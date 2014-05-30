@@ -24,6 +24,9 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
+    <referenceBlock name="head.components">
+        <block class="Magento\Framework\View\Element\Js\Components" name="checkout_page_head_components" template="Magento_Catalog::js/components.phtml"/>
+    </referenceBlock>
     <update handle="page_one_column"/>
     <referenceBlock name="page.main.title">
         <arguments>

@@ -165,9 +165,7 @@
                     <block class="Magento\Backend\Block\Template" name="design_editor_tools_code_tab_handle" as="tab_handle" template="Magento_DesignEditor::editor/tools/tabs/handle.phtml"/>
                     <block class="Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Tabs\Body" name="design_editor_tools_code_tab_body" as="tab_body" template="Magento_DesignEditor::editor/tools/tabs/body.phtml"/>
                     <!-- Tab with CSS list -->
-                    <block class="Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Code\Css" name="design_editor_tools_code_css" template="Magento_DesignEditor::editor/tools/code/css.phtml">
-                        <block class="Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Code\Css\Group" name="design_editor_tools_code_css_group" template="Magento_DesignEditor::editor/tools/code/css/group.phtml"/>
-                    </block>
+                    <block class="Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Code\Css" name="design_editor_tools_code_css" template="Magento_DesignEditor::editor/tools/code/css.phtml"/>
                     <!-- Tab with JavaScript list -->
                     <block class="Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Code\Js" name="design_editor_tools_code_js" template="Magento_DesignEditor::editor/tools/code/js.phtml"/>
                     <!-- Tab with Custom CSS -->

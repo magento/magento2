@@ -51,7 +51,7 @@ class __cli_Magento_Connect
     public function setIncludes()
     {
         if (defined('DEVELOPMENT_MODE')) {
-            $libPath = PS . dirname(BP) . '/lib';
+            $libPath = PS . dirname(BP) . '/lib/internal';
         } else {
             $libPath = PS . BP . '/downloader/lib';
         }

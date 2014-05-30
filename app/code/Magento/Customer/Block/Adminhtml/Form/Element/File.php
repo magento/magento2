@@ -31,9 +31,9 @@ namespace Magento\Customer\Block\Adminhtml\Form\Element;
 class File extends \Magento\Framework\Data\Form\Element\AbstractElement
 {
     /**
-     * @var \Magento\Framework\View\Url
+     * @var \Magento\Framework\View\Asset\Repository
      */
-    protected $_viewUrl;
+    protected $_assetRepo;
 
     /**
      * Adminhtml data
@@ -47,7 +47,7 @@ class File extends \Magento\Framework\Data\Form\Element\AbstractElement
      * @param \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Backend\Helper\Data $adminhtmlData
-     * @param \Magento\Framework\View\Url $viewUrl
+     * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param array $data
      */
     public function __construct(
@@ -55,11 +55,11 @@ class File extends \Magento\Framework\Data\Form\Element\AbstractElement
         \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection,
         \Magento\Framework\Escaper $escaper,
         \Magento\Backend\Helper\Data $adminhtmlData,
-        \Magento\Framework\View\Url $viewUrl,
+        \Magento\Framework\View\Asset\Repository $assetRepo,
         $data = array()
     ) {
         $this->_adminhtmlData = $adminhtmlData;
-        $this->_viewUrl = $viewUrl;
+        $this->_assetRepo = $assetRepo;
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
         $this->setType('file');
     }
@@ -152,7 +152,7 @@ class File extends \Magento\Framework\Data\Form\Element\AbstractElement
             $image = array(
                 'alt' => __('Download'),
                 'title' => __('Download'),
-                'src' => $this->_viewUrl->getViewFileUrl('images/fam_bullet_disk.gif'),
+                'src'   => $this->_assetRepo->getUrl('images/fam_bullet_disk.gif'),
                 'class' => 'v-middle'
             );
             $url = $this->_getPreviewUrl();

@@ -26,179 +26,125 @@ namespace Magento\Framework\View\Asset\MergeStrategy;
 class ChecksumTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Asset\MergeStrategyInterface
+     */
+    private $mergerMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Directory\ReadInterface
+     */
+    private $sourceDir;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Directory\WriteInterface
+     */
+    private $targetDir;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Asset\File
+     */
+    private $resultAsset;
+
+    /**
      * @var \Magento\Framework\View\Asset\MergeStrategy\Checksum
      */
-    protected $_object;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_filesystem;
-
-    /**
-     * @var \Magento\Framework\Filesystem\Directory\Write | \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_directory;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_strategy;
-
-    /**
-     * @var string
-     */
-    protected $_mergedFileAbs = 'absolutePath/destination_file.js';
-
-    /**
-     * @var string
-     */
-    protected $_mergedFile = 'destination_file.js';
-
-    /**
-     * @var string
-     */
-    protected $_mergedMetaFileAbs = 'absolutePath/destination_file.js.dat';
-
-    /**
-     * @var string
-     */
-    protected $_mergedMetaFile = 'destination_file.js.dat';
-
-    /**
-     * @var array
-     */
-    protected $_filesArray = array('absolutePath/file1.js', 'absolutePath/file2.js');
+    private $checksum;
 
     protected function setUp()
     {
-        $this->_filesystem =
-            $this->getMock('Magento\Framework\App\Filesystem', array('getDirectoryWrite'), array(), '', false);
-        $this->_directory = $this->getMock('Magento\Framework\Filesystem\Directory\Write', array(), array(), '', false);
-        $this->_filesystem->expects(
-            $this->once()
-        )->method(
-            'getDirectoryWrite'
-        )->will(
-            $this->returnValue($this->_directory)
-        );
-        $this->_directory->expects(
-            $this->exactly(2)
-        )->method(
-            'stat'
-        )->will(
-            $this->returnValueMap(
-                array(array('file1.js', array('mtime' => '123')), array('file2.js', array('mtime' => '456')))
-            )
-        );
-        $this->_directory->expects($this->any())->method('getRelativePath')->will(
-            $this->returnCallback(
-                function ($path) {
-                    $parts = explode('/', $path);
-                    return end($parts);
-                }
-            )
-        );
-
-        $this->_strategy = $this->getMock('Magento\Framework\View\Asset\MergeStrategyInterface');
-
-        $this->_object = new \Magento\Framework\View\Asset\MergeStrategy\Checksum($this->_strategy, $this->_filesystem);
+        $this->mergerMock = $this->getMockForAbstractClass('\Magento\Framework\View\Asset\MergeStrategyInterface');
+        $this->sourceDir = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\ReadInterface');
+        $this->targetDir = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\WriteInterface');
+        $filesystem = $this->getMock('\Magento\Framework\App\Filesystem', array(), array(), '', false);
+        $filesystem->expects($this->once())
+            ->method('getDirectoryRead')
+            ->with(\Magento\Framework\App\Filesystem::ROOT_DIR)
+            ->will($this->returnValue($this->sourceDir))
+        ;
+        $filesystem->expects($this->any())
+            ->method('getDirectoryWrite')
+            ->with(\Magento\Framework\App\Filesystem::STATIC_VIEW_DIR)
+            ->will($this->returnValue($this->targetDir))
+        ;
+        $this->checksum = new Checksum($this->mergerMock, $filesystem);
+        $this->resultAsset = $this->getMock('\Magento\Framework\View\Asset\File', array(), array(), '', false);
     }
 
-    /**
-     * Test when everything is valid, no merging required
-     */
-    public function testMergeFilesNoMergeRequired()
+    public function testMergeNoAssets()
     {
-        $this->_directory->expects($this->exactly(2))->method('isExist')->will($this->returnValue(true));
+        $this->mergerMock->expects($this->never())->method('merge');
+        $this->checksum->merge(array(), $this->resultAsset);
+    }
 
-        $this->_directory->expects(
-            $this->once()
-        )->method(
-            'readFile'
-        )->with(
-            $this->_mergedMetaFile
-        )->will(
-            $this->returnValue('123456')
-        );
+    public function testMergeNoDatFile()
+    {
+        $this->targetDir->expects($this->once())
+            ->method('isExist')
+            ->with('merged/result.txt.dat')
+            ->will($this->returnValue(false))
+        ;
+        $assets = $this->getAssetsToMerge();
+        $this->mergerMock->expects($this->once())->method('merge')->with($assets, $this->resultAsset);
+        $this->targetDir->expects($this->once())->method('writeFile')->with('merged/result.txt.dat', '11');
+        $this->checksum->merge($assets, $this->resultAsset);
+    }
 
-        $this->_directory->expects($this->never())->method('writeFile');
+    public function testMergeMtimeChanged()
+    {
+        $this->targetDir->expects($this->once())
+            ->method('isExist')
+            ->with('merged/result.txt.dat')
+            ->will($this->returnValue(true))
+        ;
+        $this->targetDir->expects($this->once())
+            ->method('readFile')
+            ->with('merged/result.txt.dat')
+            ->will($this->returnValue('10'))
+        ;
+        $assets = $this->getAssetsToMerge();
+        $this->mergerMock->expects($this->once())->method('merge')->with($assets, $this->resultAsset);
+        $this->targetDir->expects($this->once())->method('writeFile')->with('merged/result.txt.dat', '11');
+        $this->checksum->merge($assets, $this->resultAsset);
+    }
 
-        $this->_strategy->expects($this->never())->method('mergeFiles');
-
-        $this->_object->mergeFiles($this->_filesArray, $this->_mergedFileAbs, 'contentType');
+    public function testMergeMtimeUnchanged()
+    {
+        $this->targetDir->expects($this->once())
+            ->method('isExist')
+            ->with('merged/result.txt.dat')
+            ->will($this->returnValue(true))
+        ;
+        $this->targetDir->expects($this->once())
+            ->method('readFile')
+            ->with('merged/result.txt.dat')
+            ->will($this->returnValue('11'))
+        ;
+        $assets = $this->getAssetsToMerge();
+        $this->mergerMock->expects($this->never())->method('merge');
+        $this->targetDir->expects($this->never())->method('writeFile');
+        $this->checksum->merge($assets, $this->resultAsset);
     }
 
     /**
-     * Test whether merged file or meta file does not exist
+     * Create mocks of assets to merge, as well as a few related necessary mocks
      *
-     * @dataProvider mergeFilesFilesDoNotExistDataProvider
-     */
-    public function testMergeFilesFilesDoNotExist($isFileExists, $isMetaFileExists)
-    {
-        $this->_directory->expects(
-            $this->any()
-        )->method(
-            'isExist'
-        )->will(
-            $this->returnValueMap(
-                array(array($this->_mergedFile, $isFileExists), array($this->_mergedMetaFile, $isMetaFileExists))
-            )
-        );
-
-
-        $this->_strategy->expects(
-            $this->once()
-        )->method(
-            'mergeFiles'
-        )->with(
-            $this->_filesArray,
-            $this->_mergedFileAbs,
-            'contentType'
-        );
-
-        $this->_directory->expects($this->once())->method('writeFile')->with($this->_mergedMetaFile, '123456');
-
-        $this->_object->mergeFiles($this->_filesArray, $this->_mergedFileAbs, 'contentType');
-    }
-
-    /**
      * @return array
      */
-    public function mergeFilesFilesDoNotExistDataProvider()
+    private function getAssetsToMerge()
     {
-        return array('no file' => array(false, true), 'no meta file' => array(true, false));
-    }
-
-    /**
-     * Test whether merged file and meta-file exist, though checksum is wrong (files were updated)
-     */
-    public function testMergeFilesExistWrongChecksum()
-    {
-        $this->_directory->expects($this->exactly(2))->method('isExist')->will($this->returnValue(true));
-
-        $this->_directory->expects(
-            $this->once()
-        )->method(
-            'readFile'
-        )->with(
-            $this->_mergedMetaFile
-        )->will(
-            $this->returnValue('000000')
-        );
-
-        $this->_strategy->expects(
-            $this->once()
-        )->method(
-            'mergeFiles'
-        )->with(
-            $this->_filesArray,
-            $this->_mergedFile,
-            'contentType'
-        );
-
-        $this->_directory->expects($this->once())->method('writeFile')->with($this->_mergedMetaFile, '123456');
-
-        $this->_object->mergeFiles($this->_filesArray, $this->_mergedFile, 'contentType');
+        $one = $this->getMock('\Magento\Framework\View\Asset\File', array(), array(), '', false);
+        $one->expects($this->once())->method('getSourceFile')->will($this->returnValue('/dir/file/one.txt'));
+        $two = $this->getMock('\Magento\Framework\View\Asset\File', array(), array(), '', false);
+        $two->expects($this->once())->method('getSourceFile')->will($this->returnValue('/dir/file/two.txt'));
+        $this->sourceDir->expects($this->exactly(2))
+            ->method('getRelativePath')
+            ->will($this->onConsecutiveCalls('file/one.txt', 'file/two.txt'))
+        ;
+        $this->sourceDir->expects($this->exactly(2))->method('stat')->will($this->returnValue(array('mtime' => '1')));
+        $this->resultAsset->expects($this->once())
+            ->method('getPath')
+            ->will($this->returnValue('merged/result.txt'))
+        ;
+        return array($one, $two);
     }
 }

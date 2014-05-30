@@ -232,12 +232,39 @@ class Design implements \Magento\Framework\View\DesignInterface
     /**
      * {@inheritdoc}
      */
+    public function getThemePath(\Magento\Framework\View\Design\ThemeInterface $theme)
+    {
+        $themePath = $theme->getThemePath();
+        if (!$themePath) {
+            $themeId = $theme->getId();
+            if ($themeId) {
+                $themePath = self::PUBLIC_THEME_DIR . $themeId;
+            } else {
+                $themePath = self::PUBLIC_VIEW_DIR;
+            }
+        }
+        return $themePath;
+    }
+
+    /**
+     * Get locale
+     *
+     * @return string
+     */
+    public function getLocale()
+    {
+        return $this->_locale->getLocaleCode();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getDesignParams()
     {
         $params = array(
             'area' => $this->getArea(),
             'themeModel' => $this->getDesignTheme(),
-            'locale' => $this->_locale->getLocaleCode()
+            'locale'     => $this->getLocale(),
         );
 
         return $params;

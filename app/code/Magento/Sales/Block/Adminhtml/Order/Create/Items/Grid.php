@@ -130,18 +130,32 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
         foreach ($items as $item) {
             // To dispatch inventory event sales_quote_item_qty_set_after, set item qty
             $item->setQty($item->getQty());
-            $stockItem = $item->getProduct()->getStockItem();
-            if ($stockItem instanceof \Magento\CatalogInventory\Model\Stock\Item) {
-                // This check has been performed properly in Inventory observer, so it has no sense
-                /*
-                $check = $stockItem->checkQuoteItemQty($item->getQty(), $item->getQty(), $item->getQty());
-                $item->setMessage($check->getMessage());
-                $item->setHasError($check->getHasError());
-                */
-                if ($item->getProduct()->getStatus() == ProductStatus::STATUS_DISABLED) {
-                    $item->setMessage(__('This product is disabled.'));
-                    $item->setHasError(true);
+
+            if (!$item->getMessage()) {
+                //Getting stock items for last quantity validation before grid display
+                $stockItemToCheck = array();
+
+                $childItems = $item->getChildren();
+                if (count($childItems)) {
+                    foreach ($childItems as $childItem) {
+                        $stockItemToCheck[] = $childItem->getProduct()->getStockItem();
+                    }
+                } else {
+                    $stockItemToCheck[] = $item->getProduct()->getStockItem();
                 }
+
+                foreach ($stockItemToCheck as $stockItem) {
+                    if ($stockItem instanceof \Magento\CatalogInventory\Model\Stock\Item) {
+                        $check = $stockItem->checkQuoteItemQty($item->getQty(), $item->getQty(), $item->getQty());
+                        $item->setMessage($check->getMessage());
+                        $item->setHasError($check->getHasError());
+                    }
+                }
+            }
+
+            if ($item->getProduct()->getStatus() == ProductStatus::STATUS_DISABLED) {
+                $item->setMessage(__('This product is disabled.'));
+                $item->setHasError(true);
             }
         }
         $this->getQuote()->setIsSuperMode($oldSuperMode);

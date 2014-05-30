@@ -132,7 +132,7 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
     private $_encryptorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\UrlInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\UrlInterface
      */
     private $_urlMock;
 

@@ -343,8 +343,9 @@
             <attribute_code>status</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
-            <default_value>1</default_value>
-            <input>select</input>
+            <default_value>Product online</default_value>
+            <input>checkbox</input>
+            <group>product-details</group>
         </status>
         <tax_class_id>
             <attribute_code>tax_class_id</attribute_code>

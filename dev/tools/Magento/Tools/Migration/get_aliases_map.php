@@ -49,7 +49,7 @@ require_once realpath(
 require_once realpath(
     dirname(dirname(dirname(dirname(dirname(__DIR__)))))
 ) . '/dev/tests/static/framework/Magento/TestFramework/Utility/Classes.php';
-require_once realpath(dirname(dirname(dirname(dirname(dirname(__DIR__)))))) . '/lib/Zend/Json.php';
+require_once realpath(dirname(dirname(dirname(dirname(dirname(__DIR__)))))) . '/lib/internal/Zend/Json.php';
 
 $magentoBaseDir = dirname(__DIR__) . '/../../../../';
 if (isset($options['p'])) {

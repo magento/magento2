@@ -112,7 +112,7 @@ class View extends Block
      *
      * @var string
      */
-    protected $mapPopup = '#map-popup';
+    protected $mapPopup = '#map-popup-click-for-price';
 
     /**
      * Stock Availability control

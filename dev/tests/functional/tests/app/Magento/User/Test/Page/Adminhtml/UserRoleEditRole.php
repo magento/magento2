@@ -28,8 +28,6 @@ use Mtf\Page\BackendPage;
 
 /**
  * Class UserRoleEditRole
- *
- * @package Magento\User\Test\Page\Adminhtml
  */
 class UserRoleEditRole extends BackendPage
 {
@@ -48,6 +46,12 @@ class UserRoleEditRole extends BackendPage
             'locator' => '[id="page:main-container"]',
             'strategy' => 'css selector',
         ],
+        'messagesBlock' => [
+            'name' => 'messagesBlock',
+            'class' => 'Magento\Core\Test\Block\Messages',
+            'locator' => '#messages',
+            'strategy' => 'css selector',
+        ],
     ];
 
     /**
@@ -64,5 +68,13 @@ class UserRoleEditRole extends BackendPage
     public function getRoleFormTabs()
     {
         return $this->getBlockInstance('roleFormTabs');
+    }
+
+    /**
+     * @return \Magento\Core\Test\Block\Messages
+     */
+    public function getMessagesBlock()
+    {
+        return $this->getBlockInstance('messagesBlock');
     }
 }

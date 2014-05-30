@@ -55,8 +55,14 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
                 $objectManager->get('Magento\ImportExport\Model\ImportFactory'),
                 $objectManager->get('Magento\ImportExport\Model\Resource\Helper'),
                 $objectManager->get('Magento\Framework\App\Resource')
-            )
+            ),
+            '',
+            true,
+            false,
+            true,
+            ['getMasterAttributeCode', 'validateRow', 'getEntityTypeCode']
         );
+        $model->expects($this->any())->method('getMasterAttributeCode')->will($this->returnValue("email"));
         $model->expects($this->any())->method('validateRow')->will($this->returnValue(true));
         $model->expects($this->any())->method('getEntityTypeCode')->will($this->returnValue('customer'));
 

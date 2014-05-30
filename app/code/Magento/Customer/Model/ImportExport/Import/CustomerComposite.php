@@ -142,6 +142,11 @@ class CustomerComposite extends \Magento\ImportExport\Model\Import\AbstractEntit
     protected $_dataSourceModels;
 
     /**
+     * {@inheritdoc}
+     */
+    protected $masterAttributeCode = 'email';
+
+    /**
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Framework\Stdlib\String $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig

@@ -59,18 +59,28 @@ class CategoryIds implements FixtureInterface
         array $data = []
     ) {
         $this->params = $params;
-        if (isset($data['presets']) && $data['presets'] !== '-') {
+
+        if (!empty($data['category'])
+            && empty($data['presets'])
+            && $data['category'] instanceof CatalogCategoryEntity
+        ) {
+            /** @var CatalogCategoryEntity $category */
+            $category = $data['category'];
+            $this->data[] = [
+                'id' => $category->getId(),
+                'name' => $category->getName(),
+            ];
+            $this->category[] = $category;
+        } elseif (isset($data['presets']) && $data['presets'] !== '-') {
             $presets = explode(',', $data['presets']);
             foreach ($presets as $preset) {
                 $category = $fixtureFactory->createByCode('catalogCategoryEntity', ['dataSet' => $preset]);
                 $category->persist();
 
                 /** @var CatalogCategoryEntity $category */
-                $this->data = [
-                    [
-                        'id' => $category->getId(),
-                        'name' => $category->getName(),
-                    ],
+                $this->data[] = [
+                    'id' => $category->getId(),
+                    'name' => $category->getName(),
                 ];
                 $this->category[] = $category;
             }

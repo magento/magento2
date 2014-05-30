@@ -78,19 +78,19 @@ class ConfiguredPrice extends FinalPrice implements ConfiguredPriceInterface
     {
         $product = $this->item->getProduct();
         $value = 0.;
+        $basePrice = parent::getValue();
         $optionIds = $this->item->getOptionByCode('option_ids');
         if ($optionIds) {
             foreach (explode(',', $optionIds->getValue()) as $optionId) {
                 $option = $product->getOptionById($optionId);
                 if ($option) {
-                    /** @var \Magento\Wishlist\Model\Item\Option $itemOption */
                     $itemOption = $this->item->getOptionByCode('option_' . $option->getId());
                     /** @var $group \Magento\Catalog\Model\Product\Option\Type\DefaultType */
                     $group = $option->groupFactory($option->getType())
                         ->setOption($option)
                         ->setConfigurationItem($this->item)
                         ->setConfigurationItemOption($itemOption);
-                    $value += $group->getOptionPrice($itemOption->getValue(), $this->value);
+                    $value += $group->getOptionPrice($itemOption->getValue(), $basePrice);
                 }
             }
         }

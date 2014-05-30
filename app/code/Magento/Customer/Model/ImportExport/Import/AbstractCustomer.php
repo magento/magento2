@@ -81,6 +81,11 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
     protected $_storageFactory;
 
     /**
+     * {@inheritdoc}
+     */
+    protected $masterAttributeCode = '_email';
+
+    /**
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Framework\Stdlib\String $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig

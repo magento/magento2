@@ -48,12 +48,9 @@ class TemplateFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrit
 
             $params = array('area' => $area, 'themeId' => $themeId, 'module' => $module);
             try {
-                $templateFilename = \Magento\TestFramework\Helper\Bootstrap::getObjectmanager()->get(
-                    'Magento\Framework\View\FileSystem'
-                )->getFilename(
-                    $file,
-                    $params
-                );
+                $templateFilename = \Magento\TestFramework\Helper\Bootstrap::getObjectmanager()
+                    ->get('Magento\Framework\View\FileSystem')
+                    ->getTemplateFileName($file, $params);
                 $this->assertFileExists($templateFilename);
             } catch (\PHPUnit_Framework_ExpectationFailedException $e) {
                 $invalidTemplates[] = "File \"{$templateFilename}\" does not exist." .

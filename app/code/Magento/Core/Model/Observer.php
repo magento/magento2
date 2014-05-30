@@ -51,9 +51,9 @@ class Observer
     protected $_config;
 
     /**
-     * @var \Magento\Framework\View\Asset\PublicFileFactory
+     * @var \Magento\Framework\View\Asset\Repository
      */
-    protected $_assetFileFactory;
+    protected $_assetRepo;
 
     /**
      * @var \Magento\Core\Model\Theme\Registration
@@ -70,7 +70,7 @@ class Observer
      * @param \Magento\Framework\View\DesignInterface $design
      * @param \Magento\Framework\View\Asset\GroupedCollection $assets
      * @param \Magento\Framework\App\Config\ReinitableConfigInterface $config
-     * @param \Magento\Framework\View\Asset\PublicFileFactory $assetFileFactory
+     * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param Theme\Registration $registration
      * @param \Magento\Framework\Logger $logger
      */
@@ -79,14 +79,14 @@ class Observer
         \Magento\Framework\View\DesignInterface $design,
         \Magento\Framework\View\Asset\GroupedCollection $assets,
         \Magento\Framework\App\Config\ReinitableConfigInterface $config,
-        \Magento\Framework\View\Asset\PublicFileFactory $assetFileFactory,
+        \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Core\Model\Theme\Registration $registration,
         \Magento\Framework\Logger $logger
     ) {
         $this->_cacheFrontendPool = $cacheFrontendPool;
         $this->_currentTheme = $design->getDesignTheme();
         $this->_pageAssets = $assets;
-        $this->_assetFileFactory = $assetFileFactory;
+        $this->_assetRepo = $assetRepo;
         $this->_registration = $registration;
         $this->_logger = $logger;
     }
@@ -138,10 +138,16 @@ class Observer
             try {
                 $service = $themeFile->getCustomizationService();
                 if ($service instanceof \Magento\Framework\View\Design\Theme\Customization\FileAssetInterface) {
-                    $asset = $this->_assetFileFactory->create(
-                        array('file' => $themeFile->getFullPath(), 'contentType' => $service->getContentType())
+                    $identifier = $themeFile->getData('file_path');
+                    $dirPath = \Magento\Framework\View\Design\Theme\Customization\Path::DIR_NAME
+                        . '/' . $this->_currentTheme->getId();
+                    $asset = $this->_assetRepo->createArbitrary(
+                        $identifier,
+                        $dirPath,
+                        \Magento\Framework\App\Filesystem::MEDIA_DIR,
+                        \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
                     );
-                    $this->_pageAssets->add($themeFile->getData('file_path'), $asset);
+                    $this->_pageAssets->add($identifier, $asset);
                 }
             } catch (\InvalidArgumentException $e) {
                 $this->_logger->logException($e);

@@ -34,4 +34,8 @@
         <area>adminhtml</area>
         <class>Magento\User\Test\Page\Adminhtml\UserRoleEditRole</class>
     </adminUserRoleNew>
+    <adminAuthLogin>
+        <mca>admin/auth/login</mca>
+        <class>Magento\User\Test\Page\Adminhtml\AdminAuthLogin</class>
+    </adminAuthLogin>
 </page>

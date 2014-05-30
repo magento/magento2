@@ -211,12 +211,6 @@ class StoreTest extends \PHPUnit_Framework_TestCase
                 'http://domain.com/web/unsecure/base_link_url/index.php/'
             ),
             array(
-                \Magento\Framework\UrlInterface::URL_TYPE_LIB,
-                false,
-                'web/unsecure/base_lib_url',
-                'http://domain.com/web/unsecure/base_lib_url/'
-            ),
-            array(
                 \Magento\Framework\UrlInterface::URL_TYPE_MEDIA,
                 false,
                 'web/unsecure/base_media_url',
@@ -229,18 +223,6 @@ class StoreTest extends \PHPUnit_Framework_TestCase
                 'http://domain.com/web/unsecure/base_static_url/'
             ),
             array(
-                \Magento\Framework\UrlInterface::URL_TYPE_CACHE,
-                false,
-                'web/unsecure/base_cache_url',
-                'http://domain.com/web/unsecure/base_cache_url/'
-            ),
-            array(
-                \Magento\Framework\UrlInterface::URL_TYPE_LIB,
-                false,
-                'web/unsecure/base_url',
-                'http://domain.com/web/unsecure/base_url/'
-            ),
-            array(
                 \Magento\Framework\UrlInterface::URL_TYPE_MEDIA,
                 false,
                 'web/unsecure/base_url',
@@ -248,12 +230,6 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             ),
             array(
                 \Magento\Framework\UrlInterface::URL_TYPE_STATIC,
-                false,
-                'web/unsecure/base_url',
-                'http://domain.com/web/unsecure/base_url/'
-            ),
-            array(
-                \Magento\Framework\UrlInterface::URL_TYPE_CACHE,
                 false,
                 'web/unsecure/base_url',
                 'http://domain.com/web/unsecure/base_url/'

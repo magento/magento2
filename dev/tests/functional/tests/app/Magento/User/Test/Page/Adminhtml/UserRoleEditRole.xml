@@ -36,4 +36,10 @@
         <locator>[id="page:main-container"]</locator>
         <strategy>css selector</strategy>
     </block>
+    <block>
+        <name>messagesBlock</name>
+        <class>Magento\Core\Test\Block\Messages</class>
+        <locator>#messages</locator>
+        <strategy>css selector</strategy>
+    </block>
 </page>

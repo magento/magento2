@@ -42,10 +42,28 @@
            <rolePage class="Magento\User\Test\Page\Adminhtml\UserRoleIndex" />
        </require>
    </assertRoleSuccessSaveMessage>
+    <assertRoleSuccessDeleteMessage module="Magento_User">
+        <severeness>low</severeness>
+        <require>
+            <rolePage class="Magento\User\Test\Page\Adminhtml\UserRoleIndex" />
+        </require>
+    </assertRoleSuccessDeleteMessage>
    <assertRoleInGrid module="Magento_User">
         <severeness>low</severeness>
         <require>
             <rolePage class="Magento\User\Test\Page\Adminhtml\UserRoleIndex" />
         </require>
    </assertRoleInGrid>
+    <assertRoleNotInGrid module="Magento_User">
+        <severeness>low</severeness>
+        <require>
+            <rolePage class="Magento\User\Test\Page\Adminhtml\UserRoleIndex" />
+        </require>
+    </assertRoleNotInGrid>
+    <assertImpossibleDeleteYourOwnRole module="Magento_User">
+        <severeness>low</severeness>
+        <require>
+            <rolePage class="Magento\User\Test\Page\Adminhtml\UserRoleEditRole" />
+        </require>
+    </assertImpossibleDeleteYourOwnRole>
 </constraint>

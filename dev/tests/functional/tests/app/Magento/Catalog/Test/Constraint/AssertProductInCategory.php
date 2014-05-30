@@ -27,7 +27,7 @@ namespace Magento\Catalog\Test\Constraint;
 use Mtf\Fixture\FixtureInterface;
 use Magento\Cms\Test\Page\CmsIndex;
 use Mtf\Constraint\AbstractConstraint;
-use Magento\Catalog\Test\Fixture\Category;
+use Magento\Catalog\Test\Fixture\CatalogCategoryEntity;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 
 /**
@@ -48,18 +48,18 @@ class AssertProductInCategory extends AbstractConstraint
      * @param CatalogCategoryView $catalogCategoryView
      * @param CmsIndex $cmsIndex
      * @param FixtureInterface $product
-     * @param Category $category
+     * @param CatalogCategoryEntity $category
      * @return void
      */
     public function processAssert(
         CatalogCategoryView $catalogCategoryView,
         CmsIndex $cmsIndex,
         FixtureInterface $product,
-        Category $category
+        CatalogCategoryEntity $category
     ) {
         //Open category view page and check visible product
         $cmsIndex->open();
-        $cmsIndex->getTopmenu()->selectCategoryByName($category->getCategoryName());
+        $cmsIndex->getTopmenu()->selectCategoryByName($category->getName());
 
         $isProductVisible = $catalogCategoryView->getListProductBlock()->isProductVisible($product->getName());
         while (!$isProductVisible && $catalogCategoryView->getToolbar()->nextPage()) {
@@ -96,7 +96,7 @@ class AssertProductInCategory extends AbstractConstraint
     }
 
     /**
-     * Returns a string representation of the object.
+     * Returns a string representation of the object
      *
      * @return string
      */

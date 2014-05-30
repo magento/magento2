@@ -73,8 +73,8 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
                 'paths' => array(
                     $this->_source . '/app/code/',
                     $this->_source . '/app/design/',
-                    $this->_source . '/pub/lib/mage/',
-                    $this->_source . '/pub/lib/varien/'
+                    $this->_source . '/lib/web/mage/',
+                    $this->_source . '/lib/web/varien/'
                 ),
                 'fileMask' => '/\.(js|phtml)$/'
             ),

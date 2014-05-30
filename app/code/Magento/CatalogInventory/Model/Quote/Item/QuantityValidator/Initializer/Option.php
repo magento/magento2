@@ -79,6 +79,7 @@ class Option
         $qtyForCheck = $this->quoteItemQtyList->getQty(
             $option->getProduct()->getId(),
             $quoteItem->getId(),
+            $quoteItem->getQuoteId(),
             $increaseOptionQty
         );
 

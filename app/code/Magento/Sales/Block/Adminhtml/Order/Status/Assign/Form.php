@@ -122,6 +122,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             array('name' => 'is_default', 'label' => __('Use Order Status As Default'), 'value' => 1)
         );
 
+        $fieldset->addField(
+            'visible_on_front',
+            'checkbox',
+            array('name' => 'visible_on_front', 'label' => __('Visible On Frontend'), 'value' => 1)
+        );
 
         $form->setAction($this->getUrl('sales/order_status/assignPost'));
         $form->setUseContainer(true);

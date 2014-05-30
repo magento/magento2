@@ -486,7 +486,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
             // Remove usage of classes that do NOT using fully-qualified class names (possibly under same namespace)
             $directories = array(
                 '/app/code/',
-                '/lib/',
+                '/lib/internal/',
                 '/downloader/app/',
                 '/downloader/lib/',
                 '/dev/tools/',

@@ -220,7 +220,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $pathsForCheck = $model->getWritableFullPathsForCheck();
         $this->assertArrayHasKey('etc', $pathsForCheck);
         $this->assertArrayHasKey('media', $pathsForCheck);
-        $this->assertArrayHasKey('lib', $pathsForCheck);
         $this->assertEquals('1', $pathsForCheck['etc']['recursive']);
     }
 }

@@ -27,7 +27,7 @@ namespace Magento\Catalog\Test\Constraint;
 use Mtf\Fixture\FixtureInterface;
 use Magento\Cms\Test\Page\CmsIndex;
 use Mtf\Constraint\AbstractConstraint;
-use Magento\Catalog\Test\Fixture\Category;
+use Magento\Catalog\Test\Fixture\CatalogCategoryEntity;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 
 /**
@@ -42,32 +42,53 @@ class AssertProductVisibleInCategory extends AbstractConstraint
      */
     protected $severeness = 'low';
 
+
+    /**
+     * Displays an error message
+     *
+     * @var string
+     */
+    protected $errorMessage = 'Product is absent on category page.';
+
+    /**
+     * Message for passing test
+     *
+     * @var string
+     */
+    protected $successfulMessage = 'Product is visible in the assigned category.';
+
     /**
      * Assert that product is visible in the assigned category
      *
      * @param CatalogCategoryView $catalogCategoryView
      * @param CmsIndex $cmsIndex
      * @param FixtureInterface $product
-     * @param Category $category
+     * @param CatalogCategoryEntity $category
      * @return void
      */
     public function processAssert(
         CatalogCategoryView $catalogCategoryView,
         CmsIndex $cmsIndex,
         FixtureInterface $product,
-        Category $category
+        CatalogCategoryEntity $category
     ) {
         $cmsIndex->open();
-        $cmsIndex->getTopmenu()->selectCategoryByName($category->getCategoryName());
+        $cmsIndex->getTopmenu()->selectCategoryByName($category->getName());
 
         $isProductVisible = $catalogCategoryView->getListProductBlock()->isProductVisible($product->getName());
         while (!$isProductVisible && $catalogCategoryView->getToolbar()->nextPage()) {
             $isProductVisible = $catalogCategoryView->getListProductBlock()->isProductVisible($product->getName());
         }
 
+        if ($product->getVisibility() === 'Search' || $product->getQuantityAndStockStatus() === 'Out of Stock') {
+            $isProductVisible = !$isProductVisible;
+            $this->errorMessage = 'Product found in this category';
+            $this->successfulMessage = 'Asserts that the product could not be found in this category';
+        }
+
         \PHPUnit_Framework_Assert::assertTrue(
             $isProductVisible,
-            'Product is absent on category page.'
+            $this->errorMessage
         );
     }
 
@@ -78,6 +99,6 @@ class AssertProductVisibleInCategory extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Product is visible in the assigned category.';
+        return $this->successfulMessage;
     }
 }

@@ -29,8 +29,6 @@ use Magento\Backend\Test\Block\FormPageActions;
 /**
  * Class PageActions
  * PageActions for the role edit page
- *
- * @package Magento\User\Test\Block\Adminhtml\Role
  */
 class PageActions extends FormPageActions
 {
@@ -39,5 +37,12 @@ class PageActions extends FormPageActions
      *
      * @var string
      */
-    protected $saveButton = '.save-role';
+    protected $saveButton = '[data-ui-id="page-actions-toolbar-savebutton"]';
+
+    /**
+     * "Delete" button
+     *
+     * @var string
+     */
+    protected $deleteButton = '[data-ui-id="page-actions-toolbar-deletebutton"]';
 }

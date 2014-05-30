@@ -117,7 +117,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getPath'
         )->with(
-            \Magento\Framework\App\Filesystem::LIB_DIR
+            \Magento\Framework\App\Filesystem::LIB_INTERNAL
         )->will(
             $this->returnValue(TESTS_TEMP_DIR . '/lib')
         );

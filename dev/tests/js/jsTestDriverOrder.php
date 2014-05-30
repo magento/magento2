@@ -27,12 +27,13 @@
  * @return array
  */
 return array(
-    '/pub/lib/jquery/jquery-1.8.2.js',
-    '/pub/lib/jquery/jquery-ui-1.9.2.js',
-    '/pub/lib/jquery/jquery.cookie.js',
-    '/pub/lib/headjs/head.min.js',
-    '/pub/lib/mage/mage.js',
-    '/pub/lib/mage/decorate.js',
-    '/pub/lib/jquery/jquery.validate.js',
-    '/pub/lib/jquery/jquery.metadata.js'
+    '/lib/web/jquery/jquery-1.8.2.js',
+    '/lib/web/jquery/jquery-ui-1.9.2.js',
+    '/dev/tests/js/framework/requirejs-util.js',
+    '/lib/web/jquery/jquery.cookie.js',
+    '/lib/web/headjs/head.min.js',
+    '/lib/web/mage/mage.js',
+    '/lib/web/mage/decorate.js',
+    '/lib/web/jquery/jquery.validate.js',
+    '/lib/web/jquery/jquery.metadata.js'
 );

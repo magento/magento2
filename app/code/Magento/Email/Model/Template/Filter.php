@@ -65,9 +65,9 @@ class Filter extends \Magento\Framework\Filter\Template
     protected $_plainTemplateMode = false;
 
     /**
-     * @var \Magento\Framework\View\Url
+     * @var \Magento\Framework\View\Asset\Repository
      */
-    protected $_viewUrl;
+    protected $_assetRepo;
 
     /**
      * @var \Magento\Framework\Logger
@@ -132,7 +132,7 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param \Magento\Framework\Stdlib\String $string
      * @param \Magento\Framework\Logger $logger
      * @param \Magento\Framework\Escaper $escaper
-     * @param \Magento\Framework\View\Url $viewUrl
+     * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Core\Model\VariableFactory $coreVariableFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -148,7 +148,7 @@ class Filter extends \Magento\Framework\Filter\Template
         \Magento\Framework\Stdlib\String $string,
         \Magento\Framework\Logger $logger,
         \Magento\Framework\Escaper $escaper,
-        \Magento\Framework\View\Url $viewUrl,
+        \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Core\Model\VariableFactory $coreVariableFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -159,7 +159,7 @@ class Filter extends \Magento\Framework\Filter\Template
         $variables = array()
     ) {
         $this->_escaper = $escaper;
-        $this->_viewUrl = $viewUrl;
+        $this->_assetRepo = $assetRepo;
         $this->_logger = $logger;
         $this->_scopeConfig = $scopeConfig;
         $this->_modifiers['escape'] = array($this, 'modifierEscape');
@@ -367,7 +367,7 @@ class Filter extends \Magento\Framework\Filter\Template
     public function viewDirective($construction)
     {
         $params = $this->_getIncludeParameters($construction[2]);
-        $url = $this->_viewUrl->getViewFileUrl($params['url'], $params);
+        $url = $this->_assetRepo->getUrlWithParams($params['url'], $params);
         return $url;
     }
 

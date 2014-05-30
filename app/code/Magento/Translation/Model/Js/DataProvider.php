@@ -174,6 +174,7 @@ class DataProvider implements DataProviderInterface
             'Edit Order' => __('Edit Order'),
             'Ok' => __('Ok'),
             'Please specify at least one search term.' => __('Please specify at least one search term.'),
+            'Create New Wish List' => __('Create New Wish List'),
         );
     }
 }

@@ -81,6 +81,7 @@ class GenerateVariations extends Action
     public function indexAction()
     {
         $this->_saveAttributeOptions();
+        $this->getRequest()->setParam('variations-matrix', array());
         $this->initializationHelper->initialize($this->productBuilder->build($this->getRequest()));
         $this->_view->loadLayout();
         $this->_view->renderLayout();

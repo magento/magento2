@@ -45,7 +45,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     /**
      * @var string
      */
-    protected $_pathPath;
+    protected $_packPath;
 
     /**
      * @var string
@@ -67,28 +67,33 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
         $this->_testDir = realpath(__DIR__ . '/_files');
         $this->_expectedDir = $this->_testDir . '/expected';
         $this->_dictionaryPath = $this->_testDir . '/source.csv';
-        $this->_pathPath = $this->_testDir . '/pack';
+        $this->_packPath = $this->_testDir . '/pack';
         $this->_locale = 'de_DE';
         $this->_expectedFiles = array(
             "/app/code/Magento/FirstModule/i18n/{$this->_locale}.csv",
             "/app/code/Magento/SecondModule/i18n/{$this->_locale}.csv",
-            "/app/design/adminhtml/default/i18n/{$this->_locale}.csv"
+            "/app/design/adminhtml/default/i18n/{$this->_locale}.csv",
+            "/lib/web/i18n/{$this->_locale}.csv",
         );
 
         $this->_generator = ServiceLocator::getPackGenerator();
+
+        \Magento\Framework\System\Dirs::rm($this->_packPath);
     }
 
     protected function tearDown()
     {
-        \Magento\Framework\System\Dirs::rm($this->_pathPath);
+        \Magento\Framework\System\Dirs::rm($this->_packPath);
     }
 
     public function testGeneration()
     {
-        $this->_generator->generate($this->_dictionaryPath, $this->_pathPath, $this->_locale);
+        $this->assertFileNotExists($this->_packPath);
+
+        $this->_generator->generate($this->_dictionaryPath, $this->_packPath, $this->_locale);
 
         foreach ($this->_expectedFiles as $file) {
-            $this->assertFileEquals($this->_expectedDir . $file, $this->_pathPath . $file);
+            $this->assertFileEquals($this->_expectedDir . $file, $this->_packPath . $file);
         }
     }
 }

@@ -82,8 +82,8 @@ class History extends \Magento\Framework\View\Element\Template
             'customer_id',
             $this->_customerSession->getCustomer()->getId()
         )->addFieldToFilter(
-            'state',
-            array('in' => $this->_orderConfig->getVisibleOnFrontStates())
+            'status',
+            array('in' => $this->_orderConfig->getVisibleOnFrontStatuses())
         )->setOrder(
             'created_at',
             'desc'

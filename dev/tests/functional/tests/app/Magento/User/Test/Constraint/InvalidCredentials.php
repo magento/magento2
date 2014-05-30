@@ -29,7 +29,6 @@ use Magento\Backend\Test\Page\AdminAuthLogin;
 
 /**
  * Class InvalidCredentials
- *
  */
 class InvalidCredentials extends AbstractConstraint
 {

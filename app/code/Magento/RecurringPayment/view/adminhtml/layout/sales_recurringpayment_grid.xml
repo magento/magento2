@@ -25,5 +25,5 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
     <remove name="root"/>
-    <block class="Magento\RecurringPayment\Block\Payment\Grid" name="sales.recurring.payment.grid" output="1"/>
+    <block class="Magento\RecurringPayment\Block\Adminhtml\Payment\Grid" name="sales.recurring.adminhtml.payment.grid" output="1"/>
 </layout>

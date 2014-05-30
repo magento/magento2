@@ -1,0 +1,327 @@
+// /**
+// //  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+//  *
+//  * @category    design
+//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+//  */
+
+@message-global-note-color: @text-color;
+@message-global-note-background: #ffee9c;
+@message-global-note-link-color: @link-color;
+@message-global-note-link-color-hover: @link-color-hover;
+@message-global-note-link-color-active: @link-color-active;
+@message-global-note-border-color: #d6ca8e;
+
+@message-global-caution-color: #fff;
+@message-global-caution-background: #ff0101;
+@message-global-caution-link-color: @link-color;
+@message-global-caution-link-color-hover: @link-color-hover;
+@message-global-caution-link-color-active: @link-color-active;
+@message-global-caution-border-color: none;
+
+@header-bg-color: false;
+
+body {
+    .css(background-color, @page-bg-color);
+}
+
+//
+//    Header
+//--------------------------------------
+.page.header {
+    .css(background-color, @header-bg-color);
+    border-bottom: 1px solid @border-color-base;
+    margin-bottom: 20px;
+}
+
+.header {
+    &.content {
+        padding-top: 10px;
+        position: relative;
+        padding-right: 90px;
+    }
+    .switcher {
+        display: none;
+    }
+}
+
+.logo {
+    position: relative;
+    z-index: 5;
+    float: left;
+    max-width: 50%;
+    margin: 0 0 10px 44px;
+    img {
+        max-height: 50px;
+        max-width: 100%;
+        display: block;
+    }
+}
+
+.page.main {
+    > .page.title {
+        margin-bottom: @indent-xl-base;
+        .title + .action {
+            margin-top: @indent-l-base;
+        }
+    }
+}
+
+.action.skip {
+    .visually-hidden();
+}
+
+.action.toggle.nav {
+    .icon-font(
+        @icon-menu,
+        @_icon-font-size: 28px
+    );
+    .icon-text-hide();
+    position: absolute;
+    top: 12px;
+    left: 15px;
+    font-size: 0;
+    z-index: 14;
+    cursor: pointer;
+}
+
+//
+//  Global notice
+//--------------------------------------
+
+.message.global {
+    p {
+        margin: 0;
+    }
+    &.noscript,
+    &.cookie {
+        .message(@_message-type: global-note);
+        margin: 0;
+    }
+    &.cookie {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 3;
+        .actions {
+            margin-top: @indent-s-base;
+        }
+        .action.allow {
+            .button-primary();
+        }
+    }
+    &.demo {
+        .message(@_message-type: global-caution);
+        text-align: center;
+        margin-bottom: 0;
+    }
+}
+
+//
+//  Footer
+//--------------------------------------
+
+@footer-bg-color: false;
+
+.footer {
+    &.page {
+        margin-top: 25px;
+        .css(background-color, @footer-bg-color);
+    }
+    &.content {
+        padding-top: 25px;
+        padding-bottom: 25px;
+        border-top: 1px solid @border-color-base;
+        ul {
+            .list-reset-styles(0, 0 50px 0 0);
+        }
+        .links {
+            display: inline-block;
+            vertical-align: top;
+            margin-bottom: 20px;
+        }
+        .links {
+            li {
+                margin: 0 0 8px 0;
+            }
+        }
+        .switcher.store {
+            margin: 0 0 30px 0;
+        }
+    }
+    .copyright {
+        .clearer();
+    }
+    .copyright,
+    .bugs {
+        display: block;
+        margin: 20px 0 0;
+    }
+}
+
+.page.header,
+.page.footer {
+    .switcher {
+        margin-right: 10px;
+        .options {
+            .dropdown(
+                @_dropdown-actions-padding: 0,
+                @_dropdown-list-item-padding: 0,
+                @_dropdown-toggle-icon-content: @icon-down,
+                @_dropdown-toggle-active-icon-content: @icon-up,
+                @_icon-font-text-hide: true,
+                @_icon-font-size: 22px,
+                @_icon-font-line-height: 22px,
+                @_dropdown-list-min-width: 160px
+            );
+            ul.dropdown {
+                a {
+                    display: block;
+                    padding: 8px;
+                    &:hover {
+                        text-decoration: none;
+                    }
+                }
+            }
+        }
+        li {
+            margin: 0;
+            font-size: @font-size-s;
+        }
+        .label {
+            .visually-hidden();
+        }
+        strong {
+            font-weight: @font-weight-base;
+        }
+    }
+}
+
+//
+//    Desktop
+//--------------------------------------
+.responsive(@break) when (@break = @break-point-1) {
+    .page.header {
+        border: 0;
+        margin-bottom: 0;
+        .panel.wrapper {
+            border-bottom: 1px solid @color-secondary;
+        }
+        .header.panel {
+            padding-top: 10px;
+            padding-bottom: 10px;
+            &:extend(.add-clearfix-desktop all);
+        }
+        .switcher {
+            display: inline-block;
+        }
+    }
+
+    .page.main {
+        > .page.title {
+            margin-bottom: @indent-l-base;
+            .title {
+                display: inline-block;
+            }
+            .title + .action {
+                float: right;
+                margin-top: @indent-base;
+            }
+        }
+    }
+
+    .header {
+        &.panel {
+            > .header.links {
+                float: right;
+                position: relative;
+                left: 0;
+                background: none;
+                height: auto;
+                width: auto;
+                -webkit-box-shadow: none;
+                box-shadow: none;
+                .list-inline();
+                > li {
+                    margin: 0 0 0 15px;
+                    &.welcome,
+                    a {
+                        line-height: 1.4;
+                    }
+                }
+                margin-left: auto;
+                a {
+                    .link();
+                }
+            }
+        }
+        &.content {
+            padding: 30px 20px 0;
+            &:extend(.add-clearfix-desktop all);
+        }
+        .links,
+        .switcher,
+        .panel {
+            display: block;
+        }
+    }
+
+    .logo {
+        margin: -8px auto 25px 0;
+        img {
+            max-height: inherit;
+        }
+    }
+
+    .page.wrapper {
+        position: relative;
+        width: 100%;
+        float: right;
+        margin: 0;
+        .transition(margin .3s ease-out 0);
+        left: 0 !important;
+    }
+
+    .footer {
+        &.content {
+            .block {
+                float: right;
+            }
+            .switcher.store {
+                display: inline-block;
+                padding-right: 50px;
+                vertical-align: top;
+            }
+        }
+    }
+    .action.toggle.nav {
+        display: none;  
+    }
+}
+
+.no-display {
+    display: none;
+}
+
+// Calendar
+.ui-datepicker td {
+    padding: 0;
+}

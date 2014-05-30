@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<validation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../../lib/Magento/Framework/Validator/etc/validation.xsd">
+<validation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../../lib/internal/Magento/Framework/Validator/etc/validation.xsd">
     <entity name="test_entity_a">
         <rules>
             <rule name="check_alnum_and_int_not_empty_and_have_valid_value">

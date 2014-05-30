@@ -98,7 +98,7 @@ SuggestTest.prototype.testRender = function() {
         dropdownWrapper: '<div class="wrapper-test"></div>',
         className: 'test-suggest',
         inputWrapper: '<div class="test-input-wrapper"></div>'
-    }
+    };
 
     var suggestInstance = this.suggestCreate(suggestOptions);
     suggestInstance._render();
@@ -247,14 +247,14 @@ SuggestTest.prototype.testBindDropdown = function() {
         selectTriggered;
 
     suggestInstance._onSelectItem = function() {
-        selectTriggered = true
-    }
+        selectTriggered = true;
+    };
     suggestInstance._focusItem = function() {
-        focusTriggered = true
-    }
+        focusTriggered = true;
+    };
     suggestInstance._blurItem = function() {
-        blurTriggered = true
-    }
+        blurTriggered = true;
+    };
     suggestInstance._bindDropdown();
 
     suggestInstance.dropdown.trigger('testFocus');
@@ -272,10 +272,10 @@ SuggestTest.prototype.testTrigger = function() {
     this.suggestElement
         .on('suggesttestevent', function() {
             return false;
-        })
+        });
     this.suggestElement.parent().on('suggesttestevent', function() {
             propogationStopped = false;
-        })
+        });
     suggestInstance._trigger('testevent');
 
     assertTrue(propogationStopped);
@@ -415,7 +415,7 @@ SuggestTest.prototype.testSelectItem = function() {
         suggestOptions = {
             showRecent: true,
             storageKey: 'jsTestDriver-test-suggest-recent'
-        }
+        };
         suggestInstance = this.suggestCreate(suggestOptions);
         suggestInstance._focused = this.uiHash.item;
 
@@ -808,11 +808,11 @@ SuggestTest.prototype.testShowAll = function() {
         suggestInstance = this.suggestCreate();
     suggestInstance._abortSearch = function() {
         searchAborted = true;
-    }
+    };
     suggestInstance._search = function(e, term, context) {
         showAllTerm = term;
         showAllContext = context;
-    }
+    };
 
     suggestInstance._showAll(jQuery.Event('showAll'));
 

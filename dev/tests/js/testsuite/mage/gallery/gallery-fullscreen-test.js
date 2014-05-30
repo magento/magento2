@@ -39,7 +39,7 @@ GalleryFullscreenTest.prototype.galleryFullscreenDestroy = function() {
     }
 };
 GalleryFullscreenTest.prototype.galleryFullscreenCreate = function(options, element) {
-    (element || this.galleryFullscreenElement)[this.widgetName](options || {} )
+    (element || this.galleryFullscreenElement)[this.widgetName](options || {} );
     return this.galleryFullscreenElement.data(this.widgetName) ||
         this.galleryFullscreenElement.data(this.widgetName.toLowerCase());
 };

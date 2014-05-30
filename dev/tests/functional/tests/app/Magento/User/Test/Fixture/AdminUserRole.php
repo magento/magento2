@@ -28,8 +28,6 @@ use Mtf\Fixture\InjectableFixture;
 
 /**
  * Class AdminUserRole
- *
- * @package Magento\User\Test\Fixture
  */
 class AdminUserRole extends InjectableFixture
 {

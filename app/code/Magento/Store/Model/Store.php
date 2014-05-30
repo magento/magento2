@@ -76,17 +76,9 @@ class Store extends AbstractModel implements
 
     const XML_PATH_UNSECURE_BASE_LINK_URL = 'web/unsecure/base_link_url';
 
-    const XML_PATH_SECURE_BASE_LIB_URL = 'web/secure/base_lib_url';
-
-    const XML_PATH_UNSECURE_BASE_LIB_URL = 'web/unsecure/base_lib_url';
-
     const XML_PATH_SECURE_BASE_STATIC_URL = 'web/secure/base_static_url';
 
     const XML_PATH_UNSECURE_BASE_STATIC_URL = 'web/unsecure/base_static_url';
-
-    const XML_PATH_SECURE_BASE_CACHE_URL = 'web/secure/base_cache_url';
-
-    const XML_PATH_UNSECURE_BASE_CACHE_URL = 'web/unsecure/base_cache_url';
 
     const XML_PATH_SECURE_BASE_MEDIA_URL = 'web/secure/base_media_url';
 
@@ -580,19 +572,6 @@ class Store extends AbstractModel implements
                     $url = $this->_updatePathUseRewrites($url);
                     break;
 
-                case \Magento\Framework\UrlInterface::URL_TYPE_LIB:
-                    $path = $secure ? self::XML_PATH_SECURE_BASE_LIB_URL : self::XML_PATH_UNSECURE_BASE_LIB_URL;
-                    $url = $this->_getConfig($path);
-                    if (!$url) {
-                        $url = $this->getBaseUrl(
-                            \Magento\Framework\UrlInterface::URL_TYPE_WEB,
-                            $secure
-                        ) . $this->filesystem->getUri(
-                            \Magento\Framework\App\Filesystem::PUB_LIB_DIR
-                        );
-                    }
-                    break;
-
                 case \Magento\Framework\UrlInterface::URL_TYPE_STATIC:
                     $path = $secure ? self::XML_PATH_SECURE_BASE_STATIC_URL : self::XML_PATH_UNSECURE_BASE_STATIC_URL;
                     $url = $this->_getConfig($path);
@@ -602,19 +581,6 @@ class Store extends AbstractModel implements
                             $secure
                         ) . $this->filesystem->getUri(
                             \Magento\Framework\App\Filesystem::STATIC_VIEW_DIR
-                        );
-                    }
-                    break;
-
-                case \Magento\Framework\UrlInterface::URL_TYPE_CACHE:
-                    $path = $secure ? self::XML_PATH_SECURE_BASE_CACHE_URL : self::XML_PATH_UNSECURE_BASE_CACHE_URL;
-                    $url = $this->_getConfig($path);
-                    if (!$url) {
-                        $url = $this->getBaseUrl(
-                            \Magento\Framework\UrlInterface::URL_TYPE_WEB,
-                            $secure
-                        ) . $this->filesystem->getUri(
-                            \Magento\Framework\App\Filesystem::PUB_VIEW_CACHE_DIR
                         );
                     }
                     break;

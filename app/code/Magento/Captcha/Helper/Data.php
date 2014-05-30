@@ -150,7 +150,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $fontsConfig = $this->_config->getValue(\Magento\Captcha\Helper\Data::XML_PATH_CAPTCHA_FONTS, 'default');
         $fonts = array();
         if ($fontsConfig) {
-            $libDir = $this->_filesystem->getPath(\Magento\Framework\App\Filesystem::LIB_DIR);
+            $libDir = $this->_filesystem->getPath(\Magento\Framework\App\Filesystem::LIB_INTERNAL);
             foreach ($fontsConfig as $fontName => $fontConfig) {
                 $fonts[$fontName] = array(
                     'label' => $fontConfig['label'],

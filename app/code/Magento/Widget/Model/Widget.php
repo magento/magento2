@@ -42,9 +42,14 @@ class Widget
     protected $_configCacheType;
 
     /**
-     * @var \Magento\Framework\View\Url
+     * @var \Magento\Framework\View\Asset\Repository
      */
-    protected $_viewUrl;
+    protected $_assetRepo;
+
+    /**
+     * @var \Magento\Framework\View\Asset\Source
+     */
+    protected $_assetSource;
 
     /**
      * @var \Magento\Framework\View\FileSystem
@@ -66,18 +71,21 @@ class Widget
     /**
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Widget\Model\Config\Data $dataStorage
-     * @param \Magento\Framework\View\Url $viewUrl
+     * @param \Magento\Framework\View\Asset\Repository $assetRepo
+     * @param \Magento\Framework\View\Asset\Source $assetSource
      * @param \Magento\Framework\View\FileSystem $viewFileSystem
      */
     public function __construct(
         \Magento\Framework\Escaper $escaper,
         \Magento\Widget\Model\Config\Data $dataStorage,
-        \Magento\Framework\View\Url $viewUrl,
+        \Magento\Framework\View\Asset\Repository $assetRepo,
+        \Magento\Framework\View\Asset\Source $assetSource,
         \Magento\Framework\View\FileSystem $viewFileSystem
     ) {
         $this->_escaper = $escaper;
         $this->_dataStorage = $dataStorage;
-        $this->_viewUrl = $viewUrl;
+        $this->_assetRepo = $assetRepo;
+        $this->_assetSource = $assetSource;
         $this->_viewFileSystem = $viewFileSystem;
     }
 
@@ -287,10 +295,14 @@ class Widget
         if (is_array($widget) && isset($widget['placeholder_image'])) {
             $placeholder = (string)$widget['placeholder_image'];
         }
-        if (!$placeholder || !$this->_viewFileSystem->getViewFile($placeholder)) {
-            $placeholder = 'Magento_Widget::placeholder.gif';
+        if ($placeholder) {
+            $asset = $this->_assetRepo->createAsset($placeholder);
+            $placeholder = $this->_assetSource->getFile($asset);
+            if ($placeholder) {
+                return $asset->getUrl();
+            }
         }
-        return $this->_viewUrl->getViewFileUrl($placeholder);
+        return $this->_assetRepo->getUrl('Magento_Widget::placeholder.gif');
     }
 
     /**

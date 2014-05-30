@@ -1,7 +1,14 @@
-Options None
 <IfModule mod_php5.c>
 php_flag engine 0
 </IfModule>
 <IfModule mod_rewrite.c>
-    RewriteEngine Off
+    RewriteEngine On
+
+    # Remove signature of the static files that is used to overcome the browser cache
+    RewriteRule ^version.+?/(.+)$ $1 [L]
+
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-l
+
+    RewriteRule .* ../static.php?resource=$0 [L]
 </IfModule>

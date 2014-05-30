@@ -95,112 +95,24 @@ class HeadTest extends \PHPUnit_Framework_TestCase
             array('file' => 'varien/form.js', 'properties' => array('ie_condition' => 'lt IE 7'))
         );
         $this->assertEquals(
-            '<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="http://example.com/feed.xml" />' .
-            "\n" .
-            '<script type="text/javascript" src="http://localhost/pub/lib/varien/js.js"></script>' .
-            "\n" .
-            '<script type="text/javascript" ' .
-            'src="http://localhost/pub/static/frontend/Magento/blank/en_US/Magento_Bundle/bundle.js">' .
-            '</script>' .
-            "\n" .
-            '<link rel="stylesheet" type="text/css" media="all"' .
-            ' href="http://localhost/pub/lib/tiny_mce/themes/advanced/skins/default/ui.css" />' .
-            "\n" .
-            '<link rel="stylesheet" type="text/css" media="print" ' .
-            'href="http://localhost/pub/static/frontend/Magento/blank/en_US/css/styles.css" />' .
-            "\n" .
-            '<link rel="next" href="http://localhost/index.php/category.html" />' .
-            "\n" .
-            '<!--[if lt IE 7]>' .
-            "\n" .
-            '<script type="text/javascript" src="http://localhost/pub/lib/varien/form.js"></script>' .
-            "\n" .
-            '<![endif]-->' .
-            "\n",
-            $this->_block->getCssJsHtml()
-        );
-    }
-
-    /**
-     * @magentoAppIsolation enabled
-     */
-    public function testGetCssJsHtmlBadLink()
-    {
-
-        $this->_block->addChild(
-            'ui.css',
-            'Magento\Theme\Block\Html\Head\Css',
-            array('file' => 'not_exist_folder/wrong_bad_file2.xyz')
-        );
-        $this->_block->addChild(
-            'jjs',
-            'Magento\Theme\Block\Html\Head\Script',
-            array('file' => 'not_exist_folder/wrong_bad_file.xyz')
-        );
-        $this->assertEquals(
-            '<link rel="stylesheet" type="text/css" media="all"' .
-            ' href="http://localhost/index.php/core/index/notfound" />' .
-            "\n" .
-            '<script type="text/javascript" src="http://localhost/index.php/core/index/notfound"></script>' .
-            "\n",
-            $this->_block->getCssJsHtml()
-        );
-    }
-
-    /**
-     * Both existing and non-existent JS and CSS links are specified
-     * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store dev/js/merge_files 0
-     * @magentoConfigFixture current_store dev/js/minify_files 0
-     */
-    public function testGetCssJsHtmlMixedLinks()
-    {
-        $this->_block->addChild(
-            'varien/js.js',
-            'Magento\Theme\Block\Html\Head\Script',
-            array('file' => 'varien/js.js')
-        );
-        $this->_block->addChild(
-            'jjs',
-            'Magento\Theme\Block\Html\Head\Script',
-            array('file' => 'not_exist_folder/wrong_bad_file.xyz')
-        );
-        $this->_block->addChild(
-            'wrong_bad_file2.xyz',
-            'Magento\Theme\Block\Html\Head\Script',
-            array('file' => 'not_exist_folder/wrong_bad_file2.xyz', 'properties' => array('ie_condition' => 'lt IE 7'))
-        );
-        $this->_block->addChild(
-            'sdsdsd.css',
-            'Magento\Theme\Block\Html\Head\Css',
-            array('file' => 'not_exist_folder/wrong_bad_file2.xyz')
-        );
-
-        $this->_block->addChild(
-            'css/styles.css',
-            'Magento\Theme\Block\Html\Head\Css',
-            array('file' => 'css/styles.css', 'properties' => array('attributes' => 'media="print"'))
-        );
-
-
-
-        $this->assertEquals(
-            '<script type="text/javascript" src="http://localhost/pub/lib/varien/js.js"></script>' .
-            "\n" .
-            '<script type="text/javascript" src="http://localhost/index.php/core/index/notfound"></script>' .
-            "\n" .
-            '<!--[if lt IE 7]>' .
-            "\n" .
-            '<script type="text/javascript" src="http://localhost/index.php/core/index/notfound"></script>' .
-            "\n" .
-            '<![endif]-->' .
-            "\n" .
-            '<link rel="stylesheet" type="text/css" media="all"' .
-            ' href="http://localhost/index.php/core/index/notfound" />' .
-            "\n" .
-            '<link rel="stylesheet" type="text/css" media="print"' .
-            ' href="http://localhost/pub/static/frontend/Magento/blank/en_US/css/styles.css" />' .
-            "\n",
+            '<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="http://example.com/feed.xml" />'
+            . "\n"
+            . '<script type="text/javascript"'
+            . ' src="http://localhost/pub/static/frontend/Magento/blank/en_US/varien/js.js"></script>' . "\n"
+            . '<script type="text/javascript"'
+            . ' src="http://localhost/pub/static/frontend/Magento/blank/en_US/Magento_Bundle/bundle.js">'
+            . '</script>' . "\n"
+            . '<link rel="stylesheet" type="text/css" media="all"'
+            . ' href="http://localhost/pub/static/frontend/Magento/blank/en_US/'
+            . 'tiny_mce/themes/advanced/skins/default/ui.css" />' . "\n"
+            . '<link rel="stylesheet" type="text/css" media="print" '
+                . 'href="http://localhost/pub/static/frontend/Magento/blank/en_US/css/styles.css" />'
+                . "\n"
+            . '<link rel="next" href="http://localhost/index.php/category.html" />' . "\n"
+            . '<!--[if lt IE 7]>' . "\n"
+            . '<script type="text/javascript"'
+            . ' src="http://localhost/pub/static/frontend/Magento/blank/en_US/varien/form.js"></script>' . "\n"
+            . '<![endif]-->' . "\n",
             $this->_block->getCssJsHtml()
         );
     }
@@ -213,7 +125,7 @@ class HeadTest extends \PHPUnit_Framework_TestCase
     {
         $this->_block->addChild('jjs', 'Magento\Theme\Block\Html\Head\Script', array('file' => 'varien/js.js'));
         $this->assertStringMatchesFormat(
-            '<script type="text/javascript" src="http://localhost/pub/cache/minify/%s_js.min.js"></script>',
+            '<script type="text/javascript" src="http://localhost/pub/static/_cache/minified/%s_js.min.js"></script>',
             $this->_block->getCssJsHtml()
         );
     }
@@ -226,7 +138,8 @@ class HeadTest extends \PHPUnit_Framework_TestCase
     {
         $this->_block->addChild('jjs', 'Magento\Theme\Block\Html\Head\Script', array('file' => 'varien/js.js'));
         $this->assertSame(
-            '<script type="text/javascript" src="http://localhost/pub/lib/varien/js.js"></script>' . "\n",
+            '<script type="text/javascript"'
+                . ' src="http://localhost/pub/static/frontend/Magento/blank/en_US/varien/js.js"></script>' . "\n",
             $this->_block->getCssJsHtml()
         );
     }

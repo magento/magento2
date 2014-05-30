@@ -143,4 +143,15 @@ class Messages extends Block
     {
         return $this->waitForElementVisible($this->noticeMessage, Locator::SELECTOR_CSS);
     }
+
+    /**
+     * Get notice message which is present on the page
+     *
+     * @return string
+     */
+    public function getNoticeMessages()
+    {
+        $this->waitForElementVisible($this->noticeMessage);
+        return $this->_rootElement->find($this->noticeMessage)->getText();
+    }
 }

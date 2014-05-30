@@ -185,13 +185,13 @@ class CustomOptions implements FixtureInterface
                     'options' => [
                         [
                             'title' => 'Test1 %isolation%',
-                            'price' => 10.01,
+                            'price' => 110.01,
                             'price_type' => 'Percent',
                             'sku' => 'sku2_%isolation%'
                         ],
                         [
                             'title' => 'Test2 %isolation%',
-                            'price' => 20.02,
+                            'price' => 210.02,
                             'price_type' => 'Fixed',
                             'sku' => 'sku3_%isolation%'
                         ]

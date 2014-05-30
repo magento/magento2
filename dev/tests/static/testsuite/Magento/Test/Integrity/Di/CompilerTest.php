@@ -83,7 +83,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $this->_compilationDir = $this->_tmpDir . '/di';
 
         (new \Magento\Framework\Autoload\IncludePath())->addIncludePath(
-            array($basePath . '/app/code', $basePath . '/lib', $this->_generationDir)
+            array($basePath . '/app/code', $basePath . '/lib/internal', $this->_generationDir)
         );
 
         $this->_command = 'php ' . $basePath . '/dev/tools/Magento/Tools/Di/compiler.php --generation=%s --di=%s';
@@ -204,7 +204,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
         $basePath = \Magento\TestFramework\Utility\Files::init()->getPathToSource();
 
         $basePath = str_replace('/', '\\', $basePath);
-        $libPath = $basePath . '\\lib';
+        $libPath = $basePath . '\\lib\\internal';
         $appPath = $basePath . '\\app\\code';
         $generationPathPath = str_replace('/', '\\', $this->_generationDir);
 

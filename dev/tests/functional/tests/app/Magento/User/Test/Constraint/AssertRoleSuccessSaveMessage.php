@@ -29,8 +29,6 @@ use Magento\User\Test\Page\Adminhtml\UserRoleIndex;
 
 /**
  * Class AssertRoleSuccessSaveMessage
- *
- * @package Magento\User\Test\Constraint
  */
 class AssertRoleSuccessSaveMessage extends AbstractConstraint
 {
@@ -47,6 +45,7 @@ class AssertRoleSuccessSaveMessage extends AbstractConstraint
     /**
      * Asserts that success message equals to expected message.
      *
+     * @param UserRoleIndex $rolePage
      * @return void
      */
     public function processAssert(UserRoleIndex $rolePage)

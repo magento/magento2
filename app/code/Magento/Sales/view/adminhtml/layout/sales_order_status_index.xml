@@ -79,6 +79,26 @@
                             </argument>
                         </arguments>
                     </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="visible_on_front">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Visible On Frontend</argument>
+                            <argument name="index" xsi:type="string">visible_on_front</argument>
+                            <argument name="type" xsi:type="string">options</argument>
+                            <argument name="sortable" xsi:type="string">0</argument>
+                            <argument name="column_css_class" xsi:type="string">col-status-visible</argument>
+                            <argument name="header_css_class" xsi:type="string">col-status-visible</argument>
+                            <argument name="options" xsi:type="array">
+                                <item name="no" xsi:type="array">
+                                    <item name="value" xsi:type="string">0</item>
+                                    <item name="label" xsi:type="string" translate="true">No</item>
+                                </item>
+                                <item name="yes" xsi:type="array">
+                                    <item name="value" xsi:type="string">1</item>
+                                    <item name="label" xsi:type="string" translate="true">Yes</item>
+                                </item>
+                            </argument>
+                        </arguments>
+                    </block>
                     <block class="Magento\Sales\Block\Status\Grid\Column\State" as="state">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">State Code and Title</argument>

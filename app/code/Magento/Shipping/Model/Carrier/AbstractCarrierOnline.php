@@ -108,6 +108,13 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
     protected $_currencyFactory;
 
     /**
+     * Raw rate request data
+     *
+     * @var \Magento\Framework\Object|null
+     */
+    protected $_rawRequest = null;
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Sales\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
      * @param \Magento\Framework\Logger\AdapterFactory $logAdapterFactory
@@ -567,5 +574,35 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
     public function isGirthAllowed($countyDest = null)
     {
         return false;
+    }
+
+    /**
+     * @param \Magento\Framework\Object|null $request
+     * @return $this
+     */
+    public function setRawRequest($request)
+    {
+        $this->_rawRequest = $request;
+        return $this;
+    }
+
+    /**
+     * Calculate price considering free shipping and handling fee
+     *
+     * @param string $cost
+     * @param string $method
+     * @return float|string
+     */
+    public function getMethodPrice($cost, $method = '')
+    {
+        return $method == $this->getConfigData(
+            $this->_freeMethod
+        ) && $this->getConfigFlag(
+            'free_shipping_enable'
+        ) && $this->getConfigData(
+            'free_shipping_subtotal'
+        ) <= $this->_rawRequest->getBaseSubtotalInclTax() ? '0.00' : $this->getFinalPriceWithHandlingFee(
+            $cost
+        );
     }
 }

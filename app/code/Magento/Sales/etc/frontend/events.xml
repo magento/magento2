@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/Magento/Framework/Event/etc/events.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
     <event name="sales_quote_address_collect_totals_before">
         <observer name="sales_customer_validate_vat_number" instance="Magento\Sales\Model\Observer\Frontend\Quote\Address\CollectTotals" method="dispatch" />
     </event>

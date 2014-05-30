@@ -33,15 +33,6 @@ class InlineParserTest extends \PHPUnit_Framework_TestCase
     /** @var string */
     protected $_storeId = 'default';
 
-    public static function setUpBeforeClass()
-    {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\DesignInterface'
-        )->setDesignTheme(
-            'Magento/blank'
-        );
-    }
-
     protected function setUp()
     {
         /** @var $inline \Magento\Framework\Translate\Inline */

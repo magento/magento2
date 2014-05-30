@@ -24,7 +24,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../../../lib/Magento/Framework/Event/etc/events.xsd">
+        xsi:noNamespaceSchemaLocation="../../../../../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
     <event name="event_1">
         <observer instance="instance_1" method="method_name_1" />
     </event>

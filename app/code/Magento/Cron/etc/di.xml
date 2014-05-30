@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/Framework/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
     <preference for="Magento\Cron\Model\ConfigInterface" type="Magento\Cron\Model\Config" />
     <preference for="Magento\Framework\Shell\CommandRendererInterface" type="Magento\Framework\Shell\CommandRenderer" />
     <type name="Magento\Cron\Model\Config\Reader\Db">

@@ -26,8 +26,6 @@ namespace Magento\Widget\Model\Widget;
 /**
  * Widget Instance Model
  *
- * @method \Magento\Widget\Model\Resource\Widget\Instance _getResource()
- * @method \Magento\Widget\Model\Resource\Widget\Instance getResource()
  * @method string getTitle()
  * @method \Magento\Widget\Model\Widget\Instance setTitle(string $value)
  * @method \Magento\Widget\Model\Widget\Instance setStoreIds(string $value)
@@ -36,8 +34,6 @@ namespace Magento\Widget\Model\Widget;
  * @method \Magento\Widget\Model\Widget\Instance setSortOrder(int $value)
  * @method \Magento\Widget\Model\Widget\Instance setThemeId(int $value)
  * @method int getThemeId()
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Instance extends \Magento\Framework\Model\AbstractModel
 {
@@ -373,7 +369,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
     {
         if (is_string($this->getData('widget_parameters'))) {
             return unserialize($this->getData('widget_parameters'));
-        } else if (is_null($this->getData('widget_parameters'))) {
+        } elseif (null === $this->getData('widget_parameters')) {
             return array();
         }
         return is_array($this->getData('widget_parameters')) ? $this->getData('widget_parameters') : array();
@@ -438,7 +434,8 @@ class Instance extends \Magento\Framework\Model\AbstractModel
                     )
                 );
 
-                $isReadable = $this->_directory->isReadable($this->_directory->getRelativePath($configFile));
+                $isReadable = $configFile
+                    && $this->_directory->isReadable($this->_directory->getRelativePath($configFile));
                 if ($isReadable) {
                     $config = $this->_reader->readFile($configFile);
                     $widgetName = isset($this->_widgetConfigXml['name']) ? $this->_widgetConfigXml['name'] : null;
@@ -546,7 +543,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      */
     public function generateLayoutUpdateXml($container, $templatePath = '')
     {
-        $templateFilename = $this->_viewFileSystem->getFilename(
+        $templateFilename = $this->_viewFileSystem->getTemplateFileName(
             $templatePath,
             array(
                 'area' => $this->getArea(),

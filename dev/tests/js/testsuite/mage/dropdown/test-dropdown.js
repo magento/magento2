@@ -57,7 +57,7 @@ test( "triggerClass", function() {
     dialog.dropdownDialog("open");
     ok( !opener.hasClass("active"), "Class added to opener when dialog opens" );
     dialog.dropdownDialog("close");
-    dialog.dropdownDialog( "destroy" )
+    dialog.dropdownDialog( "destroy" );
 
 });
 
@@ -249,7 +249,7 @@ test( "createTitileBar", function() {
     dialog.dropdownDialog( "destroy" );
 
     dialog.dropdownDialog({"createTitleBar":false});
-    ok(!($(".ui-dialog").find(".ui-dialog-titlebar").length > 0), "Title bar isn't created");
+    ok($(".ui-dialog").find(".ui-dialog-titlebar").length <= 0, "Title bar isn't created");
     dialog.dropdownDialog( "destroy" );
 });
 
@@ -283,6 +283,6 @@ test( "autoSize", function() {
 
     dialog.dropdownDialog({"autoSize":false, width:"300"});
     dialog.dropdownDialog("open");
-    ok(!($(".ui-dialog").css("width") === '300px'), "_size function disabled");
+    ok($(".ui-dialog").css("width") !== '300px', "_size function disabled");
     dialog.dropdownDialog( "destroy" );
 });

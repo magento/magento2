@@ -94,7 +94,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
 
         $viewFilesystem = $this->getMock(
             '\Magento\Framework\View\Filesystem',
-            array('getFilename'),
+            array('getTemplateFileName'),
             array(),
             '',
             false
@@ -102,7 +102,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $viewFilesystem->expects(
             $this->any()
         )->method(
-            'getFilename'
+            'getTemplateFileName'
         )->will(
             $this->returnValue('var/www/magento\rootdir/app\custom/filename.phtml')
         );
@@ -283,27 +283,19 @@ class EditTest extends \PHPUnit_Framework_TestCase
         );
         $this->filesystemMock->expects($this->any())->method('getPath')->will($this->returnValueMap($dirValueMap));
 
-        $this->_emailConfigMock->expects(
-            $this->once()
-        )->method(
-            'getAvailableTemplates'
-        )->will(
-            $this->returnValue(array('template_b2', 'template_a', 'template_b1'))
-        );
-        $this->_emailConfigMock->expects(
-            $this->exactly(3)
-        )->method(
-            'getTemplateModule'
-        )->will(
-            $this->onConsecutiveCalls('Fixture_ModuleB', 'Fixture_ModuleA', 'Fixture_ModuleB')
-        );
-        $this->_emailConfigMock->expects(
-            $this->exactly(3)
-        )->method(
-            'getTemplateLabel'
-        )->will(
-            $this->onConsecutiveCalls('Template B2', 'Template A', 'Template B1')
-        );
+        $this->_emailConfigMock
+            ->expects($this->once())
+            ->method('getAvailableTemplates')
+            ->will($this->returnValue(array('template_b2', 'template_a', 'template_b1')));
+        $this->_emailConfigMock
+            ->expects($this->exactly(3))
+            ->method('getTemplateModule')
+            ->will($this->onConsecutiveCalls('Fixture_ModuleB', 'Fixture_ModuleA', 'Fixture_ModuleB'));
+        $this->_emailConfigMock
+            ->expects($this->exactly(3))
+            ->method('getTemplateLabel')
+            ->will($this->onConsecutiveCalls('Template B2', 'Template A', 'Template B1'));
+
         $this->assertEmpty($this->_block->getData('template_options'));
         $this->_block->setTemplate('my/custom\template.phtml');
         $this->_block->toHtml();

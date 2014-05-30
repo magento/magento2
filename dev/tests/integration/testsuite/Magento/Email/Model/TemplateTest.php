@@ -55,7 +55,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 $objectManager->get('Magento\Core\Model\App\Emulation'),
                 $objectManager->get('Magento\Store\Model\StoreManager'),
                 $objectManager->create('Magento\Framework\App\Filesystem'),
-                $objectManager->create('Magento\Framework\View\Url'),
+                $objectManager->create('Magento\Framework\View\Asset\Repository'),
                 $objectManager->create('Magento\Framework\View\FileSystem'),
                 $objectManager->create('Magento\Framework\App\Config\ScopeConfigInterface'),
                 $objectManager->get('Magento\Email\Model\Template\FilterFactory'),
@@ -212,6 +212,29 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->assertStringEndsWith(
             'static/frontend/Magento/blank/en_US/Magento_Email/logo_email.gif',
             $this->_model->getDefaultEmailLogo()
+        );
+    }
+
+    /**
+     * @dataProvider setDesignConfigExceptionDataProvider
+     * @expectedException \Magento\Framework\Exception
+     */
+    public function testSetDesignConfigException($config)
+    {
+        // \Magento\Core\Model\Template is an abstract class
+        $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\Email\Model\Template');
+        $model->setDesignConfig($config);
+    }
+
+    public function setDesignConfigExceptionDataProvider()
+    {
+        $storeId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getId();
+        return array(
+            array(array()),
+            array(array('area' => 'frontend')),
+            array(array('store' => $storeId)),
         );
     }
 }

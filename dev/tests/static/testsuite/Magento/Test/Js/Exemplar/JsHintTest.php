@@ -39,7 +39,7 @@ class JsHintTest extends \PHPUnit_Framework_TestCase
     public static function setUpBeforeClass()
     {
         $reportFile = __DIR__ . '/../../../tmp/js_report.txt';
-        $fileName = BP . '/pub/lib/mage/mage.js';
+        $fileName = BP . '/lib/web/mage/mage.js';
         self::$_cmd = new \Magento\TestFramework\Inspection\JsHint\Command($fileName, $reportFile);
     }
 

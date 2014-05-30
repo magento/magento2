@@ -171,4 +171,58 @@ class GridTest extends \PHPUnit_Framework_TestCase
         $item->expects($this->{$calledTimes}())->method('getProductType')->will($this->returnValue($productType));
         return $item;
     }
+
+    /**
+     * @covers \Magento\Sales\Block\Adminhtml\Order\Create\Items\Grid::getItems
+     */
+    public function testGetItems()
+    {
+        $layoutMock = $this->getMock('\Magento\Framework\View\LayoutInterface');
+        $blockMock = $this->getMock(
+            '\Magento\Framework\View\Element\AbstractBlock',
+            array('getItems'), array(), '', false
+        );
+
+
+        $itemMock = $this->getMock(
+            '\Magento\Sales\Model\Quote\Item',
+            array('getProduct', 'setHasError', 'setQty', 'getQty', '__sleep', '__wakeup'), array(), '', false
+        );
+        $productMock = $this->getMock(
+            '\Magento\Catalog\Model\Product',
+            array('getStockItem', 'getStatus', '__sleep', '__wakeup'), array(), '', false
+        );
+        $stockItemMock = $this->getMock(
+            '\Magento\CatalogInventory\Model\Stock\Item',
+            array(), array(), '', false
+        );
+        $checkMock = $this->getMock(
+            '\Magento\Framework\Object',
+            array('getMessage', 'getHasError'), array(), '', false
+        );
+
+        $layoutMock->expects($this->once())->method('getParentName')->will($this->returnValue('parentBlock'));
+        $layoutMock->expects($this->once())->method('getBlock')->with('parentBlock')
+            ->will($this->returnValue($blockMock));
+
+        $blockMock->expects($this->once())->method('getItems')->will($this->returnValue(array($itemMock)));
+
+        $itemMock->expects($this->any())->method('getChildren')->will($this->returnValue(array($itemMock)));
+        $itemMock->expects($this->any())->method('getProduct')->will($this->returnValue($productMock));
+
+        $productMock->expects($this->any())->method('getStockItem')->will($this->returnValue($stockItemMock));
+        $productMock->expects($this->any())->method('getStatus')
+            ->will($this->returnValue(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED));
+
+        $checkMock->expects($this->any())->method('getMessage')->will($this->returnValue('Message'));
+        $checkMock->expects($this->any())->method('getHasError')->will($this->returnValue(false));
+
+        $stockItemMock->expects($this->once())->method('checkQuoteItemQty')->will($this->returnValue($checkMock));
+
+        $this->_block->getQuote()->setIsSuperMode(true);
+        $items = $this->_block->setLayout($layoutMock)->getItems();
+
+        $this->assertEquals('Message', $items[0]->getMessage());
+        $this->assertEquals(true, $this->_block->getQuote()->getIsSuperMode());
+    }
 }

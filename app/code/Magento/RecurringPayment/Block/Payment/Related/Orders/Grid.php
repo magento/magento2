@@ -118,7 +118,7 @@ class Grid extends \Magento\RecurringPayment\Block\Payment\View
                 'status'
             )
         );
-        $this->_relatedOrders->addFieldToFilter('state', array('in' => $this->_config->getVisibleOnFrontStates()));
+        $this->_relatedOrders->addFieldToFilter('status', array('in' => $this->_config->getVisibleOnFrontStatuses()));
 
         $pager = $this->getLayout()->createBlock(
             'Magento\Theme\Block\Html\Pager'

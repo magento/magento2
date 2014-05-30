@@ -161,10 +161,6 @@ class Topmenu extends Template implements IdentityInterface
             return $html;
         }
 
-        if (!empty($childrenWrapClass)) {
-            $html .= '<div class="' . $childrenWrapClass . '">';
-        }
-
         $colStops = null;
         if ($childLevel == 0 && $limit) {
             $colStops = $this->_columnBrake($child->getChildren(), $limit);
@@ -174,9 +170,6 @@ class Topmenu extends Template implements IdentityInterface
         $html .= $this->_getHtml($child, $childrenWrapClass, $limit, $colStops);
         $html .= '</ul>';
 
-        if (!empty($childrenWrapClass)) {
-            $html .= '</div>';
-        }
 
         return $html;
     }

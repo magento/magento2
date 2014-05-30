@@ -28,8 +28,6 @@ use Mtf\Page\BackendPage;
 
 /**
  * Class UserRoleIndex
- *
- * @package Magento\User\Test\Page\Adminhtml
  */
 class UserRoleIndex extends BackendPage
 {
@@ -51,7 +49,7 @@ class UserRoleIndex extends BackendPage
         'messagesBlock' => [
             'name' => 'messagesBlock',
             'class' => 'Magento\Core\Test\Block\Messages',
-            'locator' => '.messages',
+            'locator' => '#messages',
             'strategy' => 'css selector',
         ],
     ];

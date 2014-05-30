@@ -146,7 +146,8 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
 
         // _loadThemeTranslation()
         $themeData = ['theme original' => 'theme translated'];
-        $this->_viewFileSystem->expects($this->once())->method('getFilename')->will($this->returnValue('/theme.csv'));
+        $this->_viewFileSystem->expects($this->once())->method('getLocaleFileName')
+            ->will($this->returnValue('/theme.csv'));
         $this->_csvParser->expects(new MethodInvokedAtIndex(1))
             ->method('getDataPairs')
             ->with('/theme.csv')

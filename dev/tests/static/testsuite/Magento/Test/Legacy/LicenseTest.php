@@ -67,7 +67,7 @@ class LicenseTest extends \PHPUnit_Framework_TestCase
             $rootFolderName . '/app/.+\.' . $extensions,
             $rootFolderName . '/dev/(?!tests/integration/tmp|tests/functional).+\.' . $extensions,
             $rootFolderName . '/downloader/.+\.' . $extensions,
-            $rootFolderName . '/lib/(Mage|Magento|Varien)/.+\.' . $extensions,
+            $rootFolderName . '/lib/internal/(Mage|Magento|Varien)/.+\.' . $extensions,
             $rootFolderName . '/pub/.+\.' . $extensions
         );
         $regexIterator = new \RegexIterator($recursiveIterator, '#(' . implode(' | ', $paths) . ')$#x');

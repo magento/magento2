@@ -111,9 +111,9 @@ class StorageTest extends \PHPUnit_Framework_TestCase
      */
     public function testUploadFile()
     {
-        $uplaoder = $this->_prepareUploader();
+        $uploader = $this->_prepareUploader();
 
-        $uplaoder->expects($this->once())->method('save')->will($this->returnValue(array('not_empty')));
+        $uploader->expects($this->once())->method('save')->will($this->returnValue(array('not_empty')));
 
         $this->_helperStorage->expects(
             $this->once()
@@ -474,10 +474,9 @@ class StorageTest extends \PHPUnit_Framework_TestCase
         $storagePath = $this->_storageRoot;
         $imagePath = $storagePath . '/' . $image;
 
-        $session = $this->getMock('Magento\Backend\Model\Session', array('getStoragePath'), array(), '', false);
-        $session->expects($this->atLeastOnce())->method('getStoragePath')->will($this->returnValue($storagePath));
-
-        $this->_helperStorage->expects($this->atLeastOnce())->method('getSession')->will($this->returnValue($session));
+        $this->_helperStorage->expects($this->once())
+            ->method('getCurrentPath')
+            ->will($this->returnValue($this->_storageRoot));
 
         $this->_helperStorage->expects(
             $this->atLeastOnce()

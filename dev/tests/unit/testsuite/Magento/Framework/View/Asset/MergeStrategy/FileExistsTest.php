@@ -26,113 +26,51 @@ namespace Magento\Framework\View\Asset\MergeStrategy;
 class FileExistsTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Asset\MergeStrategyInterface
+     */
+    private $mergerMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem\Directory\WriteInterface
+     */
+    private $dirMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Asset\File
+     */
+    private $resultAsset;
+
+    /**
      * @var \Magento\Framework\View\Asset\MergeStrategy\FileExists
      */
-    protected $_object;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_filesystem;
-
-    /**
-     * @var \Magento\Framework\Filesystem\Directory\Write | \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_directory;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_strategy;
-
-    /**
-     * @var string
-     */
-    protected $_mergedFileAbs = 'absolutePath/destination_file.js';
-
-    /**
-     * @var string
-     */
-    protected $_mergedFile = 'destination_file.js';
-
-    /**
-     * @var array
-     */
-    protected $_filesArray = array('file1.js', 'file2.js');
+    private $fileExists;
 
     protected function setUp()
     {
-        $this->_filesystem = $this->getMock(
-            'Magento\Framework\App\Filesystem',
-            array('getDirectoryWrite', 'getDirectoryRead'),
-            array(),
-            '',
-            false
-        );
-        $this->_directory = $this->getMock('Magento\Framework\Filesystem\Directory\Write', array(), array(), '', false);
-        $this->_filesystem->expects(
-            $this->any()
-        )->method(
-            'getDirectoryRead'
-        )->will(
-            $this->returnValue($this->_directory)
-        );
-        $this->_strategy = $this->getMock('Magento\Framework\View\Asset\MergeStrategyInterface');
-
-        $this->_directory->expects($this->any())->method('getRelativePath')->will(
-            $this->returnCallback(
-                function ($path) {
-                    $parts = explode('/', $path);
-                    return end($parts);
-                }
-            )
-        );
-
-        $this->_object = new \Magento\Framework\View\Asset\MergeStrategy\FileExists(
-            $this->_strategy,
-            $this->_filesystem
-        );
+        $this->mergerMock = $this->getMockForAbstractClass('\Magento\Framework\View\Asset\MergeStrategyInterface');
+        $this->dirMock = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\ReadInterface');
+        $filesystem = $this->getMock('\Magento\Framework\App\Filesystem', array(), array(), '', false);
+        $filesystem->expects($this->once())
+            ->method('getDirectoryRead')
+            ->with(\Magento\Framework\App\Filesystem::STATIC_VIEW_DIR)
+            ->will($this->returnValue($this->dirMock))
+        ;
+        $this->fileExists = new FileExists($this->mergerMock, $filesystem);
+        $this->resultAsset = $this->getMock('\Magento\Framework\View\Asset\File', array(), array(), '', false);
+        $this->resultAsset->expects($this->once())->method('getPath')->will($this->returnValue('foo/file'));
     }
 
-    public function testMergeFilesFileExists()
+    public function testMergeExists()
     {
-        $this->_strategy->expects($this->never())->method('mergeFiles');
-
-        $this->_directory->expects(
-            $this->once()
-        )->method(
-            'isExist'
-        )->with(
-            $this->equalTo($this->_mergedFile)
-        )->will(
-            $this->returnValue(true)
-        );
-
-        $this->_object->mergeFiles($this->_filesArray, $this->_mergedFileAbs, 'contentType');
+        $this->dirMock->expects($this->once())->method('isExist')->with('foo/file')->will($this->returnValue(true));
+        $this->mergerMock->expects($this->never())->method('merge');
+        $this->fileExists->merge(array(), $this->resultAsset);
     }
 
-    public function testMergeFilesFileDoesNotExist()
+    public function testMergeNotExists()
     {
-        $this->_strategy->expects(
-            $this->once()
-        )->method(
-            'mergeFiles'
-        )->with(
-            $this->_filesArray,
-            $this->_mergedFileAbs,
-            'contentType'
-        );
-
-        $this->_directory->expects(
-            $this->once()
-        )->method(
-            'isExist'
-        )->with(
-            $this->equalTo($this->_mergedFile)
-        )->will(
-            $this->returnValue(false)
-        );
-
-        $this->_object->mergeFiles($this->_filesArray, $this->_mergedFileAbs, 'contentType');
+        $this->dirMock->expects($this->once())->method('isExist')->with('foo/file')->will($this->returnValue(false));
+        $this->mergerMock->expects($this->once())->method('merge')->with(array(), $this->resultAsset);
+        $this->fileExists->merge(array(), $this->resultAsset);
     }
 }

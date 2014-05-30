@@ -30,6 +30,17 @@ class EntityTest extends \PHPUnit_Framework_TestCase
      */
     protected $_model;
 
+    protected function setUp()
+    {
+        $this->_model = $this->getMock(
+            'Magento\Framework\Model\AbstractModel',
+            array('load', 'save', 'delete', 'getIdFieldName', '__wakeup'),
+            array(),
+            '',
+            false
+        );
+    }
+
     /**
      * Callback for save method in mocked model
      */
@@ -60,6 +71,15 @@ class EntityTest extends \PHPUnit_Framework_TestCase
         $this->_model->setId(null);
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Class 'stdClass' is irrelevant to the tested model
+     */
+    public function testConstructorIrrelevantModelClass()
+    {
+        new \Magento\TestFramework\Entity($this->_model, array(), 'stdClass');
+    }
+
     public function crudDataProvider()
     {
         return array(
@@ -75,22 +95,11 @@ class EntityTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException($expectedException);
 
-        $this->_model = $this->getMock(
-            'Magento\Framework\Model\AbstractModel',
-            array('load', 'save', 'delete', 'getIdFieldName', '__wakeup'),
-            array(),
-            '',
-            false
-        );
-
-        $this->_model->expects($this->atLeastOnce())->method('load');
-        $this->_model->expects(
-            $this->atLeastOnce()
-        )->method(
-            'save'
-        )->will(
-            $this->returnCallback(array($this, $saveCallback))
-        );
+        $this->_model->expects($this->atLeastOnce())
+            ->method('load');
+        $this->_model->expects($this->atLeastOnce())
+            ->method('save')
+            ->will($this->returnCallback(array($this, $saveCallback)));
         /* It's important that 'delete' should be always called to guarantee the cleanup */
         $this->_model->expects(
             $this->atLeastOnce()

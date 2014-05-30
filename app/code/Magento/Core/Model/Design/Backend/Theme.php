@@ -61,8 +61,10 @@ class Theme extends \Magento\Framework\App\Config\Value
      */
     protected function _beforeSave()
     {
-        $design = clone $this->_design;
-        $design->setDesignTheme($this->getValue(), \Magento\Framework\App\Area::AREA_FRONTEND);
+        if ('' != $this->getValue()) {
+            $design = clone $this->_design;
+            $design->setDesignTheme($this->getValue(), \Magento\Framework\App\Area::AREA_FRONTEND);
+        }
         return parent::_beforeSave();
     }
 }

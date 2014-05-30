@@ -35,7 +35,7 @@ require BP . '/app/autoload.php';
         realpath(__DIR__ . '/../testsuite'),
         realpath(BP . '/app'),
         realpath(BP . '/app/code'),
-        realpath(BP . '/lib')
+        realpath(BP . '/lib/internal')
     )
 );
 if (is_dir(TESTS_TEMP_DIR)) {

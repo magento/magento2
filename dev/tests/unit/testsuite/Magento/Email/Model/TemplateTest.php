@@ -51,7 +51,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 $this->getMock('Magento\Core\Model\App\Emulation', array(), array(), '', false),
                 $this->getMock('Magento\Store\Model\StoreManager', array(), array(), '', false),
                 $this->getMock('Magento\Framework\App\Filesystem', array(), array(), '', false),
-                $this->getMock('Magento\Framework\View\Url', array(), array(), '', false),
+                $this->getMock('Magento\Framework\View\Asset\Repository', array(), array(), '', false),
                 $this->getMock('Magento\Framework\View\FileSystem', array(), array(), '', false),
                 $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface'),
                 $this->getMock('Magento\Email\Model\Template\FilterFactory', array(), array(), '', false),

@@ -93,11 +93,47 @@
     </components>
     <steps>
       <step>Login to backend.</step>
-      <step>Navigate to MARKETING -> Newsletter Template.</step>
+      <step>Navigate to MARKETING -&gt; Newsletter Template.</step>
       <step>Add New Template.</step>
       <step>Fill in all data according to data set.</step>
       <step>Save.</step>
       <step>Perform asserts.</step>
+    </steps>
+  </testcase>
+  <testcase>
+    <id>MTA-25</id>
+    <ticketId>MTA-25</ticketId>
+    <name>UpdateProductSimpleEntityTest</name>
+    <description>Cover UpdateProductSimpleEntity with fucntional tests designed for automation</description>
+    <module>Catalog</module>
+    <components>
+      <component>Products (CS)</component>
+    </components>
+    <steps>
+      <step>Login to backend.</step>
+      <step>Navigate to PRODUCTS &gt; Catalog.</step>
+      <step>Select a product in the grid.</step>
+      <step>Edit test value(s) according to dataset.</step>
+      <step>Click "Save".</step>
+      <step>Perform asserts</step>
+    </steps>
+  </testcase>
+  <testcase>
+    <id>MTA-16</id>
+    <ticketId>MTA-16</ticketId>
+    <name>CreateVirtualProductEntityTest</name>
+    <description>Test Creation for CreateVirtualProductEntity</description>
+    <module>Catalog</module>
+    <components>
+      <component>Virtual Product (CS)</component>
+    </components>
+    <steps>
+      <step>Login as admin.</step>
+      <step>Navigate to the Products &gt; Inventory &gt; Catalog.</step>
+      <step>Click on "+" dropdown and select Virtual Product type.</step>
+      <step>Fill in all data according to data set.</step>
+      <step>Save product.</step>
+      <step>Verify created product.</step>
     </steps>
   </testcase>
 </testcases>

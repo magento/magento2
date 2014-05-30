@@ -26,7 +26,7 @@ define('BP', __DIR__ . '/../..');
 (new \Magento\Framework\Autoload\IncludePath())->addIncludePath(
     array(
         BP . '/app/code',
-        BP . '/lib',
+        BP . '/lib/internal',
     )
 );
 

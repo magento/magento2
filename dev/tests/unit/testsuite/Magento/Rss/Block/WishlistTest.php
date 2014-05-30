@@ -46,7 +46,7 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
     protected $rssFactoryMock;
 
     /**
-     * @var \Magento\UrlInterface
+     * @var \Magento\Framework\UrlInterface
      */
     protected $urlBuilderMock;
 

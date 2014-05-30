@@ -62,37 +62,52 @@ class AggregateInvoker
      */
     public function __invoke(callable $callback, array $dataSource)
     {
-        $exceptionDumper = function (\Exception $exception, $dataSet) {
-            $dataSet = $exception instanceof \PHPUnit_Framework_AssertionFailedError &&
-                !$exception instanceof \PHPUnit_Framework_IncompleteTestError &&
-                !$exception instanceof \PHPUnit_Framework_SkippedTestError ||
-                $this->_options['verbose'] ? 'Data set: ' . var_export(
-                    $dataSet,
-                    true
-                ) . PHP_EOL : '';
-            return $dataSet . $exception->getMessage() . PHP_EOL . \PHPUnit_Util_Filter::getFilteredStacktrace(
-                $exception
-            );
-        };
-        $results = array(
-            'PHPUnit_Framework_IncompleteTestError' => array(),
-            'PHPUnit_Framework_SkippedTestError' => array(),
-            'PHPUnit_Framework_AssertionFailedError' => array()
-        );
+        $results = [
+            'PHPUnit_Framework_IncompleteTestError' => [],
+            'PHPUnit_Framework_SkippedTestError' => [],
+            'PHPUnit_Framework_AssertionFailedError' => [],
+        ];
         $passed = 0;
-        foreach ($dataSource as $dataSet) {
+        foreach ($dataSource as $dataSetName => $dataSet) {
             try {
                 call_user_func_array($callback, $dataSet);
                 $passed++;
             } catch (\PHPUnit_Framework_IncompleteTestError $exception) {
-                $results[get_class($exception)][] = $exceptionDumper($exception, $dataSet);
+                $results[get_class($exception)][] = $this->prepareMessage($exception, $dataSetName, $dataSet);
             } catch (\PHPUnit_Framework_SkippedTestError $exception) {
-                $results[get_class($exception)][] = $exceptionDumper($exception, $dataSet);
+                $results[get_class($exception)][] = $this->prepareMessage($exception, $dataSetName, $dataSet);
             } catch (\PHPUnit_Framework_AssertionFailedError $exception) {
-                $results['PHPUnit_Framework_AssertionFailedError'][] = $exceptionDumper($exception, $dataSet);
+                $results['PHPUnit_Framework_AssertionFailedError'][] = $this->prepareMessage(
+                    $exception,
+                    $dataSetName,
+                    $dataSet
+                );
             }
         }
         $this->processResults($results, $passed);
+    }
+
+    /**
+     * @param \Exception $exception
+     * @param string $dataSetName
+     * @param mixed $dataSet
+     * @return string
+     */
+    protected function prepareMessage(\Exception $exception, $dataSetName, $dataSet)
+    {
+        if (!is_string($dataSetName)) {
+            $dataSetName = var_export($dataSet, true);
+        }
+        if ($exception instanceof \PHPUnit_Framework_AssertionFailedError
+            && !$exception instanceof \PHPUnit_Framework_IncompleteTestError
+            && !$exception instanceof \PHPUnit_Framework_SkippedTestError
+            || $this->_options['verbose']) {
+            $dataSetName = 'Data set: ' . $dataSetName . PHP_EOL;
+        } else {
+            $dataSetName = '';
+        }
+        return $dataSetName . $exception->getMessage() . PHP_EOL
+        . \PHPUnit_Util_Filter::getFilteredStacktrace($exception);
     }
 
     /**

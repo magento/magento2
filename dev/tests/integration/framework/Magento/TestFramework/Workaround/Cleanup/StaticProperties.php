@@ -34,7 +34,7 @@ class StaticProperties
      *
      * @var array
      */
-    protected static $_cleanableFolders = array('/app/code/', '/dev/tests/', '/lib/');
+    protected static $_cleanableFolders = array('/app/code/', '/dev/tests/', '/lib/internal/');
 
     /**
      * Classes to exclude from static variables cleaning

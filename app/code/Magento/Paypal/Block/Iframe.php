@@ -21,6 +21,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
 namespace Magento\Paypal\Block;
 
 /**
@@ -112,7 +113,7 @@ class Iframe extends \Magento\Payment\Block\Form
             $templateFile = "{$templatePath}/iframe.phtml";
 
             $directory = $this->_filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::MODULES_DIR);
-            $file = $this->_viewFileSystem->getFilename($templateFile, array('module' => 'Magento_Paypal'));
+            $file = $this->_viewFileSystem->getTemplateFileName($templateFile, array('module' => 'Magento_Paypal'));
             if ($directory->isExist($directory->getRelativePath($file))) {
                 $this->setTemplate($templateFile);
             } else {

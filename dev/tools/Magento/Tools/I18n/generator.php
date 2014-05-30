@@ -56,8 +56,8 @@ try {
                 'paths' => array(
                     $directory . '/app/code/',
                     $directory . '/app/design/',
-                    $directory . '/pub/lib/mage/',
-                    $directory . '/pub/lib/varien/'
+                    $directory . '/lib/web/mage/',
+                    $directory . '/lib/web/varien/'
                 ),
                 'fileMask' => '/\.(js|phtml)$/'
             ),

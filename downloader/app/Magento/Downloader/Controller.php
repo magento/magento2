@@ -577,7 +577,7 @@ final class Controller
      */
     public function getVarFilename()
     {
-        return $this->getMageDir() . '/lib/Magento/Framework/Profiler.php';
+        return $this->getMageDir() . '/lib/internal/Magento/Framework/Profiler.php';
     }
 
     /**

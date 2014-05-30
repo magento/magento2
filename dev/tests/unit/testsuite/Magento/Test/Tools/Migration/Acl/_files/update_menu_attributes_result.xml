@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../lib/Magento/Framework/Acl/etc/acl.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../lib/internal/Magento/Framework/Acl/etc/acl.xsd">
     <menu>
         <add id="item1" resource="acl4"/>
         <add id="item2" resource="acl2"/>

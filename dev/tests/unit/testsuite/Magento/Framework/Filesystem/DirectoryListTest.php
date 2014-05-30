@@ -31,7 +31,7 @@ class DirectoryListTest extends \PHPUnit_Framework_TestCase
     /**
      * Test for add directory and getConfig methods
      *
-     * @dataProvider providerConfig
+     * @dataProvider addDirectoryGetConfigDataProvider
      * @param string $root
      * @param array $directories
      * @param array $configs
@@ -46,45 +46,42 @@ class DirectoryListTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    /**
-     * @expectedException \Magento\Framework\Filesystem\FilesystemException
-     */
-    public function testAddDefinedDirectory()
-    {
-        $directories = array(AppFilesystem::PUB_LIB_DIR => array('path' => ''));
-        $directoryList = new DirectoryList(__DIR__, $directories);
-        $directoryList->addDirectory(AppFilesystem::PUB_LIB_DIR, array('path' => ''));
-    }
-
-    /**
-     * Data provider for testAddDirectoryGetConfig
-     */
-    public function providerConfig()
+    public function addDirectoryGetConfigDataProvider()
     {
         return array(
-            'pub_lib' => array(
+            'static_view' => array(
                 __DIR__,
-                array('custom1_' . AppFilesystem::PUB_LIB_DIR => array('path' => 'pub/lib_basic')),
+                array(),
                 array(
-                    'custom2_' . AppFilesystem::PUB_LIB_DIR => array(
-                        'path' => 'pub/lib',
-                        'uri' => 'pub/lib',
+                    'custom2_' . AppFilesystem::STATIC_VIEW_DIR => array(
+                        'path' => 'some/static',
+                        'uri' => 'some/static',
                         'permissions' => 0777,
                         'read_only' => true,
                         'allow_create_dirs' => true
                     )
                 ),
                 array(
-                    'custom2_' . AppFilesystem::PUB_LIB_DIR => array(
-                        'path' => str_replace('\\', '/', __DIR__ . '/pub/lib'),
-                        'uri' => 'pub/lib',
+                    'custom2_' . AppFilesystem::STATIC_VIEW_DIR => array(
+                        'path' => str_replace('\\', '/', __DIR__ . '/some/static'),
+                        'uri' => 'some/static',
                         'permissions' => 0777,
                         'read_only' => true,
                         'allow_create_dirs' => true
                     )
-                )
+                ),
             )
         );
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Filesystem\FilesystemException
+     */
+    public function testAddDefinedDirectory()
+    {
+        $directories = array(AppFilesystem::STATIC_VIEW_DIR => array('path' => ''));
+        $directoryList = new DirectoryList(__DIR__, $directories);
+        $directoryList->addDirectory(AppFilesystem::STATIC_VIEW_DIR, array('path' => ''));
     }
 
     /**

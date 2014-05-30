@@ -62,7 +62,7 @@ class AssertAddToCartButtonPresent extends AbstractConstraint
      *
      * @var CatalogProductSimple
      */
-    protected $catalogProductSimple;
+    protected $product;
 
     /**
      * Product Page on Frontend
@@ -76,7 +76,7 @@ class AssertAddToCartButtonPresent extends AbstractConstraint
      *
      * @param CmsIndex $cmsIndex
      * @param CatalogCategoryView $catalogCategoryView
-     * @param CatalogProductSimple $catalogProductSimple
+     * @param CatalogProductSimple $product
      * @param CatalogProductView $catalogProductView
      *
      * @return void
@@ -84,12 +84,12 @@ class AssertAddToCartButtonPresent extends AbstractConstraint
     public function processAssert(
         CmsIndex $cmsIndex,
         CatalogCategoryView $catalogCategoryView,
-        CatalogProductSimple $catalogProductSimple,
+        CatalogProductSimple $product,
         CatalogProductView $catalogProductView
     ) {
         $this->catalogCategoryView = $catalogCategoryView;
         $this->cmsIndex = $cmsIndex;
-        $this->catalogProductSimple = $catalogProductSimple;
+        $this->product = $product;
         $this->catalogProductView = $catalogProductView;
 
         $this->addToCardPresentOnCategory();
@@ -105,7 +105,7 @@ class AssertAddToCartButtonPresent extends AbstractConstraint
     {
         $this->cmsIndex->open();
         $this->cmsIndex->getTopmenu()->selectCategoryByName(
-            $this->catalogProductSimple->getCategoryIds()[0]['name']
+            $this->product->getCategoryIds()[0]['name']
         );
         \PHPUnit_Framework_Assert::assertTrue(
             $this->catalogCategoryView->getListProductBlock()->checkAddToCardButton(),
@@ -122,9 +122,9 @@ class AssertAddToCartButtonPresent extends AbstractConstraint
     {
         $this->cmsIndex->open();
         $this->cmsIndex->getTopmenu()->selectCategoryByName(
-            $this->catalogProductSimple->getCategoryIds()[0]['name']
+            $this->product->getCategoryIds()[0]['name']
         );
-        $this->catalogCategoryView->getListProductBlock()->openProductViewPage($this->catalogProductSimple->getName());
+        $this->catalogCategoryView->getListProductBlock()->openProductViewPage($this->product->getName());
         \PHPUnit_Framework_Assert::assertTrue(
             $this->catalogProductView->getViewBlock()->checkAddToCardButton(),
             "Button 'Add to Card' is absent on Product page"

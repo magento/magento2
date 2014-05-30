@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/Framework/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
     <preference for="Magento\Catalog\Block\Product\ReviewRendererInterface" type="Magento\Review\Block\Product\ReviewRenderer" />
     <type name="Magento\Framework\Model\ActionValidator\RemoveAction">
         <arguments>
@@ -37,6 +37,11 @@
             <argument name="allowedAttributes" xsi:type="array">
                 <item name="rating_summary" xsi:type="string">rating_summary</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Review\Model\Review">
+        <arguments>
+            <argument name="urlModel" xsi:type="object">Magento\Framework\Url</argument>
         </arguments>
     </type>
 </config>

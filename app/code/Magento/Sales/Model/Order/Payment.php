@@ -337,69 +337,100 @@ class Payment extends \Magento\Payment\Model\Info
         $methodInstance->setStore($order->getStoreId());
 
         $orderState = \Magento\Sales\Model\Order::STATE_NEW;
-        $stateObject = new \Magento\Framework\Object();
+        $orderStatus = $methodInstance->getConfigData('order_status');
+        $isCustomerNotified = false;
 
-        /**
-         * Do order payment validation on payment method level
-         */
+        // Do order payment validation on payment method level
         $methodInstance->validate();
         $action = $methodInstance->getConfigPaymentAction();
+
         if ($action) {
             if ($methodInstance->isInitializeNeeded()) {
-                /**
-                 * For method initialization we have to use original config value for payment action
-                 */
+                $stateObject = new \Magento\Framework\Object();
+                // For method initialization we have to use original config value for payment action
                 $methodInstance->initialize($methodInstance->getConfigData('payment_action'), $stateObject);
+                $orderState = $stateObject->getState() ?: $orderState;
+                $orderStatus = $stateObject->getStatus() ?: $orderStatus;
+                $isCustomerNotified = $stateObject->getIsNotified();
             } else {
                 $orderState = \Magento\Sales\Model\Order::STATE_PROCESSING;
-                switch ($action) {
-                    case \Magento\Payment\Model\Method\AbstractMethod::ACTION_ORDER:
-                        $this->_order($order->getBaseTotalDue());
-                        break;
-                    case \Magento\Payment\Model\Method\AbstractMethod::ACTION_AUTHORIZE:
-                        $this->_authorize(true, $order->getBaseTotalDue());
-                        // base amount will be set inside
-                        $this->setAmountAuthorized($order->getTotalDue());
-                        break;
-                    case \Magento\Payment\Model\Method\AbstractMethod::ACTION_AUTHORIZE_CAPTURE:
-                        $this->setAmountAuthorized($order->getTotalDue());
-                        $this->setBaseAmountAuthorized($order->getBaseTotalDue());
-                        $this->capture(null);
-                        break;
-                    default:
-                        break;
-                }
+                $this->processAction($action, $order);
             }
         }
 
-        $orderIsNotified = null;
-        if ($stateObject->getState() && $stateObject->getStatus()) {
-            $orderState = $stateObject->getState();
-            $orderStatus = $stateObject->getStatus();
-            $orderIsNotified = $stateObject->getIsNotified();
-        } else {
-            $orderStatus = $methodInstance->getConfigData('order_status');
-            if (!$orderStatus) {
-                $orderStatus = $order->getConfig()->getStateDefaultStatus($orderState);
-            }
-        }
-        $isCustomerNotified = null !== $orderIsNotified ? $orderIsNotified : $order->getCustomerNoteNotify();
-        $message = $order->getCustomerNote();
+        $isCustomerNotified = $isCustomerNotified ?: $order->getCustomerNoteNotify();
 
-        // add message if order was put into review during authorization or capture
-        if ($order->getState() == \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW) {
-            if ($message) {
-                $order->addStatusToHistory($order->getStatus(), $message, $isCustomerNotified);
-            }
-        } elseif ($order->getState() && ($orderStatus !== $order->getStatus() || $message)) {
-            $order->setState($orderState, $orderStatus, $message, $isCustomerNotified);
-        } elseif ($order->getState() != $orderState || $order->getStatus() != $orderStatus || $message) {
-            $order->setState($orderState, $orderStatus, $message, $isCustomerNotified);
+        if (!in_array($orderStatus, $order->getConfig()->getStateStatuses($orderState))) {
+            $orderStatus = $order->getConfig()->getStateDefaultStatus($orderState);
         }
+
+        $this->updateOrder($order, $orderState, $orderStatus, $isCustomerNotified);
 
         $this->_eventManager->dispatch('sales_order_payment_place_end', array('payment' => $this));
 
         return $this;
+    }
+
+    /**
+     * Set appropriate state to order or add status to order history
+     *
+     * @param \Magento\Sales\Model\Order $order
+     * @param string $orderState
+     * @param string $orderStatus
+     * @param bool $isCustomerNotified
+     * @return void
+     */
+    protected function updateOrder(\Magento\Sales\Model\Order $order, $orderState, $orderStatus, $isCustomerNotified)
+    {
+        // add message if order was put into review during authorization or capture
+        $message = $order->getCustomerNote();
+        $originalOrderState = $order->getState();
+        $originalOrderStatus = $order->getStatus();
+
+        switch (true) {
+            case ($message && ($originalOrderState == \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW)):
+                $order->addStatusToHistory($originalOrderStatus, $message, $isCustomerNotified);
+                break;
+            case ($message):
+            case ($originalOrderState && $message):
+            case ($originalOrderState != $orderState):
+            case ($originalOrderStatus != $orderStatus):
+                $order->setState($orderState, $orderStatus, $message, $isCustomerNotified);
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * Perform actions based on passed action name
+     *
+     * @param string $action
+     * @param \Magento\Sales\Model\Order $order
+     * @return void
+     */
+    protected function processAction($action, \Magento\Sales\Model\Order $order)
+    {
+        $totalDue = $order->getTotalDue();
+        $baseTotalDue = $order->getBaseTotalDue();
+
+        switch ($action) {
+            case \Magento\Payment\Model\Method\AbstractMethod::ACTION_ORDER:
+                $this->_order($baseTotalDue);
+                break;
+            case \Magento\Payment\Model\Method\AbstractMethod::ACTION_AUTHORIZE:
+                $this->_authorize(true, $baseTotalDue);
+                // base amount will be set inside
+                $this->setAmountAuthorized($totalDue);
+                break;
+            case \Magento\Payment\Model\Method\AbstractMethod::ACTION_AUTHORIZE_CAPTURE:
+                $this->setAmountAuthorized($totalDue);
+                $this->setBaseAmountAuthorized($baseTotalDue);
+                $this->capture(null);
+                break;
+            default:
+                break;
+        }
     }
 
     /**

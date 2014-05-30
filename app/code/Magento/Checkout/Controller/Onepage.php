@@ -125,7 +125,8 @@ class Onepage extends Action
      */
     protected function _expireAjax()
     {
-        if (!$this->getOnepage()->getQuote()->hasItems() || $this->getOnepage()->getQuote()->getHasError()) {
+        $quote = $this->getOnepage()->getQuote();
+        if (!$quote->hasItems() || $quote->getHasError() || !$quote->validateMinimumAmount()) {
             $this->_ajaxRedirectResponse();
             return true;
         }
@@ -225,29 +226,11 @@ class Onepage extends Action
             return;
         }
         $quote = $this->getOnepage()->getQuote();
-        if (!$quote->hasItems() || $quote->getHasError()) {
+        if (!$quote->hasItems() || $quote->getHasError() || !$quote->validateMinimumAmount()) {
             $this->_redirect('checkout/cart');
             return;
         }
-        if (!$quote->validateMinimumAmount()) {
-            $error = $this->_objectManager->get(
-                'Magento\Framework\App\Config\ScopeConfigInterface'
-            )->getValue(
-                'sales/minimum_order/error_message',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            ) ? $this->_objectManager->get(
-                'Magento\Framework\App\Config\ScopeConfigInterface'
-            )->getValue(
-                'sales/minimum_order/error_message',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            ) : __(
-                'Subtotal must exceed minimum order amount'
-            );
 
-            $this->messageManager->addError($error);
-            $this->_redirect('checkout/cart');
-            return;
-        }
         $this->_objectManager->get('Magento\Checkout\Model\Session')->setCartWasUpdated(false);
         $currentUrl = $this->_objectManager->create('Magento\Framework\UrlInterface')->getUrl('*/*/*', array('_secure' => true));
         $this->_objectManager->get('Magento\Customer\Model\Session')->setBeforeAuthUrl($currentUrl);

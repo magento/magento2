@@ -46,7 +46,7 @@ $order = $objectManager->create('Magento\Sales\Model\Order');
 $order->setIncrementId(
     '100000001'
 )->setState(
-    \Magento\Sales\Model\Order::STATE_PROCESSING
+    \Magento\Sales\Model\Order::STATE_PROCESSING, true
 )->setSubtotal(
     100
 )->setBaseSubtotal(

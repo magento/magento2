@@ -34,26 +34,6 @@ class CatalogProductSimple extends AbstractRepository
 {
     public function __construct(array $defaultConfig = [], array $defaultData = [])
     {
-        $this->_data['SimpleProduct_sku_516169631'] = [
-            'sku' => 'SimpleProduct_sku_516169631',
-            'name' => 'SimpleProduct 516169631',
-            'type_id' => 'simple',
-            'attribute_set_id' => '4',
-            'price' => ['value' => 3, 'preset' => '-'],
-            'id' => '1',
-            'mtf_dataset_name' => 'SimpleProduct_sku_516169631'
-        ];
-
-        $this->_data['SimpleProduct_sku_1947585255'] = [
-            'sku' => 'SimpleProduct_sku_1947585255',
-            'name' => 'SimpleProduct 1947585255',
-            'type_id' => 'simple',
-            'attribute_set_id' => '4',
-            'price' => ['value' => 4, 'preset' => '-'],
-            'id' => '2',
-            'mtf_dataset_name' => 'SimpleProduct_sku_1947585255'
-        ];
-
         $this->_data['100_dollar_product'] = [
             'sku' => '100_dollar_product%isolation%',
             'name' => '100_dollar_product%isolation%',
@@ -90,6 +70,15 @@ class CatalogProductSimple extends AbstractRepository
             'attribute_set_id' => '4',
             'price' => ['value' => 100, 'preset' => ''],
             'category_ids' => ['presets' => 'default_subcategory']
+        ];
+
+        $this->_data['product_without_category'] = [
+            'sku' => 'simple_product_without_category_%isolation%',
+            'name' => 'Simple product without category %isolation%',
+            'type_id' => 'simple',
+            'attribute_set_id' => '4',
+            'price' => ['value' => 100, 'preset' => '-'],
+            'category_ids' => ['presets' => null]
         ];
     }
 }

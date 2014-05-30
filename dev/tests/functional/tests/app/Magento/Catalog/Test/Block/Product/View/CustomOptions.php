@@ -67,7 +67,7 @@ class CustomOptions extends Block
      *
      * @var string
      */
-    protected $selectLocator = '//div[contains(@class,"control")]//select';
+    protected $selectLocator = './div[contains(@class,"control")]//select';
 
     /**
      * Title value CSS locator
@@ -88,7 +88,7 @@ class CustomOptions extends Block
      *
      * @var string
      */
-    protected $optionLocator = '//option[%d]';
+    protected $optionLocator = './option[%d]';
 
     /**
      * Option XPath locator by value

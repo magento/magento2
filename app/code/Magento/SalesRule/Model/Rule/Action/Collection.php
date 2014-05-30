@@ -26,18 +26,18 @@ namespace Magento\SalesRule\Model\Rule\Action;
 class Collection extends \Magento\Rule\Model\Action\Collection
 {
     /**
-     * @param \Magento\Framework\View\Url $viewUrl
+     * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @param \Magento\Rule\Model\ActionFactory $actionFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\View\Url $viewUrl,
+        \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\View\LayoutInterface $layout,
         \Magento\Rule\Model\ActionFactory $actionFactory,
         array $data = array()
     ) {
-        parent::__construct($viewUrl, $layout, $actionFactory, $data);
+        parent::__construct($assetRepo, $layout, $actionFactory, $data);
         $this->setType('Magento\SalesRule\Model\Rule\Action\Collection');
     }
 

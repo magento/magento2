@@ -61,7 +61,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('widget_window_url', $settings);
 
         $jsFilename = $settings['widget_plugin_src'];
-        $this->assertStringStartsWith('http://localhost/pub/lib/', $jsFilename);
+        $this->assertStringStartsWith('http://localhost/pub/static/adminhtml/Magento/backend/en_US/', $jsFilename);
         $this->assertStringEndsWith('editor_plugin.js', $jsFilename);
 
         $this->assertInternalType('array', $settings['widget_placeholders']);

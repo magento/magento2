@@ -140,20 +140,26 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param string $status
      * @param string $state
      * @param bool $isDefault
+     * @param bool $visibleOnFront
      * @return $this
      */
-    public function assignState($status, $state, $isDefault)
+    public function assignState($status, $state, $isDefault, $visibleOnFront = false)
     {
         if ($isDefault) {
             $this->_getWriteAdapter()->update(
                 $this->_stateTable,
-                array('is_default' => 0),
-                array('state = ?' => $state)
+                ['is_default' => 0],
+                ['state = ?' => $state]
             );
         }
         $this->_getWriteAdapter()->insertOnDuplicate(
             $this->_stateTable,
-            array('status' => $status, 'state' => $state, 'is_default' => (int)$isDefault)
+            [
+                'status' => $status,
+                'state' => $state,
+                'is_default' => (int)$isDefault,
+                'visible_on_front' => (int)$visibleOnFront
+            ]
         );
         return $this;
     }

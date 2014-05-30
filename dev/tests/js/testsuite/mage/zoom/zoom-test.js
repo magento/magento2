@@ -337,14 +337,14 @@ ZoomTest.prototype.testLargeImageLoaded = function() {
     _getWhiteBordersOffset.returnValue = 1;
     zoomInstance.element.append(image);
     zoomInstance.options.selectors.image = '[data-role=test-image]';
-    zoomInstance.image = image
+    zoomInstance.image = image;
     _getAspectRatio.returnCallback = function(image) {
         if (image.is(zoomInstance.image)) {
             return 0;
         } else {
             return 1;
         }
-    }
+    };
 
     jQuery(zoomInstance.options.selectors.image).on('processStop', function() {
         processStopTriggered = true;

@@ -90,8 +90,8 @@ class Recent extends \Magento\Framework\View\Element\Template
             'customer_id',
             $this->_customerSession->getCustomer()->getId()
         )->addAttributeToFilter(
-            'state',
-            array('in' => $this->_orderConfig->getVisibleOnFrontStates())
+            'status',
+            array('in' => $this->_orderConfig->getVisibleOnFrontStatuses())
         )->addAttributeToSort(
             'created_at',
             'desc'

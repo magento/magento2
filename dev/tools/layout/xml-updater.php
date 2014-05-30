@@ -26,7 +26,7 @@ require_once $basePath . '/app/autoload.php';
 require __DIR__ . '/Formatter.php';
 
 (new \Magento\Framework\Autoload\IncludePath())->addIncludePath(array(
-    $basePath . '/lib',
+    $basePath . '/lib/internal',
 ));
 
 try{

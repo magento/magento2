@@ -91,8 +91,6 @@ class Baseurl extends \Magento\Framework\App\Config\Value
                 $this->_assertStartsWithValuesOrUrl($placeholders, $value);
                 break;
             case \Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_STATIC_URL:
-            case \Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_CACHE_URL:
-            case \Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_LIB_URL:
             case \Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_MEDIA_URL:
                 $this->_assertStartsWithValuesOrUrlOrEmpty($placeholders, $value);
                 break;
@@ -119,8 +117,6 @@ class Baseurl extends \Magento\Framework\App\Config\Value
                 $this->_assertStartsWithValuesOrUrl($placeholders, $value);
                 break;
             case \Magento\Store\Model\Store::XML_PATH_SECURE_BASE_STATIC_URL:
-            case \Magento\Store\Model\Store::XML_PATH_SECURE_BASE_CACHE_URL:
-            case \Magento\Store\Model\Store::XML_PATH_SECURE_BASE_LIB_URL:
             case \Magento\Store\Model\Store::XML_PATH_SECURE_BASE_MEDIA_URL:
                 $this->_assertStartsWithValuesOrUrlOrEmpty($placeholders, $value);
                 break;
@@ -228,10 +224,8 @@ class Baseurl extends \Magento\Framework\App\Config\Value
             switch ($this->getPath()) {
                 case \Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_URL:
                 case \Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_MEDIA_URL:
-                case \Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_LIB_URL:
                 case \Magento\Store\Model\Store::XML_PATH_SECURE_BASE_URL:
                 case \Magento\Store\Model\Store::XML_PATH_SECURE_BASE_MEDIA_URL:
-                case \Magento\Store\Model\Store::XML_PATH_SECURE_BASE_LIB_URL:
                     $this->_mergeService->cleanMergedJsCss();
                     break;
             }

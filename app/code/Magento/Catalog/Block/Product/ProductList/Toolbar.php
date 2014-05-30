@@ -674,6 +674,8 @@ class Toolbar extends \Magento\Framework\View\Element\Template
                     'design/pagination/pagination_frame_skip',
                     \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                 )
+            )->setLimit(
+                $this->getLimit()
             )->setCollection(
                 $this->getCollection()
             );

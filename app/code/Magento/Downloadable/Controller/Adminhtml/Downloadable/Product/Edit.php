@@ -57,9 +57,8 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product
      */
     protected function _processDownload($resource, $resourceType)
     {
+        /* @var $helper \Magento\Downloadable\Helper\Download */
         $helper = $this->_objectManager->get('Magento\Downloadable\Helper\Download');
-        /* @var $helper DownloadHelper */
-
         $helper->setResource($resource, $resourceType);
 
         $fileName = $helper->getFilename();
@@ -86,12 +85,12 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product
         }
 
         if ($contentDisposition = $helper->getContentDisposition()) {
-            $this->getResponse()->setHeader('Content-Disposition', $contentDisposition . '; filename=' . $fileName);
+            $this->getResponse()
+                ->setHeader('Content-Disposition', $contentDisposition . '; filename=' . $fileName);
         }
 
         $this->getResponse()->clearBody();
         $this->getResponse()->sendHeaders();
-
         $helper->output();
     }
 

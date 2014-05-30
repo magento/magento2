@@ -753,9 +753,15 @@ class Item extends \Magento\Framework\Model\AbstractModel
 
                         $result->setItemBackorders($backorderQty);
                     } else {
-                        $orderedItems = $this->getOrderedItems();
-                        $itemsLeft = $this->getQty() > $orderedItems ? ($this->getQty() - $orderedItems) * 1 : 0;
-                        $backorderQty = $itemsLeft > 0 ? ($qty - $itemsLeft) * 1 : $qty * 1;
+                        $orderedItems = (int)$this->getOrderedItems();
+
+                        // Available item qty in stock excluding item qty in other quotes
+                        $qtyAvailable = ($this->getQty() - ($summaryQty - $qty))* 1;
+                        if ($qtyAvailable > 0) {
+                            $backorderQty = $qty * 1 - $qtyAvailable;
+                        } else {
+                            $backorderQty = $qty * 1;
+                        }
 
                         if ($backorderQty > 0) {
                             $result->setItemBackorders($backorderQty);

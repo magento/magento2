@@ -22,11 +22,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Class that implements CRUP tests for \Magento\Framework\Model\AbstractModel based objects
- */
 namespace Magento\TestFramework;
 
+/**
+ * Class that implements CRUD tests for \Magento\Core\Model\AbstractModel based objects
+ */
 class Entity
 {
     /**
@@ -34,14 +34,39 @@ class Entity
      */
     protected $_model;
 
+    /**
+     * @var array
+     */
     protected $_updateData;
 
-    public function __construct(\Magento\Framework\Model\AbstractModel $model, array $updateData)
+    /**
+     * @var string
+     */
+    protected $_modelClass;
+
+    /**
+     * @param \Magento\Framework\Model\AbstractModel $model
+     * @param array $updateData
+     * @param string|null $modelClass Class of a model to use when creating new instances, or NULL for auto-detection
+     * @throws \InvalidArgumentException
+     */
+    public function __construct(\Magento\Framework\Model\AbstractModel $model, array $updateData, $modelClass = null)
     {
-        $this->_model = $model;
-        $this->_updateData = $updateData;
+        $this->_model       = $model;
+        $this->_updateData  = $updateData;
+        if ($modelClass) {
+            if (!$model instanceof $modelClass) {
+                throw new \InvalidArgumentException("Class '$modelClass' is irrelevant to the tested model.");
+            }
+            $this->_modelClass = $modelClass;
+        } else {
+            $this->_modelClass = get_class($this->_model);
+        }
     }
 
+    /**
+     * Test Create -> Read -> Update -> Delete operations
+     */
     public function testCrud()
     {
         $this->_testCreate();
@@ -56,12 +81,13 @@ class Entity
     }
 
     /**
+     * Retrieve new instance of not yet loaded model
+     *
      * @return \Magento\Framework\Model\AbstractModel
      */
     protected function _getEmptyModel()
     {
-        $modelClass = get_class($this->_model);
-        return \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create($modelClass);
+        return \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create($this->_modelClass);
     }
 
     protected function _testCreate()
