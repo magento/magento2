@@ -32,12 +32,24 @@ use Magento\Tax\Model\Config;
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
+    /**
+     * Price conversion constant for positive
+     */
     const PRICE_CONVERSION_PLUS = 1;
 
+    /**
+     * Price conversion constant for negative
+     */
     const PRICE_CONVERSION_MINUS = 2;
 
+    /**
+     * Default tax class for customers
+     */
     const CONFIG_DEFAULT_CUSTOMER_TAX_CLASS = 'tax/classes/default_customer_tax_class';
 
+    /**
+     * Default tax class for products
+     */
     const CONFIG_DEFAULT_PRODUCT_TAX_CLASS = 'tax/classes/default_product_tax_class';
 
     /**
@@ -48,44 +60,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_config;
 
     /**
+     * Tax calculator
+     *
      * @var \Magento\Tax\Model\Calculation
      */
     protected $_calculation;
-
-    /**
-     * @var mixed
-     */
-    protected $_displayTaxColumn;
-
-    /**
-     * @var mixed
-     */
-    protected $_taxData;
-
-    /**
-     * @var mixed
-     */
-    protected $_priceIncludesTax;
-
-    /**
-     * @var mixed
-     */
-    protected $_shippingPriceIncludesTax;
-
-    /**
-     * @var mixed
-     */
-    protected $_applyTaxAfterDiscount;
-
-    /**
-     * @var int
-     */
-    protected $_priceDisplayType;
-
-    /**
-     * @var mixed
-     */
-    protected $_shippingPriceDisplayType;
 
     /**
      * Postcode cut to this length when creating search templates
@@ -136,6 +115,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_taxItemFactory;
 
     /**
+     * @var \Magento\Tax\Model\Resource\Sales\Order\Tax\CollectionFactory
+     */
+    protected $_orderTaxCollectionFactory;
+
+    /**
      * @var \Magento\Framework\Locale\ResolverInterface
      */
     protected $_localeResolver;
@@ -151,6 +135,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory
      * @param \Magento\Tax\Model\Resource\Sales\Order\Tax\ItemFactory $taxItemFactory
+     * @param \Magento\Tax\Model\Resource\Sales\Order\Tax\CollectionFactory $orderTaxCollectionFactory
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      */
     public function __construct(
@@ -164,6 +149,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\Locale\FormatInterface $localeFormat,
         \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory,
         \Magento\Tax\Model\Resource\Sales\Order\Tax\ItemFactory $taxItemFactory,
+        \Magento\Tax\Model\Resource\Sales\Order\Tax\CollectionFactory $orderTaxCollectionFactory,
         \Magento\Framework\Locale\ResolverInterface $localeResolver
     ) {
         parent::__construct($context);
@@ -176,6 +162,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_localeFormat = $localeFormat;
         $this->_attributeFactory = $attributeFactory;
         $this->_taxItemFactory = $taxItemFactory;
+        $this->_orderTaxCollectionFactory = $orderTaxCollectionFactory;
         $this->_localeResolver = $localeResolver;
     }
 
@@ -254,13 +241,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * Output
+     * Retrieves the "including tax" or "excluding tax" label
      *
      * @param bool $flag
-     * @param null|int|string|Store $store
      * @return string
      */
-    public function getIncExcText($flag, $store = null)
+    public function getIncExcText($flag)
     {
         return $flag ? __('Incl. Tax') : __('Excl. Tax');
     }
@@ -314,7 +300,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         }
 
         if ($res === false) {
-            $res = $this->displayTaxColumn($store);
+            $res = $this->displayTaxColumn();
         }
         return $res;
     }
@@ -443,10 +429,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Check if need display tax column in for shopping cart/order items
      *
-     * @param null|string|bool|int|Store $store
      * @return bool
      */
-    public function displayTaxColumn($store = null)
+    public function displayTaxColumn()
     {
         return $this->_config->displayCartPricesBoth();
     }
@@ -488,8 +473,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected function _getAllRatesByProductClass($store = null)
     {
         $result = array();
-        $originRate = $this->_calculation->getRateOriginRequest($store);
-        $rates = $this->_calculation->getRatesForAllProductTaxClasses($originRate);
+        $defaultRate = $this->_calculation->getDefaultRateRequest($store);
+        $rates = $this->_calculation->getRatesForAllProductTaxClasses($defaultRate);
         foreach ($rates as $class => $rate) {
             $result["value_{$class}"] = $rate;
         }
@@ -507,6 +492,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param   null|int $ctc customer tax class
      * @param   null|string|bool|int|Store $store
      * @param   bool $priceIncludesTax flag what price parameter contain tax
+     * @param   bool $roundPrice
      * @return  float
      */
     public function getPrice(
@@ -517,7 +503,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $billingAddress = null,
         $ctc = null,
         $store = null,
-        $priceIncludesTax = null
+        $priceIncludesTax = null,
+        $roundPrice = true
     ) {
         if (!$price) {
             return $price;
@@ -541,8 +528,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             }
         }
         if ($taxClassId && $priceIncludesTax) {
-            $request = $this->_calculation->getRateRequest(false, false, false, $store);
-            $includingPercent = $this->_calculation->getRate($request->setProductClassId($taxClassId));
+            if ($this->isCrossBorderTradeEnabled($store)) {
+                $includingPercent = $percent;
+            } else {
+                $request = $this->_calculation->getRateOriginRequest($store);
+                $includingPercent = $this->_calculation->getRate($request->setProductClassId($taxClassId));
+            }
         }
 
         if ($percent === false || is_null($percent)) {
@@ -552,39 +543,34 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         }
 
         $product->setTaxPercent($percent);
+        if ($product->getAppliedRates() == null) {
+            $request = $this->_calculation->getRateRequest($shippingAddress, $billingAddress, $ctc, $store);
+            $request->setProductClassId($taxClassId);
+            $appliedRates = $this->_calculation->getAppliedRates($request);
+            $product->setAppliedRates($appliedRates);
+        }
 
         if (!is_null($includingTax)) {
             if ($priceIncludesTax) {
                 if ($includingTax) {
                     /**
-                     * Recalculate price include tax in case of different rates
+                     * Recalculate price include tax in case of different rates.  Otherwise price remains the same.
                      */
                     if ($includingPercent != $percent) {
-                        $price = $this->_calculatePrice($price, $includingPercent, false);
-                        /**
-                         * Using regular rounding. Ex:
-                         * price incl tax   = 52.76
-                         * store tax rate   = 19.6%
-                         * customer tax rate= 19%
-                         *
-                         * price excl tax = 52.76 / 1.196 = 44.11371237 ~ 44.11
-                         * tax = 44.11371237 * 0.19 = 8.381605351 ~ 8.38
-                         * price incl tax = 52.49531773 ~ 52.50 != 52.49
-                         *
-                         * that why we need round prices excluding tax before applying tax
-                         * this calculation is used for showing prices on catalog pages
-                         */
-                        if ($percent != 0) {
-                            $price = $this->getCalculator()->round($price);
-                            $price = $this->_calculatePrice($price, $percent, true);
-                        }
+                        // determine the customer's price that includes tax
+                        $price = $this->_calculatePriceInclTax($price, $includingPercent, $percent, $store);
                     }
                 } else {
                     $price = $this->_calculatePrice($price, $includingPercent, false);
                 }
             } else {
                 if ($includingTax) {
-                    $price = $this->_calculatePrice($price, $percent, true);
+                    $appliedRates = $product->getAppliedRates();
+                    if (count($appliedRates) > 1) {
+                        $price = $this->_calculatePriceInclTaxWithMultipleRates($price, $appliedRates);
+                    } else {
+                        $price = $this->_calculatePrice($price, $percent, true);
+                    }
                 }
             }
         } else {
@@ -592,7 +578,18 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                 switch ($this->getPriceDisplayType($store)) {
                     case Config::DISPLAY_TYPE_EXCLUDING_TAX:
                     case Config::DISPLAY_TYPE_BOTH:
-                        $price = $this->_calculatePrice($price, $includingPercent, false);
+                        if ($includingPercent != $percent) {
+                            // determine the customer's price that includes tax
+                            $taxablePrice = $this->_calculatePriceInclTax($price, $includingPercent, $percent, $store);
+                            // determine the customer's tax amount,
+                            // round tax unless $roundPrice is set explicitly to false
+                            $tax = $this->_calculation->calcTaxAmount($taxablePrice, $percent, true, $roundPrice);
+                            // determine the customer's price without taxes
+                            $price = $taxablePrice - $tax;
+                        } else {
+                            //round tax first unless $roundPrice is set to false explicitly
+                            $price = $this->_calculatePrice($price, $includingPercent, false, $roundPrice);
+                        }
                         break;
                     case Config::DISPLAY_TYPE_INCLUDING_TAX:
                         $price = $this->_calculatePrice($price, $includingPercent, false);
@@ -604,7 +601,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             } else {
                 switch ($this->getPriceDisplayType($store)) {
                     case Config::DISPLAY_TYPE_INCLUDING_TAX:
-                        $price = $this->_calculatePrice($price, $percent, true);
+                        $appliedRates = $product->getAppliedRates();
+                        if (count($appliedRates) > 1) {
+                            $price = $this->_calculatePriceInclTaxWithMultipleRates($price, $appliedRates);
+                        } else {
+                            $price = $this->_calculatePrice($price, $percent, true);
+                        }
                         break;
                     case Config::DISPLAY_TYPE_BOTH:
                     case Config::DISPLAY_TYPE_EXCLUDING_TAX:
@@ -614,7 +616,29 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                 }
             }
         }
-        return $store->roundPrice($price);
+        if ($roundPrice) {
+            return $store->roundPrice($price);
+        } else {
+            return $price;
+        }
+    }
+
+    /**
+     * Given a store price that includes tax at the store rate, this function will back out the store's tax, and add in
+     * the customer's tax.  Returns this new price which is the customer's price including tax.
+     *
+     * @param float $storePriceInclTax
+     * @param float $storePercent
+     * @param float $customerPercent
+     * @param null|int|string|Store $store
+     * @return float
+     */
+    protected function _calculatePriceInclTax($storePriceInclTax, $storePercent, $customerPercent, $store)
+    {
+        $priceExclTax         = $this->_calculatePrice($storePriceInclTax, $storePercent, false, false);
+        $customerTax          = $this->_calculation->calcTaxAmount($priceExclTax, $customerPercent, false, false);
+        $customerPriceInclTax = $store->roundPrice($priceExclTax + $customerTax);
+        return $customerPriceInclTax;
     }
 
     /**
@@ -640,34 +664,55 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Check if we have display in catalog prices including and excluding tax
      *
+     * @param  null|int|string|Store $store
      * @return bool
      */
-    public function displayBothPrices()
+    public function displayBothPrices($store = null)
     {
-        return $this->getPriceDisplayType() == Config::DISPLAY_TYPE_BOTH;
+        return $this->getPriceDisplayType($store) == Config::DISPLAY_TYPE_BOTH;
     }
 
     /**
-     * Calculate price including/excluding tax base on tax rate percent
+     * Calculate price including/excluding tax based on tax rate percent
      *
      * @param   float $price
      * @param   float $percent
-     * @param   bool $type true - for calculate price including tax and false if price excluding tax
+     * @param   bool  $type - true to calculate the price including tax or false if calculating price to exclude tax
+     * @param   bool  $roundTaxFirst
      * @return  float
      */
-    protected function _calculatePrice($price, $percent, $type)
+    protected function _calculatePrice($price, $percent, $type, $roundTaxFirst = false)
     {
         if ($type) {
-            $taxAmount = $this->_calculation->calcTaxAmount($price, $percent, false, false);
+            $taxAmount = $this->_calculation->calcTaxAmount($price, $percent, false, $roundTaxFirst);
             return $price + $taxAmount;
         } else {
-            $taxAmount = $this->_calculation->calcTaxAmount($price, $percent, true, false);
+            $taxAmount = $this->_calculation->calcTaxAmount($price, $percent, true, $roundTaxFirst);
             return $price - $taxAmount;
         }
     }
 
     /**
-     * @param bool $flag
+     * Calculate price including tax when multiple taxes is applied and rounded independently.
+     *
+     * @param  float $price
+     * @param  array $appliedRates
+     * @return float
+     */
+    protected function _calculatePriceInclTaxWithMultipleRates($price, $appliedRates)
+    {
+        $tax = 0;
+        foreach ($appliedRates as $appliedRate) {
+            $taxRate = $appliedRate['percent'];
+            $tax += $this->_calculation->round($price * $taxRate / 100);
+        }
+        return $tax + $price;
+    }
+
+    /**
+     * Returns the include / exclude tax label
+     *
+     * @param  bool $flag
      * @return string
      */
     public function getIncExcTaxLabel($flag)
@@ -677,6 +722,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Check if shipping prices include tax
+     *
      * @param null|string|bool|int|Store $store
      * @return bool
      */
@@ -686,6 +733,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get shipping price display type
+     *
      * @param null|string|bool|int|Store $store
      * @return int
      */
@@ -695,6 +744,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Returns whether the shipping price should display with taxes included
+     *
      * @return bool
      */
     public function displayShippingPriceIncludingTax()
@@ -703,6 +754,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Returns whether the shipping price should display without taxes
+     *
      * @return bool
      */
     public function displayShippingPriceExcludingTax()
@@ -711,6 +764,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Returns whether the shipping price should display both with and without taxes
+     *
      * @return bool
      */
     public function displayShippingBothPrices()
@@ -719,6 +774,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Get tax class id specified for shipping tax estimation
+     *
      * @param null|string|bool|int|Store $store
      * @return int
      */
@@ -761,6 +818,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Returns the SQL for the price tax
+     *
      * @param string $priceField
      * @param string $taxClassField
      * @return string
@@ -771,7 +830,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             return '';
         }
 
-        $request = $this->_calculation->getRateRequest(false, false, false);
+        $request = $this->_calculation->getDefaultRateRequest();
         $defaultTaxes = $this->_calculation->getRatesForAllProductTaxClasses($request);
 
         $request = $this->_calculation->getRateRequest();
@@ -779,7 +838,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
         $defaultTaxString = $currentTaxString = '';
 
-        $rateToVariable = array('defaultTaxString' => 'defaultTaxes', 'currentTaxString' => 'currentTaxes');
+        $rateToVariable = array(
+            'defaultTaxString' => 'defaultTaxes',
+            'currentTaxString' => 'currentTaxes',
+        );
         foreach ($rateToVariable as $rateVariable => $rateArray) {
             if (${$rateArray} && is_array(${$rateArray})) {
                 ${$rateVariable} = '';
@@ -944,8 +1006,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *  $index => array(
      *      'tax_amount'        => $taxAmount,
      *      'base_tax_amount'   => $baseTaxAmount,
-     *      'hidden_tax_amount' => $hiddenTaxAmount
-     *      'title'             => $title
+     *      'hidden_tax_amount' => $hiddenTaxAmount,
+     *      'title'             => $title,
      *      'percent'           => $percent
      *  )
      * )
@@ -965,33 +1027,55 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
         $taxClassAmount = array();
         if ($current && $source) {
-            /** @var $item \Magento\Sales\Model\Order\Item */
-            foreach ($current->getItemsCollection() as $item) {
-                /** @var $taxCollection \Magento\Tax\Model\Resource\Sales\Order\Tax\Item */
-                $taxCollection = $this->_taxItemFactory->create();
-                $taxCollection->getTaxItemsByItemId(
-                    $item->getOrderItemId() ? $item->getOrderItemId() : $item->getItemId()
-                );
+            if ($current == $source) {
+                // use the actuals
+                $rates = $this->_getTaxRateSubtotals($source);
+                foreach ($rates['items'] as $rate) {
+                    $taxClassId = $rate['tax_id'];
+                    $taxClassAmount[$taxClassId]['tax_amount'] = $rate['amount'];
+                    $taxClassAmount[$taxClassId]['base_tax_amount'] = $rate['base_amount'];
+                    $taxClassAmount[$taxClassId]['title'] = $rate['title'];
+                    $taxClassAmount[$taxClassId]['percent'] = $rate['percent'];
+                }
+            } else {
+                // regenerate tax subtotals
+                // Calculate taxes for shipping
+                $shippingTaxAmount = $current->getShippingTaxAmount();
+                if ($shippingTaxAmount) {
+                    $shippingTax    = $this->getShippingTax($current);
+                    $taxClassAmount = array_merge($taxClassAmount, $shippingTax);
+                }
 
-                foreach ($taxCollection as $tax) {
-                    $taxClassId = $tax['tax_id'];
-                    $percent = $tax['tax_percent'];
+                /** @var $item \Magento\Sales\Model\Order\Item */
+                foreach ($current->getItemsCollection() as $item) {
+                    /** @var $taxCollection \Magento\Tax\Model\Resource\Sales\Order\Tax\Item */
+                    $taxCollection = $this->_taxItemFactory->create();
+                    $taxCollection->getTaxItemsByItemId(
+                        $item->getOrderItemId() ? $item->getOrderItemId() : $item->getItemId()
+                    );
 
-                    $price = $item->getRowTotal();
-                    $basePrice = $item->getBaseRowTotal();
-                    if ($this->applyTaxAfterDiscount($item->getStoreId())) {
-                        $price = $price - $item->getDiscountAmount() + $item->getHiddenTaxAmount();
-                        $basePrice = $basePrice - $item->getBaseDiscountAmount() + $item->getBaseHiddenTaxAmount();
-                    }
+                    foreach ($taxCollection as $tax) {
+                        $taxClassId = $tax['tax_id'];
+                        $percent = $tax['tax_percent'];
 
-                    if (isset($taxClassAmount[$taxClassId])) {
-                        $taxClassAmount[$taxClassId]['tax_amount'] += $price * $percent / 100;
-                        $taxClassAmount[$taxClassId]['base_tax_amount'] += $basePrice * $percent / 100;
-                    } else {
-                        $taxClassAmount[$taxClassId]['tax_amount'] = $price * $percent / 100;
-                        $taxClassAmount[$taxClassId]['base_tax_amount'] = $basePrice * $percent / 100;
-                        $taxClassAmount[$taxClassId]['title'] = $tax['title'];
-                        $taxClassAmount[$taxClassId]['percent'] = $tax['percent'];
+                        $price = $item->getRowTotal();
+                        $basePrice = $item->getBaseRowTotal();
+                        if ($this->applyTaxAfterDiscount($item->getStoreId())) {
+                            $price = $price - $item->getDiscountAmount() + $item->getHiddenTaxAmount();
+                            $basePrice = $basePrice - $item->getBaseDiscountAmount() + $item->getBaseHiddenTaxAmount();
+                        }
+                        $taxAmount = $price * $percent / 100;
+                        $baseTaxAmount = $basePrice * $percent / 100;
+
+                        if (isset($taxClassAmount[$taxClassId])) {
+                            $taxClassAmount[$taxClassId]['tax_amount'] += $taxAmount;
+                            $taxClassAmount[$taxClassId]['base_tax_amount'] += $baseTaxAmount;
+                        } else {
+                            $taxClassAmount[$taxClassId]['tax_amount'] = $taxAmount;
+                            $taxClassAmount[$taxClassId]['base_tax_amount'] = $baseTaxAmount;
+                            $taxClassAmount[$taxClassId]['title'] = $tax['title'];
+                            $taxClassAmount[$taxClassId]['percent'] = $tax['percent'];
+                        }
                     }
                 }
             }
@@ -1006,6 +1090,17 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         }
 
         return $taxClassAmount;
+    }
+
+    /**
+     * Returns the array of tax rates for the order
+     *
+     * @param \Magento\Sales\Model\Order $order
+     * @return array
+     */
+    protected function _getTaxRateSubtotals($order)
+    {
+        return $this->_orderTaxCollectionFactory->create()->loadByOrder($order)->toArray();
     }
 
     /**
@@ -1074,5 +1169,16 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             self::CONFIG_DEFAULT_PRODUCT_TAX_CLASS,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
+    }
+
+    /**
+     * Return whether cross border trade is enabled or not
+     *
+     * @param   null|int|string|Store $store
+     * @return  bool
+     */
+    public function isCrossBorderTradeEnabled($store = null)
+    {
+        return (bool)$this->_config->crossBorderTradeEnabled($store);
     }
 }

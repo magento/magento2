@@ -48,7 +48,7 @@ class AttributePriceTest extends \PHPUnit_Framework_TestCase
     /** @var  \Magento\Tax\Pricing\Price\Plugin\AttributePrice */
     protected $plugin;
 
-    /** @var \Magento\Object|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Object|\PHPUnit_Framework_MockObject_MockObject */
     protected $rateRequestMock;
 
     /** @var \Magento\ConfigurableProduct\Pricing\Price\AttributePrice|\PHPUnit_Framework_MockObject_MockObject */

@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/Magento/Framework/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
     <virtualType name="Magento\LayeredNavigation\Block\Navigation\Category" type="Magento\LayeredNavigation\Block\Navigation">
         <arguments>
             <argument name="catalogLayer" xsi:type="object">Magento\Catalog\Model\Layer\Category</argument>

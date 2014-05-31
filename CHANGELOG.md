@@ -1,3 +1,132 @@
+2.0.0.0-dev80
+=============
+* Framework improvements:
+  * Reworked subsystem of static view files preprocessing
+     * Refactored implementation of the view files "fallback" and "collecting" (layout XML files, LESS files for @magento_import) mechanisms for better abstraction
+     * Used the concept of "view asset" in client code of the View library across the board
+     * Refactored and simplified LESS preprocessing library, mechanisms of merging and minifying static view files
+     * Reworked the way how links to static view files are generated and served):
+         * Changed the strategy of generating unique URL for view static files
+         * Separated the view files publication process from the page generation
+         * Added a separate entry point (pub/static.php) for file materialization
+     * View files deployment tool changes:
+         * Renamed CLI script from generator.php to deploy.php
+         * Fixed the known limitation of view files deployment tool of being unable to materialize files per languages. Now the list of intended languages can be provided as a CLI parameter
+         * Expanded the tool parameters
+     * Improved security and reliability of view files structure:
+         * Restructured the module view folder by file type: "web" – view static files, "templates" – module template files, and "layout" – module layout files
+         * Reworked the theme module folder to repeat the same structure as in the module
+         * Added “web” folder to a theme root which contains static view files
+         * Renamed the pub/lib to lib/web. Currently there are no static files that are publicly accessible by default. All static view files may be subject of preprocessing
+         * Renamed the former lib to lib/internal
+  * Support of RequireJS:
+     * Adopted RequireJS library and implemented ability for modules or themes to introduce RequireJS configuration (aka shim-config)
+     * Refactored scripts in the Magento_ConfigurableProduct module to be loaded via RequireJS
+* Tax calculation updates:
+  * Fixed tax calculation rounding issues when discount is applied
+  * Fixed extra penny problem when exact tax amount ends with 0.5 cent
+  * Fixed tax calculation errors when customer tax rate is different from store tax rate
+  * Added support to round tax at individual tax rate
+  * Fixed price inconsistencies between catalog and shopping cart
+  * Added support to maintain consistent price including tax for customers with different tax rates
+  * Added support to allow tax rules with different priorities to be applied to subtotal only
+* Fixed bugs:
+  * Fixed an issue where it was impossible to place an order with Zero Subtotal Checkout using checkout with multiple addresses
+  * Fixed an issue where an irrelevant  confirmation window appeared when placing an order with Zero Subtotal Checkout in the backend
+  * Fixed an issue where it was impossible to create an order for a new customer in the backend if gift options were  enabled
+  * Fixed an issue where a wrong message about backordered items in cart was displayed in the backend
+  * Fixed an issue where it was impossible to perform a checkout with multiple addresses when the  Validate Each Address Separately option in Multi-address Checkout was enabled
+  * Fixed an issue where the Minimum Order Amount option was applied to the orders
+  * Fixed an issue where the duplicated element  caused  problems when attempting to customize styling  of the section
+  * Fixed an issue where a user was redirected to Dashboard when clicking the Search  and Reset buttons on the Recurring Profile page
+  * Fixed an issue where the Enabled for RMA option was available for online shipping method in Magento 2 CE
+  * Fixed an issue when free shipping was applied even if the Free Shipping with Minimum Order Amount option was disabled
+  * Fixed an issue with not displaying a downloadable product with the Links can be purchased separately option enabled on the grouped product page
+  * Fixed an issue of not generating product price variations during configurable product creation
+  * Fixed an issue with incorrect work of category pager
+  * Fixed an issue with file permissions change after the system backup was run
+  * Fixed an issue with inconsistency between the REST request and response format
+  * Fixed an issue with the Magento Contact Us form not submitted if secure_base_url doesn't contain "https"
+  * Fixed an issue with incorrect display of the Price as configured field which didn’t count product options cost
+  * Fixed an issue with incorrect redirect when clicking the product URL in Pending Review Rss
+* JavaScript improvements:
+  * Added standard validation to the front-end address fields
+  * Implemented the wishlist widget
+  * Implemented the tabs widget
+  * Implemented the collapsible widget
+  * Implemented the accordion widget
+  * Implemented the tooltip widget
+  * Standardized widgets used on one page checkout
+
+2.0.0.0-dev79
+=============
+* Tax calculation updates:
+  * Fixed issues in tax calculation rounding with discount applied
+  * Fixed an issue with extra penny  when exact tax amount ended with 0.5 cent
+  * Fixed an issue where there were tax calculation errors when customer tax rate was different from store tax rate
+  * Added support to round tax at individual tax rate
+  * Fixed price inconsistencies between catalog and shopping cart
+  * Added support for maintaining consistent price including tax for customers with different tax rates
+  * Added support for applying tax rules with different priorities to subtotal only
+  
+* Fixed bugs:
+  * Removed the extra '%' sign in the error\notice message on Gift Card Accounts page on the backend
+  * Fixed an issue with image uploading functionality in the Catalog configuration
+  * Fixed an issue where a customer could not navigate the store when downloading the downloadable product
+  * Fixed an issue where adding CMS block Catalog Events Lister caused an error
+  * Fixed an issue where the price was displayed twice on the Product page on the frontend
+  * Fixed an issue where an admin could not open search results on the backend
+  * Fixed an issue where the Rule Based Product Relations functionality was generating incorrect SQL when product category attribute was set through "is one of" or "contains" operator by constant value
+  * Fixed an issue where it was impossible to add a product to the Compare list for  categories with three-column page layout
+  * Fixed an issue where a blank page opened when changing store view on a product page on the frontend
+  * Fixed an issue where the  "Please specify at least one search term." error message was not displayed if search is performed without search data specified on the frontend
+  * Fixed a Google Chrome specific issue where page layout was broken when updating status for reviews on the backend
+  * Fixed admin look and feel issues
+  * Fixed an issue where the order notices and error messages were not red
+  * Fixed a UI issue which appeared during custom attribute creation
+  * Fixed an issue where the popup did not open after clicking What's this? next to the Remember Me check box  when persistent shopping cart was enabled
+  * Fixed an issue where the options of the Add Product split dropdown did not fit the page
+  * Fixed an issue where the default theme preview image sample link was missing
+  * Fixed a Safari and Internet Explorer 9 specific issue where the backend menu is not displayed for users with custom admin roles
+  * Fixed an issue where  the price of bundle products was not  displayed correctly on the product page on the frontend
+  * Fixed a UI issue in the debug mode configuration
+  * Fixed minor issues with page layout
+  * Fixed an issue where the mini shopping cart loaded data from cache
+  * Fixed an issue where there was an incorrect value in the Grand Total (Base) column in the Orders grid if Catalog Price Scope was set to Website
+  * Fixed an issue where the Entity Generator tool did not accept the "class" parameter
+  * Fixed an issue where the default email template was not applied when the custom template in use was deleted
+  * Fixed an issue where shipping price for flat rate was set to 0 in the side block during checkout of a product with a configured recurring profile
+  * Fixed an issue where it was possible to create more Shipping Labels than there were products in the shipment
+  * Fixed an issue where data about "SHA-IN Pass Phrase" was missing after changing "Payment Action" in the Ogone payment method configuration
+  * Fixed performance issues with reindexing of the Price indexer
+  * Fixed an issue where importing tax rates with postal code = * led to incorrect data entered into database
+  * Fixed an issue where incorrect link to reset password was sent if secure URL was used on the frontend
+  * Fixed an issue where the Links section was absent while editing downloadable products from the Wishlist
+  * Fixed an issue where specified details for composite products were lost after adding to Gift Card and Downloadable products to the Wishlist
+  * Fixed and issue where the Date widget was set to incorrect date when creating a new customer
+  * Fixed an issue where a customer was redirected to Dashboard if the Redirect user to dashboard after login option was set to вЂNoвЂ™
+  * Fixed an issue where a customer was not able to register during checkout if Guest Checkout was not allowed
+  * Fixed an issue where System logs were not generated properly in integration tests
+  * Fixed benchmarking script
+  * Fixed an issue where it was impossible to put store to the maintenance mode during backup
+  * Fixed insecure use of mt_rand()
+  * Fixed an issue where Quoted price was displayed incorrectly from the shopping cart in the backend
+* Functional tests:
+  * Tax Rule Creation
+  * Admin User Role Creation
+  * Simple Product Creation
+  * Customer Group Creation
+  * Update Backend Customer
+  * Newsletter Creation
+  * Virtual Product Creation
+  * Catalog Price Rule Creation
+  * Category Url Rewrite Creation
+  * Admin User Role Deletion
+* Update composer.json.dist in order to download and install MTF from Public GitHub (MAGETWO-24698)
+* GitHub requests:
+  * [#542] (https://github.com/magento/magento2/pull/542) Fix ImportExport bug which occurs while importing multiple rows per entity
+  * [#507] (https://github.com/magento/magento2/issues/507) "Insert Image" window is overlapped on menu
+
 2.0.0.0-dev78
 =============
 * Fixed bugs:
@@ -158,7 +287,7 @@
       * `lib/Magento/Framework/Data/Form/Element/Submit.php`
       * `lib/Magento/Framework/Data/Form/Element/Text.php`
       * `lib/Magento/Framework/Data/Form/Element/Textarea.php`
-  
+
 2.0.0.0-dev75
 =============
 * Modularity improvements:
@@ -2678,4 +2807,3 @@ Deprecated code & minor fixes update:
 2.0.0.0-dev01
 =============
 * Added initial version of Magento 2.x CE to public repository
-

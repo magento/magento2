@@ -84,22 +84,18 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $expectedArray = array('key' => 'value', 'key_one' => 'value_one');
         $attributes = array('key' => 'value');
         $postValue = 'postValue';
-        $valueMap = array(
+        $postValueMap = array(
             array('new-variations-attribute-set-id', null, $postValue),
             array('associated_product_ids', array(), $associatedProductIds),
-            array('variations-matrix', array(), $postValue),
             array('affect_configurable_product_attributes', null, $postValue)
         );
-        $this->requestMock->expects($this->any())->method('getPost')->will($this->returnValueMap($valueMap));
-        $this->requestMock->expects(
-            $this->once()
-        )->method(
-            'getParam'
-        )->with(
-            'attributes'
-        )->will(
-            $this->returnValue($attributes)
+        $this->requestMock->expects($this->any())->method('getPost')->will($this->returnValueMap($postValueMap));
+
+        $paramValueMap = array(
+            array('variations-matrix', array(), $postValue),
+            array('attributes', null, $attributes)
         );
+        $this->requestMock->expects($this->any())->method('getParam')->will($this->returnValueMap($paramValueMap));
         $this->productTypeMock->expects(
             $this->once()
         )->method(
@@ -109,7 +105,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             $this->productMock
         );
         $this->productMock->expects($this->once())->method('setNewVariationsAttributeSetId')->with($postValue);
-        $this->requestMock->expects($this->once())->method('getActionName')->will($this->returnValue('action_name'));
         $this->productTypeMock->expects(
             $this->once()
         )->method(
@@ -133,19 +128,14 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $valueMap = array(
             array('new-variations-attribute-set-id', null, $postValue),
             array('associated_product_ids', array(), $associatedProductIds),
-            array('variations-matrix', array(), $postValue),
             array('affect_configurable_product_attributes', null, $postValue)
         );
         $this->requestMock->expects($this->any())->method('getPost')->will($this->returnValueMap($valueMap));
-        $this->requestMock->expects(
-            $this->once()
-        )->method(
-            'getParam'
-        )->with(
-            'attributes'
-        )->will(
-            $this->returnValue($attributes)
+        $paramValueMap = array(
+            array('variations-matrix', array(), array()),
+            array('attributes', null, $attributes)
         );
+        $this->requestMock->expects($this->any())->method('getParam')->will($this->returnValueMap($paramValueMap));
         $this->productTypeMock->expects(
             $this->once()
         )->method(
@@ -155,13 +145,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             $this->productMock
         );
         $this->productMock->expects($this->once())->method('setNewVariationsAttributeSetId')->with($postValue);
-        $this->requestMock->expects(
-            $this->once()
-        )->method(
-            'getActionName'
-        )->will(
-            $this->returnValue('generateVariations')
-        );
         $this->productTypeMock->expects($this->never())->method('generateSimpleProducts');
         $this->productMock->expects($this->once())->method('setAssociatedProductIds')->with($associatedProductIds);
         $this->productMock->expects($this->once())->method('setCanSaveConfigurableAttributes')->with(true);

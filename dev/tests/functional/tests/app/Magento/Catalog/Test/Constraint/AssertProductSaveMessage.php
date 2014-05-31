@@ -25,14 +25,16 @@
 namespace Magento\Catalog\Test\Constraint;
 
 use Mtf\Constraint\AbstractConstraint;
-use Magento\Catalog\Test\Page\Product\CatalogProductEdit;
+use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 
 /**
  * Class AssertProductSaveMessage
- *
  */
 class AssertProductSaveMessage extends AbstractConstraint
 {
+    /**
+     * Text value to be checked
+     */
     const SUCCESS_MESSAGE = 'You saved the product.';
 
     /**
@@ -61,7 +63,9 @@ class AssertProductSaveMessage extends AbstractConstraint
     }
 
     /**
-     * @inheritdoc
+     * Returns a string representation of the object.
+     *
+     * @return string
      */
     public function toString()
     {

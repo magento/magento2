@@ -2037,16 +2037,7 @@ class Quote extends \Magento\Framework\Model\AbstractModel
         $addresses = $this->getAllAddresses();
 
         if ($multishipping) {
-            if ($minOrderMulti) {
-                foreach ($addresses as $address) {
-                    foreach ($address->getQuote()->getItemsCollection() as $item) {
-                        $amount = $item->getBaseRowTotal() - $item->getBaseDiscountAmount();
-                        if ($amount < $minAmount) {
-                            return false;
-                        }
-                    }
-                }
-            } else {
+            if (!$minOrderMulti) {
                 $baseTotal = 0;
                 foreach ($addresses as $address) {
                     /* @var $address Address */

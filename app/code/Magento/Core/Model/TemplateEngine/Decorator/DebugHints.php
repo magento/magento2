@@ -72,10 +72,8 @@ class DebugHints implements \Magento\Framework\View\TemplateEngineInterface
     protected function _renderTemplateHints($blockHtml, $templateFile)
     {
         return <<<HTML
-<div style="position:relative; border:1px dotted red; margin:6px 2px; padding:18px 2px 2px 2px; zoom:1;">
-<div style="position:absolute; left:0; top:0; padding:2px 5px; background:red; color:white; font:normal 11px Arial;
-text-align:left !important; z-index:998;" onmouseover="this.style.zIndex='999'"
-onmouseout="this.style.zIndex='998'" title="{$templateFile}">{$templateFile}</div>
+<div class="debugging-hints" style="position: relative; border: 1px dotted red; margin: 6px 2px; padding: 18px 2px 2px 2px;">
+<div class="debugging-hint-template-file" style="position: absolute; top: 0; padding: 2px 5px; font: normal 11px Arial; background: red; left: 0; color: white;" onmouseover="this.style.zIndex = 999;" onmouseout="this.style.zIndex = 'auto';" title="{$templateFile}">{$templateFile}</div>
 {$blockHtml}
 </div>
 HTML;
@@ -92,9 +90,7 @@ HTML;
     {
         $blockClass = get_class($block);
         return <<<HTML
-<div style="position:absolute; right:0; top:0; padding:2px 5px; background:red; color:blue; font:normal 11px Arial;
-text-align:left !important; z-index:998;" onmouseover="this.style.zIndex='999'" onmouseout="this.style.zIndex='998'"
-title="{$blockClass}">{$blockClass}</div>
+<div class="debugging-hint-block-class" style="position: absolute; top: 0; padding: 2px 5px; font: normal 11px Arial; background: red; right: 0; color: blue;" onmouseover="this.style.zIndex = 999;" onmouseout="this.style.zIndex = 'auto';" title="{$blockClass}">{$blockClass}</div>
 {$blockHtml}
 HTML;
     }

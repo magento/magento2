@@ -28,7 +28,6 @@ use Mtf\Fixture\InjectableFixture;
 
 /**
  * Class AdminUserInjectable
- *
  */
 class AdminUserInjectable extends InjectableFixture
 {
@@ -43,11 +42,12 @@ class AdminUserInjectable extends InjectableFixture
     protected $handlerInterface = 'Magento\User\Test\Handler\AdminUser\AdminUserInterface';
 
     protected $defaultDataSet = [
-        'username' => 'admin',
+        'username' => 'customAdmin%isolation%',
+        'firstname' => 'FirstName%isolation%',
+        'lastname' => 'LastName%isolation%',
+        'email' => 'email%isolation%@example.com',
         'password' => '123123q',
-        'created' => null,
-        'is_active' => null,
-        'interface_locale' => null,
+        'password_confirmation' => '123123q',
     ];
 
     protected $user_id = [
@@ -178,6 +178,11 @@ class AdminUserInjectable extends InjectableFixture
         'input' => '',
     ];
 
+    protected $role_id = [
+        'attribute_code' => 'role_id',
+        'backend_type' => 'virtual',
+    ];
+
     public function getUserId()
     {
         return $this->getData('user_id');
@@ -256,5 +261,10 @@ class AdminUserInjectable extends InjectableFixture
     public function getInterfaceLocale()
     {
         return $this->getData('interface_locale');
+    }
+
+    public function getRoleId()
+    {
+        return $this->getData('role_id');
     }
 }

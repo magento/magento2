@@ -36,6 +36,5 @@
     <filesystem_prerequisites>
         <directory alias="etc" recursive="true" />
         <directory alias="media" recursive="false" existence="true" writable="true" />
-        <directory alias="lib" recursive="true" existence="true" writable="true" />
     </filesystem_prerequisites>
 </install_wizard>

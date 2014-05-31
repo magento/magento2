@@ -32,7 +32,9 @@ namespace Magento\Backup\Model;
  */
 class Backup extends \Magento\Framework\Object implements \Magento\Framework\Backup\Db\BackupInterface
 {
-    /* internal constants */
+    /**
+     * Compress rate
+     */
     const COMPRESS_RATE = 9;
 
     /**

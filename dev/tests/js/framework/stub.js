@@ -21,9 +21,8 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
-"use strict";
-
 (function ($, window) {
+    "use strict";
 
     function wrapMethod(object, property, method, copyProperties) {
         if (!object) {
@@ -77,7 +76,7 @@
                 if (!Object.prototype.hasOwnProperty.call(method, prop)) {
                     method[prop] = wrappedMethod[prop];
                 }
-            };
+            }
         }
 
         return method;

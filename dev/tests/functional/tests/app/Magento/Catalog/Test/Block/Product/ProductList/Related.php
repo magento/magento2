@@ -18,7 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @spi
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -26,14 +25,25 @@
 namespace Magento\Catalog\Test\Block\Product\ProductList;
 
 use Mtf\Block\Block;
-use Mtf\Factory\Factory;
+use Mtf\Client\Element;
 use Mtf\Client\Element\Locator;
 
+/**
+ * Class Related
+ * Related product block on the page
+ */
 class Related extends Block
 {
+    /**
+     * Related product locator on the page
+     *
+     * @var string
+     */
     protected $relatedProduct = "//div[normalize-space(div//a)='%s']";
 
     /**
+     * Checking related product visibility
+     *
      * @param string $productName
      * @return bool
      */
@@ -43,6 +53,8 @@ class Related extends Block
     }
 
     /**
+     * Verify that you can choose the related products
+     *
      * @param string $productName
      * @return bool
      */
@@ -52,7 +64,10 @@ class Related extends Block
     }
 
     /**
+     * Open related product
+     *
      * @param string $productName
+     * @return void
      */
     public function openRelatedProduct($productName)
     {
@@ -60,7 +75,10 @@ class Related extends Block
     }
 
     /**
+     * Select related product
+     *
      * @param string $productName
+     * @return void
      */
     public function selectProductForAddToCart($productName)
     {
@@ -70,8 +88,10 @@ class Related extends Block
     }
 
     /**
+     * Get related product element
+     *
      * @param string $productName
-     * @return mixed|\Mtf\Client\Element
+     * @return Element
      */
     private function getProductElement($productName)
     {

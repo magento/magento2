@@ -29,4 +29,24 @@
         <area>adminhtml</area>
         <class>Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex</class>
     </catalogProductIndex>
+    <catalogProductNew>
+        <mca>catalog/product/new</mca>
+        <area>adminhtml</area>
+        <class>Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew</class>
+    </catalogProductNew>
+    <catalogProductEdit>
+        <mca>catalog/product/edit</mca>
+        <area>adminhtml</area>
+        <class>Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit</class>
+    </catalogProductEdit>
+    <catalogProductViewPage>
+        <mca>catalog/product/view</mca>
+        <area>product</area>
+        <class>Magento\Catalog\Test\Page\Product\CatalogProductView</class>
+    </catalogProductViewPage>
+    <catalogCategoryView>
+        <mca>catalog/category/view</mca>
+        <area>category</area>
+        <class>Magento\Catalog\Test\Page\Category\CatalogCategoryView</class>
+    </catalogCategoryView>
 </page>

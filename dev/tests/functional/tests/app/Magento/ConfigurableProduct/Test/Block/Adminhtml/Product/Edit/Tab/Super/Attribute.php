@@ -31,7 +31,6 @@ use Mtf\Client\Element\Locator;
 /**
  * Class Attribute
  * Attribute block in Variation section
- *
  */
 class Attribute extends Block
 {

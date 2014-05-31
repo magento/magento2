@@ -30,8 +30,6 @@ use Magento\Catalog\Model\Product;
 /**
  * Review model
  *
- * @method \Magento\Review\Model\Resource\Review _getResource()
- * @method \Magento\Review\Model\Resource\Review getResource()
  * @method string getCreatedAt()
  * @method \Magento\Review\Model\Review setCreatedAt(string $value)
  * @method \Magento\Review\Model\Review setEntityId(int $value)
@@ -39,8 +37,6 @@ use Magento\Catalog\Model\Product;
  * @method \Magento\Review\Model\Review setEntityPkValue(int $value)
  * @method int getStatusId()
  * @method \Magento\Review\Model\Review setStatusId(int $value)
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Review extends \Magento\Framework\Model\AbstractModel
 {
@@ -52,18 +48,33 @@ class Review extends \Magento\Framework\Model\AbstractModel
     protected $_eventPrefix = 'review';
 
     /**
-     * Review entity codes
+     * Product entity review code
      */
     const ENTITY_PRODUCT_CODE = 'product';
 
+    /**
+     * Customer entity review code
+     */
     const ENTITY_CUSTOMER_CODE = 'customer';
 
+    /**
+     * Category entity review code
+     */
     const ENTITY_CATEGORY_CODE = 'category';
 
+    /**
+     * Approved review status code
+     */
     const STATUS_APPROVED = 1;
 
+    /**
+     * Pending review status code
+     */
     const STATUS_PENDING = 2;
 
+    /**
+     * Not Approved review status code
+     */
     const STATUS_NOT_APPROVED = 3;
 
     /**
@@ -243,6 +254,22 @@ class Review extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Get product view url
+     *
+     * @param string|int $productId
+     * @param string|int $storeId
+     * @return string
+     */
+    public function getProductUrl($productId, $storeId)
+    {
+        if ($storeId) {
+            $this->_urlModel->setScope($storeId);
+        }
+
+        return $this->_urlModel->getUrl('catalog/product/view', array('id' => $productId));
+    }
+
+    /**
      * Validate review summary fields
      *
      * @return bool|string[]
@@ -289,24 +316,23 @@ class Review extends \Magento\Framework\Model\AbstractModel
     public function appendSummary($collection)
     {
         $entityIds = array();
-        foreach ($collection->getItems() as $_item) {
-            $entityIds[] = $_item->getEntityId();
+        foreach ($collection->getItems() as $item) {
+            $entityIds[] = $item->getEntityId();
         }
 
         if (sizeof($entityIds) == 0) {
             return $this;
         }
 
-        $summaryData = $this->_summaryFactory->create()->addEntityFilter(
-            $entityIds
-        )->addStoreFilter(
-            $this->_storeManager->getStore()->getId()
-        )->load();
+        $summaryData = $this->_summaryFactory->create()
+            ->addEntityFilter($entityIds)
+            ->addStoreFilter($this->_storeManager->getStore()->getId())
+            ->load();
 
-        foreach ($collection->getItems() as $_item) {
-            foreach ($summaryData as $_summary) {
-                if ($_summary->getEntityPkValue() == $_item->getEntityId()) {
-                    $_item->setRatingSummary($_summary);
+        foreach ($collection->getItems() as $item) {
+            foreach ($summaryData as $summary) {
+                if ($summary->getEntityPkValue() == $item->getEntityId()) {
+                    $item->setRatingSummary($summary);
                 }
             }
         }
@@ -344,9 +370,8 @@ class Review extends \Magento\Framework\Model\AbstractModel
     {
         $store = $this->_storeManager->getStore($store);
         if ($store) {
-            return in_array($store->getId(), (array)$this->getStores());
+            return in_array($store->getId(), (array) $this->getStores());
         }
-
         return false;
     }
 

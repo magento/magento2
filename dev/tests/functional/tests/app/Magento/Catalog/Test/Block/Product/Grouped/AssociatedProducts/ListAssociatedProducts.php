@@ -32,11 +32,13 @@ use Mtf\Client\Element\Locator;
 
 /**
  * Class ListAssociatedProducts
- *
+ * List associated products on the page
  */
 class ListAssociatedProducts extends Block
 {
     /**
+     * Getting block products
+     *
      * @param string $productId
      * @param Element $context
      * @return ListAssociatedProducts\Product
@@ -54,6 +56,8 @@ class ListAssociatedProducts extends Block
     }
 
     /**
+     * Filling options products
+     *
      * @param array $data
      * @param Element $element
      */

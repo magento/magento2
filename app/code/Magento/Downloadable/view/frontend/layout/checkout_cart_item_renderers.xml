@@ -28,6 +28,6 @@
         <block class="Magento\Downloadable\Block\Checkout\Cart\Item\Renderer" as="downloadable" template="checkout/cart/item/default.phtml"/>
     </referenceBlock>
     <referenceBlock name="additional.product.info">
-        <block class="Magento\Framework\View\Element\Template" name="downloadable.product.links" template="checkout/links.phtml"/>
+        <block class="Magento\Framework\View\Element\Template" name="downloadable.product.links" template="Magento_Downloadable::checkout/links.phtml"/>
     </referenceBlock>
 </layout>

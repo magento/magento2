@@ -26,28 +26,71 @@ namespace Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Code;
 /**
  * Block that renders CSS tab
  */
-class Css extends \Magento\Framework\View\Element\Template
+class Css extends \Magento\Backend\Block\Widget\Form
 {
     /**
-     * Get file groups content
-     *
-     * @return string[]
+     * @var \Magento\DesignEditor\Helper\Data
      */
-    public function getFileGroups()
-    {
-        $groups = array();
-        foreach ($this->getCssFiles() as $groupName => $files) {
-            $groups[] = $this->getChildBlock(
-                'design_editor_tools_code_css_group'
-            )->setTitle(
-                $groupName
-            )->setFiles(
-                $files
-            )->setThemeId(
-                $this->getThemeId()
-            )->toHtml();
-        }
+    protected $_designEditorHelper;
 
-        return $groups;
+    /**
+     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\DesignEditor\Helper\Data $designEditorHelper
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\DesignEditor\Helper\Data $designEditorHelper,
+        array $data = array()
+    ) {
+        $this->_designEditorHelper = $designEditorHelper;
+        parent::__construct($context, $data);
+    }
+
+    /**
+     * Get CSS file assets
+     *
+     * Note: someone must set them in the first place
+     *
+     * @return \Magento\Framework\View\Asset\LocalInterface[]
+     */
+    public function getAssets()
+    {
+        return $this->_getData('assets');
+    }
+
+    /**
+     * Get url to download CSS file
+     *
+     * @param string $fileId
+     * @param int $themeId
+     * @return string
+     */
+    public function getDownloadUrl($fileId, $themeId)
+    {
+        return $this->getUrl(
+            'adminhtml/system_design_theme/downloadCss',
+            ['theme_id' => $themeId, 'file' => $this->_designEditorHelper->urlEncode($fileId)]
+        );
+    }
+
+    /**
+     * Check if files group needs "add" button
+     *
+     * @return false
+     */
+    public function hasAddButton()
+    {
+        return false;
+    }
+
+    /**
+     * Check if files group needs download buttons next to each file
+     *
+     * @return true
+     */
+    public function hasDownloadButton()
+    {
+        return true;
     }
 }

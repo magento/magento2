@@ -24,10 +24,8 @@
 
 namespace Magento\ConfigurableProduct\Test\Constraint;
 
-use Magento\Catalog\Test\Page\Product\CatalogProductView;
-use Magento\Checkout\Test\Page\CheckoutCart;
 use Mtf\Constraint\AbstractConstraint;
-use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
+use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\ConfigurableProduct\Test\Fixture\CatalogProductConfigurable;
 
 /**
@@ -43,8 +41,11 @@ class AssertConfigurableView extends AbstractConstraint
     protected $severeness = 'low';
 
     /**
+     * Assert configurable product, corresponds to the product page
+     *
      * @param CatalogProductView $catalogProductView
      * @param CatalogProductConfigurable $configurable
+     * @return void
      */
     public function processAssert(
         CatalogProductView $catalogProductView,
@@ -63,6 +64,7 @@ class AssertConfigurableView extends AbstractConstraint
      *
      * @param CatalogProductConfigurable $configurable
      * @param CatalogProductView $catalogProductView
+     * @return void
      */
     protected function assertOnProductView(
         CatalogProductConfigurable $configurable,
@@ -87,11 +89,14 @@ class AssertConfigurableView extends AbstractConstraint
                 'Product special price on product view page is not correct.'
             );
         } else {
-            $price = $catalogProductView->getViewBlock()->getProductPriceBlock()->getPrice();
-            \PHPUnit_Framework_Assert::assertContains(
-                (string)$price,
+            //Price verification
+            $price = $catalogProductView->getViewBlock()
+                ->getProductPriceBlock($configurable->getName())
+                ->getPrice();
+            \PHPUnit_Framework_Assert::assertEquals(
+                '$' . $price['price_regular_price'],
                 $pricePresetData['product_price'],
-                'Product price on product view page is not correct.'
+                'Product price on category page is not correct.'
             );
         }
     }

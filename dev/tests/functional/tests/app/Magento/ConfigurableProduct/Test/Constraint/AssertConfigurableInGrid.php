@@ -25,12 +25,11 @@
 namespace Magento\ConfigurableProduct\Test\Constraint;
 
 use Mtf\Constraint\AbstractConstraint;
-use Magento\ConfigurableProduct\Test\Fixture\CatalogProductConfigurable;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
+use Magento\ConfigurableProduct\Test\Fixture\CatalogProductConfigurable;
 
 /**
  * Class AssertConfigurableInGrid
- *
  */
 class AssertConfigurableInGrid extends AbstractConstraint
 {
@@ -42,24 +41,26 @@ class AssertConfigurableInGrid extends AbstractConstraint
     protected $severeness = 'high';
 
     /**
-     * Assert product availability in Products Grid
+     * Assert product availability in products grid
      *
-     * @param CatalogProductConfigurable $configurable
+     * @param CatalogProductConfigurable $product
      * @param CatalogProductIndex $productPageGrid
      * @return void
      */
-    public function processAssert(CatalogProductConfigurable $configurable, CatalogProductIndex $productPageGrid)
+    public function processAssert(CatalogProductConfigurable $product, CatalogProductIndex $productPageGrid)
     {
-        $filter = ['sku' => $configurable->getSku()];
+        $filter = ['sku' => $product->getSku()];
         $productPageGrid->open();
         \PHPUnit_Framework_Assert::assertTrue(
             $productPageGrid->getProductGrid()->isRowVisible($filter),
-            'Product with sku \'' . $configurable->getSku() . '\' is absent in Products grid.'
+            'Product with sku \'' . $product->getSku() . '\' is absent in Products grid.'
         );
     }
 
     /**
-     * @inheritdoc
+     * Returns a string representation of the object.
+     *
+     * @return string
      */
     public function toString()
     {

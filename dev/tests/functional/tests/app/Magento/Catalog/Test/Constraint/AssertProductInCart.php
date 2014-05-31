@@ -24,10 +24,10 @@
 
 namespace Magento\Catalog\Test\Constraint;
 
-use Magento\Catalog\Test\Page\Product\CatalogProductView;
-use Magento\Checkout\Test\Page\CheckoutCart;
+use Mtf\Fixture\FixtureInterface;
 use Mtf\Constraint\AbstractConstraint;
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
+use Magento\Checkout\Test\Page\CheckoutCart;
+use Magento\Catalog\Test\Page\Product\CatalogProductView;
 
 /**
  * Class AssertProductInCart
@@ -42,13 +42,16 @@ class AssertProductInCart extends AbstractConstraint
     protected $severeness = 'low';
 
     /**
+     * Assertion that the product is correctly displayed in cart
+     *
      * @param CatalogProductView $catalogProductView
-     * @param CatalogProductSimple $product
+     * @param FixtureInterface $product
      * @param CheckoutCart $checkoutCart
+     * @return void
      */
     public function processAssert(
         CatalogProductView $catalogProductView,
-        CatalogProductSimple $product,
+        FixtureInterface $product,
         CheckoutCart $checkoutCart
     ) {
         //Add product to cart
@@ -56,43 +59,74 @@ class AssertProductInCart extends AbstractConstraint
         $catalogProductView->open();
         $productOptions = $product->getCustomOptions();
         if ($productOptions) {
-            $customOption = $catalogProductView->getOptionsBlock();
-            $options = $customOption->getProductCustomOptions();
+            $customOption = $catalogProductView->getCustomOptionsBlock();
+            $options = $customOption->getOptions();
             $key = $productOptions[0]['title'];
-            $customOption->selectProductCustomOption($options[$key][1]);
+            $customOption->selectProductCustomOption(reset($options[$key]['value']));
         }
         $catalogProductView->getViewBlock()->clickAddToCart();
 
+        // Check price
         $this->assertOnShoppingCart($product, $checkoutCart);
     }
 
     /**
-     * Assert prices on the shopping Cart
+     * Assert prices on the shopping cart
      *
-     * @param CatalogProductSimple $product
+     * @param FixtureInterface $product
      * @param CheckoutCart $checkoutCart
+     * @return void
      */
-    protected function assertOnShoppingCart(CatalogProductSimple $product, CheckoutCart $checkoutCart)
+    protected function assertOnShoppingCart(FixtureInterface $product, CheckoutCart $checkoutCart)
     {
-        /** @var \Magento\Catalog\Test\Fixture\CatalogProductSimple\Price $priceFixture */
-        $priceFixture = $product->getDataFieldConfig('price')['source'];
-        $pricePresetData = $priceFixture->getPreset();
+        $cartBlock = $checkoutCart->getCartBlock();
+        $productName = $product->getName();
+        $productOptions = $product->getCustomOptions();
+        $priceComparing = $product->getPrice();
 
-        $price = $checkoutCart->getCartBlock()->getProductPriceByName($product->getName());
+        if ($groupPrice = $product->getGroupPrice()) {
+            $groupPrice = reset($groupPrice);
+            $priceComparing = $groupPrice['price'];
+        }
+
+        if ($specialPrice = $product->getSpecialPrice()) {
+            $priceComparing = $specialPrice;
+        }
+
+        if (!empty($productOptions)) {
+            $productOption = reset($productOptions);
+            $optionsData = reset($productOption['options']);
+            $optionName = $cartBlock->getCartItemOptionsNameByProductName($productName);
+            $optionValue = $cartBlock->getCartItemOptionsValueByProductName($productName);
+
+            \PHPUnit_Framework_Assert::assertTrue(
+                trim($optionName) === $productOption['title']
+                && trim($optionValue) === $optionsData['title'],
+                'In the cart wrong option product.'
+            );
+
+            if ($optionsData['price_type'] === 'Percent') {
+                $priceComparing = $priceComparing * (1 + $optionsData['price'] / 100);
+            } else {
+                $priceComparing += $optionsData['price'];
+            }
+        }
+
+        $price = $checkoutCart->getCartBlock()->getProductPriceByName($productName);
         \PHPUnit_Framework_Assert::assertEquals(
-            $pricePresetData['cart_price'],
+            '$' . number_format($priceComparing, 2),
             $price,
             'Product price in shopping cart is not correct.'
         );
     }
 
     /**
-     * Text of Visible in category assert
+     * Returns a string representation of the object.
      *
      * @return string
      */
     public function toString()
     {
-        return 'Product price in shopping cart is not correct.';
+        return 'Product is correctly displayed in cart.';
     }
 }

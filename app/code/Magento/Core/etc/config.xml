@@ -97,18 +97,10 @@
                         <uri>pub</uri>
                         <permissions>511</permissions>
                     </pub>
-                    <pub_lib>
-                        <read_only>0</read_only>
-                        <path>pub/lib</path>
-                        <uri>pub/lib</uri>
-                        <permissions>511</permissions>
-                    </pub_lib>
-                    <view_cache>
-                        <read_only>0</read_only>
-                        <path>pub/cache</path>
-                        <uri>pub/cache</uri>
-                        <permissions>511</permissions>
-                    </view_cache>
+                    <lib_web>
+                        <read_only>1</read_only>
+                        <path>lib/web</path>
+                    </lib_web>
                     <tmp>
                         <read_only>0</read_only>
                         <path>var/tmp</path>

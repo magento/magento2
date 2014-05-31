@@ -129,7 +129,7 @@ class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
         $code = '';
         $charsetSize = count($charset);
         for ($i = 0; $i < $length; $i++) {
-            $char = $charset[mt_rand(0, $charsetSize - 1)];
+            $char = $charset[\Magento\Framework\Math\Random::getRandomNumber(0, $charsetSize - 1)];
             if ($split > 0 && $i % $split == 0 && $i != 0) {
                 $char = $splitChar . $char;
             }

@@ -26,6 +26,7 @@
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
     <referenceBlock name="head.components">
         <block class="Magento\Framework\View\Element\Js\Components" name="wishlist_product_view_head_components" template="Magento_Wishlist::js/components.phtml"/>
+        <block class="Magento\Framework\View\Element\Js\Components" name="configurableproduct_product_view_head_components" template="Magento_ConfigurableProduct::js/components.phtml"/>
     </referenceBlock>
     <referenceBlock name="root">
         <action method="addBodyClass">

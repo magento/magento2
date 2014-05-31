@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/Magento/Framework/Mview/etc/mview.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/Mview/etc/mview.xsd">
     <view id="view_two" class="Ogogo\Class\Two" group="default">
         <subscriptions>
             <table name="some_entity" entity_column="entity_id" />

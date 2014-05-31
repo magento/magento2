@@ -214,7 +214,7 @@ class Storage
     public function deleteFile($file)
     {
         $file = $this->_helper->urlDecode($file);
-        $path = $this->mediaWriteDirectory->getRelativePath($this->_helper->getSession()->getStoragePath());
+        $path = $this->mediaWriteDirectory->getRelativePath($this->_helper->getCurrentPath());
 
         $filePath = $this->mediaWriteDirectory->getRelativePath($path . '/' . $file);
         $thumbnailPath = $this->_helper->getThumbnailDirectory($filePath) . '/' . $file;

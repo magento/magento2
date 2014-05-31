@@ -453,26 +453,6 @@ abstract class AbstractCarrier extends \Magento\Framework\Object implements Abst
     }
 
     /**
-     * Calculate price considering free shipping and handling fee
-     *
-     * @param string $cost
-     * @param string $method
-     * @return float|string
-     */
-    public function getMethodPrice($cost, $method = '')
-    {
-        return $method == $this->getConfigData(
-            $this->_freeMethod
-        ) && (!$this->getConfigFlag(
-            'free_shipping_enable'
-        ) || $this->getConfigData(
-            'free_shipping_subtotal'
-        ) <= $this->_rawRequest->getBaseSubtotalInclTax()) ? '0.00' : $this->getFinalPriceWithHandlingFee(
-            $cost
-        );
-    }
-
-    /**
      * Get the handling fee for the shipping + cost
      *
      * @param float $cost

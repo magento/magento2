@@ -46,18 +46,29 @@ class AssertCustomerInGrid extends AbstractConstraint
      *
      * @param CustomerInjectable $customer
      * @param CustomerIndex $pageCustomerIndex
+     * @param CustomerInjectable $initialCustomer [optional]
      * @return void
      */
-    public function processAssert(CustomerInjectable $customer, CustomerIndex $pageCustomerIndex)
-    {
-        $name = ($customer->hasData('prefix') ? $customer->getPrefix() . ' ' : '')
-            . $customer->getFirstname()
-            . ($customer->hasData('middlename') ? ' ' . $customer->getMiddlename() : '')
-            . ' ' . $customer->getLastname()
-            . ($customer->hasData('suffix') ? ' ' . $customer->getSuffix() : '');
+    public function processAssert(
+        CustomerInjectable $customer,
+        CustomerIndex $pageCustomerIndex,
+        CustomerInjectable $initialCustomer = null
+    ) {
+        if ($initialCustomer) {
+            $customer = $customer->hasData()
+                ? array_merge($initialCustomer->getData(), $customer->getData())
+                : $initialCustomer->getData();
+        } else {
+            $customer = $customer->getData();
+        }
+        $name = (isset($customer['prefix']) ? $customer['prefix'] . ' ' : '')
+            . $customer['firstname']
+            . (isset($customer['middlename']) ? ' ' . $customer['middlename'] : '')
+            . ' ' . $customer['lastname']
+            . (isset($customer['suffix']) ? ' ' . $customer['suffix'] : '');
         $filter = [
             'name' => $name,
-            'email' => $customer->getEmail(),
+            'email' => $customer['email'],
         ];
 
         $pageCustomerIndex->open();

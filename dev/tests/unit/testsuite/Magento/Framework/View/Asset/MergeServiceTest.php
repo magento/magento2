@@ -145,37 +145,37 @@ class MergeServiceTest extends \PHPUnit_Framework_TestCase
         return array(
             'js production mode' => array(
                 $jsAssets,
-                \Magento\Framework\View\Publisher::CONTENT_TYPE_JS,
+                'js',
                 \Magento\Framework\App\State::MODE_PRODUCTION,
                 'Magento\Framework\View\Asset\MergeStrategy\FileExists'
             ),
             'css production mode' => array(
                 $cssAssets,
-                \Magento\Framework\View\Publisher::CONTENT_TYPE_CSS,
+                'css',
                 \Magento\Framework\App\State::MODE_PRODUCTION,
                 'Magento\Framework\View\Asset\MergeStrategy\FileExists'
             ),
             'js default mode' => array(
                 $jsAssets,
-                \Magento\Framework\View\Publisher::CONTENT_TYPE_JS,
+                'js',
                 \Magento\Framework\App\State::MODE_DEFAULT,
                 'Magento\Framework\View\Asset\MergeStrategy\Checksum'
             ),
             'css default mode' => array(
                 $cssAssets,
-                \Magento\Framework\View\Publisher::CONTENT_TYPE_CSS,
+                'js',
                 \Magento\Framework\App\State::MODE_DEFAULT,
                 'Magento\Framework\View\Asset\MergeStrategy\Checksum'
             ),
             'js developer mode' => array(
                 $jsAssets,
-                \Magento\Framework\View\Publisher::CONTENT_TYPE_JS,
+                'js',
                 \Magento\Framework\App\State::MODE_DEVELOPER,
                 'Magento\Framework\View\Asset\MergeStrategy\Checksum'
             ),
             'css developer mode' => array(
                 $cssAssets,
-                \Magento\Framework\View\Publisher::CONTENT_TYPE_CSS,
+                'css',
                 \Magento\Framework\App\State::MODE_DEVELOPER,
                 'Magento\Framework\View\Asset\MergeStrategy\Checksum'
             )
@@ -184,7 +184,7 @@ class MergeServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testCleanMergedJsCss()
     {
-        $mergedDir = \Magento\Framework\View\Asset\Merged::PUBLIC_MERGE_DIR;
+        $mergedDir = \Magento\Framework\View\Asset\Merged::getRelativeDir();
         $this->_directory->expects($this->once())->method('delete')->with($mergedDir);
 
         $this->_object->cleanMergedJsCss();

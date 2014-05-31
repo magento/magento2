@@ -23,6 +23,11 @@
  */
 namespace Magento\Framework\Event;
 
+/**
+ * Class ManagerTest
+ *
+ * @package Magento\Framework\Event
+ */
 class ManagerTest extends \PHPUnit_Framework_TestCase
 {
     /**

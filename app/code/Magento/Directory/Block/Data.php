@@ -131,12 +131,12 @@ class Data extends \Magento\Framework\View\Element\Template
             $id
         )->setTitle(
             __($title)
-        )->setClass(
-            'validate-select'
         )->setValue(
             $defValue
         )->setOptions(
             $options
+        )->setExtraParams(
+            'data-validate="{\'validate-select\':true}"'
         )->getHtml();
 
         \Magento\Framework\Profiler::stop('TEST: ' . __METHOD__);

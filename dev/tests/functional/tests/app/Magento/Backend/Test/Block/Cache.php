@@ -90,7 +90,7 @@ class Cache extends Block
      */
     public function isStorageCacheFlushed()
     {
-        return $this->getMessageBlock()->getSuccessMessages() == $this->messagesText['cache_storage_flushed'];
+        return $this->getMessagesBlock()->getSuccessMessages() == $this->messagesText['cache_storage_flushed'];
     }
 
     /**
@@ -100,7 +100,7 @@ class Cache extends Block
      */
     public function isMagentoCacheFlushed()
     {
-        return $this->getMessageBlock()->getSuccessMessages() == $this->messagesText['cache_magento_flushed'];
+        return $this->getMessagesBlock()->getSuccessMessages() == $this->messagesText['cache_magento_flushed'];
     }
 
     /**
@@ -108,7 +108,7 @@ class Cache extends Block
      *
      * @return \Magento\Core\Test\Block\Messages
      */
-    protected function getMessageBlock()
+    protected function getMessagesBlock()
     {
         return Factory::getBlockFactory()->getMagentoCoreMessages(
             $this->_rootElement->find($this->messagesSelector, Locator::SELECTOR_XPATH)

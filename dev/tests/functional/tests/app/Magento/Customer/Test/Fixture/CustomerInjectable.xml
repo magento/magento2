@@ -165,6 +165,7 @@
             <is_required>1</is_required>
             <default_value></default_value>
             <input>select</input>
+            <group>account_information</group>
         </store_id>
         <suffix>
             <attribute_code>suffix</attribute_code>
@@ -203,6 +204,5 @@
             <backend_type>virtual</backend_type>
         </password_confirmation>
     </fields>
-    <repository_class>Magento\Customer\Test\Repository\CustomerInjectable</repository_class>
     <handler_interface>Magento\Customer\Test\Handler\CustomerInjectable\CustomerInjectableInterface</handler_interface>
 </fixture>

@@ -53,7 +53,7 @@ class Js extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstrac
     protected function _addThemeJsFieldset()
     {
         $form = $this->getForm();
-        $themeFieldset = $form->addFieldset('theme_js', array('legend' => __('Theme Java Script')));
+        $themeFieldset = $form->addFieldset('theme_js', array('legend' => __('Theme JavaScript')));
         $customization = $this->_getCurrentTheme()->getCustomization();
         $customJsFiles = $customization->getFilesByType(
             \Magento\Framework\View\Design\Theme\Customization\File\Js::TYPE

@@ -6,5 +6,5 @@ dev
 downloader/app/Magento
 downloader/lib/Magento
 index.php
-lib/Magento
+lib/internal/Magento
 pub

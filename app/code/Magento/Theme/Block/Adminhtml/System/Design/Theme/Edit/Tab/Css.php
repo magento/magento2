@@ -121,34 +121,29 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
             array('legend' => __('Theme CSS'), 'class' => 'fieldset-wide')
         );
         $this->_addElementTypes($themeFieldset);
-        foreach ($this->getFiles() as $groupName => $files) {
-            foreach ($files as &$file) {
-                $file = $this->_convertFileData($file);
-            }
-            $themeFieldset->addField(
-                'theme_css_view_' . $groupName,
-                'links',
-                array('label' => $groupName, 'title' => $groupName, 'name' => 'links', 'values' => $files)
+
+        $links = array();
+        /** @var \Magento\Framework\View\Asset\LocalInterface $asset */
+        foreach ($this->getFiles() as $fileId => $asset) {
+            $links[$fileId] = array(
+                'href'      => $this->getDownloadUrl($fileId, $this->_getCurrentTheme()->getId()),
+                'label'     => $fileId,
+                'title'     => $asset->getPath(),
+                'delimiter' => '<br />'
             );
         }
+        $themeFieldset->addField(
+            'theme_css_view_assets',
+            'links',
+            array(
+                'label'  => __('Theme CSS Assets'),
+                'title'  => __('Theme CSS Assets'),
+                'name'   => 'links',
+                'values' => $links,
+            )
+        );
 
         return $this;
-    }
-
-    /**
-     * Prepare file items for output on page for download
-     *
-     * @param \Magento\Core\Model\Theme\File $file
-     * @return array
-     */
-    protected function _convertFileData($file)
-    {
-        return array(
-            'href' => $this->getDownloadUrl($file['id'], $this->_getCurrentTheme()->getId()),
-            'label' => $file['id'],
-            'title' => $file['safePath'],
-            'delimiter' => '<br />'
-        );
     }
 
     /**

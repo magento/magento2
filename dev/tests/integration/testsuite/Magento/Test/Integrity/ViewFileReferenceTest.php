@@ -46,9 +46,14 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
     protected static $_fallbackRule;
 
     /**
-     * @var \Magento\Framework\View\Design\FileResolution\Strategy\Fallback
+     * @var \Magento\Framework\View\Design\FileResolution\Fallback\StaticFile
      */
-    protected static $_fallback;
+    protected static $_viewFilesFallback;
+
+    /**
+     * @var \Magento\Framework\View\Design\FileResolution\Fallback\File
+     */
+    static protected $_filesFallback;
 
     /**
      * @var array
@@ -67,11 +72,16 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
             array('preferences' => array('Magento\Core\Model\Theme' => 'Magento\Core\Model\Theme\Data'))
         );
 
-        /** @var $fallbackFactory \Magento\Framework\View\Design\Fallback\Factory */
-        $fallbackFactory = $objectManager->get('Magento\Framework\View\Design\Fallback\Factory');
-        self::$_fallbackRule = $fallbackFactory->createViewFileRule();
+        /** @var $fallbackPool \Magento\Framework\View\Design\Fallback\RulePool */
+        $fallbackPool = $objectManager->get('Magento\Framework\View\Design\Fallback\RulePool');
+        self::$_fallbackRule = $fallbackPool->getRule(
+            \Magento\Framework\View\Design\Fallback\RulePool::TYPE_STATIC_FILE
+        );
 
-        self::$_fallback = $objectManager->get('Magento\Framework\View\Design\FileResolution\Strategy\Fallback');
+        self::$_viewFilesFallback = $objectManager->get(
+            'Magento\Framework\View\Design\FileResolution\Fallback\StaticFile'
+        );
+        self::$_filesFallback = $objectManager->get('Magento\Framework\View\Design\FileResolution\Fallback\File');
 
         // Themes to be checked
         self::$_themeCollection = $objectManager->get('Magento\Core\Model\Theme\Collection');
@@ -139,7 +149,7 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
      */
     public function testModularFallback($modularCall, array $usages, $area)
     {
-        list(, $file) = explode(\Magento\Framework\View\Service::SCOPE_SEPARATOR, $modularCall);
+        list(, $file) = explode(\Magento\Framework\View\Asset\Repository::FILE_ID_SEPARATOR, $modularCall);
 
         $wrongResolutions = array();
         foreach (self::$_themeCollection as $theme) {
@@ -173,13 +183,13 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
     protected function _getFileResolutions(\Magento\Framework\View\Design\ThemeInterface $theme, $file)
     {
         $found = array();
-        $fileResolved = self::$_fallback->getFile($theme->getArea(), $theme, $file);
+        $fileResolved = self::$_filesFallback->getFile($theme->getArea(), $theme, $file);
         if (file_exists($fileResolved)) {
             $found[$fileResolved] = $fileResolved;
         }
 
         foreach (self::$_checkThemeLocales[$theme->getFullPath()] as $locale) {
-            $fileResolved = self::$_fallback->getViewFile($theme->getArea(), $theme, $locale, $file);
+            $fileResolved = self::$_viewFilesFallback->getFile($theme->getArea(), $theme, $locale, $file);
             if (file_exists($fileResolved)) {
                 $found[$fileResolved] = $fileResolved;
             }
@@ -198,7 +208,8 @@ class ViewFileReferenceTest extends \PHPUnit_Framework_TestCase
 
             $modulePattern = '[A-Z][a-z]+_[A-Z][a-z]+';
             $filePattern = '[[:alnum:]_/-]+\\.[[:alnum:]_./-]+';
-            $pattern = '#' . $modulePattern . preg_quote(\Magento\Framework\View\Service::SCOPE_SEPARATOR)
+            $pattern = '#' . $modulePattern
+                . preg_quote(\Magento\Framework\View\Asset\Repository::FILE_ID_SEPARATOR)
                 . $filePattern . '#S';
             if (!preg_match_all($pattern, file_get_contents($file), $matches)) {
                 continue;

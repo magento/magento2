@@ -23,6 +23,8 @@
  */
 namespace Magento\Backup\Helper;
 
+use Magento\Framework\App\State\MaintenanceMode;
+
 /**
  * Backup data helper
  */
@@ -191,7 +193,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         return array(
             '.git',
             '.svn',
-            'maintenance.flag',
+            $this->_filesystem->getPath(MaintenanceMode::FLAG_DIR) . '/' . MaintenanceMode::FLAG_FILENAME,
             $this->_filesystem->getPath(\Magento\Framework\App\Filesystem::SESSION_DIR),
             $this->_filesystem->getPath(\Magento\Framework\App\Filesystem::CACHE_DIR),
             $this->_filesystem->getPath(\Magento\Framework\App\Filesystem::LOG_DIR),
@@ -211,7 +213,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         return array(
             '.svn',
             '.git',
-            'maintenance.flag',
+            $this->_filesystem->getPath(MaintenanceMode::FLAG_DIR) . '/' . MaintenanceMode::FLAG_FILENAME,
             $this->_filesystem->getPath(\Magento\Framework\App\Filesystem::SESSION_DIR),
             $this->_filesystem->getPath(\Magento\Framework\App\Filesystem::LOG_DIR),
             $this->_filesystem->getPath(\Magento\Framework\App\Filesystem::VAR_DIR) . '/locks',
@@ -219,35 +221,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $this->_filesystem->getPath(\Magento\Framework\App\Filesystem::ROOT_DIR) . '/errors',
             $this->_filesystem->getPath(\Magento\Framework\App\Filesystem::ROOT_DIR) . '/index.php'
         );
-    }
-
-    /**
-     * Put store into maintenance mode
-     *
-     * @return bool
-     */
-    public function turnOnMaintenanceMode()
-    {
-        $maintenanceFlagFile = $this->getMaintenanceFlagFilePath();
-        $result = $this->_filesystem->getDirectoryWrite(
-            \Magento\Framework\App\Filesystem::ROOT_DIR
-        )->writeFile(
-            $maintenanceFlagFile,
-            'maintenance'
-        );
-
-        return $result !== false;
-    }
-
-    /**
-     * Turn off store maintenance mode
-     *
-     * @return void
-     */
-    public function turnOffMaintenanceMode()
-    {
-        $maintenanceFlagFile = $this->getMaintenanceFlagFilePath();
-        $this->_filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::ROOT_DIR)->delete($maintenanceFlagFile);
     }
 
     /**
@@ -272,16 +245,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         }
 
         return $messagesMap[$type];
-    }
-
-    /**
-     * Get path to maintenance flag file
-     *
-     * @return string
-     */
-    protected function getMaintenanceFlagFilePath()
-    {
-        return 'maintenance.flag';
     }
 
     /**

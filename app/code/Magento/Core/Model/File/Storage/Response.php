@@ -25,7 +25,7 @@ namespace Magento\Core\Model\File\Storage;
 
 use Magento\Framework\App\Response\Http;
 
-class Response extends Http
+class Response extends Http implements \Magento\Framework\App\Response\FileInterface
 {
     /**
      * @var \Magento\Framework\File\Transfer\Adapter\Http

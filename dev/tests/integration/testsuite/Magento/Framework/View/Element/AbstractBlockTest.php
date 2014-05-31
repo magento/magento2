@@ -508,23 +508,10 @@ class AbstractBlockTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($withRoute, $this->_block->getUrl('catalog/product/view', array('id' => 10)));
     }
 
-    /**
-     * Isolation level has been raised in order to flush themes configuration in-memory cache
-     *
-     * @magentoAppIsolation enabled
-     */
     public function testGetViewFileUrl()
     {
-        $this->assertStringStartsWith('http://localhost/pub/static/frontend/', $this->_block->getViewFileUrl());
-        $this->assertStringEndsWith('css/styles.css', $this->_block->getViewFileUrl('css/styles.css'));
-
-        /**
-         * File is not exist
-         */
-        $this->assertStringEndsWith(
-            '/core/index/notfound',
-            $this->_block->getViewFileUrl('not_exist_folder/wrong_bad_file.xyz')
-        );
+        $actualResult = $this->_block->getViewFileUrl('css/styles.css');
+        $this->assertStringMatchesFormat('http://localhost/pub/static/frontend/%s/en_US/css/styles.css', $actualResult);
     }
 
     public function testFormatDate()

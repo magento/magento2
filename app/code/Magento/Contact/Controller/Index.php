@@ -31,12 +31,24 @@ use Magento\Framework\App\RequestInterface;
  */
 class Index extends \Magento\Framework\App\Action\Action
 {
+    /**
+     * Recipient email config path
+     */
     const XML_PATH_EMAIL_RECIPIENT = 'contact/email/recipient_email';
 
+    /**
+     * Sender email config path
+     */
     const XML_PATH_EMAIL_SENDER = 'contact/email/sender_email_identity';
 
+    /**
+     * Email template config path
+     */
     const XML_PATH_EMAIL_TEMPLATE = 'contact/email/email_template';
 
+    /**
+     * Enabled config path
+     */
     const XML_PATH_ENABLED = 'contact/contact/enabled';
 
     /**
@@ -50,18 +62,34 @@ class Index extends \Magento\Framework\App\Action\Action
     protected $inlineTranslation;
 
     /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    protected $scopeConfig;
+
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    protected $storeManager;
+
+    /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder,
-        \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
+        \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         parent::__construct($context);
         $this->_transportBuilder = $transportBuilder;
         $this->inlineTranslation = $inlineTranslation;
+        $this->scopeConfig = $scopeConfig;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -73,13 +101,7 @@ class Index extends \Magento\Framework\App\Action\Action
      */
     public function dispatch(RequestInterface $request)
     {
-        if (!$this->_objectManager->get(
-            'Magento\Framework\App\Config\ScopeConfigInterface'
-        )->isSetFlag(
-            self::XML_PATH_ENABLED,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        )
-        ) {
+        if (!$this->scopeConfig->isSetFlag(self::XML_PATH_ENABLED, \Magento\Store\Model\ScopeInterface::SCOPE_STORE)) {
             throw new NotFoundException();
         }
         return parent::dispatch($request);
@@ -93,12 +115,9 @@ class Index extends \Magento\Framework\App\Action\Action
     public function indexAction()
     {
         $this->_view->loadLayout();
-        $this->_view->getLayout()->getBlock(
-            'contactForm'
-        )->setFormAction(
-            $this->_objectManager->create('Magento\Framework\UrlInterface')->getUrl('*/*/post')
-        );
-
+        $this->_view->getLayout()
+            ->getBlock('contactForm')
+            ->setFormAction($this->_url->getUrl('*/*/post', ['_secure' => true]));
         $this->_view->getLayout()->initMessages();
         $this->_view->renderLayout();
     }
@@ -111,87 +130,64 @@ class Index extends \Magento\Framework\App\Action\Action
      */
     public function postAction()
     {
-        if (!$this->getRequest()->isSecure()) {
+        $post = $this->getRequest()->getPost();
+        if (!$post) {
             $this->_redirect('*/*/');
             return;
         }
-        $post = $this->getRequest()->getPost();
-        if ($post) {
-            $this->inlineTranslation->suspend();
-            try {
-                $postObject = new \Magento\Framework\Object();
-                $postObject->setData($post);
 
-                $error = false;
+        $this->inlineTranslation->suspend();
+        try {
+            $postObject = new \Magento\Framework\Object();
+            $postObject->setData($post);
 
-                if (!\Zend_Validate::is(trim($post['name']), 'NotEmpty')) {
-                    $error = true;
-                }
+            $error = false;
 
-                if (!\Zend_Validate::is(trim($post['comment']), 'NotEmpty')) {
-                    $error = true;
-                }
-
-                if (!\Zend_Validate::is(trim($post['email']), 'EmailAddress')) {
-                    $error = true;
-                }
-
-                if (\Zend_Validate::is(trim($post['hideit']), 'NotEmpty')) {
-                    $error = true;
-                }
-
-                if ($error) {
-                    throw new \Exception();
-                }
-
-                $scopeConfig = $this->_objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface');
-                $storeManager = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface');
-                $transport = $this->_transportBuilder->setTemplateIdentifier(
-                    $scopeConfig->getValue(
-                        self::XML_PATH_EMAIL_TEMPLATE,
-                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-                    )
-                )->setTemplateOptions(
-                    array(
-                        'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
-                        'store' => $storeManager->getStore()->getId()
-                    )
-                )->setTemplateVars(
-                    array('data' => $postObject)
-                )->setFrom(
-                    $scopeConfig->getValue(
-                        self::XML_PATH_EMAIL_SENDER,
-                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-                    )
-                )->addTo(
-                    $scopeConfig->getValue(
-                        self::XML_PATH_EMAIL_RECIPIENT,
-                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-                    )
-                )->setReplyTo(
-                    $post['email']
-                )->getTransport();
-
-                $transport->sendMessage();
-
-                $this->inlineTranslation->resume();
-
-                $this->messageManager->addSuccess(
-                    __('Thanks for contacting us with your comments and questions. We\'ll respond to you very soon.')
-                );
-                $this->_redirect('*/*/');
-
-                return;
-            } catch (\Exception $e) {
-                $this->inlineTranslation->resume();
-                $this->messageManager->addError(
-                    __('We can\'t process your request right now. Sorry, that\'s all we know.')
-                );
-                $this->_redirect('*/*/');
-                return;
+            if (!\Zend_Validate::is(trim($post['name']), 'NotEmpty')) {
+                $error = true;
             }
-        } else {
+            if (!\Zend_Validate::is(trim($post['comment']), 'NotEmpty')) {
+                $error = true;
+            }
+            if (!\Zend_Validate::is(trim($post['email']), 'EmailAddress')) {
+                $error = true;
+            }
+            if (\Zend_Validate::is(trim($post['hideit']), 'NotEmpty')) {
+                $error = true;
+            }
+            if ($error) {
+                throw new \Exception();
+            }
+
+            $storeScope = \Magento\Store\Model\ScopeInterface::SCOPE_STORE;
+            $transport = $this->_transportBuilder
+                ->setTemplateIdentifier($this->scopeConfig->getValue(self::XML_PATH_EMAIL_TEMPLATE, $storeScope))
+                ->setTemplateOptions(
+                    [
+                        'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
+                        'store' => $this->storeManager->getStore()->getId()
+                    ]
+                )
+                ->setTemplateVars(array('data' => $postObject))
+                ->setFrom($this->scopeConfig->getValue(self::XML_PATH_EMAIL_SENDER, $storeScope))
+                ->addTo($this->scopeConfig->getValue(self::XML_PATH_EMAIL_RECIPIENT, $storeScope))
+                ->setReplyTo($post['email'])
+                ->getTransport();
+
+            $transport->sendMessage();
+            $this->inlineTranslation->resume();
+            $this->messageManager->addSuccess(
+                __('Thanks for contacting us with your comments and questions. We\'ll respond to you very soon.')
+            );
             $this->_redirect('*/*/');
+            return;
+        } catch (\Exception $e) {
+            $this->inlineTranslation->resume();
+            $this->messageManager->addError(
+                __('We can\'t process your request right now. Sorry, that\'s all we know.')
+            );
+            $this->_redirect('*/*/');
+            return;
         }
     }
 }

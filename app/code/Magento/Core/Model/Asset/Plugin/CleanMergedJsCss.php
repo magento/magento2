@@ -60,9 +60,10 @@ class CleanMergedJsCss
     {
         $proceed();
 
-        /** @var \Magento\Framework\Filesystem\Directory\ReadInterface $pubCacheDirectory */
-        $pubCacheDirectory = $this->filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::PUB_VIEW_CACHE_DIR);
-        $mergedDir = $pubCacheDirectory->getAbsolutePath() . '/' . \Magento\Framework\View\Asset\Merged::PUBLIC_MERGE_DIR;
+        /** @var \Magento\Framework\Filesystem\Directory\ReadInterface $pubStaticDirectory */
+        $pubStaticDirectory = $this->filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::STATIC_VIEW_DIR);
+        $mergedDir = $pubStaticDirectory->getAbsolutePath() . '/'
+            . \Magento\Framework\View\Asset\Merged::getRelativeDir();
         $this->database->deleteFolder($mergedDir);
     }
 }

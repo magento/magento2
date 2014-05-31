@@ -85,12 +85,18 @@ class Observer
     protected $_backupFactory;
 
     /**
+     * @var \Magento\Framework\App\State\MaintenanceMode
+     */
+    protected $maintenanceMode;
+
+    /**
      * @param \Magento\Backup\Helper\Data $backupData
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\Logger $logger
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\App\Filesystem $filesystem
      * @param \Magento\Framework\Backup\Factory $backupFactory
+     * @param \Magento\Framework\App\State\MaintenanceMode $maintenanceMode
      */
     public function __construct(
         \Magento\Backup\Helper\Data $backupData,
@@ -98,7 +104,8 @@ class Observer
         \Magento\Framework\Logger $logger,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\App\Filesystem $filesystem,
-        \Magento\Framework\Backup\Factory $backupFactory
+        \Magento\Framework\Backup\Factory $backupFactory,
+        \Magento\Framework\App\State\MaintenanceMode $maintenanceMode
     ) {
         $this->_backupData = $backupData;
         $this->_coreRegistry = $coreRegistry;
@@ -106,6 +113,7 @@ class Observer
         $this->_scopeConfig = $scopeConfig;
         $this->_filesystem = $filesystem;
         $this->_backupFactory = $backupFactory;
+        $this->maintenanceMode = $maintenanceMode;
     }
 
     /**
@@ -120,7 +128,7 @@ class Observer
         }
 
         if ($this->_scopeConfig->isSetFlag(self::XML_PATH_BACKUP_MAINTENANCE_MODE, ScopeInterface::SCOPE_STORE)) {
-            $this->_backupData->turnOnMaintenanceMode();
+            $this->maintenanceMode->turnOn();
         }
 
         $type = $this->_scopeConfig->getValue(self::XML_PATH_BACKUP_TYPE, ScopeInterface::SCOPE_STORE);
@@ -158,7 +166,7 @@ class Observer
         }
 
         if ($this->_scopeConfig->isSetFlag(self::XML_PATH_BACKUP_MAINTENANCE_MODE, ScopeInterface::SCOPE_STORE)) {
-            $this->_backupData->turnOffMaintenanceMode();
+            $this->maintenanceMode->turnOff();
         }
 
         return $this;

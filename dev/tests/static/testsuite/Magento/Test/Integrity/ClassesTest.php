@@ -348,6 +348,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
                 $newObjectPattern = '/^' .
                     '.*new\s(?<venderClass>\\\\Magento(?:\\\\[a-zA-Z0-9_]+)+)\(.*\)' .
                     '|.*new\s(?<badClass>[A-Z][a-zA-Z0-9]+[a-zA-Z0-9_\\\\]*)\(.*\)\;' .
+                    '|use [A-Z][a-zA-Z0-9_\\\\]+ as (?<aliasClass>[A-Z][a-zA-Z0-9]+)' .
                     '/m';
                 $result1 = array();
                 preg_match_all($newObjectPattern, $contents, $result1);
@@ -356,6 +357,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
                 $staticCallPattern = '/^' .
                     '((?!Magento).)*(?<venderClass>\\\\Magento(?:\\\\[a-zA-Z0-9_]+)+)\:\:.*\;' .
                     '|[^\\\\^a-z^A-Z^0-9^_^:](?<badClass>[A-Z][a-zA-Z0-9_]+)\:\:.*\;' .
+                    '|use [A-Z][a-zA-Z0-9_\\\\]+ as (?<aliasClass>[A-Z][a-zA-Z0-9]+)' .
                     '/m';
                 $result2 = array();
                 preg_match_all($staticCallPattern, $contents, $result2);
@@ -365,6 +367,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
                     '[\s]*\*\s\@(?:return|throws)\s(?<venderClass>\\\\Magento(?:\\\\[a-zA-Z0-9_]+)+)' .
                     '|[\s]*\*\s\@return\s(?<badClass>[A-Z][a-zA-Z0-9_\\\\]+)' .
                     '|[\s]*\*\s\@throws\s(?<exception>[A-Z][a-zA-Z0-9_\\\\]+)' .
+                    '|use [A-Z][a-zA-Z0-9_\\\\]+ as (?<aliasClass>[A-Z][a-zA-Z0-9]+)' .
                     '/m';
                 $result3 = array();
                 preg_match_all($annotationPattern, $contents, $result3);
@@ -375,6 +378,10 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
 
                 $badClasses = array_unique(
                     array_merge_recursive($result1['badClass'], $result2['badClass'], $result3['badClass'])
+                );
+
+                $aliasClasses = array_unique(
+                    array_merge_recursive($result1['aliasClass'], $result2['aliasClass'], $result3['aliasClass'])
                 );
 
                 $vendorClasses = array_filter($vendorClasses, 'strlen');
@@ -391,12 +398,36 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
                 if (empty($badClasses)) {
                     return;
                 }
+
+                $aliasClasses = array_filter($aliasClasses, 'strlen');
+                if (!empty($aliasClasses)) {
+                    $badClasses = $this->handleAliasClasses($aliasClasses, $badClasses);
+                }
+
                 $badClasses = $this->referenceBlacklistFilter($badClasses);
                 $badClasses = $this->removeSpecialCases($badClasses, $file, $contents, $namespacePath);
                 $this->_assertClassReferences($badClasses, $file);
             },
             \Magento\TestFramework\Utility\Files::init()->getClassFiles()
         );
+    }
+
+    /**
+     * Remove alias class name references that have been identified as 'bad'.
+     *
+     * @param $aliasClasses
+     * @param $badClasses
+     */
+    protected function handleAliasClasses($aliasClasses, $badClasses)
+    {
+        foreach ($aliasClasses as $aliasClass) {
+            foreach ($badClasses as $badClass) {
+                if (strpos($badClass, $aliasClass) === 0) {
+                    unset($badClasses[array_search($badClass, $badClasses)]);
+                }
+            }
+        }
+        return $badClasses;
     }
 
     /**
@@ -455,7 +486,7 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
             // Remove usage of classes that do NOT using fully-qualified class names (possibly under same namespace)
             $directories = array(
                 '/app/code/',
-                '/lib/',
+                '/lib/internal/',
                 '/downloader/app/',
                 '/downloader/lib/',
                 '/dev/tools/',

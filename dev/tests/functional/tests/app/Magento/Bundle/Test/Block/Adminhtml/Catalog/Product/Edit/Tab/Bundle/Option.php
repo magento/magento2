@@ -31,7 +31,7 @@ use Mtf\Client\Element\Locator;
 
 /**
  * Class Option
- * Bundle options
+ * Bundle product options block
  */
 class Option extends Block
 {
@@ -40,7 +40,7 @@ class Option extends Block
      *
      * @var string
      */
-    protected $searchGridBlock = '[role=dialog][style*="display: block;"]';
+    protected $searchGridBlock = "ancestor::body//div[contains(@style,'display: block') and @role='dialog']";
 
     /**
      * Added product row
@@ -87,14 +87,12 @@ class Option extends Block
     /**
      * Get grid for assigning products for bundle option
      *
-     * @param Element $context
      * @return \Magento\Bundle\Test\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Search\Grid
      */
-    protected function getSearchGridBlock(Element $context = null)
+    protected function getSearchGridBlock()
     {
-        $element = $context ? : $this->_rootElement;
         return Factory::getBlockFactory()->getMagentoBundleAdminhtmlCatalogProductEditTabBundleOptionSearchGrid(
-            $element->find($this->searchGridBlock)
+            $this->_rootElement->find($this->searchGridBlock, Locator::SELECTOR_XPATH)
         );
     }
 
@@ -107,7 +105,7 @@ class Option extends Block
      */
     protected function getSelectionBlock($rowNumber, Element $context = null)
     {
-        $element = $context ? : $this->_rootElement;
+        $element = $context !== null ? $context : $this->_rootElement;
         return Factory::getBlockFactory()->getMagentoBundleAdminhtmlCatalogProductEditTabBundleOptionSelection(
             $element->find($this->selectionBlock . '_' . $rowNumber)
         );
@@ -115,6 +113,8 @@ class Option extends Block
 
     /**
      * Expand block
+     *
+     * @return void
      */
     public function expand()
     {
@@ -128,6 +128,7 @@ class Option extends Block
      *
      * @param array $fields
      * @param Element $context
+     * @return void
      */
     public function fillBundleOption(array $fields, Element $context)
     {
@@ -136,7 +137,7 @@ class Option extends Block
         foreach ($fields['assigned_products'] as $field) {
             if (is_array($field)) {
                 $this->_rootElement->find($this->addProducts)->click();
-                $searchBlock = $this->getSearchGridBlock($context);
+                $searchBlock = $this->getSearchGridBlock();
                 $searchBlock->searchAndSelect($field['search_data']);
                 $searchBlock->addProducts();
                 $this->getSelectionBlock($rowNumber)->fillProductRow($field['data']);
@@ -149,6 +150,7 @@ class Option extends Block
      * Update bundle option (now only general data, skipping assignments)
      *
      * @param array $fields
+     * @return void
      */
     public function updateBundleOption(array $fields)
     {
@@ -159,6 +161,7 @@ class Option extends Block
      * Fill in general data to bundle option
      *
      * @param array $fields
+     * @return void
      */
     private function fillOptionData(array $fields)
     {

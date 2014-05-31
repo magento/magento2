@@ -142,7 +142,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             return '';
         }
 
-        if ($this->_getSession()->hasCustomerId()) {
+        if ($this->_getSession()->hasCustomerId() && $this->_getSession()->getCustomerId()) {
             $customerData = $this->_customerService->getCustomer($this->_getSession()->getCustomerId());
             return $this->_customerViewHelper->getCustomerName($customerData);
         }

@@ -27,8 +27,6 @@ use Magento\Framework\Model\AbstractModel;
 
 /**
  * Review resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Review extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
@@ -323,7 +321,7 @@ class Review extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 $this->_reviewTable . '.review_id=store.review_id AND store.store_id = :store_id',
                 array()
             );
-            $bind[':store_id'] = (int)$storeId;
+            $bind[':store_id'] = (int) $storeId;
         }
         if ($approvedOnly) {
             $select->where("{$this->_reviewTable}.status_id = :status_id");
@@ -361,15 +359,10 @@ class Review extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 true,
                 $ratingSummaryObject->getStoreId()
             );
-            $select = $readAdapter->select()->from(
-                $this->_aggregateTable
-            )->where(
-                'entity_pk_value = :pk_value'
-            )->where(
-                'entity_type = :entity_type'
-            )->where(
-                'store_id = :store_id'
-            );
+            $select = $readAdapter->select()->from($this->_aggregateTable)
+                ->where('entity_pk_value = :pk_value')
+                ->where('entity_type = :entity_type')
+                ->where('store_id = :store_id');
             $bind = array(
                 ':pk_value' => $object->getEntityPkValue(),
                 ':entity_type' => $object->getEntityId(),
@@ -379,17 +372,11 @@ class Review extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
             $data = new \Magento\Framework\Object();
 
-            $data->setReviewsCount(
-                $reviewsCount
-            )->setEntityPkValue(
-                $object->getEntityPkValue()
-            )->setEntityType(
-                $object->getEntityId()
-            )->setRatingSummary(
-                $ratingSummary > 0 ? $ratingSummary : 0
-            )->setStoreId(
-                $ratingSummaryObject->getStoreId()
-            );
+            $data->setReviewsCount($reviewsCount)
+                ->setEntityPkValue($object->getEntityPkValue())
+                ->setEntityType($object->getEntityId())
+                ->setRatingSummary($ratingSummary > 0 ? $ratingSummary : 0)
+                ->setStoreId($ratingSummaryObject->getStoreId());
 
             $writeAdapter->beginTransaction();
             try {
@@ -418,15 +405,9 @@ class Review extends \Magento\Framework\Model\Resource\Db\AbstractDb
         if (empty($reviewId)) {
             return array();
         }
-        $select = $adapter->select()->from(
-            array('v' => $this->getTable('rating_option_vote')),
-            'r.rating_id'
-        )->joinInner(
-            array('r' => $this->getTable('rating')),
-            'v.rating_id=r.rating_id'
-        )->where(
-            'v.review_id = :revire_id'
-        );
+        $select = $adapter->select()->from(array('v' => $this->getTable('rating_option_vote')), 'r.rating_id')
+            ->joinInner(array('r' => $this->getTable('rating')), 'v.rating_id=r.rating_id')
+            ->where('v.review_id = :revire_id');
         return $adapter->fetchCol($select, array(':revire_id' => $reviewId));
     }
 
@@ -472,12 +453,8 @@ class Review extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function getEntityIdByCode($entityCode)
     {
         $adapter = $this->_getReadAdapter();
-        $select = $adapter->select()->from(
-            $this->_reviewEntityTable,
-            array('entity_id')
-        )->where(
-            'entity_code = :entity_code'
-        );
+        $select = $adapter->select()->from($this->_reviewEntityTable, array('entity_id'))
+            ->where('entity_code = :entity_code');
         return $adapter->fetchOne($select, array(':entity_code' => $entityCode));
     }
 

@@ -108,9 +108,9 @@ class Image extends AbstractHelper
     protected $_placeholder;
 
     /**
-     * @var \Magento\Framework\View\Url
+     * @var \Magento\Framework\View\Asset\Repository
      */
-    protected $_viewUrl;
+    protected $_assetRepo;
 
     /**
      * Core store config
@@ -129,19 +129,19 @@ class Image extends AbstractHelper
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Catalog\Model\Product\ImageFactory $productImageFactory
-     * @param \Magento\Framework\View\Url $viewUrl
+     * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Catalog\Model\Product\ImageFactory $productImageFactory,
-        \Magento\Framework\View\Url $viewUrl,
+        \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
         $this->_productImageFactory = $productImageFactory;
         parent::__construct($context);
         $this->_scopeConfig = $scopeConfig;
-        $this->_viewUrl = $viewUrl;
+        $this->_assetRepo = $assetRepo;
     }
 
     /**
@@ -434,7 +434,7 @@ class Image extends AbstractHelper
     protected function getDefaultPlaceholderUrl()
     {
         try {
-            $url = $this->_viewUrl->getViewFileUrl($this->getPlaceholder());
+            $url = $this->_assetRepo->getUrl($this->getPlaceholder());
         } catch (\Exception $e) {
             $this->_logger->logException($e);
             $url = $this->_urlBuilder->getUrl('', array('_direct' => 'core/index/notfound'));

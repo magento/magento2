@@ -41,6 +41,13 @@ class Messages extends Block
     protected $successMessage = '[data-ui-id$=message-success]';
 
     /**
+     * Message link
+     *
+     * @var string
+     */
+    protected $messageLink = "//a[contains(.,'%s')]";
+
+    /**
      * Error message selector.
      *
      * @var string
@@ -88,6 +95,36 @@ class Messages extends Block
     }
 
     /**
+     * Click on link in the messages which are present on the page
+     *
+     * @param string $messageType
+     * @param string $linkText
+     * @return void
+     */
+    public function clickLinkInMessages($messageType, $linkText)
+    {
+        if ($this->isVisibleMessage($messageType)) {
+            $this->_rootElement
+                ->find($this->{$messageType . 'Message'}, Locator::SELECTOR_CSS)
+                ->find(sprintf($this->messageLink, $linkText), Locator::SELECTOR_XPATH)
+                ->click();
+        }
+    }
+
+    /**
+     * Check is visible messages
+     *
+     * @param string $messageType
+     * @return bool
+     */
+    public function isVisibleMessage($messageType)
+    {
+        return $this->_rootElement
+            ->find($this->{$messageType . 'Message'}, Locator::SELECTOR_CSS)
+            ->isVisible();
+    }
+
+    /**
      * Check for error message
      *
      * @return bool
@@ -105,5 +142,16 @@ class Messages extends Block
     public function assertNoticeMessage()
     {
         return $this->waitForElementVisible($this->noticeMessage, Locator::SELECTOR_CSS);
+    }
+
+    /**
+     * Get notice message which is present on the page
+     *
+     * @return string
+     */
+    public function getNoticeMessages()
+    {
+        $this->waitForElementVisible($this->noticeMessage);
+        return $this->_rootElement->find($this->noticeMessage)->getText();
     }
 }

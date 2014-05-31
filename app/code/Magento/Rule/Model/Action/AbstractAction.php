@@ -32,9 +32,9 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
 abstract class AbstractAction extends \Magento\Framework\Object implements ActionInterface
 {
     /**
-     * @var \Magento\Framework\View\Url
+     * @var \Magento\Framework\View\Asset\Repository
      */
-    protected $_viewUrl;
+    protected $_assetRepo;
 
     /**
      * @var \Magento\Framework\View\LayoutInterface
@@ -42,16 +42,16 @@ abstract class AbstractAction extends \Magento\Framework\Object implements Actio
     protected $_layout;
 
     /**
-     * @param \Magento\Framework\View\Url $viewUrl
+     * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @param array $data
      */
     public function __construct(
-        \Magento\Framework\View\Url $viewUrl,
+        \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\View\LayoutInterface $layout,
         array $data = array()
     ) {
-        $this->_viewUrl = $viewUrl;
+        $this->_assetRepo = $assetRepo;
         $this->_layout = $layout;
 
         parent::__construct($data);
@@ -330,7 +330,7 @@ abstract class AbstractAction extends \Magento\Framework\Object implements Actio
      */
     public function getAddLinkHtml()
     {
-        $src = $this->_viewUrl->getViewFileUrl('images/rule_component_add.gif');
+        $src = $this->_assetRepo->getUrl('images/rule_component_add.gif');
         $html = '<img src="' . $src . '" alt="" class="rule-param-add v-middle" />';
         return $html;
     }
@@ -340,7 +340,7 @@ abstract class AbstractAction extends \Magento\Framework\Object implements Actio
      */
     public function getRemoveLinkHtml()
     {
-        $src = $this->_viewUrl->getViewFileUrl('images/rule_component_remove.gif');
+        $src = $this->_assetRepo->getUrl('images/rule_component_remove.gif');
         $html = '<span class="rule-param"><a href="javascript:void(0)" class="rule-param-remove"><img src="' .
             $src .
             '" alt="" class="v-middle" /></a></span>';

@@ -108,8 +108,8 @@ class Sidebar extends \Magento\Framework\View\Element\Template implements \Magen
             'customer_id',
             $customerId
         )->addAttributeToFilter(
-            'state',
-            array('in' => $this->_orderConfig->getVisibleOnFrontStates())
+            'status',
+            array('in' => $this->_orderConfig->getVisibleOnFrontStatuses())
         )->addAttributeToSort(
             'created_at',
             'desc'

@@ -31,9 +31,9 @@ namespace Magento\Rule\Model\Condition;
 class Context implements \Magento\Framework\ObjectManager\ContextInterface
 {
     /**
-     * @var \Magento\Framework\View\Url
+     * @var \Magento\Framework\View\Asset\Repository
      */
-    protected $_viewUrl;
+    protected $_assetRepo;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
@@ -56,20 +56,20 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     protected $_logger;
 
     /**
-     * @param \Magento\Framework\View\Url $viewUrl
+     * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @param \Magento\Rule\Model\ConditionFactory $conditionFactory
      * @param \Magento\Framework\Logger $logger
      */
     public function __construct(
-        \Magento\Framework\View\Url $viewUrl,
+        \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\View\LayoutInterface $layout,
         \Magento\Rule\Model\ConditionFactory $conditionFactory,
         \Magento\Framework\Logger $logger
     ) {
-        $this->_viewUrl = $viewUrl;
+        $this->_assetRepo = $assetRepo;
         $this->_localeDate = $localeDate;
         $this->_layout = $layout;
         $this->_conditionFactory = $conditionFactory;
@@ -77,11 +77,11 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \Magento\Framework\View\Url
+     * @return \Magento\Framework\View\Asset\Repository
      */
-    public function getViewUrl()
+    public function getAssetRepository()
     {
-        return $this->_viewUrl;
+        return $this->_assetRepo;
     }
 
     /**

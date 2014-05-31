@@ -129,11 +129,6 @@ class ObjectManagerFactory extends \Magento\Framework\App\ObjectManagerFactory
             $this->_primaryConfigData = array_replace(
                 parent::_loadPrimaryConfig($directoryList, $argumentMapper, $appMode),
                 array(
-                    'Magento\Framework\View\Design\FileResolution\Strategy\Fallback\CachingProxy' => array(
-                        'arguments' => array(
-                            'canSaveMap' => false
-                        )
-                    ),
                     'default_setup' => array('type' => 'Magento\TestFramework\Db\ConnectionAdapter')
                 )
             );

@@ -55,13 +55,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests that config returns right urls going to static js library
+     * Tests that config returns right urls going to the published library path
      */
-    public function testGetConfigJsUrls()
+    public function testGetConfigCssUrls()
     {
         $config = $this->_model->getConfig();
-        $this->assertStringMatchesFormat('http://localhost/pub/lib/%s', $config->getPopupCss());
-        $this->assertStringMatchesFormat('http://localhost/pub/lib/%s', $config->getContentCss());
+        $publicPathPattern = 'http://localhost/pub/static/adminhtml/Magento/backend/en_US/mage/%s';
+        $this->assertStringMatchesFormat($publicPathPattern, $config->getPopupCss());
+        $this->assertStringMatchesFormat($publicPathPattern, $config->getContentCss());
     }
 
     /**

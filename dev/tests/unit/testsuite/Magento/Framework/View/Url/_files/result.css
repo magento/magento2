@@ -20,7 +20,8 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-h2 {background: url(../../referenced/images/h2.gif?test);}
+h2 {background: url(../two/another/../images/h2.gif?test);}
+body {background: url(../two/another/body.gif);}
 a {background: url(data:image/png;)}
 li {background: url("https://example.com/absolute.gif");}
-ol.favicon {background: url(../../referenced/dir/Magento_Theme::favicon.ico)} /* base file */
+ol.favicon {background: url(../two/another/Magento_Theme::favicon.ico)} /* base file */

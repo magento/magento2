@@ -93,7 +93,7 @@ class CatalogProductReview extends Page
      *
      * @return \Magento\Core\Test\Block\Messages
      */
-    public function getMessageBlock()
+    public function getMessagesBlock()
     {
         return Factory::getBlockFactory()->getMagentoCoreMessages($this->_browser->find($this->messageWrapperSelector));
     }

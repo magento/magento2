@@ -36,6 +36,8 @@ class EditSimpleProductTest extends Functional
 {
     /**
      * Login into backend area before test
+     *
+     * @return void
      */
     protected function setUp()
     {
@@ -46,6 +48,7 @@ class EditSimpleProductTest extends Functional
      * Edit simple product
      *
      * @ZephyrId MAGETWO-12428
+     * @return void
      */
     public function testEditProduct()
     {
@@ -58,7 +61,7 @@ class EditSimpleProductTest extends Functional
         $productGridPage = Factory::getPageFactory()->getCatalogProductIndex();
         $gridBlock = $productGridPage->getProductGrid();
         $editProductPage = Factory::getPageFactory()->getCatalogProductEdit();
-        $productBlockForm = $editProductPage->getProductBlockForm();
+        $productForm = $editProductPage->getProductForm();
         $cachePage = Factory::getPageFactory()->getAdminCache();
 
         $productGridPage->open();
@@ -68,8 +71,8 @@ class EditSimpleProductTest extends Functional
                 'type' => 'Simple Product'
             )
         );
-        $productBlockForm->fill($editProduct);
-        $productBlockForm->save($editProduct);
+        $productForm->fill($editProduct);
+        $editProductPage->getFormAction()->save();
         //Verifying
         $editProductPage->getMessagesBlock()->assertSuccessMessage();
         // Flush cache
@@ -85,8 +88,9 @@ class EditSimpleProductTest extends Functional
      * Assert existing product on admin product grid
      *
      * @param SimpleProduct $product
+     * @return void
      */
-    protected function assertOnGrid($product)
+    protected function assertOnGrid(SimpleProduct $product)
     {
         $productGridPage = Factory::getPageFactory()->getCatalogProductIndex();
         $productGridPage->open();
@@ -99,8 +103,9 @@ class EditSimpleProductTest extends Functional
      *
      * @param SimpleProduct $product
      * @param string $categoryName
+     * @return void
      */
-    protected function assertOnCategoryPage($product, $categoryName)
+    protected function assertOnCategoryPage(SimpleProduct $product, $categoryName)
     {
         //Pages
         $frontendHomePage = Factory::getPageFactory()->getCmsIndexIndex();
@@ -119,8 +124,9 @@ class EditSimpleProductTest extends Functional
      *
      * @param SimpleProduct $productOld
      * @param SimpleProduct $productEdited
+     * @return void
      */
-    protected function assertOnProductPage($productOld, $productEdited)
+    protected function assertOnProductPage(SimpleProduct $productOld, SimpleProduct $productEdited)
     {
         $productPage = Factory::getPageFactory()->getCatalogProductView();
         $productPage->init($productOld);
@@ -128,6 +134,7 @@ class EditSimpleProductTest extends Functional
 
         $productViewBlock = $productPage->getViewBlock();
         $this->assertEquals($productEdited->getProductName(), $productViewBlock->getProductName());
-        $this->assertEquals($productEdited->getProductPrice(), $productViewBlock->getProductPrice());
+        $price = $productViewBlock->getProductPrice();
+        $this->assertEquals(number_format($productEdited->getProductPrice(), 2), $price['price_regular_price']);
     }
 }

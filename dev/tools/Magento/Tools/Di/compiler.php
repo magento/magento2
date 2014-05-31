@@ -54,7 +54,7 @@ try {
     $relationsFile = $diDir . '/relations.php';
     $pluginDefFile = $diDir . '/plugins.php';
 
-    $compilationDirs = array($rootDir . '/app/code', $rootDir . '/lib/Magento');
+    $compilationDirs = array($rootDir . '/app/code', $rootDir . '/lib/internal/Magento');
 
     /** @var Writer\WriterInterface $logWriter Writer model for success messages */
     $logWriter = $opt->getOption('v') ? new Writer\Console() : new Writer\Quiet();

@@ -29,13 +29,15 @@ use Mtf\TestCase\Functional;
 use Magento\Catalog\Test\Fixture\SimpleProduct;
 
 /**
- * Create product
- *
+ * Class CreateProductTest
+ * Create product test
  */
 class CreateProductTest extends Functional
 {
     /**
      * Login into backend area before test
+     *
+     * @return void
      */
     protected function setUp()
     {
@@ -46,6 +48,7 @@ class CreateProductTest extends Functional
      * Create simple product with settings in advanced inventory tab
      *
      * @ZephyrId MAGETWO-12914
+     * @return void
      */
     public function testCreateProductAdvancedInventory()
     {
@@ -54,11 +57,11 @@ class CreateProductTest extends Functional
         //Data
         $createProductPage = Factory::getPageFactory()->getCatalogProductNew();
         $createProductPage->init($product);
-        $productBlockForm = $createProductPage->getProductBlockForm();
+        $productForm = $createProductPage->getProductForm();
         //Steps
         $createProductPage->open();
-        $productBlockForm->fill($product);
-        $productBlockForm->save($product);
+        $productForm->fill($product);
+        $createProductPage->getFormAction()->save();
         $createProductPage->getMessagesBlock()->assertSuccessMessage();
         //Flush cache
         $cachePage = Factory::getPageFactory()->getAdminCache();
@@ -74,8 +77,9 @@ class CreateProductTest extends Functional
      * Assert existing product on admin product grid
      *
      * @param SimpleProduct $product
+     * @return void
      */
-    protected function assertOnGrid($product)
+    protected function assertOnGrid(SimpleProduct $product)
     {
         $productGridPage = Factory::getPageFactory()->getCatalogProductIndex();
         $productGridPage->open();
@@ -87,8 +91,9 @@ class CreateProductTest extends Functional
      * Assert product data on category and product pages
      *
      * @param SimpleProduct $product
+     * @return void
      */
-    protected function assertOnCategory($product)
+    protected function assertOnCategory(SimpleProduct $product)
     {
         //Pages
         $frontendHomePage = Factory::getPageFactory()->getCmsIndexIndex();
@@ -104,6 +109,7 @@ class CreateProductTest extends Functional
         //Verification on product detail page
         $productViewBlock = $productPage->getViewBlock();
         $this->assertEquals($product->getProductName(), $productViewBlock->getProductName());
-        $this->assertEquals($product->getProductPrice(), $productViewBlock->getProductPrice());
+        $price = $productViewBlock->getProductPrice();
+        $this->assertEquals(number_format($product->getProductPrice(), 2), $price['price_regular_price']);
     }
 }

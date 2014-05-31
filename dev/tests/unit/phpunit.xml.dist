@@ -36,7 +36,7 @@
     <filter>
         <whitelist addUncoveredFilesFromWhiteList="true">
             <directory suffix=".php">../../../app/code/Magento</directory>
-            <directory suffix=".php">../../../lib/Magento</directory>
+            <directory suffix=".php">../../../lib/internal/Magento</directory>
             <exclude>
                 <directory suffix=".php">../../../app/code/Magento/*/sql</directory>
                 <directory suffix=".php">../../../app/code/Magento/*/data</directory>

@@ -27,7 +27,7 @@
         <target name="magecore" label="Magento module file" uri="./app/code" />
         <target name="magedesign" label="Magento User Interface (layouts, templates)" uri="./app/design" />
         <target name="mageetc" label="Magento Global Configuration" uri="./app/etc" />
-        <target name="magelib" label="Magento PHP Library file" uri="./lib" />
+        <target name="magelib" label="Magento PHP Library file" uri="./lib/internal" />
         <target name="magelocale" label="Magento Locale language file" uri="./app/locale" />
         <target name="magemedia" label="Magento Media library" uri="./media" />
         <target name="mageweb" label="Magento Other web accessible file" uri="." />

@@ -64,9 +64,9 @@ class Product extends \Magento\Core\Helper\Url
     protected $_priceBlock;
 
     /**
-     * @var \Magento\Framework\View\Url
+     * @var \Magento\Framework\View\Asset\Repository
      */
-    protected $_viewUrl;
+    protected $_assetRepo;
 
     /**
      * Core registry
@@ -136,7 +136,7 @@ class Product extends \Magento\Core\Helper\Url
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Model\Session $catalogSession
-     * @param \Magento\Framework\View\Url $viewUrl
+     * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Catalog\Model\Attribute\Config $attributeConfig
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -150,7 +150,7 @@ class Product extends \Magento\Core\Helper\Url
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Model\Session $catalogSession,
-        \Magento\Framework\View\Url $viewUrl,
+        \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Catalog\Model\Attribute\Config $attributeConfig,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
@@ -165,7 +165,7 @@ class Product extends \Magento\Core\Helper\Url
         $this->_attributeConfig = $attributeConfig;
         $this->_coreRegistry = $coreRegistry;
         $this->_scopeConfig = $scopeConfig;
-        $this->_viewUrl = $viewUrl;
+        $this->_assetRepo = $assetRepo;
         $this->_coreConfig = $coreConfig;
         $this->_logger = $context->getLogger();
         $this->_reindexPriceIndexerData = $reindexPriceIndexerData;
@@ -250,7 +250,7 @@ class Product extends \Magento\Core\Helper\Url
         $url = false;
         $attribute = $product->getResource()->getAttribute('image');
         if (!$product->getImage()) {
-            $url = $this->_viewUrl->getViewFileUrl('Magento_Catalog::images/product/placeholder/image.jpg');
+            $url = $this->_assetRepo->getUrl('Magento_Catalog::images/product/placeholder/image.jpg');
         } elseif ($attribute) {
             $url = $attribute->getFrontend()->getUrl($product);
         }
@@ -268,7 +268,7 @@ class Product extends \Magento\Core\Helper\Url
         $url = false;
         $attribute = $product->getResource()->getAttribute('small_image');
         if (!$product->getSmallImage()) {
-            $url = $this->_viewUrl->getViewFileUrl('Magento_Catalog::images/product/placeholder/small_image.jpg');
+            $url = $this->_assetRepo->getUrl('Magento_Catalog::images/product/placeholder/small_image.jpg');
         } elseif ($attribute) {
             $url = $attribute->getFrontend()->getUrl($product);
         }

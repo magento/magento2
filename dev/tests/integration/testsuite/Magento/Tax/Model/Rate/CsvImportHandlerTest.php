@@ -59,6 +59,7 @@ class CsvImportHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEmpty($importedRuleCA->getId());
         $this->assertEquals(8.25, (double)$importedRuleCA->getRate());
         $this->assertEquals('US', $importedRuleCA->getTaxCountryId());
+        $this->assertEquals('*', $importedRuleCA->getTaxPostcode());
 
         $importedRuleFL = $objectManager->create(
             'Magento\Tax\Model\Calculation\Rate'
@@ -68,6 +69,7 @@ class CsvImportHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEmpty($importedRuleFL->getId());
         $this->assertEquals(15, (double)$importedRuleFL->getRate());
         $this->assertEquals('US', $importedRuleFL->getTaxCountryId());
+        $this->assertNull($importedRuleFL->getTaxPostcode());
     }
 
     /**

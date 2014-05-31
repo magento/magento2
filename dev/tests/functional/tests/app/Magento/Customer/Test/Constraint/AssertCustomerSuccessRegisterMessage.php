@@ -50,7 +50,7 @@ class AssertCustomerSuccessRegisterMessage extends AbstractConstraint
      */
     public function processAssert(CustomerAccountCreate $registerPage)
     {
-        $actualMessage = $registerPage->getMessageBlock()->getSuccessMessages();
+        $actualMessage = $registerPage->getMessagesBlock()->getSuccessMessages();
         \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_MESSAGE,
             $actualMessage,

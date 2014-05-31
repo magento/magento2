@@ -21,6 +21,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Tax\Model\Calculation;
 
 /**
  * Tax Rule Model
@@ -34,40 +35,8 @@
  * @method int getPosition()
  * @method \Magento\Tax\Model\Calculation\Rule setPosition(int $value)
  */
-namespace Magento\Tax\Model\Calculation;
-
 class Rule extends \Magento\Framework\Model\AbstractModel
 {
-    /**
-     * @var mixed
-     */
-    protected $_ctcs = null;
-
-    /**
-     * @var mixed
-     */
-    protected $_ptcs = null;
-
-    /**
-     * @var mixed
-     */
-    protected $_rates = null;
-
-    /**
-     * @var mixed
-     */
-    protected $_ctcModel = null;
-
-    /**
-     * @var mixed
-     */
-    protected $_ptcModel = null;
-
-    /**
-     * @var mixed
-     */
-    protected $_rateModel = null;
-
     /**
      * Prefix of model events names
      *
@@ -125,7 +94,7 @@ class Rule extends \Magento\Framework\Model\AbstractModel
 
     /**
      * After save rule
-     * Redeclared for populate rate calculations
+     * Re-declared for populate rate calculations
      *
      * @return $this
      */
@@ -139,7 +108,7 @@ class Rule extends \Magento\Framework\Model\AbstractModel
 
     /**
      * After rule delete
-     * re-declared for dispatch tax_settings_change_after event
+     * Re-declared for dispatch tax_settings_change_after event
      *
      * @return $this
      */
@@ -259,5 +228,19 @@ class Rule extends \Magento\Framework\Model\AbstractModel
         $classes = $this->_taxClass->getCollection()->setClassTypeFilter($classFilter)->toOptionArray();
 
         return $classes;
+    }
+
+    /**
+     * Fetches rules by rate, customer tax class and product tax class
+     * and product tax class combination
+     *
+     * @param array $rateId
+     * @param array $customerTaxClassIds
+     * @param array $productTaxClassIds
+     * @return array
+     */
+    public function fetchRuleCodes($rateId, $customerTaxClassIds, $productTaxClassIds)
+    {
+        return $this->getResource()->fetchRuleCodes($rateId, $customerTaxClassIds, $productTaxClassIds);
     }
 }

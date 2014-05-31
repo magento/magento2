@@ -62,18 +62,21 @@ class Status extends \Magento\Framework\Model\AbstractModel
      * Assign order status to particular state
      *
      * @param string $state
-     * @param boolean $isDefault make the status as default one for state
+     * @param bool $isDefault make the status as default one for state
+     * @param bool $visibleOnFront
      * @return $this
      * @throws \Exception
      */
-    public function assignState($state, $isDefault = false)
+    public function assignState($state, $isDefault = false, $visibleOnFront = false)
     {
-        $this->_getResource()->beginTransaction();
+        /** @var \Magento\Sales\Model\Resource\Order\Status $resource */
+        $resource = $this->_getResource();
+        $resource->beginTransaction();
         try {
-            $this->_getResource()->assignState($this->getStatus(), $state, $isDefault);
-            $this->_getResource()->commit();
+            $resource->assignState($this->getStatus(), $state, $isDefault, $visibleOnFront);
+            $resource->commit();
         } catch (\Exception $e) {
-            $this->_getResource()->rollBack();
+            $resource->rollBack();
             throw $e;
         }
         return $this;
@@ -88,14 +91,16 @@ class Status extends \Magento\Framework\Model\AbstractModel
      */
     public function unassignState($state)
     {
-        $this->_getResource()->beginTransaction();
+        /** @var \Magento\Sales\Model\Resource\Order\Status $resource */
+        $resource = $this->_getResource();
+        $resource->beginTransaction();
         try {
-            $this->_getResource()->unassignState($this->getStatus(), $state);
-            $this->_getResource()->commit();
-            $params = array('status' => $this->getStatus(), 'state' => $state);
+            $resource->unassignState($this->getStatus(), $state);
+            $resource->commit();
+            $params = ['status' => $this->getStatus(), 'state' => $state];
             $this->_eventManager->dispatch('sales_order_status_unassign', $params);
         } catch (\Exception $e) {
-            $this->_getResource()->rollBack();
+            $resource->rollBack();
             throw $e;
         }
         return $this;

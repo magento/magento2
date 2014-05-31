@@ -29,7 +29,7 @@
         <block class="Magento\Framework\View\Element\Js\Components" name="checkout_page_head_components" template="Magento_Checkout::js/components.phtml"/>
     </referenceBlock>
     <referenceContainer name="header-wrapper">
-        <block class="Magento\Checkout\Block\Cart\Sidebar" name="minicart" as="minicart" after="logo" template="cart/minicart.phtml">
+        <block class="Magento\Checkout\Block\Cart\Sidebar" name="minicart" as="minicart" after="logo" template="cart/minicart.phtml" cacheable="false">
             <block class="Magento\Framework\View\Element\RendererList" name="checkout.cart.sidebar.item.renderers" as="renderer.list" />
             <container name="minicart.extra.info" as="minicart_info" label="My Cart Extra info"/>
             <container name="topCart.extra_actions" as="extra_actions" label="My Cart Extra Actions">

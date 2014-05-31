@@ -64,13 +64,6 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
     protected $_request;
 
     /**
-     * Raw rate request data
-     *
-     * @var \Magento\Framework\Object
-     */
-    protected $_rawRequest;
-
-    /**
      * Rate result data
      *
      * @var Result

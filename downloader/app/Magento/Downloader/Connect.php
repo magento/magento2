@@ -28,7 +28,7 @@ error_reporting(E_ALL & ~E_NOTICE);
 
 // add Magento lib in include_path if needed
 $_includePath = get_include_path();
-$_libDir = dirname(__DIR__) . '/lib';
+$_libDir = dirname(__DIR__) . '/lib/internal';
 if (strpos($_includePath, $_libDir) === false) {
     if (substr($_includePath, 0, 2) === '.' . PATH_SEPARATOR) {
         $_includePath = '.' . PATH_SEPARATOR . $_libDir . PATH_SEPARATOR . substr($_includePath, 2);

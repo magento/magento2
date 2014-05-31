@@ -127,8 +127,8 @@ class View extends \Magento\Framework\View\Element\Template
                 'customer_id',
                 (int)$this->_customerSession->getCustomerId()
             )->addFieldToFilter(
-                'state',
-                array('in' => $this->_orderConfig->getVisibleOnFrontStates())
+                'status',
+                array('in' => $this->_orderConfig->getVisibleOnFrontStatuses())
             )->setOrder(
                 'created_at',
                 'desc'

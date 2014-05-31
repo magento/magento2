@@ -36,7 +36,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
         $dom = new \DOMDocument();
         $dom->load(__DIR__ . "/_files/{$invalidXmlFile}");
         libxml_use_internal_errors(true);
-        $result = $dom->schemaValidate(__DIR__ . "/../../../../../../../lib/Magento/Framework/Config/etc/{$xsdFile}");
+        $result = $dom->schemaValidate(BP . "/lib/internal/Magento/Framework/Config/etc/{$xsdFile}");
 
         $errorsQty = count(libxml_get_errors());
         libxml_use_internal_errors(false);

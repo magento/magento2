@@ -408,7 +408,7 @@ class DefaultModel extends \Zend_Captcha_Image implements \Magento\Captcha\Model
             $to = self::DEFAULT_WORD_LENGTH_TO;
         }
 
-        return mt_rand($from, $to);
+        return \Magento\Framework\Math\Random::getRandomNumber($from, $to);
     }
 
     /**
@@ -509,7 +509,7 @@ class DefaultModel extends \Zend_Captcha_Image implements \Magento\Captcha\Model
      */
     protected function _randomSize()
     {
-        return mt_rand(280, 300) / 100;
+        return \Magento\Framework\Math\Random::getRandomNumber(280, 300) / 100;
     }
 
     /**

@@ -147,9 +147,10 @@ class Application
                 Filesystem::VAR_DIR => array('path' => $installDir),
                 Filesystem::MEDIA_DIR => array('path' => "{$installDir}/media"),
                 Filesystem::STATIC_VIEW_DIR => array('path' => "{$installDir}/pub_static"),
-                Filesystem::PUB_VIEW_CACHE_DIR => array('path' => "{$installDir}/pub_cache"),
                 Filesystem::GENERATION_DIR => array('path' => $generationDir),
-                Filesystem::CACHE_DIR => array('path' => $installDir . '/cache')
+                Filesystem::CACHE_DIR => array('path' => $installDir . '/cache'),
+                Filesystem::LOG_DIR => array('path' => $installDir . '/log'),
+                Filesystem::THEMES_DIR => array('path' => BP . '/app/design'),
             ),
             \Magento\Framework\App\State::PARAM_MODE => $appMode
         );

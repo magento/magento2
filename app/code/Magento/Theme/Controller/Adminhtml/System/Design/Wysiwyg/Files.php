@@ -37,14 +37,22 @@ class Files extends \Magento\Backend\App\Action
     protected $_fileFactory;
 
     /**
+     * @var \Magento\Theme\Helper\Storage
+     */
+    protected $storage;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+     * @param \Magento\Theme\Helper\Storage $storage
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+        \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
+        \Magento\Theme\Helper\Storage $storage
     ) {
         $this->_fileFactory = $fileFactory;
+        $this->storage = $storage;
         parent::__construct($context);
     }
 
@@ -89,7 +97,7 @@ class Files extends \Magento\Backend\App\Action
     {
         $name = $this->getRequest()->getPost('name');
         try {
-            $path = $this->_getSession()->getStoragePath();
+            $path = $this->storage->getCurrentPath();
             $result = $this->_getStorage()->createFolder($name, $path);
         } catch (\Magento\Framework\Model\Exception $e) {
             $result = array('error' => true, 'message' => $e->getMessage());
@@ -108,7 +116,7 @@ class Files extends \Magento\Backend\App\Action
     public function deleteFolderAction()
     {
         try {
-            $path = $this->_getSession()->getStoragePath();
+            $path = $this->storage->getCurrentPath();
             $this->_getStorage()->deleteDirectory($path);
         } catch (\Exception $e) {
             $result = array('error' => true, 'message' => $e->getMessage());
@@ -128,9 +136,7 @@ class Files extends \Magento\Backend\App\Action
             $this->_view->getLayout()->getBlock('wysiwyg_files.files')->setStorage($this->_getStorage());
             $this->_view->renderLayout();
 
-            $this->_getSession()->setStoragePath(
-                $this->_objectManager->get('Magento\Theme\Helper\Storage')->getCurrentPath()
-            );
+            $this->_getSession()->setStoragePath($this->storage->getCurrentPath());
         } catch (\Exception $e) {
             $result = array('error' => true, 'message' => $e->getMessage());
             $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result));
@@ -145,7 +151,7 @@ class Files extends \Magento\Backend\App\Action
     public function uploadAction()
     {
         try {
-            $path = $this->_getSession()->getStoragePath();
+            $path = $this->storage->getCurrentPath();
             $result = $this->_getStorage()->uploadFile($path);
         } catch (\Exception $e) {
             $result = array('error' => $e->getMessage(), 'errorcode' => $e->getCode());

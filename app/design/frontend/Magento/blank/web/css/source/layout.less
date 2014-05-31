@@ -1,0 +1,129 @@
+// /**
+// //  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+//  *
+//  * @category    design
+//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+//  */
+
+@layout-column-left-offset: 2%;
+@layout-column-right-offset: @layout-column-left-offset;
+
+.navigation > ul,
+.breadcrumbs,
+.page.header .header.panel,
+.header.content,
+.footer.content,
+.page.main,
+.page.wrapper > .widget,
+.page.wrapper > .page.bottom,
+.block.category.event {
+    padding-left: @layout-indent;
+    padding-right: @layout-indent;
+}
+
+.page.wrapper {
+    position: relative;
+    left: 0;
+    -webkit-transition: all .25s ease-out;
+    -moz-transition: all .25s ease-out;
+    transition: all .25s ease-out;
+}
+
+.page.wrapper.open{
+    left: 86%;
+    -webkit-transition: all .25s ease-on;
+    -moz-transition: all .25s ease-out;
+    transition: all .25s ease-out;
+}
+
+.columns {
+    #layout-columns();
+    > .column {
+        &:extend(.add-box-sizing all);
+        .css(padding-bottom, @indent-xl-base);
+    }
+    .column.main {
+        min-height: 300px;
+    }
+}
+
+.page.header {
+    .panel.wrapper {
+        position: absolute;
+        top: 0;
+        left: -86%;
+        background: #f5f5f5;
+        height: 100%;
+        width: 86%;
+        -webkit-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        .panel.header {
+            padding: 0;
+        }
+    }
+}
+
+//
+//    Desktop
+//--------------------------------------
+.responsive(@break) when (@break = @break-point-1) {
+    .navigation > ul,
+    .breadcrumbs,
+    .page.header .header.panel,
+    .header.content,
+    .footer.content,
+    .page.main,
+    .page.wrapper > .widget,
+    .page.wrapper > .page.bottom,
+    .block.category.event {
+        margin: 0 auto;
+        width: auto;
+        max-width: @layout-max-width;
+    }
+
+    .column.main {
+        #layout-columns > .main();
+    }
+
+    .column.left {
+        #layout-columns > .left();
+        padding-right: @layout-column-left-offset;
+    }
+
+    .column.right {
+        #layout-columns > .right();
+        padding-left: @layout-column-right-offset;
+    }
+    .page.header {
+        .panel.wrapper {
+            position: relative;
+            top: 0;
+            left: 0;
+            background: none;
+            height: auto;
+            width: auto;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+            .panel.header {
+                padding: 10px 20px;
+            }
+        }
+    }
+}

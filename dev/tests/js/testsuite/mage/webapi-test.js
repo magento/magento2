@@ -25,11 +25,11 @@ WebapiTest = TestCase('WebapiTest');
 WebapiTest.prototype.testConstructorSuccess = function() {
     var successCallback = function(){};
     new $.mage.Webapi('baseUrl', {'timeout': 100, 'success': successCallback});
-}
+};
 
 WebapiTest.prototype.testConstructorSuccessEmptyArgs = function() {
     new $.mage.Webapi('baseUrl');
-}
+};
 
 WebapiTest.prototype.testConstructorInvalidBaseUrl = function() {
     expectAsserts(1);
@@ -40,7 +40,7 @@ WebapiTest.prototype.testConstructorInvalidBaseUrl = function() {
         var expectedException = "String baseUrl parameter required";
         assertEquals("Invalid exception was thrown.", expectedException, e);
     }
-}
+};
 
 WebapiTest.prototype.testCallInvalidMethod = function() {
     var Webapi = new $.mage.Webapi('baseUrl');
@@ -51,33 +51,33 @@ WebapiTest.prototype.testCallInvalidMethod = function() {
         var expectedException = "Method name is not valid: INVALID_HTTP_METHOD";
         assertEquals("Invalid exception was thrown.", expectedException, e);
     }
-}
+};
 
 WebapiTest.prototype.testCallSuccessCallback = function() {
     // ensure that custom successCallback was executed
     expectAsserts(1);
     var successCallback = function(response) {
         assertObject("Response is expected to be an object", response);
-    }
+    };
     var Webapi = new $.mage.Webapi('baseUrl', {'success': successCallback});
     $.ajax = function(settings) {
         settings.success({});
     };
     Webapi.call('products', 'GET');
-}
+};
 
 WebapiTest.prototype.testCallErrorCallback = function() {
     // ensure that custom successCallback was executed
     expectAsserts(1);
     var errorCallback = function(response) {
         assertObject("Response is expected to be an object", response);
-    }
+    };
     var Webapi = new $.mage.Webapi('baseUrl', {'error': errorCallback});
     $.ajax = function(settings) {
         settings.error({});
     };
     Webapi.call('products', 'GET');
-}
+};
 
 WebapiTest.prototype.testCallProductGet = function() {
     var baseUri = 'baseUrl';

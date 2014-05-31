@@ -33,7 +33,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', array(), array(), '', false);
+        $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
         $downloadableFile = $this->getMockBuilder(
             'Magento\Downloadable\Helper\File'
         )->disableOriginalConstructor()->getMock();
@@ -44,34 +44,69 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $filesystem = $this->getMockBuilder('Magento\Framework\App\Filesystem')
             ->disableOriginalConstructor()
             ->getMock();
-        $coreRegistry = $this->getMock('Magento\Framework\Registry', array(), array(), '', false);
-        $logger = $this->getMock('Magento\Framework\Logger', array(), array(), '', false);
-        $productFactoryMock = $this->getMock('Magento\Catalog\Model\ProductFactory', array(), array(), '', false);
-        $sampleResFactory = $this->getMock(
-            'Magento\Downloadable\Model\Resource\SampleFactory',
-            array(),
-            array(),
-            '',
-            false
-        );
-        $linkResource = $this->getMock('Magento\Downloadable\Model\Resource\Link', array(), array(), '', false);
-        $linksFactory = $this->getMock(
-            'Magento\Downloadable\Model\Resource\Link\CollectionFactory',
-            array(),
-            array(),
-            '',
-            false
-        );
+        $coreRegistry = $this->getMock('Magento\Framework\Registry', [], [], '', false);
+        $logger = $this->getMock('Magento\Framework\Logger', [], [], '', false);
+        $productFactoryMock = $this->getMock('Magento\Catalog\Model\ProductFactory', [], [], '', false);
+        $sampleResFactory = $this->getMock('Magento\Downloadable\Model\Resource\SampleFactory', [], [], '', false);
+        $linkResource = $this->getMock('Magento\Downloadable\Model\Resource\Link', [], [], '', false);
+        $linksFactory = $this->getMock('Magento\Downloadable\Model\Resource\Link\CollectionFactory', [], [], '', false);
         $samplesFactory = $this->getMock(
             'Magento\Downloadable\Model\Resource\Sample\CollectionFactory',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
-        $sampleFactory = $this->getMock('Magento\Downloadable\Model\SampleFactory', array(), array(), '', false);
-        $linkFactory = $this->getMock('Magento\Downloadable\Model\LinkFactory', array(), array(), '', false);
+        $sampleFactory = $this->getMock('Magento\Downloadable\Model\SampleFactory', [], [], '', false);
+        $linkFactory = $this->getMock('Magento\Downloadable\Model\LinkFactory', [], [], '', false);
 
+        $entityTypeMock = $this->getMock('Magento\Eav\Model\Entity\Type', [], [], '', false);
+        $resourceProductMock = $this->getMock(
+            'Magento\Catalog\Model\Resource\Product',
+            ['getEntityType'],
+            [],
+            '',
+            false
+        );
+        $resourceProductMock->expects($this->any())->method('getEntityType')->will($this->returnValue($entityTypeMock));
+
+        $productMock = $this->getMock(
+            'Magento\Catalog\Model\Product',
+            [
+                'getResource',
+                'canAffectOptions',
+                'getLinksPurchasedSeparately',
+                'setTypeHasRequiredOptions',
+                'setRequiredOptions',
+                'getDownloadableData',
+                'setTypeHasOptions',
+                'setLinksExist',
+                '__wakeup'
+            ],
+            [],
+            '',
+            false
+        );
+        $productMock->expects($this->any())->method('getResource')->will($this->returnValue($resourceProductMock));
+        $productMock->expects($this->any())->method('setTypeHasRequiredOptions')->with($this->equalTo(true))->will(
+            $this->returnSelf()
+        );
+        $productMock->expects($this->any())->method('setRequiredOptions')->with($this->equalTo(true))->will(
+            $this->returnSelf()
+        );
+        $productMock->expects($this->any())->method('getDownloadableData')->will($this->returnValue(array()));
+        $productMock->expects($this->any())->method('setTypeHasOptions')->with($this->equalTo(false));
+        $productMock->expects($this->any())->method('setLinksExist')->with($this->equalTo(false));
+        $productMock->expects($this->any())->method('canAffectOptions')->with($this->equalTo(true));
+        $productMock->expects($this->any())->method('getLinksPurchasedSeparately')->will($this->returnValue(true));
+        $productMock->expects($this->any())->method('getLinksPurchasedSeparately')->will($this->returnValue(true));
+        $this->_productMock = $productMock;
+
+        $eavConfigMock = $this->getMock('\Magento\Eav\Model\Config', ['getEntityAttributeCodes'], [], '', false);
+        $eavConfigMock->expects($this->any())
+            ->method('getEntityAttributeCodes')
+            ->with($this->equalTo($entityTypeMock), $this->equalTo($productMock))
+            ->will($this->returnValue(array()));
         $this->_model = $objectHelper->getObject(
             'Magento\Downloadable\Model\Product\Type',
             array(
@@ -88,7 +123,8 @@ class TypeTest extends \PHPUnit_Framework_TestCase
                 'linksFactory' => $linksFactory,
                 'samplesFactory' => $samplesFactory,
                 'sampleFactory' => $sampleFactory,
-                'linkFactory' => $linkFactory
+                'linkFactory' => $linkFactory,
+                'eavConfig' => $eavConfigMock
             )
         );
     }
@@ -96,5 +132,10 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     public function testHasWeightFalse()
     {
         $this->assertFalse($this->_model->hasWeight(), 'This product has weight, but it should not');
+    }
+
+    public function testBeforeSave()
+    {
+        $this->_model->beforeSave($this->_productMock);
     }
 }

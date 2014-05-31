@@ -47,7 +47,7 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
     {
         $this->_viewFileSystem = $this->getMock(
             'Magento\Framework\View\FileSystem',
-            array('getFilename', 'getDesignTheme'),
+            array('getLocaleFileName', 'getDesignTheme'),
             array(),
             '',
             false
@@ -55,7 +55,7 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
 
         $this->_viewFileSystem->expects($this->any())
             ->method(
-                'getFilename'
+                'getLocaleFileName'
             )->will(
                 $this->returnValue(dirname(__DIR__) . '/Core/Model/_files/design/frontend/test_default/i18n/en_US.csv')
             );
@@ -96,8 +96,7 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
 
         $objectManager->addSharedInstance($this->_designModel, 'Magento\Core\Model\View\Design\Proxy');
 
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Framework\Translate');
+        $this->_model = $objectManager->create('Magento\Framework\Translate');
         $objectManager->addSharedInstance($this->_model, 'Magento\Framework\Translate');
         $objectManager->removeSharedInstance('Magento\Framework\Phrase\Renderer\Composite');
         $objectManager->removeSharedInstance('Magento\Framework\Phrase\Renderer\Translate');

@@ -39,8 +39,10 @@ abstract class AbstractController extends \Magento\Framework\App\Action\Action
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      */
-    public function __construct(\Magento\Framework\App\Action\Context $context, \Magento\Framework\Registry $coreRegistry)
-    {
+    public function __construct(
+        \Magento\Framework\App\Action\Context $context,
+        \Magento\Framework\Registry $coreRegistry
+    ) {
         $this->_coreRegistry = $coreRegistry;
         parent::__construct($context);
     }
@@ -54,12 +56,12 @@ abstract class AbstractController extends \Magento\Framework\App\Action\Action
     protected function _canViewOrder($order)
     {
         $customerId = $this->_objectManager->get('Magento\Customer\Model\Session')->getCustomerId();
-        $availableStates = $this->_objectManager->get('Magento\Sales\Model\Order\Config')->getVisibleOnFrontStates();
-        if ($order->getId() && $order->getCustomerId() && $order->getCustomerId() == $customerId && in_array(
-            $order->getState(),
-            $availableStates,
-            true
-        )
+        $availableStatuses = $this->_objectManager->get('Magento\Sales\Model\Order\Config')
+            ->getVisibleOnFrontStatuses();
+        if ($order->getId()
+            && $order->getCustomerId()
+            && $order->getCustomerId() == $customerId
+            && in_array($order->getStatus(), $availableStatuses, true)
         ) {
             return true;
         }

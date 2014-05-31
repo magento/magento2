@@ -1,6 +1,0 @@
-############################################
-## always send 404 on missing files
-
-<IfModule mod_rewrite.c>
-    RewriteEngine off
-</IfModule>

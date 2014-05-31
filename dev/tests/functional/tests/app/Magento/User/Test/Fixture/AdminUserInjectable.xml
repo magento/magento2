@@ -141,6 +141,10 @@
             <default_value>en_US</default_value>
             <input></input>
         </interface_locale>
+        <role_id>
+            <attribute_code>role_id</attribute_code>
+            <backend_type>virtual</backend_type>
+        </role_id>
     </fields>
     <repository_class>Magento\User\Test\Repository\AdminUserInjectable</repository_class>
     <handler_interface>Magento\User\Test\Handler\AdminUser\AdminUserInterface</handler_interface>

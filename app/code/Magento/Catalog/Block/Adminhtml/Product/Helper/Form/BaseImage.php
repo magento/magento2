@@ -54,15 +54,15 @@ class BaseImage extends \Magento\Framework\Data\Form\Element\AbstractElement
     protected $_fileConfig;
 
     /**
-     * @var \Magento\Framework\View\Url
+     * @var \Magento\Framework\View\Asset\Repository
      */
-    protected $_viewUrl;
+    protected $_assetRepo;
 
     /**
      * @param \Magento\Framework\Data\Form\Element\Factory $factoryElement
      * @param \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection
      * @param \Magento\Framework\Escaper $escaper
-     * @param \Magento\Framework\View\UrlFactory $coreViewUrlFactory
+     * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Backend\Model\UrlFactory $backendUrlFactory
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Framework\File\Size $fileConfig
@@ -72,7 +72,7 @@ class BaseImage extends \Magento\Framework\Data\Form\Element\AbstractElement
         \Magento\Framework\Data\Form\Element\Factory $factoryElement,
         \Magento\Framework\Data\Form\Element\CollectionFactory $factoryCollection,
         \Magento\Framework\Escaper $escaper,
-        \Magento\Framework\View\UrlFactory $coreViewUrlFactory,
+        \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Backend\Model\UrlFactory $backendUrlFactory,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Framework\File\Size $fileConfig,
@@ -80,7 +80,7 @@ class BaseImage extends \Magento\Framework\Data\Form\Element\AbstractElement
     ) {
         parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
 
-        $this->_viewUrl = $coreViewUrlFactory->create();
+        $this->_assetRepo = $assetRepo;
         $this->_url = $backendUrlFactory->create();
         $this->_catalogHelperData = $catalogData;
         $this->_fileConfig = $fileConfig;
@@ -106,7 +106,7 @@ class BaseImage extends \Magento\Framework\Data\Form\Element\AbstractElement
     {
         $htmlId = $this->_escaper->escapeHtml($this->getHtmlId());
         $uploadUrl = $this->_escaper->escapeHtml($this->_getUploadUrl());
-        $spacerImage = $this->_viewUrl->getViewFileUrl('images/spacer.gif');
+        $spacerImage = $this->_assetRepo->getUrl('images/spacer.gif');
         $imagePlaceholderText = __('Click here or drag and drop to add images');
         $deleteImageText = __('Delete image');
         $makeBaseText = __('Make Base');

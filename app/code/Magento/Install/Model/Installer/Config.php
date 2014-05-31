@@ -94,7 +94,7 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
         $this->_request = $request;
         $this->_storeManager = $storeManager;
         $this->_filesystem = $filesystem;
-        $this->_pubDirectory = $filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::PUB_LIB_DIR);
+        $this->_pubDirectory = $filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::PUB_DIR);
         $this->_configDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::CONFIG_DIR);
         $this->messageManager = $messageManager;
     }
@@ -228,7 +228,7 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
         try {
             $staticFile = $this->_findFirstFileRelativePath('', '/.+\.(html?|js|css|gif|jpe?g|png)$/');
             $staticUrl = $baseUrl . $this->_filesystem->getUri(
-                \Magento\Framework\App\Filesystem::PUB_LIB_DIR
+                \Magento\Framework\App\Filesystem::PUB_DIR
             ) . '/' . $staticFile;
             $client = new \Magento\Framework\HTTP\ZendClient($staticUrl);
             $response = $client->request('GET');
@@ -252,20 +252,19 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
     protected function _findFirstFileRelativePath($dir, $pattern = '/.*/')
     {
         $childDirs = array();
-        foreach ($this->_pubDirectory->read($dir) as $itemName) {
-            $itemPath = $dir . '/' . $itemName;
+        foreach ($this->_pubDirectory->read($dir) as $itemPath) {
             if ($this->_pubDirectory->isFile($itemPath)) {
-                if (preg_match($pattern, $itemName)) {
-                    return $itemName;
+                if (preg_match($pattern, $itemPath)) {
+                    return $itemPath;
                 }
             } else {
-                $childDirs[$itemName] = $itemPath;
+                $childDirs[$itemPath] = $itemPath;
             }
         }
         foreach ($childDirs as $dirName => $dirPath) {
             $filePath = $this->_findFirstFileRelativePath($dirPath, $pattern);
             if ($filePath) {
-                return $dirName . '/' . $filePath;
+                return $filePath;
             }
         }
         return null;

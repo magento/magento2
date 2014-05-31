@@ -43,11 +43,6 @@ class DesignTest extends \PHPUnit_Framework_TestCase
      */
     protected $_viewConfig;
 
-    /**
-     * @var \Magento\Framework\View\Url
-     */
-    protected $_viewUrl;
-
     public static function setUpBeforeClass()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -57,8 +52,8 @@ class DesignTest extends \PHPUnit_Framework_TestCase
         $themeDir->delete('theme/frontend');
         $themeDir->delete('theme/_merged');
 
-        $pubLibPath = $filesystem->getPath(\Magento\Framework\App\Filesystem::PUB_LIB_DIR);
-        copy($pubLibPath . '/prototype/prototype.js', $pubLibPath . '/prototype/prototype.min.js');
+        $libPath = $filesystem->getPath(\Magento\Framework\App\Filesystem::LIB_WEB);
+        copy($libPath . '/prototype/prototype.js', $libPath . '/prototype/prototype.min.js');
     }
 
     public static function tearDownAfterClass()
@@ -66,17 +61,16 @@ class DesignTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Framework\App\Filesystem $filesystem */
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get('Magento\Framework\App\Filesystem');
-        $pubLibPath = $filesystem->getPath(\Magento\Framework\App\Filesystem::PUB_LIB_DIR);
-        unlink($pubLibPath . '/prototype/prototype.min.js');
+        $libPath = $filesystem->getPath(\Magento\Framework\App\Filesystem::LIB_WEB);
+        unlink($libPath . '/prototype/prototype.min.js');
     }
 
     protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_model = $objectManager->create('Magento\Framework\View\DesignInterface');
+        $this->_model = $objectManager->create('Magento\\Framework\View\DesignInterface');
         $this->_viewFileSystem = $objectManager->create('Magento\Framework\View\FileSystem');
         $this->_viewConfig = $objectManager->create('Magento\Framework\View\ConfigInterface');
-        $this->_viewUrl = $objectManager->create('Magento\Framework\View\Url');
         $objectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
     }
 
@@ -102,7 +96,6 @@ class DesignTest extends \PHPUnit_Framework_TestCase
 
         $this->_viewFileSystem = $objectManager->create('Magento\Framework\View\FileSystem');
         $this->_viewConfig = $objectManager->create('Magento\Framework\View\ConfigInterface');
-        $this->_viewUrl = $objectManager->create('Magento\Framework\View\Url');
     }
 
     public function testSetGetArea()
@@ -115,11 +108,8 @@ class DesignTest extends \PHPUnit_Framework_TestCase
 
     public function testSetDesignTheme()
     {
-        $this->_model->setDesignTheme('test_test');
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\State')
-            ->setAreaCode('test');
-        $this->assertEquals('test', $this->_model->getArea());
-        $this->assertEquals(null, $this->_model->getDesignTheme()->getThemePath());
+        $this->_model->setDesignTheme('Magento/blank', 'frontend');
+        $this->assertEquals('Magento/blank', $this->_model->getDesignTheme()->getThemePath());
     }
 
     public function testGetDesignTheme()
@@ -194,21 +184,6 @@ class DesignTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $file
-     * @expectedException \Magento\Framework\Exception
-     * @dataProvider extractScopeExceptionDataProvider
-     */
-    public function testExtractScopeException($file)
-    {
-        $this->_viewFileSystem->getFilename($file, array());
-    }
-
-    public function extractScopeExceptionDataProvider()
-    {
-        return array(array('::no_scope.ext'), array('../file.ext'));
-    }
-
-    /**
      * @magentoAppIsolation enabled
      */
     public function testGetViewConfig()
@@ -250,119 +225,5 @@ class DesignTest extends \PHPUnit_Framework_TestCase
             throw $e;
         }
         $directory->delete($relativePath);
-    }
-
-    /**
-     * @param string $appMode
-     * @param string $file
-     * @param string $result
-     *
-     * @dataProvider getViewUrlDataProvider
-     *
-     * @magentoConfigFixture current_store dev/static/sign 0
-     * @magentoAppIsolation enabled
-     */
-    public function testGetViewUrl($appMode, $file, $result)
-    {
-        $currentAppMode = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\App\State'
-        )->getMode();
-        if ($currentAppMode != $appMode) {
-            $this->markTestSkipped("Implemented to be run in {$appMode} mode");
-        }
-        $this->_emulateFixtureTheme();
-        $this->assertEquals($result, $this->_viewUrl->getViewFileUrl($file));
-    }
-
-    /**
-     * @param string $appMode
-     * @param string $file
-     * @param string $result
-     *
-     * @dataProvider getViewUrlDataProvider
-     *
-     * @magentoConfigFixture current_store dev/static/sign 1
-     * @magentoAppIsolation enabled
-     */
-    public function testGetViewUrlSigned($appMode, $file, $result)
-    {
-        $currentAppMode = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\App\State'
-        )->getMode();
-        if ($currentAppMode != $appMode) {
-            $this->markTestSkipped("Implemented to be run in {$appMode} mode");
-        }
-        $url = $this->_viewUrl->getViewFileUrl($file);
-        $this->assertEquals(strpos($url, $result), 0);
-        $lastModified = array();
-        preg_match('/.*\?(.*)$/i', $url, $lastModified);
-        $this->assertArrayHasKey(1, $lastModified);
-        $this->assertEquals(10, strlen($lastModified[1]));
-        $this->assertLessThanOrEqual(time(), $lastModified[1]);
-        $this->assertGreaterThan(1970, date('Y', $lastModified[1]));
-    }
-
-    /**
-     * @return array
-     */
-    public function getViewUrlDataProvider()
-    {
-        return array(
-            array(
-                \Magento\Framework\App\State::MODE_DEFAULT,
-                'Magento_Theme::favicon.ico',
-                'http://localhost/pub/static/frontend/test_default/en_US/Magento_Theme/favicon.ico'
-            ),
-            array(
-                \Magento\Framework\App\State::MODE_DEFAULT,
-                'prototype/prototype.js',
-                'http://localhost/pub/lib/prototype/prototype.js'
-            ),
-            array(
-                \Magento\Framework\App\State::MODE_DEVELOPER,
-                'Magento_Theme::menu.js',
-                'http://localhost/pub/static/frontend/test_default/en_US/Magento_Theme/menu.js'
-            ),
-            array(
-                \Magento\Framework\App\State::MODE_DEFAULT,
-                'Magento_Theme::menu.js',
-                'http://localhost/pub/static/frontend/test_default/en_US/Magento_Theme/menu.js'
-            ),
-            array(
-                \Magento\Framework\App\State::MODE_DEFAULT,
-                'Magento_Catalog::widgets.css',
-                'http://localhost/pub/static/frontend/test_default/en_US/Magento_Catalog/widgets.css'
-            ),
-            array(
-                \Magento\Framework\App\State::MODE_DEVELOPER,
-                'Magento_Catalog::widgets.css',
-                'http://localhost/pub/static/frontend/test_default/en_US/Magento_Catalog/widgets.css'
-            )
-        );
-    }
-
-    public function testGetPublicFileUrl()
-    {
-        $pubLibFile = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\App\Filesystem'
-        )->getPath(
-            \Magento\Framework\App\Filesystem::PUB_LIB_DIR
-        ) . '/jquery/jquery.js';
-        $actualResult = $this->_viewUrl->getPublicFileUrl($pubLibFile);
-        $this->assertStringEndsWith('/jquery/jquery.js', $actualResult);
-    }
-
-    /**
-     * @magentoConfigFixture current_store dev/static/sign 1
-     */
-    public function testGetPublicFileUrlSigned()
-    {
-        $pubLibFile = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\App\Filesystem'
-        )->getPath(
-            \Magento\Framework\App\Filesystem::PUB_LIB_DIR
-        ) . '/jquery/jquery.js';
-        $actualResult = $this->_viewUrl->getPublicFileUrl($pubLibFile);
-        $this->assertStringMatchesFormat('%a/jquery/jquery.js?%d', $actualResult);
     }
 }

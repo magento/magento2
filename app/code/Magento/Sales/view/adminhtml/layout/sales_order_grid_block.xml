@@ -166,6 +166,7 @@
                         <argument name="header" xsi:type="string" translate="true">Grand Total (Base)</argument>
                         <argument name="type" xsi:type="string">currency</argument>
                         <argument name="currency" xsi:type="string">base_currency_code</argument>
+                        <argument name="rate" xsi:type="string">1</argument>
                         <argument name="index" xsi:type="string">base_grand_total</argument>
                         <argument name="header_css_class" xsi:type="string">col-gtbase</argument>
                         <argument name="column_css_class" xsi:type="string">col-gtbase</argument>

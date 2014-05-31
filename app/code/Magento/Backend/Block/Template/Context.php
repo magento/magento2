@@ -65,7 +65,7 @@ class Context extends \Magento\Framework\View\Element\Template\Context
      * @param \Magento\Framework\Session\Generic $session
      * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\View\Url $viewUrl
+     * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\View\ConfigInterface $viewConfig
      * @param \Magento\Framework\App\Cache\StateInterface $cacheState
      * @param \Magento\Framework\Logger $logger
@@ -97,7 +97,7 @@ class Context extends \Magento\Framework\View\Element\Template\Context
         \Magento\Framework\Session\Generic $session,
         \Magento\Framework\Session\SidResolverInterface $sidResolver,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\View\Url $viewUrl,
+        \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\View\ConfigInterface $viewConfig,
         \Magento\Framework\App\Cache\StateInterface $cacheState,
         \Magento\Framework\Logger $logger,
@@ -132,7 +132,7 @@ class Context extends \Magento\Framework\View\Element\Template\Context
             $session,
             $sidResolver,
             $scopeConfig,
-            $viewUrl,
+            $assetRepo,
             $viewConfig,
             $cacheState,
             $logger,

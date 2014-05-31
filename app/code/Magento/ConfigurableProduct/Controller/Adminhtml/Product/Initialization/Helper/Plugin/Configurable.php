@@ -58,11 +58,9 @@ class Configurable
 
             $product->setNewVariationsAttributeSetId($this->request->getPost('new-variations-attribute-set-id'));
             $associatedProductIds = $this->request->getPost('associated_product_ids', array());
-            if ($this->request->getActionName() != 'generateVariations') {
-                $generatedProductIds = $this->productType->generateSimpleProducts(
-                    $product,
-                    $this->request->getPost('variations-matrix', array())
-                );
+            $variationsMatrix = $this->request->getParam('variations-matrix', array());
+            if (!empty($variationsMatrix)) {
+                $generatedProductIds = $this->productType->generateSimpleProducts($product, $variationsMatrix);
                 $associatedProductIds = array_merge($associatedProductIds, $generatedProductIds);
             }
             $product->setAssociatedProductIds(array_filter($associatedProductIds));

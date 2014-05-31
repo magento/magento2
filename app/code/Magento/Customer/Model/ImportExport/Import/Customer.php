@@ -128,6 +128,11 @@ class Customer extends AbstractCustomer
     protected $_resourceHelper;
 
     /**
+     * {@inheritdoc}
+     */
+    protected $masterAttributeCode = 'email';
+
+    /**
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Framework\Stdlib\String $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig

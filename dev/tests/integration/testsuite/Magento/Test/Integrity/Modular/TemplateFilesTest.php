@@ -46,7 +46,7 @@ class TemplateFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrit
                 );
                 $file = \Magento\TestFramework\Helper\Bootstrap::getObjectmanager()->get(
                     'Magento\Framework\View\FileSystem'
-                )->getFilename(
+                )->getTemplateFileName(
                     $template,
                     $params
                 );

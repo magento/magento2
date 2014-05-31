@@ -24,6 +24,9 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
+    <referenceBlock name="head.components">
+        <block class="Magento\Framework\View\Element\Js\Components" name="checkout_page_head_components" template="Magento_Catalog::js/components.phtml"/>
+    </referenceBlock>
     <update handle="page_one_column"/>
     <referenceBlock name="page.main.title">
         <arguments>
@@ -97,7 +100,6 @@
                     </block>
                     <block class="Magento\Catalog\Block\Product\View" name="product.info.options.wrapper.bottom" as="product_options_wrapper_bottom" template="product/view/options/wrapper/bottom.phtml">
                         <block class="Magento\Catalog\Block\Product\View" name="product.info.addtocart.additional" as="product.info.addtocart" template="product/view/addtocart.phtml"/>
-                        <block class="Magento\Catalog\Block\Product\View" name="product.clone_prices" as="prices" template="product/view/price_clone.phtml"/>
                     </block>
                 </block>
             </block>

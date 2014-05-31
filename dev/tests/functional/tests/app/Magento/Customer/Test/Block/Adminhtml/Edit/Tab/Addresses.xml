@@ -25,14 +25,30 @@
 -->
 <mapping strict="0">
     <fields>
+        <prefix>
+            <selector>#address_form_container [aria-hidden="false"] [name^="address"][name$="[prefix]"]</selector>
+            <strategy>css selector</strategy>
+        </prefix>
         <firstname>
             <selector>#address_form_container [aria-hidden="false"] [name^="address"][name$="[firstname]"]</selector>
             <strategy>css selector</strategy>
         </firstname>
+        <middlename>
+            <selector>#address_form_container [aria-hidden="false"] [name^="address"][name$="[middlename]"]</selector>
+            <strategy>css selector</strategy>
+        </middlename>
         <lastname>
             <selector>#address_form_container [aria-hidden="false"] [name^="address"][name$="[lastname]"]</selector>
             <strategy>css selector</strategy>
         </lastname>
+        <suffix>
+            <selector>#address_form_container [aria-hidden="false"] [name^="address"][name$="[suffix]"]</selector>
+            <strategy>css selector</strategy>
+        </suffix>
+        <company>
+            <selector>#address_form_container [aria-hidden="false"] [name^="address"][name$="[company]"]</selector>
+            <strategy>css selector</strategy>
+        </company>
         <street>
             <selector>#address_form_container [aria-hidden="false"] [name^="address"][name$="[street][0]"]</selector>
             <strategy>css selector</strategy>
@@ -51,6 +67,10 @@
             <selector>#address_form_container [aria-hidden="false"] [name^="address"][name$="[region_id]"]</selector>
             <strategy>css selector</strategy>
         </region_id>
+        <region>
+            <selector>#address_form_container [aria-hidden="false"] [name^="address"][name$="[region]"]</selector>
+            <strategy>css selector</strategy>
+        </region>
         <postcode>
             <selector>#address_form_container [aria-hidden="false"] [name^="address"][name$="[postcode]"]</selector>
             <strategy>css selector</strategy>
@@ -59,5 +79,13 @@
             <selector>#address_form_container [aria-hidden="false"] [name^="address"][name$="[telephone]"]</selector>
             <strategy>css selector</strategy>
         </telephone>
+        <fax>
+            <selector>#address_form_container [aria-hidden="false"] [name^="address"][name$="[fax]"]</selector>
+            <strategy>css selector</strategy>
+        </fax>
+        <vat_id>
+            <selector>#address_form_container [aria-hidden="false"] [name^="address"][name$="[vat_id]"]</selector>
+            <strategy>css selector</strategy>
+        </vat_id>
     </fields>
 </mapping>

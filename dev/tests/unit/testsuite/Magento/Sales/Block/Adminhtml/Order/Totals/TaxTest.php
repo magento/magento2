@@ -30,123 +30,85 @@ namespace Magento\Sales\Block\Adminhtml\Order\Totals;
 class TaxTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Sales\Block\Adminhtml\Order\Totals\Tax
+     * Test method for getFullTaxInfo
+     *
+     * @param \Magento\Sales\Model\Order $source
+     * @param array $getCalculatedTax
+     * @param array $getShippingTax
+     * @param array $expectedResult
+     *
+     * @dataProvider getFullTaxInfoDataProvider
      */
-    protected $_block;
-
-    /**
-     * @var \Magento\Framework\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_objectManager;
-
-    /**
-     * Instantiate \Magento\Sales\Block\Adminhtml\Order\Totals\Tax block
-     */
-    protected function setUp()
+    public function testGetFullTaxInfo($source, $getCalculatedTax, $getShippingTax, $expectedResult)
     {
-        $this->_block = $this->getMockBuilder(
-            'Magento\Sales\Block\Adminhtml\Order\Totals\Tax'
-        )->setConstructorArgs(
-            $this->_getModelArgument()
-        )->setMethods(
-            array('getOrder')
-        )->getMock();
+        $taxHelperMock = $this->getMockBuilder('Magento\Tax\Helper\Data')
+            ->setMethods(array('getCalculatedTaxes', 'getShippingTax'))
+            ->disableOriginalConstructor()
+            ->getMock();
+        $taxHelperMock->expects($this->any())
+            ->method('getCalculatedTaxes')
+            ->will($this->returnValue($getCalculatedTax));
+        $taxHelperMock->expects($this->any())
+            ->method('getShippingTax')
+            ->will($this->returnValue($getShippingTax));
+
+        $mockObject = $this->getMockBuilder('Magento\Sales\Block\Adminhtml\Order\Totals\Tax')
+            ->setConstructorArgs($this->_getConstructArguments($taxHelperMock))
+            ->setMethods(array('getOrder'))
+            ->getMock();
+        $mockObject->expects($this->once())
+            ->method('getOrder')
+            ->will($this->returnValue($source));
+
+        $actualResult = $mockObject->getFullTaxInfo();
+        $this->assertEquals($expectedResult, $actualResult);
     }
 
     /**
-     * Module arguments for \Magento\Sales\Block\Adminhtml\Order\Totals\Tax
+     * Provide the tax helper mock as a constructor argument
      *
+     * @param $taxHelperMock
      * @return array
      */
-    protected function _getModelArgument()
+    protected function _getConstructArguments($taxHelperMock)
     {
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $attributeFactory = $this->getMock(
-            'Magento\Eav\Model\Entity\AttributeFactory',
-            array('create'),
-            array(),
-            '',
-            false
-        );
-        $taxItemFactory = $this->getMock(
-            'Magento\Tax\Model\Resource\Sales\Order\Tax\ItemFactory',
-            array('create'),
-            array(),
-            '',
-            false
-        );
-        $taxHelperMock = $objectManagerHelper->getObject(
-            'Magento\Tax\Helper\Data',
-            array('attributeFactory' => $attributeFactory, 'taxItemFactory' => $taxItemFactory)
-        );
-
-        $taxOrderFactory = $this->getMock(
-            'Magento\Tax\Model\Sales\Order\TaxFactory',
-            array('create'),
-            array(),
-            '',
-            false
-        );
-
         return $objectManagerHelper->getConstructArguments(
             'Magento\Sales\Block\Adminhtml\Order\Totals\Tax',
-            array('taxHelper' => $taxHelperMock, 'taxOrderFactory' => $taxOrderFactory)
+            array('taxHelper' => $taxHelperMock)
         );
     }
 
     /**
-     * @return \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function _getSalesOrderMock()
-    {
-        $orderMock = $this->getMockBuilder(
-            'Magento\Sales\Model\Order'
-        )->setMethods(
-            array('getItemsCollection', '__wakeup')
-        )->disableOriginalConstructor()->getMock();
-        $orderMock->expects($this->any())->method('getItemsCollection')->will($this->returnValue(array()));
-        return $orderMock;
-    }
-
-    /**
-     * Test MAGETWO-1653: Incorrect tax summary for partial credit memos/invoices
-     *
-     * @dataProvider getSampleData
-     */
-    public function testAddAttributesToForm($actual, $expected)
-    {
-        $orderMock = $this->_getSalesOrderMock();
-        $orderMock->setData($actual);
-        $this->_block->expects($this->any())->method('getOrder')->will($this->returnValue($orderMock));
-        $fullTaxInfo = $this->_block->getFullTaxInfo();
-        $this->assertEquals(reset($fullTaxInfo), $expected);
-        $this->assertTrue(true);
-    }
-
-    /**
-     * Data provider with sample data for tax order
+     * Data provider.
+     * 1st Case : $source is not an instance of \Magento\Sales\Model\Order
+     * 2nd Case : getCalculatedTaxes and getShippingTax return value
      *
      * @return array
      */
-    public function getSampleData()
+    public function getFullTaxInfoDataProvider()
     {
+        $notAnInstanceOfASalesModelOrder = $this->getMock('stdClass');
+
+        $salesModelOrderMock = $this->getMockBuilder('Magento\Sales\Model\Order')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $getCalculatedTax = array(
+            'tax' => 'tax',
+            'shipping_tax' => 'shipping_tax'
+        );
+        $getShippingTax = array(
+            'shipping_tax' => 'shipping_tax',
+            'shipping_and_handing' => 'shipping_and_handing'
+        );
+
         return array(
-            array(
-                'actual' => array(
-                    'calculated_taxes' => array(),
-                    'shipping_tax' => array(),
-                    'shipping_tax_amount' => 1.25,
-                    'base_shipping_tax_amount' => 3.25,
-                    'tax_amount' => 0.16,
-                    'base_tax_amount' => 2
-                ),
-                'expected' => array(
-                    'tax_amount' => 1.25,
-                    'base_tax_amount' => 3.25,
-                    'title' => 'Shipping & Handling Tax',
-                    'percent' => null
-                )
-            )
+            'source is not an instance of \Magento\Sales\Model\Order' =>
+                array($notAnInstanceOfASalesModelOrder, $getCalculatedTax, $getShippingTax, array()),
+            'source is an instance of \Magento\Sales\Model\Order and has reasonable data' =>
+                array($salesModelOrderMock, $getCalculatedTax, $getShippingTax, array('tax' => 'tax',
+                'shipping_tax' => 'shipping_tax', 'shipping_and_handing' => 'shipping_and_handing'))
         );
     }
 }

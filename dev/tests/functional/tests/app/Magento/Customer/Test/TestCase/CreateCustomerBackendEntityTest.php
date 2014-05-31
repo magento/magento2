@@ -78,6 +78,9 @@ class CreateCustomerBackendEntityTest extends Injectable
      */
     public function testCreateCustomerBackendEntity(CustomerInjectable $customer, AddressInjectable $address)
     {
+        // Prepare data
+        $address = $address->hasData() ? $address : null;
+
         // Steps
         $this->pageCustomerIndex->open();
         $this->pageCustomerIndex->getPageActionsBlock()->addNew();

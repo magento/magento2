@@ -79,7 +79,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     public function testGetTemplateFile()
     {
         $params = array('module' => 'Fixture_Module', 'area' => 'frontend');
-        $this->_viewFileSystem->expects($this->once())->method('getFilename')->with('template.phtml', $params);
+        $this->_viewFileSystem->expects($this->once())->method('getTemplateFileName')->with('template.phtml', $params);
         $this->_block->getTemplateFile();
     }
 

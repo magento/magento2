@@ -60,6 +60,16 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
      */
     protected $productListHelper;
 
+    /**
+     * @var \Magento\Framework\View\Layout|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $layout;
+
+    /**
+     * @var \Magento\Theme\Block\Html\Pager|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $pagerBlock;
+
     protected function setUp()
     {
         $this->model = $this->getMock(
@@ -75,7 +85,23 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->urlBuilder = $this->getMock('Magento\Framework\Url', array('getUrl'), array(), '', false);
+        $this->layout = $this->getMock('Magento\Framework\View\Layout', ['getChildName', 'getBlock'], [], '', false);
+        $this->pagerBlock = $this->getMock(
+            'Magento\Theme\Block\Html\Pager',
+            [
+                'setUseContainer',
+                'setShowPerPage',
+                'setShowAmounts',
+                'setFrameLength',
+                'setJump',
+                'setLimit',
+                'setCollection',
+                'toHtml'
+            ],
+            [],
+            '',
+            false);
+        $this->urlBuilder = $this->getMock('Magento\Framework\Url', ['getUrl'], [], '', false);
         $this->scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
         $scopeConfig = array(
@@ -103,7 +129,7 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
 
         $context = $this->getMock(
             'Magento\Framework\View\Element\Template\Context',
-            array('getUrlBuilder', 'getStoreConfig'),
+            array('getUrlBuilder', 'getScopeConfig', 'getLayout'),
             array(),
             '',
             false
@@ -112,9 +138,11 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
             ->method('getUrlBuilder')
             ->will($this->returnValue($this->urlBuilder));
         $context->expects($this->any())
-            ->method('getStoreConfig')
+            ->method('getScopeConfig')
             ->will($this->returnValue($this->scopeConfig));
-
+        $context->expects($this->any())
+            ->method('getlayout')
+            ->will($this->returnValue($this->layout));
         $this->productListHelper = $this->getMock('Magento\Catalog\Helper\Product\ProductList',
             array(),
             array(),
@@ -222,5 +250,50 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(10));
 
         $this->assertEquals($limit, $this->block->getLimit());
+    }
+
+    public function testGetPagerHtml()
+    {
+        $limit = 10;
+
+        $this->layout->expects($this->once())
+            ->method('getChildName')
+            ->will($this->returnValue('product_list_toolbar_pager'));
+        $this->layout->expects($this->once())
+            ->method('getBlock')
+            ->will($this->returnValue($this->pagerBlock));
+        $this->productListHelper->expects($this->exactly(2))
+            ->method('getAvailableLimit')
+            ->will($this->returnValue(array(10 => 10, 20 => 20)));
+        $this->model->expects($this->once())
+            ->method('getLimit')
+            ->will($this->returnValue($limit));
+        $this->pagerBlock->expects($this->once())
+            ->method('setUseContainer')
+            ->will($this->returnValue($this->pagerBlock));
+        $this->pagerBlock->expects($this->once())
+            ->method('setShowPerPage')
+            ->will($this->returnValue($this->pagerBlock));
+        $this->pagerBlock->expects($this->once())
+            ->method('setShowAmounts')
+            ->will($this->returnValue($this->pagerBlock));
+        $this->pagerBlock->expects($this->once())
+            ->method('setFrameLength')
+            ->will($this->returnValue($this->pagerBlock));
+        $this->pagerBlock->expects($this->once())
+            ->method('setJump')
+            ->will($this->returnValue($this->pagerBlock));
+        $this->pagerBlock->expects($this->once())
+            ->method('setLimit')
+            ->with($limit)
+            ->will($this->returnValue($this->pagerBlock));
+        $this->pagerBlock->expects($this->once())
+            ->method('setCollection')
+            ->will($this->returnValue($this->pagerBlock));
+        $this->pagerBlock->expects($this->once())
+            ->method('toHtml')
+            ->will($this->returnValue(true));
+
+        $this->assertTrue($this->block->getPagerHtml());
     }
 }

@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/Magento/Framework/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
     <preference for="Magento\Framework\Acl\CacheInterface" type="Magento\Framework\Acl\Cache" />
     <preference for="Magento\Framework\App\AreaInterface" type="Magento\Framework\App\Area" />
     <preference for="Magento\Framework\Module\Updater\SetupInterface" type="Magento\Framework\Module\Setup" />
@@ -118,7 +118,7 @@
     <type name="Magento\Core\Model\Theme\Collection" shared="false" />
     <type name="Magento\Core\Model\Layout\Merge">
         <arguments>
-            <argument name="fileSource" xsi:type="object">Magento\Framework\View\Layout\File\Source\Aggregated</argument>
+            <argument name="fileSource" xsi:type="object">Magento\Framework\View\Layout\File\Collector\Aggregated</argument>
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Layout</argument>
         </arguments>
     </type>
@@ -127,47 +127,72 @@
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Layout</argument>
         </arguments>
     </type>
-    <virtualType name="layoutFileSourceBaseFiltered" type="Magento\Framework\View\Layout\File\Source\Decorator\ModuleOutput">
+
+    <virtualType name="layoutFileSourceBase" type="Magento\Framework\View\File\Collector\Base">
         <arguments>
-            <argument name="subject" xsi:type="object">Magento\Framework\View\Layout\File\Source\Base</argument>
+            <argument name="subDir" xsi:type="string">layout</argument>
         </arguments>
     </virtualType>
-    <virtualType name="layoutFileSourceBaseSorted" type="Magento\Framework\View\Layout\File\Source\Decorator\ModuleDependency">
+    <virtualType name="layoutFileSourceBaseFiltered" type="Magento\Framework\View\File\Collector\Decorator\ModuleOutput">
+        <arguments>
+            <argument name="subject" xsi:type="object">layoutFileSourceBase</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="layoutFileSourceBaseSorted" type="Magento\Framework\View\File\Collector\Decorator\ModuleDependency">
         <arguments>
             <argument name="subject" xsi:type="object">layoutFileSourceBaseFiltered</argument>
         </arguments>
     </virtualType>
-    <virtualType name="layoutFileSourceThemeFiltered" type="Magento\Framework\View\Layout\File\Source\Decorator\ModuleOutput">
+
+    <virtualType name="layoutFileSourceTheme" type="Magento\Framework\View\File\Collector\ThemeModular">
         <arguments>
-            <argument name="subject" xsi:type="object">Magento\Framework\View\Layout\File\Source\Theme</argument>
+            <argument name="subDir" xsi:type="string">layout</argument>
         </arguments>
     </virtualType>
-    <virtualType name="layoutFileSourceThemeSorted" type="Magento\Framework\View\Layout\File\Source\Decorator\ModuleDependency">
+    <virtualType name="layoutFileSourceThemeFiltered" type="Magento\Framework\View\File\Collector\Decorator\ModuleOutput">
+        <arguments>
+            <argument name="subject" xsi:type="object">layoutFileSourceTheme</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="layoutFileSourceThemeSorted" type="Magento\Framework\View\File\Collector\Decorator\ModuleDependency">
         <arguments>
             <argument name="subject" xsi:type="object">layoutFileSourceThemeFiltered</argument>
         </arguments>
     </virtualType>
-    <virtualType name="layoutFileSourceOverrideBaseFiltered" type="Magento\Framework\View\Layout\File\Source\Decorator\ModuleOutput">
+
+    <virtualType name="layoutFileSourceOverrideBase" type="Magento\Framework\View\File\Collector\Override\Base">
         <arguments>
-            <argument name="subject" xsi:type="object">Magento\Framework\View\Layout\File\Source\Override\Base</argument>
+            <argument name="subDir" xsi:type="string">layout/override/base</argument>
         </arguments>
     </virtualType>
-    <virtualType name="layoutFileSourceOverrideBaseSorted" type="Magento\Framework\View\Layout\File\Source\Decorator\ModuleDependency">
+    <virtualType name="layoutFileSourceOverrideBaseFiltered" type="Magento\Framework\View\File\Collector\Decorator\ModuleOutput">
+        <arguments>
+            <argument name="subject" xsi:type="object">layoutFileSourceOverrideBase</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="layoutFileSourceOverrideBaseSorted" type="Magento\Framework\View\File\Collector\Decorator\ModuleDependency">
         <arguments>
             <argument name="subject" xsi:type="object">layoutFileSourceOverrideBaseFiltered</argument>
         </arguments>
     </virtualType>
-    <virtualType name="layoutFileSourceOverrideThemeFiltered" type="Magento\Framework\View\Layout\File\Source\Decorator\ModuleOutput">
+
+    <virtualType name="layoutFileSourceOverrideTheme" type="Magento\Framework\View\File\Collector\Override\ThemeModular">
         <arguments>
-            <argument name="subject" xsi:type="object">Magento\Framework\View\Layout\File\Source\Override\Theme</argument>
+            <argument name="subDir" xsi:type="string">layout/override/theme</argument>
         </arguments>
     </virtualType>
-    <virtualType name="layoutFileSourceOverrideThemeSorted" type="Magento\Framework\View\Layout\File\Source\Decorator\ModuleDependency">
+    <virtualType name="layoutFileSourceOverrideThemeFiltered" type="Magento\Framework\View\File\Collector\Decorator\ModuleOutput">
+        <arguments>
+            <argument name="subject" xsi:type="object">layoutFileSourceOverrideTheme</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="layoutFileSourceOverrideThemeSorted" type="Magento\Framework\View\File\Collector\Decorator\ModuleDependency">
         <arguments>
             <argument name="subject" xsi:type="object">layoutFileSourceOverrideThemeFiltered</argument>
         </arguments>
     </virtualType>
-    <type name="Magento\Framework\View\Layout\File\Source\Aggregated">
+
+    <type name="Magento\Framework\View\Layout\File\Collector\Aggregated">
         <arguments>
             <argument name="baseFiles" xsi:type="object">layoutFileSourceBaseSorted</argument>
             <argument name="themeFiles" xsi:type="object">layoutFileSourceThemeSorted</argument>
@@ -175,6 +200,7 @@
             <argument name="overrideThemeFiles" xsi:type="object">layoutFileSourceOverrideThemeSorted</argument>
         </arguments>
     </type>
+
     <type name="Magento\Framework\View\Design\Theme\Image">
         <arguments>
             <argument name="uploader" xsi:type="object">Magento\Framework\View\Design\Theme\Image\Uploader\Proxy</argument>
@@ -227,39 +253,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\View\Publisher">
-        <arguments>
-            <argument name="preProcessor" xsi:type="object">Magento\Framework\View\Asset\PreProcessor\Composite</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\View\Publisher\CssFile">
-        <arguments>
-            <argument name="allowDuplication" xsi:type="boolean">true</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\View\Publisher\File">
-        <arguments>
-            <argument name="allowDuplication" xsi:type="boolean">true</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\View\Asset\PreProcessor\Composite">
-        <arguments>
-            <argument name="preProcessorsConfig" xsi:type="array">
-                <item name="css_preprocessor" xsi:type="array">
-                    <item name="class" xsi:type="string">Magento\Framework\Css\PreProcessor\Composite</item>
-                    <item name="asset_type" xsi:type="string">css</item>
-                </item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Framework\Css\PreProcessor\Composite">
-        <arguments>
-            <argument name="preProcessors" xsi:type="array">
-                <item name="css_source_processor" xsi:type="string">Magento\Framework\Css\PreProcessor\Less</item>
-                <item name="css_url_processor" xsi:type="string">Magento\Framework\Css\PreProcessor\UrlResolver</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\Object\Copy\Config\Reader">
         <arguments>
             <argument name="fileName" xsi:type="string">fieldset.xml</argument>
@@ -268,8 +261,8 @@
     </type>
     <type name="Magento\Framework\Object\Copy\Config\SchemaLocator">
         <arguments>
-            <argument name="schema" xsi:type="string">lib/Magento/Framework/Object/etc/fieldset.xsd</argument>
-            <argument name="perFileSchema" xsi:type="string">lib/Magento/Framework/Object/etc/fieldset_file.xsd</argument>
+            <argument name="schema" xsi:type="string">lib/internal/Magento/Framework/Object/etc/fieldset.xsd</argument>
+            <argument name="perFileSchema" xsi:type="string">lib/internal/Magento/Framework/Object/etc/fieldset_file.xsd</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Object\Copy\Config\Data">
@@ -391,7 +384,6 @@
     </type>
     <type name="Magento\Framework\View\Asset\MergeService">
         <plugin name="cleanMergedJsCss" type="Magento\Core\Model\Asset\Plugin\CleanMergedJsCss"/>
-        <plugin name="clearLessImportCache" type="Magento\Framework\Css\PreProcessor\Cache\Plugin\ImportCleaner" sortOrder="10"/>
     </type>
     <type name="Magento\Core\Model\Url\ScopeResolver">
         <arguments>
@@ -400,35 +392,44 @@
     </type>
     <type name="Magento\Framework\Less\PreProcessor\Instruction\MagentoImport">
         <arguments>
-            <argument name="fileSource" xsi:type="object">Magento\Framework\Less\File\Source\Aggregated</argument>
+            <argument name="fileSource" xsi:type="object">Magento\Framework\Less\File\Collector\Aggregated</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Less\PreProcessor\Instruction\Import">
+    <virtualType name="lessFileSourceBase" type="Magento\Framework\View\File\Collector\Base">
         <arguments>
-            <argument name="preProcessor" xsi:type="object">Magento\Framework\Less\PreProcessor\Proxy</argument>
+            <argument name="subDir" xsi:type="string">web</argument>
         </arguments>
-    </type>
-    <type name="Magento\Framework\Less\File\Source\Aggregated">
+    </virtualType>
+    <virtualType name="lessFileSourceBaseFiltered" type="Magento\Framework\View\File\Collector\Decorator\ModuleOutput">
         <arguments>
-            <argument name="libraryFiles" xsi:type="object">Magento\Framework\Less\File\Source\Library</argument>
-            <argument name="baseFiles" xsi:type="object">Magento\Framework\Less\File\Source\Base</argument>
-            <argument name="themeFiles" xsi:type="object">Magento\Framework\Less\File\Source\Theme</argument>
+            <argument name="subject" xsi:type="object">lessFileSourceBase</argument>
         </arguments>
-    </type>
-    <type name="Magento\Framework\Css\PreProcessor\Less">
-        <plugin name="process_less" type="Magento\Framework\Css\PreProcessor\Cache\Plugin\Less" sortOrder="10"/>
-    </type>
-    <type name="Magento\Framework\Less\PreProcessor">
-        <plugin name="process_less" type="Magento\Framework\Css\PreProcessor\Cache\Plugin\InstructionPreProcessor" sortOrder="10"/>
+    </virtualType>
+    <virtualType name="lessFileSourceBaseSorted" type="Magento\Framework\View\File\Collector\Decorator\ModuleDependency">
         <arguments>
-            <argument name="preProcessors" xsi:type="array">
-                <item name="magento_import" xsi:type="array">
-                    <item name="class" xsi:type="string">Magento\Framework\Less\PreProcessor\Instruction\MagentoImport</item>
-                </item>
-                <item name="import" xsi:type="array">
-                    <item name="class" xsi:type="string">Magento\Framework\Less\PreProcessor\Instruction\Import</item>
-                </item>
-            </argument>
+            <argument name="subject" xsi:type="object">lessFileSourceBaseFiltered</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="lessFileOverriddenBase" type="Magento\Framework\View\File\Collector\Override\Base">
+        <arguments>
+            <argument name="subDir" xsi:type="string">web</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="lessFileSourceThemeFiltered" type="Magento\Framework\View\File\Collector\Decorator\ModuleOutput">
+        <arguments>
+            <argument name="subject" xsi:type="object">lessFileSourceTheme</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="lessFileSourceThemeSorted" type="Magento\Framework\View\File\Collector\Decorator\ModuleDependency">
+        <arguments>
+            <argument name="subject" xsi:type="object">lessFileSourceThemeFiltered</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\Less\File\Collector\Aggregated">
+        <arguments>
+            <argument name="libraryFiles" xsi:type="object">Magento\Framework\Less\File\Collector\Library</argument>
+            <argument name="baseFiles" xsi:type="object">lessFileSourceBaseSorted</argument>
+            <argument name="overriddenBaseFiles" xsi:type="object">lessFileOverriddenBase</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\App\Config\Initial\Converter">

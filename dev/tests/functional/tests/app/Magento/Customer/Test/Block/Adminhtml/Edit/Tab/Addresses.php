@@ -27,6 +27,7 @@ namespace Magento\Customer\Test\Block\Adminhtml\Edit\Tab;
 use Mtf\Client\Element;
 use Mtf\Client\Element\Locator;
 use Mtf\Fixture\FixtureInterface;
+use Magento\Customer\Test\Fixture\AddressInjectable;
 use Magento\Backend\Test\Block\Widget\Tab;
 
 /**
@@ -51,47 +52,114 @@ class Addresses extends Tab
     protected $customerAddress = '//*[@id="address_list"]/li[%d]/a';
 
     /**
+     * Magento loader
+     *
+     * @var string
+     */
+    protected $loader = '//ancestor::body/div[@data-role="loader"]';
+
+    /**
      * Fill customer addresses
      *
-     * @param FixtureInterface|FixtureInterface[]|null $address
+     * @param FixtureInterface|FixtureInterface[] $address
      * @return $this
      */
     public function fillAddresses($address)
     {
-        if (null !== $address) {
-            $addresses = is_array($address) ? $address : [$address];
+        $addresses = is_array($address) ? $address : [$address];
+        foreach ($addresses as $address) {
+            $this->addNewAddress();
 
-            foreach ($addresses as $address) {
-                if ($address->hasData()) {
-                    $this->addNewAddress();
-                    $this->fillFormTab($address->getData(), $this->_rootElement);
-                }
+            /* Fix switch between region_id and region */
+            /** @var AddressInjectable $address */
+            $countryId = $address->getCountryId();
+            if ($countryId && $this->mapping['country_id']) {
+                $this->_fill($this->dataMapping(['country_id' => $countryId]));
+                $this->waitForElementNotVisible($this->loader, Locator::SELECTOR_XPATH);
             }
+
+            $this->fillFormTab($address->getData(), $this->_rootElement);
         }
 
         return $this;
     }
 
     /**
-     * Verify customer addresses
+     * Update customer addresses
+     *
+     * @param FixtureInterface|FixtureInterface[] $address
+     * @return $this
+     * @throws \Exception
+     */
+    public function updateAddresses($address)
+    {
+        $addresses = is_array($address) ? $address : [1 => $address];
+        foreach ($addresses as $addressNumber => $address) {
+            /* Throw exception if isn't exist previous customer address. */
+            if (1 < $addressNumber && !$this->isVisibleCustomerAddress($addressNumber - 1)) {
+                throw new \Exception("Invalid argument: can't update customer address #{$addressNumber}");
+            }
+
+            if (!$this->isVisibleCustomerAddress($addressNumber)) {
+                $this->addNewAddress();
+            }
+            $this->openCustomerAddress($addressNumber);
+
+            /* Fix switch between region_id and region */
+            /** @var AddressInjectable $address */
+            $countryId = $address->getCountryId();
+            if ($countryId && $this->mapping['country_id']) {
+                $this->_fill($this->dataMapping(['country_id' => $countryId]));
+                $this->waitForElementNotVisible($this->loader, Locator::SELECTOR_XPATH);
+            }
+            $this->fillFormTab($address->getData(), $this->_rootElement);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get data of Customer addresses
      *
      * @param FixtureInterface|FixtureInterface[]|null $address
-     * @return bool
+     * @return array
+     * @throws \Exception
      */
-    public function verifyAddresses($address)
+    public function getDataAddresses($address = null)
     {
+        $data = [];
         $addresses = is_array($address) ? $address : [1 => $address];
 
         foreach ($addresses as $addressNumber => $address) {
-            if ($address->hasData()) {
+            $isHasData = (null === $address) || $address->hasData();
+            $isVisibleCustomerAddress = $this->isVisibleCustomerAddress($addressNumber);
+
+            if ($isHasData && !$isVisibleCustomerAddress) {
+                throw new \Exception("Invalid argument: can't get data from customer address #{$addressNumber}");
+            }
+
+            if (!$isHasData && !$isVisibleCustomerAddress) {
+                $data[$addressNumber] = [];
+            } else {
                 $this->openCustomerAddress($addressNumber);
-                if (!$this->verifyFormTab($address->getData(), $this->_rootElement)) {
-                    return false;
-                }
+                $data[$addressNumber] = $this->getData($address, $this->_rootElement);
             }
         }
 
-        return true;
+        return $data;
+    }
+
+    /**
+     * Get data to fields on tab
+     *
+     * @param array|null $fields
+     * @param Element|null $element
+     * @return array
+     */
+    public function getDataFormTab($fields = null, Element $element = null)
+    {
+        /* Skip get data for standard method. Use getDataAddresses. */
+        return [];
     }
 
     /**
@@ -119,5 +187,20 @@ class Addresses extends Tab
             throw new \Exception("Can't open customer address #{$addressNumber}");
         }
         $addressTab->click();
+    }
+
+    /**
+     * Check is visible customer address
+     *
+     * @param int $addressNumber
+     * @return bool
+     */
+    protected function isVisibleCustomerAddress($addressNumber)
+    {
+        $addressTab = $this->_rootElement->find(
+            sprintf($this->customerAddress, $addressNumber),
+            Locator::SELECTOR_XPATH
+        );
+        return $addressTab->isVisible();
     }
 }

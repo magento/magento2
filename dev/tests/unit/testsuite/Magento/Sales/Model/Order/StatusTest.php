@@ -23,13 +23,18 @@
  */
 namespace Magento\Sales\Model\Order;
 
+/**
+ * Class StatusTest
+ *
+ * @package Magento\Sales\Model\Order
+ */
 class StatusTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Retrieve prepared for test \Magento\Sales\Model\Order\Status
      *
-     * @param null|PHPUnit_Framework_MockObject_MockObject $resource
-     * @param null|PHPUnit_Framework_MockObject_MockObject $eventDispatcher
+     * @param null|\PHPUnit_Framework_MockObject_MockObject $resource
+     * @param null|\PHPUnit_Framework_MockObject_MockObject $eventDispatcher
      * @return \Magento\Sales\Model\Order\Status
      */
     protected function _getPreparedModel($resource = null, $eventDispatcher = null)
@@ -79,5 +84,29 @@ class StatusTest extends \PHPUnit_Framework_TestCase
         $model = $this->_getPreparedModel($resource, $eventDispatcher);
         $model->setStatus($status);
         $this->assertInstanceOf('Magento\Sales\Model\Order\Status', $model->unassignState($state));
+    }
+
+    public function testAssignState()
+    {
+        $state = 'test_state';
+        $status = 'test_status';
+        $visibleOnFront = true;
+
+        $resource = $this->getMock('Magento\Sales\Model\Resource\Order\Status', array(), array(), '', false);
+        $resource->expects($this->once())
+            ->method('beginTransaction');
+        $resource->expects($this->once())
+            ->method('assignState')
+            ->with(
+                $this->equalTo($status),
+                $this->equalTo($state)
+            );
+        $resource->expects($this->once())->method('commit');
+
+        $eventDispatcher = $this->getMock('Magento\Framework\Event\ManagerInterface', array(), array(), '', false);
+
+        $model = $this->_getPreparedModel($resource, $eventDispatcher);
+        $model->setStatus($status);
+        $this->assertInstanceOf('Magento\Sales\Model\Order\Status', $model->assignState($state), $visibleOnFront);
     }
 }

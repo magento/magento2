@@ -45,7 +45,7 @@ class SchemaTest extends \PHPUnit_Framework_TestCase
             count($schemaLocations),
             'The XML file at ' . $filename . ' does not have a schema properly defined.  It should
 have a xsi:noNamespaceSchemaLocation attribute defined with a relative path.  E.g.
-xsi:noNamespaceSchemaLocation="../../../lib/Magento/Framework/etc/something.xsd"
+xsi:noNamespaceSchemaLocation="../../../lib/internal/Magento/Framework/etc/something.xsd"
             '
         );
 

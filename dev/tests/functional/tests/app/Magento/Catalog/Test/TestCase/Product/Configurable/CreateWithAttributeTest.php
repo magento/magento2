@@ -31,13 +31,15 @@ use Magento\Catalog\Test\Fixture\ProductAttribute;
 use Magento\Catalog\Test\Fixture\ConfigurableProduct;
 
 /**
+ * Class CreateWithAttributeTest
  * Configurable product with creating new category and new attribute
- *
  */
 class CreateWithAttributeTest extends Functional
 {
     /**
      * Login into backend area before test
+     *
+     * @return void
      */
     protected function setUp()
     {
@@ -48,6 +50,7 @@ class CreateWithAttributeTest extends Functional
      * Creating configurable product with creating new category and new attribute (required fields only)
      *
      * @ZephyrId MAGETWO-13361
+     * @return void
      */
     public function testCreateConfigurableProductWithNewAttribute()
     {
@@ -77,36 +80,38 @@ class CreateWithAttributeTest extends Functional
      * Fill required fields for simple product with category creation
      *
      * @param Product $product
+     * @return void
      */
     protected function fillSimpleProductWithNewCategory($product)
     {
         //Page & Blocks
         $manageProductsGrid = Factory::getPageFactory()->getCatalogProductIndex();
         $createProductPage = Factory::getPageFactory()->getCatalogProductNew();
-        $productBlockForm = $createProductPage->getProductBlockForm();
+        $productForm = $createProductPage->getProductForm();
 
         //Steps
         $manageProductsGrid->open();
         $manageProductsGrid->getProductBlock()->addProduct();
-        $productBlockForm->fill($product);
-        $productBlockForm->openTab(Product::GROUP_PRODUCT_DETAILS);
-        $productBlockForm->addNewCategory($product);
+        $productForm->fill($product);
+        $productForm->openTab(Product::GROUP_PRODUCT_DETAILS);
+        $productForm->addNewCategory($product);
     }
 
     /**
      * Add new attribute to product
      *
      * @param ProductAttribute $attribute
+     * @return void
      */
     protected function addNewAttribute(ProductAttribute $attribute)
     {
         $createProductPage = Factory::getPageFactory()->getCatalogProductNew();
 
-        $productBlockForm = $createProductPage->getProductBlockForm();
-        $productBlockForm->openVariationsTab();
-        $productBlockForm->clickCreateNewVariationSet();
+        $productForm = $createProductPage->getConfigurableProductForm();
+        $productForm->openVariationsTab();
+        $productForm->clickCreateNewVariationSet();
 
-        $newAttributeForm = $createProductPage->getAttributeEditBlock();
+        $newAttributeForm = $productForm->getConfigurableAttributeEditBlock();
         $this->assertTrue($newAttributeForm->isVisible(), '"New attribute" window is not opened');
 
         $newAttributeForm->openFrontendProperties();
@@ -119,17 +124,20 @@ class CreateWithAttributeTest extends Functional
      * Fill product variations and save product
      *
      * @param ConfigurableProduct $variations
+     * @return void
      */
     protected function fillProductVariationsAndSave(ConfigurableProduct $variations)
     {
         $createProductPage = Factory::getPageFactory()->getCatalogProductNew();
-        $productBlockForm = $createProductPage->getProductBlockForm();
-        $productBlockForm->fillVariations($variations);
-        $productBlockForm->save($variations);
+        $createProductPage->getProductForm()
+            ->fillVariations($variations);
+        $createProductPage->getFormAction()->saveProduct($createProductPage, $variations);
     }
 
     /**
      * Assert product was saved
+     *
+     * @return void
      */
     protected function assertProductSaved()
     {
@@ -145,6 +153,7 @@ class CreateWithAttributeTest extends Functional
      * Assert existing product on backend product grid
      *
      * @param Product $product
+     * @return void
      */
     protected function assertOnGrid(Product $product)
     {
@@ -163,6 +172,7 @@ class CreateWithAttributeTest extends Functional
      *
      * @param Product $product
      * @param ConfigurableProduct $variations
+     * @return void
      */
     protected function assertOnFrontend(Product $product, ConfigurableProduct $variations)
     {
@@ -187,9 +197,10 @@ class CreateWithAttributeTest extends Functional
             $productViewBlock->getProductName(),
             'Product name does not correspond to specified.'
         );
+        $price = $productViewBlock->getProductPrice();
         $this->assertEquals(
-            $product->getProductPrice(),
-            $productViewBlock->getProductPrice(),
+            number_format($product->getProductPrice(), 2),
+            $price['price_regular_price'],
             'Product price does not correspond to specified.'
         );
         $this->assertTrue(

@@ -24,7 +24,6 @@
 
 namespace Magento\Catalog\Test\Fixture\CatalogProductSimple;
 
-use Mtf\Fixture\FixtureFactory;
 use Mtf\Fixture\FixtureInterface;
 
 /**
@@ -37,11 +36,6 @@ use Mtf\Fixture\FixtureInterface;
  */
 class TierPriceOptions implements FixtureInterface
 {
-    /**
-     * @var \Mtf\Fixture\FixtureFactory
-     */
-    protected $fixtureFactory;
-
     /**
      * @param array $params
      * @param array $data
@@ -87,21 +81,35 @@ class TierPriceOptions implements FixtureInterface
 
     /**
      * @param string $name
-     * @return mixed
-     * @throws \Exception
+     * @return mixed|null
      */
     protected function getPreset($name)
     {
         $presets = [
+            'default' => [
+                0 => [
+                    'price' => 150,
+                    'website' => 'All Websites [USD]',
+                    'price_qty' => 3,
+                    'customer_group' => 'ALL GROUPS'
+                ],
+                1 => [
+                    'price' => 24,
+                    'website' => 'All Websites [USD]',
+                    'price_qty' => 15,
+                    'customer_group' => 'ALL GROUPS'
+                ]
+            ],
             'MAGETWO-23002' => [
-                '0' => [
+                0 => [
                     'price' => 90,
                     'website' => 'All Websites [USD]',
-                    'quantity' => '1',
+                    'price_qty' => 2,
                     'customer_group' => 'ALL GROUPS'
                 ]
             ]
         ];
+
         if (!isset($presets[$name])) {
             return null;
         }

@@ -79,13 +79,17 @@ class ServiceArgsSerializer
         $inputData = [];
         foreach ($params as $param) {
             $paramName = $param->getName();
-            if (isset($inputArray[$paramName])) {
+            $snakeCaseParamName = strtolower(preg_replace("/(?<=\\w)(?=[A-Z])/", "_$1", $paramName));
+            if (isset($inputArray[$paramName]) || isset($inputArray[$snakeCaseParamName])) {
+                $paramValue = isset($inputArray[$paramName])
+                    ? $inputArray[$paramName]
+                    : $inputArray[$snakeCaseParamName];
+
                 if ($this->_isArrayParam($param)) {
                     $paramType = "{$param->getType()}[]";
                 } else {
                     $paramType = $param->getType();
                 }
-                $paramValue = $inputArray[$paramName];
                 $inputData[] = $this->_convertValue($paramValue, $paramType);
             } else {
                 $inputData[] = $param->getDefaultValue(); // not set, so use default

@@ -122,7 +122,7 @@ class Success extends \Magento\Framework\View\Element\Template
         if ($orderId) {
             $order = $this->_orderFactory->create()->load($orderId);
             if ($order->getId()) {
-                $isVisible = !in_array($order->getState(), $this->_orderConfig->getInvisibleOnFrontStates());
+                $isVisible = !in_array($order->getStatus(), $this->_orderConfig->getInvisibleOnFrontStatuses());
                 $canView = $this->httpContext->getValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH) && $isVisible;
                 $this->addData(
                     array(

@@ -95,7 +95,7 @@ class FileResolverTest extends \PHPUnit_Framework_TestCase
     public function testGetDesign()
     {
         $widgetConfigs = $this->_object->get('widget.xml', 'design');
-        $expected = realpath(__DIR__ . '/_files/design/frontend/Test/etc/widget.xml');
+        $expected = str_replace('\\', '/', realpath(__DIR__ . '/_files/design/frontend/Test/etc/widget.xml'));
         $actual = $widgetConfigs->key();
         $this->assertCount(1, $widgetConfigs);
         $this->assertStringEndsWith($actual, $expected);
@@ -104,7 +104,7 @@ class FileResolverTest extends \PHPUnit_Framework_TestCase
     public function testGetGlobal()
     {
         $widgetConfigs = $this->_object->get('widget.xml', 'global');
-        $expected = realpath(__DIR__ . '/_files/code/Magento/Test/etc/widget.xml');
+        $expected = str_replace('\\', '/', realpath(__DIR__ . '/_files/code/Magento/Test/etc/widget.xml'));
         $actual = $widgetConfigs->key();
         $this->assertCount(1, $widgetConfigs);
         $this->assertStringEndsWith($actual, $expected);

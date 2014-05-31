@@ -132,15 +132,6 @@ interface AbstractCarrierInterface
     public function getSortOrder();
 
     /**
-     * Calculate price considering free shipping and handling fee
-     *
-     * @param string $cost
-     * @param string $method
-     * @return float|string
-     */
-    public function getMethodPrice($cost, $method = '');
-
-    /**
      * Get the handling fee for the shipping + cost
      *
      * @param float $cost

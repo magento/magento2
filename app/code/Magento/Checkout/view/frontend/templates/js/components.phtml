@@ -1,0 +1,90 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<script type="text/javascript">
+    (function($) {
+        "use strict";
+        /**
+         * Declaration of resources needed for defined components
+         */
+        $.mage.component({
+            paymentAuthentication: [
+                '<?php echo $this->getViewFileUrl('Magento_Checkout::js/payment-authentication.js') ?>'
+            ],
+            collapsible: [
+				'<?php echo $this->getViewFileUrl('mage/collapsible.js') ?>'
+			],
+            dropdownDialog: [
+                '<?php echo $this->getViewFileUrl('mage/dropdown.js') ?>'
+            ],
+            accordion: [
+                '<?php echo $this->getViewFileUrl('mage/collapsible.js') ?>',
+                '<?php echo $this->getViewFileUrl('mage/tabs.js') ?>',
+				'<?php echo $this->getViewFileUrl('mage/accordion.js') ?>'
+			],
+            addToCart: [
+                '<?php echo $this->getViewFileUrl('Magento_Catalog::js/msrp.js') ?>'
+            ],
+            checkoutBalance: [
+                '<?php echo $this->getViewFileUrl('Magento_Customer::js/checkout-balance.js')?>'
+            ],
+            shoppingCart: [
+                '<?php echo $this->getViewFileUrl('Magento_Checkout::js/shopping-cart.js') ?>'
+            ],
+            regionUpdater: [
+                '<?php echo $this->getViewFileUrl('Magento_Checkout::js/region-updater.js') ?>'
+            ],
+            creditCardType: [
+                '<?php echo $this->getViewFileUrl('Magento_Payment::cc-type.js') ?>'
+            ],
+            loader: [
+                '<?php echo $this->getViewFileUrl('jquery/handlebars/handlebars-v1.3.0.js')?>',
+                '<?php echo $this->getViewFileUrl('mage/loader.js') ?>'
+            ],
+            tooltip: [
+                '<?php echo $this->getViewFileUrl('mage/tooltip.js') ?>'
+            ],
+            opcOrderReview: [
+                '<?php echo $this->getViewFileUrl('jquery/jquery.validate.js')?>',
+                '<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js')?>',
+                '<?php echo $this->getViewFileUrl('mage/validation.js')?>',
+                '<?php echo $this->getViewFileUrl('mage/validation/validation.js')?>',
+                '<?php echo $this->getViewFileUrl('Magento_Checkout::js/opc-checkout-method.js') ?>',
+                '<?php echo $this->getViewFileUrl('Magento_Checkout::js/opc-billing-info.js') ?>',
+                '<?php echo $this->getViewFileUrl('Magento_Checkout::js/opc-shipping-info.js') ?>',
+                '<?php echo $this->getViewFileUrl('Magento_Checkout::js/opc-shipping-method.js') ?>',
+                '<?php echo $this->getViewFileUrl('Magento_Checkout::js/opc-payment-info.js') ?>',
+                '<?php echo $this->getViewFileUrl('Magento_Checkout::js/opc-order-review.js') ?>'
+
+            ],
+            sidebar: [
+                '<?php echo $this->getViewFileUrl('Magento_Checkout::js/sidebar.js') ?>'
+            ],
+            payment: [
+                '<?php echo $this->getViewFileUrl('Magento_Checkout::js/payment.js') ?>'
+            ]
+        });
+    })(jQuery);
+</script>
+<?php echo $this->getChildHtml() ?>

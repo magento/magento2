@@ -128,8 +128,8 @@ GalleryTest.prototype.resetImageSelection = function(images) {
             delete image.selected;
         }
         return true;
-    })
-}
+    });
+};
 
 GalleryTest.prototype.testInit = function() {
     this.galleryElement.gallery();
@@ -389,13 +389,13 @@ GalleryTest.prototype.testFindSelected = function() {
 
     galleryInstance.options.images = this.resetImageSelection(galleryInstance.options.images);
     galleryInstance.options.images[1].selected = true;
-    var selected = galleryInstance._findSelected();
+    selected = galleryInstance._findSelected();
     assertTrue(selected === 1);
 
     galleryInstance.options.images = this.resetImageSelection(galleryInstance.options.images);
     galleryInstance.options.images[0].selected = true;
     galleryInstance.options.images[1].selected = true;
-    var selected = galleryInstance._findSelected();
+    selected = galleryInstance._findSelected();
     assertTrue(selected === 0);
 };
 GalleryTest.prototype.testInitControl = function() {

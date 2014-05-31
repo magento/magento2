@@ -42,6 +42,13 @@ class Shipping extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
     protected $_config = null;
 
     /**
+     * Tax helper instance
+     *
+     * @var \Magento\Tax\Helper\Data|null
+     */
+    protected $_taxHelper = null;
+
+    /**
      * Flag which is initialized when collect method is started and catalog prices include tax.
      * It is used for checking if store tax and customer tax requests are similar
      *
@@ -61,12 +68,17 @@ class Shipping extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
      *
      * @param \Magento\Tax\Model\Calculation $calculation
      * @param \Magento\Tax\Model\Config $taxConfig
+     * @param \Magento\Tax\Helper\Data $taxHelper
      */
-    public function __construct(\Magento\Tax\Model\Calculation $calculation, \Magento\Tax\Model\Config $taxConfig)
-    {
+    public function __construct(
+        \Magento\Tax\Model\Calculation $calculation,
+        \Magento\Tax\Model\Config $taxConfig,
+        \Magento\Tax\Helper\Data $taxHelper
+    ) {
         $this->setCode('shipping');
         $this->_calculator = $calculation;
         $this->_config = $taxConfig;
+        $this->_taxHelper = $taxHelper;
     }
 
     /**
@@ -94,7 +106,12 @@ class Shipping extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
 
         $priceIncludesTax = $this->_config->shippingPriceIncludesTax($store);
         if ($priceIncludesTax) {
-            $this->_areTaxRequestsSimilar = $calc->compareRequests($addressTaxRequest, $storeTaxRequest);
+            if ($this->_taxHelper->isCrossBorderTradeEnabled($store)) {
+                $this->_areTaxRequestsSimilar = true;
+            } else {
+                $this->_areTaxRequestsSimilar =
+                    $this->_calculator->compareRequests($storeTaxRequest, $addressTaxRequest);
+            }
         }
 
         $shipping = $taxShipping = $address->getShippingAmount();
@@ -111,36 +128,54 @@ class Shipping extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
                 $taxable = $taxShipping;
                 $baseTaxable = $baseTaxShipping;
                 $isPriceInclTax = true;
+                $address->setTotalAmount('shipping', $shipping);
+                $address->setBaseTotalAmount('shipping', $baseShipping);
             } else {
                 $storeRate = $calc->getStoreRate($addressTaxRequest, $store);
                 $storeTax = $calc->calcTaxAmount($shipping, $storeRate, true, false);
                 $baseStoreTax = $calc->calcTaxAmount($baseShipping, $storeRate, true, false);
                 $shipping = $calc->round($shipping - $storeTax);
                 $baseShipping = $calc->round($baseShipping - $baseStoreTax);
-                $tax = $this->_round($calc->calcTaxAmount($shipping, $rate, false, false), $rate, false);
+                $tax = $this->_round($calc->calcTaxAmount($shipping, $rate, false, false), $rate, true);
                 $baseTax = $this->_round(
                     $calc->calcTaxAmount($baseShipping, $rate, false, false),
                     $rate,
-                    false,
+                    true,
                     'base'
                 );
                 $taxShipping = $shipping + $tax;
                 $baseTaxShipping = $baseShipping + $baseTax;
-                $taxable = $shipping;
-                $baseTaxable = $baseShipping;
-                $isPriceInclTax = false;
+                $taxable = $taxShipping;
+                $baseTaxable = $baseTaxShipping;
+                $isPriceInclTax = true;
+                $address->setTotalAmount('shipping', $shipping);
+                $address->setBaseTotalAmount('shipping', $baseShipping);
             }
         } else {
-            $tax = $this->_round($calc->calcTaxAmount($shipping, $rate, false, false), $rate, false);
-            $baseTax = $this->_round($calc->calcTaxAmount($baseShipping, $rate, false, false), $rate, false, 'base');
+            $appliedRates = $calc->getAppliedRates($addressTaxRequest);
+            $taxes = array();
+            $baseTaxes = array();
+            foreach ($appliedRates as $appliedRate) {
+                $taxRate = $appliedRate['percent'];
+                $taxId = $appliedRate['id'];
+                $taxes[] = $this->_round($calc->calcTaxAmount($shipping, $taxRate, false, false), $taxId, false);
+                $baseTaxes[] = $this->_round(
+                    $calc->calcTaxAmount($baseShipping, $taxRate, false, false),
+                    $taxId,
+                    false,
+                    'base'
+                );
+            }
+            $tax = array_sum($taxes);
+            $baseTax = array_sum($baseTaxes);
             $taxShipping = $shipping + $tax;
             $baseTaxShipping = $baseShipping + $baseTax;
             $taxable = $shipping;
             $baseTaxable = $baseShipping;
             $isPriceInclTax = false;
+            $address->setTotalAmount('shipping', $shipping);
+            $address->setBaseTotalAmount('shipping', $baseShipping);
         }
-        $address->setTotalAmount('shipping', $shipping);
-        $address->setBaseTotalAmount('shipping', $baseShipping);
         $address->setShippingInclTax($taxShipping);
         $address->setBaseShippingInclTax($baseTaxShipping);
         $address->setShippingTaxable($taxable);

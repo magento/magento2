@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/Magento/Framework/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
     <preference for="Magento\Customer\Model\Customer" type="Magento\Customer\Model\Backend\Customer" />
     <type name="Magento\Customer\Model\Session">
         <arguments>
@@ -33,6 +33,13 @@
     <type name="Magento\Customer\Model\Resource\Customer\Collection">
         <arguments>
             <argument name="modelName" xsi:type="string">Magento\Customer\Model\Backend\Customer</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Core\Model\Url\SecurityInfo">
+        <arguments>
+            <argument name="secureUrlList" xsi:type="array">
+                <item name="customer" xsi:type="string">/customer/</item>
+            </argument>
         </arguments>
     </type>
 </config>

@@ -173,6 +173,8 @@ class DataProvider implements DataProviderInterface
             'Your order cannot be completed at this time as there is no payment methods available for it.' => __('Your order cannot be completed at this time as there is no payment methods available for it.'),
             'Edit Order' => __('Edit Order'),
             'Ok' => __('Ok'),
+            'Please specify at least one search term.' => __('Please specify at least one search term.'),
+            'Create New Wish List' => __('Create New Wish List'),
         );
     }
 }

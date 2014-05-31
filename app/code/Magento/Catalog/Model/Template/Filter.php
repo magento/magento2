@@ -48,9 +48,9 @@ class Filter extends \Magento\Framework\Filter\Template
     protected $_useSessionInUrl = false;
 
     /**
-     * @var \Magento\Framework\View\Url
+     * @var \Magento\Framework\View\Asset\Repository
      */
-    protected $_viewUrl;
+    protected $_assetRepo;
 
     /**
      * Store manager
@@ -62,17 +62,17 @@ class Filter extends \Magento\Framework\Filter\Template
     /**
      * @param \Magento\Framework\Stdlib\String $string
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\View\Url $viewUrl
+     * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param array $variables
      */
     public function __construct(
         \Magento\Framework\Stdlib\String $string,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\View\Url $viewUrl,
+        \Magento\Framework\View\Asset\Repository $assetRepo,
         $variables = array()
     ) {
         $this->_storeManager = $storeManager;
-        $this->_viewUrl = $viewUrl;
+        $this->_assetRepo = $assetRepo;
         parent::__construct($string, $variables);
     }
 
@@ -112,8 +112,20 @@ class Filter extends \Magento\Framework\Filter\Template
     {
         $params = $this->_getIncludeParameters($construction[2]);
         $params['_absolute'] = $this->_useAbsoluteLinks;
-
-        $url = $this->_viewUrl->getViewFileUrl($params['url'], $params);
+        /**
+         * @bug: the "_absolute" key is not supported by underlying services
+         * probably this happened because of multitude of refactorings in past
+         * The original intent of _absolute parameter was to simply append specified path to a base URL
+         * bypassing any kind of processing.
+         * For example, normally you would use {{view url="css/styles.css"}} directive which would automatically resolve
+         * into something like http://example.com/pub/static/area/theme/en_US/css/styles.css
+         * But with _absolute, the expected behavior is this: {{view url="favicon.ico" _absolute=true}} should resolve
+         * into something like http://example.com/favicon.ico
+         *
+         * To fix the issue, it is better not to maintain the _absolute parameter anymore in undrelying services,
+         * but instead just create a different type of directive, for example {{baseUrl path="favicon.ico"}}
+         */
+        $url = $this->_assetRepo->getUrlWithParams($params['url'], $params);
 
         return $url;
     }

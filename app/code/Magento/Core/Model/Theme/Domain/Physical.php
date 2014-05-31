@@ -86,7 +86,7 @@ class Physical implements \Magento\Framework\View\Design\Theme\Domain\PhysicalIn
 
         /** @var $themeCustomization \Magento\Framework\View\Design\ThemeInterface */
         $themeCustomization = $this->_themeFactory->create()->setData($themeData);
-        $themeCustomization->getThemeImage()->createPreviewImageCopy($theme->getPreviewImage());
+        $themeCustomization->getThemeImage()->createPreviewImageCopy($theme);
         $themeCustomization->save();
 
         $this->_themeCopyService->copy($theme, $themeCustomization);

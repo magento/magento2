@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../lib/Magento/Framework/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
     <preference for="Magento\Framework\App\RequestInterface" type="Magento\Framework\App\Request\Http" />
     <preference for="Magento\Framework\App\Request\PathInfoProcessorInterface" type="Magento\Store\App\Request\PathInfoProcessor" />
     <preference for="Magento\Framework\App\ResponseInterface" type="Magento\Framework\App\Response\Http" />
@@ -87,6 +87,7 @@
     <preference for="Magento\Framework\Mview\View\CollectionInterface" type="Magento\Framework\Mview\View\Collection" />
     <preference for="Magento\Framework\Mview\View\SubscriptionInterface" type="Magento\Framework\Mview\View\Subscription" />
     <preference for="Magento\Framework\Mview\View\ChangelogInterface" type="Magento\Framework\Mview\View\Changelog" />
+    <preference for="Magento\Framework\View\Design\FileResolution\Fallback\CacheDataInterface" type="Magento\Framework\View\Design\FileResolution\Fallback\CacheData\Flat"/>
     <type name="Magento\Framework\Model\Context">
         <arguments>
             <argument name="actionValidator" xsi:type="object">Magento\Framework\Model\ActionValidator\RemoveAction\Proxy</argument>
@@ -137,6 +138,11 @@
         </arguments>
     </type>
     <type name="Magento\Framework\App\Arguments\ValidationState">
+        <arguments>
+            <argument name="appMode" xsi:type="init_parameter">Magento\Framework\App\State::PARAM_MODE</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Asset\MinifyService">
         <arguments>
             <argument name="appMode" xsi:type="init_parameter">Magento\Framework\App\State::PARAM_MODE</argument>
         </arguments>
@@ -260,28 +266,6 @@
             <argument name="session" xsi:type="object">Magento\Framework\Session\Generic\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\View\Url">
-        <arguments>
-            <argument name="fileUrlMap" xsi:type="array">
-                <item name="urlLib" xsi:type="array">
-                    <item name="key" xsi:type="const">Magento\Framework\UrlInterface::URL_TYPE_LIB</item>
-                    <item name="value" xsi:type="const">Magento\Framework\App\Filesystem::PUB_LIB_DIR</item>
-                </item>
-                <item name="urlMedia" xsi:type="array">
-                    <item name="key" xsi:type="const">Magento\Framework\UrlInterface::URL_TYPE_MEDIA</item>
-                    <item name="value" xsi:type="const">Magento\Framework\App\Filesystem::MEDIA_DIR</item>
-                </item>
-                <item name="urlStatic" xsi:type="array">
-                    <item name="key" xsi:type="const">Magento\Framework\UrlInterface::URL_TYPE_STATIC</item>
-                    <item name="value" xsi:type="const">Magento\Framework\App\Filesystem::STATIC_VIEW_DIR</item>
-                </item>
-                <item name="urlCache" xsi:type="array">
-                    <item name="key" xsi:type="const">Magento\Framework\UrlInterface::URL_TYPE_CACHE</item>
-                    <item name="value" xsi:type="const">Magento\Framework\App\Filesystem::PUB_VIEW_CACHE_DIR</item>
-                </item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\App\Filesystem">
         <arguments>
             <argument name="fileReadFactory" xsi:type="object">Magento\Framework\Filesystem\File\ReadFactory</argument>
@@ -353,6 +337,46 @@
     <type name="Magento\Framework\Mview\Config\Data">
         <arguments>
             <argument name="stateCollection" xsi:type="object" shared="false">Magento\Framework\Mview\View\State\CollectionInterface</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\StaticResource">
+        <arguments>
+            <argument name="response" xsi:type="object" shared="false">Magento\Core\Model\File\Storage\Response</argument>
+        </arguments>
+    </type>
+    <virtualType name="fallbackResolverSimpleWithGroupedCache" type="Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\View\Design\FileResolution\Fallback\CacheData\Grouped</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\View\Design\FileResolution\Fallback\File">
+        <arguments>
+            <argument name="resolver" xsi:type="object">fallbackResolverSimpleWithGroupedCache</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Design\FileResolution\Fallback\TemplateFile">
+        <arguments>
+            <argument name="resolver" xsi:type="object">fallbackResolverSimpleWithGroupedCache</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Design\FileResolution\Fallback\LocaleFile">
+        <arguments>
+            <argument name="resolver" xsi:type="object">fallbackResolverSimpleWithGroupedCache</argument>
+        </arguments>
+    </type>
+    <virtualType name="viewFileFallbackResolver" type="Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Alternative">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\View\Design\FileResolution\Fallback\CacheData\Flat</argument>
+            <argument name="alternativeExtensions" xsi:type="array">
+                <item name="css" xsi:type="array">
+                    <item name="less" xsi:type="string">less</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\View\Design\FileResolution\Fallback\StaticFile">
+        <arguments>
+            <argument name="resolver" xsi:type="object">viewFileFallbackResolver</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Code\Generator">

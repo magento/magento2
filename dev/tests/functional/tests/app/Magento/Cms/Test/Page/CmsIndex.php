@@ -24,139 +24,101 @@
 
 namespace Magento\Cms\Test\Page;
 
-use Mtf\Page\Page;
-use Mtf\Factory\Factory;
-use Mtf\Client\Element\Locator;
+use Mtf\Page\FrontendPage;
 
 /**
  * Class CmsIndex
- * Home page for frontend
  *
+ * @package Magento\Cms\Test\Page
  */
-class CmsIndex extends Page
+class CmsIndex extends FrontendPage
 {
-    /**
-     * URL for home page
-     */
     const MCA = 'cms/index/index';
 
-    /**
-     * Search block
-     *
-     * @var string
-     */
-    protected $searchBlock = '#search_mini_form';
+    protected $_blocks = [
+        'searchBlock' => [
+            'name' => 'searchBlock',
+            'class' => 'Magento\Catalog\Test\Block\Search',
+            'locator' => '#search_mini_form',
+            'strategy' => 'css selector',
+        ],
+        'topmenu' => [
+            'name' => 'topmenu',
+            'class' => 'Magento\Theme\Test\Block\Html\Topmenu',
+            'locator' => '[role=navigation]',
+            'strategy' => 'css selector',
+        ],
+        'titleBlock' => [
+            'name' => 'titleBlock',
+            'class' => 'Magento\Theme\Test\Block\Html\Title',
+            'locator' => '.page.title',
+            'strategy' => 'css selector',
+        ],
+        'footerBlock' => [
+            'name' => 'footerBlock',
+            'class' => 'Magento\Theme\Test\Block\Html\Footer',
+            'locator' => 'footer.footer',
+            'strategy' => 'css selector',
+        ],
+        'linksBlock' => [
+            'name' => 'linksBlock',
+            'class' => 'Magento\Theme\Test\Block\Links',
+            'locator' => '.header .links',
+            'strategy' => 'css selector',
+        ],
+        'storeSwitcherBlock' => [
+            'name' => 'storeSwitcherBlock',
+            'class' => 'Magento\Store\Test\Block\Switcher',
+            'locator' => '[data-ui-id="language-switcher"]',
+            'strategy' => 'css selector',
+        ],
+    ];
 
     /**
-     * Top menu navigation block
-     *
-     * @var string
-     */
-    protected $topmenuBlock = '[role=navigation]';
-
-    /**
-     * Page title block
-     *
-     * @var string
-     */
-    protected $titleBlock = '.page.title';
-
-    /**
-     * Footer block
-     *
-     * @var string
-     */
-    protected $footerBlock = 'footer.footer';
-
-    /**
-     * Page Top Links block
-     *
-     * @var string
-     */
-    protected $linksBlock = '.header .links';
-
-    /**
-     * Store switcher block path
-     */
-    private $storeSwitcherBlock = '//*[@data-ui-id="language-switcher"]';
-
-    /**
-     * Custom constructor
-     */
-    protected function _init()
-    {
-        $this->_url = $_ENV['app_frontend_url'];
-    }
-
-    /**
-     * Get the search block
-     *
      * @return \Magento\Catalog\Test\Block\Search
      */
     public function getSearchBlock()
     {
-        return Factory::getBlockFactory()->getMagentoCatalogSearch(
-            $this->_browser->find($this->searchBlock, Locator::SELECTOR_CSS)
-        );
+        return $this->getBlockInstance('searchBlock');
     }
 
     /**
-     * Get category title block
-     *
      * @return \Magento\Theme\Test\Block\Html\Topmenu
      */
     public function getTopmenu()
     {
-        return Factory::getBlockFactory()->getMagentoThemeHtmlTopmenu(
-            $this->_browser->find($this->topmenuBlock, Locator::SELECTOR_CSS)
-        );
+        return $this->getBlockInstance('topmenu');
     }
 
     /**
-     * Get title block
-     *
      * @return \Magento\Theme\Test\Block\Html\Title
      */
     public function getTitleBlock()
     {
-        return Factory::getBlockFactory()->getMagentoThemeHtmlTitle(
-            $this->_browser->find($this->titleBlock, Locator::SELECTOR_CSS)
-        );
+        return $this->getBlockInstance('titleBlock');
     }
 
     /**
-     * Get footer block
-     *
      * @return \Magento\Theme\Test\Block\Html\Footer
      */
     public function getFooterBlock()
     {
-        return Factory::getBlockFactory()->getMagentoThemeHtmlFooter(
-            $this->_browser->find($this->footerBlock, Locator::SELECTOR_CSS)
-        );
+        return $this->getBlockInstance('footerBlock');
     }
 
     /**
-     * Get Top Links block
-     *
      * @return \Magento\Theme\Test\Block\Links
      */
     public function getLinksBlock()
     {
-        return Factory::getBlockFactory()->getMagentoThemeLinks(
-            $this->_browser->find($this->linksBlock, Locator::SELECTOR_CSS)
-        );
+        return $this->getBlockInstance('linksBlock');
     }
 
     /**
-     * Get store switcher
-     *
      * @return \Magento\Store\Test\Block\Switcher
      */
     public function getStoreSwitcherBlock()
     {
-        return Factory::getBlockFactory()->getMagentoStoreSwitcher(
-            $this->_browser->find($this->storeSwitcherBlock, Locator::SELECTOR_XPATH)
-        );
+        return $this->getBlockInstance('storeSwitcherBlock');
     }
 }

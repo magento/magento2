@@ -23,13 +23,10 @@
  */
 namespace Magento\Core\Model\App;
 
+use Magento\Framework\App\State;
+
 class StateTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var \Magento\Framework\App\State
-     */
-    protected $_model;
-
     /**
      * @param string $mode
      * @dataProvider constructorDataProvider

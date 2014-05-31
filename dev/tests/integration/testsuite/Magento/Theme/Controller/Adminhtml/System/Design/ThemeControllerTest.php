@@ -57,7 +57,7 @@ class ThemeControllerTest extends \Magento\Backend\Utility\Controller
             'Magento\Framework\App\Filesystem\DirectoryList'
         );
         /** @var $directoryList \Magento\Framework\App\Filesystem\DirectoryList */
-        $directoryList->addDirectory(\Magento\Framework\App\Filesystem::SYS_TMP_DIR, array('path' => '/'));
+        $directoryList->addDirectory(\Magento\Framework\App\Filesystem::SYS_TMP_DIR, array('path' => ''));
 
         $theme = $this->_objectManager->create('Magento\Framework\View\Design\ThemeInterface')
             ->getCollection()

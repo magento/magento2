@@ -28,7 +28,7 @@ namespace Magento\Framework\Math;
 class RandomTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @param int $length
+     * @param int    $length
      * @param string $chars
      *
      * @dataProvider getRandomStringDataProvider
@@ -80,5 +80,31 @@ class RandomTest extends \PHPUnit_Framework_TestCase
         if (preg_match('/[^' . $chars . ']+/', $string, $matches)) {
             $this->fail(sprintf('Unexpected char "%s" found', $matches[0]));
         }
+    }
+
+    /**
+     * @param $min
+     * @param $max
+     *
+     * @dataProvider testGetRandomNumberProvider
+     */
+    public function testGetRandomNumber($min, $max)
+    {
+        $number = \Magento\Framework\Math\Random::getRandomNumber($min, $max);
+        $this->assertLessThanOrEqual($max, $number);
+        $this->assertGreaterThanOrEqual($min, $number);
+    }
+
+    public function testGetRandomNumberProvider()
+    {
+        return [
+            [0, 100],
+            [0, 1],
+            [0, 0],
+            [-1, 0],
+            [-100, 0],
+            [-1, 1],
+            [-100, 100]
+        ];
     }
 }

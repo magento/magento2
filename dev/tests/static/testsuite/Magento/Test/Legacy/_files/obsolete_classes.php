@@ -1414,37 +1414,37 @@ return array(
         'Magento\Framework\View\Design\Fallback\Rule\RuleInterface'
     ),
     array('Magento\Core\Model\Design\Fallback\Rule\Simple', 'Magento\Framework\View\Design\Fallback\Rule\Simple'),
-    array('Magento\Core\Model\Design\Fallback\Factory', 'Magento\Framework\View\Design\Fallback\Factory'),
-    array(
-        'Magento\Core\Model\Design\FileResolution\Strategy\Fallback\CachingProxy',
-        'Magento\Framework\View\Design\FileResolution\Strategy\Fallback\CachingProxy'
-    ),
+    array('Magento\Core\Model\Design\Fallback\Factory', 'Magento\Framework\View\Design\Fallback\RulePool'),
+    array('Magento\Core\Model\Design\FileResolution\Strategy\Fallback\CachingProxy'),
+    array('Magento\Framework\View\Design\FileResolution\Strategy\View\NotifiableInterface'),
+    array('Magento\Framework\View\Design\FileResolution\Strategy\View\FileInterface'),
+    array('Magento\Framework\View\Design\FileResolution\Strategy\View\LocaleInterface'),
+    array('Magento\Framework\View\Design\FileResolution\Strategy\View\ViewInterface'),
+    array('Magento\Framework\View\Design\FileResolution\Strategy\Fallback\CachingProxy'),
     array(
         'Magento\Core\Model\Design\FileResolution\Strategy\Fallback',
-        'Magento\Framework\View\Design\FileResolution\Strategy\Fallback'
+        'Magento\Framework\View\Design\FileResolution\Fallback\{File,ViewFile,LocaleFile,TemplateFile}'
     ),
-    array(
-        'Magento\Core\Model\Design\FileResolution\StrategyPool',
-        'Magento\Framework\View\Design\FileResolution\StrategyPool'
-    ),
-    array('Magento\Core\Model\Layout\File', 'Magento\Framework\View\Layout\File'),
-    array('Magento\Core\Model\Layout\File\Factory', 'Magento\Framework\View\Layout\File\Factory'),
-    array('Magento\Core\Model\Layout\File\FileList\Factory', 'Magento\Framework\View\Layout\File\FileList\Factory'),
-    array('Magento\Core\Model\Layout\File\ListFile', 'Magento\Framework\View\Layout\File\FileList'),
-    array('Magento\Core\Model\Layout\File\Source\Aggregated', 'Magento\Framework\View\Layout\File\Source\Aggregated'),
-    array('Magento\Core\Model\Layout\File\Source\Base', 'Magento\Framework\View\Layout\File\Source\Base'),
+    array('Magento\Core\Model\Design\FileResolution\StrategyPool'),
+    array('Magento\Framework\View\Design\FileResolution\StrategyPool'),
+    array('Magento\Core\Model\Layout\File','Magento\Framework\View\File'),
+    array('Magento\Core\Model\Layout\File\Factory','Magento\Framework\View\File\Factory'),
+    array('Magento\Core\Model\Layout\File\FileList\Factory','Magento\Framework\View\File\FileList\Factory'),
+    array('Magento\Core\Model\Layout\File\ListFile','Magento\Framework\View\File\FileList'),
+    array('Magento\Core\Model\Layout\File\Source\Aggregated','Magento\Framework\View\Layout\File\Collector\Aggregated'),
+    array('Magento\Core\Model\Layout\File\Source\Base','Magento\Framework\View\Layout\File\Source\Base'),
     array(
         'Magento\Core\Model\Layout\File\Source\Decorator\ModuleDependency',
-        'Magento\Framework\View\Layout\File\Source\Decorator\ModuleDependency'
+        'Magento\Framework\View\File\Collector\Decorator\ModuleDependency'
     ),
     array(
         'Magento\Core\Model\Layout\File\Source\Decorator\ModuleOutput',
-        'Magento\Framework\View\Layout\File\Source\Decorator\ModuleOutput'
+        'Magento\Framework\View\File\Collector\Decorator\ModuleOutput'
     ),
     array('Magento\Core\Model\Layout\File\Source\Override\Base', 'Magento\Framework\View\Layout\File\Override\Base'),
     array('Magento\Core\Model\Layout\File\Source\Override\Theme', 'Magento\Framework\View\Layout\File\Override\Theme'),
     array('Magento\Core\Model\Layout\File\Source\Theme', 'Magento\Framework\View\Layout\File\Source\Theme'),
-    array('Magento\Core\Model\Layout\File\SourceInterface', 'Magento\Framework\View\Layout\File\SourceInterface'),
+    array('Magento\Core\Model\Layout\File\SourceInterface', 'Magento\Framework\View\File\CollectorInterface'),
     array('Magento\Core\Model\LayoutFactory', 'Magento\Framework\View\LayoutFactory'),
     array('Magento\Core\Model\TemplateEngine\EngineInterface', 'Magento\Framework\View\TemplateEngineInterface'),
     array('Magento\Core\Model\TemplateEngine\Factory', 'Magento\Framework\View\TemplateEngineFactory'),
@@ -1604,12 +1604,13 @@ return array(
     ),
     array('Magento\Adminhtml\Block\Checkout\Agreement', 'Magento\CheckoutAgreements\Block\Adminhtml\Agreement'),
     array('Magento\Adminhtml\Controller\Checkout\Agreement', 'Magento\Checkout\Controller\Adminhtml\Agreement'),
-    array('Magento\Core\Model\View\PublicFilesManagerInterface', 'Magento\Framework\View\PublicFilesManagerInterface'),
-    array('Magento\Core\Model\View\DeployedFilesManager', 'Magento\Framework\View\DeployedFilesManager'),
+    array('Magento\Core\Model\View\PublicFilesManagerInterface', 'Magento\Framework\View\Asset\SourceFileInterface'),
+    array('Magento\Core\Model\View\DeployedFilesManager', 'Magento\Framework\View\AssetInterface'),
+    array('Magento\Framework\View\DeployedFilesManager', 'Magento\Framework\View\AssetInterface'),
     array('Magento\Core\Model\View\Publisher', 'Magento\Framework\View\Publisher'),
     array('Magento\Core\Model\View\FileSystem', 'Magento\Framework\View\FileSystem'),
-    array('Magento\Core\Model\View\Service', 'Magento\Framework\View\Service'),
-    array('Magento\Core\Model\View\Url', 'Magento\Framework\View\Url'),
+    array('Magento\Core\Model\View\Service', 'Magento\Framework\View\Asset\Repository'),
+    array('Magento\Core\Model\View\Url', 'Magento\Framework\View\Asset\Repository'),
     array('Magento\Core\Model\View\Config', 'Magento\Framework\View\Config'),
     array('Magento\Core\Model\Image\Factory', 'Magento\Framework\Image\Factory'),
     array('Magento\Core\Model\Theme\Image', 'Magento\Framework\View\Design\Theme\Image'),
@@ -1814,7 +1815,7 @@ return array(
     array('Magento\Core\Model\Page\Asset\MinifyService', 'Magento\Framework\View\Asset\MinifyService'),
     array('Magento\Core\Model\Page\Asset\PublicFile', 'Magento\Framework\View\Asset\PublicFile'),
     array('Magento\Core\Model\Page\Asset\Remote', 'Magento\Framework\View\Asset\Remote'),
-    array('Magento\Core\Model\Page\Asset\ViewFile', 'Magento\Framework\View\Asset\ViewFile'),
+    array('Magento\Core\Model\Page\Asset\ViewFile', 'Magento\Framework\View\Asset\File'),
     array('Magento\Page\Block\Html\Head\AssetBlock', 'Magento\Theme\Block\Html\Head\AssetBlockInterface'),
     array('Magento\Page\Block\Html\Head\Css', 'Magento\Theme\Block\Html\Head\Css'),
     array('Magento\Page\Block\Html\Head\Link', 'Magento\Theme\Block\Html\Head\Link'),
@@ -2511,5 +2512,71 @@ return array(
     [
         'Magento\Customer\Service\V1\CustomerAddressCurrentServiceInterface',
         'Magento\Customer\Helper\Session\CurrentCustomerAddress'
-    ]
+    ],
+    [
+        'Magento\SalesArchive\Block\Adminhtml\Sales\Order\Grid\Button',
+        'Magento\SalesArchive\Block\Adminhtml\Sales\Order\Grid'
+    ],
+    ['Magento\Framework\View\Url', 'Magento\Framework\View\Asset\Repository'],
+    ['Magento\Less\File\Source\Base', 'Magento\Framework\View\File\Collector\Base'],
+    ['Magento\Less\File\Source\Theme', 'Magento\Framework\View\File\Collector\ThemeModular'],
+    ['Magento\Framework\View\Layout\File\FileList\CollateInterface', 'Magento\Framework\View\File\FileList\CollateInterface'],
+    ['Magento\Framework\View\Layout\File\FileList\Collator', 'Magento\Framework\View\File\FileList\Collator'],
+    ['Magento\Framework\View\Layout\File\FileList\Factory', 'Magento\Framework\View\File\FileList\Factory'],
+    [
+        'Magento\Framework\View\Layout\File\Source\Decorator\ModuleDependency',
+        'Magento\Framework\View\File\Collector\Decorator\ModuleDependency'
+    ],
+    [
+        'Magento\Framework\View\Layout\File\Source\Decorator\ModuleOutput',
+        'Magento\Framework\View\File\Collector\Decorator\ModuleOutput'
+    ],
+    ['Magento\Framework\View\Layout\File\Source\Override\Base', 'Magento\Framework\View\File\Collector\Override\Base'],
+    [
+        'Magento\Framework\View\Layout\File\Source\Override\Theme',
+        'Magento\Framework\View\File\Collector\Override\ThemeModular'
+    ],
+    ['Magento\Framework\View\Layout\File\Source\Base', 'Magento\Framework\View\File\Collector\Base'],
+    ['Magento\Framework\View\Layout\File\Source\Theme', 'Magento\Framework\View\File\Collector\ThemeModular'],
+    ['Magento\Framework\View\Layout\File\Factory', 'Magento\Framework\View\File\Factory'],
+    ['Magento\Framework\View\Layout\File\FileList', 'Magento\Framework\View\File\FileList'],
+    ['Magento\Framework\View\Layout\File\SourceInterface', 'Magento\Framework\View\File\CollectorInterface'],
+    ['Magento\Framework\View\Layout\File', 'Magento\Framework\View\File'],
+    ['Magento\Framework\View\Url\Resolver', 'Magento\Framework\View\Asset\Repository'],
+    [
+        'Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Code\Css\Group',
+        'Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Code\Css'
+    ],
+    ['Magento\Css\PreProcessor\Composite'],
+    ['Magento\Css\PreProcessor\UrlResolver', 'Magento\Framework\View\Asset\PreProcessor\ModuleNotation'],
+    ['Magento\Less\PreProcessor\File\FileList'],
+    ['Magento\Less\PreProcessor\File\FileListFactory'],
+    ['Magento\Less\PreProcessor\File\Less', 'Magento\Framework\View\Asset\File'],
+    ['Magento\Less\PreProcessor\File\LessFactory'],
+    ['Magento\Less\PreProcessor\InstructionFactory'],
+    ['Magento\Less\PreProcessor', 'Magento\Framework\Less\FileGenerator'],
+    ['Magento\Less\PreProcessorInterface', 'Magento\Framework\View\Asset\PreProcessorInterface'],
+    ['Magento\Framework\View\Asset\PreProcessorFactory'],
+    ['Magento\Framework\View\Asset\PreProcessor\Composite'],
+    [
+        'Magento\Framework\View\Asset\PreProcessor\PreProcessorInterface',
+        'Magento\Framework\View\Asset\PreProcessorInterface'
+    ],
+    ['Magento\Framework\View\Publisher', '\Magento\Framework\App\View\Asset\Publisher'],
+    ['Magento\Framework\View\Publisher\FileAbstract'],
+    ['Magento\Framework\View\Publisher\File'],
+    ['Magento\Framework\View\Publisher\FileFactory'],
+    ['Magento\Framework\View\Publisher\CssFile'],
+    ['Magento\Framework\View\RelatedFile'],
+    ['Magento\Css\PreProcessor\Cache\Plugin\Less', 'Magento\Framework\View\Asset\PreProcessing\Cache'],
+    ['Magento\Css\PreProcessor\Cache\Import\Cache'],
+    ['Magento\Css\PreProcessor\Cache\Plugin\ImportCleaner'],
+    ['Magento\Css\PreProcessor\Cache\Import\Map\Storage', 'Magento\Framework\View\Asset\PreProcessing\Cache'],
+    ['Magento\Css\PreProcessor\Cache\Import\ImportEntity'],
+    ['Magento\Css\PreProcessor\Cache\Import\ImportEntityFactory'],
+    ['Magento\Css\PreProcessor\Cache\Import\ImportEntityInterface'],
+    ['Magento\Css\PreProcessor\Cache\CacheFactory'],
+    ['Magento\Css\PreProcessor\Cache\CacheInterface'],
+    ['Magento\Css\PreProcessor\Cache\CacheManager'],
+    ['Magento\Framework\View\Design\FileResolution\Strategy\ViewInterface'],
 );

@@ -65,9 +65,9 @@ class Filter extends \Magento\Framework\Filter\Template
     protected $_plainTemplateMode = false;
 
     /**
-     * @var \Magento\Framework\View\Url
+     * @var \Magento\Framework\View\Asset\Repository
      */
-    protected $_viewUrl;
+    protected $_assetRepo;
 
     /**
      * @var \Magento\Framework\Logger
@@ -132,7 +132,7 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param \Magento\Framework\Stdlib\String $string
      * @param \Magento\Framework\Logger $logger
      * @param \Magento\Framework\Escaper $escaper
-     * @param \Magento\Framework\View\Url $viewUrl
+     * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Core\Model\VariableFactory $coreVariableFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -148,7 +148,7 @@ class Filter extends \Magento\Framework\Filter\Template
         \Magento\Framework\Stdlib\String $string,
         \Magento\Framework\Logger $logger,
         \Magento\Framework\Escaper $escaper,
-        \Magento\Framework\View\Url $viewUrl,
+        \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Core\Model\VariableFactory $coreVariableFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -159,7 +159,7 @@ class Filter extends \Magento\Framework\Filter\Template
         $variables = array()
     ) {
         $this->_escaper = $escaper;
-        $this->_viewUrl = $viewUrl;
+        $this->_assetRepo = $assetRepo;
         $this->_logger = $logger;
         $this->_scopeConfig = $scopeConfig;
         $this->_modifiers['escape'] = array($this, 'modifierEscape');
@@ -244,12 +244,12 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function blockDirective($construction)
     {
-        $skipParams = array('type', 'id', 'output');
+        $skipParams = array('class', 'id', 'output');
         $blockParameters = $this->_getIncludeParameters($construction[2]);
+        $block = null;
 
-        if (isset($blockParameters['type'])) {
-            $type = $blockParameters['type'];
-            $block = $this->_layout->createBlock($type, null, array('data' => $blockParameters));
+        if (isset($blockParameters['class'])) {
+            $block = $this->_layout->createBlock($blockParameters['class'], null, array('data' => $blockParameters));
         } elseif (isset($blockParameters['id'])) {
             $block = $this->_layout->createBlock('Magento\Cms\Block\Block');
             if ($block) {
@@ -257,19 +257,19 @@ class Filter extends \Magento\Framework\Filter\Template
             }
         }
 
-        if ($block) {
-            $block->setBlockParams($blockParameters);
-            foreach ($blockParameters as $k => $v) {
-                if (in_array($k, $skipParams)) {
-                    continue;
-                }
-                $block->setDataUsingMethod($k, $v);
-            }
-        }
-
         if (!$block) {
             return '';
         }
+
+        $block->setBlockParams($blockParameters);
+        foreach ($blockParameters as $k => $v) {
+            if (in_array($k, $skipParams)) {
+                continue;
+            }
+            $block->setDataUsingMethod($k, $v);
+        }
+
+
         if (isset($blockParameters['output'])) {
             $method = $blockParameters['output'];
         }
@@ -367,7 +367,7 @@ class Filter extends \Magento\Framework\Filter\Template
     public function viewDirective($construction)
     {
         $params = $this->_getIncludeParameters($construction[2]);
-        $url = $this->_viewUrl->getViewFileUrl($params['url'], $params);
+        $url = $this->_assetRepo->getUrlWithParams($params['url'], $params);
         return $url;
     }
 

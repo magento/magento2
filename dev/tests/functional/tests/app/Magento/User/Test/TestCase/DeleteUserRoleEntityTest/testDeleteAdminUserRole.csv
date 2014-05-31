@@ -1,0 +1,3 @@
+"isDefaultUser";"constraint"
+"0";"assertImpossibleDeleteYourOwnRole, assertRoleInGrid"
+"1";"assertRoleSuccessDeleteMessage, assertRoleNotInGrid"

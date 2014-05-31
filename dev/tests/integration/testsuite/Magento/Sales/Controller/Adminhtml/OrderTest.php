@@ -113,7 +113,7 @@ class OrderTest extends \Magento\Backend\Utility\Controller
         return array(
             array('status' => 'pending', 'comment' => 'Test comment', 'response' => 'Test comment'),
             array(
-                'status' => '',
+                'status' => 'processing',
                 'comment' => '',
                 'response' => '{"error":true,"message":"Comment text cannot be empty."}'
             )

@@ -444,9 +444,9 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
     {
         parent::beforeSave($product);
         if ($this->getLinkSelectionRequired($product)) {
-            $product->setTypeHasRequiredOptions(true);
+            $product->setTypeHasRequiredOptions(true)->setRequiredOptions(true);
         } else {
-            $product->setTypeHasRequiredOptions(false);
+            $product->setTypeHasRequiredOptions(false)->setRequiredOptions(false);
         }
 
         // Update links_exist attribute value

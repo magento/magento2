@@ -40,4 +40,4 @@ $objectManger->configure(array(
 ));
 /** @var $registration \Magento\Core\Model\Theme\Registration */
 $registration = $objectManger->create('Magento\Core\Model\Theme\Registration');
-$registration->register(implode('/', array('*', '*', 'theme.xml')));
+$registration->register('*/*/theme.xml');

@@ -23,6 +23,11 @@
  */
 namespace Magento\Framework\Exception;
 
+/**
+ * Class LocalizedExceptionTest
+ *
+ * @package Magento\Framework\Exception
+ */
 class LocalizedExceptionTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Framework\Phrase\RendererInterface */
@@ -90,5 +95,56 @@ class LocalizedExceptionTest extends \PHPUnit_Framework_TestCase
                 'message',
             ],
         ];
+    }
+
+    public function testGetRawMessage()
+    {
+        $message =  'message %1 %2';
+        $params = [
+            'parameter1',
+            'parameter2'
+        ];
+        $cause = new \Exception();
+        $localizeException = new LocalizedException(
+            $message,
+            $params,
+            $cause
+        );
+        $this->assertEquals($message, $localizeException->getRawMessage());
+    }
+
+    public function testGetParameters()
+    {
+        $message =  'message %1 %2';
+        $params = [
+            'parameter1',
+            'parameter2'
+        ];
+        $cause = new \Exception();
+        $localizeException = new LocalizedException(
+            $message,
+            $params,
+            $cause
+        );
+
+        $this->assertEquals($params, $localizeException->getParameters());
+    }
+
+    public function testGetLogMessage()
+    {
+        $message =  'message %1 %2';
+        $params = [
+            'parameter1',
+            'parameter2'
+        ];
+        $cause = new \Exception();
+
+        $localizeException = new LocalizedException(
+            $message,
+            $params,
+            $cause
+        );
+        $expectedLogMessage = 'message parameter1 parameter2';
+        $this->assertEquals($expectedLogMessage, $localizeException->getLogMessage());
     }
 }

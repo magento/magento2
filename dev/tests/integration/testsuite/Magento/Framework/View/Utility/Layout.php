@@ -48,13 +48,13 @@ class Layout
     public function getLayoutUpdateFromFixture($layoutUpdatesFile)
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\Framework\View\Layout\File\Factory $fileFactory */
-        $fileFactory = $objectManager->get('Magento\Framework\View\Layout\File\Factory');
+        /** @var \Magento\Framework\View\File\Factory $fileFactory */
+        $fileFactory = $objectManager->get('Magento\Framework\View\File\Factory');
         $files = array();
         foreach ((array)$layoutUpdatesFile as $filename) {
             $files[] = $fileFactory->create($filename, 'Magento_View');
         }
-        $fileSource = $this->_testCase->getMockForAbstractClass('Magento\Framework\View\Layout\File\SourceInterface');
+        $fileSource = $this->_testCase->getMockForAbstractClass('Magento\Framework\View\File\CollectorInterface');
         $fileSource->expects(
             \PHPUnit_Framework_TestCase::any()
         )->method(

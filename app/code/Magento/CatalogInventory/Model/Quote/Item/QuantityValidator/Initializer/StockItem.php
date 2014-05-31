@@ -72,13 +72,15 @@ class StockItem
             /**
              * we are using 0 because original qty was processed
              */
-            $qtyForCheck = $this->quoteItemQtyList->getQty($quoteItem->getProduct()->getId(), $quoteItem->getId(), 0);
+            $qtyForCheck = $this->quoteItemQtyList
+                ->getQty($quoteItem->getProduct()->getId(), $quoteItem->getId(), $quoteItem->getQuoteId(), 0);
         } else {
             $increaseQty = $quoteItem->getQtyToAdd() ? $quoteItem->getQtyToAdd() : $qty;
             $rowQty = $qty;
             $qtyForCheck = $this->quoteItemQtyList->getQty(
                 $quoteItem->getProduct()->getId(),
                 $quoteItem->getId(),
+                $quoteItem->getQuoteId(),
                 $increaseQty
             );
         }

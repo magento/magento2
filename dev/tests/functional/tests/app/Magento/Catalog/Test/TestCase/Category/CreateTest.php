@@ -52,7 +52,7 @@ class CreateTest extends Functional
         $treeBlockEdit = $catalogCategoryEditPage->getTreeBlock();
         $formBlock = $catalogCategoryEditPage->getFormBlock();
         $actionsBlock = $catalogCategoryEditPage->getPageActionsBlock();
-        $messageBlock = $catalogCategoryEditPage->getMessageBlock();
+        $messagesBlock = $catalogCategoryEditPage->getMessagesBlock();
         //Steps
         Factory::getApp()->magentoBackendLoginUser();
         $catalogCategoryPage->open();
@@ -61,7 +61,7 @@ class CreateTest extends Functional
         $formBlock->fill($category);
         $actionsBlock->save();
         //Verifying
-        $messageBlock->assertSuccessMessage();
+        $messagesBlock->assertSuccessMessage();
         //Flush cache
         $cachePage = Factory::getPageFactory()->getAdminCache();
         $cachePage->open();

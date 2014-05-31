@@ -165,10 +165,6 @@
                     <label>Debug</label>
                     <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="active_rma" translate="label" type="select" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Enabled for RMA</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
-                </field>
             </group>
         </section>
     </system>

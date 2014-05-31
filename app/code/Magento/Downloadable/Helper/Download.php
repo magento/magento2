@@ -128,12 +128,18 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_workingDirectory;
 
     /**
+     * @var \Magento\Framework\Session\SessionManagerInterface
+     */
+    protected $_session;
+
+    /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Downloadable\Helper\File $downloadableFile
      * @param \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\App\Filesystem $filesystem
+     * @param \Magento\Framework\Session\SessionManagerInterface $session
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -141,13 +147,15 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Downloadable\Helper\File $downloadableFile,
         \Magento\Core\Helper\File\Storage\Database $coreFileStorageDb,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\App\Filesystem $filesystem
+        \Magento\Framework\App\Filesystem $filesystem,
+        \Magento\Framework\Session\SessionManagerInterface $session
     ) {
         $this->_coreData = $coreData;
         $this->_downloadableFile = $downloadableFile;
         $this->_coreFileStorageDb = $coreFileStorageDb;
         $this->_scopeConfig = $scopeConfig;
         $this->_filesystem = $filesystem;
+        $this->_session = $session;
 
         parent::__construct($context);
     }
@@ -281,6 +289,7 @@ class Download extends \Magento\Framework\App\Helper\AbstractHelper
     public function output()
     {
         $handle = $this->_getHandle();
+        $this->_session->writeClose();
         while (true == ($buffer = $handle->read(1024))) {
             echo $buffer;
         }

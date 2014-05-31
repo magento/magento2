@@ -66,14 +66,14 @@ test( "omitting AM/PM in timeformat option changes AMPM option to false", functi
 test( "with server timezone offset", function(){
 	var serverTimezoneSeconds = 1346122095,
 	calendar = $('#calendar').calendar({serverTimezoneSeconds: serverTimezoneSeconds}),
-		currentDate = new Date();
+        currentDate = new Date();
     currentDate.setTime((serverTimezoneSeconds + currentDate.getTimezoneOffset() * 60) * 1000);
     ok(currentDate.toString() === calendar.calendar('getTimezoneDate').toString());
     calendar.calendar('destroy');
 });
 test( "without sever timezone offset", function() {
 	var calendar = $('#calendar').calendar(),
-    	currentDate = new Date();
+        currentDate = new Date();
     ok(currentDate.toString() === calendar.calendar('getTimezoneDate').toString());
     calendar.calendar('destroy');
 });

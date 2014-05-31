@@ -68,7 +68,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     public function testIncludeTemplate()
     {
         $this->mockViewFilesystem->expects($this->once())
-            ->method('getFilename')
+            ->method('getTemplateFileName')
             ->with('template')
             ->will($this->returnValue(__DIR__ . '/_files/test_include.php'));
         $include = $this->template->getInclude('template', ['one' => 1, 'two' => 2]);
@@ -78,7 +78,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     public function testNoFilename()
     {
         $this->mockViewFilesystem->expects($this->once())
-            ->method('getFilename')
+            ->method('getTemplateFileName')
             ->with('template')
             ->will($this->returnValue(false));
         $include = $this->template->getInclude('template', ['one' => 1, 'two' => 2]);

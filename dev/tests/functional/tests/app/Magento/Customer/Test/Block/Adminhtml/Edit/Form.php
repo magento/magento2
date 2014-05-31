@@ -26,6 +26,7 @@ namespace Magento\Customer\Test\Block\Adminhtml\Edit;
 
 use Mtf\Fixture\FixtureInterface;
 use Magento\Backend\Test\Block\Widget\FormTabs;
+use Mtf\Fixture\InjectableFixture;
 
 /**
  * Class Form
@@ -43,8 +44,10 @@ class Form extends FormTabs
      */
     public function fillCustomer(FixtureInterface $customer, $address = null)
     {
-        parent::fill($customer);
-
+        $isHasData = ($customer instanceof InjectableFixture) ? $customer->hasData() : true;
+        if ($isHasData) {
+            parent::fill($customer);
+        }
         if (null !== $address) {
             $this->openTab('addresses');
             $this->getTabElement('addresses')->fillAddresses($address);
@@ -54,21 +57,42 @@ class Form extends FormTabs
     }
 
     /**
-     * Verify Customer information, addresses on tabs.
+     * Update Customer forms on tabs by customer, addresses data
      *
      * @param FixtureInterface $customer
      * @param FixtureInterface|FixtureInterface[]|null $address
-     * @return bool
+     * @return $this
      */
-    public function verifyCustomer(FixtureInterface $customer, $address = null)
+    public function updateCustomer(FixtureInterface $customer, $address = null)
     {
-        $isVerify = parent::verify($customer);
+        $isHasData = ($customer instanceof InjectableFixture) ? $customer->hasData() : true;
+        if ($isHasData) {
+            parent::fill($customer);
+        }
+        if (null !== $address) {
+            $this->openTab('addresses');
+            $this->getTabElement('addresses')->updateAddresses($address);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get data of Customer information, addresses on tabs.
+     *
+     * @param FixtureInterface $customer
+     * @param FixtureInterface|FixtureInterface[]|null $address
+     * @return array
+     */
+    public function getDataCustomer(FixtureInterface $customer, $address = null)
+    {
+        $data = ['customer' => $customer->hasData() ? parent::getData($customer) : parent::getData()];
 
         if (null !== $address) {
             $this->openTab('addresses');
-            $isVerify = $isVerify && $this->getTabElement('addresses')->verifyAddresses($address);
+            $data['addresses'] = $this->getTabElement('addresses')->getDataAddresses($address);
         }
 
-        return $isVerify;
+        return $data;
     }
 }

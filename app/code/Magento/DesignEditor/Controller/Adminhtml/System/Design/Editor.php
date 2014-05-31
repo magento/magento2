@@ -303,7 +303,7 @@ class Editor extends \Magento\Backend\App\Action
             }
             $themeCopy->setData($theme->getData());
             $themeCopy->setId(null)->setThemeTitle(__('Copy of [%1]', $theme->getThemeTitle()));
-            $themeCopy->getThemeImage()->createPreviewImageCopy($theme->getPreviewImage());
+            $themeCopy->getThemeImage()->createPreviewImageCopy($theme);
             $themeCopy->save();
             $copyService->copy($theme, $themeCopy);
             $this->messageManager->addSuccess(__('You saved a duplicate copy of this theme in "My Customizations."'));
@@ -420,8 +420,9 @@ class Editor extends \Magento\Backend\App\Action
         if ($cssTabBlock) {
             /** @var $helper \Magento\Core\Helper\Theme */
             $helper = $this->_objectManager->get('Magento\Core\Helper\Theme');
-            $cssFiles = $helper->getGroupedCssFiles($theme);
-            $cssTabBlock->setCssFiles($cssFiles)->setThemeId($theme->getId());
+            $assets = $helper->getCssAssets($theme);
+            $cssTabBlock->setAssets($assets)
+                ->setThemeId($theme->getId());
         }
         return $this;
     }
