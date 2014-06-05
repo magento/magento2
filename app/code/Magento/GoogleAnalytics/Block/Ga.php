@@ -114,7 +114,7 @@ class Ga extends \Magento\Framework\View\Element\Template
 
         $collection = $this->_salesOrderCollection->create();
         $collection->addFieldToFilter('entity_id', array('in' => $orderIds));
-        $result = array( "ga('require', 'ecommerce', 'ecommerce.js');" );
+        $result = array( "ga('require', 'ec', 'ec.js');" );
         foreach ($collection as $order) {
             if ($order->getIsVirtual()) {
                 $address = $order->getBillingAddress();
