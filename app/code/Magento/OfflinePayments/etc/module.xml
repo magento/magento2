@@ -32,7 +32,6 @@
         </sequence>
         <depends>
             <module name="Magento_Payment"/>
-            <module name="Magento_Checkout"/>
         </depends>
     </module>
 </config>

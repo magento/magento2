@@ -166,7 +166,7 @@ class CustomerBuilderTest extends \PHPUnit_Framework_TestCase
             'Magento\Customer\Service\V1\Data\AddressBuilder',
             [
                 'valueBuilder' => $this->_valueBuilder,
-                'regionBuilder' => new RegionBuilder(),
+                'regionBuilder' => $this->_objectManager->getObject('\Magento\Customer\Service\V1\Data\RegionBuilder'),
                 'metadataService' => $this->_customerMetadataService
             ]
         )->create();

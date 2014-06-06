@@ -139,7 +139,7 @@ class Agreement extends \Magento\Paypal\Model\Payment\Method\Billing\AbstractAgr
      * @param \Magento\Framework\Logger\AdapterFactory $logAdapterFactory
      * @param \Magento\Paypal\Model\Billing\AgreementFactory $agreementFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Paypal\Model\Method\ProTypeFactory $proTypeFactory
+     * @param \Magento\Paypal\Model\ProFactory $proFactory
      * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param \Magento\Paypal\Model\CartFactory $cartFactory
      * @param array $data
@@ -153,7 +153,7 @@ class Agreement extends \Magento\Paypal\Model\Payment\Method\Billing\AbstractAgr
         \Magento\Framework\Logger\AdapterFactory $logAdapterFactory,
         \Magento\Paypal\Model\Billing\AgreementFactory $agreementFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Paypal\Model\Method\ProTypeFactory $proTypeFactory,
+        \Magento\Paypal\Model\ProFactory $proFactory,
         \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Paypal\Model\CartFactory $cartFactory,
         array $data = array()
@@ -173,7 +173,7 @@ class Agreement extends \Magento\Paypal\Model\Payment\Method\Billing\AbstractAgr
         if ($proInstance && $proInstance instanceof \Magento\Paypal\Model\Pro) {
             $this->_pro = $proInstance;
         } else {
-            $this->_pro = $proTypeFactory->create('Magento\Paypal\Model\Pro');
+            $this->_pro = $proFactory->create();
         }
         $this->_pro->setMethod($this->_code);
     }
@@ -412,7 +412,7 @@ class Agreement extends \Magento\Paypal\Model\Payment\Method\Billing\AbstractAgr
         $api = $this->_pro->getApi()->setReferenceId(
             $billingAgreement->getReferenceId()
         )->setPaymentAction(
-            $proConfig->paymentAction
+            $proConfig->getConfigValue('paymentAction')
         )->setAmount(
             $amount
         )->setCurrencyCode(
@@ -422,7 +422,7 @@ class Agreement extends \Magento\Paypal\Model\Payment\Method\Billing\AbstractAgr
         )->setPaypalCart(
             $cart
         )->setIsLineItemsEnabled(
-            $proConfig->lineItemsEnabled
+            $proConfig->getConfigValue('lineItemsEnabled')
         )->setInvNum(
             $order->getIncrementId()
         );

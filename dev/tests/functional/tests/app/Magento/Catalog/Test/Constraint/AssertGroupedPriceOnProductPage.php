@@ -53,8 +53,10 @@ class AssertGroupedPriceOnProductPage extends AbstractConstraint
         $catalogProductView->open();
         $fields = $product->getData();
         $groupPrice = $catalogProductView->getViewBlock()->getProductPrice();
-        $groupPrice = empty($groupPrice['price_special_price']) ? null : $groupPrice['price_special_price'];
-        if (!empty($fields['group_price'])) {
+        $groupPrice = isset($groupPrice['price_special_price'])
+            ? $groupPrice['price_special_price']
+            : null;
+        if (isset($fields['group_price'])) {
             foreach ($fields['group_price'] as $itemGroupPrice) {
                 \PHPUnit_Framework_Assert::assertEquals(
                     $itemGroupPrice['price'],
@@ -66,7 +68,7 @@ class AssertGroupedPriceOnProductPage extends AbstractConstraint
     }
 
     /**
-     * Returns a string representation of the object.
+     * Returns a string representation of the object
      *
      * @return string
      */

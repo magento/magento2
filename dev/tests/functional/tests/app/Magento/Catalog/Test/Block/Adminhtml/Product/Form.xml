@@ -85,6 +85,13 @@
             <inventory_qty>
                 <selector>[name='product[stock_data][qty]']</selector>
             </inventory_qty>
+            <stock_data_use_config_min_qty>
+                <selector>[name='product[stock_data][use_config_min_qty]']</selector>
+                <input>checkbox</input>
+            </stock_data_use_config_min_qty>
+            <stock_data_min_qty>
+                <selector>[name='product[stock_data][min_qty]']</selector>
+            </stock_data_min_qty>
         </fields>
     </advanced-inventory>
     <autosettings>

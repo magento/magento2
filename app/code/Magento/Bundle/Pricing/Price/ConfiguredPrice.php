@@ -46,6 +46,11 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
     protected $calculator;
 
     /**
+     * @var DiscountCalculator
+     */
+    protected $discountCalculator;
+
+    /**
      * @var null|ItemInterface
      */
     protected $item;
@@ -54,12 +59,14 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
      * @param Product $saleableItem
      * @param float $quantity
      * @param BundleCalculatorInterface $calculator
+     * @param DiscountCalculator $discountCalculator
      * @param ItemInterface $item
      */
     public function __construct(
         Product $saleableItem,
         $quantity,
         BundleCalculatorInterface $calculator,
+        DiscountCalculator $discountCalculator,
         ItemInterface $item = null
     ) {
         $this->item = $item;
@@ -136,7 +143,10 @@ class ConfiguredPrice extends CatalogPrice\FinalPrice implements ConfiguredPrice
     {
         if ($this->item) {
             $configuredOptionsAmount = $this->getConfiguredAmount()->getBaseAmount();
-            return parent::getValue() + $this->basePrice->calculateBaseValue($configuredOptionsAmount);
+            return parent::getValue() +
+                $this->priceInfo
+                    ->getPrice(BundleDiscountPrice::PRICE_CODE)
+                    ->calculateDiscount($configuredOptionsAmount);
         } else {
             return parent::getValue();
         }

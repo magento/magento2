@@ -36,34 +36,59 @@
             <loginPage class="Magento\Backend\Test\Page\AdminAuthLogin" />
         </require>
     </invalidCredentials>
-   <assertRoleSuccessSaveMessage module="Magento_User">
-       <severeness>low</severeness>
-       <require>
-           <rolePage class="Magento\User\Test\Page\Adminhtml\UserRoleIndex" />
-       </require>
-   </assertRoleSuccessSaveMessage>
+    <assertRoleSuccessSaveMessage module="Magento_User">
+        <severeness>low</severeness>
+        <require>
+            <rolePage class="Magento\User\Test\Page\Adminhtml\UserRoleIndex" />
+        </require>
+    </assertRoleSuccessSaveMessage>
     <assertRoleSuccessDeleteMessage module="Magento_User">
         <severeness>low</severeness>
         <require>
             <rolePage class="Magento\User\Test\Page\Adminhtml\UserRoleIndex" />
         </require>
     </assertRoleSuccessDeleteMessage>
-   <assertRoleInGrid module="Magento_User">
+    <assertRoleInGrid module="Magento_User">
         <severeness>low</severeness>
         <require>
             <rolePage class="Magento\User\Test\Page\Adminhtml\UserRoleIndex" />
         </require>
-   </assertRoleInGrid>
+    </assertRoleInGrid>
     <assertRoleNotInGrid module="Magento_User">
         <severeness>low</severeness>
         <require>
             <rolePage class="Magento\User\Test\Page\Adminhtml\UserRoleIndex" />
+            <role class="Magento\User\Test\Fixture\AdminUserRole" />
         </require>
     </assertRoleNotInGrid>
+    <assertImpossibleDeleteYourOwnAccount module="Magento_User">
+        <severeness>low</severeness>
+        <require>
+            <userEdit class="Magento\User\Test\Page\Adminhtml\UserEdit" />
+        </require>
+    </assertImpossibleDeleteYourOwnAccount>
     <assertImpossibleDeleteYourOwnRole module="Magento_User">
         <severeness>low</severeness>
         <require>
             <rolePage class="Magento\User\Test\Page\Adminhtml\UserRoleEditRole" />
         </require>
     </assertImpossibleDeleteYourOwnRole>
+    <assertUserInGrid module="Magento_User">
+        <severeness>low</severeness>
+        <require>
+            <rolePage class="Magento\User\Test\Page\Adminhtml\UserIndex" />
+        </require>
+    </assertUserInGrid>
+    <assertUserNotInGrid module="Magento_User">
+        <severeness>low</severeness>
+        <require>
+            <rolePage class="Magento\User\Test\Page\Adminhtml\UserIndex" />
+        </require>
+    </assertUserNotInGrid>
+    <assertUserSuccessDeleteMessage module="Magento_User">
+        <severeness>low</severeness>
+        <require>
+            <rolePage class="Magento\User\Test\Page\Adminhtml\UserIndex" />
+        </require>
+    </assertUserSuccessDeleteMessage>
 </constraint>

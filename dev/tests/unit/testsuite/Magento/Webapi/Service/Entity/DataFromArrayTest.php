@@ -35,7 +35,7 @@ class DataFromArrayTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $objectFactory = new \Magento\Webapi\Service\Entity\WebapiObjectManager();
+        $objectFactory = new \Magento\Webapi\Service\Entity\WebapiObjectManager($objectManager);
         $typeProcessor = $objectManager->getObject('Magento\Webapi\Model\Config\ClassReflector\TypeProcessor');
         $this->serializer = new ServiceArgsSerializer($typeProcessor, $objectFactory);
     }

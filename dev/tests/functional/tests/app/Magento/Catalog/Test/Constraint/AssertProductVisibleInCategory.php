@@ -82,8 +82,8 @@ class AssertProductVisibleInCategory extends AbstractConstraint
 
         if ($product->getVisibility() === 'Search' || $product->getQuantityAndStockStatus() === 'Out of Stock') {
             $isProductVisible = !$isProductVisible;
-            $this->errorMessage = 'Product found in this category';
-            $this->successfulMessage = 'Asserts that the product could not be found in this category';
+            $this->errorMessage = 'Product found in this category.';
+            $this->successfulMessage = 'Asserts that the product could not be found in this category.';
         }
 
         \PHPUnit_Framework_Assert::assertTrue(
@@ -93,7 +93,7 @@ class AssertProductVisibleInCategory extends AbstractConstraint
     }
 
     /**
-     * Returns a string representation of the object.
+     * Returns a string representation of the object
      *
      * @return string
      */

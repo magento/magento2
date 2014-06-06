@@ -198,12 +198,18 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
     protected $_itemOptionFactory;
 
     /**
+     * @var \Magento\Sales\Helper\Quote\Item\Compare
+     */
+    protected $_compareHelper;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Sales\Model\Status\ListFactory $statusListFactory
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
-     * @param \Magento\Sales\Model\Quote\Item\OptionFactory $itemOptionFactory
+     * @param Item\OptionFactory $itemOptionFactory
+     * @param \Magento\Sales\Helper\Quote\Item\Compare $compareHelper
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -217,6 +223,7 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
         \Magento\Sales\Model\Status\ListFactory $statusListFactory,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
         \Magento\Sales\Model\Quote\Item\OptionFactory $itemOptionFactory,
+        \Magento\Sales\Helper\Quote\Item\Compare $compareHelper,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
@@ -224,6 +231,7 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
         $this->_errorInfos = $statusListFactory->create();
         $this->_localeFormat = $localeFormat;
         $this->_itemOptionFactory = $itemOptionFactory;
+        $this->_compareHelper = $compareHelper;
         parent::__construct($context, $registry, $productFactory, $resource, $resourceCollection, $data);
     }
 
@@ -504,46 +512,14 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
     }
 
     /**
-     * Compare item
+     * Compare items
      *
      * @param   \Magento\Sales\Model\Quote\Item $item
      * @return  bool
      */
     public function compare($item)
     {
-        if ($this->getProductId() != $item->getProductId()) {
-            return false;
-        }
-        foreach ($this->getOptions() as $option) {
-            if (in_array($option->getCode(), $this->_notRepresentOptions)) {
-                continue;
-            }
-            $itemOption = $item->getOptionByCode($option->getCode());
-            if ($itemOption) {
-                $itemOptionValue = $itemOption->getValue();
-                $optionValue = $option->getValue();
-
-                // dispose of some options params, that can cramp comparing of arrays
-                if (is_string($itemOptionValue) && is_string($optionValue)) {
-                    $_itemOptionValue = @unserialize($itemOptionValue);
-                    $_optionValue = @unserialize($optionValue);
-                    if (is_array($_itemOptionValue) && is_array($_optionValue)) {
-                        $itemOptionValue = $_itemOptionValue;
-                        $optionValue = $_optionValue;
-                        // looks like it does not break bundle selection qty
-                        unset($itemOptionValue['qty'], $itemOptionValue['uenc']);
-                        unset($optionValue['qty'], $optionValue['uenc']);
-                    }
-                }
-
-                if ($itemOptionValue != $optionValue) {
-                    return false;
-                }
-            } else {
-                return false;
-            }
-        }
-        return true;
+        return $this->_compareHelper->compare($this, $item);
     }
 
     /**
@@ -609,7 +585,7 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
     /**
      * Get all item options
      *
-     * @return array
+     * @return \Magento\Sales\Model\Quote\Item\Option[]
      */
     public function getOptions()
     {

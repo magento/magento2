@@ -520,6 +520,7 @@
 
 /* Change Attribute Set */
 #product_info_tabs li.removed,
+div.removed,
 .field.removed {
     display: none !important;
 }

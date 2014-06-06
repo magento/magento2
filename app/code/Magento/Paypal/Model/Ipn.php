@@ -107,7 +107,7 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
         }
         /** @link https://cms.paypal.com/cgi-bin/marketingweb?cmd=_render-content&content_ID=developer/e_howto_admin_IPNIntro */
         // verify merchant email intended to receive notification
-        $merchantEmail = $this->_config->businessAccount;
+        $merchantEmail = $this->_config->getConfigValue('businessAccount');
         if (!$merchantEmail) {
             return $this->_config;
         }

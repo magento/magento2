@@ -30,8 +30,6 @@ use Magento\Catalog\Test\Page\Product\CatalogProductView;
 
 /**
  * Class AssertCustomOptionsOnProductPage
- *
- * @package Magento\Catalog\Test\Constraint
  */
 class AssertCustomOptionsOnProductPage extends AbstractConstraint
 {
@@ -63,47 +61,30 @@ class AssertCustomOptionsOnProductPage extends AbstractConstraint
         // Open product view page
         $catalogProductView->init($this->product);
         $catalogProductView->open();
+        // Prepare data
         $customOptions = $catalogProductView->getCustomOptionsBlock()->getOptions();
-        $compareOptions = $this->product->getCustomOptions();
-
-        $compareOptions = $this->prepareOptionArray($compareOptions);
-        ksort($compareOptions);
-        ksort($customOptions);
-        $noError = array_keys($compareOptions) === array_keys($customOptions);
-
-        if ($noError) {
-            $noError = $this->compareOptions($customOptions, $compareOptions);
+        foreach ($customOptions as &$option) {
+            unset($option['value']);
         }
+        unset($option);
+        $compareOptions = $this->prepareOptionArray($this->product->getCustomOptions());
+        $customOptions = $this->dataSortByKey($customOptions);
+        $compareOptions = $this->dataSortByKey($compareOptions);
 
-        \PHPUnit_Framework_Assert::assertTrue(
-            $noError,
+        \PHPUnit_Framework_Assert::assertEquals(
+            $customOptions,
+            $compareOptions,
             'Incorrect display of custom product options on the product page.'
         );
     }
 
-    /**
-     * Comparison of options
-     *
-     * @param array $options
-     * @param array $compareOptions
-     * @return bool
-     */
-    protected function compareOptions(array $options, array $compareOptions)
+    protected function dataSortByKey(array $data)
     {
-        foreach ($options as $key => $option) {
-            sort($option['price']);
-            if (!isset($compareOptions[$key]['price'])) {
-                return false;
-            }
-            sort($compareOptions[$key]['price']);
-            if ($option['is_require'] !== $compareOptions[$key]['is_require']
-                || $option['price'] !== $compareOptions[$key]['price']
-            ) {
-                return false;
-            }
+        foreach ($data as &$item) {
+            ksort($item);
         }
-
-        return true;
+        unset($item);
+        return $data;
     }
 
     /**
@@ -116,12 +97,13 @@ class AssertCustomOptionsOnProductPage extends AbstractConstraint
     {
         $result = [];
         $productPrice = $this->product->hasData('group_price')
-            ? $this->product->getPrice()
-            : $this->product->getGroupPrice()[0]['price'];
+            ? $this->product->getGroupPrice()[0]['price']
+            : $this->product->getPrice();
 
         $placeholder = ['Yes' => true, 'No' => false];
         foreach ($options as $option) {
             $result[$option['title']]['is_require'] = $placeholder[$option['is_require']];
+            $result[$option['title']]['title'] = $option['title'];
             $result[$option['title']]['price'] = [];
             foreach ($option['options'] as $optionValue) {
                 if ($optionValue['price_type'] === 'Percent') {
@@ -135,7 +117,7 @@ class AssertCustomOptionsOnProductPage extends AbstractConstraint
     }
 
     /**
-     * Returns a string representation of the object.
+     * Returns a string representation of the object
      *
      * @return string
      */

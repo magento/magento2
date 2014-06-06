@@ -47,11 +47,6 @@ class BundleSelectionPrice extends AbstractPrice
     protected $bundleProduct;
 
     /**
-     * @var BasePrice
-     */
-    protected $bundleBasePrice;
-
-    /**
      * Event manager
      *
      * @var \Magento\Framework\Event\ManagerInterface
@@ -59,24 +54,30 @@ class BundleSelectionPrice extends AbstractPrice
     protected $eventManager;
 
     /**
+     * @var DiscountCalculator
+     */
+    protected $discountCalculator;
+
+    /**
      * @param Product $saleableItem
      * @param float $quantity
      * @param CalculatorInterface $calculator
      * @param SaleableInterface $bundleProduct
      * @param ManagerInterface $eventManager
+     * @param DiscountCalculator $discountCalculator
      */
     public function __construct(
         Product $saleableItem,
         $quantity,
         CalculatorInterface $calculator,
         SaleableInterface $bundleProduct,
-        ManagerInterface $eventManager
+        ManagerInterface $eventManager,
+        DiscountCalculator $discountCalculator
     ) {
         parent::__construct($saleableItem, $quantity, $calculator);
         $this->bundleProduct = $bundleProduct;
-        $this->bundleBasePrice = $this->bundleProduct->getPriceInfo()
-            ->getPrice(CatalogPrice\BasePrice::PRICE_CODE, $this->quantity);
         $this->eventManager = $eventManager;
+        $this->discountCalculator = $discountCalculator;
     }
 
     /**
@@ -92,15 +93,15 @@ class BundleSelectionPrice extends AbstractPrice
 
         if ($this->bundleProduct->getPriceType() == Price::PRICE_TYPE_DYNAMIC) {
             $value = $this->priceInfo
-                ->getPrice(FinalPrice::PRICE_CODE, $this->quantity)
+                ->getPrice(FinalPrice::PRICE_CODE)
                 ->getValue();
         } else {
             if ($this->product->getSelectionPriceType()) {
                 // calculate price for selection type percent
-                $product = clone $this->bundleProduct;
-                $price = $product->getPriceInfo()
-                    ->getPrice(CatalogPrice\RegularPrice::PRICE_CODE, $this->quantity)
+                $price = $this->bundleProduct->getPriceInfo()
+                    ->getPrice(CatalogPrice\RegularPrice::PRICE_CODE)
                     ->getValue();
+                $product = clone $this->bundleProduct;
                 $product->setFinalPrice($price);
                 $this->eventManager->dispatch(
                     'catalog_product_get_final_price',
@@ -112,7 +113,7 @@ class BundleSelectionPrice extends AbstractPrice
                 $value = $this->product->getSelectionPriceValue() * $this->quantity;
             }
         }
-        $this->value = $this->bundleBasePrice->calculateBaseValue($value);
+        $this->value = $this->discountCalculator->calculateDiscount($this->bundleProduct, $value);
         return $this->value;
     }
 }

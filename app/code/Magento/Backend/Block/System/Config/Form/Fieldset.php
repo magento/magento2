@@ -92,7 +92,7 @@ class Fieldset extends \Magento\Backend\Block\AbstractBlock implements
         if ($element->getIsNested()) {
             $html = '<tr class="nested"><td colspan="4"><div class="' . $this->_getFrontendClass($element) . '">';
         } else {
-            $html = '<div class="' . $this->_getFrontendClass($element) . ' ">';
+            $html = '<div class="' . $this->_getFrontendClass($element) . '">';
         }
 
         $html .= '<div class="entry-edit-head collapseable">' .

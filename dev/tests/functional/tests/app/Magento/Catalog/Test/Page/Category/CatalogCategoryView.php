@@ -58,7 +58,7 @@ class CatalogCategoryView extends FrontendPage
             'class' => 'Magento\Catalog\Test\Block\Product\ProductList\Toolbar',
             'locator' => '.pages .items',
             'strategy' => 'css selector',
-        ],
+        ]
     ];
 
     /**

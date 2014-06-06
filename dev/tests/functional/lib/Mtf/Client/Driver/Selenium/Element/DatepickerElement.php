@@ -39,14 +39,14 @@ class DatepickerElement extends Element
      *
      * @var string
      */
-    protected $datePickerButton = './/following-sibling::img[contains(@class,"ui-datepicker-trigger")]';
+    protected $datePickerButton = './../img[contains(@class,"ui-datepicker-trigger")]';
 
     /**
      * DatePicker block
      *
      * @var string
      */
-    protected $datePickerBlock = './/ancestor::body//*[contains(@id,"ui-datepicker-div")]';
+    protected $datePickerBlock = './ancestor::body//*[@id="ui-datepicker-div"]';
 
     /**
      * Field Month on the DatePicker

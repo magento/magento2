@@ -50,13 +50,6 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
     protected $_infoBlockType = 'Magento\Paypal\Block\Payment\Info';
 
     /**
-     * Website Payments Pro instance type
-     *
-     * @var $_proType string
-     */
-    protected $_proType = 'Magento\Paypal\Model\Pro';
-
-    /**
      * Availability option
      *
      * @var bool
@@ -162,11 +155,6 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
     protected $_authorizationCountKey = 'authorization_count';
 
     /**
-     * @var \Magento\Paypal\Model\Method\ProTypeFactory
-     */
-    protected $_proTypeFactory;
-
-    /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
@@ -186,7 +174,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Logger\AdapterFactory $logAdapterFactory
-     * @param \Magento\Paypal\Model\Method\ProTypeFactory $proTypeFactory
+     * @param ProFactory $proFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param \Magento\Paypal\Model\CartFactory $cartFactory
@@ -197,14 +185,13 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Logger\AdapterFactory $logAdapterFactory,
-        \Magento\Paypal\Model\Method\ProTypeFactory $proTypeFactory,
+        ProFactory $proFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Paypal\Model\CartFactory $cartFactory,
         array $data = array()
     ) {
         parent::__construct($eventManager, $paymentData, $scopeConfig, $logAdapterFactory, $data);
-        $this->_proTypeFactory = $proTypeFactory;
         $this->_storeManager = $storeManager;
         $this->_urlBuilder = $urlBuilder;
         $this->_cartFactory = $cartFactory;
@@ -213,7 +200,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
         if ($proInstance && $proInstance instanceof \Magento\Paypal\Model\Pro) {
             $this->_pro = $proInstance;
         } else {
-            $this->_pro = $this->_proTypeFactory->create($this->_proType);
+            $this->_pro = $proFactory->create();
         }
         $this->_pro->setMethod($this->_code);
     }
@@ -299,7 +286,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      */
     public function getConfigData($field, $storeId = null)
     {
-        return $this->_pro->getConfig()->{$field};
+        return $this->_pro->getConfig()->getConfigValue($field);
     }
 
     /**
@@ -622,7 +609,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
         )->setAmount(
             $amount
         )->setPaymentAction(
-            $this->_pro->getConfig()->paymentAction
+            $this->_pro->getConfig()->getConfigValue('paymentAction')
         )->setNotifyUrl(
             $this->_urlBuilder->getUrl('paypal/ipn/')
         )->setInvNum(
@@ -632,7 +619,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
         )->setPaypalCart(
             $cart
         )->setIsLineItemsEnabled(
-            $this->_pro->getConfig()->lineItemsEnabled
+            $this->_pro->getConfig()->getConfigValue('lineItemsEnabled')
         );
         if ($order->getIsVirtual()) {
             $api->setAddress($order->getBillingAddress())->setSuppressShipping(true);

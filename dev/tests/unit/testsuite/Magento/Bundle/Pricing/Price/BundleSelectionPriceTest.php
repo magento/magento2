@@ -24,240 +24,240 @@
 
 namespace Magento\Bundle\Pricing\Price;
 
-use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Catalog\Pricing\Price as CatalogPrice;
+use Magento\Catalog\Pricing\Price\RegularPrice;
 
 /**
  * Class BundleSelectionPriceTest
- *
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class BundleSelectionPriceTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\Bundle\Pricing\Price\BundleSelectionPrice */
-    protected $bundleSelectionPrice;
+    /**
+     * @var \Magento\Bundle\Pricing\Price\BundleSelectionPrice
+     */
+    protected $selectionPrice;
 
-    /** @var ObjectManagerHelper */
-    protected $objectManagerHelper;
+    /**
+     * @var \Magento\Framework\Pricing\Adjustment\CalculatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $calculatorMock;
 
-    /** @var \Magento\Framework\Pricing\Object\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $saleableInterfaceMock;
-
-    /** @var float */
-    protected $quantity = 1.;
-
-    /** @var \Magento\Framework\Pricing\Adjustment\CalculatorInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $calculatorInterfaceMock;
-
-    /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     */
     protected $productMock;
 
-    /** @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $managerInterfaceMock;
+    /**
+     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $bundleMock;
 
-    /** @var \Magento\Framework\Pricing\PriceInfoInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \Magento\Framework\Event\Manager|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $eventManagerMock;
+
+    /**
+     * @var \Magento\Framework\Pricing\PriceInfo\Base|\PHPUnit_Framework_MockObject_MockObject
+     */
     protected $priceInfoMock;
 
-    /** @var \Magento\Catalog\Pricing\Price\BasePrice|\PHPUnit_Framework_MockObject_MockObject */
-    protected $basePriceMock;
-
-    /** @var \Magento\Catalog\Pricing\Price\FinalPrice|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \Magento\Catalog\Pricing\Price\FinalPrice|\PHPUnit_Framework_MockObject_MockObject
+     */
     protected $finalPriceMock;
 
-    /** @var \Magento\Catalog\Pricing\Price\RegularPrice|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \Magento\Catalog\Pricing\Price\RegularPrice|\PHPUnit_Framework_MockObject_MockObject
+     */
     protected $regularPriceMock;
 
-    /** @var  float */
-    protected $finalPriceValue;
+    /**
+     * @var \Magento\Bundle\Pricing\Price\DiscountCalculator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $discountCalculatorMock;
 
-    /** @var  float */
-    protected $regularPriceValue;
+    /**
+     * @var float
+     */
+    protected $quantity;
 
-    /** @var  float */
-    protected $expectedResult;
-
-    protected function prepare()
+    /**
+     * Test setUp
+     */
+    protected function setUp()
     {
-        $this->saleableInterfaceMock = $this->getMock(
+        $this->productMock = $this->getMock(
             'Magento\Catalog\Model\Product',
-            [
-                'getPriceInfo',
-                'getSelectionPriceType',
-                'getSelectionPriceValue',
-                '__wakeup',
-                '__sleep'
-            ],
+            ['__wakeup', 'getPriceInfo', 'getSelectionPriceType', 'getSelectionPriceValue'],
             [],
             '',
             false
         );
-        $this->calculatorInterfaceMock = $this->getMock('Magento\Framework\Pricing\Adjustment\CalculatorInterface');
-        $this->productMock = $this->getMock(
+
+        $this->bundleMock = $this->getMock(
             'Magento\Catalog\Model\Product',
-            ['getPriceType', 'setFinalPrice', 'getQty', 'getData', 'getPriceInfo', '__wakeup', '__sleep'],
+            ['__wakeup', 'getPriceType', 'getPriceInfo', 'setFinalPrice', 'getData'],
+            [],
+            '',
+            false
+        );
+        $this->calculatorMock = $this->getMock(
+            'Magento\Framework\Pricing\Adjustment\CalculatorInterface',
+            [],
             [],
             '',
             false,
+            true,
             false
         );
-
-        $this->managerInterfaceMock = $this->getMock('Magento\Framework\Event\ManagerInterface');
-
-        $this->priceInfoMock = $this->getMock('\Magento\Framework\Pricing\PriceInfoInterface');
-        $this->priceInfoMock->expects($this->atLeastOnce())
-            ->method('getPrice')
-            ->will($this->returnCallback(array($this, 'getPriceCallback')));
-
-        $this->productMock->expects($this->atLeastOnce())
-            ->method('getPriceInfo')
-            ->will($this->returnValue($this->priceInfoMock));
-
-        $this->saleableInterfaceMock->expects($this->atLeastOnce())
-            ->method('getPriceInfo')
-            ->will($this->returnValue($this->priceInfoMock));
-    }
-
-    /**
-     * @param string $priceType
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    public function getPriceCallback($priceType)
-    {
-        switch ($priceType) {
-            case CatalogPrice\BasePrice::PRICE_CODE:
-                $this->basePriceMock = $this->getMock('Magento\Bundle\Pricing\Price\BasePrice', [], [], '', false);
-                $this->basePriceMock->expects($this->once())
-                    ->method('calculateBaseValue')
-                    ->with($this->expectedResult)
-                    ->will($this->returnArgument(0));
-                return $this->basePriceMock;
-            case CatalogPrice\FinalPrice::PRICE_CODE:
-                $this->finalPriceMock = $this->getMock(
-                    'Magento\Catalog\Pricing\Price\FinalPrice',
-                    [],
-                    [],
-                    '',
-                    false
-                );
-                $this->finalPriceMock->expects($this->once())
-                    ->method('getValue')
-                    ->will($this->returnValue($this->finalPriceValue));
-                return $this->finalPriceMock;
-            case CatalogPrice\RegularPrice::PRICE_CODE:
-                $this->regularPriceMock = $this->getMock(
-                    'Magento\Catalog\Pricing\Price\RegularPrice',
-                    [],
-                    [],
-                    '',
-                    false
-                );
-                $this->regularPriceMock->expects($this->once())
-                    ->method('getValue')
-                    ->will($this->returnValue($this->regularPriceValue));
-                return $this->regularPriceMock;
-            default:
-                break;
-        }
-        $this->fail('Price mock was not found');
-    }
-
-    /**
-     * @param string $bundlePriceType
-     * @param array $selectionData
-     * @param float $expectedResult
-     * @dataProvider getValueDataProvider
-     */
-    public function testGetValue($bundlePriceType, $selectionData, $expectedResult)
-    {
-        $this->prepare();
-        $this->expectedResult = $expectedResult;
-        $this->productMock->expects($this->once())
-            ->method('getPriceType')
-            ->will($this->returnValue($bundlePriceType));
-
-        if (isset($selectionData['getSelectionPriceType'])) {
-            $this->saleableInterfaceMock->expects($this->once())
-                ->method('getSelectionPriceType')
-                ->will($this->returnValue($selectionData['getSelectionPriceType']));
-            if ($selectionData['getSelectionPriceType']) {
-                $this->regularPriceValue = $selectionData['regularPriceValue'];
-                $this->productMock->expects($this->once())
-                    ->method('setFinalPrice')
-                    ->with($this->equalTo($selectionData['regularPriceValue']))
-                    ->will($this->returnSelf());
-                $this->productMock->expects($this->once())
-                    ->method('getQty')
-                    ->will($this->returnValue($selectionData['bundleQty']));
-
-                $this->productMock->expects($this->once())
-                    ->method('getData')
-                    ->with($this->equalTo('final_price'))
-                    ->will($this->returnValue($selectionData['finalPrice']));
-
-                $this->managerInterfaceMock->expects($this->once())
-                    ->method('dispatch')
-                    ->with(
-                        $this->equalTo('catalog_product_get_final_price'),
-                        $this->equalTo(['product' => $this->productMock, 'qty' => $selectionData['bundleQty']])
-                    )
-                    ->will($this->returnSelf());
-            }
-            $this->quantity = $selectionData['bundleQty'];
-            $this->saleableInterfaceMock->expects($this->once())
-            ->method('getSelectionPriceValue')
-            ->will($this->returnValue($selectionData['selectionPriceValue']));
-        } else {
-            $this->finalPriceValue = $expectedResult;
-        }
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->bundleSelectionPrice = $this->objectManagerHelper->getObject(
-            'Magento\Bundle\Pricing\Price\BundleSelectionPrice',
-            [
-                'saleableItem' => $this->saleableInterfaceMock,
-                'quantity' => $this->quantity,
-                'calculator' => $this->calculatorInterfaceMock,
-                'bundleProduct' => $this->productMock,
-                'eventManager' => $this->managerInterfaceMock
-            ]
+        $this->eventManagerMock = $this->getMock(
+            'Magento\Framework\Event\Manager',
+            ['dispatch'],
+            [],
+            '',
+            false
         );
+        $this->priceInfoMock = $this->getMock(
+            'Magento\Framework\Pricing\PriceInfo\Base',
+            ['getPrice'],
+            [],
+            '',
+            false
+        );
+        $this->discountCalculatorMock = $this->getMock(
+            'Magento\Bundle\Pricing\Price\DiscountCalculator',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->finalPriceMock = $this->getMock(
+            'Magento\Catalog\Pricing\Price\FinalPrice',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->regularPriceMock = $this->getMock(
+            'Magento\Catalog\Pricing\Price\RegularPrice',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->productMock->expects($this->once())
+            ->method('getPriceInfo')
+            ->will($this->returnValue($this->priceInfoMock));
 
-        $this->assertSame($expectedResult, $this->bundleSelectionPrice->getValue());
-        // test value caching
-        $this->assertSame($expectedResult, $this->bundleSelectionPrice->getValue());
+        $this->quantity = 1;
+        $this->selectionPrice = new \Magento\Bundle\Pricing\Price\BundleSelectionPrice(
+            $this->productMock,
+            $this->quantity,
+            $this->calculatorMock,
+            $this->bundleMock,
+            $this->eventManagerMock,
+            $this->discountCalculatorMock
+        );
     }
 
     /**
-     * @return array
+     *  test fro method getValue with dynamic productType
      */
-    public function getValueDataProvider()
+    public function testGetValueTypeDynamic()
     {
-        return [
-            'dynamic bundle' => [
-                'bundle type' => 0,
-                'selection data' => [],
-                'expected result' => 3.3
-            ],
-            'fixed bundle - percent price' => [
-                'bundle type' => 1,
-                'selection data' => [
-                    'getSelectionPriceType' => true,
-                    'regularPriceValue' => 4.,
-                    'bundleQty' => 3.,
-                    'finalPrice' => 100,
-                    'selectionPriceValue' => 10.
-                ],
-                'expected result' => 10.
-            ],
-            'fixed bundle - fixed price' => [
-                'bundle type' => 1,
-                'selection data' => [
-                    'getSelectionPriceType' => false,
-                    'bundleQty' => 2.,
-                    'selectionPriceValue' => 10.
-                ],
-                'expected result' => 20.
-            ],
-        ];
+        $this->bundleMock->expects($this->once())
+            ->method('getPriceType')
+            ->will($this->returnValue(\Magento\Bundle\Model\Product\Price::PRICE_TYPE_DYNAMIC));
+        $this->priceInfoMock->expects($this->once())
+            ->method('getPrice')
+            ->with($this->equalTo(FinalPrice::PRICE_CODE))
+            ->will($this->returnValue($this->finalPriceMock));
+        $this->finalPriceMock->expects($this->once())
+            ->method('getValue')
+            ->will($this->returnValue(100));
+        $this->discountCalculatorMock->expects($this->once())
+            ->method('calculateDiscount')
+            ->with(
+                $this->equalTo($this->bundleMock),
+                $this->equalTo(100)
+            )
+            ->will($this->returnValue(70));
+        $this->assertEquals(70, $this->selectionPrice->getValue());
+        $this->assertEquals(70, $this->selectionPrice->getValue());
+    }
+
+    /**
+     * test for method getValue with type Fixed and selectionPriceType not null
+     */
+    public function testGetValueTypeFixedWithSelectionPriceType()
+    {
+        $this->bundleMock->expects($this->once())
+            ->method('getPriceType')
+            ->will($this->returnValue(\Magento\Bundle\Model\Product\Price::PRICE_TYPE_FIXED));
+        $this->bundleMock->expects($this->atLeastOnce())
+            ->method('getPriceInfo')
+            ->will($this->returnValue($this->priceInfoMock));
+        $this->priceInfoMock->expects($this->once())
+            ->method('getPrice')
+            ->with($this->equalTo(RegularPrice::PRICE_CODE))
+            ->will($this->returnValue($this->regularPriceMock));
+        $this->regularPriceMock->expects($this->once())
+            ->method('getValue')
+            ->will($this->returnValue(100));
+        $this->bundleMock->expects($this->once())
+            ->method('setFinalPrice')
+            ->will($this->returnSelf());
+        $this->eventManagerMock->expects($this->once())
+            ->method('dispatch');
+        $this->bundleMock->expects($this->exactly(2))
+            ->method('getData')
+            ->will($this->returnValueMap(
+                    [
+                        ['qty', null, 1],
+                        ['final_price', null, 100],
+                    ]
+                )
+            );
+        $this->productMock->expects($this->once())
+            ->method('getSelectionPriceType')
+            ->will($this->returnValue(true));
+        $this->productMock->expects($this->any())
+            ->method('getSelectionPriceValue')
+            ->will($this->returnValue(100));
+        $this->discountCalculatorMock->expects($this->once())
+            ->method('calculateDiscount')
+            ->with(
+                $this->equalTo($this->bundleMock),
+                $this->equalTo(100)
+            )
+            ->will($this->returnValue(70));
+        $this->assertEquals(70, $this->selectionPrice->getValue());
+    }
+
+    /**
+     * test for method getValue with type Fixed and selectionPriceType is empty or zero
+     */
+    public function testGetValueTypeFixedWithoutSelectionPriceType()
+    {
+        $this->bundleMock->expects($this->once())
+            ->method('getPriceType')
+            ->will($this->returnValue(\Magento\Bundle\Model\Product\Price::PRICE_TYPE_FIXED));
+        $this->productMock->expects($this->once())
+            ->method('getSelectionPriceType')
+            ->will($this->returnValue(false));
+        $this->productMock->expects($this->any())
+            ->method('getSelectionPriceValue')
+            ->will($this->returnValue(100));
+        $this->discountCalculatorMock->expects($this->once())
+            ->method('calculateDiscount')
+            ->with(
+                $this->equalTo($this->bundleMock),
+                $this->equalTo(100)
+            )
+            ->will($this->returnValue(70));
+        $this->assertEquals(70, $this->selectionPrice->getValue());
     }
 }

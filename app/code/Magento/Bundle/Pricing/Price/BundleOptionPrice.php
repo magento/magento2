@@ -125,7 +125,8 @@ class BundleOptionPrice extends AbstractPrice implements BundleOptionPriceInterf
      */
     public function getOptionSelectionAmount($selection)
     {
-        $selectionPrice = $this->selectionFactory->create($this->product, $selection, $selection->getSelectionQty());
+        $selectionPrice = $this->selectionFactory
+            ->create($this->product, $selection, $selection->getSelectionQty());
         return $selectionPrice->getAmount();
     }
 

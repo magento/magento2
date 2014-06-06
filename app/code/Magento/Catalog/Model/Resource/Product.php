@@ -505,6 +505,29 @@ class Product extends AbstractResource
     }
 
     /**
+     * Get product ids by their sku
+     *
+     * @param  array $productSkuList
+     * @return array
+     */
+    public function getProductsIdsBySkus(array $productSkuList)
+    {
+        $select = $this->_getReadAdapter()->select()->from(
+            $this->getTable('catalog_product_entity'),
+            array('sku', 'entity_id')
+        )->where(
+            'sku IN (?)',
+            $productSkuList
+        );
+
+        $result = array();
+        foreach ($this->_getReadAdapter()->fetchAll($select) as $row) {
+            $result[$row['sku']] = $row['entity_id'];
+        }
+        return $result;
+    }
+
+    /**
      * Retrieve product entities info
      *
      * @param  array|string|null $columns

@@ -25,7 +25,6 @@
 namespace Magento\Framework\Service;
 
 use Magento\Customer\Service\V1\Data\Customer;
-use Magento\Customer\Service\V1\Data\RegionBuilder;
 
 /**
  * Class implements tests for DataObjectConverterTest class.
@@ -164,8 +163,11 @@ class DataObjectConverterTest extends \PHPUnit_Framework_TestCase
             ->setDefaultShipping(true)
             ->setPostcode('75477')
             ->setRegion(
-                (new RegionBuilder())->setRegionCode(self::REGION_CODE)->setRegion(self::REGION)
-                    ->setRegionId(self::REGION_ID)->create()
+                $objectManager->getObject('\Magento\Customer\Service\V1\Data\RegionBuilder')
+                    ->setRegionCode(self::REGION_CODE)
+                    ->setRegion(self::REGION)
+                    ->setRegionId(self::REGION_ID)
+                    ->create()
             )
             ->setStreet($street1)
             ->setTelephone('3468676')
@@ -181,8 +183,11 @@ class DataObjectConverterTest extends \PHPUnit_Framework_TestCase
             ->setDefaultShipping(false)
             ->setPostcode('47676')
             ->setRegion(
-                (new RegionBuilder())->setRegionCode(self::REGION_CODE)->setRegion(self::REGION)
-                    ->setRegionId(self::REGION_ID)->create()
+                $objectManager->getObject('\Magento\Customer\Service\V1\Data\RegionBuilder')
+                    ->setRegionCode(self::REGION_CODE)
+                    ->setRegion(self::REGION)
+                    ->setRegionId(self::REGION_ID)
+                    ->create()
             )
             ->setStreet($street2)
             ->setCity('CityX')

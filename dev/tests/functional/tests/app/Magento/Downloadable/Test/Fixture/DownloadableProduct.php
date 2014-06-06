@@ -26,6 +26,10 @@ namespace Magento\Downloadable\Test\Fixture;
 use Mtf\Factory\Factory;
 use Magento\Catalog\Test\Fixture\Product;
 
+/**
+ * Class DownloadableProduct
+ * Fixture for Downloadable product
+ */
 class DownloadableProduct extends Product
 {
     const GROUP = 'downloadable_information';
@@ -55,14 +59,7 @@ class DownloadableProduct extends Product
             'price' => [
                 'value' => '1',
                 'group' => static::GROUP_PRODUCT_DETAILS
-            ],
-            'downloadable_link_purchase_type' => [
-                'value' => 'Yes',
-                'input_value' => '1',
-                'group' => static::GROUP,
-                'input' => 'select',
-                'input_name' => 'links_purchased_separately'
-            ],
+            ]
         );
 
         $this->_data['fields'] = $data + $this->_data['fields'];

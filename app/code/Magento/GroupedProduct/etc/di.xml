@@ -91,4 +91,35 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Service\V1\Product\Link\Data\ProductLink\CollectionProvider">
+        <arguments>
+            <argument name="providers" xsi:type="array">
+                <item name="associated" xsi:type="object">Magento\GroupedProduct\Service\V1\Product\Link\Data\ProductLink\CollectionProvider\Grouped</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks">
+        <plugin name="GroupedProduct" type="Magento\GroupedProduct\Model\Product\Initialization\Helper\ProductLinks\Plugin\Grouped" />
+    </type>
+    <type name="Magento\Catalog\Service\V1\Product\Link\Data\ProductLinkBuilder">
+        <arguments>
+            <argument name="customAttributesCodes" xsi:type="array">
+                <item name="grouped" xsi:type="string">qty</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Service\V1\Product\Link\Data\ProductLink\DataMapper\Composite">
+        <arguments>
+            <argument name="mappers" xsi:type="array">
+                <item name="grouped" xsi:type="object">\Magento\GroupedProduct\Service\V1\Product\Link\Data\ProductLink\DataMapper\GroupedProduct</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Service\V1\Product\Link\Data\ProductLink\ProductEntity\ConverterPool">
+        <arguments>
+            <argument name="converters" xsi:type="array">
+                <item name="associated" xsi:type="object">\Magento\GroupedProduct\Service\V1\Product\Link\Data\ProductLink\ProductEntity\Converter</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

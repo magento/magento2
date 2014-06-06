@@ -76,13 +76,13 @@ class AssertProductIsNotDisplayingOnFrontend extends AbstractConstraint
 
         if ($titleBlock->getTitle() !== self::NOT_FOUND_MESSAGE) {
             $errors[] = '- the headline on the page does not match, the text should be -> "'
-                . self::NOT_FOUND_MESSAGE . '"';
+                . self::NOT_FOUND_MESSAGE . '".';
         }
 
         $cmsIndex->open();
         $cmsIndex->getSearchBlock()->search($product->getSku());
         if ($catalogSearchResult->getListProductBlock()->isProductVisible($product->getName())) {
-            $errors[] = '- successful product search';
+            $errors[] = '- successful product search.';
         }
 
         $cmsIndex->open();
@@ -93,7 +93,7 @@ class AssertProductIsNotDisplayingOnFrontend extends AbstractConstraint
         }
 
         if ($isProductVisible) {
-            $errors[] = '- product found in this category';
+            $errors[] = '- product found in this category.';
         }
 
         \PHPUnit_Framework_Assert::assertTrue(
@@ -104,7 +104,7 @@ class AssertProductIsNotDisplayingOnFrontend extends AbstractConstraint
     }
 
     /**
-     * Returns a string representation of the object.
+     * Returns a string representation of the object
      *
      * @return string
      */

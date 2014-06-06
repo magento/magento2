@@ -97,6 +97,7 @@
     </type>
     <type name="Magento\Backend\Model\Url">
         <arguments>
+            <argument name="scopeResolver" xsi:type="object">Magento\Backend\Model\Url\ScopeResolver</argument>
             <argument name="authSession" xsi:type="object">Magento\Backend\Model\Auth\Session\Proxy</argument>
             <argument name="formKey" xsi:type="object">Magento\Framework\Data\Form\FormKey\Proxy</argument>
             <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
@@ -186,7 +187,7 @@
 
     <type name="Magento\Backend\Model\Config\Structure\Element\Iterator\Group" shared="false" />
     <type name="Magento\Backend\Model\Config\Structure\Element\Group\Proxy" shared="false" />
-    
+
     <type name="Magento\Backend\Model\Config\Structure\Element\Dependency\Mapper" shared="false">
         <arguments>
             <argument name="fieldLocator" xsi:type="object">Magento\Backend\Model\Config\Structure\Search\Proxy</argument>

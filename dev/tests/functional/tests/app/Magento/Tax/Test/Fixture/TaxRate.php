@@ -46,7 +46,7 @@ class TaxRate extends InjectableFixture
         'rate' => '10',
         'tax_country_id' => 'United States',
         'tax_postcode' => '*',
-        'tax_region_id' => '0',
+        'tax_region_id' => 'California',
     ];
 
     protected $tax_calculation_rate_id = [

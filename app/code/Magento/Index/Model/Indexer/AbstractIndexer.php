@@ -147,7 +147,7 @@ abstract class AbstractIndexer extends \Magento\Framework\Model\AbstractModel im
     }
 
     /**
-     * Try dynamicly detect and call event hanler from resource model.
+     * Try dynamicly detect and call event handler from resource model.
      * Handler name will be generated from event entity and type code
      *
      * @param   Event $event

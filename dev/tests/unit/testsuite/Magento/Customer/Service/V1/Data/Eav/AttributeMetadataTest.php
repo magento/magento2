@@ -51,10 +51,10 @@ class AttributeMetadataTest extends \PHPUnit_Framework_TestCase
             'Magento\Customer\Service\V1\Data\Eav\ValidationRuleBuilder'
         );
 
-        $attributeMetadataBuilder = (new AttributeMetadataBuilder(
-            $optionBuilder,
-            $validationRuleBuilder
-        ))->populateWithArray(
+        $attributeMetadataBuilder = $objectManager->getObject(
+            '\Magento\Customer\Service\V1\Data\Eav\AttributeMetadataBuilder',
+            ['optionBuilder' => $optionBuilder, 'validationRuleBuilder' => $validationRuleBuilder]
+        )->populateWithArray(
             array(
                 'attribute_code' => self::ATTRIBUTE_CODE,
                 'frontend_input' => self::FRONTEND_INPUT,

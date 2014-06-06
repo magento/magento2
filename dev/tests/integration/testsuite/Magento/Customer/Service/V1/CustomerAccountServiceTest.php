@@ -76,6 +76,7 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
         $this->_customerDetailsBuilder =
             $this->_objectManager->create('Magento\Customer\Service\V1\Data\CustomerDetailsBuilder');
 
+        $regionBuilder = $this->_objectManager->create('Magento\Customer\Service\V1\Data\RegionBuilder');
         $this->_addressBuilder->setId(1)
             ->setCountryId('US')
             ->setCustomerId(1)
@@ -83,7 +84,7 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
             ->setDefaultShipping(true)
             ->setPostcode('75477')
             ->setRegion(
-                (new V1\Data\RegionBuilder())->setRegionCode('AL')->setRegion('Alabama')->setRegionId(1)->create()
+                $regionBuilder->setRegionCode('AL')->setRegion('Alabama')->setRegionId(1)->create()
             )
             ->setStreet(['Green str, 67'])
             ->setTelephone('3468676')
@@ -99,7 +100,7 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
             ->setDefaultShipping(false)
             ->setPostcode('47676')
             ->setRegion(
-                (new V1\Data\RegionBuilder())->setRegionCode('AL')->setRegion('Alabama')->setRegionId(1)->create()
+                $regionBuilder->setRegionCode('AL')->setRegion('Alabama')->setRegionId(1)->create()
             )
             ->setStreet(['Black str, 48'])
             ->setCity('CityX')
@@ -1217,22 +1218,23 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
 
     public function searchCustomersDataProvider()
     {
+        $builder = Bootstrap::getObjectManager()->create('\Magento\Framework\Service\V1\Data\FilterBuilder');
         return [
             'Customer with specific email' => [
-                [(new FilterBuilder())->setField('email')->setValue('customer@search.example.com')->create()],
+                [$builder->setField('email')->setValue('customer@search.example.com')->create()],
                 null,
                 [1 => ['email' => 'customer@search.example.com', 'firstname' => 'Firstname']]
             ],
             'Customer with specific first name' => [
-                [(new FilterBuilder())->setField('firstname')->setValue('Firstname2')->create()],
+                [$builder->setField('firstname')->setValue('Firstname2')->create()],
                 null,
                 [2 => ['email' => 'customer2@search.example.com', 'firstname' => 'Firstname2']]
             ],
             'Customers with either email' => [
                 [],
                 [
-                    (new FilterBuilder())->setField('firstname')->setValue('Firstname')->create(),
-                    (new FilterBuilder())->setField('firstname')->setValue('Firstname2')->create()
+                    $builder->setField('firstname')->setValue('Firstname')->create(),
+                    $builder->setField('firstname')->setValue('Firstname2')->create()
                 ],
                 [
                     1 => ['email' => 'customer@search.example.com', 'firstname' => 'Firstname'],
@@ -1241,7 +1243,7 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
             ],
             'Customers created since' => [
                 [
-                    (new FilterBuilder())->setField('created_at')->setValue('2011-02-28 15:52:26')
+                    $builder->setField('created_at')->setValue('2011-02-28 15:52:26')
                         ->setConditionType('gt')->create()
                 ],
                 [],
@@ -1266,7 +1268,7 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
             ->create('Magento\Framework\Service\V1\Data\SearchCriteriaBuilder');
 
         // Filter for 'firstname' like 'First'
-        $filterBuilder = new FilterBuilder();
+        $filterBuilder = $this->_objectManager->create('\Magento\Framework\Service\V1\Data\FilterBuilder');
         $firstnameFilter = $filterBuilder->setField('firstname')
             ->setConditionType('like')
             ->setValue('First%')

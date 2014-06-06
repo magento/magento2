@@ -24,19 +24,35 @@
 
 namespace Magento\Bundle\Pricing\Price;
 
-use Magento\Customer\Model\Session;
+use Magento\Catalog\Pricing\Price\RegularPrice;
 
 /**
- * Bundle droup price model
+ * Bundle group price model
  */
-class GroupPrice extends \Magento\Catalog\Pricing\Price\GroupPrice
+class GroupPrice extends \Magento\Catalog\Pricing\Price\GroupPrice implements DiscountProviderInterface
 {
     /**
-     * Price type group
+     * @var float|false
      */
-    const PRICE_CODE = 'group_price';
+    protected $percent;
 
     /**
+     * Returns percent discount value
+     *
+     * @return bool|float
+     */
+    public function getDiscountPercent()
+    {
+        if ($this->percent === null) {
+            $percent = parent::getValue();
+            $this->percent = ($percent) ? max(0, min(100, 100 - $percent)) : null;
+        }
+        return $this->percent;
+    }
+
+    /**
+     * Returns pice value
+     *
      * @return float|bool
      */
     public function getValue()
@@ -45,10 +61,10 @@ class GroupPrice extends \Magento\Catalog\Pricing\Price\GroupPrice
             return $this->value;
         }
 
-        $groupPrice = parent::getValue();
+        $groupPrice = $this->getDiscountPercent();
         if ($groupPrice) {
-            $basePrice = $this->getBasePrice();
-            $this->value = $basePrice - $basePrice * ($groupPrice / 100);
+            $regularPrice = $this->getRegularPrice();
+            $this->value = $regularPrice * ($groupPrice / 100);
         } else {
             $this->value = false;
         }
@@ -56,13 +72,12 @@ class GroupPrice extends \Magento\Catalog\Pricing\Price\GroupPrice
     }
 
     /**
-     * @param null|float $qty
+     * Returns regular price
+     *
      * @return bool|float
      */
-    protected function getBasePrice($qty = null)
+    protected function getRegularPrice()
     {
-        return $this->priceInfo
-            ->getPrice(\Magento\Catalog\Pricing\Price\BasePrice::PRICE_CODE)
-            ->getValue();
+        return $this->priceInfo->getPrice(RegularPrice::PRICE_CODE)->getValue();
     }
 }

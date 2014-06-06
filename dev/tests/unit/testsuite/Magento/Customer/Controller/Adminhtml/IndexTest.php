@@ -422,10 +422,16 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($customerId)
         );
 
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        /** @var $customerBuilder \Magento\Customer\Service\V1\Data\CustomerBuilder' */
-        $customerBuilder = $objectManager->getObject('\Magento\Customer\Service\V1\Data\CustomerBuilder');
-        $customer = $customerBuilder->setId($customerId)->setEmail($email)->setWebsiteId($websiteId)->create();
+
+        $customerBuilder = $this->getMock('\Magento\Customer\Service\V1\Data\CustomerBuilder', [], [], '', false);
+        $data = [
+            'id' => $customerId,
+            'email' => $email,
+            'website_id' => $websiteId
+        ];
+        $customerBuilder->expects($this->once())->method('getData')->will($this->returnValue($data));
+
+        $customer = new \Magento\Customer\Service\V1\Data\Customer($customerBuilder);
 
         $this->_acctServiceMock->expects(
             $this->once()

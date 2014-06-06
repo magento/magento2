@@ -33,14 +33,14 @@ class Info extends \Magento\Framework\Model\AbstractModel
      *
      * @var array
      */
-    protected $_additionalInformation = -1;
+    protected $_additionalInformation = array();
 
     /**
      * Payment data
      *
      * @var \Magento\Payment\Helper\Data
      */
-    protected $_paymentData = null;
+    protected $_paymentData;
 
     /**
      * @var \Magento\Framework\Encryption\EncryptorInterface
@@ -95,7 +95,7 @@ class Info extends \Magento\Framework\Model\AbstractModel
     /**
      * Retrieve payment method model object
      *
-     * @return \Magento\Payment\Model\MethodInterface
+     * @return MethodInterface
      * @throws \Magento\Framework\Model\Exception
      */
     public function getMethodInstance()
@@ -105,7 +105,7 @@ class Info extends \Magento\Framework\Model\AbstractModel
                 $instance = $this->_paymentData->getMethodInstance($this->getMethod());
                 if (!$instance) {
                     $instance = $this->_paymentData->getMethodInstance(
-                        \Magento\Payment\Model\Method\Substitution::CODE
+                        Method\Substitution::CODE
                     );
                 }
                 $instance->setInfoInstance($this);
@@ -126,10 +126,7 @@ class Info extends \Magento\Framework\Model\AbstractModel
      */
     public function encrypt($data)
     {
-        if ($data) {
-            return $this->_encryptor->encrypt($data);
-        }
-        return $data;
+        return $this->_encryptor->encrypt($data);
     }
 
     /**
@@ -140,10 +137,7 @@ class Info extends \Magento\Framework\Model\AbstractModel
      */
     public function decrypt($data)
     {
-        if ($data) {
-            return $this->_encryptor->decrypt($data);
-        }
-        return $data;
+        return $this->_encryptor->decrypt($data);
     }
 
     /**
@@ -197,7 +191,7 @@ class Info extends \Magento\Framework\Model\AbstractModel
             unset($this->_additionalInformation[$key]);
             return $this->setData('additional_information', $this->_additionalInformation);
         }
-        $this->_additionalInformation = -1;
+        $this->_additionalInformation = array();
         return $this->unsetData('additional_information');
     }
 
@@ -217,17 +211,14 @@ class Info extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Make sure _additionalInformation is an array
+     * Initialize _additionalInformation with $this->_data['additional_information'] if empty
      *
      * @return void
      */
     protected function _initAdditionalInformation()
     {
-        if (-1 === $this->_additionalInformation) {
+        if (empty($this->_additionalInformation) && $this->_getData('additional_information')) {
             $this->_additionalInformation = $this->_getData('additional_information');
-        }
-        if (null === $this->_additionalInformation) {
-            $this->_additionalInformation = array();
         }
     }
 }

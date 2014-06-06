@@ -34,8 +34,14 @@
         <area>adminhtml</area>
         <class>Magento\User\Test\Page\Adminhtml\UserRoleEditRole</class>
     </adminUserRoleNew>
-    <adminAuthLogin>
-        <mca>admin/auth/login</mca>
-        <class>Magento\User\Test\Page\Adminhtml\AdminAuthLogin</class>
-    </adminAuthLogin>
+    <adminUserIndex>
+        <mca>admin/user</mca>
+        <area>adminhtml</area>
+        <class>Magento\User\Test\Page\Adminhtml\UserIndex</class>
+    </adminUserIndex>
+    <adminUserEdit>
+        <mca>admin/user/edit</mca>
+        <area>adminhtml</area>
+        <class>Magento\User\Test\Page\Adminhtml\UserEdit</class>
+    </adminUserEdit>
 </page>

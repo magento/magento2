@@ -488,7 +488,7 @@ class SetupUtil
     {
         /** @var \Magento\Customer\Service\V1\CustomerGroupService $customerGroupService */
         $customerGroupService = $this->objectManager->create('Magento\Customer\Service\V1\CustomerGroupService');
-        $customerGroupBuilder = (new \Magento\Customer\Service\V1\Data\CustomerGroupBuilder())
+        $customerGroupBuilder = $this->objectManager->create('\Magento\Customer\Service\V1\Data\CustomerGroupBuilder')
             ->setCode('custom_group')
             ->setTaxClassId($customerTaxClassId);
         $customerGroup = new \Magento\Customer\Service\V1\Data\CustomerGroup($customerGroupBuilder);

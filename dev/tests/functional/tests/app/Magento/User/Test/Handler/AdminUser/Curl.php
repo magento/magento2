@@ -30,7 +30,7 @@ use Mtf\Util\Protocol\CurlInterface;
 use Mtf\Util\Protocol\CurlTransport;
 use Mtf\Util\Protocol\CurlTransport\BackendDecorator;
 use Mtf\System\Config;
-use Magento\Backend\Test\Handler\Pagination;
+use Magento\Backend\Test\Handler\Extractor;
 
 /**
  * Class Curl
@@ -65,8 +65,8 @@ class Curl extends AbstractCurl implements AdminUserInterface
         $url = 'admin/user/roleGrid/sort/user_id/dir/desc';
         $regExpPattern = '/class=\"\scol\-id col\-user_id\W*>\W+(\d+)\W+<\/td>\W+<td[\w\s\"=\-]*?>\W+?'
             . $data['username'] . '/siu';
-        $pagination = new Pagination($url, $regExpPattern);
+        $extractor = new Extractor($url, $regExpPattern);
 
-        return ['user_id' => $pagination->getId()];
+        return ['user_id' => $extractor->getData()[1]];
     }
 }

@@ -196,7 +196,11 @@ class Product extends \Magento\Backend\App\Action
         $this->_eventManager->dispatch('catalog_product_new_action', array('product' => $product));
 
         if ($this->getRequest()->getParam('popup')) {
-            $this->_view->loadLayout('popup');
+            $this->_view->loadLayout(array(
+                'popup',
+                strtolower($this->_request->getFullActionName()),
+                'catalog_product_' . $product->getTypeId()
+            ));
         } else {
             $this->_view->loadLayout(
                 array(

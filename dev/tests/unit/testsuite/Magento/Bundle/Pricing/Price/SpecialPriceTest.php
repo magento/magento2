@@ -36,7 +36,7 @@ class SpecialPriceTest extends \PHPUnit_Framework_TestCase
     protected $saleable;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceInfoInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceInfo\Base |\PHPUnit_Framework_MockObject_MockObject
      */
     protected $priceInfo;
 
@@ -52,7 +52,7 @@ class SpecialPriceTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->localeDate = $this->getMock('Magento\Framework\Stdlib\DateTime\TimezoneInterface');
-        $this->priceInfo = $this->getMock('Magento\Framework\Pricing\PriceInfoInterface');
+        $this->priceInfo = $this->getMock('Magento\Framework\Pricing\PriceInfo\Base', [], [], '', false);
 
         $this->saleable->expects($this->once())
             ->method('getPriceInfo')
@@ -66,16 +66,17 @@ class SpecialPriceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param float $basePrice
-     * @param float $specialPrice
-     * @param bool $isScopeDateInInterval
-     * @param float $value
+     * @param $regularPrice
+     * @param $specialPrice
+     * @param $isScopeDateInInterval
+     * @param $value
+     * @param $percent
      * @dataProvider getValueDataProvider
      */
-    public function testGetValue($basePrice, $specialPrice, $isScopeDateInInterval, $value)
+    public function testGetValue($regularPrice, $specialPrice, $isScopeDateInInterval, $value, $percent)
     {
         $specialFromDate =  'some date from';
-        $specialToDate =  'som date to';
+        $specialToDate =  'some date to';
 
         $this->saleable->expects($this->once())
             ->method('getSpecialPrice')
@@ -103,15 +104,18 @@ class SpecialPriceTest extends \PHPUnit_Framework_TestCase
             $price = $this->getMock('Magento\Framework\Pricing\Price\PriceInterface');
             $this->priceInfo->expects($this->once())
                 ->method('getPrice')
-                ->with(\Magento\Catalog\Pricing\Price\BasePrice::PRICE_CODE)
+                ->with(\Magento\Catalog\Pricing\Price\RegularPrice::PRICE_CODE)
                 ->will($this->returnValue($price));
             $price->expects($this->once())
                 ->method('getValue')
-                ->will($this->returnValue($basePrice));
+                ->will($this->returnValue($regularPrice));
         }
 
         $this->assertEquals($value, $this->model->getValue());
+
+        //check that the second call will get data from cache the same as in first call
         $this->assertEquals($value, $this->model->getValue());
+        $this->assertEquals($percent, $this->model->getDiscountPercent());
     }
 
     /**
@@ -120,9 +124,12 @@ class SpecialPriceTest extends \PHPUnit_Framework_TestCase
     public function getValueDataProvider()
     {
         return array(
-            ['basePrice' => 100, 'specialPrice' => 40, 'isScopeDateInInterval' => true,  'value' => 60],
-            ['basePrice' => 75,  'specialPrice' => 40, 'isScopeDateInInterval' => true,  'value' => 45],
-            ['basePrice' => 75,  'specialPrice' => 40, 'isScopeDateInInterval' => false, 'value' => false],
+            ['regularPrice' => 100, 'specialPrice' => 40, 'isScopeDateInInterval' => true,  'value' => 40,
+                'percent' => 40],
+            ['regularPrice' => 75,  'specialPrice' => 40, 'isScopeDateInInterval' => true,  'value' => 30,
+                'percent' => 40],
+            ['regularPrice' => 75,  'specialPrice' => 40, 'isScopeDateInInterval' => false, 'value' => false,
+                'percent' => null],
         );
     }
 }

@@ -29,7 +29,7 @@
  */
 namespace Magento\Paypal\Block\Adminhtml\System\Config\Fieldset;
 
-class Location extends \Magento\Backend\Block\System\Config\Form\Fieldset
+class Location extends \Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Expanded
 {
     /**
      * Render fieldset html
@@ -373,6 +373,6 @@ class Location extends \Magento\Backend\Block\System\Config\Form\Fieldset
                 });
             });
         ';
-        return $this->toHtml() . $this->_jsHelper->getScript($js);
+        return parent::render($element) . $this->_jsHelper->getScript($js);
     }
 }

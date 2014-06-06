@@ -35,7 +35,7 @@ class AbstractPriceTest extends \PHPUnit_Framework_TestCase
     protected $price;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceInfoInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Pricing\PriceInfo\Base |\PHPUnit_Framework_MockObject_MockObject
      */
     protected $priceInfoMock;
 

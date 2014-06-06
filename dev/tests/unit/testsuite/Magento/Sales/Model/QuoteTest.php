@@ -47,19 +47,39 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     protected $quoteAddressCollectionMock;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $storeMock;
+    protected $resourceMock;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $scopeConfigMock;
+    protected $contextMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $customerFactoryMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $addressConverterMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $eventManagerMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $customerGroupServiceMock;
 
     /**
      * @var \Magento\Sales\Model\Quote
@@ -75,11 +95,24 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->quoteAddressMock = $this->getMock('Magento\Sales\Model\Quote\Address', array(), array(), '', false);
-        $methods = array('isDeleted', 'setQuoteFilter', 'getIterator', 'validateMinimumAmount');
+        $this->quoteAddressMock = $this->getMock(
+            'Magento\Sales\Model\Quote\Address',
+            [
+                'isDeleted',
+                'getCollection',
+                'getId',
+                'getCustomerAddressId',
+                '__wakeup',
+                'getAddressType',
+                'getDeleteImmediately'
+            ],
+            [],
+            '',
+            false
+        );
         $this->quoteAddressCollectionMock = $this->getMock(
             'Magento\Sales\Model\Resource\Quote\Address\Collection',
-            $methods,
+            array(),
             array(),
             '',
             false
@@ -100,18 +133,49 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->quoteAddressCollectionMock)
         );
 
-        $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $this->eventManagerMock = $this->getMockBuilder('Magento\Framework\Event\Manager')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->storeMock = $this->getMock('Magento\Store\Model\Store', array(), array(), '', false);
-        $this->storeManagerMock->expects($this->any())->method('getStore')->will($this->returnValue($this->storeMock));
-        $this->scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->quote = (new ObjectManager(
+        $this->storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->resourceMock = $this->getMockBuilder('Magento\Sales\Model\Resource\Quote')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->contextMock = $this->getMockBuilder('Magento\Framework\Model\Context')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->customerFactoryMock = $this->getMockBuilder('Magento\Customer\Model\CustomerFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $this->addressConverterMock = $this->getMockBuilder('Magento\Customer\Model\Address\Converter')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->customerGroupServiceMock = $this->getMockBuilder('Magento\Customer\Service\V1\CustomerGroupService')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->contextMock->expects($this->any())
+            ->method('getEventDispatcher')
+            ->will($this->returnValue($this->eventManagerMock));
+
+
+        $this->quote = (
+        new ObjectManager(
             $this
-        ))->getObject(
+        )
+        )->getObject(
                 'Magento\Sales\Model\Quote',
-                array('quoteAddressFactory' => $this->quoteAddressFactoryMock,
-                      'storeManager' => $this->storeManagerMock,
-                      'scopeConfig' => $this->scopeConfigMock)
+                [
+                    'quoteAddressFactory' => $this->quoteAddressFactoryMock,
+                    'storeManager' => $this->storeManagerMock,
+                    'resource' => $this->resourceMock,
+                    'context' => $this->contextMock,
+                    'customerFactory' => $this->customerFactoryMock,
+                    'addressConverter' => $this->addressConverterMock,
+                    'customerGroupService' => $this->customerGroupServiceMock
+                ]
             );
     }
 
@@ -201,25 +265,416 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         return $shippingAddressMock;
     }
 
-    public function testValidateMinimumAmount()
+    public function testGetStoreIdNoId()
     {
+        $storeMock = $this->getMockBuilder('Magento\Store\Model\Store')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $storeMock->expects($this->once())
+            ->method('getId')
+            ->will($this->returnValue(null));
+        $this->storeManagerMock->expects($this->once())
+            ->method('getStore')
+            ->will($this->returnValue($storeMock));
 
-        $this->storeMock->expects($this->any())->method('getId')->will($this->returnValue(false));
-        $valueMap = array(
-            array('sales/minimum_order/active', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, false, true),
-            array('sales/minimum_order/multi_address',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE, false, true)
-        );
-        $this->scopeConfigMock->expects($this->any())->method('isSetFlag')->will($this->returnValueMap($valueMap));
-        $this->scopeConfigMock->expects($this->once())
-            ->method('getValue')
-            ->with('sales/minimum_order/amount', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, false)
-            ->will($this->returnValue(150));
-        $this->quoteAddressCollectionMock
-            ->expects($this->any())
+        $result = $this->quote->getStoreId();
+        $this->assertNull($result);
+    }
+
+    public function testGetStoreId()
+    {
+        $storeId = 1;
+
+        $result = $this->quote->setStoreId($storeId)->getStoreId();
+        $this->assertEquals($storeId, $result);
+    }
+
+    public function testGetStore()
+    {
+        $storeId = 1;
+
+        $storeMock = $this->getMockBuilder('Magento\Store\Model\Store')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->storeManagerMock->expects($this->once())
+            ->method('getStore')
+            ->with($storeId)
+            ->will($this->returnValue($storeMock));
+
+        $this->quote->setStoreId($storeId);
+        $result = $this->quote->getStore();
+        $this->assertInstanceOf('Magento\Store\Model\Store', $result);
+    }
+
+    public function testSetStore()
+    {
+        $storeId = 1;
+
+        $storeMock = $this->getMockBuilder('Magento\Store\Model\Store')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $storeMock->expects($this->once())
+            ->method('getId')
+            ->will($this->returnValue($storeId));
+
+        $result = $this->quote->setStore($storeMock);
+        $this->assertInstanceOf('Magento\Sales\Model\Quote', $result);
+    }
+
+    public function testGetSharedWebsiteStoreIds()
+    {
+        $sharedIds = null;
+        $storeIds = [1, 2, 3];
+
+        $websiteMock = $this->getMockBuilder('Magento\Store\Model\Website')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $websiteMock->expects($this->once())
+            ->method('getStoreIds')
+            ->will($this->returnValue($storeIds));
+
+        $this->quote->setData('shared_store_ids', $sharedIds);
+        $this->quote->setWebsite($websiteMock);
+        $result = $this->quote->getSharedStoreIds();
+        $this->assertEquals($storeIds, $result);
+    }
+
+    public function testGetSharedStoreIds()
+    {
+        $sharedIds = null;
+        $storeIds = [1, 2, 3];
+        $storeId = 1;
+
+        $websiteMock = $this->getMockBuilder('Magento\Store\Model\Website')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $websiteMock->expects($this->once())
+            ->method('getStoreIds')
+            ->will($this->returnValue($storeIds));
+
+        $storeMock = $this->getMockBuilder('Magento\Store\Model\Store')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $storeMock->expects($this->once())
+            ->method('getWebsite')
+            ->will($this->returnValue($websiteMock));
+
+        $this->storeManagerMock->expects($this->once())
+            ->method('getStore')
+            ->with($storeId)
+            ->will($this->returnValue($storeMock));
+
+        $this->quote->setData('shared_store_ids', $sharedIds);
+        $this->quote->setStoreId($storeId);
+        $result = $this->quote->getSharedStoreIds();
+        $this->assertEquals($storeIds, $result);
+    }
+
+    public function testLoadActive()
+    {
+        $quoteId = 1;
+
+        $this->resourceMock->expects($this->once())
+            ->method('loadActive')
+            ->with($this->quote, $quoteId);
+
+        $this->eventManagerMock->expects($this->any())
+            ->method('dispatch');
+
+        $result = $this->quote->loadActive($quoteId);
+        $this->assertInstanceOf('Magento\Sales\Model\Quote', $result);
+    }
+
+    public function testloadByIdWithoutStore()
+    {
+        $quoteId = 1;
+
+        $this->resourceMock->expects($this->once())
+            ->method('loadByIdWithoutStore')
+            ->with($this->quote, $quoteId);
+
+        $this->eventManagerMock->expects($this->any())
+            ->method('dispatch');
+
+        $result = $this->quote->loadByIdWithoutStore($quoteId);
+        $this->assertInstanceOf('Magento\Sales\Model\Quote', $result);
+    }
+
+    public function testSetCustomerAddressData()
+    {
+        $customerId = 1;
+
+        $addressItemMock = $this->getMockBuilder('Magento\Customer\Service\V1\Data\Address')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $addresses = [$addressItemMock];
+
+        $addressModelMock = $this->getMockBuilder('Magento\Customer\Model\Address')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->addressConverterMock->expects($this->once())
+            ->method('createAddressModel')
+            ->with($addressItemMock)
+            ->will($this->returnValue($addressModelMock));
+
+        $addressCollectionMock = $this->getMockBuilder('Magento\Customer\Model\Resource\Address\Collection')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $addressCollectionMock->expects($this->once())
+            ->method('removeAllItems');
+
+        $customerMock = $this->getMockBuilder('Magento\Customer\Model\Customer')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $customerMock->expects($this->once())
+            ->method('load')
+            ->with($customerId);
+        $customerMock->expects($this->once())
+            ->method('getId')
+            ->will($this->returnValue(false));
+        $customerMock->expects($this->once())
+            ->method('getAddressesCollection')
+            ->will($this->returnValue($addressCollectionMock));
+        $customerMock->expects($this->once())
+            ->method('addAddress')
+            ->with($addressModelMock);
+
+        $this->customerFactoryMock->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($customerMock));
+        $this->quote->setCustomerId($customerId);
+
+        $result = $this->quote->setCustomerAddressData($addresses);
+        $this->assertInstanceOf('Magento\Sales\Model\Quote', $result);
+    }
+
+    public function testGetCustomerTaxClassId()
+    {
+        $groupId = 1;
+        $taxClassId = 1;
+
+        $customerGroupMock = $this->getMockBuilder('Magento\Customer\Service\V1\Data\CustomerGroup')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $customerGroupMock->expects($this->once())
+            ->method('getTaxClassId')
+            ->will($this->returnValue($taxClassId));
+
+        $this->customerGroupServiceMock->expects($this->once())
+            ->method('getGroup')
+            ->with($groupId)
+            ->will($this->returnValue($customerGroupMock));
+
+        $this->quote->setData('customer_group_id', $groupId);
+        $result = $this->quote->getCustomerTaxClassId();
+        $this->assertEquals($taxClassId, $result);
+    }
+
+    public function testGetAllAddresses()
+    {
+        $id = 1;
+        $this->quoteAddressCollectionMock->expects($this->once())
             ->method('setQuoteFilter')
-            ->will($this->returnValue(array($this->quoteAddressCollectionMock)));
-        $this->quoteAddressCollectionMock->expects($this->never())->method('validateMinimumAmount');
-        $this->assertEquals(true, $this->quote->validateMinimumAmount(true));
+            ->with($id)
+            ->will($this->returnSelf());
+
+        $this->quoteAddressMock->expects($this->once())
+            ->method('isDeleted')
+            ->will($this->returnValue(false));
+
+        $iterator = new \ArrayIterator([$this->quoteAddressMock]);
+        $this->quoteAddressCollectionMock->expects($this->any())
+            ->method('getIterator')
+            ->will($this->returnValue($iterator));
+
+        $this->quote->setId($id);
+        $result = $this->quote->getAllAddresses();
+        $this->assertEquals([$this->quoteAddressMock], $result);
+    }
+
+    /**
+     * @dataProvider dataProviderGetAddress
+     */
+    public function testGetAddressById($addressId, $expected)
+    {
+        $id = 1;
+        $this->quoteAddressCollectionMock->expects($this->once())
+            ->method('setQuoteFilter')
+            ->with($id)
+            ->will($this->returnSelf());
+
+        $this->quoteAddressMock->expects($this->once())
+            ->method('getId')
+            ->will($this->returnValue($id));
+
+        $iterator = new \ArrayIterator([$this->quoteAddressMock]);
+        $this->quoteAddressCollectionMock->expects($this->any())
+            ->method('getIterator')
+            ->will($this->returnValue($iterator));
+
+        $this->quote->setId($id);
+        $result = $this->quote->getAddressById($addressId);
+
+        $this->assertEquals((bool)$expected, (bool)$result);
+    }
+
+    public static function dataProviderGetAddress()
+    {
+        return [
+            [1, true],
+            [2, false]
+        ];
+    }
+
+    /**
+     * @param $isDeleted
+     * @param $customerAddressId
+     * @param $expected
+     *
+     * @dataProvider dataProviderGetAddressByCustomer
+     */
+    public function testGetAddressByCustomerAddressId($isDeleted, $customerAddressId, $expected)
+    {
+        $id = 1;
+        $this->quoteAddressCollectionMock->expects($this->once())
+            ->method('setQuoteFilter')
+            ->with($id)
+            ->will($this->returnSelf());
+
+        $this->quoteAddressMock->expects($this->once())
+            ->method('isDeleted')
+            ->will($this->returnValue($isDeleted));
+        $this->quoteAddressMock->expects($this->once())
+            ->method('getCustomerAddressId')
+            ->will($this->returnValue($customerAddressId));
+
+        $iterator = new \ArrayIterator([$this->quoteAddressMock]);
+        $this->quoteAddressCollectionMock->expects($this->any())
+            ->method('getIterator')
+            ->will($this->returnValue($iterator));
+
+        $this->quote->setId($id);
+        $result = $this->quote->getAddressByCustomerAddressId($id);
+
+        $this->assertEquals((bool)$expected, (bool)$result);
+    }
+
+    public static function dataProviderGetAddressByCustomer()
+    {
+        return [
+            [false, 1, true],
+            [false, 2, false]
+        ];
+    }
+
+    /**
+     * @param $isDeleted
+     * @param $addressType
+     * @param $customerAddressId
+     * @param $expected
+     *
+     * @dataProvider dataProviderShippingAddress
+     */
+    public function testGetShippingAddressByCustomerAddressId($isDeleted, $addressType, $customerAddressId, $expected)
+    {
+        $id = 1;
+
+        $this->quoteAddressCollectionMock->expects($this->once())
+            ->method('setQuoteFilter')
+            ->with($id)
+            ->will($this->returnSelf());
+
+        $this->quoteAddressMock->expects($this->once())
+            ->method('isDeleted')
+            ->will($this->returnValue($isDeleted));
+        $this->quoteAddressMock->expects($this->once())
+            ->method('getCustomerAddressId')
+            ->will($this->returnValue($customerAddressId));
+        $this->quoteAddressMock->expects($this->once())
+            ->method('getAddressType')
+            ->will($this->returnValue($addressType));
+
+        $iterator = new \ArrayIterator([$this->quoteAddressMock]);
+        $this->quoteAddressCollectionMock->expects($this->any())
+            ->method('getIterator')
+            ->will($this->returnValue($iterator));
+
+        $this->quote->setId($id);
+
+        $result = $this->quote->getShippingAddressByCustomerAddressId($id);
+        $this->assertEquals($expected, (bool)$result);
+    }
+
+    public static function dataProviderShippingAddress()
+    {
+        return [
+            [false, \Magento\Customer\Model\Address\AbstractAddress::TYPE_SHIPPING, 1, true],
+            [false, \Magento\Customer\Model\Address\AbstractAddress::TYPE_SHIPPING, 2, false],
+        ];
+    }
+
+    public function testRemoveAddress()
+    {
+        $id = 1;
+
+        $this->quoteAddressCollectionMock->expects($this->once())
+            ->method('setQuoteFilter')
+            ->with($id)
+            ->will($this->returnSelf());
+
+        $this->quoteAddressMock->expects($this->once())
+            ->method('isDeleted')
+            ->with(true);
+        $this->quoteAddressMock->expects($this->once())
+            ->method('getId')
+            ->will($this->returnValue($id));
+
+        $iterator = new \ArrayIterator([$this->quoteAddressMock]);
+        $this->quoteAddressCollectionMock->expects($this->any())
+            ->method('getIterator')
+            ->will($this->returnValue($iterator));
+
+        $this->quote->setId($id);
+
+        $result = $this->quote->removeAddress($id);
+        $this->assertInstanceOf('Magento\Sales\Model\Quote', $result);
+    }
+
+    public function testRemoveAllAddresses()
+    {
+        $id = 1;
+
+        $this->quoteAddressCollectionMock->expects($this->once())
+            ->method('setQuoteFilter')
+            ->with($id)
+            ->will($this->returnSelf());
+
+        $this->quoteAddressMock->expects($this->any())
+            ->method('getAddressType')
+            ->will($this->returnValue(\Magento\Customer\Model\Address\AbstractAddress::TYPE_SHIPPING));
+        $this->quoteAddressMock->expects($this->any())
+            ->method('isDeleted')
+            ->will($this->returnValue(false));
+        $this->quoteAddressMock->expects($this->once())
+            ->method('getId')
+            ->will($this->returnValue($id));
+        $this->quoteAddressMock->expects($this->once())
+            ->method('getDeleteImmediately')
+            ->will($this->returnValue(true));
+
+        $iterator = new \ArrayIterator([$id => $this->quoteAddressMock]);
+        $this->quoteAddressCollectionMock->expects($this->any())
+            ->method('getIterator')
+            ->will($this->returnValue($iterator));
+        $this->quoteAddressCollectionMock->expects($this->once())
+            ->method('removeItemByKey')
+            ->with($id)
+            ->will($this->returnValue($iterator));
+
+        $this->quote->setId($id);
+
+        $result = $this->quote->removeAllAddresses();
+        $this->assertInstanceOf('Magento\Sales\Model\Quote', $result);
     }
 }

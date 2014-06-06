@@ -72,7 +72,7 @@ class AssertAddToCartButtonPresent extends AbstractConstraint
     protected $catalogProductView;
 
     /**
-     * Assert that "Add to cart" button is present on page.
+     * Assert that "Add to cart" button is present on page
      *
      * @param CmsIndex $cmsIndex
      * @param CatalogCategoryView $catalogCategoryView
@@ -109,7 +109,7 @@ class AssertAddToCartButtonPresent extends AbstractConstraint
         );
         \PHPUnit_Framework_Assert::assertTrue(
             $this->catalogCategoryView->getListProductBlock()->checkAddToCardButton(),
-            "Button 'Add to Card' is absent on Category page"
+            "Button 'Add to Card' is absent on Category page."
         );
     }
 
@@ -127,7 +127,7 @@ class AssertAddToCartButtonPresent extends AbstractConstraint
         $this->catalogCategoryView->getListProductBlock()->openProductViewPage($this->product->getName());
         \PHPUnit_Framework_Assert::assertTrue(
             $this->catalogProductView->getViewBlock()->checkAddToCardButton(),
-            "Button 'Add to Card' is absent on Product page"
+            "Button 'Add to Card' is absent on Product page."
         );
     }
 

@@ -34,12 +34,15 @@ abstract class AbstractObjectBuilder extends \Magento\Framework\Service\Data\Abs
     protected $_valueBuilder;
 
     /**
+     * @param \Magento\Framework\Service\Data\ObjectFactory $objectFactory
      * @param AttributeValueBuilder $valueBuilder
      */
-    public function __construct(AttributeValueBuilder $valueBuilder)
-    {
+    public function __construct(
+        \Magento\Framework\Service\Data\ObjectFactory $objectFactory,
+        AttributeValueBuilder $valueBuilder
+    ) {
         $this->_valueBuilder = $valueBuilder;
-        parent::__construct();
+        parent::__construct($objectFactory);
     }
 
     /**

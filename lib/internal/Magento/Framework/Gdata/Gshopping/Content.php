@@ -278,7 +278,7 @@ class Content extends \Zend_Gdata
      */
     public function setLogAdapter($instance, $method)
     {
-        if (method_exists($instance, $method)) {
+        if (method_exists($instance, $method) && is_callable([$instance, $method])) {
             $this->_logAdapter = $instance;
             $this->_logAdapterLogAction = $method;
         }

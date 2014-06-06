@@ -305,7 +305,7 @@ class Shipping implements RateCollectorInterface
                 return $this;
             }
             // sort rates by price
-            if (method_exists($result, 'sortRatesByPrice')) {
+            if (method_exists($result, 'sortRatesByPrice') && is_callable([$result, 'sortRatesByPrice'])) {
                 $result->sortRatesByPrice();
             }
             $this->getResult()->append($result);

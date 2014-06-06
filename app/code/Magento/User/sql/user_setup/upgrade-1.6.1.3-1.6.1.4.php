@@ -39,3 +39,4 @@ $connection->addColumn(
         'comment' => 'Backend interface locale'
     )
 );
+$installer->endSetup();

@@ -38,13 +38,14 @@ class SearchCriteriaBuilder extends AbstractObjectBuilder
     protected $_filterGroupBuilder;
 
     /**
-     * Constructor
-     *
+     * @param \Magento\Framework\Service\Data\ObjectFactory $objectFactory
      * @param FilterGroupBuilder $filterGroupBuilder
      */
-    public function __construct(FilterGroupBuilder $filterGroupBuilder)
-    {
-        parent::__construct();
+    public function __construct(
+        \Magento\Framework\Service\Data\ObjectFactory $objectFactory,
+        FilterGroupBuilder $filterGroupBuilder
+    ) {
+        parent::__construct($objectFactory);
         $this->_filterGroupBuilder = $filterGroupBuilder;
     }
 

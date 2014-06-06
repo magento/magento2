@@ -67,7 +67,16 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
 
         $this->_adapter = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',
-            array('_connect', '_beginTransaction', '_commit', '_rollBack', 'query', '_debugWriteToFile', 'fetchRow'),
+            array(
+                'getCreateTable',
+                '_connect',
+                '_beginTransaction',
+                '_commit',
+                '_rollBack',
+                'query',
+                '_debugWriteToFile',
+                'fetchRow'
+            ),
             array(
                 'dbname' => 'not_exists',
                 'username' => 'not_valid',
@@ -528,5 +537,89 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
                     . 'NOT NULL default  auto_increment COMMENT Some field AFTER `Previous field` ',
             )
         );
+    }
+
+    /**
+     * @dataProvider getForeignKeysProvider
+     * @param string $tableName
+     * @param string $schemaName
+     * @param string $constraint
+     * @param array $expected
+     */
+    public function testGetForeignKeys($tableName, $schemaName, $constraint, $expected)
+    {
+        $constraint = ",\n" . $constraint;
+        $this->_adapter->expects($this->once())
+            ->method('getCreateTable')
+            ->will($this->returnValue($constraint));
+        $this->assertEquals($expected, $this->_adapter->getForeignKeys($tableName, $schemaName));
+    }
+
+    public function getForeignKeysProvider()
+    {
+        return [
+            [
+                'table1',
+                'schema1',
+                'CONSTRAINT `FK_SALES_FLAT_ORDER_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID` FOREIGN KEY '
+                . '(`customer_id`) REFERENCES `customer_entity` (`entity_id`) ON DELETE SET NULL ON UPDATE CASCADE',
+                [
+                    'FK_SALES_FLAT_ORDER_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID' => [
+                        'FK_NAME'           => 'FK_SALES_FLAT_ORDER_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID',
+                        'SCHEMA_NAME'       => 'schema1',
+                        'TABLE_NAME'        => 'table1',
+                        'COLUMN_NAME'       => 'customer_id',
+                        'REF_SHEMA_NAME'    => '',
+                        'REF_TABLE_NAME'    => 'customer_entity',
+                        'REF_COLUMN_NAME'   => 'entity_id',
+                        'ON_DELETE'         => 'SET NULL',
+                        'ON_UPDATE'         => 'CASCADE'
+                    ]
+                ]
+            ],
+            [
+                'table1',
+                'schema1',
+                'CONSTRAINT `FK_SALES_FLAT_ORDER_STORE_ID_STORE_STORE_ID` FOREIGN KEY (`store_id`) '
+                . 'REFERENCES `store` (`store_id`) ON DELETE SET NULL ON UPDATE CASCADE',
+                [
+                    'FK_SALES_FLAT_ORDER_STORE_ID_STORE_STORE_ID' => [
+                        'FK_NAME'           => 'FK_SALES_FLAT_ORDER_STORE_ID_STORE_STORE_ID',
+                        'SCHEMA_NAME'       => 'schema1',
+                        'TABLE_NAME'        => 'table1',
+                        'COLUMN_NAME'       => 'store_id',
+                        'REF_SHEMA_NAME'    => '',
+                        'REF_TABLE_NAME'    => 'store',
+                        'REF_COLUMN_NAME'   => 'store_id',
+                        'ON_DELETE'         => 'SET NULL',
+                        'ON_UPDATE'         => 'CASCADE'
+                    ]
+                ]
+            ],
+            [
+                'table1',
+                'schema1',
+                '`entity_id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT \'Entity Id\'',
+                []
+            ],
+            [
+                'table1',
+                'schema1',
+                'CONSTRAINT `refdata_ibfk_1` FOREIGN KEY (`refcol`) REFERENCES `test_ref`.`usefuldata` (`col`)',
+                [
+                    'REFDATA_IBFK_1' => [
+                        'FK_NAME'           => 'refdata_ibfk_1',
+                        'SCHEMA_NAME'       => 'schema1',
+                        'TABLE_NAME'        => 'table1',
+                        'COLUMN_NAME'       => 'refcol',
+                        'REF_SHEMA_NAME'    => 'test_ref',
+                        'REF_TABLE_NAME'    => 'usefuldata',
+                        'REF_COLUMN_NAME'   => 'col',
+                        'ON_DELETE'         => '',
+                        'ON_UPDATE'         => ''
+                    ]
+                ]
+            ],
+        ];
     }
 }

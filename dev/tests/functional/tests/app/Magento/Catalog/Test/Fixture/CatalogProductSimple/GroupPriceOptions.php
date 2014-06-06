@@ -105,6 +105,13 @@ class GroupPriceOptions implements FixtureInterface
                     'website' => 'All Websites [USD]',
                     'customer_group' => 'NOT LOGGED IN'
                 ]
+            ],
+            'default' => [
+                [
+                    'price' => 20,
+                    'website' => 'All Websites [USD]',
+                    'customer_group' => 'NOT LOGGED IN'
+                ]
             ]
         ];
         if (!isset($presets[$name])) {

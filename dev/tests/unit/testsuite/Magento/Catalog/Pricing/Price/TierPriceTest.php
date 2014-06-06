@@ -73,7 +73,7 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->priceInfo = $this->getMock('Magento\Framework\Pricing\PriceInfoInterface', [], [], '', false);
+        $this->priceInfo = $this->getMock('Magento\Framework\Pricing\PriceInfo\Base', [], [], '', false);
 
         $this->product = $this->getMock(
             'Magento\Catalog\Model\Product',

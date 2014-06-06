@@ -45,11 +45,6 @@ class Config
     const METHOD_WPP_DIRECT = 'paypal_direct';
 
     /**
-     * Direct Payments (Payflow Edition)
-     */
-    const METHOD_WPP_PE_DIRECT = 'payflow_direct';
-
-    /**
      * Express Checkout (Payflow Edition)
      */
     const METHOD_WPP_PE_EXPRESS = 'payflow_express';
@@ -203,8 +198,7 @@ class Config
         'paypal_standard' => 'WPS',
         'paypal_express' => 'EC',
         'paypal_direct' => 'DP',
-        'payflow_express' => 'EC',
-        'payflow_direct' => 'DP'
+        'payflow_express' => 'EC'
     );
 
     /**
@@ -732,41 +726,26 @@ class Config
 
         switch ($methodCode) {
             case self::METHOD_WPS:
-                if (!$this->businessAccount) {
+                if (!$this->getConfigValue('businessAccount')) {
                     $result = false;
                     break;
                 }
                 // check for direct payments dependence
-                if ($this->isMethodActive(self::METHOD_WPP_DIRECT) || $this->isMethodActive(self::METHOD_WPP_PE_DIRECT)
-                ) {
+                if ($this->isMethodActive(self::METHOD_WPP_DIRECT)) {
                     $result = false;
                 }
                 break;
             case self::METHOD_WPP_EXPRESS:
-                // check for direct payments dependence
-                if ($this->isMethodActive(self::METHOD_WPP_PE_DIRECT)) {
-                    $result = false;
-                } elseif ($this->isMethodActive(self::METHOD_WPP_DIRECT)) {
+                if ($this->isMethodActive(self::METHOD_WPP_DIRECT)) {
                     $result = true;
                 }
                 break;
             case self::METHOD_WPP_PE_EXPRESS:
                 // check for direct payments dependence
-                if ($this->isMethodActive(
-                    self::METHOD_WPP_PE_DIRECT
-                ) || $this->isMethodActive(
-                    self::METHOD_PAYFLOWLINK
-                ) || $this->isMethodActive(
-                    self::METHOD_PAYFLOWADVANCED
-                )
-                ) {
+                if ($this->isMethodActive(self::METHOD_PAYFLOWLINK)
+                    || $this->isMethodActive(self::METHOD_PAYFLOWADVANCED)) {
                     $result = true;
-                } elseif (!$this->isMethodActive(
-                    self::METHOD_WPP_PE_DIRECT
-                ) && !$this->isMethodActive(
-                    self::METHOD_PAYFLOWPRO
-                )
-                ) {
+                } elseif (!$this->isMethodActive(self::METHOD_PAYFLOWPRO)) {
                     $result = false;
                 }
                 break;
@@ -774,7 +753,6 @@ class Config
                 $result = $this->isWppApiAvailabe();
                 break;
             case self::METHOD_WPP_DIRECT:
-            case self::METHOD_WPP_PE_DIRECT:
                 break;
         }
         return $result;
@@ -789,7 +767,7 @@ class Config
      * @param string $key
      * @return string|null
      */
-    public function __get($key)
+    public function getConfigValue($key)
     {
         $underscored = strtolower(preg_replace('/(.)([A-Z])/', "$1_$2", $key));
         $path = $this->_getSpecificConfigPath($underscored);
@@ -894,9 +872,9 @@ class Config
      */
     public function getCountryMethods($countryCode = null)
     {
-        $countryMethods = array(
-            'other' => array(self::METHOD_WPS, self::METHOD_WPP_EXPRESS, self::METHOD_BILLING_AGREEMENT),
-            'US' => array(
+        $countryMethods = [
+            'other' => [self::METHOD_WPS, self::METHOD_WPP_EXPRESS, self::METHOD_BILLING_AGREEMENT],
+            'US' => [
                 self::METHOD_PAYFLOWADVANCED,
                 self::METHOD_WPP_DIRECT,
                 self::METHOD_WPS,
@@ -905,68 +883,71 @@ class Config
                 self::METHOD_WPP_EXPRESS,
                 self::METHOD_BILLING_AGREEMENT,
                 self::METHOD_WPP_PE_EXPRESS
-            ),
-            'CA' => array(
+            ],
+            'CA' => [
                 self::METHOD_WPP_DIRECT,
                 self::METHOD_WPS,
                 self::METHOD_PAYFLOWPRO,
                 self::METHOD_PAYFLOWLINK,
                 self::METHOD_WPP_EXPRESS,
-                self::METHOD_BILLING_AGREEMENT
-            ),
-            'GB' => array(
-                self::METHOD_WPP_DIRECT,
-                self::METHOD_WPS,
-                self::METHOD_WPP_PE_DIRECT,
-                self::METHOD_HOSTEDPRO,
-                self::METHOD_WPP_EXPRESS,
                 self::METHOD_BILLING_AGREEMENT,
                 self::METHOD_WPP_PE_EXPRESS
-            ),
-            'AU' => array(
+            ],
+            'GB' => [
+                self::METHOD_WPP_DIRECT,
+                self::METHOD_WPS,
+                self::METHOD_HOSTEDPRO,
+                self::METHOD_WPP_EXPRESS,
+                self::METHOD_BILLING_AGREEMENT
+            ],
+            'AU' => [
                 self::METHOD_WPS,
                 self::METHOD_PAYFLOWPRO,
                 self::METHOD_HOSTEDPRO,
                 self::METHOD_WPP_EXPRESS,
                 self::METHOD_BILLING_AGREEMENT
-            ),
-            'NZ' => array(
+            ],
+            'NZ' => [
                 self::METHOD_WPS,
                 self::METHOD_PAYFLOWPRO,
                 self::METHOD_WPP_EXPRESS,
                 self::METHOD_BILLING_AGREEMENT
-            ),
-            'JP' => array(
+            ],
+            'JP' => [
                 self::METHOD_WPS,
                 self::METHOD_HOSTEDPRO,
                 self::METHOD_WPP_EXPRESS,
                 self::METHOD_BILLING_AGREEMENT
-            ),
-            'FR' => array(
+            ],
+            'FR' => [
                 self::METHOD_WPS,
                 self::METHOD_HOSTEDPRO,
                 self::METHOD_WPP_EXPRESS,
                 self::METHOD_BILLING_AGREEMENT
-            ),
-            'IT' => array(
+            ],
+            'IT' => [
                 self::METHOD_WPS,
                 self::METHOD_HOSTEDPRO,
                 self::METHOD_WPP_EXPRESS,
                 self::METHOD_BILLING_AGREEMENT
-            ),
-            'ES' => array(
+            ],
+            'ES' => [
                 self::METHOD_WPS,
                 self::METHOD_HOSTEDPRO,
                 self::METHOD_WPP_EXPRESS,
                 self::METHOD_BILLING_AGREEMENT
-            ),
-            'HK' => array(
+            ],
+            'HK' => [
                 self::METHOD_WPS,
                 self::METHOD_HOSTEDPRO,
                 self::METHOD_WPP_EXPRESS,
                 self::METHOD_BILLING_AGREEMENT
-            )
-        );
+            ],
+            'DE' => [
+                self::METHOD_WPP_EXPRESS,
+                self::METHOD_BILLING_AGREEMENT
+            ]
+        ];
         if ($countryCode === null) {
             return $countryMethods;
         }
@@ -1028,7 +1009,7 @@ class Config
     {
         return sprintf(
             'https://www.%spaypal.com/cgi-bin/webscr%s',
-            $this->sandboxFlag ? 'sandbox.' : '',
+            $this->getConfigValue('sandboxFlag') ? 'sandbox.' : '',
             $params ? '?' . http_build_query($params) : ''
         );
     }
@@ -1040,7 +1021,7 @@ class Config
      */
     public function areButtonsDynamic()
     {
-        return $this->buttonFlavor === self::EC_FLAVOR_DYNAMIC;
+        return $this->getConfigValue('buttonFlavor') === self::EC_FLAVOR_DYNAMIC;
     }
 
     /**
@@ -1058,7 +1039,7 @@ class Config
         if ($this->areButtonsDynamic()) {
             return $this->_getDynamicImageUrl(self::EC_BUTTON_TYPE_SHORTCUT, $localeCode, $orderTotal, $pal);
         }
-        if ($this->buttonType === self::EC_BUTTON_TYPE_MARK) {
+        if ($this->getConfigValue('buttonType') === self::EC_BUTTON_TYPE_MARK) {
             return $this->getPaymentMarkImageUrl($localeCode);
         }
         return sprintf(
@@ -1085,7 +1066,7 @@ class Config
         }
 
         if (null === $staticSize) {
-            $staticSize = $this->paymentMarkSize;
+            $staticSize = $this->getConfigValue('paymentMarkSize');
         }
         switch ($staticSize) {
             case self::PAYMENT_MARK_37X23:
@@ -1317,7 +1298,7 @@ class Config
      */
     public function getPaymentAction()
     {
-        switch ($this->paymentAction) {
+        switch ($this->getConfigValue('paymentAction')) {
             case self::PAYMENT_ACTION_AUTH:
                 return \Magento\Payment\Model\Method\AbstractMethod::ACTION_AUTHORIZE;
             case self::PAYMENT_ACTION_SALE:
@@ -1372,7 +1353,8 @@ class Config
      */
     public function shouldAskToCreateBillingAgreement()
     {
-        return $this->allow_ba_signup === self::EC_BA_SIGNUP_ASK && !$this->shouldUseUnilateralPayments();
+        return $this->getConfigValue('allow_ba_signup') === self::EC_BA_SIGNUP_ASK
+            && !$this->shouldUseUnilateralPayments();
     }
 
     /**
@@ -1382,7 +1364,7 @@ class Config
      */
     public function shouldUseUnilateralPayments()
     {
-        return $this->business_account && !$this->isWppApiAvailabe();
+        return $this->getConfigValue('business_account') && !$this->isWppApiAvailabe();
     }
 
     /**
@@ -1392,7 +1374,10 @@ class Config
      */
     public function isWppApiAvailabe()
     {
-        return $this->api_username && $this->api_password && ($this->api_signature || $this->api_cert);
+        return $this->getConfigValue('api_username')
+            && $this->getConfigValue('api_password')
+            && ($this->getConfigValue('api_signature')
+            || $this->getConfigValue('api_cert'));
     }
 
     /**
@@ -1449,7 +1434,6 @@ class Config
     {
         switch ($code) {
             case self::METHOD_WPP_DIRECT:
-            case self::METHOD_WPP_PE_DIRECT:
             case self::METHOD_PAYFLOWPRO:
             case self::METHOD_PAYFLOWLINK:
             case self::METHOD_PAYFLOWADVANCED:
@@ -1491,8 +1475,9 @@ class Config
     public function exportExpressCheckoutStyleSettings(\Magento\Framework\Object $to)
     {
         foreach ($this->_ecStyleConfigMap as $key => $exportKey) {
-            if ($this->{$key}) {
-                $to->setData($exportKey, $this->{$key});
+            $configValue = $this->getConfigValue($key);
+            if ($configValue) {
+                $to->setData($exportKey, $configValue);
             }
         }
     }
@@ -1522,7 +1507,7 @@ class Config
         }
         return sprintf(
             'https://fpdbs%s.paypal.com/dynamicimageweb?%s',
-            $this->sandboxFlag ? '.sandbox' : '',
+            $this->getConfigValue('sandboxFlag') ? '.sandbox' : '',
             http_build_query($params)
         );
     }
@@ -1559,7 +1544,6 @@ class Config
                 $path = $this->_mapExpressFieldset($fieldName);
                 break;
             case self::METHOD_WPP_DIRECT:
-            case self::METHOD_WPP_PE_DIRECT:
                 $path = $this->_mapDirectFieldset($fieldName);
                 break;
             case self::METHOD_BILLING_AGREEMENT:
@@ -1577,7 +1561,6 @@ class Config
                     $path = $this->_mapWppFieldset($fieldName);
                     break;
                 case self::METHOD_WPP_PE_EXPRESS:
-                case self::METHOD_WPP_PE_DIRECT:
                 case self::METHOD_PAYFLOWADVANCED:
                 case self::METHOD_PAYFLOWLINK:
                     $path = $this->_mapWpukFieldset($fieldName);
@@ -1731,10 +1714,7 @@ class Config
         )
         ) {
             $pathPrefix = 'payment/payflow_advanced';
-        } elseif ($this->_methodCode == self::METHOD_WPP_PE_EXPRESS && !$this->isMethodAvailable(
-            self::METHOD_WPP_PE_DIRECT
-        )
-        ) {
+        } elseif ($this->_methodCode == self::METHOD_WPP_PE_EXPRESS) {
             $pathPrefix = 'payment/payflowpro';
         } elseif ($this->_methodCode == self::METHOD_PAYFLOWADVANCED || $this->_methodCode == self::METHOD_PAYFLOWLINK
         ) {

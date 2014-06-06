@@ -106,7 +106,7 @@
 
         <xs:complexType>
             <xs:sequence>
-                <xs:choice minOccurs="2" maxOccurs="unbounded">
+                <xs:choice minOccurs="1" maxOccurs="unbounded">
                     <xs:element name="label" type="xs:string" />
                     <xs:element name="class" type="xs:string" />
                     <xs:element name="tab" type="typeTabId" />
@@ -144,7 +144,6 @@
                     <xs:element name="frontend_model" type="typeModel" />
                     <xs:element name="clone_model" type="typeModel" />
                     <xs:element name="clone_fields" type="xs:int" />
-                    <xs:element name="expanded" type="xs:int" />
                     <xs:element name="help_url" type="typeUrl" />
                     <xs:element name="more_url" type="typeUrl" />
                     <xs:element name="demo_link" type="typeUrl" />

@@ -41,26 +41,34 @@ class Helper
     protected $stockFilter;
 
     /**
-     * @var Helper\ProductLinks
+     * @var \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks
      */
     protected $productLinks;
+
+    /**
+     * @var \Magento\Backend\Helper\Js
+     */
+    protected $jsHelper;
 
     /**
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param StockDataFilter $stockFilter
-     * @param Helper\ProductLinks $productLinks
+     * @param \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks $productLinks
+     * @param \Magento\Backend\Helper\Js $jsHelper
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         StockDataFilter $stockFilter,
-        Helper\ProductLinks $productLinks
+        \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks $productLinks,
+        \Magento\Backend\Helper\Js $jsHelper
     ) {
         $this->request = $request;
         $this->storeManager = $storeManager;
         $this->stockFilter = $stockFilter;
         $this->productLinks = $productLinks;
+        $this->jsHelper = $jsHelper;
     }
 
     /**
@@ -117,7 +125,15 @@ class Helper
             }
         }
 
-        $product = $this->productLinks->initializeLinks($product);
+        $links = $this->request->getPost('links');
+        $links = is_array($links) ? $links : array();
+        $linkTypes = array('related', 'upsell', 'crosssell');
+        foreach ($linkTypes as $type) {
+            if (isset($links[$type])) {
+                $links[$type] = $this->jsHelper->decodeGridSerializedInput($links[$type]);
+            }
+        }
+        $product = $this->productLinks->initializeLinks($product, $links);
 
         /**
          * Initialize product options

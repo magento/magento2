@@ -98,7 +98,7 @@ class Setup extends \Magento\Framework\Module\Setup
                     'status' => \Magento\Index\Model\Process::STATUS_REQUIRE_REINDEX
                 );
             }
-            if (method_exists($connection, 'insertArray')) {
+            if (method_exists($connection, 'insertArray') && is_callable([$connection, 'insertArray'])) {
                 $connection->insertArray($table, array('indexer_code', 'status'), $insertData);
             }
         }

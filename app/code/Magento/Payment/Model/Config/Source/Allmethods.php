@@ -30,7 +30,7 @@ class Allmethods implements \Magento\Framework\Option\ArrayInterface
      *
      * @var \Magento\Payment\Helper\Data
      */
-    protected $_paymentData = null;
+    protected $_paymentData;
 
     /**
      * @param \Magento\Payment\Helper\Data $paymentData

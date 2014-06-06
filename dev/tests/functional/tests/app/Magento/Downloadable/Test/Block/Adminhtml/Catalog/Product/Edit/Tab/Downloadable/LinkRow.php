@@ -23,40 +23,36 @@
  */
 namespace Magento\Downloadable\Test\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable;
 
-use Mtf\Block\Block;
-use Mtf\Client\Element\Locator;
+use Mtf\Block\Form;
 
-class LinkRow extends Block
+/**
+ * Class LinkRow
+ *
+ * Form item links
+ */
+class LinkRow extends Form
 {
     /**
-     * Example: name="downloadable[link][1][price]"
+     * Fill item link
      *
-     * @var string
+     * @param array $fields
+     * @return void
      */
-    protected $fieldSelectorTemplate = '[name="downloadable[link][%d][%s]"]';
+    public function fillLinkRow(array $fields)
+    {
+        $mapping = $this->dataMapping($fields);
+        $this->_fill($mapping);
+    }
 
     /**
-     * @param int $rowIndex
-     * @param array $rowData
+     * Get data item link
+     *
+     * @param array $fields
+     * @return array
      */
-    public function fill($rowIndex, $rowData)
+    public function getDataLinkRow(array $fields)
     {
-        foreach ([
-            'title', 'price', 'number_of_downloads', 'is_unlimited',
-            'is_shareable', 'sample][type', 'sample][url', 'type', 'link_url', 'sort_order'
-        ] as $field) {
-            if (isset($rowData[$field]['value'])) {
-                $fieldSelector = sprintf($this->fieldSelectorTemplate, $rowIndex, $field);
-                /* @TODO replace with typified radio element */
-                $type = isset($rowData[$field]['input']) ? $rowData[$field]['input'] : null;
-                if ($type == 'radio') {
-                    $type = 'checkbox';
-                    $fieldSelector .= sprintf('[value=%s]', $rowData[$field]['value']);
-                    $rowData[$field]['value'] = 'Yes';
-                }
-                $this->_rootElement->find($fieldSelector, Locator::SELECTOR_CSS, $type)
-                    ->setValue($rowData[$field]['value']);
-            }
-        }
+        $mapping = $this->dataMapping($fields);
+        return $this->_getData($mapping);
     }
 }

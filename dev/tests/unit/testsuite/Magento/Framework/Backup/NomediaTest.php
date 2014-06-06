@@ -23,8 +23,6 @@
  */
 namespace Magento\Framework\Backup;
 
-require_once __DIR__ . '/_files/Gz.php';
-require_once __DIR__ . '/_files/Tar.php';
 require_once __DIR__ . '/_files/Fs.php';
 require_once __DIR__ . '/_files/Helper.php';
 require_once __DIR__ . '/_files/io.php';
@@ -90,10 +88,11 @@ class NomediaTest extends \PHPUnit_Framework_TestCase
 
         $model = new \Magento\Framework\Backup\Nomedia($this->_filesystemMock, $this->_backupFactoryMock);
         $model->setRootDir($rootDir);
+        $model->setBackupsDir($rootDir);
         $model->{$action}();
         $this->assertTrue($model->getIsSuccess());
 
-        $this->assertEquals(array($rootDir . '/media', $rootDir . '/pub/media'), $model->getIgnorePaths());
+        $this->assertEquals(array($rootDir, $rootDir . '/media', $rootDir . '/pub/media'), $model->getIgnorePaths());
     }
 
     /**

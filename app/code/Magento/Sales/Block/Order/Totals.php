@@ -72,7 +72,7 @@ class Totals extends \Magento\Framework\View\Element\Template
     {
         $this->_initTotals();
         foreach ($this->getLayout()->getChildBlocks($this->getNameInLayout()) as $child) {
-            if (method_exists($child, 'initTotals')) {
+            if (method_exists($child, 'initTotals') && is_callable([$child, 'initTotals'])) {
                 $child->initTotals();
             }
         }

@@ -143,7 +143,8 @@ class CustomerGroupServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateGroup()
     {
-        $group = (new Data\CustomerGroupBuilder())->setId(null)->setCode('Test Group')->setTaxClassId(3)->create();
+        $builder = $this->_objectManager->create('\Magento\Customer\Service\V1\Data\CustomerGroupBuilder');
+        $group = $builder->setId(null)->setCode('Test Group')->setTaxClassId(3)->create();
         $groupId = $this->_groupService->saveGroup($group);
         $this->assertNotNull($groupId);
 
@@ -155,7 +156,8 @@ class CustomerGroupServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateGroup()
     {
-        $group = (new Data\CustomerGroupBuilder())->setId(null)->setCode('New Group')->setTaxClassId(3)->create();
+        $builder = $this->_objectManager->create('\Magento\Customer\Service\V1\Data\CustomerGroupBuilder');
+        $group = $builder->setId(null)->setCode('New Group')->setTaxClassId(3)->create();
         $groupId = $this->_groupService->saveGroup($group);
         $this->assertNotNull($groupId);
 
@@ -164,7 +166,7 @@ class CustomerGroupServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($group->getCode(), $newGroup->getCode());
         $this->assertEquals($group->getTaxClassId(), $newGroup->getTaxClassId());
 
-        $updates = (new Data\CustomerGroupBuilder())->setId($groupId)->setCode('Updated Group')->setTaxClassId(3)
+        $updates = $builder->setId($groupId)->setCode('Updated Group')->setTaxClassId(3)
             ->create();
         $newId = $this->_groupService->saveGroup($updates);
         $this->assertEquals($newId, $groupId);
@@ -256,17 +258,18 @@ class CustomerGroupServiceTest extends \PHPUnit_Framework_TestCase
 
     public function searchGroupsDataProvider()
     {
+        $builder = Bootstrap::getObjectManager()->create('\Magento\Framework\Service\V1\Data\FilterBuilder');
         return [
             'eq' => [
-                [(new FilterBuilder())->setField(CustomerGroup::CODE)->setValue('General')->create()],
+                [$builder->setField(CustomerGroup::CODE)->setValue('General')->create()],
                 null,
                 [1 => [CustomerGroup::CODE => 'General', CustomerGroup::TAX_CLASS_ID => 3]]
             ],
             'and' => [
                 [
-                    (new FilterBuilder())->setField(CustomerGroup::CODE)->setValue('General')->create(),
-                    (new FilterBuilder())->setField(CustomerGroup::TAX_CLASS_ID)->setValue('3')->create(),
-                    (new FilterBuilder())->setField(CustomerGroup::ID)->setValue('1')->create(),
+                    $builder->setField(CustomerGroup::CODE)->setValue('General')->create(),
+                    $builder->setField(CustomerGroup::TAX_CLASS_ID)->setValue('3')->create(),
+                    $builder->setField(CustomerGroup::ID)->setValue('1')->create(),
                 ],
                 [],
                 [1 => [CustomerGroup::CODE => 'General', CustomerGroup::TAX_CLASS_ID => 3]]
@@ -274,8 +277,8 @@ class CustomerGroupServiceTest extends \PHPUnit_Framework_TestCase
             'or' => [
                 [],
                 [
-                    (new FilterBuilder())->setField(CustomerGroup::CODE)->setValue('General')->create(),
-                    (new FilterBuilder())->setField(CustomerGroup::CODE)->setValue('Wholesale')->create(),
+                    $builder->setField(CustomerGroup::CODE)->setValue('General')->create(),
+                    $builder->setField(CustomerGroup::CODE)->setValue('Wholesale')->create(),
                 ],
                 [
                     1 => [CustomerGroup::CODE => 'General', CustomerGroup::TAX_CLASS_ID => 3],
@@ -284,7 +287,7 @@ class CustomerGroupServiceTest extends \PHPUnit_Framework_TestCase
             ],
             'like' => [
                 [
-                    (new FilterBuilder())->setField(CustomerGroup::CODE)->setValue('er')->setConditionType('like')
+                    $builder->setField(CustomerGroup::CODE)->setValue('er')->setConditionType('like')
                         ->create()
                 ],
                 [],

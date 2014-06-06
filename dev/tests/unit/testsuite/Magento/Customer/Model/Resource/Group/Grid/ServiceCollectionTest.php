@@ -52,7 +52,7 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->filterBuilder = new \Magento\Framework\Service\V1\Data\FilterBuilder();
+        $this->filterBuilder = $this->objectManager->getObject('\Magento\Framework\Service\V1\Data\FilterBuilder');
         $filterGroupBuilder = $this->objectManager
             ->getObject('Magento\Framework\Service\V1\Data\Search\FilterGroupBuilder');
         /** @var \Magento\Framework\Service\V1\Data\SearchCriteriaBuilder $searchBuilder */
@@ -62,7 +62,8 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
         );
         $this->groupServiceMock = $this->getMockBuilder('\Magento\Customer\Service\V1\CustomerGroupServiceInterface')
             ->getMock();
-        $this->searchResults = (new \Magento\Customer\Service\V1\Data\SearchResultsBuilder())->create();
+        $this->searchResults = $this->objectManager
+            ->getObject('\Magento\Customer\Service\V1\Data\SearchResultsBuilder')->create();
 
         $this->serviceCollection = $this->objectManager
             ->getObject(

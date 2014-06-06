@@ -23,6 +23,7 @@
  */
 /** @var $installer \Magento\Tax\Model\Resource\Setup */
 $installer = $this;
+$installer->startSetup();
 //
 /**
  * Create table 'tax/class'

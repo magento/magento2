@@ -88,14 +88,14 @@ class Form extends FormTabs
      *
      * @var string
      */
-    protected $advancedTabPanel = '[role="tablist"] [role="tabpanel"][aria-expanded="true"]:not("overflow")';
+    protected $advancedTabPanel = './/*[role="tablist"]//ul[!contains(@style,"overflow")]';
 
     /**
-     * Locator status of products
+     * CSS locator button status of the product
      *
      * @var string
      */
-    protected $onlineSwitcher = '#product-online-switcher + [for="product-online-switcher"]';
+    protected $onlineSwitcher = '#product-online-switcher%s + [for="product-online-switcher"]';
 
     /**
      * Category fixture
@@ -112,13 +112,25 @@ class Form extends FormTabs
      * @param Element $element
      * @return $this
      */
-    public function fillProduct(FixtureInterface $fixture, CatalogCategoryEntity $category = null, Element $element = null)
-    {
+    public function fillProduct(
+        FixtureInterface $fixture,
+        CatalogCategoryEntity $category = null,
+        Element $element = null
+    ) {
         $this->category = $category;
         $this->fillCategory($fixture);
-        if ($fixture instanceof InjectableFixture && $fixture->getStatus() === 'Product offline') {
-            $this->_rootElement->find($this->onlineSwitcher)->click();
+
+        if ($fixture instanceof InjectableFixture) {
+            $status = $fixture->getStatus();
+            if (($status === 'Product offline'
+                && $this->_rootElement->find(sprintf($this->onlineSwitcher, ':checked'))->isVisible())
+                || ($status === 'Product online'
+                && $this->_rootElement->find(sprintf($this->onlineSwitcher, ':not(:checked)'))->isVisible())
+            ) {
+                $this->_rootElement->find(sprintf($this->onlineSwitcher, ''))->click();
+            }
         }
+
         return parent::fill($fixture, $element);
     }
 
@@ -152,7 +164,7 @@ class Form extends FormTabs
             $categoryName = $this->category->getName();
         }
         if (empty($categoryName) && !($fixture instanceof InjectableFixture)) {
-                $categoryName = $fixture->getCategoryName();
+            $categoryName = $fixture->getCategoryName();
         }
         if (empty($categoryName)) {
             return;
@@ -268,11 +280,11 @@ class Form extends FormTabs
         $strategy = isset($this->tabs[$tabName]['strategy'])
             ? $this->tabs[$tabName]['strategy']
             : Locator::SELECTOR_CSS;
-        $advancedTabList = $this->advancedTabList;
         $tab = $this->_rootElement->find($selector, $strategy);
         $advancedSettings = $this->_rootElement->find($this->advancedSettings);
 
         // Wait until all tabs will load
+        $advancedTabList = $this->advancedTabList;
         $this->_rootElement->waitUntil(
             function () use ($rootElement, $advancedTabList) {
                 return $rootElement->find($advancedTabList)->isVisible();
@@ -287,12 +299,17 @@ class Form extends FormTabs
             $tabPanel = $this->advancedTabPanel;
             $this->_rootElement->waitUntil(
                 function () use ($rootElement, $tabPanel) {
-                    return $rootElement->find($tabPanel)->isVisible();
+                    return $rootElement->find($tabPanel, Locator::SELECTOR_XPATH)->isVisible();
                 }
             );
             // Wait until needed tab will appear
             $this->_rootElement->waitUntil(
-                function () use ($rootElement, $selector, $strategy) {
+                function () use ($rootElement, $selector, $strategy, $tabPanel) {
+                    $this->_rootElement->waitUntil(
+                        function () use ($rootElement, $tabPanel) {
+                            return $rootElement->find($tabPanel, Locator::SELECTOR_XPATH)->isVisible();
+                        }
+                    );
                     return $rootElement->find($selector, $strategy)->isVisible();
                 }
             );

@@ -651,12 +651,12 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 reset($stockItemRows) ? array_keys(end($stockItemRows)) : array(),
                 array(),
                 array(
-                    '_links_related_sku',
-                    '_links_related_position',
-                    '_links_crosssell_sku',
-                    '_links_crosssell_position',
-                    '_links_upsell_sku',
-                    '_links_upsell_position',
+                    '_related_sku',
+                    '_related_position',
+                    '_crosssell_sku',
+                    '_crosssell_position',
+                    '_upsell_sku',
+                    '_upsell_position',
                     '_associated_sku',
                     '_associated_default_qty',
                     '_associated_position'

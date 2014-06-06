@@ -91,16 +91,16 @@ class Info
      * @var array
      */
     protected $_paymentMap = array(
-        self::PAYER_ID => 'paypal_payer_id',
-        self::PAYER_EMAIL => 'paypal_payer_email',
-        self::PAYER_STATUS => 'paypal_payer_status',
-        self::ADDRESS_ID => 'paypal_address_id',
-        self::ADDRESS_STATUS => 'paypal_address_status',
-        self::PROTECTION_EL => 'paypal_protection_eligibility',
-        self::FRAUD_FILTERS => 'paypal_fraud_filters',
-        self::CORRELATION_ID => 'paypal_correlation_id',
-        self::AVS_CODE => 'paypal_avs_code',
-        self::CVV2_MATCH => 'paypal_cvv2_match',
+        self::PAYER_ID => self::PAYPAL_PAYER_ID,
+        self::PAYER_EMAIL => self::PAYPAL_PAYER_EMAIL,
+        self::PAYER_STATUS => self::PAYPAL_PAYER_STATUS,
+        self::ADDRESS_ID => self::PAYPAL_ADDRESS_ID,
+        self::ADDRESS_STATUS => self::PAYPAL_ADDRESS_STATUS,
+        self::PROTECTION_EL => self::PAYPAL_PROTECTION_ELIGIBILITY,
+        self::FRAUD_FILTERS => self::PAYPAL_FRAUD_FILTERS,
+        self::CORRELATION_ID => self::PAYPAL_CORRELATION_ID,
+        self::AVS_CODE => self::PAYPAL_AVS_CODE,
+        self::CVV2_MATCH => self::PAYPAL_CVV2_MATCH,
         self::CENTINEL_VPAS => self::CENTINEL_VPAS,
         self::CENTINEL_ECI => self::CENTINEL_ECI,
         self::BUYER_TAX_ID => self::BUYER_TAX_ID,
@@ -186,6 +186,68 @@ class Info
      * @var array
      */
     protected $_paymentMapFull = array();
+
+    /**
+     * Cache for storing label translations
+     *
+     * @var array
+     */
+    protected $_labelCodesCache = [];
+
+    /**
+     * Paypal payer id code key
+     */
+    const PAYPAL_PAYER_ID = 'paypal_payer_id';
+
+    /**
+     * Paypal payer email code key
+     */
+    const PAYPAL_PAYER_EMAIL = 'paypal_payer_email';
+
+    /**
+     * Paypal payer status code key
+     */
+    const PAYPAL_PAYER_STATUS = 'paypal_payer_status';
+
+    /**
+     * Paypal address id code key
+     */
+    const PAYPAL_ADDRESS_ID = 'paypal_address_id';
+
+    /**
+     * Paypal address status code key
+     */
+    const PAYPAL_ADDRESS_STATUS = 'paypal_address_status';
+
+    /**
+     * Paypal protection eligibility code key
+     */
+    const PAYPAL_PROTECTION_ELIGIBILITY = 'paypal_protection_eligibility';
+
+    /**
+     * Paypal fraud filters code key
+     */
+    const PAYPAL_FRAUD_FILTERS = 'paypal_fraud_filters';
+
+    /**
+     * Paypal correlation id code key
+     */
+    const PAYPAL_CORRELATION_ID = 'paypal_correlation_id';
+
+    /**
+     * Paypal avs code key
+     */
+    const PAYPAL_AVS_CODE = 'paypal_avs_code';
+
+    /**
+     * Paypal cvv2 code key
+     */
+    const PAYPAL_CVV2_MATCH = 'paypal_cvv2_match';
+
+    /**
+     * Item labels key for label codes cache
+     */
+    const ITEM_LABELS = 'item labels';
 
     /**
      * All available payment info getter
@@ -409,7 +471,7 @@ class Info
      */
     public static function explainReasonCode($code)
     {
-        $comments = array(
+        $comments = [
             'chargeback' => __('A reversal has occurred on this transaction due to a chargeback by your customer.'),
             'guarantee' => __(
                 'A reversal has occurred on this transaction due to your customer triggering a money-back guarantee.'
@@ -439,14 +501,10 @@ class Info
             'adjustment_reimburse' => __('A case that has been resolved and close requires a reimbursement.'),
             'duplicate' => __('Buyer claims that a possible duplicate payment was made to the merchant.'),
             'merchandise' => __('Buyer claims that the received merchandise is unsatisfactory, defective, or damaged.')
-        );
-        $value = array_key_exists(
-            $code,
-            $comments
-        ) && !empty($comments[$code]) ? $comments[$code] : __(
-            'Unknown reason. Please contact PayPal customer service.'
-        );
-        return $value;
+        ];
+        return isset($comments[$code])
+            ? $comments[$code]
+            : __('Unknown reason. Please contact PayPal customer service.');
     }
 
     /**
@@ -457,21 +515,18 @@ class Info
      */
     public static function isReversalDisputable($code)
     {
-        switch ($code) {
-            case 'none':
-            case 'other':
-            case 'chargeback':
-            case 'buyer-complaint':
-            case 'buyer_complaint':
-            case 'adjustment_reversal':
-                return true;
-            case 'guarantee':
-            case 'refund':
-            case 'chargeback_reimbursement':
-            case 'chargeback_settlement':
-            default:
-                return false;
-        }
+        $listOfDisputeCodes = [
+            'none' => true,
+            'other' => true,
+            'chargeback' => true,
+            'buyer-complaint' => true,
+            'adjustment_reversal' => true,
+            'guarantee' => false,
+            'refund' => false,
+            'chargeback_reimbursement' => false,
+            'chargeback_settlement' => false,
+        ];
+        return isset($listOfDisputeCodes[$code]) ? $listOfDisputeCodes[$code] : false;
     }
 
     /**
@@ -518,37 +573,27 @@ class Info
      */
     protected function _getLabel($key)
     {
-        switch ($key) {
-            case 'paypal_payer_id':
-                return __('Payer ID');
-            case 'paypal_payer_email':
-                return __('Payer Email');
-            case 'paypal_payer_status':
-                return __('Payer Status');
-            case 'paypal_address_id':
-                return __('Payer Address ID');
-            case 'paypal_address_status':
-                return __('Payer Address Status');
-            case 'paypal_protection_eligibility':
-                return __('Merchant Protection Eligibility');
-            case 'paypal_fraud_filters':
-                return __('Triggered Fraud Filters');
-            case 'paypal_correlation_id':
-                return __('Last Correlation ID');
-            case 'paypal_avs_code':
-                return __('Address Verification System Response');
-            case 'paypal_cvv2_match':
-                return __('CVV2 Check Result by PayPal');
-            case self::BUYER_TAX_ID:
-                return __('Buyer\'s Tax ID');
-            case self::BUYER_TAX_ID_TYPE:
-                return __('Buyer\'s Tax ID Type');
-            case self::CENTINEL_VPAS:
-                return __('PayPal/Centinel Visa Payer Authentication Service Result');
-            case self::CENTINEL_ECI:
-                return __('PayPal/Centinel Electronic Commerce Indicator');
+        if (!isset($this->_labelCodesCache[self::ITEM_LABELS])) {
+            $this->_labelCodesCache[self::ITEM_LABELS] = [
+                self::PAYPAL_PAYER_ID => __('Payer ID'),
+                self::PAYPAL_PAYER_EMAIL=> __('Payer Email'),
+                self::PAYPAL_PAYER_STATUS => __('Payer Status'),
+                self::PAYPAL_ADDRESS_ID => __('Payer Address ID'),
+                self::PAYPAL_ADDRESS_STATUS => __('Payer Address Status'),
+                self::PAYPAL_PROTECTION_ELIGIBILITY=> __('Merchant Protection Eligibility'),
+                self::PAYPAL_FRAUD_FILTERS => __('Triggered Fraud Filters'),
+                self::PAYPAL_CORRELATION_ID => __('Last Correlation ID'),
+                self::PAYPAL_AVS_CODE => __('Address Verification System Response'),
+                self::PAYPAL_CVV2_MATCH => __('CVV2 Check Result by PayPal'),
+                self::BUYER_TAX_ID => __('Buyer\'s Tax ID'),
+                self::BUYER_TAX_ID_TYPE => __('Buyer\'s Tax ID Type'),
+                self::CENTINEL_VPAS => __('PayPal/Centinel Visa Payer Authentication Service Result'),
+                self::CENTINEL_ECI => __('PayPal/Centinel Electronic Commerce Indicator')
+            ];
         }
-        return '';
+        return isset($this->_labelCodesCache[self::ITEM_LABELS][$key])
+            ? $this->_labelCodesCache[self::ITEM_LABELS][$key]
+            : '';
     }
 
     /**
@@ -559,8 +604,12 @@ class Info
      */
     public static function getCaseTypeLabel($key)
     {
-        $labels = array('chargeback' => __('Chargeback'), 'complaint' => __('Complaint'), 'dispute' => __('Dispute'));
-        $value = array_key_exists($key, $labels) && !empty($labels[$key]) ? $labels[$key] : '';
+        $labels = [
+            'chargeback' => __('Chargeback'),
+            'complaint' => __('Complaint'),
+            'dispute' => __('Dispute')
+        ];
+        $value = isset($labels[$key]) ? $labels[$key] : '';
         return $value;
     }
 
@@ -575,10 +624,10 @@ class Info
     {
         $label = '';
         switch ($key) {
-            case 'paypal_avs_code':
+            case self::PAYPAL_AVS_CODE:
                 $label = $this->_getAvsLabel($value);
                 break;
-            case 'paypal_cvv2_match':
+            case self::PAYPAL_CVV2_MATCH:
                 $label = $this->_getCvv2Label($value);
                 break;
             case self::CENTINEL_VPAS:
@@ -605,64 +654,42 @@ class Info
      */
     protected function _getAvsLabel($value)
     {
-        switch ($value) {
-            // Visa, MasterCard, Discover and American Express
-            case 'A':
-            case 'YN':
-                return __('Matched Address only (no ZIP)');
-            case 'B':
+        if (!isset($this->_labelCodesCache[self::PAYPAL_AVS_CODE])) {
+            $this->_labelCodesCache[self::PAYPAL_AVS_CODE] = [
+                // Visa, MasterCard, Discover and American Express
+                'A' => __('Matched Address only (no ZIP)'),
                 // international "A"
-                return __('Matched Address only (no ZIP) International');
-            case 'N':
-                return __('No Details matched');
-            case 'C':
+                'B' => __('Matched Address only (no ZIP) International'),
+                'N' => __('No Details matched'),
                 // international "N"
-                return __('No Details matched. International');
-            case 'X':
-                return __('Exact Match. Address and nine-digit ZIP code');
-            case 'D':
+                'C' => __('No Details matched. International'),
+                'X' => __('Exact Match. Address and nine-digit ZIP code'),
                 // international "X"
-                return __('Exact Match. Address and Postal Code. International');
-            case 'F':
+                'D' => __('Exact Match. Address and Postal Code. International'),
                 // UK-specific "X"
-                return __('Exact Match. Address and Postal Code. UK-specific');
-            case 'E':
-                return __('N/A. Not allowed for MOTO (Internet/Phone) transactions');
-            case 'G':
-                return __('N/A. Global Unavailable');
-            case 'I':
-                return __('N/A. International Unavailable');
-            case 'Z':
-            case 'NY':
-                return __('Matched five-digit ZIP only (no Address)');
-            case 'P':
+                'F' => __('Exact Match. Address and Postal Code. UK-specific'),
+                'E' => __('N/A. Not allowed for MOTO (Internet/Phone) transactions'),
+                'G' => __('N/A. Global Unavailable'),
+                'I' => __('N/A. International Unavailable'),
+                'Z' => __('Matched five-digit ZIP only (no Address)'),
                 // international "Z"
-            case 'NY':
-                return __('Matched Postal Code only (no Address)');
-            case 'R':
-                return __('N/A. Retry');
-            case 'S':
-                return __('N/A. Service not Supported');
-            case 'U':
-                return __('N/A. Unavailable');
-            case 'W':
-                return __('Matched whole nine-didgit ZIP (no Address)');
-            case 'Y':
-                return __('Yes. Matched Address and five-didgit ZIP');
+                'P' => __('Matched Postal Code only (no Address)'),
+                'R' => __('N/A. Retry'),
+                'S' => __('N/A. Service not Supported'),
+                'U' => __('N/A. Unavailable'),
+                'W' => __('Matched whole nine-didgit ZIP (no Address)'),
+                'Y' => __('Yes. Matched Address and five-didgit ZIP'),
                 // Maestro and Solo
-            case '0':
-                return __('All the address information matched');
-            case '1':
-                return __('None of the address information matched');
-            case '2':
-                return __('Part of the address information matched');
-            case '3':
-                return __('N/A. The merchant did not provide AVS information');
-            case '4':
-                return __('N/A. Address not checked, or acquirer had no response. Service not available');
-            default:
-                return $value;
+                '0' => __('All the address information matched'),
+                '1' => __('None of the address information matched'),
+                '2' => __('Part of the address information matched'),
+                '3' => __('N/A. The merchant did not provide AVS information'),
+                '4' => __('N/A. Address not checked, or acquirer had no response. Service not available')
+            ];
         }
+        return isset($this->_labelCodesCache[self::PAYPAL_AVS_CODE][$value])
+            ? $this->_labelCodesCache[self::PAYPAL_AVS_CODE][$value]
+            : $value;
     }
 
     /**
@@ -674,34 +701,26 @@ class Info
      */
     protected function _getCvv2Label($value)
     {
-        switch ($value) {
-            // Visa, MasterCard, Discover and American Express
-            case 'M':
-                return __('Matched (CVV2CSC)');
-            case 'N':
-                return __('No match');
-            case 'P':
-                return __('N/A. Not processed');
-            case 'S':
-                return __('N/A. Service not supported');
-            case 'U':
-                return __('N/A. Service not available');
-            case 'X':
-                return __('N/A. No response');
+        if (!isset($this->_labelCodesCache[self::PAYPAL_CVV2_MATCH])) {
+            $this->_labelCodesCache[self::PAYPAL_CVV2_MATCH] = [
+                // Visa, MasterCard, Discover and American Express
+                'M' => __('Matched (CVV2CSC)'),
+                'N' => __('No match'),
+                'P' => __('N/A. Not processed'),
+                'S' => __('N/A. Service not supported'),
+                'U' => __('N/A. Service not available'),
+                'X' => __('N/A. No response'),
                 // Maestro and Solo
-            case '0':
-                return __('Matched (CVV2)');
-            case '1':
-                return __('No match');
-            case '2':
-                return __('N/A. The merchant has not implemented CVV2 code handling');
-            case '3':
-                return __('N/A. Merchant has indicated that CVV2 is not present on card');
-            case '4':
-                return __('N/A. Service not available');
-            default:
-                return $value;
+                '0' => __('Matched (CVV2)'),
+                '1' => __('No match'),
+                '2' => __('N/A. The merchant has not implemented CVV2 code handling'),
+                '3' => __('N/A. Merchant has indicated that CVV2 is not present on card'),
+                '4' => __('N/A. Service not available')
+            ];
         }
+        return isset($this->_labelCodesCache[self::PAYPAL_CVV2_MATCH][$value])
+            ? $this->_labelCodesCache[self::PAYPAL_CVV2_MATCH][$value]
+            : $value;
     }
 
     /**
@@ -713,29 +732,27 @@ class Info
      */
     private function _getCentinelVpasLabel($value)
     {
-        switch ($value) {
-            case '2':
-            case 'D':
-                return __('Authenticated, Good Result');
-            case '1':
-                return __('Authenticated, Bad Result');
-            case '3':
-            case '6':
-            case '8':
-            case 'A':
-            case 'C':
-                return __('Attempted Authentication, Good Result');
-            case '4':
-            case '7':
-            case '9':
-                return __('Attempted Authentication, Bad Result');
-            case '':
-            case '0':
-            case 'B':
-                return __('No Liability Shift');
-            default:
-                return $value;
+        if (!isset($this->_labelCodesCache[self::CENTINEL_VPAS])) {
+            $this->_labelCodesCache[self::CENTINEL_VPAS] = [
+                '2' => __('Authenticated, Good Result'),
+                'D' => __('Authenticated, Good Result'),
+                '1' => __('Authenticated, Bad Result'),
+                '3' => __('Attempted Authentication, Good Result'),
+                '6' => __('Attempted Authentication, Good Result'),
+                '8' => __('Attempted Authentication, Good Result'),
+                'A' => __('Attempted Authentication, Good Result'),
+                'C' => __('Attempted Authentication, Good Result'),
+                '4' => __('Attempted Authentication, Bad Result'),
+                '7' => __('Attempted Authentication, Bad Result'),
+                '9' => __('Attempted Authentication, Bad Result'),
+                '' => __('No Liability Shift'),
+                '0' => __('No Liability Shift'),
+                'B' => __('No Liability Shift')
+            ];
         }
+        return isset($this->_labelCodesCache[self::CENTINEL_VPAS][$value])
+            ? $this->_labelCodesCache[self::CENTINEL_VPAS][$value]
+            : $value;
     }
 
     /**
@@ -747,17 +764,18 @@ class Info
      */
     private function _getCentinelEciLabel($value)
     {
-        switch ($value) {
-            case '01':
-            case '07':
-                return __('Merchant Liability');
-            case '02':
-            case '05':
-            case '06':
-                return __('Issuer Liability');
-            default:
-                return $value;
+        if (!isset($this->_labelCodesCache[self::CENTINEL_ECI])) {
+            $this->_labelCodesCache[self::CENTINEL_ECI] = [
+                '01' => __('Merchant Liability'),
+                '07' => __('Merchant Liability'),
+                '02' => __('Issuer Liability'),
+                '05' => __('Issuer Liability'),
+                '06' => __('Issuer Liability')
+            ];
         }
+        return isset($this->_labelCodesCache[self::CENTINEL_ECI][$value])
+            ? $this->_labelCodesCache[self::CENTINEL_ECI][$value]
+            : $value;
     }
 
     /**
@@ -768,15 +786,14 @@ class Info
      */
     protected function _getBuyerIdTypeValue($code)
     {
-        $value = '';
-        switch ($code) {
-            case self::BUYER_TAX_ID_TYPE_CNPJ:
-                $value = __('CNPJ');
-                break;
-            case self::BUYER_TAX_ID_TYPE_CPF:
-                $value = __('CPF');
-                break;
+        if (!isset($this->_labelCodesCache[self::BUYER_TAX_ID_TYPE])) {
+            $this->_labelCodesCache[self::BUYER_TAX_ID_TYPE] = [
+                self::BUYER_TAX_ID_TYPE_CNPJ => __('CNPJ'),
+                self::BUYER_TAX_ID_TYPE_CPF => __('CPF')
+            ];
         }
-        return $value;
+        return isset($this->_labelCodesCache[self::BUYER_TAX_ID_TYPE][$code])
+            ? $this->_labelCodesCache[self::BUYER_TAX_ID_TYPE][$code]
+            : '';
     }
 }

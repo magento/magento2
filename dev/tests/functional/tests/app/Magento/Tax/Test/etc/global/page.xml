@@ -34,4 +34,14 @@
         <area>adminhtml</area>
         <class>Magento\Tax\Test\Page\Adminhtml\TaxRuleNew</class>
     </taxRuleNew>
+    <taxRateIndex>
+        <mca>tax/rate/index</mca>
+        <area>adminhtml</area>
+        <class>Magento\Tax\Test\Page\Adminhtml\TaxRateIndex</class>
+    </taxRateIndex>
+    <taxRateNew>
+        <mca>tax/rate/add</mca>
+        <area>adminhtml</area>
+        <class>Magento\Tax\Test\Page\Adminhtml\TaxRateNew</class>
+    </taxRateNew>
 </page>

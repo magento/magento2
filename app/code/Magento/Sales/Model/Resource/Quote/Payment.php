@@ -36,21 +36,13 @@ class Payment extends \Magento\Sales\Model\Resource\AbstractResource
     protected $_serializableFields = array('additional_information' => array(null, array()));
 
     /**
-     * @var \Magento\Sales\Model\Payment\Method\Converter
-     */
-    protected $_paymentConverter;
-
-    /**
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param \Magento\Sales\Model\Payment\Method\Converter $paymentConverter
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Sales\Model\Payment\Method\Converter $paymentConverter
+        \Magento\Framework\Stdlib\DateTime $dateTime
     ) {
-        $this->_paymentConverter = $paymentConverter;
         parent::__construct($resource, $dateTime);
     }
 
@@ -61,7 +53,6 @@ class Payment extends \Magento\Sales\Model\Resource\AbstractResource
      */
     protected function _construct()
     {
-        $this->_converter = $this->_paymentConverter;
         $this->_init('sales_flat_quote_payment', 'payment_id');
     }
 }
