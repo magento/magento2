@@ -43,16 +43,16 @@ class AttributeMetadataBuilder extends \Magento\Framework\Service\Data\AbstractO
     protected $_validationRuleBuilder;
 
     /**
-     * Initializes builder.
-     *
-     * @param \Magento\Customer\Service\V1\Data\Eav\OptionBuilder $optionBuilder
-     * @param \Magento\Customer\Service\V1\Data\Eav\ValidationRuleBuilder $validationRuleBuilder
+     * @param \Magento\Framework\Service\Data\ObjectFactory $objectFactory
+     * @param OptionBuilder $optionBuilder
+     * @param ValidationRuleBuilder $validationRuleBuilder
      */
     public function __construct(
+        \Magento\Framework\Service\Data\ObjectFactory $objectFactory,
         \Magento\Customer\Service\V1\Data\Eav\OptionBuilder $optionBuilder,
         \Magento\Customer\Service\V1\Data\Eav\ValidationRuleBuilder $validationRuleBuilder
     ) {
-        parent::__construct();
+        parent::__construct($objectFactory);
         $this->_optionBuilder = $optionBuilder;
         $this->_validationRuleBuilder = $validationRuleBuilder;
         $this->_data[AttributeMetadata::OPTIONS] = array();

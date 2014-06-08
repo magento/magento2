@@ -104,7 +104,7 @@ class AbstractIpn
         $postbackUrl = $this->_config->getPaypalUrl();
         $this->_addDebugData('postback_to', $postbackUrl);
 
-        $httpAdapter->setConfig(array('verifypeer' => $this->_config->verifyPeer));
+        $httpAdapter->setConfig(array('verifypeer' => $this->_config->getConfigValue('verifyPeer')));
         $httpAdapter->write(\Zend_Http_Client::POST, $postbackUrl, '1.1', array('Connection: close'), $postbackQuery);
         try {
             $postbackResult = $httpAdapter->read();
@@ -169,7 +169,7 @@ class AbstractIpn
      */
     protected function _debug()
     {
-        if ($this->_config && $this->_config->debug) {
+        if ($this->_config && $this->_config->getConfigValue('debug')) {
             $file = $this->_config
                 ->getMethodCode() ? "payment_{$this
                 ->_config

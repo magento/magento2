@@ -43,25 +43,17 @@ class Payment extends AbstractOrder
     protected $_eventPrefix = 'sales_order_payment_resource';
 
     /**
-     * @var \Magento\Sales\Model\Payment\Method\Converter
-     */
-    protected $_paymentConverter;
-
-    /**
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Eav\Model\Entity\TypeFactory $eavEntityTypeFactory
-     * @param \Magento\Sales\Model\Payment\Method\Converter $paymentConverter
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Eav\Model\Entity\TypeFactory $eavEntityTypeFactory,
-        \Magento\Sales\Model\Payment\Method\Converter $paymentConverter
+        \Magento\Eav\Model\Entity\TypeFactory $eavEntityTypeFactory
     ) {
-        $this->_paymentConverter = $paymentConverter;
         parent::__construct($resource, $dateTime, $eventManager, $eavEntityTypeFactory);
     }
 
@@ -72,7 +64,6 @@ class Payment extends AbstractOrder
      */
     protected function _construct()
     {
-        $this->_converter = $this->_paymentConverter;
         $this->_init('sales_flat_order_payment', 'entity_id');
     }
 }

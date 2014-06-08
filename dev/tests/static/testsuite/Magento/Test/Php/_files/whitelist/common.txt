@@ -27,6 +27,7 @@ app/code/Magento/Catalog/Model/ProductOptions
 app/code/Magento/Catalog/Model/ProductTypes
 app/code/Magento/Catalog/Model/Plugin
 app/code/Magento/Catalog/Model/Observer/Reindex.php
+app/code/Magento/Catalog/Service
 app/code/Magento/CatalogInventory/Block/Adminhtml/Form/Field/Stock.php
 app/code/Magento/Centinel/Model/State/Jcb.php
 app/code/Magento/Checkout/Block/Cart/Link.php
@@ -64,6 +65,7 @@ app/code/Magento/Eav/Model/Cache/Type.php
 app/code/Magento/GiftMessage/Model/Plugin
 app/code/Magento/GoogleShopping/Block/SiteVerification.php
 app/code/Magento/GoogleShopping/Model/AttributeFactory.php
+app/code/Magento/GroupedProduct/Service
 app/code/Magento/Eav/Model/Entity/Attribute/Config
 app/code/Magento/Eav/Model/Entity/Attribute/Config.php
 app/code/Magento/Email

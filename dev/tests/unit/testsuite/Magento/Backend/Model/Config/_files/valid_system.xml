@@ -33,7 +33,6 @@
                 <fieldset_css>some_css</fieldset_css>
                 <clone_fields>1</clone_fields>
                 <clone_model>Some_Clone_Model</clone_model>
-                <expanded>1</expanded>
                 <field id="field_id" translate="label"  type="some_type" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Some Label</label>
                     <source_model>Some_Source_Model</source_model>

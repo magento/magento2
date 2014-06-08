@@ -177,7 +177,7 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
 
         // check visibility on cart or product page
         $context = $isInCatalog ? 'visible_on_product' : 'visible_on_cart';
-        if (!$config->{$context}) {
+        if (!$config->getConfigValue($context)) {
             $this->_shouldRender = false;
             return $result;
         }

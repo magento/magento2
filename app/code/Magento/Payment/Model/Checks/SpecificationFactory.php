@@ -29,11 +29,11 @@ namespace Magento\Payment\Model\Checks;
 class SpecificationFactory
 {
     /**
-     * Object manager
+     * Composite Factory
      *
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Payment\Model\Checks\CompositeFactory
      */
-    protected $objectManager;
+    protected $compositeFactory;
 
     /** @var  array mapping */
     protected $mapping;
@@ -41,12 +41,12 @@ class SpecificationFactory
     /**
      * Construct
      *
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Payment\Model\Checks\CompositeFactory $compositeFactory
      * @param array $mapping
      */
-    public function __construct(\Magento\Framework\ObjectManager $objectManager, array $mapping)
+    public function __construct(\Magento\Payment\Model\Checks\CompositeFactory $compositeFactory, array $mapping)
     {
-        $this->objectManager = $objectManager;
+        $this->compositeFactory = $compositeFactory;
         $this->mapping = $mapping;
     }
 
@@ -54,15 +54,12 @@ class SpecificationFactory
      * Creates new instances of payment method models
      *
      * @param array $data
-     * @return SpecificationInterface
+     * @return Composite
      * @throws \Magento\Framework\Model\Exception
      */
     public function create($data)
     {
         $specifications = array_intersect_key($this->mapping, array_flip((array)$data));
-        return $this->objectManager->create(
-            'Magento\Payment\Model\Checks\Composite',
-            array('list' => $specifications)
-        );
+        return $this->compositeFactory->create(array('list' => $specifications));
     }
 }

@@ -23,6 +23,8 @@
  */
 namespace Magento\Ogone\Model;
 
+use Magento\Store\Model\ScopeInterface;
+
 /**
  * Config model
  */
@@ -45,6 +47,7 @@ class Config extends \Magento\Payment\Model\Config
      * @param \Magento\Payment\Model\Method\Factory $paymentMethodFactory
      * @param \Magento\Framework\Locale\ListsInterface $localeLists
      * @param \Magento\Framework\Config\DataInterface $dataStorage
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      */
@@ -53,10 +56,11 @@ class Config extends \Magento\Payment\Model\Config
         \Magento\Payment\Model\Method\Factory $paymentMethodFactory,
         \Magento\Framework\Locale\ListsInterface $localeLists,
         \Magento\Framework\Config\DataInterface $dataStorage,
+        \Magento\Framework\Stdlib\DateTime\DateTime $date,
         \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor
     ) {
-        parent::__construct($scopeConfig, $paymentMethodFactory, $localeLists, $dataStorage);
+        parent::__construct($scopeConfig, $paymentMethodFactory, $localeLists, $dataStorage, $date);
         $this->_urlBuilder = $urlBuilder;
         $this->_encryptor = $encryptor;
     }
@@ -73,7 +77,7 @@ class Config extends \Magento\Payment\Model\Config
         if (!empty($path)) {
             return $this->_scopeConfig->getValue(
                 self::OGONE_PAYMENT_PATH . $path,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                ScopeInterface::SCOPE_STORE,
                 $storeId
             );
         }

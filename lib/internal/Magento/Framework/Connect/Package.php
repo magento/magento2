@@ -1397,7 +1397,7 @@ END;
             /**
              * Check for method availability, validator
              */
-            if (!method_exists($v, $validatorMethod)) {
+            if (!method_exists($v, $validatorMethod) || !is_callable([$v, $validatorMethod])) {
                 throw new \Magento\Framework\Exception("Invalid method specified for Validator : {$validatorMethod}");
             }
 

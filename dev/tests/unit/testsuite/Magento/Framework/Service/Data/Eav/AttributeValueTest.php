@@ -31,7 +31,8 @@ class AttributeValueTest extends \PHPUnit_Framework_TestCase
 
     public function testConstructorAndGetters()
     {
-        $attributeBuilder = (new AttributeValueBuilder())
+        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $attributeBuilder = $helper->getObject('\Magento\Framework\Service\Data\Eav\AttributeValueBuilder')
             ->setAttributeCode(self::ATTRIBUTE_CODE)
             ->setValue(self::VALUE);
         $attribute = new AttributeValue($attributeBuilder);

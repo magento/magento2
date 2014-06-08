@@ -480,7 +480,10 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      */
     public function getApiEndpoint()
     {
-        return sprintf('https://%spayflowpro.paypal.com/transaction', $this->_config->sandboxFlag ? 'pilot-' : '');
+        return sprintf(
+            'https://%spayflowpro.paypal.com/transaction',
+            $this->_config->getConfigValue('sandboxFlag') ? 'pilot-' : ''
+        );
     }
 
     /**
@@ -597,7 +600,7 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
             case \Magento\Paypal\Model\Api\Nvp::GET_EXPRESS_CHECKOUT_DETAILS:
             case \Magento\Paypal\Model\Api\Nvp::SET_EXPRESS_CHECKOUT:
             case \Magento\Paypal\Model\Api\Nvp::DO_DIRECT_PAYMENT:
-                return $this->_config->payment_action ==
+                return $this->_config->getConfigValue('payment_action') ==
                     \Magento\Paypal\Model\Config::PAYMENT_ACTION_AUTH ? self::TRXTYPE_AUTH_ONLY : self::TRXTYPE_SALE;
             case \Magento\Paypal\Model\Api\Nvp::DO_CAPTURE:
                 return self::TRXTYPE_DELAYED_CAPTURE;

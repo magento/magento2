@@ -72,7 +72,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getPriceInfo', 'getPriceType', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
-        $priceInfo = $this->getMock('Magento\Framework\Pricing\PriceInfoInterface', [], [], '', true);
+        $priceInfo = $this->getMock('Magento\Framework\Pricing\PriceInfo\Base', [], [], '', false);
         $priceInfo->expects($this->any())->method('getPrice')->will($this->returnCallback(function ($type) {
             if (!isset($this->priceMocks[$type])) {
                 throw new \PHPUnit_Framework_ExpectationFailedException('Unexpected type of price model');

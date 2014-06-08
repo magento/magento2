@@ -86,6 +86,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
         CalculatorInterface $calculator,
         Session $customerSession
     ) {
+        $quantity = $quantity ?: 1;
         parent::__construct($saleableItem, $quantity, $calculator);
         $this->customerSession = $customerSession;
         if ($saleableItem->hasCustomerGroupId()) {

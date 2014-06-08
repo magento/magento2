@@ -89,15 +89,6 @@
                 <verify_peer>1</verify_peer>
                 <model>Magento\Paypal\Model\PayflowExpress</model>
             </payflow_express>
-            <payflow_direct>
-                <title>PayPal Direct Payment Payflow Edition</title>
-                <payment_action>Authorization</payment_action>
-                <cctypes>VI,MC,AE</cctypes>
-                <useccv>1</useccv>
-                <group>paypal</group>
-                <verify_peer>1</verify_peer>
-                <model>Magento\Paypal\Model\PayflowDirect</model>
-            </payflow_direct>
             <payflowpro>
                 <model>Magento\Paypal\Model\Payflowpro</model>
                 <title>Payflow Pro</title>

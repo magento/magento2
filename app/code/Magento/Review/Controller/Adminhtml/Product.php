@@ -43,12 +43,34 @@ class Product extends \Magento\Backend\App\Action
     protected $_coreRegistry = null;
 
     /**
+     * Review model factory
+     *
+     * @var \Magento\Review\Model\ReviewFactory
+     */
+    protected $_reviewFactory;
+
+    /**
+     * Rating model factory
+     *
+     * @var \Magento\Review\Model\RatingFactory
+     */
+    protected $_ratingFactory;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
+     * @param \Magento\Review\Model\ReviewFactory $reviewFactory
+     * @param \Magento\Review\Model\RatingFactory $ratingFactory
      */
-    public function __construct(\Magento\Backend\App\Action\Context $context, \Magento\Framework\Registry $coreRegistry)
-    {
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\Registry $coreRegistry,
+        \Magento\Review\Model\ReviewFactory $reviewFactory,
+        \Magento\Review\Model\RatingFactory $ratingFactory
+    ) {
         $this->_coreRegistry = $coreRegistry;
+        $this->_reviewFactory = $reviewFactory;
+        $this->_ratingFactory = $ratingFactory;
         parent::__construct($context);
     }
 
@@ -138,7 +160,7 @@ class Product extends \Magento\Backend\App\Action
     public function saveAction()
     {
         if (($data = $this->getRequest()->getPost()) && ($reviewId = $this->getRequest()->getParam('id'))) {
-            $review = $this->_objectManager->create('Magento\Review\Model\Review')->load($reviewId);
+            $review = $this->_reviewFactory->create()->load($reviewId);
             if (!$review->getId()) {
                 $this->messageManager->addError(__('The review was removed by another user or does not exist.'));
             } else {
@@ -153,8 +175,7 @@ class Product extends \Magento\Backend\App\Action
                     )->addOptionInfo()->load()->addRatingOptions();
                     foreach ($arrRatingId as $ratingId => $optionId) {
                         if ($vote = $votes->getItemByColumnValue('rating_id', $ratingId)) {
-                            $this->_objectManager->create(
-                                'Magento\Review\Model\Rating'
+                            $this->_ratingFactory->create(
                             )->setVoteId(
                                 $vote->getId()
                             )->setReviewId(
@@ -163,8 +184,7 @@ class Product extends \Magento\Backend\App\Action
                                 $optionId
                             );
                         } else {
-                            $this->_objectManager->create(
-                                'Magento\Review\Model\Rating'
+                            $this->_ratingFactory->create(
                             )->setRatingId(
                                 $ratingId
                             )->setReviewId(
@@ -203,7 +223,7 @@ class Product extends \Magento\Backend\App\Action
     {
         $reviewId = $this->getRequest()->getParam('id', false);
         try {
-            $this->_objectManager->create('Magento\Review\Model\Review')->setId($reviewId)->aggregate()->delete();
+            $this->_reviewFactory->create()->setId($reviewId)->aggregate()->delete();
 
             $this->messageManager->addSuccess(__('The review has been deleted.'));
             if ($this->getRequest()->getParam('ret') == 'pending') {
@@ -233,7 +253,7 @@ class Product extends \Magento\Backend\App\Action
         } else {
             try {
                 foreach ($reviewsIds as $reviewId) {
-                    $model = $this->_objectManager->create('Magento\Review\Model\Review')->load($reviewId);
+                    $model = $this->_reviewFactory->create()->load($reviewId);
                     $model->delete();
                 }
                 $this->messageManager->addSuccess(
@@ -261,7 +281,7 @@ class Product extends \Magento\Backend\App\Action
             try {
                 $status = $this->getRequest()->getParam('status');
                 foreach ($reviewsIds as $reviewId) {
-                    $model = $this->_objectManager->create('Magento\Review\Model\Review')->load($reviewId);
+                    $model = $this->_reviewFactory->create()->load($reviewId);
                     $model->setStatusId($status)->save()->aggregate();
                 }
                 $this->messageManager->addSuccess(
@@ -293,7 +313,7 @@ class Product extends \Magento\Backend\App\Action
             try {
                 $stores = $this->getRequest()->getParam('stores');
                 foreach ($reviewsIds as $reviewId) {
-                    $model = $this->_objectManager->create('Magento\Review\Model\Review')->load($reviewId);
+                    $model = $this->_reviewFactory->create()->load($reviewId);
                     $model->setSelectStores($stores);
                     $model->save();
                 }
@@ -361,30 +381,29 @@ class Product extends \Magento\Backend\App\Action
         $productId = $this->getRequest()->getParam('product_id', false);
 
         if ($data = $this->getRequest()->getPost()) {
-            if ($this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->hasSingleStore()) {
+            /** @var \Magento\Store\Model\StoreManagerInterface $storeManagerInterface */
+            $storeManager = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface');
+            if ($storeManager->hasSingleStore()) {
                 $data['stores'] = array(
-                    $this->_objectManager->get('Magento\Store\Model\StoreManager')->getStore(true)->getId()
+                    $storeManager->getStore(true)->getId()
                 );
             } elseif (isset($data['select_stores'])) {
                 $data['stores'] = $data['select_stores'];
             }
 
-            $review = $this->_objectManager->create('Magento\Review\Model\Review')->setData($data);
-
-            $product = $this->_objectManager->create('Magento\Catalog\Model\Product')->load($productId);
+            $review = $this->_reviewFactory->create()->setData($data);
 
             try {
                 $review->setEntityId(1) // product
                     ->setEntityPkValue($productId)
-                    ->setStoreId($product->getStoreId())
+                    ->setStoreId(\Magento\Store\Model\Store::DEFAULT_STORE_ID)
                     ->setStatusId($data['status_id'])
                     ->setCustomerId(null)//null is for administrator only
                     ->save();
 
                 $arrRatingId = $this->getRequest()->getParam('ratings', array());
                 foreach ($arrRatingId as $ratingId => $optionId) {
-                    $this->_objectManager->create(
-                        'Magento\Review\Model\Rating'
+                    $this->_ratingFactory->create(
                     )->setRatingId(
                         $ratingId
                     )->setReviewId(

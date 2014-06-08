@@ -228,6 +228,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
      */
     private function getSampleAddressEntity()
     {
+        $regionBuilder =  Bootstrap::getObjectManager()->create('\Magento\Customer\Service\V1\Data\RegionBuilder');
         $this->_customerAddressBuilder->setCountryId(
             'US'
         )->setDefaultBilling(
@@ -237,7 +238,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         )->setPostcode(
             '75477'
         )->setRegion(
-            (new RegionBuilder())->setRegion('Alabama')->setRegionId(1)->setRegionCode('AL')->create()
+            $regionBuilder->setRegion('Alabama')->setRegionId(1)->setRegionCode('AL')->create()
         )->setStreet(
             array('Green str, 67')
         )->setTelephone(
@@ -260,7 +261,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
         )->setPostcode(
             '47676'
         )->setRegion(
-            (new RegionBuilder())->setRegion('Alabama')->setRegionId(1)->setRegionCode('AL')->create()
+            $regionBuilder->setRegion('Alabama')->setRegionId(1)->setRegionCode('AL')->create()
         )->setStreet(
             array('Black str, 48')
         )->setCity(

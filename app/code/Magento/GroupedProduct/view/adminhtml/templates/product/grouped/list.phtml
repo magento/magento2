@@ -27,8 +27,8 @@
 <tr title="#" class="pointer" data-role="row">
     <td data-column="info" class="col-draggable col-info">
         <span class="draggable-handle"></span>
-        <input type="hidden" name="links[grouped][${id}][id]" value="${id}" data-role="id" />
-        <input type="hidden" name="links[grouped][${id}][position]" value="${position}" data-role="position" />
+        <input type="hidden" name="links[associated][${id}][id]" value="${id}" data-role="id" />
+        <input type="hidden" name="links[associated][${id}][position]" value="${position}" data-role="position" />
     </td>
     <td data-column="name" class="editable col-name">
         ${name}
@@ -40,7 +40,7 @@
         ${price}
     </td>
     <td data-column="qty" class="editable col-qty col-number">
-        <input type="text" class="input-text " name="links[grouped][${id}][qty]" value="${qty}">
+        <input type="text" class="input-text " name="links[associated][${id}][qty]" value="${qty}">
     </td>
     <td data-column="actions" class="col-actions">
         <button type="button" class="action- delete" data-role="delete"></button>

@@ -25,11 +25,6 @@ namespace Magento\Ogone\Model;
 
 class ApiTest extends \PHPUnit_Framework_TestCase
 {
-    protected function setUp()
-    {
-        $this->markTestSkipped('Api tests were skipped');
-    }
-
     /**
      * Test protected method, which converts Magento internal charset (UTF-8) to the one, understandable
      * by Ogone (ISO-8859-1), and then encodes html entities

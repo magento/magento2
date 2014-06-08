@@ -140,6 +140,14 @@ class Source extends AbstractEav
             array('d' => $this->getTable('catalog_product_entity_int')),
             '1 = 1 AND d.store_id = 0',
             array('entity_id', 'attribute_id', 'value')
+        )->joinInner(
+            array('d2' => $this->getTable('catalog_product_entity_int')),
+            sprintf(
+                'd.entity_id = d2.entity_id AND d2.attribute_id = %s AND d2.value = %s AND d.store_id = 0',
+                $this->_eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, 'status')->getId(),
+                ProductStatus::STATUS_ENABLED
+            ),
+            array()
         )->where(
             's.store_id != 0'
         );

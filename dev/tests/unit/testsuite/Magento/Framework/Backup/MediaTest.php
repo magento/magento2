@@ -23,8 +23,6 @@
  */
 namespace Magento\Framework\Backup;
 
-require_once __DIR__ . '/_files/Gz.php';
-require_once __DIR__ . '/_files/Tar.php';
 require_once __DIR__ . '/_files/Fs.php';
 require_once __DIR__ . '/_files/Helper.php';
 require_once __DIR__ . '/_files/io.php';
@@ -90,18 +88,26 @@ class MediaTest extends \PHPUnit_Framework_TestCase
 
         $model = new \Magento\Framework\Backup\Media($this->_filesystemMock, $this->_backupFactoryMock);
         $model->setRootDir($rootDir);
+        $model->setBackupsDir($rootDir);
         $model->{$action}();
         $this->assertTrue($model->getIsSuccess());
 
         $this->assertTrue($model->{$action}());
 
-        $paths = $model->getIgnorePaths();
-        $path1 = str_replace('\\', '/', $paths[0]);
-        $path2 = str_replace('\\', '/', $paths[1]);
+        $ignorePaths = $model->getIgnorePaths();
+
         $rootDir = str_replace('\\', '/', $rootDir);
 
-        $this->assertEquals($rootDir . '/code', $path1);
-        $this->assertEquals($rootDir . '/var/log', $path2);
+        foreach ($ignorePaths as &$path) {
+            if (strpos($path, '~tmp-') || strpos($path, '_media')) {
+                unlink($path);
+            }
+            $path = str_replace('\\', '/', $path);
+        }
+
+        $this->assertTrue(in_array($rootDir, $ignorePaths));
+        $this->assertTrue(in_array($rootDir . '/code', $ignorePaths));
+        $this->assertTrue(in_array($rootDir . '/var/log', $ignorePaths));
     }
 
     /**

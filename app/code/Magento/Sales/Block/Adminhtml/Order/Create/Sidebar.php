@@ -67,7 +67,7 @@ class Sidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      */
     public function canDisplay($child)
     {
-        if (method_exists($child, 'canDisplay')) {
+        if (method_exists($child, 'canDisplay') && is_callable([$child, 'canDisplay'])) {
             return $child->canDisplay();
         }
         return true;

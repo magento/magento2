@@ -45,8 +45,7 @@ return array(
         '<?xml version="1.0"?><config><system><section id="section1"><label>Label</label><field id="field_id">' .
         '</field><field id="new_field_id"/></section></system></config>',
         array(
-            "Element 'field': This element is not expected. Expected is one of ( label, class, tab, header_css, " .
-            "resource, group )."
+            "Element 'field': This element is not expected."
         )
     ),
     'group_id_not_unique' => array(
@@ -164,14 +163,6 @@ return array(
         '<group id="group1"><label>Label</label><field id="field_id"><options />' .
         '</field></group><group id="group2"><label>Label_One</label></group></section></system></config>',
         array("Element 'options': Missing child element(s). Expected is ( option ).")
-    ),
-    'section_with_only_one_allowed_element' => array(
-        '<?xml version="1.0"?><config><system><section id="section1" advanced="false">' .
-        '<group id="group1" /></section></system></config>',
-        array(
-            "Element 'section': Missing child element(s). Expected is one of ( label, class, tab, header_css, " .
-            "resource, group )."
-        )
     ),
     'system_node_without_allowed_elements' => array(
         '<?xml version="1.0"?><config><system/></config>',

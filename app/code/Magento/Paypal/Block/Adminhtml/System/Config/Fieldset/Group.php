@@ -83,7 +83,8 @@ class Group extends \Magento\Backend\Block\System\Config\Form\Fieldset
             return $extra['configState'][$element->getId()];
         }
 
-        if ($element->getExpanded() !== null) {
+        $groupConfig = $element->getGroup();
+        if (!empty($groupConfig['expanded'])) {
             return true;
         }
 

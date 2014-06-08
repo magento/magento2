@@ -94,17 +94,6 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             'get'
         )->with(
             'config.xml',
-            'primary'
-        )->will(
-            $this->returnValue(array())
-        );
-
-        $this->_fileResolverMock->expects(
-            $this->at(1)
-        )->method(
-            'get'
-        )->with(
-            'config.xml',
             'global'
         )->will(
             $this->returnValue(array())
@@ -126,17 +115,6 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
 
         $this->_fileResolverMock->expects(
             $this->at(0)
-        )->method(
-            'get'
-        )->with(
-            'config.xml',
-            'primary'
-        )->will(
-            $this->returnValue(array())
-        );
-
-        $this->_fileResolverMock->expects(
-            $this->at(1)
         )->method(
             'get'
         )->with(

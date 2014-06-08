@@ -29,10 +29,14 @@ use Mtf\Fixture\FixtureInterface;
 
 /**
  * Class CatalogProductView
+ *
  * Frontend product view page
  */
 class CatalogProductView extends FrontendPage
 {
+    /**
+     * URL for catalog product grid
+     */
     const MCA = 'catalog/product/view';
 
     protected $_blocks = [
@@ -90,12 +94,6 @@ class CatalogProductView extends FrontendPage
             'locator' => '#customer-reviews',
             'strategy' => 'css selector',
         ],
-        'downloadableLinksBlock' => [
-            'name' => 'downloadableLinksBlock',
-            'class' => 'Magento\Downloadable\Test\Block\Catalog\Product\Links',
-            'locator' => '[data-container-for=downloadable-links]',
-            'strategy' => 'css selector',
-        ],
         'mapBlock' => [
             'name' => 'mapBlock',
             'class' => 'Magento\Catalog\Test\Block\Product\Price',
@@ -105,15 +103,13 @@ class CatalogProductView extends FrontendPage
         'titleBlock' => [
             'name' => 'titleBlock',
             'class' => 'Magento\Theme\Test\Block\Html\Title',
-            'locator' => '.page.title h1.title',
+            'locator' => '.page.title',
             'strategy' => 'css selector',
         ]
     ];
 
     /**
      * Custom constructor
-     *
-     * @return void
      */
     protected function _init()
     {
@@ -132,6 +128,8 @@ class CatalogProductView extends FrontendPage
     }
 
     /**
+     * Get product view block
+     *
      * @return \Magento\Catalog\Test\Block\Product\View
      */
     public function getViewBlock()
@@ -140,6 +138,8 @@ class CatalogProductView extends FrontendPage
     }
 
     /**
+     * Get product options block
+     *
      * @return \Magento\Catalog\Test\Block\Product\View\CustomOptions
      */
     public function getCustomOptionsBlock()
@@ -201,14 +201,6 @@ class CatalogProductView extends FrontendPage
     public function getCrosssellBlock()
     {
         return $this->getBlockInstance('crosssellBlock');
-    }
-
-    /**
-     * @return \Magento\Downloadable\Test\Block\Catalog\Product\Links
-     */
-    public function getDownloadableLinksBlock()
-    {
-        return $this->getBlockInstance('downloadableLinksBlock');
     }
 
     /**

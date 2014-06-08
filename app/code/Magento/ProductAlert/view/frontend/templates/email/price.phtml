@@ -41,7 +41,7 @@
                     <a href="<?php echo $_product->getProductUrl() ?>"><?php echo $this->escapeHtml($_product->getName()) ?></a>
                 </strong>
             </p>
-            <?php if ($shortDescription = $this->escapeHtml($_product->getShortDescription())): ?>
+            <?php if ($shortDescription = $this->getFilteredContent($_product->getShortDescription())): ?>
                 <p><small><?php echo $shortDescription ?></small></p>
             <?php endif; ?>
             <p><?php echo $this->getProductPriceHtml(

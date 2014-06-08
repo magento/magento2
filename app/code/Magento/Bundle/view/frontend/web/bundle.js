@@ -60,6 +60,9 @@
             }
         },
         _create: function() {
+            this.element.on('reloadPrice', $.proxy(function() {
+                this.reloadPrice();
+            }, this));
             $(this.options.productBundleSelector).each(
                 $.proxy(function(key, value) {
                     var element = $(value),

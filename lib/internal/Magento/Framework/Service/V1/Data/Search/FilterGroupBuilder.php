@@ -38,13 +38,14 @@ class FilterGroupBuilder extends AbstractObjectBuilder
     protected $_filterBuilder;
 
     /**
-     * Constructor
-     *
+     * @param \Magento\Framework\Service\Data\ObjectFactory $objectFactory
      * @param FilterBuilder $filterBuilder
      */
-    public function __construct(FilterBuilder $filterBuilder)
-    {
-        parent::__construct();
+    public function __construct(
+        \Magento\Framework\Service\Data\ObjectFactory $objectFactory,
+        FilterBuilder $filterBuilder
+    ) {
+        parent::__construct($objectFactory);
         $this->_filterBuilder = $filterBuilder;
     }
 

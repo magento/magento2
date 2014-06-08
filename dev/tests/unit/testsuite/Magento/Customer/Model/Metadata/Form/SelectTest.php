@@ -113,6 +113,7 @@ class SelectTest extends AbstractFormTestCase
      */
     public function testOutputValue($value, $expected)
     {
+        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->attributeMetadataMock->expects(
             $this->any()
         )->method(
@@ -120,9 +121,12 @@ class SelectTest extends AbstractFormTestCase
         )->will(
             $this->returnValue(
                 array(
-                    (new OptionBuilder())->setValue('14')->setLabel('fourteen')->create(),
-                    (new OptionBuilder())->setValue('some key')->setLabel('some string')->create(),
-                    (new OptionBuilder())->setValue('true')->setLabel('True')->create()
+                    $helper->getObject('\Magento\Customer\Service\V1\Data\Eav\OptionBuilder')
+                        ->setValue('14')->setLabel('fourteen')->create(),
+                    $helper->getObject('\Magento\Customer\Service\V1\Data\Eav\OptionBuilder')
+                        ->setValue('some key')->setLabel('some string')->create(),
+                    $helper->getObject('\Magento\Customer\Service\V1\Data\Eav\OptionBuilder')
+                        ->setValue('true')->setLabel('True')->create()
                 )
             )
         );

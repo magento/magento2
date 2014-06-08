@@ -57,7 +57,7 @@ class AssertProductInCategory extends AbstractConstraint
         FixtureInterface $product,
         CatalogCategoryEntity $category
     ) {
-        //Open category view page and check visible product
+        // Open category view page and check visible product
         $cmsIndex->open();
         $cmsIndex->getTopmenu()->selectCategoryByName($category->getName());
 

@@ -156,7 +156,7 @@ abstract class AbstractApi extends \Magento\Framework\Object
      */
     public function getApiUsername()
     {
-        return $this->_config->apiUsername;
+        return $this->_config->getConfigValue('apiUsername');
     }
 
     /**
@@ -166,7 +166,7 @@ abstract class AbstractApi extends \Magento\Framework\Object
      */
     public function getApiPassword()
     {
-        return $this->_config->apiPassword;
+        return $this->_config->getConfigValue('apiPassword');
     }
 
     /**
@@ -176,7 +176,7 @@ abstract class AbstractApi extends \Magento\Framework\Object
      */
     public function getApiSignature()
     {
-        return $this->_config->apiSignature;
+        return $this->_config->getConfigValue('apiSignature');
     }
 
     /**
@@ -542,7 +542,7 @@ abstract class AbstractApi extends \Magento\Framework\Object
         if ($this->hasData($key)) {
             return $this->getData($key);
         }
-        return $this->_config->{$key} ? $this->_config->{$key} : $default;
+        return $this->_config->getConfigValue($key) ? $this->_config->getConfigValue($key) : $default;
     }
 
     /**
@@ -639,7 +639,7 @@ abstract class AbstractApi extends \Magento\Framework\Object
      */
     public function getDebugFlag()
     {
-        return $this->_config->debug;
+        return $this->_config->getConfigValue('debug');
     }
 
     /**
@@ -649,6 +649,6 @@ abstract class AbstractApi extends \Magento\Framework\Object
      */
     public function getUseCertAuthentication()
     {
-        return (bool)$this->_config->apiAuthentication;
+        return (bool)$this->_config->getConfigValue('apiAuthentication');
     }
 }

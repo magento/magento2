@@ -164,7 +164,7 @@ class Factory implements \Magento\Framework\ObjectManager\Factory
                         ? $this->globalArguments[$item['argument']]
                         : null;
                 } else {
-                    $this->parseArray($item);
+                    $this->parseArray($array[$key]);
                 }
             }
         }

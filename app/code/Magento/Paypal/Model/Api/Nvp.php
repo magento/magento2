@@ -783,7 +783,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     public function getApiEndpoint()
     {
         $url = $this->getUseCertAuthentication() ? 'https://api%s.paypal.com/nvp' : 'https://api-3t%s.paypal.com/nvp';
-        return sprintf($url, $this->_config->sandboxFlag ? '.sandbox' : '');
+        return sprintf($url, $this->_config->getConfigValue('sandboxFlag') ? '.sandbox' : '');
     }
 
     /**
@@ -1174,7 +1174,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
 
         try {
             $http = new \Magento\Framework\HTTP\Adapter\Curl();
-            $config = array('timeout' => 60, 'verifypeer' => $this->_config->verifyPeer);
+            $config = array('timeout' => 60, 'verifypeer' => $this->_config->getConfigValue('verifyPeer'));
             if ($this->getUseProxy()) {
                 $config['proxy'] = $this->getProxyHost() . ':' . $this->getProxyPort();
             }

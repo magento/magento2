@@ -1,0 +1,113 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<fixture class="Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery">
+    <module>Magento_CatalogSearch</module>
+    <type>flat</type>
+    <entity_type>catalogsearch_query</entity_type>
+    <collection>Magento\CatalogSearch\Model\Resource\Query\Collection</collection>
+    <fields>
+        <query_id>
+            <attribute_code>query_id</attribute_code>
+            <backend_type>int</backend_type>
+            <is_required>1</is_required>
+            <default_value></default_value>
+            <input></input>
+        </query_id>
+        <query_text>
+            <attribute_code>query_text</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required></is_required>
+            <default_value></default_value>
+            <input></input>
+            <source>Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery\SearchData</source>
+        </query_text>
+        <num_results>
+            <attribute_code>num_results</attribute_code>
+            <backend_type>int</backend_type>
+            <is_required></is_required>
+            <default_value>0</default_value>
+            <input></input>
+        </num_results>
+        <popularity>
+            <attribute_code>popularity</attribute_code>
+            <backend_type>int</backend_type>
+            <is_required></is_required>
+            <default_value>0</default_value>
+            <input></input>
+        </popularity>
+        <redirect>
+            <attribute_code>redirect</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required></is_required>
+            <default_value></default_value>
+            <input></input>
+        </redirect>
+        <synonym_for>
+            <attribute_code>synonym_for</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required></is_required>
+            <default_value></default_value>
+            <input></input>
+        </synonym_for>
+        <store_id>
+            <attribute_code>store_id</attribute_code>
+            <backend_type>smallint</backend_type>
+            <is_required></is_required>
+            <default_value>0</default_value>
+            <input></input>
+        </store_id>
+        <display_in_terms>
+            <attribute_code>display_in_terms</attribute_code>
+            <backend_type>smallint</backend_type>
+            <is_required></is_required>
+            <default_value>1</default_value>
+            <input></input>
+        </display_in_terms>
+        <is_active>
+            <attribute_code>is_active</attribute_code>
+            <backend_type>smallint</backend_type>
+            <is_required></is_required>
+            <default_value>1</default_value>
+            <input></input>
+        </is_active>
+        <is_processed>
+            <attribute_code>is_processed</attribute_code>
+            <backend_type>smallint</backend_type>
+            <is_required></is_required>
+            <default_value>0</default_value>
+            <input></input>
+        </is_processed>
+        <updated_at>
+            <attribute_code>updated_at</attribute_code>
+            <backend_type>timestamp</backend_type>
+            <is_required></is_required>
+            <default_value>CURRENT_TIMESTAMP</default_value>
+            <input></input>
+        </updated_at>
+    </fields>
+    <repository_class>Magento\CatalogSearch\Test\Repository\CatalogSearchQuery</repository_class>
+    <handler_interface>Magento\CatalogSearch\Test\Handler\CatalogSearchQuery\CatalogSearchQueryInterface</handler_interface>
+</fixture>

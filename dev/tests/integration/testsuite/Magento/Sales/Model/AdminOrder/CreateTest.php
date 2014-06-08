@@ -139,33 +139,6 @@ class CreateTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Sales/_files/order_paid_with_saved_cc.php
-     */
-    public function testInitFromOrderSavedCcInformationNotDeleted()
-    {
-        /** @var $objectManager \Magento\TestFramework\ObjectManager */
-        $objectManager = Bootstrap::getObjectManager();
-
-        /** @var $order \Magento\Sales\Model\Order */
-        $order = $objectManager->create('Magento\Sales\Model\Order');
-        $order->loadByIncrementId('100000001');
-
-        $payment = $order->getPayment();
-        $this->assertEquals('5', $payment->getCcExpMonth());
-        $this->assertEquals('2016', $payment->getCcExpYear());
-        $this->assertEquals('AE', $payment->getCcType());
-        $this->assertEquals('0005', $payment->getCcLast4());
-
-        $objectManager->get('Magento\Framework\Registry')->unregister('rule_data');
-        $payment = $this->_model->initFromOrder($order)->getQuote()->getPayment();
-
-        $this->assertEquals('5', $payment->getCcExpMonth());
-        $this->assertEquals('2016', $payment->getCcExpYear());
-        $this->assertEquals('AE', $payment->getCcType());
-        $this->assertEquals('0005', $payment->getCcLast4());
-    }
-
-    /**
      * @magentoAppIsolation enabled
      */
     public function testGetCustomerWishlistNoCustomerId()

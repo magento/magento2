@@ -166,10 +166,9 @@ class Observer
     /**
      * Refresh sales coupons report statistics for last day
      *
-     * @param Schedule $schedule
      * @return $this
      */
-    public function aggregateSalesReportCouponsData($schedule)
+    public function aggregateSalesReportCouponsData()
     {
         $this->_localeResolver->emulate(0);
         $currentDate = $this->_localeDate->date();

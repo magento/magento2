@@ -252,7 +252,7 @@ class Standard extends \Magento\Payment\Model\Method\AbstractMethod
 
         // add cart totals and line items
         $cart = $this->_cartFactory->create(array('salesModel' => $order));
-        $api->setPaypalCart($cart)->setIsLineItemsEnabled($this->_config->lineItemsEnabled);
+        $api->setPaypalCart($cart)->setIsLineItemsEnabled($this->_config->getConfigValue('lineItemsEnabled'));
         $api->setCartSummary($this->_getAggregatedCartSummary());
         $api->setLocale($api->getLocaleCode());
         $result = $api->getStandardCheckoutRequest();
@@ -313,7 +313,7 @@ class Standard extends \Magento\Payment\Model\Method\AbstractMethod
      */
     public function getConfigData($field, $storeId = null)
     {
-        return $this->getConfig()->{$field};
+        return $this->getConfig()->getConfigValue($field);
     }
 
     /**
@@ -323,8 +323,8 @@ class Standard extends \Magento\Payment\Model\Method\AbstractMethod
      */
     private function _getAggregatedCartSummary()
     {
-        if ($this->_config->lineItemsSummary) {
-            return $this->_config->lineItemsSummary;
+        if ($this->_config->getConfigValue('lineItemsSummary')) {
+            return $this->_config->getConfigValue('lineItemsSummary');
         }
         return $this->_storeManager->getStore($this->getStore())->getFrontendName();
     }

@@ -130,18 +130,6 @@ class Direct extends \Magento\Payment\Model\Method\Cc
     protected $_pro;
 
     /**
-     * Website Payments Pro instance type
-     *
-     * @var $_proType string
-     */
-    protected $_proType = 'Magento\Paypal\Model\Pro';
-
-    /**
-     * @var \Magento\Paypal\Model\Method\ProTypeFactory
-     */
-    protected $_proTypeFactory;
-
-    /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
@@ -170,7 +158,7 @@ class Direct extends \Magento\Payment\Model\Method\Cc
      * @param \Magento\Framework\Module\ModuleListInterface $moduleList
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Centinel\Model\Service $centinelService
-     * @param \Magento\Paypal\Model\Method\ProTypeFactory $proTypeFactory
+     * @param \Magento\Paypal\Model\ProFactory $proFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param \Magento\Framework\App\RequestInterface $requestHttp
@@ -188,7 +176,7 @@ class Direct extends \Magento\Payment\Model\Method\Cc
         \Magento\Framework\Module\ModuleListInterface $moduleList,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Centinel\Model\Service $centinelService,
-        \Magento\Paypal\Model\Method\ProTypeFactory $proTypeFactory,
+        \Magento\Paypal\Model\ProFactory $proFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Framework\App\RequestInterface $requestHttp,
@@ -206,7 +194,6 @@ class Direct extends \Magento\Payment\Model\Method\Cc
             $centinelService,
             $data
         );
-        $this->_proTypeFactory = $proTypeFactory;
         $this->_storeManager = $storeManager;
         $this->_urlBuilder = $urlBuilder;
         $this->_requestHttp = $requestHttp;
@@ -216,7 +203,7 @@ class Direct extends \Magento\Payment\Model\Method\Cc
         if ($proInstance && $proInstance instanceof \Magento\Paypal\Model\Pro) {
             $this->_pro = $proInstance;
         } else {
-            $this->_pro = $this->_proTypeFactory->create($this->_proType);
+            $this->_pro = $proFactory->create();
         }
         $this->_pro->setMethod($this->_code);
     }
@@ -267,7 +254,7 @@ class Direct extends \Magento\Payment\Model\Method\Cc
      */
     public function getAllowedCcTypes()
     {
-        $ccTypes = explode(',', $this->_pro->getConfig()->cctypes);
+        $ccTypes = explode(',', $this->_pro->getConfig()->getConfigValue('cctypes'));
         $country = $this->_pro->getConfig()->getMerchantCountry();
 
         if ($country == 'GB') {
@@ -307,7 +294,7 @@ class Direct extends \Magento\Payment\Model\Method\Cc
                 $value = $this->getAllowedCcTypes();
                 break;
             default:
-                $value = $this->_pro->getConfig()->{$field};
+                $value = $this->_pro->getConfig()->getConfigValue($field);
         }
         return $value;
     }
@@ -421,7 +408,7 @@ class Direct extends \Magento\Payment\Model\Method\Cc
     {
         $validator = parent::getCentinelValidator();
         if (!$validator->getCustomApiEndpointUrl()) {
-            $validator->setCustomApiEndpointUrl($this->_pro->getConfig()->centinelDefaultApiUrl);
+            $validator->setCustomApiEndpointUrl($this->_pro->getConfig()->getConfigValue('centinelDefaultApiUrl'));
         }
         return $validator;
     }
@@ -449,7 +436,7 @@ class Direct extends \Magento\Payment\Model\Method\Cc
     {
         $order = $payment->getOrder();
         $api = $this->_pro->getApi()->setPaymentAction(
-            $this->_pro->getConfig()->paymentAction
+            $this->_pro->getConfig()->getConfigValue('paymentAction')
         )->setIpAddress(
             $this->_requestHttp->getClientIp(false)
         )->setAmount(
@@ -493,7 +480,7 @@ class Direct extends \Magento\Payment\Model\Method\Cc
         // add line items
         $cart = $this->_cartFactory->create(array('salesModel' => $order));
 
-        $api->setPaypalCart($cart)->setIsLineItemsEnabled($this->_pro->getConfig()->lineItemsEnabled);
+        $api->setPaypalCart($cart)->setIsLineItemsEnabled($this->_pro->getConfig()->getConfigValue('lineItemsEnabled'));
 
         // call api and import transaction and other payment information
         $api->callDoDirectPayment();

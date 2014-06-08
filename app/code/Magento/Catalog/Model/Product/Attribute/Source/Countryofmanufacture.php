@@ -74,7 +74,7 @@ class Countryofmanufacture extends \Magento\Eav\Model\Entity\Attribute\Source\Ab
      */
     public function getAllOptions()
     {
-        $cacheKey = 'DIRECTORY_COUNTRY_SELECT_STORE_' . $this->_storeManager->getStore()->getCode();
+        $cacheKey = 'COUNTRYOFMANUFACTURE_SELECT_STORE_' . $this->_storeManager->getStore()->getCode();
         if ($cache = $this->_configCacheType->load($cacheKey)) {
             $options = unserialize($cache);
         } else {

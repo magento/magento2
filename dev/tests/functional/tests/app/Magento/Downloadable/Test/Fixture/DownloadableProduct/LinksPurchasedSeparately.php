@@ -26,10 +26,15 @@ namespace Magento\Downloadable\Test\Fixture\DownloadableProduct;
 use Mtf\Factory\Factory;
 use Magento\Downloadable\Test\Fixture\DownloadableProduct;
 
+/**
+ * Class LinksPurchasedSeparately
+ *
+ * Init downloadable data purchased separately
+ */
 class LinksPurchasedSeparately extends DownloadableProduct
 {
     /**
-     * {inheritdoc}
+     * Init downloadable data
      */
     protected function _initData()
     {
@@ -38,28 +43,30 @@ class LinksPurchasedSeparately extends DownloadableProduct
             $this->_data,
             [
                 'fields' => [
-                    'downloadable_link_purchase_type' => [
-                        'value' => 'Yes',
-                        'input_value' => '1',
-                    ],
-                    'downloadable' => [
-                        'link' => [
-                            [
-                                'title' => ['value' => 'row1'],
-                                'price' => ['value' => 2],
-                                'number_of_downloads' => ['value' => 2],
-                                'sample][type' => ['value' => 'url', 'input' => 'radio'],
-                                'sample][url' => ['value' => 'http://example.com'],
-                                'type' => ['value' => 'url', 'input' => 'radio'],
-                                'link_url' => ['value' => 'http://example.com'],
-                                'is_shareable' => [ // needed explicit default value for CURL handler
-                                    'input' => 'select',
-                                    'input_value' => static::LINK_IS_SHAREABLE_USE_CONFIG_VALUE,
+                    'downloadable_links' => [
+                        'value' => [
+                            'title' => 'Links%isolation%',
+                            'links_purchased_separately' => 'Yes',
+                            'downloadable' => [
+                                'link' => [
+                                    [
+                                        'title' => 'row1%isolation%',
+                                        'price' => 2.43,
+                                        'number_of_downloads' => 2,
+                                        'sample' => [
+                                            'sample_type_url' => 'Yes',
+                                            'sample_url' => 'http://example.com'
+                                        ],
+                                        'file_type_url' => 'Yes',
+                                        'file_link_url' => 'http://example.com',
+                                        'is_shareable' => 'No',
+                                        'sort_order' => 0
+                                    ]
                                 ],
                             ]
                         ],
                         'group' => static::GROUP
-                    ]
+                    ],
                 ]
             ]
         );

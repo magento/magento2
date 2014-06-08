@@ -216,6 +216,62 @@ class CustomOptions implements FixtureInterface
                         ]
                     ]
                 ]
+            ],
+            'default' => [
+                [
+                    'title' => 'custom option drop down',
+                    'is_require' => 'Yes',
+                    'type' => 'Drop-down',
+                    'options' => [
+                        [
+                            'title' => '10 percent',
+                            'price' => 10,
+                            'price_type' => 'Percent',
+                            'sku' => 'sku_drop_down_row_1'
+                        ]
+                    ]
+                ],
+                [
+                    'title' => 'custom option drop down2',
+                    'is_require' => 'Yes',
+                    'type' => 'Drop-down',
+                    'options' => [
+                        [
+                            'title' => '20 percent',
+                            'price' => 20,
+                            'price_type' => 'Percent',
+                            'sku' => 'sku_drop_down_row_2'
+                        ]
+                    ]
+                ]
+            ],
+            'two_options' => [
+                [
+                    'title' => 'custom option drop down',
+                    'is_require' => 'Yes',
+                    'type' => 'Drop-down',
+                    'options' => [
+                        [
+                            'title' => '10 percent',
+                            'price' => 10,
+                            'price_type' => 'Percent',
+                            'sku' => 'sku_drop_down_row_1'
+                        ]
+                    ]
+                ],
+                [
+                    'title' => 'custom option drop down2',
+                    'is_require' => 'Yes',
+                    'type' => 'Drop-down',
+                    'options' => [
+                        [
+                            'title' => '20 percent',
+                            'price' => 20,
+                            'price_type' => 'Percent',
+                            'sku' => 'sku_drop_down_row_2'
+                        ]
+                    ]
+                ]
             ]
         ];
         if (!isset($presets[$name])) {

@@ -47,7 +47,7 @@ class AgreementTest extends \PHPUnit_Framework_TestCase
         $paypalConfigMock = $this->getMockBuilder(
             '\Magento\Paypal\Model\Config'
         )->disableOriginalConstructor()->setMethods(
-            array('__get')
+            array('getConfigValue')
         )->getMock();
         $this->_apiNvpMock = $this->getMockBuilder(
             '\Magento\Paypal\Model\Api\Nvp'

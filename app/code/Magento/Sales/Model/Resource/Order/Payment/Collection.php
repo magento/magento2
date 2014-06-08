@@ -43,16 +43,10 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection\Abstract
     protected $_eventObject = 'order_payment_collection';
 
     /**
-     * @var \Magento\Sales\Model\Payment\Method\Converter
-     */
-    protected $_converter;
-
-    /**
      * @param \Magento\Core\Model\EntityFactory $entityFactory
      * @param \Magento\Framework\Logger $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Sales\Model\Payment\Method\Converter $converter
      * @param \Zend_Db_Adapter_Abstract $connection
      * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
      */
@@ -61,11 +55,9 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection\Abstract
         \Magento\Framework\Logger $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Sales\Model\Payment\Method\Converter $converter,
         $connection = null,
         \Magento\Framework\Model\Resource\Db\AbstractDb $resource = null
     ) {
-        $this->_converter = $converter;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
     }
 
@@ -89,14 +81,6 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection\Abstract
         foreach ($this->_items as $item) {
             $this->getResource()->unserializeFields($item);
         }
-
-        /** @var \Magento\Sales\Model\Order\Payment $item */
-        foreach ($this->_items as $item) {
-            foreach ($item->getData() as $fieldName => $fieldValue) {
-                $item->setData($fieldName, $this->_converter->decode($item, $fieldName));
-            }
-        }
-
         return parent::_afterLoad();
     }
 }

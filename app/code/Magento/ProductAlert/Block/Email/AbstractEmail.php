@@ -45,6 +45,36 @@ abstract class AbstractEmail extends \Magento\Framework\View\Element\Template
     protected $_store;
 
     /**
+     * @var \Magento\Framework\Filter\Input\MaliciousCode
+     */
+    protected $_maliciousCode;
+
+    /**
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Magento\Framework\Filter\Input\MaliciousCode $maliciousCode
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Magento\Framework\Filter\Input\MaliciousCode $maliciousCode,
+        array $data = array()
+    ) {
+        $this->_maliciousCode = $maliciousCode;
+        parent::__construct($context, $data);
+    }
+
+    /**
+    * Filter malicious code before insert content to email
+    *
+    * @param  string|array $content
+    * @return string|array
+    */
+    public function getFilteredContent($content)
+    {
+        return $this->_maliciousCode->filter($content);
+    }
+
+    /**
      * Set Store scope
      *
      * @param int|string|\Magento\Store\Model\Website|\Magento\Store\Model\Store $store

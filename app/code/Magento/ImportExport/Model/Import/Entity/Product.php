@@ -178,9 +178,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @var array
      */
     protected $_linkNameToId = array(
-        '_links_related_' => \Magento\Catalog\Model\Product\Link::LINK_TYPE_RELATED,
-        '_links_crosssell_' => \Magento\Catalog\Model\Product\Link::LINK_TYPE_CROSSSELL,
-        '_links_upsell_' => \Magento\Catalog\Model\Product\Link::LINK_TYPE_UPSELL
+        '_related_' => \Magento\Catalog\Model\Product\Link::LINK_TYPE_RELATED,
+        '_crosssell_' => \Magento\Catalog\Model\Product\Link::LINK_TYPE_CROSSSELL,
+        '_upsell_' => \Magento\Catalog\Model\Product\Link::LINK_TYPE_UPSELL
     );
 
     /**
@@ -258,15 +258,15 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         '_tier_price_customer_group',
         '_tier_price_qty',
         '_tier_price_price',
-        '_links_related_sku',
+        '_related_sku',
         '_group_price_website',
         '_group_price_customer_group',
         '_group_price_price',
-        '_links_related_position',
-        '_links_crosssell_sku',
-        '_links_crosssell_position',
-        '_links_upsell_sku',
-        '_links_upsell_position',
+        '_related_position',
+        '_crosssell_sku',
+        '_crosssell_position',
+        '_upsell_sku',
+        '_upsell_position',
         '_custom_option_store',
         '_custom_option_type',
         '_custom_option_title',

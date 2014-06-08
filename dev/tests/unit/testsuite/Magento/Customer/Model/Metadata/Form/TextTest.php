@@ -124,12 +124,15 @@ class TextTest extends AbstractFormTestCase
      */
     public function testValidateValueLength($value, $expected)
     {
+        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $validationRules = array(
             'min_text_length' => new ValidationRule(
-                (new ValidationRuleBuilder())->populateWithArray(array('name' => 'min_text_length', 'value' => 4))
+                $helper->getObject('\Magento\Customer\Service\V1\Data\Eav\ValidationRuleBuilder')
+                    ->populateWithArray(array('name' => 'min_text_length', 'value' => 4))
             ),
             'max_text_length' => new ValidationRule(
-                (new ValidationRuleBuilder())->populateWithArray(array('name' => 'max_text_length', 'value' => 8))
+                    $helper->getObject('\Magento\Customer\Service\V1\Data\Eav\ValidationRuleBuilder')
+                        ->populateWithArray(array('name' => 'max_text_length', 'value' => 8))
             )
         );
 

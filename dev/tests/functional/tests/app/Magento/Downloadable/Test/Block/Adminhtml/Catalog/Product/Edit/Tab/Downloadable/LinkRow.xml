@@ -1,0 +1,85 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<mapping strict="0">
+    <fields>
+        <title>
+            <selector>[name$='[title]']</selector>
+            <strategy>css selector</strategy>
+        </title>
+        <price>
+            <selector>[name$='[price]']</selector>
+            <strategy>css selector</strategy>
+        </price>
+        <number_of_downloads>
+            <selector>[name$='[number_of_downloads]']</selector>
+            <strategy>css selector</strategy>
+        </number_of_downloads>
+        <is_unlimited>
+            <selector>[name$='[is_unlimited]']</selector>
+            <strategy>css selector</strategy>
+            <input>checkbox</input>
+        </is_unlimited>
+        <is_shareable>
+            <selector>[name$='[is_shareable]']</selector>
+            <strategy>css selector</strategy>
+            <input>select</input>
+        </is_shareable>
+        <sample composite="1">
+            <sample_type_url>
+                <selector>[value='url'][name$='[sample][type]']</selector>
+                <strategy>css selector</strategy>
+                <input>checkbox</input>
+            </sample_type_url>
+            <sample_type_file>
+                <selector>[value='file'][name$='[sample][type]']</selector>
+                <strategy>css selector</strategy>
+                <input>checkbox</input>
+            </sample_type_file>
+            <sample_url>
+                <selector>[name$='[sample][url]']</selector>
+                <strategy>css selector</strategy>
+            </sample_url>
+        </sample>
+        <file_type_url>
+            <selector>[value='url'][name*='[type]']:not([name*='[sample]'])</selector>
+            <strategy>css selector</strategy>
+            <input>checkbox</input>
+        </file_type_url>
+        <file_type_file>
+            <selector>[value='file'][name*='[type]']:not([name*='[sample]'])</selector>
+            <strategy>css selector</strategy>
+            <input>checkbox</input>
+        </file_type_file>
+        <file_link_url>
+            <selector>[name$='[link_url]']</selector>
+            <strategy>css selector</strategy>
+        </file_link_url>
+        <sort_order>
+            <selector>[name$='[sort_order]']</selector>
+            <strategy>css selector</strategy>
+        </sort_order>
+    </fields>
+</mapping>

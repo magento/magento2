@@ -120,7 +120,7 @@ class CodeSniffer implements ToolInterface
         $this->wrapper->checkRequirements();
         $settings = $this->wrapper->getDefaults();
         $settings['files'] = $whiteList;
-        $settings['standard'] = $this->rulesetDir;
+        $settings['standard'] = [$this->rulesetDir];
         $settings['ignored'] = $blackList;
         $settings['extensions'] = $extensions;
         $settings['reportFile'] = $this->reportFile;

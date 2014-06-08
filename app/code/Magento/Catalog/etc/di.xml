@@ -33,6 +33,15 @@
     <preference for="Magento\Framework\Pricing\PriceInfoInterface" type="Magento\Framework\Pricing\PriceInfo\Base" />
     <preference for="Magento\Framework\Pricing\PriceCurrencyInterface" type="Magento\Directory\Model\PriceCurrency" />
     <preference for="Magento\Framework\Pricing\Adjustment\CalculatorInterface" type="Magento\Framework\Pricing\Adjustment\Calculator" />
+    <preference for="Magento\Catalog\Service\V1\ProductTypeServiceInterface" type="Magento\Catalog\Service\V1\ProductTypeService" />
+    <preference for="Magento\Catalog\Service\V1\Product\AttributeGroup\ReadServiceInterface" type="Magento\Catalog\Service\V1\Product\AttributeGroup\ReadService" />
+    <preference for="Magento\Catalog\Service\V1\Product\AttributeGroup\WriteServiceInterface" type="Magento\Catalog\Service\V1\Product\AttributeGroup\WriteService" />
+    <preference for="Magento\Catalog\Service\V1\Product\AttributeSet\ReadServiceInterface" type="Magento\Catalog\Service\V1\Product\AttributeSet\ReadService" />
+    <preference for="Magento\Catalog\Service\V1\Product\AttributeSet\WriteServiceInterface" type="Magento\Catalog\Service\V1\Product\AttributeSet\WriteService" />
+    <preference for="Magento\Catalog\Service\V1\Product\AttributeSet\AttributeServiceInterface" type="Magento\Catalog\Service\V1\Product\AttributeSet\AttributeService" />
+    <preference for="Magento\Catalog\Service\V1\Product\Link\ReadServiceInterface" type="Magento\Catalog\Service\V1\Product\Link\ReadService" />
+    <preference for="Magento\Catalog\Service\V1\Product\Link\WriteServiceInterface" type="Magento\Catalog\Service\V1\Product\Link\WriteService" />
+    <preference for="Magento\Catalog\Service\V1\Product\Link\Data\ProductLink\DataMapperInterface" type="Magento\Catalog\Service\V1\Product\Link\Data\ProductLink\DataMapper\Composite" />
     <type name="Magento\Log\Model\Resource\Log">
         <plugin name="catalogLog" type="Magento\Catalog\Model\Plugin\Log" />
     </type>
@@ -237,9 +246,9 @@
     <type name="Magento\Catalog\Model\Product\LinkTypeProvider">
         <arguments>
             <argument name="linkTypes" xsi:type="array">
-                <item name="links_related" xsi:type="const">Magento\Catalog\Model\Product\Link::LINK_TYPE_RELATED</item>
-                <item name="links_crosssell" xsi:type="const">Magento\Catalog\Model\Product\Link::LINK_TYPE_CROSSSELL</item>
-                <item name="links_upsell" xsi:type="const">Magento\Catalog\Model\Product\Link::LINK_TYPE_UPSELL</item>
+                <item name="related" xsi:type="const">Magento\Catalog\Model\Product\Link::LINK_TYPE_RELATED</item>
+                <item name="crosssell" xsi:type="const">Magento\Catalog\Model\Product\Link::LINK_TYPE_CROSSSELL</item>
+                <item name="upsell" xsi:type="const">Magento\Catalog\Model\Product\Link::LINK_TYPE_UPSELL</item>
             </argument>
         </arguments>
     </type>
@@ -368,6 +377,22 @@
                     <item name="infoClass" xsi:type="string">Magento\Framework\Pricing\PriceInfo\Base</item>
                     <item name="prices" xsi:type="string">Magento\Catalog\Pricing\Price\Collection</item>
                 </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Service\V1\Product\Link\Data\ProductLink\CollectionProvider">
+        <arguments>
+            <argument name="providers" xsi:type="array">
+                <item name="crosssell" xsi:type="object">Magento\Catalog\Service\V1\Product\Link\Data\ProductLink\CollectionProvider\Crosssell</item>
+                <item name="upsell" xsi:type="object">Magento\Catalog\Service\V1\Product\Link\Data\ProductLink\CollectionProvider\Upsell</item>
+                <item name="related" xsi:type="object">Magento\Catalog\Service\V1\Product\Link\Data\ProductLink\CollectionProvider\Related</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Service\V1\Product\Link\Data\ProductLink\ProductEntity\ConverterPool">
+        <arguments>
+            <argument name="converters" xsi:type="array">
+                <item name="default" xsi:type="object">\Magento\Catalog\Service\V1\Product\Link\Data\ProductLink\ProductEntity\DefaultConverter</item>
             </argument>
         </arguments>
     </type>

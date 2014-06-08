@@ -319,6 +319,7 @@ abstract class Grid extends Block
         $sortBlock = $this->_rootElement->find(sprintf($this->sortLink, $field, $sort));
         if ($sortBlock->isVisible()) {
             $sortBlock->click();
+            $this->getTemplateBlock()->waitLoader();
         }
     }
 }

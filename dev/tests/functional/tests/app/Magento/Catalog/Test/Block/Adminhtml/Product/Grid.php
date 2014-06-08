@@ -27,7 +27,7 @@ namespace Magento\Catalog\Test\Block\Adminhtml\Product;
 use Magento\Backend\Test\Block\Widget\Grid as ParentGrid;
 
 /**
- * Class ProductGrid
+ * Class Grid
  * Backend catalog product grid
  */
 class Grid extends ParentGrid
@@ -35,24 +35,24 @@ class Grid extends ParentGrid
     /**
      * Initialize block elements
      */
-    protected $filters = array(
-        'name' => array(
+    protected $filters = [
+        'name' => [
             'selector' => '#productGrid_product_filter_name'
-        ),
-        'sku' => array(
+        ],
+        'sku' => [
             'selector' => '#productGrid_product_filter_sku'
-        ),
-        'type' => array(
+        ],
+        'type' => [
             'selector' => '#productGrid_product_filter_type',
             'input' => 'select'
-        ),
-        'price_from' => array(
+        ],
+        'price_from' => [
             'selector' => '#productGrid_product_filter_price_from'
-        ),
-        'price_to' => array(
+        ],
+        'price_to' => [
             'selector' => '#productGrid_product_filter_price_to'
-        )
-    );
+        ]
+    ];
 
     /**
      * Update attributes for selected items

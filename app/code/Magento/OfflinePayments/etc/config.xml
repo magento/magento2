@@ -26,15 +26,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Core/etc/config.xsd">
     <default>
         <payment>
-            <ccsave>
-                <active>0</active>
-                <cctypes>AE,VI,MC,DI</cctypes>
-                <model>Magento\OfflinePayments\Model\Ccsave</model>
-                <order_status>pending</order_status>
-                <title>Credit Card (saved)</title>
-                <allowspecific>0</allowspecific>
-                <group>offline</group>
-            </ccsave>
             <checkmo>
                 <active>1</active>
                 <model>Magento\OfflinePayments\Model\Checkmo</model>

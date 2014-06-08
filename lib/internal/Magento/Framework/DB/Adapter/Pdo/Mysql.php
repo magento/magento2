@@ -1141,7 +1141,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
 
             // collect CONSTRAINT
             $regExp  = '#,\s+CONSTRAINT `([^`]*)` FOREIGN KEY \(`([^`]*)`\) '
-                . 'REFERENCES (`[^`]*\.)?`([^`]*)` \(`([^`]*)`\)'
+                . 'REFERENCES (`([^`]*)`\.)?`([^`]*)` \(`([^`]*)`\)'
                 . '( ON DELETE (RESTRICT|CASCADE|SET NULL|NO ACTION))?'
                 . '( ON UPDATE (RESTRICT|CASCADE|SET NULL|NO ACTION))?#';
             $matches = array();
@@ -1152,11 +1152,11 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                     'SCHEMA_NAME'       => $schemaName,
                     'TABLE_NAME'        => $tableName,
                     'COLUMN_NAME'       => $match[2],
-                    'REF_SHEMA_NAME'    => isset($match[3]) ? $match[3] : $schemaName,
-                    'REF_TABLE_NAME'    => $match[4],
-                    'REF_COLUMN_NAME'   => $match[5],
-                    'ON_DELETE'         => isset($match[6]) ? $match[7] : '',
-                    'ON_UPDATE'         => isset($match[8]) ? $match[9] : ''
+                    'REF_SHEMA_NAME'    => isset($match[4]) ? $match[4] : $schemaName,
+                    'REF_TABLE_NAME'    => $match[5],
+                    'REF_COLUMN_NAME'   => $match[6],
+                    'ON_DELETE'         => isset($match[7]) ? $match[8] : '',
+                    'ON_UPDATE'         => isset($match[9]) ? $match[10] : ''
                 );
             }
 

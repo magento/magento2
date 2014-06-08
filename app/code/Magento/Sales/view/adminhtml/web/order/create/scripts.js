@@ -938,21 +938,24 @@ AdminOrder.prototype = {
         }
     },
 
-    loadAreaResponseHandler : function (response){
+    loadAreaResponseHandler : function (response) {
         if (response.error) {
             alert(response.message);
         }
-        if(response.ajaxExpired && response.ajaxRedirect) {
+        if (response.ajaxExpired && response.ajaxRedirect) {
             setLocation(response.ajaxRedirect);
         }
-        if(!this.loadingAreas){
+        if (!this.loadingAreas) {
             this.loadingAreas = [];
         }
-        if(typeof this.loadingAreas == 'string'){
+        if (typeof this.loadingAreas == 'string') {
             this.loadingAreas = [this.loadingAreas];
         }
-        if(this.loadingAreas.indexOf('message') == -1) {
+        if (this.loadingAreas.indexOf('message') == -1) {
             this.loadingAreas.push('message');
+        }
+        if (response.header) {
+            jQuery('.page-actions-inner').attr('data-title', response.header);
         }
 
         for (var i = 0; i < this.loadingAreas.length; i++) {
@@ -968,7 +971,7 @@ AdminOrder.prototype = {
         }
     },
 
-    prepareArea : function(area){
+    prepareArea : function(area) {
         if (this.giftMessageDataChanged) {
             return area.without('giftmessage');
         }

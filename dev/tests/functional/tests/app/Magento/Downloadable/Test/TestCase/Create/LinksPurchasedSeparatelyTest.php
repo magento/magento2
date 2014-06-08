@@ -45,7 +45,6 @@ class LinksPurchasedSeparatelyTest extends Functional
         $this->product = Factory::getFixtureFactory()
             ->getMagentoDownloadableDownloadableProductLinksPurchasedSeparately();
         $this->product->switchData('downloadable');
-
         Factory::getApp()->magentoBackendLoginUser();
     }
 
@@ -57,15 +56,17 @@ class LinksPurchasedSeparatelyTest extends Functional
      */
     public function test()
     {
-        $createProductPage = Factory::getPageFactory()->getCatalogProductNew();
-        $createProductPage->init($this->product);
-        $productForm = $createProductPage->getProductForm();
-
+        $createProductPage = Factory::getPageFactory()->getCatalogProductIndex();
         $createProductPage->open();
-        $productForm->fill($this->product);
-        $createProductPage->getFormAction()->save();
+        $createProductPage->getProductBlock()->addProduct('downloadable');
 
-        $createProductPage->getMessagesBlock()->assertSuccessMessage();
+        $createProductPageNew = Factory::getPageFactory()->getCatalogProductNew();
+        $productBlockForm = $createProductPageNew->getForm();
+
+        $productBlockForm->fillProduct($this->product);
+        $createProductPageNew->getFormAction()->save();
+
+        $createProductPageNew->getMessagesBlock()->assertSuccessMessage();
 
         $cachePage = Factory::getPageFactory()->getAdminCache();
         $cachePage->open();
@@ -99,7 +100,7 @@ class LinksPurchasedSeparatelyTest extends Functional
         $product = $this->product;
         $frontendHomePage = Factory::getPageFactory()->getCmsIndexIndex();
         $categoryPage = Factory::getPageFactory()->getCatalogCategoryView();
-        $productPage = Factory::getPageFactory()->getCatalogProductView();
+        $productPage = Factory::getPageFactory()->getDownloadableCatalogProductView();
 
         $frontendHomePage->open();
         $frontendHomePage->getTopmenu()->selectCategoryByName($product->getCategoryName());
@@ -108,18 +109,21 @@ class LinksPurchasedSeparatelyTest extends Functional
         $this->assertTrue($productListBlock->isProductVisible($product->getProductName()));
         $productListBlock->openProductViewPage($product->getProductName());
 
-        $productViewBlock = $productPage->getViewBlock();
+        $productViewBlock = $productPage->getDownloadableViewBlock();
         $this->assertEquals($product->getProductName(), $productViewBlock->getProductName());
-        $price = $productViewBlock->getProductPrice();
-        $this->assertEquals(number_format($product->getProductPrice(), 2), $price['price_regular_price']);
-
-        $productPage->getDownloadableLinksBlock()
-            ->check([['title' => $product->getData('fields/downloadable/link/0/title/value')]]);
-
-        $price = $productViewBlock->getProductPrice();
         $this->assertEquals(
-            number_format($product->getProductPrice() + $product->getData('fields/downloadable/link/0/price/value'), 2),
-            $price['price_regular_price']
+            sprintf('%1.2f', $product->getProductPrice()),
+            $productViewBlock->getProductPrice()['price_regular_price']
+        );
+
+        $this->assertEquals(
+            $productPage->getDownloadableViewBlock()->getDownloadableLinksBlock()->getItemTitle(1),
+            $product->getData('fields/downloadable_links/value/downloadable/link/0/title')
+        );
+
+        $this->assertEquals(
+            sprintf('$%1.2f', $product->getData('fields/downloadable_links/value/downloadable/link/0/price')),
+            $productPage->getDownloadableViewBlock()->getDownloadableLinksBlock()->getItemPrice(1)
         );
     }
 }

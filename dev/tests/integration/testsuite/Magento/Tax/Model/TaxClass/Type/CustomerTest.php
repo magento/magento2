@@ -41,6 +41,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $builder = $this->_objectManager->create('\Magento\Customer\Service\V1\Data\CustomerGroupBuilder');
 
         /* Create a tax class */
         $model = $this->_objectManager->create('Magento\Tax\Model\ClassModel');
@@ -53,7 +54,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         $model->setId($taxClassId);
         /** @var $customerGroupService \Magento\Customer\Service\V1\CustomerGroupServiceInterface */
         $customerGroupService = $this->_objectManager->create('\Magento\Customer\Service\V1\CustomerGroupService');
-        $group = (new CustomerGroupBuilder())->setId(null)->setCode(self::GROUP_CODE)->setTaxClassId($taxClassId)
+        $group = $builder->setId(null)->setCode(self::GROUP_CODE)->setTaxClassId($taxClassId)
             ->create();
         $customerGroupService->saveGroup($group);
 

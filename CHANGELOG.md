@@ -1,3 +1,70 @@
+2.0.0.0-dev81
+=============
+* Framework improvements:
+  * Covered the following Magento application components with unit tests:
+      * `SalesRule/Model/Observer`
+      * `SalesRule/Helper/*`
+      * `SalesRule/Model/Plugin/*`
+      * `SalesRule/Model/System/Config*`
+      * `Sales/Model/Config.php`
+      * `Sales/Model/Download.php`
+      * `Sales/Model/Quote.php`
+  * Covered the following Magento lib form elements with unit tests:
+      * `lib/Magento/Framework/Flag.php`
+      * `lib/Magento/Framework/Escaper`
+      * `lib/Magento/Framework/Event`
+      * `lib/Magento/Framework/Logger`
+      * `lib/Magento/Framework/Util`
+      * `lib/Magento/Framework/Registry.php`
+      * `lib/Magento/Framework/Backup/Media`
+      * `lib/Magento/Framework/Backup/NoMedia`
+      * `lib/Magento/Framework/Archive`
+      * `lib/Magento/Framework/Translate.php`
+  * Created Service API for Magento_Catalog module:
+      * AttributeSet service
+      * AttributeSetGroup service
+      * ProductLinks service
+      * ProductType service
+* Payments Improvements:
+  * Resolved a performance issue with Merchant Country selector under Payment Methods settings
+  * Removed the PayPal Payments Pro Payflow Edition payment solution
+  * Removed the Saved Credit Card payment method
+* Added the following functional tests:
+  * Delete Admin User
+  * Delete Backend Customer
+  * Delete Product UrlRewrite
+  * Downloadable Product Creation
+  * Update Simple Product
+  * Update Tax Rule
+  * Update Tax Rate
+  * Suggest Searching Result
+* Fixed bugs:
+  * Fixed an issue where the Create Order page title was not correct when scrolling down was performed
+  * Fixed the concurrent test running in MTF
+  * Fixed an issue where product custom options were merged incorrectly
+  * Fixed an issue where customer group discount was not applied for bundle products
+  * Fixed an issue where it was impossible to  create a refund for the PayPal Exprecch Checkout Payflow Edition if captured from the PayPal admin
+  * Fixed an issue where adding customer review caused an error in system.log
+  * Fixed an issue where  the Manage Stock option was automatically reset to No after changing the Stock Availability option
+  * Fixed an issue where the recurring profile attributes where displayed for a product when they were not included in the product attribute set.
+  * Fixed an issue where a fatal error appeared in some cases on attempt to add a product to  cart when FPT was enabled
+  * Fixed an issue where back in stock product alert emails showed HTML markup
+  * Fixed an issue where the Refresh Statistics link on the Sales Report page redirected to the frontend after setting  Add Store Code to Urls to Yes
+  * Fixed an issue where the selected bundle options price was included to the price displayed in the MAP popup
+  * Fixed an issue where the wrong allowed countries list was used in Checkout
+  * Fixed an issue where configurable products with out of stock associated simple products were displayed in layered navigation
+  * Fixed an issue where configurable products lost options  after being duplicated using the Save and Duplicate button
+  * Fixed issues with simple product custom options where it was impossible to import them from a product page and they were not duplicated correctly using the Save and Duplicate button
+  * Fixed an issue where it was impossible to create a customer on the backend in a single store mode
+  * Fixed an issue where reviews created on the backend appeared with the Guest status
+  * Fixed an issue where it was impossible to add an image for a configurable product variation during editing
+* Processed GitHub requests:
+  * [#539] (https://github.com/magento/magento2/issues/539) The "{config.xml,*/config.xml}" pattern cannot be processed
+  * [#564] (https://github.com/magento/magento2/issues/564) Catalog product images - Do not removing from file system
+  * [#256] (https://github.com/magento/magento2/issues/256) Unused file app\code\core\Mage\Backend\view\adminhtml\store\switcher\enhanced.phtml
+  * [#561] (https://github.com/magento/magento2/pull/561) Bugfix Magento\Framework\DB\Adapter\Pdo\Mysql::getForeignKeys()
+  * [#576] (https://github.com/magento/magento2/pull/576) Change Request for InvokerDefault::_callObserverMethod()
+
 2.0.0.0-dev80
 =============
 * Framework improvements:
@@ -104,7 +171,7 @@
   * Fixed an issue where the Links section was absent while editing downloadable products from the Wishlist
   * Fixed an issue where specified details for composite products were lost after adding to Gift Card and Downloadable products to the Wishlist
   * Fixed and issue where the Date widget was set to incorrect date when creating a new customer
-  * Fixed an issue where a customer was redirected to Dashboard if the Redirect user to dashboard after login option was set to вЂNoвЂ™
+  * Fixed an issue where a customer was redirected to Dashboard if the Redirect user to dashboard after login option was set to "No"
   * Fixed an issue where a customer was not able to register during checkout if Guest Checkout was not allowed
   * Fixed an issue where System logs were not generated properly in integration tests
   * Fixed benchmarking script
@@ -122,7 +189,7 @@
   * Catalog Price Rule Creation
   * Category Url Rewrite Creation
   * Admin User Role Deletion
-* Update composer.json.dist in order to download and install MTF from Public GitHub (MAGETWO-24698)
+* Update composer.json.dist in order to download and install MTF from Public GitHub
 * GitHub requests:
   * [#542] (https://github.com/magento/magento2/pull/542) Fix ImportExport bug which occurs while importing multiple rows per entity
   * [#507] (https://github.com/magento/magento2/issues/507) "Insert Image" window is overlapped on menu

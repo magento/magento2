@@ -56,7 +56,7 @@
         <require>
             <catalogCategoryView class="Magento\Catalog\Test\Page\Category\CatalogCategoryView" />
             <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
-            <category class="Magento\Catalog\Test\Page\Category\CatalogCategoryView" />
+            <category class="Magento\Catalog\Test\Fixture\CatalogCategoryEntity" />
             <product class="Mtf\Fixture\FixtureInterface" />
         </require>
     </assertProductVisibleInCategory>
@@ -74,7 +74,7 @@
             <catalogCategoryView class="Magento\Catalog\Test\Page\Category\CatalogCategoryView" />
             <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
             <product class="Mtf\Fixture\FixtureInterface" />
-            <category class="Magento\Catalog\Test\Page\Category\CatalogCategoryView" />
+            <category class="Magento\Catalog\Test\Fixture\CatalogCategoryEntity" />
         </require>
     </assertProductInCategory>
     <assertProductInCart module="Magento_Catalog">
@@ -141,7 +141,7 @@
             <catalogCategoryView class="Magento\Catalog\Test\Page\Category\CatalogCategoryView" />
             <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
             <product class="Mtf\Fixture\FixtureInterface" />
-            <category class="Magento\Catalog\Test\Page\Category\CatalogCategoryView" />
+            <category class="Magento\Catalog\Test\Fixture\CatalogCategoryEntity" />
             <catalogProductView class="Magento\Catalog\Test\Page\Product\CatalogProductView" />
             <catalogSearchResult class="Magento\CatalogSearch\Test\Page\CatalogsearchResult" />
         </require>

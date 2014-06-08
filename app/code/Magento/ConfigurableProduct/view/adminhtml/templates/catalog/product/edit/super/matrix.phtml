@@ -105,7 +105,7 @@ $productByUsedAttributes = $this->getAssociatedProducts();
                         <?php $image = $product->getImage(); if ($image == 'no_selection'): $image = ''; endif; ;?>
                         <div class="action-upload<?php if ($image): ?> no-display<?php endif;?>" data-action="upload-image">
                             <span><?php echo __('Upload Image'); ?></span>
-                            <input name="image" type="file" disabled="disabled"
+                            <input name="image" type="file" disabled="disabled" data-locked="1"
                                    data-url="<?php echo $this->escapeHtml($this->getImageUploadUrl()) ?>"
                                    title="<?php echo __('Upload Image'); ?>" />
                             <input id="product-<?php echo $product->getId()?>-variation-image"

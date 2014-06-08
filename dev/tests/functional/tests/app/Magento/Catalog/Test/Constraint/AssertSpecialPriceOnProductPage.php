@@ -53,8 +53,10 @@ class AssertSpecialPriceOnProductPage extends AbstractConstraint
         $catalogProductView->open();
         $fields = $product->getData();
         $specialPrice = $catalogProductView->getViewBlock()->getProductPrice();
-        $specialPrice = isset($specialPrice['price_special_price']) ? $specialPrice['price_special_price'] : null;
-        if (!empty($fields['special_price'])) {
+        $specialPrice = (isset($specialPrice['price_special_price']))
+            ? $specialPrice['price_special_price']
+            : null;
+        if (isset($fields['special_price'])) {
             \PHPUnit_Framework_Assert::assertEquals(
                 $fields['special_price'],
                 $specialPrice,
@@ -64,12 +66,12 @@ class AssertSpecialPriceOnProductPage extends AbstractConstraint
     }
 
     /**
-     * Returns a string representation of the object.
+     * Returns a string representation of the object
      *
      * @return string
      */
     public function toString()
     {
-        return "Assert that displayed special price on product page equals passed from fixture";
+        return "Assert that displayed special price on product page equals passed from fixture.";
     }
 }

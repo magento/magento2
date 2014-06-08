@@ -60,6 +60,11 @@ class ItemTest extends \PHPUnit_Framework_TestCase
      */
     private $objectManagerHelper;
 
+    /**
+     * @var \Magento\Sales\Helper\Quote\Item\Compare|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $compareHelper;
+
     const PRODUCT_ID = 1;
     const PRODUCT_TYPE = 'simple';
     const PRODUCT_SKU = '12345';
@@ -109,6 +114,14 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
 
+        $this->compareHelper = $this->getMock(
+            'Magento\Sales\Helper\Quote\Item\Compare',
+            [],
+            [],
+            '',
+            false
+        );
+
         $this->model = $this->objectManagerHelper->getObject(
             '\Magento\Sales\Model\Quote\Item',
             [
@@ -116,6 +129,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
                 'context' => $this->modelContext,
                 'statusListFactory' => $statusListFactory,
                 'itemOptionFactory' => $this->itemOptionFactory,
+                'compareHelper' => $this->compareHelper
             ]
         );
     }
@@ -610,6 +624,24 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue([$optionCode1 => $optionMock1, $optionCode2 => $optionMock2]));
 
         $this->assertTrue($this->model->representProduct($productMock));
+    }
+
+    /**
+     * test compare
+     */
+    public function testCompare()
+    {
+        $itemMock = $this->getMock('Magento\Sales\Model\Quote\Item',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->compareHelper->expects($this->once())
+            ->method('compare')
+            ->with($this->equalTo($this->model), $this->equalTo($itemMock))
+            ->will($this->returnValue(true));
+        $this->assertTrue($this->model->compare($itemMock));
     }
 
     public function testCompareOptionsEqual()

@@ -104,8 +104,8 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $regionBuilder = $objectManagerHelper->getObject('Magento\Customer\Service\V1\Data\RegionBuilder');
+        $this->objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $regionBuilder = $this->objectManagerHelper->getObject('Magento\Customer\Service\V1\Data\RegionBuilder');
         /** @var \Magento\Customer\Service\V1\CustomerMetadataService $customerMetadataService */
         $this->_customerMetadataService = $this->getMockBuilder(
             'Magento\Customer\Service\V1\CustomerMetadataService'
@@ -124,9 +124,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
                 )
             )
         );
-        $this->_valueBuilder = $objectManagerHelper
+        $this->_valueBuilder = $this->objectManagerHelper
             ->getObject('Magento\Framework\Service\Data\Eav\AttributeValueBuilder');
-        $this->_addressBuilder = $objectManagerHelper->getObject(
+        $this->_addressBuilder = $this->objectManagerHelper->getObject(
             'Magento\Customer\Service\V1\Data\AddressBuilder',
             [
                 'valueBuilder' => $this->_valueBuilder,
@@ -156,7 +156,8 @@ class AddressTest extends \PHPUnit_Framework_TestCase
                 'getStreet' => $this->_expectedValues['street'],
                 'getCity' => $this->_expectedValues['city'],
                 'getCountryId' => $this->_expectedValues['country_id'],
-                'getRegion' => (new RegionBuilder())->setRegionId(0)->setRegion('Texas')->create(),
+                'getRegion' => $this->objectManagerHelper->getObject('\Magento\Customer\Service\V1\Data\RegionBuilder')
+                        ->setRegionId(0)->setRegion('Texas')->create(),
                 'getPostcode' => $this->_expectedValues['postcode'],
                 'getTelephone' => $this->_expectedValues['telephone']
             )
@@ -225,7 +226,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $addressBuilder->setCity($this->_expectedValues['city']);
         $addressBuilder->setCountryId($this->_expectedValues['country_id']);
         $addressBuilder->setRegion(
-            (new RegionBuilder())->setRegionId(
+            $this->objectManagerHelper->getObject('\Magento\Customer\Service\V1\Data\RegionBuilder')->setRegionId(
                 $this->_expectedValues['region']['region_id']
             )->setRegion(
                 $this->_expectedValues['region']['region']
@@ -264,7 +265,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->_expectedValues['city'], $address->getCity());
         $this->assertEquals($this->_expectedValues['country_id'], $address->getCountryId());
         $this->assertEquals(
-            (new RegionBuilder())->setRegionId(
+            $this->objectManagerHelper->getObject('\Magento\Customer\Service\V1\Data\RegionBuilder')->setRegionId(
                 $this->_expectedValues['region']['region_id']
             )->setRegion(
                 $this->_expectedValues['region']['region']

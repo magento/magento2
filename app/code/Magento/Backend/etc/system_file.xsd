@@ -145,7 +145,6 @@
                     <xs:element name="frontend_model" type="typeModel" />
                     <xs:element name="clone_model" type="typeModel" />
                     <xs:element name="clone_fields" type="xs:int" />
-                    <xs:element name="expanded" type="xs:int" />
                     <xs:element name="help_url" type="typeUrl" />
                     <xs:element name="more_url" type="typeUrl" />
                     <xs:element name="demo_link" type="typeUrl" />

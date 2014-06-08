@@ -36,6 +36,21 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_configurableAttributeFactoryMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_typeConfigurableFactory;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_attributeCollectionFactory;
+
+    /**
      * @var \Magento\TestFramework\Helper\ObjectManager
      */
     protected $_objectHelper;
@@ -52,9 +67,9 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $coreRegistry = $this->getMock('Magento\Framework\Registry', array(), array(), '', false);
         $logger = $this->getMock('Magento\Framework\Logger', array(), array(), '', false);
         $productFactoryMock = $this->getMock('Magento\Catalog\Model\ProductFactory', array(), array(), '', false);
-        $confFactoryMock = $this->getMock(
+        $this->_typeConfigurableFactory = $this->getMock(
             'Magento\ConfigurableProduct\Model\Resource\Product\Type\ConfigurableFactory',
-            array(),
+            ['create', 'saveProducts'],
             array(),
             '',
             false
@@ -68,9 +83,9 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $confAttrFactoryMock = $this->getMock(
+        $this->_configurableAttributeFactoryMock = $this->getMock(
             'Magento\ConfigurableProduct\Model\Product\Type\Configurable\AttributeFactory',
-            array(),
+            array('create'),
             array(),
             '',
             false
@@ -82,9 +97,9 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $attrColFactory = $this->getMock(
+        $this->_attributeCollectionFactory = $this->getMock(
             'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\CollectionFactory',
-            array(),
+            array('create'),
             array(),
             '',
             false
@@ -93,13 +108,13 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             'Magento\ConfigurableProduct\Model\Product\Type\Configurable',
             array(
                 'productFactory' => $productFactoryMock,
-                'typeConfigurableFactory' => $confFactoryMock,
+                'typeConfigurableFactory' => $this->_typeConfigurableFactory,
                 'entityFactory' => $entityFactoryMock,
                 'attributeSetFactory' => $setFactoryMock,
                 'eavAttributeFactory' => $attributeFactoryMock,
-                'configurableAttributeFactory' => $confAttrFactoryMock,
+                'configurableAttributeFactory' => $this->_configurableAttributeFactoryMock,
                 'productCollectionFactory' => $productColFactory,
-                'attributeCollectionFactory' => $attrColFactory,
+                'attributeCollectionFactory' => $this->_attributeCollectionFactory,
                 'eventManager' => $eventManager,
                 'coreData' => $coreDataMock,
                 'fileStorageDb' => $fileStorageDbMock,
@@ -113,5 +128,64 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     public function testHasWeightTrue()
     {
         $this->assertTrue($this->_model->hasWeight(), 'This product has not weight, but it should');
+    }
+
+    /**
+     * Test `Save` method
+     */
+    public function testSave()
+    {
+        $attributeData = [1 => [
+            'id' => 1,
+            'code' => 'someattr',
+            'attribute_id' => 111,
+            'position' => 0,
+            'label' => 'Some Super Attribute',
+            'values' => []
+        ]];
+
+        $product = $this->getMockBuilder('\Magento\Catalog\Model\Product')
+            ->setMethods(['getIsDuplicate', 'dataHasChangedFor', 'getConfigurableAttributesData', 'getStoreId',
+                'getId', 'getData', 'hasData', 'getAssociatedProductIds', '__wakeup', '__sleep'
+            ])->disableOriginalConstructor()
+            ->getMock();
+        $product->expects($this->any())->method('dataHasChangedFor')->will($this->returnValue('false'));
+        $product->expects($this->any())->method('getConfigurableAttributesData')
+            ->will($this->returnValue($attributeData));
+        $product->expects($this->once())->method('getIsDuplicate')->will($this->returnValue(true));
+        $product->expects($this->any())->method('getStoreId')->will($this->returnValue(1));
+        $product->expects($this->any())->method('getId')->will($this->returnValue(1));
+        $product->expects($this->any())->method('getAssociatedProductIds')->will($this->returnValue([2]));
+        $product->expects($this->any())->method('hasData')->with('_cache_instance_used_product_attribute_ids')
+            ->will($this->returnValue(true));
+        $product->expects($this->any())->method('getData')->with('_cache_instance_used_product_attribute_ids')
+            ->will($this->returnValue([1]));
+
+        $attribute = $this->getMockBuilder('\Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute')
+            ->disableOriginalConstructor()
+            ->setMethods(['addData', 'setStoreId', 'setProductId', 'save', '__wakeup', '__sleep'])
+            ->getMock();
+        $expectedAttributeData = $attributeData[1];
+        unset($expectedAttributeData['id']);
+        $attribute->expects($this->once())->method('addData')->with($expectedAttributeData)->will($this->returnSelf());
+        $attribute->expects($this->once())->method('setStoreId')->with(1)->will($this->returnSelf());
+        $attribute->expects($this->once())->method('setProductId')->with(1)->will($this->returnSelf());
+        $attribute->expects($this->once())->method('save')->will($this->returnSelf());
+
+        $this->_configurableAttributeFactoryMock->expects($this->any())->method('create')
+            ->will($this->returnValue($attribute));
+
+        $attributeCollection = $this->getMockBuilder(
+                '\Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\Collection'
+            )->setMethods(['setProductFilter', 'addFieldToFilter', 'walk'])->disableOriginalConstructor()
+            ->getMock();
+        $this->_attributeCollectionFactory->expects($this->any())->method('create')
+            ->will($this->returnValue($attributeCollection));
+
+        $this->_typeConfigurableFactory->expects($this->once())->method('create')->will($this->returnSelf());
+        $this->_typeConfigurableFactory->expects($this->once())->method('saveProducts')->withAnyParameters()
+            ->will($this->returnSelf());
+
+        $this->_model->save($product);
     }
 }

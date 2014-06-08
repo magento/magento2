@@ -170,9 +170,44 @@ class ObjectManager
      */
     public function getObject($className, array $arguments = array())
     {
+        if (is_subclass_of($className, '\Magento\Framework\Service\Data\AbstractObjectBuilder')) {
+            return $this->getBuilder($className, $arguments);
+        }
         $constructArguments = $this->getConstructArguments($className, $arguments);
         $reflectionClass = new \ReflectionClass($className);
         return $reflectionClass->newInstanceArgs($constructArguments);
+    }
+
+    /**
+     * Get data object builder
+     *
+     * @param string $className
+     * @param array $arguments
+     * @return object
+     */
+    protected function getBuilder($className, array $arguments)
+    {
+        $objectFactory = $this->_testObject->getMock('Magento\Framework\Service\Data\ObjectFactory', [], [], '', false);
+
+        if (!isset($arguments['objectFactory'])) {
+            $arguments['objectFactory'] = $objectFactory;
+        }
+
+
+        $constructArguments = $this->getConstructArguments($className, $arguments);
+        $reflectionClass = new \ReflectionClass($className);
+        $builderObject = $reflectionClass->newInstanceArgs($constructArguments);
+
+        $objectFactory->expects($this->_testObject->any())
+            ->method('create')
+            ->will($this->_testObject->returnCallback(
+                function ($className, $arguments) {
+                    $reflectionClass = new \ReflectionClass($className);
+                    return $reflectionClass->newInstanceArgs($arguments);
+                }
+            ));
+
+        return $builderObject;
     }
 
     /**

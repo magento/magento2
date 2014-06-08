@@ -25,9 +25,6 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
     <preference for="Magento\GroupedProduct\Model\Product\Type\Grouped" type="Magento\GroupedProduct\Model\Product\Type\Grouped\Backend" />
-    <type name="Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\ProductLinks">
-        <plugin name="GroupedProduct" type="Magento\GroupedProduct\Controller\Adminhtml\Product\Initialization\Helper\ProductLinks\Plugin\Grouped" />
-    </type>
     <type name="Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar">
         <plugin name="GroupedProduct" type="Magento\GroupedProduct\Block\Adminhtml\Order\Create\Sidebar" sortOrder="100"/>
     </type>

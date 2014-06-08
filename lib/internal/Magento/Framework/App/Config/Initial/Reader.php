@@ -60,7 +60,7 @@ class Reader
      *
      * @var array
      */
-    protected $_scopePriorityScheme = array('primary', 'global');
+    protected $_scopePriorityScheme = array('global');
 
     /**
      * Path to corresponding XSD file with validation rules for config

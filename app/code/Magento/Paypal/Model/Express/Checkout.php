@@ -483,8 +483,8 @@ class Checkout
             ->setInvNum($this->_quote->getReservedOrderId())
             ->setReturnUrl($returnUrl)
             ->setCancelUrl($cancelUrl)
-            ->setSolutionType($this->_config->solutionType)
-            ->setPaymentAction($this->_config->paymentAction)
+            ->setSolutionType($this->_config->getConfigValue('solutionType'))
+            ->setPaymentAction($this->_config->getConfigValue('paymentAction'))
         ;
         if ($this->_giropayUrls) {
             list($successUrl, $cancelUrl, $pendingUrl) = $this->_giropayUrls;
@@ -499,13 +499,13 @@ class Checkout
 
         $this->_setBillingAgreementRequest();
 
-        if ($this->_config->requireBillingAddress == PaypalConfig::REQUIRE_BILLING_ADDRESS_ALL) {
+        if ($this->_config->getConfigValue('requireBillingAddress') == PaypalConfig::REQUIRE_BILLING_ADDRESS_ALL) {
             $this->_api->setRequireBillingAddress(1);
         }
 
         // suppress or export shipping address
         if ($this->_quote->getIsVirtual()) {
-            if ($this->_config->requireBillingAddress == PaypalConfig::REQUIRE_BILLING_ADDRESS_VIRTUAL) {
+            if ($this->_config->getConfigValue('requireBillingAddress') == PaypalConfig::REQUIRE_BILLING_ADDRESS_VIRTUAL) {
                 $this->_api->setRequireBillingAddress(1);
             }
             $this->_api->setSuppressShipping(true);
@@ -527,11 +527,14 @@ class Checkout
         /** @var $cart \Magento\Payment\Model\Cart */
         $cart = $this->_cartFactory->create(array('salesModel' => $this->_quote));
         $this->_api->setPaypalCart($cart)
-            ->setIsLineItemsEnabled($this->_config->lineItemsEnabled);
+            ->setIsLineItemsEnabled($this->_config->getConfigValue('lineItemsEnabled'));
 
         // add shipping options if needed and line items are available
         $cartItems = $cart->getAllItems();
-        if ($this->_config->lineItemsEnabled && $this->_config->transferShippingOptions && !empty($cartItems)) {
+        if ($this->_config->getConfigValue('lineItemsEnabled')
+            && $this->_config->getConfigValue('transferShippingOptions')
+            && !empty($cartItems)
+        ) {
             if (!$this->_quote->getIsVirtual() && !$this->_quote->hasNominalItems()) {
                 $options = $this->_prepareShippingOptions($address, true);
                 if ($options) {
@@ -816,7 +819,9 @@ class Checkout
         $this->_quote->getBillingAddress()->setShouldIgnoreValidation(true);
         if (!$this->_quote->getIsVirtual()) {
             $this->_quote->getShippingAddress()->setShouldIgnoreValidation(true);
-            if (!$this->_config->requireBillingAddress && !$this->_quote->getBillingAddress()->getEmail()) {
+            if (!$this->_config->getConfigValue('requireBillingAddress')
+                && !$this->_quote->getBillingAddress()->getEmail()
+            ) {
                 $this->_quote->getBillingAddress()->setSameAsBilling(1);
             }
         }
@@ -913,7 +918,7 @@ class Checkout
         $isRequested = $this->_isBARequested || $this->_quote->getPayment()
             ->getAdditionalInformation(self::PAYMENT_INFO_TRANSPORT_BILLING_AGREEMENT);
 
-        if (!($this->_config->allow_ba_signup == PaypalConfig::EC_BA_SIGNUP_AUTO
+        if (!($this->_config->getConfigValue('allow_ba_signup') == PaypalConfig::EC_BA_SIGNUP_AUTO
             || $isRequested && $this->_config->shouldAskToCreateBillingAgreement())
         ) {
             return $this;

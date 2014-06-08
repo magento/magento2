@@ -67,7 +67,7 @@ class ConfiguredPriceTest extends \PHPUnit_Framework_TestCase
         $basePrice = $this->getMock('Magento\Framework\Pricing\Price\PriceInterface', [], [], '', false);
         $basePrice->expects($this->any())->method('getValue')->will($this->returnValue($this->basePriceValue));
 
-        $this->priceInfo = $this->getMock('Magento\Framework\Pricing\PriceInfoInterface', [], [], '', false);
+        $this->priceInfo = $this->getMock('Magento\Framework\Pricing\PriceInfo\Base', [], [], '', false);
         $this->priceInfo->expects($this->any())->method('getPrice')->will($this->returnValue($basePrice));
 
         $this->product = $this->getMockBuilder('Magento\Catalog\Model\Product')

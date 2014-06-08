@@ -67,10 +67,16 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $formFactory = $objectManager->get('Magento\Framework\Data\FormFactory');
         $form = $formFactory->create();
         $fieldset = $form->addFieldset('test_fieldset', array());
-        $dateAttribute = (new AttributeMetadataBuilder(
-            new OptionBuilder(),
-            new ValidationRuleBuilder()
-        ))->setAttributeCode(
+        $attributeBuilder = $objectManager->create(
+            '\Magento\Customer\Service\V1\Data\Eav\AttributeMetadataBuilder',
+            [
+                'optionBuilder' => $objectManager->create('\Magento\Customer\Service\V1\Data\Eav\OptionBuilder'),
+                'validationRuleBuilder' => $objectManager->create(
+                    '\Magento\Customer\Service\V1\Data\Eav\ValidationRuleBuilder'
+                ),
+            ]
+        );
+        $dateAttribute = $attributeBuilder->setAttributeCode(
             'date'
         )->setBackendType(
             'datetime'

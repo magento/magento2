@@ -34,6 +34,10 @@
             <attribute_code>id</attribute_code>
             <backend_type>virtual</backend_type>
         </id>
+        <id_path>
+            <attribute_code>id_path</attribute_code>
+            <backend_type>virtual</backend_type>
+        </id_path>
         <store_id>
             <attribute_code>store_id</attribute_code>
             <backend_type>varchar</backend_type>
@@ -61,4 +65,6 @@
             <input>text</input>
         </description>
     </fields>
+    <repository_class>Magento\UrlRewrite\Test\Repository\UrlRewrite</repository_class>
+    <handler_interface>Magento\UrlRewrite\Test\Handler\UrlRewrite</handler_interface>
 </fixture>
