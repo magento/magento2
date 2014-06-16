@@ -28,7 +28,6 @@ use Mtf\Page\FrontendPage;
 
 /**
  * Class CustomerAccountCreate
- *
  */
 class CustomerAccountCreate extends FrontendPage
 {

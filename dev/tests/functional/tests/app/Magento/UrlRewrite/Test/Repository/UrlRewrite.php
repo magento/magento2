@@ -40,7 +40,7 @@ class UrlRewrite extends AbstractRepository
     {
         $this->_data['default'] = [
             'request_path' => 'test-test-test%isolation%.html',
-            'options' => 'No',
+            'options' => 'Temporary (302)',
             'store_id' => 'Default Store View'
         ];
     }

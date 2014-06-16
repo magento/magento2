@@ -34,16 +34,18 @@ class CreditmemoTest extends \Magento\Backend\Utility\Controller
      */
     public function testAddCommentAction()
     {
-        /** @var $stockItem \Magento\CatalogInventory\Model\Stock\Item */
-        $stockItem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\CatalogInventory\Model\Stock\Item'
-        );
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var \Magento\CatalogInventory\Model\Stock\Status $status */
+        $status = $objectManager->get('Magento\CatalogInventory\Model\Stock\Status');
+        $status->updateStatus(1);
+        /** @var \Magento\CatalogInventory\Model\Stock\Item $stockItem */
+        $stockItem = $objectManager->create('Magento\CatalogInventory\Model\Stock\Item');
         $stockItem->loadByProduct(1);
         $this->assertEquals(95, $stockItem->getStockQty());
         $stockItem = null;
 
-        /** @var $order \Magento\Sales\Model\Order */
-        $order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Sales\Model\Order');
+        /** @var \Magento\Sales\Model\Order $order */
+        $order = $objectManager->create('Magento\Sales\Model\Order');
         $order->load('100000001', 'increment_id');
 
         $items = $order->getCreditmemosCollection()->getItems();
@@ -57,10 +59,8 @@ class CreditmemoTest extends \Magento\Backend\Utility\Controller
         $html = $this->getResponse()->getBody();
 
         $this->assertContains($comment, $html);
-        /** @var $stockItem \Magento\CatalogInventory\Model\Stock\Item */
-        $stockItem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\CatalogInventory\Model\Stock\Item'
-        );
+        /** @var \Magento\CatalogInventory\Model\Stock\Item $stockItem */
+        $stockItem = $objectManager->create('Magento\CatalogInventory\Model\Stock\Item');
         $stockItem->loadByProduct(1);
         $this->assertEquals(95, $stockItem->getStockQty());
     }

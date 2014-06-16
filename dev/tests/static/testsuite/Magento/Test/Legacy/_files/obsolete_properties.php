@@ -336,4 +336,6 @@ return array(
     ['_tierPriceDefaultTemplate', 'Magento\Catalog\Block\Product\AbstractProduct'],
     ['_mimeTypes', 'Magento\Framework\File\Transfer\Adapter\Http', '\Magento\Framework\File\Mime::$mimeTypes'],
     ['_viewFileResolution', 'Magento\Framework\View\FileSystem', '_fileResolution, _localeFileResolution'],
+    ['_inventoryModel', 'Magento\AdvancedCheckout\Model\Resource\Sku\Errors\Grid\Collection'],
+    ['_productInstance', 'Magento\CatalogInventory\Model\Stock\Item'],
 );

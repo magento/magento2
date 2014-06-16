@@ -48,4 +48,16 @@
         <locator>.pages .items</locator>
         <strategy>css selector</strategy>
     </block>
+    <block>
+        <name>titleBlock</name>
+        <class>Magento\Theme\Test\Block\Html\Title</class>
+        <locator>.page.title h1.title</locator>
+        <strategy>css selector</strategy>
+    </block>
+    <block>
+        <name>viewBlock</name>
+        <class>Magento\Catalog\Test\Block\Category\View</class>
+        <locator>.category.view</locator>
+        <strategy>css selector</strategy>
+    </block>
 </page>

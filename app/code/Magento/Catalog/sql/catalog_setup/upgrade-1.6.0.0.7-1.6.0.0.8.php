@@ -72,9 +72,3 @@ $connection->addIndex(
     $installer->getIdxName('catalog_category_anc_categs_index_tmp', array('path', 'category_id')),
     array('path', 'category_id')
 );
-
-$connection->addIndex(
-    $installer->getTable('catalog_category_entity'),
-    $installer->getIdxName('catalog_category_entity', array('path', 'entity_id')),
-    array('path', 'entity_id')
-);

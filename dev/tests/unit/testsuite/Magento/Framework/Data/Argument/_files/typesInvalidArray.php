@@ -77,11 +77,6 @@ return array(
         <argument name="a" xsi:type="string"><child>v</child></argument></arguments>',
         array("Element 'child': This element is not expected.")
     ),
-    'array without items' => array(
-        '<?xml version="1.0"?><arguments xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-        <argument name="a" xsi:type="array">v</argument></arguments>',
-        array("Element 'argument': Missing child element(s). Expected is ( item ).")
-    ),
     'array with forbidden child' => array(
         '<?xml version="1.0"?><arguments xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
         <argument name="a" xsi:type="array"><child>v</child></argument></arguments>',

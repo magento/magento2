@@ -26,7 +26,7 @@
 <page mca="catalog/product/edit" >
     <block>
         <name>form</name>
-        <class>Magento\Catalog\Test\Block\Adminhtml\Product\Form</class>
+        <class>Magento\Catalog\Test\Block\Adminhtml\Product\ProductForm</class>
         <locator>[id="page:main-container"]</locator>
         <strategy>css selector</strategy>
     </block>

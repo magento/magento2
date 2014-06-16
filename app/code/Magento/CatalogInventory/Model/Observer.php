@@ -22,15 +22,15 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Catalog inventory module observer
- */
 namespace Magento\CatalogInventory\Model;
 
 use Magento\CatalogInventory\Model\Stock\Item;
 use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Sales\Model\Quote\Item as QuoteItem;
 
+/**
+ * Catalog inventory module observer
+ */
 class Observer
 {
     /**
@@ -176,9 +176,9 @@ class Observer
     public function removeInventoryData($observer)
     {
         $product = $observer->getEvent()->getProduct();
-        if ($product instanceof \Magento\Catalog\Model\Product && $product->getId() && isset(
-            $this->_stockItemsArray[$product->getId()]
-        )
+        if ($product instanceof \Magento\Catalog\Model\Product
+            && $product->getId()
+            && isset($this->_stockItemsArray[$product->getId()])
         ) {
             unset($this->_stockItemsArray[$product->getId()]);
         }
@@ -186,7 +186,7 @@ class Observer
     }
 
     /**
-     * Add information about producs stock status to collection
+     * Add information about product stock status to collection
      * Used in for product collection after load
      *
      * @param EventObserver $observer
@@ -251,74 +251,50 @@ class Observer
      */
     protected function _prepareItemForSave($item, $product)
     {
-        $item->addData(
-            $product->getStockData()
-        )->setProduct(
-            $product
-        )->setProductId(
-            $product->getId()
-        )->setStockId(
-            $item->getStockId()
-        );
-        if (!is_null(
-            $product->getData('stock_data/min_qty')
-        ) && is_null(
-            $product->getData('stock_data/use_config_min_qty')
-        )
-        ) {
-            $item->setData('use_config_min_qty', false);
+        $item->addData($product->getStockData())
+            ->setProduct($product)
+            ->setProductId($product->getId())
+            ->setStockId($item->getStockId());
+
+        $paramListToCheck = [
+            'use_config_min_qty' => [
+                'item' => 'stock_data/min_qty',
+                'config' => 'stock_data/use_config_min_qty',
+            ],
+            'use_config_min_sale_qty' => [
+                'item' => 'stock_data/min_sale_qty',
+                'config' => 'stock_data/use_config_min_sale_qty',
+            ],
+            'use_config_max_sale_qty' => [
+                'item' => 'stock_data/max_sale_qty',
+                'config' => 'stock_data/use_config_max_sale_qty',
+            ],
+            'use_config_backorders' => [
+                'item' => 'stock_data/backorders',
+                'config' => 'stock_data/use_config_backorders',
+            ],
+            'use_config_notify_stock_qty' => [
+                'item' => 'stock_data/notify_stock_qty',
+                'config' => 'stock_data/use_config_notify_stock_qty',
+            ],
+            'use_config_enable_qty_inc' => [
+                'item' => 'stock_data/enable_qty_increments',
+                'config' => 'stock_data/use_config_enable_qty_inc',
+            ],
+            'use_config_qty_increments' => [
+                'item' => 'stock_data/qty_increments',
+                'config' => 'stock_data/use_config_qty_increments',
+            ],
+        ];
+        foreach ($paramListToCheck as $dataKey => $configPath) {
+            if (null !== $product->getData($configPath['item']) && null === $product->getData($configPath['config'])) {
+                $item->setData($dataKey, false);
+            }
         }
-        if (!is_null(
-            $product->getData('stock_data/min_sale_qty')
-        ) && is_null(
-            $product->getData('stock_data/use_config_min_sale_qty')
-        )
-        ) {
-            $item->setData('use_config_min_sale_qty', false);
-        }
-        if (!is_null(
-            $product->getData('stock_data/max_sale_qty')
-        ) && is_null(
-            $product->getData('stock_data/use_config_max_sale_qty')
-        )
-        ) {
-            $item->setData('use_config_max_sale_qty', false);
-        }
-        if (!is_null(
-            $product->getData('stock_data/backorders')
-        ) && is_null(
-            $product->getData('stock_data/use_config_backorders')
-        )
-        ) {
-            $item->setData('use_config_backorders', false);
-        }
-        if (!is_null(
-            $product->getData('stock_data/notify_stock_qty')
-        ) && is_null(
-            $product->getData('stock_data/use_config_notify_stock_qty')
-        )
-        ) {
-            $item->setData('use_config_notify_stock_qty', false);
-        }
+
         $originalQty = $product->getData('stock_data/original_inventory_qty');
         if (strlen($originalQty) > 0) {
             $item->setQtyCorrection($item->getQty() - $originalQty);
-        }
-        if (!is_null(
-            $product->getData('stock_data/enable_qty_increments')
-        ) && is_null(
-            $product->getData('stock_data/use_config_enable_qty_inc')
-        )
-        ) {
-            $item->setData('use_config_enable_qty_inc', false);
-        }
-        if (!is_null(
-            $product->getData('stock_data/qty_increments')
-        ) && is_null(
-            $product->getData('stock_data/use_config_qty_increments')
-        )
-        ) {
-            $item->setData('use_config_qty_increments', false);
         }
         return $this;
     }
@@ -346,7 +322,7 @@ class Observer
      * Also called after every successful order placement to ensure subtraction of inventory
      *
      * @param EventObserver $observer
-     * @return $this|void
+     * @return $this
      */
     public function subtractQuoteInventory(EventObserver $observer)
     {
@@ -355,7 +331,7 @@ class Observer
         // Maybe we've already processed this quote in some event during order placement
         // e.g. call in event 'sales_model_service_quote_submit_before' and later in 'checkout_submit_all_after'
         if ($quote->getInventoryProcessed()) {
-            return;
+            return $this;
         }
         $items = $this->_getProductsQty($quote->getAllItems());
 
@@ -538,8 +514,8 @@ class Observer
         $children = $item->getChildrenItems();
         $qty = $item->getQtyOrdered() - max($item->getQtyShipped(), $item->getQtyInvoiced()) - $item->getQtyCanceled();
 
-        if ($item->getId() && ($productId = $item->getProductId()) && empty($children) && $qty) {
-            $this->_stock->backItemQty($productId, $qty);
+        if ($item->getId() && $item->getProductId() && empty($children) && $qty) {
+            $this->_stock->backItemQty($item->getProductId(), $qty);
         }
 
         return $this;
@@ -548,10 +524,9 @@ class Observer
     /**
      * Update items stock status and low stock date.
      *
-     * @param EventObserver $observer
      * @return $this
      */
-    public function updateItemsStockUponConfigChange($observer)
+    public function updateItemsStockUponConfigChange()
     {
         $this->_resourceStock->updateSetOutOfStock();
         $this->_resourceStock->updateSetInStock();
@@ -628,10 +603,9 @@ class Observer
     /**
      * Reindex all events of product-massAction type
      *
-     * @param EventObserver $observer
      * @return void
      */
-    public function reindexProductsMassAction($observer)
+    public function reindexProductsMassAction()
     {
         $this->_indexer->indexEvents(
             \Magento\Catalog\Model\Product::ENTITY,

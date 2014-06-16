@@ -30,6 +30,7 @@ use \Magento\Catalog\Service\V1\Product\Link\Data\ProductLink;
 use \Magento\Framework\Exception\NoSuchEntityException;
 use \Magento\Catalog\Model\Resource\Product as ProductResource;
 use \Magento\Catalog\Service\V1\Product\Link\Data\ProductLink\ProductEntity\ConverterPool;
+use Magento\Catalog\Service\V1\Product\ProductLoader;
 
 class WriteService implements WriteServiceInterface
 {

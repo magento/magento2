@@ -23,6 +23,9 @@
  */
 namespace Magento\Catalog\Block\Product;
 
+/**
+ * Abstract product block context
+ */
 class Context extends \Magento\Framework\View\Element\Template\Context
 {
     /**
@@ -81,6 +84,11 @@ class Context extends \Magento\Framework\View\Element\Template\Context
     protected $reviewRenderer;
 
     /**
+     * @var \Magento\CatalogInventory\Service\V1\StockItem
+     */
+    protected $stockItemService;
+
+    /**
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
@@ -115,6 +123,7 @@ class Context extends \Magento\Framework\View\Element\Template\Context
      * @param \Magento\Theme\Helper\Layout $layoutHelper
      * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param ReviewRendererInterface $reviewRenderer
+     * @param \Magento\CatalogInventory\Service\V1\StockItem $stockItemService
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -152,7 +161,8 @@ class Context extends \Magento\Framework\View\Element\Template\Context
         \Magento\Catalog\Helper\Product\Compare $compareProduct,
         \Magento\Theme\Helper\Layout $layoutHelper,
         \Magento\Catalog\Helper\Image $imageHelper,
-        ReviewRendererInterface $reviewRenderer
+        ReviewRendererInterface $reviewRenderer,
+        \Magento\CatalogInventory\Service\V1\StockItem $stockItemService
     ) {
         $this->imageHelper = $imageHelper;
         $this->layoutHelper = $layoutHelper;
@@ -165,6 +175,7 @@ class Context extends \Magento\Framework\View\Element\Template\Context
         $this->catalogHelper = $catalogHelper;
         $this->mathRandom = $mathRandom;
         $this->reviewRenderer = $reviewRenderer;
+        $this->stockItemService = $stockItemService;
         parent::__construct(
             $request,
             $layout,
@@ -190,6 +201,14 @@ class Context extends \Magento\Framework\View\Element\Template\Context
             $appState,
             $storeManager
         );
+    }
+
+    /**
+     * @return \Magento\CatalogInventory\Service\V1\StockItem
+     */
+    public function getStockItemService()
+    {
+        return $this->stockItemService;
     }
 
     /**

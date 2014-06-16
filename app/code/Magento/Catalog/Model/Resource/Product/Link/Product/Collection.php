@@ -112,6 +112,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         $this->_product = $product;
         if ($product && $product->getId()) {
             $this->_hasLinkFilter = true;
+            $this->setStore($product->getStore());
         }
         return $this;
     }

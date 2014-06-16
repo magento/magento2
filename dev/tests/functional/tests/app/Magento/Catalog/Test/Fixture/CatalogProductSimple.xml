@@ -391,6 +391,7 @@
             <is_required>0</is_required>
             <default_value></default_value>
             <input>text</input>
+            <group>autosettings</group>
         </url_key>
         <url_path>
             <attribute_code>url_path</attribute_code>
@@ -440,6 +441,11 @@
             <group>customer-options</group>
             <fixture>Magento\Catalog\Test\Fixture\CatalogProductSimple\CustomOptions</fixture>
         </custom_options>
+        <website_ids>
+            <attribute_code>website_ids</attribute_code>
+            <backend_type>virtual</backend_type>
+            <default_value>Main Website</default_value>
+        </website_ids>
     </fields>
     <data_set>
         <sku></sku>

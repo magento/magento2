@@ -118,10 +118,23 @@ class FormTabs extends Form
     public function fill(FixtureInterface $fixture, Element $element = null)
     {
         $tabs = $this->getFieldsByTabs($fixture);
+        return $this->fillTabs($tabs, $element);
+    }
+
+    /**
+     * Fill specified form with tabs
+     *
+     * @param array $tabs
+     * @param Element|null $element
+     * @return FormTabs
+     */
+    protected function fillTabs(array $tabs, Element $element = null)
+    {
+        $context = ($element === null) ? $this->_rootElement : $element;
         foreach ($tabs as $tabName => $tabFields) {
             $tabElement = $this->getTabElement($tabName);
             $this->openTab($tabName);
-            $tabElement->fillFormTab(array_merge($tabFields, $this->unassignedFields), $this->_rootElement);
+            $tabElement->fillFormTab(array_merge($tabFields, $this->unassignedFields), $context);
             $this->updateUnassignedFields($tabElement);
         }
         if (!empty($this->unassignedFields)) {

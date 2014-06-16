@@ -33,7 +33,7 @@
         <xs:complexContent>
             <xs:extension base="argumentType">
                 <xs:sequence>
-                    <xs:element name="item" type="argumentType" minOccurs="1" maxOccurs="unbounded">
+                    <xs:element name="item" type="argumentType" minOccurs="0" maxOccurs="unbounded">
                         <xs:key name="itemName">
                             <xs:selector xpath="item"></xs:selector>
                             <xs:field xpath="@name"></xs:field>

@@ -119,7 +119,7 @@ var linkTemplate = '<tr>'+
         '<div class="files">'+
             '<div class="row">'+
                 '<label for="downloadable_link_{{id}}_sample_file_type"><input type="radio" class="radio" id="downloadable_link_{{id}}_sample_file_type" name="downloadable[link][{{id}}][sample][type]" value="file"{{sample_file_checked}} /> File:</label>'+
-                '<input type="hidden" id="downloadable_link_{{id}}_sample_file_save" name="downloadable[link][{{id}}][sample][file]" value="{{sample_file_save}}" />'+
+                '<input type="hidden" id="downloadable_link_{{id}}_sample_file_save" name="downloadable[link][{{id}}][sample][file]" value="{{sample_file_save}}" class="validate-downloadable-file"/>'+
                 '<div id="downloadable_link_{{id}}_sample_file" class="uploader">'+
                     '<div id="downloadable_link_{{id}}_sample_file-old" class="file-row-info"></div>'+
                     '<div id="downloadable_link_{{id}}_sample_file-new" class="file-row-info"></div>'+
@@ -136,7 +136,7 @@ var linkTemplate = '<tr>'+
                 '</div>'+
             '</div>'+
             '<div class="row">'+
-                '<label for="downloadable_link_{{id}}_sample_url_type"><input type="radio" class="radio" id="downloadable_link_{{id}}_sample_url_type" name="downloadable[link][{{id}}][sample][type]" value="url"{{sample_url_checked}} /> URL:</label><input type="text" class="input-text" name="downloadable[link][{{id}}][sample][url]" value="{{sample_url}}" />'+
+                '<label for="downloadable_link_{{id}}_sample_url_type"><input type="radio" class="radio" id="downloadable_link_{{id}}_sample_url_type" name="downloadable[link][{{id}}][sample][type]" value="url"{{sample_url_checked}} /> URL:</label><input type="text" class="input-text validate-downloadable-url" name="downloadable[link][{{id}}][sample][url]" value="{{sample_url}}" />'+
             '</div>'+
             '<div>'+
                 '<span id="downloadable_link_{{id}}_sample_container"></span>'+

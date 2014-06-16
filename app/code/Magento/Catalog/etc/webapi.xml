@@ -25,6 +25,48 @@
 -->
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../app/code/Magento/Webapi/etc/webapi.xsd">
+    <route url="/V1/products" method="POST">
+        <service class="Magento\Catalog\Service\V1\ProductServiceInterface" method="create"/>
+        <resources>
+            <resource ref="Magento_Catalog::products" />
+        </resources>
+    </route>
+    <route url="/V1/products/:id" method="PUT">
+        <service class="Magento\Catalog\Service\V1\ProductServiceInterface" method="update" />
+        <resources>
+            <resource ref="Magento_Catalog::products" />
+        </resources>
+    </route>
+    <route url="/V1/products/:id" method="DELETE">
+        <service class="Magento\Catalog\Service\V1\ProductServiceInterface" method="delete"/>
+        <resources>
+            <resource ref="Magento_Catalog::products" />
+        </resources>
+    </route>
+    <route url="/V1/products" method="GET">
+        <service class="Magento\Catalog\Service\V1\ProductServiceInterface" method="search"/>
+        <resources>
+            <resource ref="Magento_Catalog::products" />
+        </resources>
+    </route>
+    <route url="/V1/products/:id" method="GET">
+        <service class="Magento\Catalog\Service\V1\ProductServiceInterface" method="get"/>
+        <resources>
+            <resource ref="Magento_Catalog::products" />
+        </resources>
+    </route>
+    <route url="/V1/products/attributes/types" method="GET">
+        <service class="Magento\Catalog\Service\V1\ProductAttributeReadServiceInterface" method="types"/>
+        <resources>
+            <resource ref="Magento_Catalog::attributes_attributes" />
+        </resources>
+    </route>
+    <route url="/V1/products/attributes/:id" method="GET">
+        <service class="Magento\Catalog\Service\V1\ProductAttributeReadServiceInterface" method="info"/>
+        <resources>
+            <resource ref="Magento_Catalog::attributes_attributes" />
+        </resources>
+    </route>
     <route url="/V1/products/types" method="GET">
         <service class="Magento\Catalog\Service\V1\ProductTypeServiceInterface" method="getProductTypes"/>
         <resources>

@@ -28,7 +28,6 @@ use Mtf\Fixture\InjectableFixture;
 
 /**
  * Class AddressInjectable
- *
  */
 class AddressInjectable extends InjectableFixture
 {

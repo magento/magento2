@@ -22,16 +22,13 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-
-/**
- * Quantity and Stock Status attribute processing
- *
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Model\Product\Attribute\Backend;
 
 use Magento\Catalog\Model\Product;
 
+/**
+ * Quantity and Stock Status attribute processing
+ */
 class Stock extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
     /**

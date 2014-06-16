@@ -37,6 +37,15 @@
     <assertUrlRewriteCategoryRedirect module="Magento_UrlRewrite">
         <severeness>low</severeness>
     </assertUrlRewriteCategoryRedirect>
+    <assertProductUrlAvailableOnTheFront module="Magento_UrlRewrite">
+        <severeness>low</severeness>
+        <require>
+            <urlRewrite class="Magento\UrlRewrite\Test\Fixture\UrlRewrite"/>
+            <catalogProductView class="Magento\Catalog\Test\Page\Product\CatalogProductView"/>
+            <product class="Mtf\Fixture\FixtureInterface"/>
+            <browser class="Mtf\Client\Browser"/>
+        </require>
+    </assertProductUrlAvailableOnTheFront>
     <assertUrlRewriteDeletedMessage module="Magento_UrlRewrite">
         <severeness>low</severeness>
         <require>

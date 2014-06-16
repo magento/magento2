@@ -21,17 +21,10 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
-
-/**
- * Catalog Product Abstract Block
- *
- * @author     Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Block\Product;
 
 /**
- * Class AbstractProduct
+ * Catalog Product Abstract Block
  */
 abstract class AbstractProduct extends \Magento\Framework\View\Element\Template
 {
@@ -85,21 +78,21 @@ abstract class AbstractProduct extends \Magento\Framework\View\Element\Template
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * Catalog data
      *
      * @var \Magento\Catalog\Helper\Data
      */
-    protected $_catalogData = null;
+    protected $_catalogData;
 
     /**
      * Tax data
      *
      * @var \Magento\Tax\Helper\Data
      */
-    protected $_taxData = null;
+    protected $_taxData;
 
     /**
      * Catalog config
@@ -144,6 +137,11 @@ abstract class AbstractProduct extends \Magento\Framework\View\Element\Template
     protected $reviewRenderer;
 
     /**
+     * @var \Magento\CatalogInventory\Service\V1\StockItem
+     */
+    protected $stockItemService;
+
+    /**
      * @param Context $context
      * @param array $data
      */
@@ -162,6 +160,7 @@ abstract class AbstractProduct extends \Magento\Framework\View\Element\Template
         $this->_catalogData = $context->getCatalogHelper();
         $this->_mathRandom = $context->getMathRandom();
         $this->reviewRenderer = $context->getReviewRenderer();
+        $this->stockItemService = $context->getStockItemService();
         parent::__construct($context, $data);
     }
 
@@ -190,8 +189,9 @@ abstract class AbstractProduct extends \Magento\Framework\View\Element\Template
     }
 
     /**
-     * Retrieves url for form submitting:
-     * some objects can use setSubmitRouteData() to set route and params for form submitting,
+     * Retrieves url for form submitting.
+     *
+     * Some objects can use setSubmitRouteData() to set route and params for form submitting,
      * otherwise default url will be used
      *
      * @param \Magento\Catalog\Model\Product $product
@@ -240,12 +240,8 @@ abstract class AbstractProduct extends \Magento\Framework\View\Element\Template
      */
     public function getMinimalQty($product)
     {
-        $stockItem = $product->getStockItem();
-        if ($stockItem) {
-            return $stockItem->getMinSaleQty()
-                && $stockItem->getMinSaleQty() > 0 ? $stockItem->getMinSaleQty() * 1 : null;
-        }
-        return null;
+        $minSaleQty = $this->stockItemService->getMinSaleQty($product->getId());
+        return $minSaleQty > 0 ? $minSaleQty : null;
     }
 
     /**
@@ -259,19 +255,19 @@ abstract class AbstractProduct extends \Magento\Framework\View\Element\Template
      */
     public function getPriceHtml($product, $displayMinimalPrice = false, $idSuffix = '')
     {
-        $type_id = $product->getTypeId();
+        $typeId = $product->getTypeId();
         if ($this->_catalogData->canApplyMsrp($product)) {
-            $realPriceHtml = $this->_preparePriceRenderer($type_id)
+            $realPriceHtml = $this->_preparePriceRenderer($typeId)
                 ->setProduct($product)
                 ->setDisplayMinimalPrice($displayMinimalPrice)
                 ->setIdSuffix($idSuffix)
                 ->toHtml();
             $product->setAddToCartUrl($this->getAddToCartUrl($product));
             $product->setRealPriceHtml($realPriceHtml);
-            $type_id = $this->_mapRenderer;
+            $typeId = $this->_mapRenderer;
         }
 
-        return $this->_preparePriceRenderer($type_id)
+        return $this->_preparePriceRenderer($typeId)
             ->setProduct($product)
             ->setDisplayMinimalPrice($displayMinimalPrice)
             ->setIdSuffix($idSuffix)
@@ -664,11 +660,7 @@ abstract class AbstractProduct extends \Magento\Framework\View\Element\Template
         $price = '';
 
         if ($priceRender) {
-            $price = $priceRender->render(
-                $priceType,
-                $product,
-                $arguments
-            );
+            $price = $priceRender->render($priceType, $product, $arguments);
         }
         return $price;
     }

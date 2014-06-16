@@ -57,10 +57,10 @@
                 <td>
                     <input name="product[options][${option_id}][file_extension]" class="input-text" type="text" value="${file_extension}">
                 </td>
-                <td class="col-file"><?php echo __('%1 x %2 px.',
+                <td class="col-file"><?php echo __('%1 <span>x</span> %2 <span>px.</span>',
                     '<input class="input-text" type="text" name="product[options][${option_id}][image_size_x]" value="${image_size_x}">',
                     '<input class="input-text" type="text" name="product[options][${option_id}][image_size_y]" value="${image_size_y}">') ?>
-                    <br/><?php echo __('Please leave blank if it is not an image.') ?>
+                    <div class="note"><?php echo __('Please leave blank if it is not an image.') ?></div>
                 </td>
             </tr>
         </table>

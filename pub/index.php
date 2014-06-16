@@ -30,10 +30,8 @@ use Magento\Framework\App\Filesystem;
 $params = $_SERVER;
 
 $params[Filesystem::PARAM_APP_DIRS][Filesystem::PUB_DIR] = array('uri' => '');
-$params[Filesystem::PARAM_APP_DIRS][Filesystem::PUB_LIB_DIR] = array('uri' => 'lib');
 $params[Filesystem::PARAM_APP_DIRS][Filesystem::MEDIA_DIR] = array('uri' => 'media');
 $params[Filesystem::PARAM_APP_DIRS][Filesystem::STATIC_VIEW_DIR] = array('uri' => 'static');
-$params[Filesystem::PARAM_APP_DIRS][Filesystem::PUB_VIEW_CACHE_DIR] = array('uri' => 'cache');
 $params[Filesystem::PARAM_APP_DIRS][Filesystem::UPLOAD_DIR] = array('uri' => 'media/upload');
 $entryPoint = new \Magento\Framework\App\EntryPoint\EntryPoint(BP, $params);
 $entryPoint->run('Magento\Framework\App\Http');

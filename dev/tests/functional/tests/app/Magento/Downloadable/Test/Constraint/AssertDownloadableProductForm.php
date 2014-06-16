@@ -25,9 +25,9 @@
 namespace Magento\Downloadable\Test\Constraint;
 
 use Magento\Catalog\Test\Constraint\AssertProductForm;
-use Mtf\Fixture\InjectableFixture;
+use Mtf\Fixture\FixtureInterface;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
-use Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew;
+use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 
 /**
  * Class AssertDownloadableProductForm
@@ -44,15 +44,15 @@ class AssertDownloadableProductForm extends AssertProductForm
     /**
      * Assert that downloadable product data on edit page equals to passed from fixture
      *
-     * @param InjectableFixture $product
+     * @param FixtureInterface $product
      * @param CatalogProductIndex $productGrid
-     * @param CatalogProductNew $productPage
+     * @param CatalogProductEdit $productPage
      * @return void
      */
     public function processAssert(
-        InjectableFixture $product,
+        FixtureInterface $product,
         CatalogProductIndex $productGrid,
-        CatalogProductNew $productPage
+        CatalogProductEdit $productPage
     ) {
         $filter = ['sku' => $product->getData('sku')];
         $productGrid->open()->getProductGrid()->searchAndOpen($filter);

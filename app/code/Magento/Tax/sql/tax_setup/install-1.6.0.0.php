@@ -83,8 +83,8 @@ $table = $installer->getConnection()->newTable(
     array('nullable' => false),
     'Position'
 )->addIndex(
-    $installer->getIdxName('tax_calculation_rule', array('priority', 'position', 'tax_calculation_rule_id')),
-    array('priority', 'position', 'tax_calculation_rule_id')
+    $installer->getIdxName('tax_calculation_rule', array('priority', 'position')),
+    array('priority', 'position')
 )->addIndex(
     $installer->getIdxName('tax_calculation_rule', array('code')),
     array('code')
@@ -208,9 +208,6 @@ $table = $installer->getConnection()->newTable(
     $installer->getIdxName('tax_calculation', array('tax_calculation_rule_id')),
     array('tax_calculation_rule_id')
 )->addIndex(
-    $installer->getIdxName('tax_calculation', array('tax_calculation_rate_id')),
-    array('tax_calculation_rate_id')
-)->addIndex(
     $installer->getIdxName('tax_calculation', array('customer_tax_class_id')),
     array('customer_tax_class_id')
 )->addIndex(
@@ -297,9 +294,6 @@ $table = $installer->getConnection()->newTable(
 )->addIndex(
     $installer->getIdxName('tax_calculation_rate_title', array('tax_calculation_rate_id', 'store_id')),
     array('tax_calculation_rate_id', 'store_id')
-)->addIndex(
-    $installer->getIdxName('tax_calculation_rate_title', array('tax_calculation_rate_id')),
-    array('tax_calculation_rate_id')
 )->addIndex(
     $installer->getIdxName('tax_calculation_rate_title', array('store_id')),
     array('store_id')

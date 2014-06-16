@@ -28,8 +28,6 @@ use Mtf\Page\FrontendPage;
 
 /**
  * Class CmsIndex
- *
- * @package Magento\Cms\Test\Page
  */
 class CmsIndex extends FrontendPage
 {

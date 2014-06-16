@@ -100,9 +100,6 @@ $table = $installer->getConnection()->newTable(
     $installer->getIdxName('core_url_rewrite', array('target_path', 'store_id')),
     array('target_path', 'store_id')
 )->addIndex(
-    $installer->getIdxName('core_url_rewrite', array('id_path')),
-    array('id_path')
-)->addIndex(
     $installer->getIdxName('core_url_rewrite', array('store_id')),
     array('store_id')
 )->addForeignKey(

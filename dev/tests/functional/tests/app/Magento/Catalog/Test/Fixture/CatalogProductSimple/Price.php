@@ -24,7 +24,6 @@
 
 namespace Magento\Catalog\Test\Fixture\CatalogProductSimple;
 
-use Mtf\Fixture\FixtureFactory;
 use Mtf\Fixture\FixtureInterface;
 
 /**
@@ -56,6 +55,14 @@ class Price implements FixtureInterface
         $this->params = $params;
         if (isset($data['value'])) {
             $this->data = $data['value'];
+            if (is_array($this->data)) {
+                $this->data = array_filter(
+                    $this->data,
+                    function ($value) {
+                        return $value !== '-';
+                    }
+                );
+            }
         }
         if (isset($data['preset'])) {
             $this->currentPreset = $data['preset'];

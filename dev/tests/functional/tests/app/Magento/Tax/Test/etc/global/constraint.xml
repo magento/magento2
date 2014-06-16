@@ -70,6 +70,10 @@
         <severeness>low</severeness>
         <require/>
     </assertTaxRateIsInCorrectRange>
+    <assertTaxRateInTaxRule module="Magento_Tax">
+        <severeness>low</severeness>
+        <require/>
+    </assertTaxRateInTaxRule>
     <assertTaxRuleIsApplied module="Magento_Tax">
         <severeness>high</severeness>
         <require />
@@ -78,4 +82,17 @@
         <severeness>high</severeness>
         <require />
     </assertTaxRuleIsNotApplied>
+    <assertTaxRuleSuccessDeleteMessage module="Magento_Tax">
+        <severeness>high</severeness>
+        <require>
+            <taxRuleIndex class="Magento\Tax\Test\Page\Adminhtml\TaxRuleIndex" />
+        </require>
+    </assertTaxRuleSuccessDeleteMessage>
+    <assertTaxRuleNotInGrid module="Magento_Tax">
+        <severeness>high</severeness>
+        <require>
+            <taxRuleIndex class="Magento\Tax\Test\Page\Adminhtml\TaxRuleIndex" />
+            <taxRule class="Magento\Tax\Test\Fixture\TaxRule" />
+        </require>
+    </assertTaxRuleNotInGrid>
 </constraint>

@@ -238,6 +238,7 @@ abstract class AbstractExpress extends AppAction implements RedirectLoginInterfa
             // TODO verify if this logic of order cancellation is deprecated
             // if there is an order - cancel it
             $orderId = $this->_getCheckoutSession()->getLastOrderId();
+            /** @var \Magento\Sales\Model\Order $order */
             $order = $orderId ? $this->_orderFactory->create()->load($orderId) : false;
             if ($order && $order->getId() && $order->getQuoteId() == $this->_getCheckoutSession()->getQuoteId()) {
                 $order->cancel()->save();

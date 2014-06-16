@@ -28,6 +28,9 @@ use Mtf\Block\Block;
 use Mtf\Client\Element;
 use Mtf\Client\Element\Locator;
 use \Magento\Catalog\Test\Fixture\Product;
+use Magento\Catalog\Test\Fixture\CatalogProductSimple;
+use Mtf\Fixture\FixtureInterface;
+use Mtf\Fixture\InjectableFixture;
 
 /**
  * Class Crosssell
@@ -45,15 +48,17 @@ class Crosssell extends Block
     /**
      * Verify cross-sell item
      *
-     * @param Product $crosssell
+     * @param FixtureInterface $crosssell
      * @return bool
      */
-    public function verifyProductCrosssell(Product $crosssell)
+    public function verifyProductCrosssell(FixtureInterface $crosssell)
     {
-        $match = $this->_rootElement->find(
-            sprintf($this->linkSelector, $crosssell->getProductName()),
-            Locator::SELECTOR_CSS
-        );
+        $productName = ($crosssell instanceof InjectableFixture)
+            /** @var CatalogProductSimple $crosssell */
+            ? $crosssell->getName()
+            /** @var Product $crosssell */
+            : $crosssell->getProductName();
+        $match = $this->_rootElement->find(sprintf($this->linkSelector, $productName), Locator::SELECTOR_CSS);
         return $match->isVisible();
     }
 

@@ -25,115 +25,23 @@
 -->
 <testcases>
   <testcase module="Magento\Tax">
-    <id>MTA-3</id>
-    <inject>
-      <page>
-        <class>\Magento\Tax\Test\Page\TaxRule</class>
-      </page>
-    </inject>
-    <invoke>
-      <tax_rule>
-        <class>\Magento\Tax\Test\Fixture\TaxRule</class>
-      </tax_rule>
-    </invoke>
-    <name>CreateTaxRuleEntityTest</name>
-    <description>Test Creation for Create TaxRuleEntity with fucntional test designed for automation</description>
-    <module>Sales</module>
+    <id>MTA-120</id>
+    <ticketId>MTA-120</ticketId>
+    <name>CreateTaxRateEntityTest</name>
+    <description>Test Creation for CreateTaxRateEntity</description>
+    <module>Tax</module>
     <components>
       <component>Tax (CS)</component>
     </components>
-    <testId>MAGETWO-20913</testId>
-    <ticketId>MTA-3</ticketId>
-    <steps/>
-  </testcase>
-  <testcase module="Magento\Catalog">
-    <id>MTA-179</id>
-    <ticketId>MTA-179</ticketId>
-    <name>CreateSimpleProductEntityTest</name>
-    <description>Test Creation for CreateSimpleProductEntity</description>
-    <module>Catalog</module>
-    <components>
-      <component>Products (CS)</component>
-    </components>
     <steps>
-      <step>Login to the backend.</step>
-      <step>Navigate to Products &gt; Catalog.</step>
-      <step>Start to create simple product.</step>
-      <step>Fill in data according to attached data set.</step>
-      <step>Save Product.</step>
-      <step>Perform appropriate assertions.</step>
-    </steps>
-  </testcase>
-  <testcase>
-    <id>MTA-42</id>
-    <ticketId>MTA-42</ticketId>
-    <name>CreateCustomerGroupEntityTest</name>
-    <description>Test Creation for CreateCustomerGroupEntity</description>
-    <module>Customer</module>
-    <components>
-      <component>Customer Groups (MX)</component>
-    </components>
-    <steps>
-      <step>Log in to backend as admin user.</step>
-      <step>Navigate to Stores&gt;Other Settings&gt;Customer Groups.</step>
-      <step>Start to create new Customer Group.</step>
-      <step>Fill in all data according to data set.</step>
-      <step>Click "Save Customer Group" button.</step>
-      <step>Perform all assertions.</step>
-    </steps>
-  </testcase>
-  <testcase>
-    <id>MTA-164</id>
-    <ticketId>MTA-164</ticketId>
-    <name>CreateNewsletterTemplateEntityTest</name>
-    <description>Test Creation for Create Newsletter Template Entity</description>
-    <module>Newsletter</module>
-    <components>
-      <component>Newsletters (MX)</component>
-    </components>
-    <steps>
-      <step>Login to backend.</step>
-      <step>Navigate to MARKETING -&gt; Newsletter Template.</step>
-      <step>Add New Template.</step>
-      <step>Fill in all data according to data set.</step>
-      <step>Save.</step>
-      <step>Perform asserts.</step>
-    </steps>
-  </testcase>
-  <testcase>
-    <id>MTA-25</id>
-    <ticketId>MTA-25</ticketId>
-    <name>UpdateProductSimpleEntityTest</name>
-    <description>Cover UpdateProductSimpleEntity with fucntional tests designed for automation</description>
-    <module>Catalog</module>
-    <components>
-      <component>Products (CS)</component>
-    </components>
-    <steps>
-      <step>Login to backend.</step>
-      <step>Navigate to PRODUCTS &gt; Catalog.</step>
-      <step>Select a product in the grid.</step>
-      <step>Edit test value(s) according to dataset.</step>
-      <step>Click "Save".</step>
-      <step>Perform asserts</step>
-    </steps>
-  </testcase>
-  <testcase>
-    <id>MTA-16</id>
-    <ticketId>MTA-16</ticketId>
-    <name>CreateVirtualProductEntityTest</name>
-    <description>Test Creation for CreateVirtualProductEntity</description>
-    <module>Catalog</module>
-    <components>
-      <component>Virtual Product (CS)</component>
-    </components>
-    <steps>
-      <step>Login as admin.</step>
-      <step>Navigate to the Products &gt; Inventory &gt; Catalog.</step>
-      <step>Click on "+" dropdown and select Virtual Product type.</step>
-      <step>Fill in all data according to data set.</step>
-      <step>Save product.</step>
-      <step>Verify created product.</step>
+      <step/>
+      <step>*Steps:*</step>
+      <step> Log in as default admin user.</step>
+      <step> Go to Stores &gt; Taxes &gt; Tax Zones and Rates.</step>
+      <step> Click 'Add New Tax Rate' button.</step>
+      <step> Fill in data according to dataSet</step>
+      <step> Save Tax Rate.</step>
+      <step> Perform all assertions.</step>
     </steps>
   </testcase>
   <testcase>
@@ -164,6 +72,28 @@
     <step> Fill Downloadable Information tab according to data set.</step>
     <step> Save product.</step>
     <step> Verify created product.</step>
+    </steps>
+  </testcase>
+  <testcase>
+    <id>MTA-93</id>
+    <ticketId>MTA-93</ticketId>
+    <name>AdvancedSearchEntityTest</name>
+    <description>Test Creation for AdvancedSearchEntity</description>
+    <module>CatalogSearch</module>
+    <components>
+      <component>Search Frontend (MX)</component>
+    </components>
+    <steps>
+      <step/>
+      <step>*Preconditions:*</step>
+      <step> Two specific simple product is created(unique sku,name,short/full description, tax class)</step>
+      <step/>
+      <step>Steps</step>
+      <step>Navigate to Frontend</step>
+      <step>Click "Advanced Search"</step>
+      <step>Fill test data in to field(s)</step>
+      <step>Click "Search" button</step>
+      <step>Perform all asserts</step>
     </steps>
   </testcase>
 </testcases>

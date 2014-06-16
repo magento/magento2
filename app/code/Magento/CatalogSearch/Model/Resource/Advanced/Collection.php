@@ -143,7 +143,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
                             $select->where('t1.entity_id = price_index.entity_id');
                         }
 
-                        $field = $this->getConnection()->getCheckSql('t2.value_id>0', 't2.value', 't1.value');
+                        $field = $this->getConnection()->getIfNullSql('t2.value', 't1.value');
                     }
 
                     if (is_array($conditionValue)) {

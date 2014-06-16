@@ -72,7 +72,7 @@
                         <div class="field field-username">
                             <label for="username" class="label"><span><?php echo __('User Name:') ?></span></label>
                             <div class="control">
-                                <input type="text" id="username" name="login[username]" value="" class="required-entry input-text" placeholder="user name" />
+                                <input type="text" id="username" name="login[username]" value="" class="required-entry input-text" placeholder="<?php echo __('user name') ?>" />
                             </div>
                         </div>
                         <div class="field field-password">
@@ -80,7 +80,7 @@
                             <div class="control">
                                 <!-- This is a dummy hidden field to trick firefox from auto filling the password -->
                                 <input type="text" class="input-text no-display" name="dummy" id="dummy" />
-                                <input type="password" id="login" name="login[password]" class="required-entry input-text" value="" placeholder="password" />
+                                <input type="password" id="login" name="login[password]" class="required-entry input-text" value="" placeholder="<?php echo __('password') ?>" />
                             </div>
                         </div>
                         <?php echo $this->getChildHtml('form.additional.info'); ?>

@@ -1,7 +1,5 @@
 <?php
 /**
- * Product stock qty block for configurable product type
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -27,6 +25,9 @@ namespace Magento\ConfigurableProduct\Block\Stockqty\Type;
 
 use Magento\Catalog\Model\Product;
 
+/**
+ * Product stock qty block for configurable product type
+ */
 class Configurable extends \Magento\CatalogInventory\Block\Stockqty\Composite
 {
     /**

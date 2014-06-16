@@ -445,7 +445,6 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
             list($constant, $class, $replacement) = $row;
             if ($class) {
                 $fullyQualified = "{$class}::{$constant}";
-                $fullyQualified = strtr($fullyQualified, array('\\' => '\\\\'));
                 $regex = preg_quote($fullyQualified);
                 if ($this->_isClassOrInterface($content, $class)) {
                     $regex .= '|' . $this->_getClassConstantDefinitionRegExp($constant)

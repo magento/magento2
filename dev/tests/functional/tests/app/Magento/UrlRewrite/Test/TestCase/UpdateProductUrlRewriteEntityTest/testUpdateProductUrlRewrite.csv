@@ -1,0 +1,3 @@
+"urlRewrite/data/product_id/dataSet";"urlRewrite/data/store_id";"urlRewrite/data/request_path";"urlRewrite/data/options";"urlRewrite/data/description";"isRequired";"constraint"
+"catalogProductSimple::100_dollar_product";"Main Website/Main Website Store/Default Store View";"test_%isolation%.html";"Temporary (302)";"description_%isolation%";"Yes";"assertUrlRewriteSaveMessage, assertProductUrlAvailableOnTheFront"
+"catalogProductSimple::100_dollar_product";"Main Website/Main Website Store/Custom Store View";"test_%isolation%.php";"No";"description_%isolation%";"No";"assertUrlRewriteSaveMessage, assertProductUrlAvailableOnTheFront"

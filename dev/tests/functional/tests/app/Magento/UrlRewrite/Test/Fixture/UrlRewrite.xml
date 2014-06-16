@@ -38,12 +38,13 @@
             <attribute_code>id_path</attribute_code>
             <backend_type>virtual</backend_type>
         </id_path>
+        <product_id>
+            <attribute_code>product_id</attribute_code>
+            <backend_type>virtual</backend_type>
+        </product_id>
         <store_id>
             <attribute_code>store_id</attribute_code>
-            <backend_type>varchar</backend_type>
-            <is_required>1</is_required>
-            <default_value>Default Store View</default_value>
-            <input>select</input>
+            <backend_type>virtual</backend_type>
         </store_id>
         <options>
             <attribute_code>options</attribute_code>

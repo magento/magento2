@@ -55,4 +55,12 @@
             <checkoutCart class="Magento\Checkout\Test\Page\CheckoutCart" />
         </require>
     </assertConfigurableInCart>
+    <assertProductAttributeIsConfigurable module="Magento_ConfigurableProduct">
+        <severeness>high</severeness>
+        <require>
+            <productAttribute class="Magento\Catalog\Test\Fixture\CatalogAttributeEntity" />
+            <productGrid class="Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex" />
+            <newProductPage class="Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew" />
+        </require>
+    </assertProductAttributeIsConfigurable>
 </constraint>

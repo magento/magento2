@@ -36,7 +36,7 @@ class CatalogProductEdit extends BackendPage
     protected $_blocks = [
         'form' => [
             'name' => 'form',
-            'class' => 'Magento\Catalog\Test\Block\Adminhtml\Product\Form',
+            'class' => 'Magento\Catalog\Test\Block\Adminhtml\Product\ProductForm',
             'locator' => '[id="page:main-container"]',
             'strategy' => 'css selector',
         ],
@@ -75,7 +75,7 @@ class CatalogProductEdit extends BackendPage
     }
 
     /**
-     * @return \Magento\Catalog\Test\Block\Adminhtml\Product\Form
+     * @return \Magento\Catalog\Test\Block\Adminhtml\Product\ProductForm
      */
     public function getForm()
     {

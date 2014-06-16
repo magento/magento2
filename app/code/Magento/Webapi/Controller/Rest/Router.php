@@ -55,12 +55,16 @@ class Router
     {
         /** @var \Magento\Webapi\Controller\Rest\Router\Route[] $routes */
         $routes = $this->_apiConfig->getRestRoutes($request);
+        $matched = [];
         foreach ($routes as $route) {
             $params = $route->match($request);
             if ($params !== false) {
                 $request->setParams($params);
-                return $route;
+                $matched[] = $route;
             }
+        }
+        if (!empty($matched)) {
+            return array_pop($matched);
         }
         throw new \Magento\Webapi\Exception(
             __('Request does not match any route.'),

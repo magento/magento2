@@ -22,16 +22,18 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-
-/**
- * Product stock qty abstarct block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\CatalogInventory\Block\Stockqty;
 
+use Magento\Catalog\Model\Product;
+
+/**
+ * Product stock qty abstract block
+ */
 abstract class AbstractStockqty extends \Magento\Framework\View\Element\Template
 {
+    /**
+     * Threshold qty config path
+     */
     const XML_PATH_STOCK_THRESHOLD_QTY = 'cataloginventory/options/stock_threshold_qty';
 
     /**
@@ -39,19 +41,27 @@ abstract class AbstractStockqty extends \Magento\Framework\View\Element\Template
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
+
+    /**
+     * @var \Magento\CatalogInventory\Service\V1\StockItem
+     */
+    protected $stockItemService;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Registry $registry
+     * @param \Magento\CatalogInventory\Service\V1\StockItem $stockItemService
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\Registry $registry,
+        \Magento\CatalogInventory\Service\V1\StockItem $stockItemService,
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;
+        $this->stockItemService = $stockItemService;
         parent::__construct($context, $data);
     }
 
@@ -74,13 +84,24 @@ abstract class AbstractStockqty extends \Magento\Framework\View\Element\Template
     {
         if (!$this->hasData('product_stock_qty')) {
             $qty = 0;
-            $stockItem = $this->getProduct()->getStockItem();
-            if ($stockItem) {
-                $qty = (double)$stockItem->getStockQty();
+            $productId = $this->getProduct()->getId();
+            if ($productId) {
+                $qty = $this->getProductStockQty($this->getProduct());
             }
             $this->setData('product_stock_qty', $qty);
         }
         return $this->getData('product_stock_qty');
+    }
+
+    /**
+     * Retrieve product stock qty
+     *
+     * @param Product $product
+     * @return float
+     */
+    public function getProductStockQty($product)
+    {
+        return $this->stockItemService->getStockQty($product->getId());
     }
 
     /**
@@ -91,7 +112,7 @@ abstract class AbstractStockqty extends \Magento\Framework\View\Element\Template
     public function getThresholdQty()
     {
         if (!$this->hasData('threshold_qty')) {
-            $qty = (double)$this->_scopeConfig->getValue(
+            $qty = (float) $this->_scopeConfig->getValue(
                 self::XML_PATH_STOCK_THRESHOLD_QTY,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );

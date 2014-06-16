@@ -139,9 +139,6 @@ $table = $installer->getConnection()->newTable(
     '20,4',
     array('nullable' => false, 'default' => '0.0000'),
     'Relevance'
-)->addIndex(
-    $installer->getIdxName('catalogsearch_result', 'query_id'),
-    'query_id'
 )->addForeignKey(
     $installer->getFkName('catalogsearch_result', 'query_id', 'catalogsearch_query', 'query_id'),
     'query_id',
