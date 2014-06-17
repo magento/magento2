@@ -254,7 +254,7 @@ class Mage_Catalog_Model_Product_Type_Price
 
     protected function _getCustomerGroupId($product)
     {
-        if ($product->getCustomerGroupId()) {
+        if (!is_null($product->getCustomerGroupId())) {
             return $product->getCustomerGroupId();
         }
         return Mage::getSingleton('Mage_Customer_Model_Session')->getCustomerGroupId();
