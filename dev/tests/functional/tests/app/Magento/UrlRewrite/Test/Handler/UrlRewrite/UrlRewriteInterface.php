@@ -31,5 +31,5 @@ use Mtf\Handler\HandlerInterface;
  */
 interface UrlRewriteInterface extends HandlerInterface
 {
-   //
+    //
 }

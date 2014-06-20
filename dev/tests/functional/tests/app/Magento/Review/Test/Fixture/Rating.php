@@ -34,12 +34,12 @@ class Rating extends InjectableFixture
     /**
      * @var string
      */
-    protected $repositoryClass = 'Magento\Rating\Test\Repository\Rating';
+    protected $repositoryClass = 'Magento\Review\Test\Repository\Rating';
 
     /**
      * @var string
      */
-    protected $handlerInterface = 'Magento\Rating\Test\Handler\Rating\RatingInterface';
+    protected $handlerInterface = 'Magento\Review\Test\Handler\Rating\RatingInterface';
 
     protected $defaultDataSet = [
         'rating_code' => 'Rating %isolation%',

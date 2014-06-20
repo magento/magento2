@@ -111,7 +111,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         );
         $product->load(1);
         // fixture
-        $this->assertEquals(2, $this->_model->getTierPriceCount($product));
+        $this->assertEquals(3, $this->_model->getTierPriceCount($product));
     }
 
     public function testGetFormatedTierPrice()

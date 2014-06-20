@@ -403,7 +403,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractModel imple
         $qty = $this->getTotalQty();
         // Round unit price before multiplying to prevent losing 1 cent on subtotal
         $total = $this->getStore()->roundPrice($this->getCalculationPriceOriginal()) * $qty;
-        $baseTotal = $this->getBaseCalculationPriceOriginal() * $qty;
+        $baseTotal = $this->getStore()->roundPrice($this->getBaseCalculationPriceOriginal()) * $qty;
 
         $this->setRowTotal($this->getStore()->roundPrice($total));
         $this->setBaseRowTotal($this->getStore()->roundPrice($baseTotal));

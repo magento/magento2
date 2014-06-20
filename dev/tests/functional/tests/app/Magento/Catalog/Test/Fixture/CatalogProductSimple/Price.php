@@ -107,35 +107,35 @@ class Price implements FixtureInterface
     {
         $presets = [
             'MAGETWO-23062' => [
-                'category_price' => '$100.00',
-                'product_price' => '$100.00',
-                'cart_price' => '$130.00'
+                'category_price' => '100.00',
+                'product_price' => '100.00',
+                'cart_price' => '130.00'
             ],
             'MAGETWO-23063' => [
-                'category_price' => '$100.00',
-                'product_price' => '$100.00',
-                'cart_price' => '$140.00'
+                'category_price' => '100.00',
+                'product_price' => '100.00',
+                'cart_price' => '140.00'
             ],
             'MAGETWO-23029' => [
-                'category_price' => '$100.00',
-                'category_special_price' => '$90.00',
-                'product_price' => '$100.00',
-                'product_special_price' => '$90.00',
-                'cart_price' => '$120.00'
+                'category_price' => '100.00',
+                'category_special_price' => '90.00',
+                'product_price' => '100.00',
+                'product_special_price' => '90.00',
+                'cart_price' => '120.00'
             ],
             'MAGETWO-23030' => [
-                'category_price' => '$100.00',
-                'category_special_price' => '$90.00',
-                'product_price' => '$100.00',
-                'product_special_price' => '$90.00',
-                'cart_price' => '$126.00'
+                'category_price' => '100.00',
+                'category_special_price' => '90.00',
+                'product_price' => '100.00',
+                'product_special_price' => '90.00',
+                'cart_price' => '126.00'
             ],
             'MAGETWO-23036' => [
-                'category_price' => '$100.00',
-                'category_special_price' => '$90.00',
-                'product_price' => '$100.00',
-                'product_special_price' => '$90.00',
-                'cart_price' => '$90.00'
+                'category_price' => '100.00',
+                'category_special_price' => '90.00',
+                'product_price' => '100.00',
+                'product_special_price' => '90.00',
+                'cart_price' => '90.00'
             ]
         ];
         if (!isset($presets[$this->currentPreset])) {

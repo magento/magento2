@@ -346,6 +346,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 
         $this->_getResource()->deleteGallery($recordsToDelete);
         $this->removeDeletedImages($filesToDelete);
+        $object->setData($attrCode, $value);
     }
 
     /**

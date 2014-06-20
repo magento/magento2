@@ -181,4 +181,76 @@
             <resource ref="Magento_Catalog::catalog"/>
         </resources>
     </route>
+    <route url="/V1/products/media/types/:attributeSetId" method="GET">
+        <service class="Magento\Catalog\Service\V1\Product\Attribute\Media\ReadServiceInterface" method="types"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/:productSku/media/:imageId" method="GET">
+        <service class="Magento\Catalog\Service\V1\Product\Attribute\Media\ReadServiceInterface" method="info"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/:productSku/media" method="POST">
+        <service class="Magento\Catalog\Service\V1\Product\Attribute\Media\WriteServiceInterface" method="create"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/:productSku/media" method="PUT">
+        <service class="Magento\Catalog\Service\V1\Product\Attribute\Media\WriteServiceInterface" method="update"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/:productSku/media/:entryId" method="DELETE">
+        <service class="Magento\Catalog\Service\V1\Product\Attribute\Media\WriteServiceInterface" method="delete"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/:productSku/media" method="GET">
+        <service class="Magento\Catalog\Service\V1\Product\Attribute\Media\ReadServiceInterface" method="getList"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/:productSku/group-prices" method="GET">
+        <service class="Magento\Catalog\Service\V1\Product\GroupPriceServiceInterface" method="getList"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/:productSku/group-prices" method="POST">
+        <service class="Magento\Catalog\Service\V1\Product\GroupPriceServiceInterface" method="set"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/:productSku/group-prices/:customerGroupId" method="DELETE">
+        <service class="Magento\Catalog\Service\V1\Product\GroupPriceServiceInterface" method="delete"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/:productSku/group-prices/:customerGroupId/tiers" method="GET">
+        <service class="Magento\Catalog\Service\V1\Product\TierPriceServiceInterface" method="getList"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/:productSku/group-prices/:customerGroupId/tiers" method="POST">
+        <service class="Magento\Catalog\Service\V1\Product\TierPriceServiceInterface" method="set"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/:productSku/group-prices/:customerGroupId/tiers/:qty" method="DELETE">
+        <service class="Magento\Catalog\Service\V1\Product\TierPriceServiceInterface" method="delete"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
 </routes>

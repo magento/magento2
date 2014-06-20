@@ -38,4 +38,11 @@ class FormPageActions extends ParentFormPageActions
      * @var string
      */
     protected $saveButton = '.save-rate';
+
+    /**
+     * "Delete" button
+     *
+     * @var string
+     */
+    protected $deleteButton = '.delete';
 }

@@ -28,7 +28,6 @@ use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\UrlRewrite\Test\Fixture\UrlRewrite;
 use Magento\UrlRewrite\Test\Page\Adminhtml\UrlrewriteEdit;
 use Magento\UrlRewrite\Test\Page\Adminhtml\UrlrewriteIndex;
-use Mtf\Fixture\FixtureFactory;
 use Mtf\TestCase\Injectable;
 
 /**
@@ -66,35 +65,18 @@ class DeleteProductUrlRewriteEntityTest extends Injectable
     protected $urlRewriteEdit;
 
     /**
-     * Prepare dataSets and pages
+     * Prepare pages
      *
-     * @param FixtureFactory $fixtureFactory
      * @param UrlrewriteIndex $urlRewriteIndex
      * @param UrlrewriteEdit $urlRewriteEdit
-     * @return array
+     * @return void
      */
     public function __inject(
-        FixtureFactory $fixtureFactory,
         UrlrewriteIndex $urlRewriteIndex,
         UrlrewriteEdit $urlRewriteEdit
     ) {
-        /** @var CatalogProductSimple $product */
-        $product = $fixtureFactory->createByCode('catalogProductSimple', ['dataSet' => 'product_without_category']);
-        $product->persist();
-
-        /** @var UrlRewrite $productRedirect */
-        $productRedirect = $fixtureFactory->createByCode(
-            'urlRewrite',
-            [
-                'dataSet' => 'default',
-                'data' => ['id_path' => 'product/' . $product->getId()]
-            ]
-        );
-        $productRedirect->persist();
-
         $this->urlRewriteIndex = $urlRewriteIndex;
         $this->urlRewriteEdit = $urlRewriteEdit;
-        return ['productRedirect' => $productRedirect];
     }
 
     /**
@@ -105,6 +87,9 @@ class DeleteProductUrlRewriteEntityTest extends Injectable
      */
     public function testDeleteProductUrlRewrite(UrlRewrite $productRedirect)
     {
+        // Precondition
+        $productRedirect->persist();
+        // Steps
         $this->urlRewriteIndex->open();
         $filter = ['request_path' => $productRedirect->getRequestPath()];
         $this->urlRewriteIndex->getUrlRedirectGrid()->searchAndOpen($filter);

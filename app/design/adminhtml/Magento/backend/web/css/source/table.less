@@ -337,7 +337,8 @@ table {
         &.col-time,
         &.col-billing_name,
         &.col-shipping_name,
-        &.col-phone {
+        &.col-phone,
+        &.col-type {
             &:extend(.ellipsis all);
         }
     }
@@ -416,6 +417,11 @@ table {
         &:extend(.col-40 all);
     }
 
+    .col-select,
+    .col-massaction {
+        text-align: center;
+    }
+
     .editable .input-text {
         width: 65px;
     }
@@ -460,7 +466,8 @@ td.col-updated_at,
 td.col-customer_since,
 td.col-session_start_time,
 td.col-time,
-td.col-sku {
+td.col-sku,
+td.col-type {
     &:extend(.nowrap all);
 }
 
@@ -1105,6 +1112,9 @@ td.col-sku {
     .rma-request-details {
         &:extend(.data-table-td-max all);
     }
+    #rma_items_grid_table .headings th {
+        &:extend(.nowrap all);
+    }
 }
 
 .adminhtml-rma-edit {
@@ -1136,6 +1146,10 @@ td.col-sku {
     .col-position {
         &:extend(.col-50 all);
     }
+}
+
+.catalog-product-index .grid .hor-scroll {
+    &:extend(.h-scroll);
 }
 
 .catalog-product-review-index {
@@ -1561,7 +1575,7 @@ td.col-sku {
 .adminhtml-cache-index,
 .adminhtml-process-list,
 .indexer-indexer-list {
-    .col-select {
+    .grid .col-select {
         width: 10px;
     }
 }

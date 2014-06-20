@@ -70,6 +70,12 @@ class CmsIndex extends FrontendPage
             'locator' => '[data-ui-id="language-switcher"]',
             'strategy' => 'css selector',
         ],
+        'cartSidebarBlock' => [
+            'name' => 'cartSidebarBlock',
+            'class' => 'Magento\Checkout\Test\Block\Cart\Sidebar',
+            'locator' => '[data-block="minicart"]',
+            'strategy' => 'css selector',
+        ],
     ];
 
     /**
@@ -118,5 +124,13 @@ class CmsIndex extends FrontendPage
     public function getStoreSwitcherBlock()
     {
         return $this->getBlockInstance('storeSwitcherBlock');
+    }
+
+    /**
+     * @return \Magento\Checkout\Test\Block\Cart\Sidebar
+     */
+    public function getCartSidebarBlock()
+    {
+        return $this->getBlockInstance('cartSidebarBlock');
     }
 }

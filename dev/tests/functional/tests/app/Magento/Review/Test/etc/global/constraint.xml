@@ -27,9 +27,15 @@
     <assertProductRatingSuccessSaveMessage module="Magento_Review">
         <severeness>high</severeness>
     </assertProductRatingSuccessSaveMessage>
+    <assertProductRatingSuccessDeleteMessage module="Magento_Review">
+        <severeness>high</severeness>
+    </assertProductRatingSuccessDeleteMessage>
     <assertProductRatingInGrid module="Magento_Review">
         <severeness>middle</severeness>
     </assertProductRatingInGrid>
+    <assertProductRatingNotInGrid module="Magento_Review">
+        <severeness>middle</severeness>
+    </assertProductRatingNotInGrid>
     <assertProductRatingInProductPage module="Magento_Review">
         <severeness>middle</severeness>
     </assertProductRatingInProductPage>

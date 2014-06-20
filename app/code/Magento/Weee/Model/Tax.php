@@ -242,7 +242,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
         }
 
         $rateRequest = $calculator->getRateRequest($shipping, $billing, $customerTaxClass, $store);
-        $defaultRateRequest = $calculator->getRateRequest(false, false, false, $store);
+        $defaultRateRequest = $calculator->getDefaultRateRequest($store);
 
         $discountPercent = 0;
         if (!$ignoreDiscount && $this->_weeeData->isDiscounted($store)) {

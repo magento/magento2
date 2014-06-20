@@ -238,4 +238,16 @@ class Form extends FormInterface
     {
         $this->_rootElement->find($this->additionalSettings)->click();
     }
+
+    /**
+     * Getting all options in Tax Rate multi select list
+     *
+     * @return array
+     */
+    public function getAllTaxRates()
+    {
+        /** @var \Mtf\Client\Driver\Selenium\Element\MultiselectlistElement $taxRates */
+        $taxRates = $this->_rootElement->find($this->taxRateBlock, Locator::SELECTOR_CSS, 'multiselectlist');
+        return $taxRates->getAllValues();
+    }
 }

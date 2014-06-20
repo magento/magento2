@@ -26,8 +26,7 @@ namespace Magento\Catalog\Block\Product;
 /**
  * Test class for \Magento\Catalog\Block\Product\Abstract.
  *
- * @magentoDataFixture Magento/Catalog/_files/product_simple.php
- * @magentoDataFixture Magento/Catalog/_files/product_image.php
+ * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
  */
 class AbstractTest extends \PHPUnit_Framework_TestCase
 {
@@ -144,7 +143,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 
     public function testGetImageLabel()
     {
-        $this->assertEquals($this->_product->getName(), $this->_block->getImageLabel());
+        $this->assertEquals('Image Alt Text', $this->_block->getImageLabel());
     }
 
     public function testGetProductUrl()

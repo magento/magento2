@@ -87,9 +87,8 @@ class AssertProductInCategory extends AbstractConstraint
         $price = $catalogCategoryView->getListProductBlock()->getProductPriceBlock($product->getName())
             ->getRegularPrice();
 
-        $priceComparing = '$' . number_format($product->getPrice(), 2);
         \PHPUnit_Framework_Assert::assertEquals(
-            $priceComparing,
+            number_format($product->getPrice(), 2),
             $price,
             'Product regular price on category page is not correct.'
         );
