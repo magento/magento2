@@ -670,7 +670,8 @@ class Mage_CatalogRule_Model_Resource_Rule extends Mage_Rule_Model_Resource_Abst
             ->where('customer_group_id = ?', $customerGroupId)
             ->where('product_id = ?', $productId)
             ->where('from_time = 0 or from_time < ?', $date)
-            ->where('to_time = 0 or to_time > ?', $date);
+            ->where('to_time = 0 or to_time > ?', $date)
+            ->order('sort_order asc');
 
         return $adapter->fetchAll($select);
     }
