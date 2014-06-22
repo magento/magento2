@@ -47,11 +47,9 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
     protected $_inventoryItemTableAlias = 'lowstock_inventory_item';
 
     /**
-     * Catalog inventory data
-     *
-     * @var \Magento\CatalogInventory\Helper\Data
+     * @var \Magento\CatalogInventory\Service\V1\StockItem
      */
-    protected $_inventoryData = null;
+    protected $stockItemService;
 
     /**
      * @var \Magento\CatalogInventory\Model\Resource\Stock\Item
@@ -80,10 +78,10 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
      * @param \Magento\Catalog\Model\Resource\Product $product
      * @param \Magento\Reports\Model\Event\TypeFactory $eventTypeFactory
      * @param \Magento\Catalog\Model\Product\Type $productType
-     * @param \Magento\CatalogInventory\Helper\Data $catalogInventoryData
+     * @param \Magento\CatalogInventory\Service\V1\StockItem $stockItemService
      * @param \Magento\CatalogInventory\Model\Resource\Stock\Item $itemResource
      * @param mixed $connection
-     * 
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -108,7 +106,7 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
         \Magento\Catalog\Model\Resource\Product $product,
         \Magento\Reports\Model\Event\TypeFactory $eventTypeFactory,
         \Magento\Catalog\Model\Product\Type $productType,
-        \Magento\CatalogInventory\Helper\Data $catalogInventoryData,
+        \Magento\CatalogInventory\Service\V1\StockItem $stockItemService,
         \Magento\CatalogInventory\Model\Resource\Stock\Item $itemResource,
         $connection = null
     ) {
@@ -136,7 +134,7 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
             $productType,
             $connection
         );
-        $this->_inventoryData = $catalogInventoryData;
+        $this->stockItemService = $stockItemService;
         $this->_itemResource = $itemResource;
     }
 
@@ -265,7 +263,7 @@ class Collection extends \Magento\Reports\Model\Resource\Product\Collection
      */
     public function filterByIsQtyProductTypes()
     {
-        $this->filterByProductType(array_keys(array_filter($this->_inventoryData->getIsQtyTypeIds())));
+        $this->filterByProductType(array_keys(array_filter($this->stockItemService->getIsQtyTypeIds())));
         return $this;
     }
 

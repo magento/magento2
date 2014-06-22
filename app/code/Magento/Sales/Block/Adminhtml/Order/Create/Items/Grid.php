@@ -213,7 +213,6 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      */
     public function getItemOrigPrice($item)
     {
-        //        return $this->convertPrice($item->getProduct()->getPrice());
         return $this->convertPrice($item->getPrice());
     }
 

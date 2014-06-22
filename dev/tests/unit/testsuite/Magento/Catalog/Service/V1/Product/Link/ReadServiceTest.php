@@ -95,7 +95,7 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->productLoaderMock = $this->getMock(
-            'Magento\Catalog\Service\V1\Product\Link\ProductLoader',
+            'Magento\Catalog\Service\V1\Product\ProductLoader',
             [],
             [],
             '',

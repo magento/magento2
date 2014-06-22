@@ -246,22 +246,23 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
      */
     public function validate($object)
     {
-        $attrCode = $this->getAttribute()->getAttributeCode();
+        $attribute = $this->getAttribute();
+        $attrCode = $attribute->getAttributeCode();
         $value = $object->getData($attrCode);
-        if ($this->getAttribute()->getIsRequired() && $this->getAttribute()->isValueEmpty($value)) {
-            return false;
+        if ($attribute->getIsVisible() && $attribute->getIsRequired() && $attribute->isValueEmpty($value)) {
+            throw new \Magento\Eav\Exception(__('The value of attribute "%1" must be set', $attrCode));
         }
 
-        if ($this->getAttribute()->getIsUnique()
-            && !$this->getAttribute()->getIsRequired()
-            && ($value == '' || $this->getAttribute()->isValueEmpty($value))
+        if ($attribute->getIsUnique()
+            && !$attribute->getIsRequired()
+            && ($value == '' || $attribute->isValueEmpty($value))
         ) {
             return true;
         }
 
-        if ($this->getAttribute()->getIsUnique()) {
-            if (!$this->getAttribute()->getEntity()->checkAttributeUniqueValue($this->getAttribute(), $object)) {
-                $label = $this->getAttribute()->getFrontend()->getLabel();
+        if ($attribute->getIsUnique()) {
+            if (!$attribute->getEntity()->checkAttributeUniqueValue($attribute, $object)) {
+                $label = $attribute->getFrontend()->getLabel();
                 throw new \Magento\Eav\Exception(__('The value of attribute "%1" must be unique', $label));
             }
         }

@@ -71,6 +71,6 @@ class Config implements \Magento\Framework\App\Config\ScopeConfigInterface
      */
     public function isSetFlag($path, $scope = \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT, $scopeCode = null)
     {
-        return (bool)$this->getValue($path, $scope, $scopeCode);
+        return (bool) $this->getValue($path, $scope, $scopeCode);
     }
 }

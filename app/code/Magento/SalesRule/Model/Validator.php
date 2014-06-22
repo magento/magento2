@@ -173,7 +173,8 @@ class Validator extends \Magento\Framework\Model\AbstractModel
                 $websiteId,
                 $customerGroupId,
                 $couponCode
-            )->load();
+            )->addFieldToFilter('is_active', 1)
+            ->load();
         }
         return $this;
     }

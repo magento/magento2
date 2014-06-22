@@ -169,6 +169,11 @@ abstract class AbstractGroupprice extends Price
             if (isset($duplicates[$compare])) {
                 throw new \Magento\Framework\Model\Exception($this->_getDuplicateErrorMessage());
             }
+
+            if (!preg_match('/^\d*(\.|,)?\d{0,4}$/i', $priceRow['price']) || $priceRow['price'] < 0) {
+                return __('Group price must be a number greater than 0.');
+            }
+
             $duplicates[$compare] = true;
         }
 

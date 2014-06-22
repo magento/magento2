@@ -25,7 +25,7 @@
 namespace Magento\Downloadable\Test\TestCase;
 
 use Mtf\TestCase\Injectable;
-use Magento\Catalog\Test\Fixture\CatalogCategoryEntity;
+use Magento\Catalog\Test\Fixture\CatalogCategory;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Downloadable\Test\Fixture\CatalogProductDownloadable;
@@ -50,7 +50,7 @@ class CreateDownloadableProductEntityTest extends Injectable
     /**
      * Fixture category
      *
-     * @var CatalogCategoryEntity
+     * @var CatalogCategory
      */
     protected $category;
 
@@ -71,10 +71,10 @@ class CreateDownloadableProductEntityTest extends Injectable
     /**
      * Persist category
      *
-     * @param CatalogCategoryEntity $category
+     * @param CatalogCategory $category
      * @return array
      */
-    public function __prepare(CatalogCategoryEntity $category)
+    public function __prepare(CatalogCategory $category)
     {
         $category->persist();
         return [
@@ -85,12 +85,12 @@ class CreateDownloadableProductEntityTest extends Injectable
     /**
      * Filling objects of the class
      *
-     * @param CatalogCategoryEntity $category
+     * @param CatalogCategory $category
      * @param CatalogProductIndex $catalogProductIndexNewPage
      * @param CatalogProductNew $catalogProductNewPage
      */
     public function __inject(
-        CatalogCategoryEntity $category,
+        CatalogCategory $category,
         CatalogProductIndex $catalogProductIndexNewPage,
         CatalogProductNew $catalogProductNewPage
     ) {
@@ -103,9 +103,9 @@ class CreateDownloadableProductEntityTest extends Injectable
      * Test create downloadable product
      *
      * @param CatalogProductDownloadable $product
-     * @param CatalogCategoryEntity $category
+     * @param CatalogCategory $category
      */
-    public function testCreateDownloadableProduct(CatalogProductDownloadable $product, CatalogCategoryEntity $category)
+    public function testCreateDownloadableProduct(CatalogProductDownloadable $product, CatalogCategory $category)
     {
         $this->catalogProductIndex->open();
         $this->catalogProductIndex->getProductBlock()->addProduct('downloadable');

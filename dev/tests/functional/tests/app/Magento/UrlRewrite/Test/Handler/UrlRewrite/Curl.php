@@ -42,7 +42,7 @@ class Curl extends AbstractCurl implements UrlRewriteInterface
      *
      * @var array
      */
-    protected $dataMapping = [
+    protected $mappingData = [
         'store_id' => ['Default Store View' => 1],
         'options' => [
             'Temporary (302)' => 'R',
@@ -67,8 +67,8 @@ class Curl extends AbstractCurl implements UrlRewriteInterface
      */
     public function persist(FixtureInterface $fixture = null)
     {
-        $url = $_ENV['app_backend_url'] . $this->url . $fixture->getData('id_path');
-        $data = $this->prepareData($fixture->getData());
+        $url = $_ENV['app_backend_url'] . $this->url . $fixture->getIdPath();
+        $data = $this->replaceMappingData($fixture->getData());
         $curl = new BackendDecorator(new CurlTransport(), new Config());
         $curl->write(CurlInterface::POST, $url, '1.0', array(), $data);
         $response = $curl->read();
@@ -77,21 +77,5 @@ class Curl extends AbstractCurl implements UrlRewriteInterface
             throw new \Exception("Product creation by curl handler was not successful! Response: $response");
         }
         $curl->close();
-    }
-
-    /**
-     * Prepare data
-     *
-     * @param array $data
-     * @return array
-     */
-    protected function prepareData(array $data)
-    {
-        foreach ($data as $key => $value) {
-            if (isset($this->dataMapping[$key])) {
-                $data[$key] = $this->dataMapping[$key][$value];
-            }
-        }
-        return $data;
     }
 }

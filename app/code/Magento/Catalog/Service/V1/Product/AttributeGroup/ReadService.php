@@ -27,6 +27,8 @@ namespace Magento\Catalog\Service\V1\Product\AttributeGroup;
 
 use \Magento\Catalog\Service\V1\Data;
 use \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory as AttributeGroupCollectionFactory;
+use \Magento\Eav\Model\Entity\Attribute\SetFactory as AttributeSetFactory;
+use \Magento\Framework\Exception\NoSuchEntityException;
 
 class ReadService implements ReadServiceInterface
 {
@@ -36,19 +38,27 @@ class ReadService implements ReadServiceInterface
     protected $groupListFactory;
 
     /**
+     * @var \Magento\Eav\Model\Entity\Attribute\SetFactory
+     */
+    protected $attributeSetFactory;
+
+    /**
      * @var \Magento\Catalog\Service\V1\Data\Eav\AttributeGroupBuilder
      */
     protected $groupBuilder;
 
     /**
      * @param AttributeGroupCollectionFactory $groupListFactory
-     * @param \Magento\Catalog\Service\V1\Data\Eav\AttributeGroupBuilder $groupBuilder
+     * @param AttributeSetFactory $attributeSetFactory
+     * @param Data\Eav\AttributeGroupBuilder $groupBuilder
      */
     public function __construct(
         AttributeGroupCollectionFactory $groupListFactory,
+        AttributeSetFactory $attributeSetFactory,
         Data\Eav\AttributeGroupBuilder $groupBuilder
     ) {
         $this->groupListFactory = $groupListFactory;
+        $this->attributeSetFactory = $attributeSetFactory;
         $this->groupBuilder = $groupBuilder;
     }
 
@@ -57,6 +67,10 @@ class ReadService implements ReadServiceInterface
      */
     public function getList($attributeSetId)
     {
+        if (!$this->attributeSetFactory->create()->load($attributeSetId)->getId()) {
+            throw NoSuchEntityException::singleField('attributeSetId', $attributeSetId);
+        }
+
         $collection = $this->groupListFactory->create();
         $collection->setAttributeSetFilter($attributeSetId);
         $collection->setSortOrder();

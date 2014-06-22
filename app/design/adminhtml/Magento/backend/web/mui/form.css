@@ -237,7 +237,8 @@ span.required {
 }
 
 .with-note .note,
-.field .note {
+.field .note,
+.data-table .note {
     font-size: 11px;
     padding-left: 15px;
     margin: 5px 0;
@@ -245,7 +246,8 @@ span.required {
 }
 
 .with-note .note:before,
-.field .note:before {
+.field .note:before,
+.data-table .note:before {
     position: absolute;
     margin: 4px 0 0 -14px;
     content: '';

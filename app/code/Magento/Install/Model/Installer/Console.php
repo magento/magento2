@@ -190,7 +190,7 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
      * Retrieve validated installation options
      *
      * @param array $options
-     * @return array|false
+     * @return array|bool
      */
     protected function _getInstallOptions(array $options)
     {
@@ -345,6 +345,11 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
                     'password' => $options['admin_password']
                 ]
             );
+
+            $this->checkServer();
+            if ($this->hasErrors()) {
+                return false;
+            }
 
             $installer = $this->_getInstaller();
 
@@ -547,5 +552,29 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
     public function getOptionalParams()
     {
         return $this->optionalParameters;
+    }
+
+    /**
+     * Check if server is applicable for Magento
+     * @return $this
+     */
+    public function checkServer()
+    {
+        \Magento\Framework\Phrase::setRenderer(
+            $this->_objectManager->get('Magento\Framework\Phrase\RendererInterface')
+        );
+
+        $installer = $this->_getInstaller();
+        $result = $installer->checkServer();
+        if (!$result) {
+            /** @var \Magento\Framework\Message\ManagerInterface $messageManager*/
+            $messageManager = $this->_objectManager->get('Magento\Framework\Message\ManagerInterface');
+            /** @var \Magento\Framework\Message\MessageInterface $message */
+            foreach ($messageManager->getMessages()->getItems() as $message) {
+                $this->addError($message->toString());
+            }
+        }
+
+        return $this;
     }
 }

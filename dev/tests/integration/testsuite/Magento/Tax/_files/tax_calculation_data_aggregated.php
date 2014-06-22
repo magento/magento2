@@ -40,4 +40,9 @@ require_once __DIR__ . '/scenarios/including_tax_total.php';
 require_once __DIR__ . '/scenarios/excluding_tax_multi_item_unit.php';
 require_once __DIR__ . '/scenarios/excluding_tax_multi_item_row.php';
 require_once __DIR__ . '/scenarios/excluding_tax_multi_item_total.php';
-
+require_once __DIR__ . '/scenarios/including_tax_cross_border_trade_disabled.php';
+require_once __DIR__ . '/scenarios/including_tax_cross_border_trade_enabled.php';
+require_once __DIR__ . '/scenarios/multi_tax_rule_total_calculate_subtotal_no.php';
+require_once __DIR__ . '/scenarios/multi_tax_rule_unit_calculate_subtotal_no.php';
+require_once __DIR__ . '/scenarios/multi_tax_rule_total_calculate_subtotal_yes.php';
+require_once __DIR__ . '/scenarios/multi_tax_rule_unit_calculate_subtotal_yes.php';

@@ -58,5 +58,15 @@ class TaxClass extends AbstractRepository
             'class_name' => 'Product Tax Class %isolation%',
             'class_type' => 'PRODUCT',
         ];
+
+        $this->_data['None'] = [
+            'class_name' => 'None',
+            'class_type' => 'PRODUCT',
+            'id' => '0',
+        ];
+
+        $this->_data['all'] = [
+            'class_name' => 'All',
+        ];
     }
 }

@@ -82,8 +82,8 @@ class EntryPoint implements EntryPointInterface
             $response->sendResponse();
         } catch (\Exception $exception) {
             if (isset(
-                $this->_parameters[state::PARAM_MODE]
-            ) && $this->_parameters[State::PARAM_MODE] == State::MODE_DEVELOPER
+                $this->_parameters[State::PARAM_MODE]
+                ) && $this->_parameters[State::PARAM_MODE] == State::MODE_DEVELOPER
             ) {
                 echo $exception->getMessage() . "\n\n";
                 echo $exception->getTraceAsString();

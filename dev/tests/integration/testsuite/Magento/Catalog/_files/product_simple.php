@@ -50,6 +50,12 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
                 'price_qty'  => 5,
                 'price'      => 5,
             ),
+            array(
+                'website_id' => 0,
+                'cust_group' => \Magento\Customer\Service\V1\CustomerGroupServiceInterface::NOT_LOGGED_IN_ID,
+                'price_qty'  => 3,
+                'price'      => 5,
+            ),
         )
     )
     ->setDescription('Description with <b>html tag</b>')

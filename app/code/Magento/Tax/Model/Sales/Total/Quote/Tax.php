@@ -933,7 +933,6 @@ class Tax extends AbstractTotal
         $rateKey = ($taxId == null) ? (string)$rate : $taxId;
         $taxSubtotal = $subtotal = $item->getTaxableAmount() + $item->getExtraRowTaxableAmount();
         $baseTaxSubtotal = $baseSubtotal = $item->getBaseTaxableAmount() + $item->getBaseExtraRowTaxableAmount();
-        $item->setTaxPercent($rate);
 
         if (!isset($taxGroups[$rateKey]['totals'])) {
             $taxGroups[$rateKey]['totals'] = array();

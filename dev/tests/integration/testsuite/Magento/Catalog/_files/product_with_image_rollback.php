@@ -22,4 +22,5 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+require __DIR__ . '/product_simple_rollback.php';
 require __DIR__ . '/product_image_rollback.php';

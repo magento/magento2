@@ -262,17 +262,8 @@ $table = $installer->getConnection()->newTable(
     array('nullable' => true, 'default' => null),
     'Attribute Value'
 )->addIndex(
-    $installer->getIdxName('eav_entity_datetime', array('entity_type_id')),
-    array('entity_type_id')
-)->addIndex(
-    $installer->getIdxName('eav_entity_datetime', array('attribute_id')),
-    array('attribute_id')
-)->addIndex(
     $installer->getIdxName('eav_entity_datetime', array('store_id')),
     array('store_id')
-)->addIndex(
-    $installer->getIdxName('eav_entity_datetime', array('entity_id')),
-    array('entity_id')
 )->addIndex(
     $installer->getIdxName('eav_entity_datetime', array('attribute_id', 'value')),
     array('attribute_id', 'value')
@@ -355,17 +346,8 @@ $table = $installer->getConnection()->newTable(
     array('nullable' => false, 'default' => '0.0000'),
     'Attribute Value'
 )->addIndex(
-    $installer->getIdxName('eav_entity_decimal', array('entity_type_id')),
-    array('entity_type_id')
-)->addIndex(
-    $installer->getIdxName('eav_entity_decimal', array('attribute_id')),
-    array('attribute_id')
-)->addIndex(
     $installer->getIdxName('eav_entity_decimal', array('store_id')),
     array('store_id')
-)->addIndex(
-    $installer->getIdxName('eav_entity_decimal', array('entity_id')),
-    array('entity_id')
 )->addIndex(
     $installer->getIdxName('eav_entity_decimal', array('attribute_id', 'value')),
     array('attribute_id', 'value')
@@ -448,17 +430,8 @@ $table = $installer->getConnection()->newTable(
     array('nullable' => false, 'default' => '0'),
     'Attribute Value'
 )->addIndex(
-    $installer->getIdxName('eav_entity_int', array('entity_type_id')),
-    array('entity_type_id')
-)->addIndex(
-    $installer->getIdxName('eav_entity_int', array('attribute_id')),
-    array('attribute_id')
-)->addIndex(
     $installer->getIdxName('eav_entity_int', array('store_id')),
     array('store_id')
-)->addIndex(
-    $installer->getIdxName('eav_entity_int', array('entity_id')),
-    array('entity_id')
 )->addIndex(
     $installer->getIdxName('eav_entity_int', array('attribute_id', 'value')),
     array('attribute_id', 'value')
@@ -550,9 +523,6 @@ $table = $installer->getConnection()->newTable(
     $installer->getIdxName('eav_entity_text', array('store_id')),
     array('store_id')
 )->addIndex(
-    $installer->getIdxName('eav_entity_text', array('entity_id')),
-    array('entity_id')
-)->addIndex(
     $installer->getIdxName(
         'eav_entity_text',
         array('entity_id', 'attribute_id', 'store_id'),
@@ -628,17 +598,8 @@ $table = $installer->getConnection()->newTable(
     array('nullable' => true, 'default' => null),
     'Attribute Value'
 )->addIndex(
-    $installer->getIdxName('eav_entity_varchar', array('entity_type_id')),
-    array('entity_type_id')
-)->addIndex(
-    $installer->getIdxName('eav_entity_varchar', array('attribute_id')),
-    array('attribute_id')
-)->addIndex(
     $installer->getIdxName('eav_entity_varchar', array('store_id')),
     array('store_id')
-)->addIndex(
-    $installer->getIdxName('eav_entity_varchar', array('entity_id')),
-    array('entity_id')
 )->addIndex(
     $installer->getIdxName('eav_entity_varchar', array('attribute_id', 'value')),
     array('attribute_id', 'value')
@@ -794,12 +755,6 @@ $table = $installer->getConnection()->newTable(
     ),
     array('entity_type_id', 'attribute_code'),
     array('type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE)
-)->addIndex(
-    $installer->getIdxName('eav_attribute', array('entity_type_id')),
-    array('entity_type_id')
-)->addIndex(
-    $installer->getIdxName('eav_attribute', array('entity_type_id')),
-    array('entity_type_id')
 )->addForeignKey(
     $installer->getFkName('eav_attribute', 'entity_type_id', 'eav_entity_type', 'entity_type_id'),
     'entity_type_id',
@@ -1186,9 +1141,6 @@ $table = $installer->getConnection()->newTable(
     array('nullable' => true, 'default' => null),
     'Value'
 )->addIndex(
-    $installer->getIdxName('eav_attribute_label', array('attribute_id')),
-    array('attribute_id')
-)->addIndex(
     $installer->getIdxName('eav_attribute_label', array('store_id')),
     array('store_id')
 )->addIndex(
@@ -1353,9 +1305,6 @@ $table = $installer->getConnection()->newTable(
     ),
     array('type_id', 'code'),
     array('type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE)
-)->addIndex(
-    $installer->getIdxName('eav_form_fieldset', array('type_id')),
-    array('type_id')
 )->addForeignKey(
     $installer->getFkName('eav_form_fieldset', 'type_id', 'eav_form_type', 'type_id'),
     'type_id',
@@ -1391,9 +1340,6 @@ $table = $installer->getConnection()->newTable(
     255,
     array('nullable' => false),
     'Label'
-)->addIndex(
-    $installer->getIdxName('eav_form_fieldset_label', array('fieldset_id')),
-    array('fieldset_id')
 )->addIndex(
     $installer->getIdxName('eav_form_fieldset_label', array('store_id')),
     array('store_id')
@@ -1459,9 +1405,6 @@ $table = $installer->getConnection()->newTable(
     ),
     array('type_id', 'attribute_id'),
     array('type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE)
-)->addIndex(
-    $installer->getIdxName('eav_form_element', array('type_id')),
-    array('type_id')
 )->addIndex(
     $installer->getIdxName('eav_form_element', array('fieldset_id')),
     array('fieldset_id')

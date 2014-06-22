@@ -50,7 +50,7 @@ class Success extends \Magento\Framework\View\Element\Template
     public function getRealOrderId()
     {
         /** @var \Magento\Sales\Model\Order $order */
-        $order = $this->_orderFactory()->create()->load($this->getLastOrderId());
+        $order = $this->_orderFactory->create()->load($this->getLastOrderId());
         return $order->getIncrementId();
     }
 }

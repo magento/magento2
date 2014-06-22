@@ -56,7 +56,19 @@ class CatalogCategoryView extends FrontendPage
         'toolbar' => [
             'name' => 'toolbar',
             'class' => 'Magento\Catalog\Test\Block\Product\ProductList\Toolbar',
-            'locator' => '.pages .items',
+            'locator' => '.toolbar.products',
+            'strategy' => 'css selector',
+        ],
+        'titleBlock' => [
+            'name' => 'titleBlock',
+            'class' => 'Magento\Theme\Test\Block\Html\Title',
+            'locator' => '.page.title h1.title',
+            'strategy' => 'css selector',
+        ],
+        'viewBlock' => [
+            'name' => 'descriptionBlock',
+            'class' => 'Magento\Catalog\Test\Block\Category\View',
+            'locator' => '.category.view',
             'strategy' => 'css selector',
         ]
     ];
@@ -91,5 +103,21 @@ class CatalogCategoryView extends FrontendPage
     public function getToolbar()
     {
         return $this->getBlockInstance('toolbar');
+    }
+
+    /**
+     * @return \Magento\Theme\Test\Block\Html\Title
+     */
+    public function getTitleBlock()
+    {
+        return $this->getBlockInstance('titleBlock');
+    }
+
+    /**
+     * @return \Magento\Catalog\Test\Block\Category\View
+     */
+    public function getViewBlock()
+    {
+        return $this->getBlockInstance('viewBlock');
     }
 }

@@ -36,6 +36,7 @@
     <argument name="number" xsi:type="number">100500</argument>
     <argument name="object" xsi:type="object">Object</argument>
     <argument name="null Different symbols 1~!@#$%^&amp;*()_+-=`[]\{}|;':,./&lt;&gt;?" xsi:type="null" />
+    <argument name="empty_array" xsi:type="array"/>
     <argument name="single_array" xsi:type="array">
         <item name="key1 unique for single array" xsi:type="string">value</item>
         <item name="Different symbols 1~!@#$%^&amp;*()_+-=`[]\{}|;':,./&lt;&gt;?" xsi:type="string">2</item>

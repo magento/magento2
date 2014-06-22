@@ -25,6 +25,7 @@ namespace Magento\Tax\Helper;
 
 use Magento\Store\Model\Store;
 use Magento\Customer\Model\Address;
+use Magento\Tax\Model\Calculation;
 use Magento\Tax\Model\Config;
 
 /**
@@ -479,6 +480,42 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $result["value_{$class}"] = $rate;
         }
         return $this->_coreData->jsonEncode($result);
+    }
+
+    /**
+     * Get unrounded product price
+     *
+     * @param   \Magento\Catalog\Model\Product $product
+     * @param   float $price inputed product price
+     * @param   bool $includingTax return price include tax flag
+     * @param   null|Address $shippingAddress
+     * @param   null|Address $billingAddress
+     * @param   null|int $ctc customer tax class
+     * @param   null|string|bool|int|Store $store
+     * @param   bool $priceIncludesTax flag what price parameter contain tax
+     * @return  float
+     */
+    public function getPriceUnrounded(
+        $product,
+        $price,
+        $includingTax = null,
+        $shippingAddress = null,
+        $billingAddress = null,
+        $ctc = null,
+        $store = null,
+        $priceIncludesTax = null
+    ) {
+        return $this->getPrice(
+            $product,
+            $price,
+            $includingTax,
+            $shippingAddress,
+            $billingAddress,
+            $ctc,
+            $store,
+            $priceIncludesTax,
+            false
+        );
     }
 
     /**

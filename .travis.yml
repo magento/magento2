@@ -28,7 +28,7 @@ before_script:
   # Create DB for Integration tests
   - sh -c "if [ '$TEST_SUITE' = 'integration' ] || [ '$TEST_SUITE' = 'integration_integrity' ]; then mysql -e 'create database magento_integration_tests;'; mv dev/tests/integration/etc/local-mysql.travis.xml.dist dev/tests/integration/etc/local-mysql.xml; fi"
   # Install tools for static tests
-  - sh -c "if [ '$TEST_SUITE' = 'static_phpcs' ] || [ '$TEST_SUITE' = 'static_annotation' ]; then pear install pear/PHP_CodeSniffer-1.4.7; fi"
+  - sh -c "if [ '$TEST_SUITE' = 'static_phpcs' ] || [ '$TEST_SUITE' = 'static_annotation' ]; then pear install pear/PHP_CodeSniffer-1.5.2; fi"
   - phpenv rehash;
 script:
   # Unit tests

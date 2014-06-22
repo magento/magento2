@@ -201,19 +201,19 @@ abstract class Collection extends \Magento\Eav\Model\Resource\Entity\Attribute\C
                 $scopeColumns['scope_website_id'] = $columnName;
             } else {
                 if (isset($mainColumns[$columnName])) {
-                    $alias = sprintf('scope_%s', $columnName);
-                    $expression = $connection->getCheckSql('main_table.%s IS NULL', 'scope_table.%s', 'main_table.%s');
-                    $expression = sprintf($expression, $columnName, $columnName, $columnName);
+                    $alias = 'scope_' . $columnName;
+                    $condition = 'main_table.' . $columnName . ' IS NULL';
+                    $true = 'scope_table.' . $columnName;
+                    $false = 'main_table.' . $columnName;
+                    $expression = $connection->getCheckSql($condition, $true, $false);
                     $this->addFilterToMap($columnName, $expression);
                     $scopeColumns[$alias] = $columnName;
                 } elseif (isset($extraColumns[$columnName])) {
-                    $alias = sprintf('scope_%s', $columnName);
-                    $expression = $connection->getCheckSql(
-                        'additional_table.%s IS NULL',
-                        'scope_table.%s',
-                        'additional_table.%s'
-                    );
-                    $expression = sprintf($expression, $columnName, $columnName, $columnName);
+                    $alias = 'scope_' . $columnName;
+                    $condition = 'additional_table.' . $columnName . ' IS NULL';
+                    $true = 'scope_table.' . $columnName;
+                    $false = 'additional_table.' . $columnName;
+                    $expression = $connection->getCheckSql($condition, $true, $false);
                     $this->addFilterToMap($columnName, $expression);
                     $scopeColumns[$alias] = $columnName;
                 }

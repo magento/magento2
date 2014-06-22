@@ -25,5 +25,5 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
     <preference for="Magento\Catalog\Test\Handler\CatalogProductSimple\CatalogProductSimpleInterface" type="\Magento\Catalog\Test\Handler\CatalogProductSimple\Curl" />
-    <preference for="Magento\Catalog\Test\Handler\CatalogCategoryEntity\CatalogCategoryEntityInterface" type="\Magento\Catalog\Test\Handler\CatalogCategoryEntity\Curl" />
+    <preference for="Magento\Catalog\Test\Handler\CatalogCategory\CatalogCategoryInterface" type="\Magento\Catalog\Test\Handler\CatalogCategory\Curl" />
 </config>

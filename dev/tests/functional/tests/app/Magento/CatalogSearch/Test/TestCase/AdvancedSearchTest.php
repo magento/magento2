@@ -54,7 +54,7 @@ class AdvancedSearchTest extends Functional
         //Steps
         $homePage->open();
         $homePage->getFooterBlock()->clickLink('Advanced Search');
-        $searchForm = $advancedSearchPage->getSearchForm();
+        $searchForm = $advancedSearchPage->getForm();
         $this->assertTrue($searchForm->isVisible(), '"Advanced Search" form is not opened');
         $searchForm->fillCustom($productFixture, array('name', 'sku'));
         $searchForm->submit();

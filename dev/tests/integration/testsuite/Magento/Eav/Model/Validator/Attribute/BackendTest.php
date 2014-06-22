@@ -60,9 +60,9 @@ class BackendTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->_model->isValid($entity));
         $this->assertArrayHasKey('email', $this->_model->getMessages());
 
-        $entity->setData('store_id', null);
+        $entity->setData('firstname', null);
         $this->assertFalse($this->_model->isValid($entity));
         $this->assertArrayHasKey('email', $this->_model->getMessages());
-        $this->assertArrayHasKey('store_id', $this->_model->getMessages());
+        $this->assertArrayHasKey('firstname', $this->_model->getMessages());
     }
 }

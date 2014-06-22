@@ -236,15 +236,15 @@ class View extends AbstractProduct implements \Magento\Framework\View\Block\Iden
             return $this->_jsonEncoder->encode($config);
         }
 
-        $_request = $this->_taxCalculation->getRateRequest(false, false, false);
+        $request = $this->_taxCalculation->getDefaultRateRequest();
         /* @var $product \Magento\Catalog\Model\Product */
         $product = $this->getProduct();
-        $_request->setProductClassId($product->getTaxClassId());
-        $defaultTax = $this->_taxCalculation->getRate($_request);
+        $request->setProductClassId($product->getTaxClassId());
+        $defaultTax = $this->_taxCalculation->getRate($request);
 
-        $_request = $this->_taxCalculation->getRateRequest();
-        $_request->setProductClassId($product->getTaxClassId());
-        $currentTax = $this->_taxCalculation->getRate($_request);
+        $request = $this->_taxCalculation->getRateRequest();
+        $request->setProductClassId($product->getTaxClassId());
+        $currentTax = $this->_taxCalculation->getRate($request);
 
         $tierPrices = array();
 

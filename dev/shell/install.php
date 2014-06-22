@@ -92,5 +92,9 @@ INSTALLSCHEME;
 define('BARE_BOOTSTRAP', 1);
 require_once __DIR__ . '/../../app/bootstrap.php';
 
+$_SERVER[\Magento\Framework\App\State::PARAM_MODE] = isset($_SERVER[\Magento\Framework\App\State::PARAM_MODE])
+    ? $_SERVER[\Magento\Framework\App\State::PARAM_MODE]
+    : \Magento\Framework\App\State::MODE_DEVELOPER;
+
 $entryPoint = new \Magento\Framework\App\EntryPoint\EntryPoint(BP, $_SERVER);
 $entryPoint->run('Magento\Install\App\Console', array('arguments' => $args));

@@ -259,9 +259,6 @@ $table = $installer->getConnection()->newTable(
     $installer->getIdxName('widget_instance_page_layout', 'page_id'),
     'page_id'
 )->addIndex(
-    $installer->getIdxName('widget_instance_page_layout', 'layout_update_id'),
-    'layout_update_id'
-)->addIndex(
     $installer->getIdxName(
         'widget_instance_page_layout',
         array('layout_update_id', 'page_id'),

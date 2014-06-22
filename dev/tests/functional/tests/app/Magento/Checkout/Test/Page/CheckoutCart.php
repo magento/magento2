@@ -24,110 +24,102 @@
 
 namespace Magento\Checkout\Test\Page;
 
-use Mtf\Page\Page;
-use Mtf\Factory\Factory;
-use Mtf\Client\Element\Locator;
-use Magento\Core\Test\Block\Messages;
-use Magento\Checkout\Test\Block;
-use Magento\Checkout\Test\Block\Cart;
-use Magento\Checkout\Test\Block\Cart\Totals;
-use Magento\Checkout\Test\Block\Cart\Shipping;
-use Magento\Catalog\Test\Block\Product\ProductList\Crosssell;
+use Mtf\Page\FrontendPage;
 
 /**
  * Class CheckoutCart
- * Checkout cart page
- *
  */
-class CheckoutCart extends Page
+class CheckoutCart extends FrontendPage
 {
     /**
      * URL for checkout cart page
      */
     const MCA = 'checkout/cart';
 
-    /**
-     * Cart shipping block
-     *
-     * @var string
-     */
-    protected $shippingBlock = '.block.shipping';
+    protected $_blocks = [
+        'cartBlock' => [
+            'name' => 'cartBlock',
+            'class' => 'Magento\Checkout\Test\Block\Cart',
+            'locator' => '//div[contains(@class, "cart container")]',
+            'strategy' => 'xpath',
+        ],
+        'messagesBlock' => [
+            'name' => 'messagesBlock',
+            'class' => 'Magento\Core\Test\Block\Messages',
+            'locator' => '.messages .messages',
+            'strategy' => 'css selector',
+        ],
+        'shippingBlock' => [
+            'name' => 'shippingBlock',
+            'class' => 'Magento\Checkout\Test\Block\Cart\Shipping',
+            'locator' => '.block.shipping',
+            'strategy' => 'css selector',
+        ],
+        'totalsBlock' => [
+            'name' => 'totalsBlock',
+            'class' => 'Magento\Checkout\Test\Block\Cart\Totals',
+            'locator' => '#shopping-cart-totals-table',
+            'strategy' => 'css selector',
+        ],
+        'crosssellBlock' => [
+            'name' => 'crosssellBlock',
+            'class' => 'Magento\Catalog\Test\Block\Product\ProductList\Crosssell',
+            'locator' => '//div[contains(@class, "block")][contains(@class, "crosssell")]',
+            'strategy' => 'xpath',
+        ],
+        'discountCodesBlock' => [
+            'name' => 'discountCodesBlock',
+            'class' => 'Magento\Checkout\Test\Block\Cart\DiscountCodes',
+            'locator' => '.block.discount',
+            'strategy' => 'css selector',
+        ],
+    ];
 
     /**
-     * Cart totals block
-     *
-     * @var string
-     */
-    protected $totalsBlock = '#shopping-cart-totals-table';
-
-    /**
-     * Custom constructor
-     */
-    protected function _init()
-    {
-        $this->_url = $_ENV['app_frontend_url'] . self::MCA;
-    }
-
-    /**
-     * Get shopping cart block
-     *
-     * @return Cart
+     * @return \Magento\Checkout\Test\Block\Cart
      */
     public function getCartBlock()
     {
-        return Factory::getBlockFactory()->getMagentoCheckoutCart(
-            $this->_browser->find('//div[contains(@class, "cart container")]', Locator::SELECTOR_XPATH)
-        );
+        return $this->getBlockInstance('cartBlock');
     }
 
     /**
-     * Get messages block
-     *
-     * @return Messages
+     * @return \Magento\Core\Test\Block\Messages
      */
     public function getMessagesBlock()
     {
-        return Factory::getBlockFactory()->getMagentoCoreMessages(
-            $this->_browser->find('.messages .messages', Locator::SELECTOR_CSS)
-        );
+        return $this->getBlockInstance('messagesBlock');
     }
 
     /**
-     * Get cart shipping block
-     *
-     * @return Shipping
+     * @return \Magento\Checkout\Test\Block\Cart\Shipping
      */
     public function getShippingBlock()
     {
-        return Factory::getBlockFactory()->getMagentoCheckoutCartShipping(
-            $this->_browser->find($this->shippingBlock, Locator::SELECTOR_CSS)
-        );
+        return $this->getBlockInstance('shippingBlock');
     }
 
     /**
-     * Get cart totals block
-     *
-     * @return Totals
+     * @return \Magento\Checkout\Test\Block\Cart\Totals
      */
     public function getTotalsBlock()
     {
-        return Factory::getBlockFactory()->getMagentoCheckoutCartTotals(
-            $this->_browser->find($this->totalsBlock, Locator::SELECTOR_CSS)
-        );
+        return $this->getBlockInstance('totalsBlock');
     }
 
     /**
-     * Retrieve cross-sells block
-     *
-     * @return Crosssell
+     * @return \Magento\Catalog\Test\Block\Product\ProductList\Crosssell
      */
     public function getCrosssellBlock()
     {
-        return Factory::getBlockFactory()->getMagentoCatalogProductProductListCrosssell(
-            $this->_browser->find(
-                '//div[contains(@class, "block")][contains(@class, "crosssell")]',
-                Locator::SELECTOR_XPATH
-            )
-        );
+        return $this->getBlockInstance('crosssellBlock');
+    }
+
+    /**
+     * @return \Magento\Checkout\Test\Block\Cart\DiscountCodes
+     */
+    public function getDiscountCodesBlock()
+    {
+        return $this->getBlockInstance('discountCodesBlock');
     }
 }

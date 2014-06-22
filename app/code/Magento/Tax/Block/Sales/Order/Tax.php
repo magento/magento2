@@ -148,14 +148,24 @@ class Tax extends \Magento\Framework\View\Element\Template
             $subtotalIncl = (double)$this->_source->getSubtotalInclTax();
             $baseSubtotalIncl = (double)$this->_source->getBaseSubtotalInclTax();
 
-            if (!$subtotalIncl) {
-                $subtotalIncl = $subtotal + $this->_source->getTaxAmount() - $this->_source->getShippingTaxAmount();
+            if (!$subtotalIncl || !$baseSubtotalIncl) {
+                // Calculate the subtotal if it is not set
+                $subtotalIncl = $subtotal
+                    + $this->_source->getTaxAmount()
+                    - $this->_source->getShippingTaxAmount();
+                $baseSubtotalIncl = $baseSubtotal
+                    + $this->_source->getBaseTaxAmount()
+                    - $this->_source->getBaseShippingTaxAmount();
+
+                if ($this->_source instanceof Order) {
+                    // Adjust for the discount tax compensation
+                    foreach ($this->_source->getAllItems() as $item) {
+                        $subtotalIncl += $item->getHiddenTaxAmount();
+                        $baseSubtotalIncl += $item->getBaseHiddenTaxAmount();
+                    }
+                }
             }
-            if (!$baseSubtotalIncl) {
-                $baseSubtotalIncl = $baseSubtotal +
-                    $this->_source->getBaseTaxAmount() -
-                    $this->_source->getBaseShippingTaxAmount();
-            }
+
             $subtotalIncl = max(0, $subtotalIncl);
             $baseSubtotalIncl = max(0, $baseSubtotalIncl);
             $totalExcl = new \Magento\Framework\Object(

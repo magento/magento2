@@ -1,3 +1,89 @@
+2.0.0.0-dev83
+=============
+* Created the Service API for the Magento_Catalog Module:
+   * Product Attribute Media API
+   * Product Group Price API
+* Tax calculation updates:
+  * Fixed tax calculation rounding issues which appeared when a discount was applied
+  * Fixed extra penny issue which appeared when exact tax amount ended with 0.5 cent
+  * Fixed tax calculation issues which appeared when a customer tax rate was different from the store tax rate
+  * Fixed price inconsistencies between catalog and shopping cart
+  * Added support for maintaining consistent prices including tax for customers with different tax rates
+  * Added support for applying tax rules with different priorities to be applied to subtotal only
+  * Added support for tax rounding at individual tax rate
+* Porting Tax Features from Magento 1.x:
+  * Price consistency UX and algorithm
+  * Canadian provincial sales taxes
+  * Fixed issues with bundle product price inconsistency across the system
+  * Added warnings if invalid tax configuration is created in the Admin panel
+  * Fixed issues with regards to hidden tax
+* Fixed bugs:
+  * Fixed an issue where grouped price was not applied for grouped products
+  * Fixed an issue where a fatal error occurred when opening a grouped product page without assigned products on the frontend
+  * Fixed an issue where it was possible to apply an inactive discount coupon
+  * Fixed an issue where the linked products information was lost when exporting products
+  * Fixed non-informative error messages for "Attribute Group Service"
+  * Fixed the invalid default value of the "apply_after_discount" tax setting
+  * Fixed an issue where the integration tests coverage whitelist was broken
+  * Fixed Admin panel UI issues: grids, headers and footers
+* Added the following functional tests:
+  * Create Product Url Rewrite
+  * Delete Catalog Price Rule
+  * Delete Category Url Rewrite
+  * Delete CMS Page Rewrite
+  * Delete Product Rating
+  * Delete Sales Rule
+  * Delete Tax Rate
+  * Update Catalog Price Rule
+  * Update Shopping Cart
+
+2.0.0.0-dev82
+=============
+* Added support for MTF Reporting Tool
+* Framework improvements:
+  * Covered the following Magento application components with unit tests:
+      * `ConfigurableProduct/Helper/Data.php`
+      * `ConfigurableProduct/Model/Export/RowCustomizer.php`
+      * `ConfigurableProduct/Model/Product/Type/Configurable.php`
+      * `ConfigurableProduct/Model/Product/Type/Plugin.php`
+      * `ConfigurableProduct/Model/Quote/Item/QuantityValidator/Initializer/Option/Plugin/ConfigurableProduct.php`
+      * `CatalogSearch/Helper/Data.php`
+  * Covered Magento lib with unit tests:
+      * `lib/internal/Magento/Framework/DB/Helper/AbstractHelper.php`
+      * `lib/internal/Magento/Framework/DB/Tree/Node.php`
+* Created Service API for Magento_Catalog Module:
+  * Implemented the Product API
+  * Implemented the ProductAttributeRead API
+* Fixed bugs:
+  * Fixed issues with form elements visibility on the backend
+  * Fixed an issue where backend forms contained an excessive container
+  * Fixed an issue where a wrong category structure was displayed on the Category page
+  * Fixed an issue where the pub/index.php entry point was broken because of the obsolete constants
+  * Fixed an issue where it was impossible to pass an empty array as an argument in DI configuration and layout updates
+  * Fixed an issue with status and visibility settings of a related product on the backend
+  * Fixed an issue with unused DB indexes, which used resources, but did not contribute to higher performance
+  * Fixed an issue where it was possible to create a downloadable product without specifying a link or a file
+  * Fixed an issue where a fatal error occured when opening a fixed bundle product with custom options page on the frontend
+  * Fixed an issue where the was a wrong config key for backend cataloginventory
+* Processed GitHub requests:
+  * [#548] (https://github.com/magento/magento2/issues/548) -- Console installer doesn't checks filesystem permissions
+  * [#552] (https://github.com/magento/magento2/issues/552) -- backend notifications sitebuild bug
+  * [#562] (https://github.com/magento/magento2/pull/562) -- Bugfix Magento\Framework\DB\Adapter\Pdo\Mysql::getCreateTable()
+  * [#565] (https://github.com/magento/magento2/pull/565) -- Magento\CatalogSearch\Model\Query::getResultCollection() not working
+  * [#557] (https://github.com/magento/magento2/issues/557) -- translation anomalies backend login page
+* Added the following functional tests:
+  * Advanced Search
+  * Existing Customer Creation
+  * Product Attribute Creation
+  * Product Rating Creation
+  * Sales Rule Creation
+  * System Product Attribute Deletion
+  * Tax Rate Creation
+  * Tax Rule Deletion
+  * Update Category
+  * Update Category Url Rewrite
+  * Update Product Url Rewrite
+
 2.0.0.0-dev81
 =============
 * Framework improvements:

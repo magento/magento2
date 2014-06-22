@@ -156,7 +156,9 @@ class Config
         $serviceBaseUrl = $this->_getServiceBaseUrl($request);
         $requestHttpMethod = $request->getHttpMethod();
         $routes = array();
-        foreach ($this->_config->getServices()[Converter::KEY_ROUTES] as $url => $httpMethods) {
+        $servicesRoutes = $this->_config->getServices()[Converter::KEY_ROUTES];
+        ksort($servicesRoutes, SORT_STRING);
+        foreach ($servicesRoutes as $url => $httpMethods) {
             // skip if baseurl is not null and does not match
             if (!$serviceBaseUrl || strpos(trim($url, '/'), trim($serviceBaseUrl, '/')) !== 0) {
                 // base url does not match, just skip this service

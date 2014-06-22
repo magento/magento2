@@ -61,7 +61,7 @@ class ListProduct extends Block
      *
      * @var string
      */
-    protected $productTitle = '.product.name';
+    protected $productTitle = '.product.name [title="%s"]';
 
     /**
      * Click for Price link on category page
@@ -85,6 +85,13 @@ class ListProduct extends Block
     protected $addToCard = "button.action.tocart";
 
     /**
+     * Price box CSS selector
+     * 
+     * @var string
+     */
+    protected $priceBox = '.price-box #product-price-%s .price';
+
+    /**
      * This method returns the price box block for the named product.
      *
      * @param string $productName String containing the name of the product to find.
@@ -101,7 +108,6 @@ class ListProduct extends Block
      * Check if product with specified name is visible
      *
      * @param string $productName
-     *
      * @return bool
      */
     public function isProductVisible($productName)
@@ -123,6 +129,7 @@ class ListProduct extends Block
      * Open product view page by clicking on product name
      *
      * @param string $productName
+     * @return void
      */
     public function openProductViewPage($productName)
     {
@@ -133,7 +140,6 @@ class ListProduct extends Block
      * This method returns the element representing the product details for the named product.
      *
      * @param string $productName String containing the name of the product
-     *
      * @return Element
      */
     protected function getProductDetailsElement($productName)
@@ -148,25 +154,17 @@ class ListProduct extends Block
      * This method returns the element on the page associated with the product name.
      *
      * @param string $productName String containing the name of the product
-     *
      * @return Element
      */
     protected function getProductNameElement($productName)
     {
-        return $this->_rootElement->find(
-            $this->productTitle,
-            Locator::SELECTOR_CSS
-        )->find(
-            '//*[@title="' . $productName . '"]',
-            Locator::SELECTOR_XPATH
-        );
+        return $this->_rootElement->find(sprintf($this->productTitle, $productName));
     }
 
     /**
      * Open MAP block on category page
      *
-     * @param $productName
-     *
+     * @param string $productName
      * @return void
      */
     public function openMapBlockOnCategoryPage($productName)
@@ -188,15 +186,12 @@ class ListProduct extends Block
      * Retrieve product price by specified Id
      *
      * @param int $productId
-     *
      * @return string
      */
     public function getPrice($productId)
     {
-        return $this->_rootElement->find(
-            '.price-box #product-price-' . $productId . ' .price',
-            Locator::SELECTOR_CSS
-        )->getText();
+        return $this->_rootElement->find(sprintf($this->priceBox, $productId), Locator::SELECTOR_CSS)
+            ->getText();
     }
 
     /**

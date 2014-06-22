@@ -206,9 +206,6 @@ $table = $installer->getConnection()->newTable(
     array('rule_id', 'from_time', 'to_time', 'website_id', 'customer_group_id', 'product_id', 'sort_order'),
     array('type' => 'unique')
 )->addIndex(
-    $installer->getIdxName('catalogrule_product', array('rule_id')),
-    array('rule_id')
-)->addIndex(
     $installer->getIdxName('catalogrule_product', array('customer_group_id')),
     array('customer_group_id')
 )->addIndex(
@@ -392,9 +389,6 @@ $table = $installer->getConnection()->newTable(
     null,
     array('unsigned' => true, 'nullable' => false, 'primary' => true, 'default' => '0'),
     'Website Id'
-)->addIndex(
-    $installer->getIdxName('catalogrule_group_website', array('rule_id')),
-    array('rule_id')
 )->addIndex(
     $installer->getIdxName('catalogrule_group_website', array('customer_group_id')),
     array('customer_group_id')

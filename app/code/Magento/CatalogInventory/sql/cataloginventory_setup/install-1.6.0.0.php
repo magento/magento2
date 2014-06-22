@@ -207,9 +207,6 @@ $table = $installer->getConnection()->newTable(
     array('product_id', 'stock_id'),
     array('type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE)
 )->addIndex(
-    $installer->getIdxName('cataloginventory_stock_item', array('product_id')),
-    array('product_id')
-)->addIndex(
     $installer->getIdxName('cataloginventory_stock_item', array('stock_id')),
     array('stock_id')
 )->addForeignKey(

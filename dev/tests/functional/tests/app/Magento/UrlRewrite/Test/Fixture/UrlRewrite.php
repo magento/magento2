@@ -54,6 +54,7 @@ class UrlRewrite extends InjectableFixture
     protected $id_path = [
         'attribute_code' => 'id_path',
         'backend_type' => 'virtual',
+        'source' => 'Magento\UrlRewrite\Test\Fixture\UrlRewrite\IdPath',
     ];
 
     protected $store_id = [

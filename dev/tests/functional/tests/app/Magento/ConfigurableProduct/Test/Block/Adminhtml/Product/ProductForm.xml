@@ -45,18 +45,6 @@
             </quantity_and_stock_status>
         </fields>
     </product-details>
-    <websites>
-        <class>\Magento\Backend\Test\Block\Widget\Tab</class>
-        <selector>#product_info_tabs_websites</selector>
-        <strategy>css selector</strategy>
-        <wrapper>product</wrapper>
-        <fields>
-            <product_website_1>
-                <selector>[name='product[website_ids][]']</selector>
-                <input>checkbox</input>
-            </product_website_1>
-        </fields>
-    </websites>
     <advanced-pricing>
         <class>\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\AdvancedPricingTab</class>
         <selector>#product_info_tabs_advanced-pricing</selector>
@@ -74,65 +62,9 @@
             </tier_price>
         </fields>
     </advanced-pricing>
-    <advanced-inventory>
-        <class>\Magento\Backend\Test\Block\Widget\Tab</class>
-        <selector>#product_info_tabs_advanced-inventory</selector>
-        <strategy>css selector</strategy>
-        <wrapper>product[stock_data]</wrapper>
-        <fields>
-            <inventory_manage_stock>
-                <selector>[name='product[stock_data][manage_stock]']</selector>
-                <input>select</input>
-            </inventory_manage_stock>
-            <inventory_qty>
-                <selector>[name='product[stock_data][qty]']</selector>
-            </inventory_qty>
-        </fields>
-    </advanced-inventory>
-    <autosettings>
-        <class>\Magento\Backend\Test\Block\Widget\Tab</class>
-        <selector>#product_info_tabs_autosettings</selector>
-        <strategy>css selector</strategy>
-        <wrapper>product</wrapper>
-        <fields>
-            <visibility>
-                <input>select</input>
-            </visibility>
-        </fields>
-    </autosettings>
     <variations>
         <class>\Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Super\Config</class>
         <selector>#product_info_tabs_product-details</selector>
         <strategy>css selector</strategy>
     </variations>
-    <grouped-product>
-        <class>\Magento\Catalog\Test\Block\Product\Grouped\AssociatedProducts</class>
-        <selector>#product_info_tabs_product-details</selector>
-        <strategy>css selector</strategy>
-    </grouped-product>
-    <customer-options>
-        <class>\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\CustomOptionsTab</class>
-        <selector>#product_info_tabs_customer_options</selector>
-        <strategy>css selector</strategy>
-        <fields>
-            <custom_options>
-                <input>select</input>
-            </custom_options>
-        </fields>
-    </customer-options>
-    <related-products>
-        <class>\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Related</class>
-        <selector>#product_info_tabs_related</selector>
-        <strategy>css selector</strategy>
-    </related-products>
-    <upsells>
-        <class>\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Upsell</class>
-        <selector>#product_info_tabs_upsell</selector>
-        <strategy>css selector</strategy>
-    </upsells>
-    <crosssells>
-        <class>\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Crosssell</class>
-        <selector>#product_info_tabs_crosssell</selector>
-        <strategy>css selector</strategy>
-    </crosssells>
 </tabs>

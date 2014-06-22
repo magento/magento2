@@ -281,9 +281,6 @@ $table = $installer->getConnection()->newTable(
     array('unsigned' => true, 'nullable' => false, 'default' => '0'),
     'Times Used'
 )->addIndex(
-    $installer->getIdxName('salesrule_coupon_usage', array('coupon_id')),
-    array('coupon_id')
-)->addIndex(
     $installer->getIdxName('salesrule_coupon_usage', array('customer_id')),
     array('customer_id')
 )->addForeignKey(
@@ -399,9 +396,6 @@ $table = $installer->getConnection()->newTable(
 )->addIndex(
     $installer->getIdxName('salesrule_label', array('store_id')),
     array('store_id')
-)->addIndex(
-    $installer->getIdxName('salesrule_label', array('rule_id')),
-    array('rule_id')
 )->addForeignKey(
     $installer->getFkName('salesrule_label', 'rule_id', 'salesrule', 'rule_id'),
     'rule_id',

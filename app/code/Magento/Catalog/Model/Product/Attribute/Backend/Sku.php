@@ -68,8 +68,8 @@ class Sku extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     {
         $attrCode = $this->getAttribute()->getAttributeCode();
         $value = $object->getData($attrCode);
-        if ($this->getAttribute()->getIsRequired() && $this->getAttribute()->isValueEmpty($value)) {
-            return false;
+        if ($this->getAttribute()->getIsRequired() && strlen($value) === 0) {
+            throw new \Magento\Eav\Exception(__('The value of attribute "%1" must be set', $attrCode));
         }
 
         if ($this->string->strlen($object->getSku()) > self::SKU_MAX_LENGTH) {

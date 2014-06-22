@@ -32,7 +32,7 @@
     </block>
     <block>
         <name>roleFormTabs</name>
-        <class>Magento\User\Test\Block\Adminhtml\Role\Edit</class>
+        <class>Magento\User\Test\Block\Adminhtml\Role\RoleForm</class>
         <locator>[id="page:main-container"]</locator>
         <strategy>css selector</strategy>
     </block>

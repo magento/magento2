@@ -23,6 +23,9 @@
  */
 namespace Magento\CatalogInventory\Model\Source;
 
+/**
+ * Back orders source class
+ */
 class Backorders implements \Magento\Framework\Option\ArrayInterface
 {
     /**

@@ -68,10 +68,6 @@
                 <td class="col price">
                     <?php if ($this->getCanShowProductPrice($_item)): ?>
                     <?php echo $this->getProductPrice($_item) ?>
-                        <?php echo $this->getProductPriceHtml(
-                            $_item,
-                            \Magento\Catalog\Pricing\Price\TierPrice::PRICE_CODE
-                        ) ?>
                     <?php endif; ?>
                 </td>
                 <?php endif; ?>

@@ -51,6 +51,8 @@ class Rule extends \Magento\Backend\App\Action
     }
 
     /**
+     * Index action
+     *
      * @return $this
      */
     public function indexAction()
@@ -63,6 +65,8 @@ class Rule extends \Magento\Backend\App\Action
     }
 
     /**
+     * Redirects to edit action
+     *
      * @return void
      */
     public function newAction()
@@ -71,6 +75,8 @@ class Rule extends \Magento\Backend\App\Action
     }
 
     /**
+     * Edit action
+     *
      * @return void
      */
     public function editAction()
@@ -106,6 +112,8 @@ class Rule extends \Magento\Backend\App\Action
     }
 
     /**
+     * Save action
+     *
      * @return void
      */
     public function saveAction()
@@ -115,6 +123,7 @@ class Rule extends \Magento\Backend\App\Action
 
             $ruleModel = $this->_objectManager->get('Magento\Tax\Model\Calculation\Rule');
             $ruleModel->setData($postData);
+            $ruleModel->setCalculateSubtotal($this->getRequest()->getParam('calculate_subtotal', 0));
 
             try {
                 $ruleModel->save();
@@ -142,6 +151,8 @@ class Rule extends \Magento\Backend\App\Action
     }
 
     /**
+     * Delete action
+     *
      * @return void
      */
     public function deleteAction()
@@ -191,6 +202,8 @@ class Rule extends \Magento\Backend\App\Action
     }
 
     /**
+     * Check if sales rule is allowed
+     *
      * @return bool
      */
     protected function _isAllowed()

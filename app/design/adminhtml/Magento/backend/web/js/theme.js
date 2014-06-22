@@ -142,16 +142,22 @@
         },
 
         _leaveEffects: function (e) {
-            var targetSubmenu = $(e.target).closest('.submenu');
+            var targetSubmenu = $(e.target).closest('.submenu'),
+            self = $(this),
+            submenu = $('> .submenu', this);
+
             if(targetSubmenu.length && targetSubmenu.is(':hidden')) {
                 return;
             }
-            var self = $(this);
 
-            $('> .submenu', this)
-                .slideUp('fast', function() {
+            if(submenu.length) {
+                submenu.slideUp('fast', function() {
                     self.removeClass('hover');
                 });
+            } else {
+                self.removeClass('hover');
+            }
+
         }
     });
 

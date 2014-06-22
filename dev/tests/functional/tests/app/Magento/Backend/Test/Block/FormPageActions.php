@@ -29,7 +29,6 @@ use Mtf\Client\Element\Locator;
 /**
  * Class FormPageActions
  * Form page actions block
- *
  */
 class FormPageActions extends PageActions
 {
@@ -125,5 +124,15 @@ class FormPageActions extends PageActions
     {
         $this->_rootElement->find($this->deleteButton)->click();
         $this->_rootElement->acceptAlert();
+    }
+
+    /**
+     * Check 'Delete' button availability
+     *
+     * @return bool
+     */
+    public function checkDeleteButton()
+    {
+        return $this->_rootElement->find($this->deleteButton)->isVisible();
     }
 }

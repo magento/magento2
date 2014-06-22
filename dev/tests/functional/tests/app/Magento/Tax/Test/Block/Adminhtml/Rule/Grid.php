@@ -67,9 +67,10 @@ class Grid extends GridInterface
      *
      * @param array $filter
      * @param bool $isSearchable
+     * @param bool $isStrict
      * @return bool
      */
-    public function isRowVisible(array $filter, $isSearchable = false)
+    public function isRowVisible(array $filter, $isSearchable = false, $isStrict = true)
     {
         $this->search(array('code' => $filter['code']));
         return parent::isRowVisible($filter, $isSearchable);

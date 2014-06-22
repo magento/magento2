@@ -24,13 +24,13 @@
 
 namespace Magento\Tax\Test\Block\Adminhtml\Rate\Edit;
 
-use Mtf\Block\Form as FormInterface;
+use Mtf\Block\Form as ParentForm;
 
 /**
  * Class Form
  * Form for tax rate creation
  */
-class Form extends FormInterface
+class Form extends ParentForm
 {
     //
 }

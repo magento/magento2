@@ -32,6 +32,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        // @TODO Re-write test according to standards of writing test (e.g do not mock tested class)
         $this->model = $this->getMock(
             'Magento\SalesRule\Model\Validator',
             array('_getRules', '_getItemOriginalPrice', '_getItemBaseOriginalPrice', '__wakeup'),
@@ -97,8 +98,6 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $quote->setVirtualItemsQty(2);
 
         $this->assertTrue($this->model->canApplyRules($item));
-
-        return true;
     }
 
     public function testProcess()
@@ -448,5 +447,48 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
 
         return $validator;
+    }
+
+    public function testInit()
+    {
+        $websiteId = 1;
+        $customerGroupId = 2;
+        $couponCode = 'code';
+
+        $ruleCollection = $this->getMockBuilder('Magento\SalesRule\Model\Resource\Rule\Collection')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $ruleCollection->expects($this->once())
+            ->method('setValidationFilter')
+            ->with($websiteId, $customerGroupId, $couponCode)
+            ->will($this->returnSelf());
+        $ruleCollection->expects($this->once())
+            ->method('addFieldToFilter')
+            ->with('is_active', 1)
+            ->will($this->returnSelf());
+        $ruleCollection->expects($this->once())
+            ->method('load')
+            ->will($this->returnSelf());
+
+        $ruleCollectionFactoryMock = $this->getMockBuilder('Magento\SalesRule\Model\Resource\Rule\CollectionFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $ruleCollectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($ruleCollection));
+
+        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $model = $helper->getObject(
+            'Magento\SalesRule\Model\Validator',
+            [
+                'collectionFactory' => $ruleCollectionFactoryMock
+            ]
+        );
+
+        $this->assertInstanceOf(
+            'Magento\SalesRule\Model\Validator',
+            $model->init($websiteId, $customerGroupId, $couponCode)
+        );
     }
 }

@@ -70,6 +70,10 @@
         <severeness>low</severeness>
         <require/>
     </assertTaxRateIsInCorrectRange>
+    <assertTaxRateInTaxRule module="Magento_Tax">
+        <severeness>low</severeness>
+        <require/>
+    </assertTaxRateInTaxRule>
     <assertTaxRuleIsApplied module="Magento_Tax">
         <severeness>high</severeness>
         <require />
@@ -78,4 +82,39 @@
         <severeness>high</severeness>
         <require />
     </assertTaxRuleIsNotApplied>
+    <assertTaxRuleSuccessDeleteMessage module="Magento_Tax">
+        <severeness>high</severeness>
+        <require>
+            <taxRuleIndex class="Magento\Tax\Test\Page\Adminhtml\TaxRuleIndex" />
+        </require>
+    </assertTaxRuleSuccessDeleteMessage>
+    <assertTaxRuleNotInGrid module="Magento_Tax">
+        <severeness>high</severeness>
+        <require>
+            <taxRuleIndex class="Magento\Tax\Test\Page\Adminhtml\TaxRuleIndex" />
+            <taxRule class="Magento\Tax\Test\Fixture\TaxRule" />
+        </require>
+    </assertTaxRuleNotInGrid>
+    <assertTaxRateSuccessDeleteMessage module="Magento_Tax">
+        <severeness>high</severeness>
+        <require>
+            <taxRateIndex class="Magento\Tax\Test\Page\Adminhtml\TaxRateIndex" />
+        </require>
+    </assertTaxRateSuccessDeleteMessage>
+    <assertTaxRateNotInGrid module="Magento_Tax">
+        <severeness>high</severeness>
+        <require>
+            <taxRateIndex class="Magento\Tax\Test\Page\Adminhtml\TaxRateIndex" />
+            <taxRate class="Magento\Tax\Test\Fixture\TaxRate" />
+        </require>
+    </assertTaxRateNotInGrid>
+    <assertTaxRateNotInTaxRule module="Magento_Tax">
+        <severeness>high</severeness>
+        <require>
+            <taxRate class="Magento\Tax\Test\Fixture\TaxRate" />
+            <taxRule class="Magento\Tax\Test\Fixture\TaxRule" />
+            <taxRuleIndex class="Magento\Tax\Test\Page\Adminhtml\TaxRuleIndex" />
+            <taxRuleNew class="Magento\Tax\Test\Page\Adminhtml\TaxRuleNew" />
+        </require>
+    </assertTaxRateNotInTaxRule>
 </constraint>

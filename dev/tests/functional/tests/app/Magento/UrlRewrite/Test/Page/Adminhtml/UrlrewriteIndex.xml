@@ -32,7 +32,7 @@
     </block>
     <block>
         <name>urlRedirectGrid</name>
-        <class>Magento\UrlRewrite\Test\Block\Catalog\Category\Grid</class>
+        <class>Magento\UrlRewrite\Test\Block\Adminhtml\Catalog\Category\Grid</class>
         <locator>#urlrewriteGrid</locator>
         <strategy>css selector</strategy>
     </block>

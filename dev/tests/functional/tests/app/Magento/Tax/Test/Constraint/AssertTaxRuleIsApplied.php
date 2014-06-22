@@ -24,20 +24,10 @@
 
 namespace Magento\Tax\Test\Constraint;
 
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
-use Magento\Catalog\Test\Page\Product\CatalogProductView;
-use Magento\Checkout\Test\Page\CheckoutCart;
-use Magento\Customer\Test\Fixture\AddressInjectable;
-use Magento\Customer\Test\Fixture\CustomerInjectable;
-use Magento\Customer\Test\Page\CustomerAccountLogin;
-use Magento\Customer\Test\Page\CustomerAccountLogout;
-use Magento\Tax\Test\Fixture\TaxRule;
-use Mtf\Constraint\AbstractConstraint;
-
 /**
  * Class AssertTaxRuleIsApplied
  */
-class AssertTaxRuleIsApplied extends AbstractConstraint
+class AssertTaxRuleIsApplied extends AssertTaxRuleApplying
 {
     /**
      * Constraint severeness
@@ -49,54 +39,23 @@ class AssertTaxRuleIsApplied extends AbstractConstraint
     /**
      * Assert that tax rule is applied on product in shopping cart.
      *
-     * @param TaxRule $taxRule
-     * @param CustomerAccountLogin $customerAccountLogin
-     * @param CustomerAccountLogout $customerAccountLogout
-     * @param CustomerInjectable $customer
-     * @param CatalogProductView $catalogProductView
-     * @param CatalogProductSimple $productSimple
-     * @param CheckoutCart $checkoutCart
-     * @param AddressInjectable $address
-     * @param array $shipping
      * @return void
      */
-    public function processAssert(
-        TaxRule $taxRule,
-        CustomerAccountLogin $customerAccountLogin,
-        CustomerAccountLogout $customerAccountLogout,
-        CustomerInjectable $customer,
-        CatalogProductView $catalogProductView,
-        CatalogProductSimple $productSimple,
-        CheckoutCart $checkoutCart,
-        AddressInjectable $address,
-        array $shipping
-    ) {
+    protected function assert()
+    {
         $errorMessages = [];
-        // Customer login
-        $customerAccountLogout->open();
-        $customerAccountLogin->open();
-        $customerAccountLogin->getLoginBlock()->login($customer);
-        // Clearing shopping cart and adding product to shopping cart
-        $checkoutCart->open()->getCartBlock()->clearShoppingCart();
-        $catalogProductView->init($productSimple);
-        $catalogProductView->open();
-        $catalogProductView->getViewBlock()->clickAddToCart();
-        // Estimate Shipping and Tax
-        $checkoutCart->getShippingBlock()->openEstimateShippingAndTax();
-        $checkoutCart->getShippingBlock()->fill($address);
-        $checkoutCart->getShippingBlock()->clickGetQuote();
-        $checkoutCart->getShippingBlock()->selectShippingMethod($shipping);
-        // Preparing data to compare
-        $taxRate = $taxRule->getDataFieldConfig('tax_rate')['source']->getFixture()[0]->getRate();
-        $expectedGrandTotal = $productSimple->getPrice() + $taxRate + $shipping['price'];
-        $expectedGrandTotal = number_format($expectedGrandTotal, 2);
-        $actualGrandTotal = $checkoutCart->getTotalsBlock()->getGrandTotal();
 
-        if ($checkoutCart->getTotalsBlock()->isTaxVisible()) {
+        // Preparing data to compare
+        $taxRate = $this->taxRule->getDataFieldConfig('tax_rate')['source']->getFixture()[0]->getRate();
+        $expectedGrandTotal = $this->productSimple->getPrice() + $taxRate + $this->shipping['price'];
+        $expectedGrandTotal = number_format($expectedGrandTotal, 2);
+        $actualGrandTotal = $this->checkoutCart->getTotalsBlock()->getGrandTotal();
+
+        if ($this->checkoutCart->getTotalsBlock()->isTaxVisible()) {
             $expectedTax = number_format($taxRate, 2);
-            $actualTax = $checkoutCart->getTotalsBlock()->getTax();
+            $actualTax = $this->checkoutCart->getTotalsBlock()->getTax();
             if ($expectedTax !== $actualTax) {
-                $errorMessages[] = 'Tax is not correct.'
+                $errorMessages[] = 'Tax Rule \'' . $this->taxRuleCode . '\' is applied wrong.'
                     . "\nExpected: " . $expectedTax
                     . "\nActual: " . $actualTax;
             }
@@ -107,10 +66,7 @@ class AssertTaxRuleIsApplied extends AbstractConstraint
                 . "\nActual: " . $actualGrandTotal;
         }
 
-        \PHPUnit_Framework_Assert::assertTrue(
-            empty($errorMessages),
-            implode(";\n", $errorMessages)
-        );
+        \PHPUnit_Framework_Assert::assertTrue(empty($errorMessages), implode(";\n", $errorMessages));
     }
 
     /**

@@ -76,9 +76,19 @@ class BundleOptionPriceTest extends \PHPUnit_Framework_TestCase
             ->method('getPriceInfo')
             ->will($this->returnValue($this->priceInfoMock));
 
+        $store = $this->getMockBuilder('Magento\Store\Model\Store')
+            ->setMethods(['roundPrice', '__wakeup'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $store->expects($this->any())->method('roundPrice')->will($this->returnArgument(0));
+
         $this->saleableItemMock->expects($this->once())
             ->method('setQty')
             ->will($this->returnSelf());
+
+        $this->saleableItemMock->expects($this->any())
+            ->method('getStore')
+            ->will($this->returnValue($store));
 
         $this->selectionFactoryMock = $this->getMockBuilder('Magento\Bundle\Pricing\Price\BundleSelectionFactory')
             ->disableOriginalConstructor()
@@ -91,8 +101,13 @@ class BundleOptionPriceTest extends \PHPUnit_Framework_TestCase
         );
         $this->amountFactory->expects($this->any())->method('create')->will($factoryCallback);
         $this->baseCalculator = $this->getMock('Magento\Framework\Pricing\Adjustment\Calculator', [], [], '', false);
+
+        $taxData = $this->getMockBuilder('Magento\Tax\Helper\Data')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->bundleCalculatorMock = $this->getMockBuilder('Magento\Bundle\Pricing\Adjustment\Calculator')
-            ->setConstructorArgs([$this->baseCalculator, $this->amountFactory, $this->selectionFactoryMock])
+            ->setConstructorArgs([$this->baseCalculator, $this->amountFactory, $this->selectionFactoryMock, $taxData])
             ->setMethods(['getOptionsAmount'])
             ->getMock();
         $this->objectManagerHelper = new ObjectManagerHelper($this);

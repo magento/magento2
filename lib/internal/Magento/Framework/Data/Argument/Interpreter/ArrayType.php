@@ -52,11 +52,11 @@ class ArrayType implements InterpreterInterface
      */
     public function evaluate(array $data)
     {
-        if (!isset($data['item']) || !is_array($data['item'])) {
+        $items = isset($data['item']) ? $data['item'] : array();
+        if (!is_array($items)) {
             throw new \InvalidArgumentException('Array items are expected.');
         }
         $result = array();
-        $items = $data['item'];
         foreach ($items as $itemKey => $itemData) {
             $result[$itemKey] = $this->itemInterpreter->evaluate($itemData);
         }
