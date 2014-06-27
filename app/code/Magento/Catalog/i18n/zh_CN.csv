@@ -269,6 +269,8 @@
 "Enable Quantity Increments","启用数量增量"
 "Enable WYSIWYG","启用所见即所得"
 "Enabled","已启用"
+"Entity type model must be an instance of \Magento\CatalogImportExport\Model\ImportExport\Export\Product\Type\AbstractType","实体类型模块必须为\Magento\CatalogImportExport\Model\ImportExport\Export\Product\Type\AbstractType的实例"
+"Entity type model must be an instance of \Magento\CatalogImportExport\Model\ImportExport\Import\Product\Type\AbstractType","实体类型模块必须为\Magento\CatalogImportExport\Model\ImportExport\Import\Product\Type\AbstractType的实例"
 "Error during retrieval of option value: %s","获取选项值 %s的过程中出错"
 "Exclude","排除"
 "Expand All","全部展开"

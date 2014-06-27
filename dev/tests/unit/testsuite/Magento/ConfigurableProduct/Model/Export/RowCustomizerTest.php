@@ -26,7 +26,7 @@ namespace Magento\ConfigurableProduct\Model\Export;
 class RowCustomizerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\ConfigurableProduct\Model\Export\RowCustomizer
+     * @var \Magento\CatalogImportExport\Model\Export\RowCustomizer
      */
     protected $_model;
 
@@ -44,7 +44,7 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_model = new \Magento\ConfigurableProduct\Model\Export\RowCustomizer;
+        $this->_model = new \Magento\CatalogImportExport\Model\Export\RowCustomizer;
     }
 
     public function testPrepareData()

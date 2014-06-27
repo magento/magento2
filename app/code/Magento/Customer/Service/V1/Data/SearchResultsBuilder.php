@@ -24,45 +24,40 @@
 
 namespace Magento\Customer\Service\V1\Data;
 
-use Magento\Framework\Service\V1\Data\SearchCriteria;
+use Magento\Framework\Service\Data\ObjectFactory;
+use Magento\Framework\Service\V1\Data\SearchCriteriaBuilder;
+use Magento\Framework\Service\V1\Data\AbstractSearchResultsBuilder;
 
 /**
  * Builder for the SearchResults Service Data Object
  *
- * @method SearchResults create()
+ * @method \Magento\Customer\Service\V1\Data\SearchResults create()
  */
-class SearchResultsBuilder extends \Magento\Framework\Service\Data\AbstractObjectBuilder
+class SearchResultsBuilder extends AbstractSearchResultsBuilder
 {
     /**
-     * Set search criteria
+     * Constructor
      *
-     * @param SearchCriteria $searchCriteria
-     * @return $this
+     * @param ObjectFactory $objectFactory
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param CustomerDetailsBuilder $customerDetailsObjectBuilder
      */
-    public function setSearchCriteria(SearchCriteria $searchCriteria)
-    {
-        return $this->_set('search_criteria', $searchCriteria);
+    public function __construct(
+        ObjectFactory $objectFactory,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        CustomerDetailsBuilder $customerDetailsObjectBuilder
+    ) {
+        parent::__construct($objectFactory, $searchCriteriaBuilder, $customerDetailsObjectBuilder);
     }
 
     /**
-     * Set total count
+     * Set customer details items
      *
-     * @param int $totalCount
+     * @param \Magento\Customer\Service\V1\Data\CustomerDetails[] $customerDetailsItems
      * @return $this
      */
-    public function setTotalCount($totalCount)
+    public function setItems($customerDetailsItems)
     {
-        return $this->_set('total_count', $totalCount);
-    }
-
-    /**
-     * Set items
-     *
-     * @param \Magento\Customer\Service\V1\Data\CustomerDetails[] $items
-     * @return $this
-     */
-    public function setItems($items)
-    {
-        return $this->_set('items', $items);
+        return parent::setItems($customerDetailsItems);
     }
 }

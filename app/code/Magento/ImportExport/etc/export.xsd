@@ -28,7 +28,7 @@
         <xs:complexType>
             <xs:choice maxOccurs="unbounded">
                 <xs:element name="entity" type="entityDeclaration" minOccurs="0" maxOccurs="unbounded" />
-                <xs:element name="productType" type="productTypeDeclaration" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element name="entityType" type="entityTypeDeclaration" minOccurs="0" maxOccurs="unbounded" />
                 <xs:element name="fileFormat" type="fileFormatDeclaration" minOccurs="0" maxOccurs="unbounded" />
             </xs:choice>
         </xs:complexType>
@@ -39,15 +39,6 @@
                 </xs:documentation>
             </xs:annotation>
             <xs:selector xpath="entity"/>
-            <xs:field xpath="@name"/>
-        </xs:unique>
-        <xs:unique name="uniqueProductTypeName">
-            <xs:annotation>
-                <xs:documentation>
-                    Export product type name must be unique.
-                </xs:documentation>
-            </xs:annotation>
-            <xs:selector xpath="productType"/>
             <xs:field xpath="@name"/>
         </xs:unique>
         <xs:unique name="uniqueFileFormatName">
@@ -70,14 +61,16 @@
         <xs:attribute name="name" type="xs:string" use="required" />
         <xs:attribute name="label" type="xs:string" use="optional" />
         <xs:attribute name="model" type="modelName" use="optional" />
+        <xs:attribute name="entityAttributeFilterType" type="xs:string" use="required" />
     </xs:complexType>
 
-    <xs:complexType name="productTypeDeclaration">
+    <xs:complexType name="entityTypeDeclaration">
         <xs:annotation>
             <xs:documentation>
-                Export product type declaration.
+                Export entity type declaration.
             </xs:documentation>
         </xs:annotation>
+        <xs:attribute name="entity" type="xs:string" use="required" />
         <xs:attribute name="name" type="xs:string" use="required" />
         <xs:attribute name="model" type="modelName" use="required" />
     </xs:complexType>

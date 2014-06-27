@@ -86,6 +86,8 @@ class IdPath implements FixtureInterface
      *
      * @param string|null $key
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getData($key = null)
     {

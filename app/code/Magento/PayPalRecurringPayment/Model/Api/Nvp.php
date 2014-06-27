@@ -96,6 +96,9 @@ class Nvp extends \Magento\Paypal\Model\Api\Nvp
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
      * @param \Magento\Framework\Logger\AdapterFactory $logAdapterFactory
      * @param \Magento\Directory\Model\CountryFactory $countryFactory
+     * @param \Magento\Paypal\Model\Api\ProcessableExceptionFactory $processableExceptionFactory
+     * @param \Magento\Framework\Model\ExceptionFactory $frameworkExceptionFactory
+     * @param \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory
      * @param \Magento\RecurringPayment\Model\QuoteImporter $quoteImporter
      * @param array $data
      */
@@ -106,6 +109,9 @@ class Nvp extends \Magento\Paypal\Model\Api\Nvp
         \Magento\Directory\Model\RegionFactory $regionFactory,
         \Magento\Framework\Logger\AdapterFactory $logAdapterFactory,
         \Magento\Directory\Model\CountryFactory $countryFactory,
+        \Magento\Paypal\Model\Api\ProcessableExceptionFactory $processableExceptionFactory,
+        \Magento\Framework\Model\ExceptionFactory $frameworkExceptionFactory,
+        \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory,
         \Magento\RecurringPayment\Model\QuoteImporter $quoteImporter,
         array $data = array()
     ) {
@@ -116,6 +122,9 @@ class Nvp extends \Magento\Paypal\Model\Api\Nvp
             $regionFactory,
             $logAdapterFactory,
             $countryFactory,
+            $processableExceptionFactory,
+            $frameworkExceptionFactory,
+            $curlFactory,
             $data
         );
         $this->_quoteImporter = $quoteImporter;

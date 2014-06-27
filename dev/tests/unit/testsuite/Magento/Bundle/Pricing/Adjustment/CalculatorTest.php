@@ -128,6 +128,15 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
         $this->priceMocks = [];
     }
 
+    public function testEmptySelectionPriceList()
+    {
+        $option = $this->getMock('Magento\Bundle\Model\Option', ['getSelections', '__wakeup'], [], '', false);
+        $option->expects($this->any())->method('getSelections')
+            ->will($this->returnValue(null));
+        $bundleProduct = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
+        $this->assertSame(array(), $this->model->createSelectionPriceList($option, $bundleProduct));
+    }
+
     /**
      * @dataProvider dataProviderForGetterAmount
      */

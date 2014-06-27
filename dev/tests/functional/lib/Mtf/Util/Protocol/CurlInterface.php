@@ -50,11 +50,11 @@ interface CurlInterface
      *
      * @param string $method
      * @param string $url
-     * @param string $http_ver
+     * @param string $httpVer
      * @param array  $headers
      * @param array  $params
      */
-    public function write($method, $url, $http_ver = '1.1', $headers = array(), $params = array());
+    public function write($method, $url, $httpVer = '1.1', $headers = array(), $params = array());
 
     /**
      * Read response from server

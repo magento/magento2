@@ -62,10 +62,10 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject */
     protected $_backendActionCtxMock;
 
-    /** @var \Magento\Integration\Service\IntegrationV1|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Integration\Service\V1\Integration|\PHPUnit_Framework_MockObject_MockObject */
     protected $_integrationSvcMock;
 
-    /** @var \Magento\Integration\Service\OauthV1|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Integration\Service\V1\Oauth|\PHPUnit_Framework_MockObject_MockObject */
     protected $_oauthSvcMock;
 
     /** @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject */
@@ -130,10 +130,10 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\TranslateInterface'
         )->disableOriginalConstructor()->getMock();
         $this->_integrationSvcMock = $this->getMockBuilder(
-            'Magento\Integration\Service\IntegrationV1'
+            'Magento\Integration\Service\V1\Integration'
         )->disableOriginalConstructor()->getMock();
         $this->_oauthSvcMock = $this->getMockBuilder(
-            'Magento\Integration\Service\OauthV1'
+            'Magento\Integration\Service\V1\Oauth'
         )->disableOriginalConstructor()->getMock();
         $this->_requestMock = $this->getMockBuilder(
             'Magento\Framework\App\Request\Http'
@@ -846,6 +846,7 @@ HANDLE;
         $this->_layoutMock->expects($this->any())->method('getMessagesBlock')->will($this->returnValue($blockMock));
         $this->_layoutMock->expects($this->any())->method('getBlock')->will($this->returnValue($blockMock));
         $this->_escaper->expects($this->any())->method('escapeHtml')->will($this->returnArgument(0));
+
         $contextParameters = array(
             'view' => $this->_viewMock,
             'objectManager' => $this->_objectManagerMock,
@@ -860,6 +861,18 @@ HANDLE;
             'Magento\Backend\App\Action\Context',
             $contextParameters
         );
+
+        $integrationCollection = $this->getMockBuilder('\Magento\Integration\Model\Resource\Integration\Collection')
+            ->disableOriginalConstructor()
+            ->setMethods(['addUnsecureEndpointFilter', 'getSize'])
+            ->getMock();
+        $integrationCollection->expects($this->any())
+            ->method('addUnsecureEndpointFilter')
+            ->will($this->returnValue($integrationCollection));
+        $integrationCollection->expects($this->any())
+            ->method('getSize')
+            ->will($this->returnValue(0));
+
         $subControllerParams = array(
             'context' => $this->_backendActionCtxMock,
             'integrationService' => $this->_integrationSvcMock,
@@ -867,7 +880,8 @@ HANDLE;
             'registry' => $this->_registryMock,
             'logger' => $loggerMock,
             'integrationData' => $this->_integrationHelperMock,
-            'escaper' => $this->_escaper
+            'escaper' => $this->_escaper,
+            'integrationCollection' => $integrationCollection
         );
         /** Create IntegrationController to test */
         $controller = $this->_objectManagerHelper->getObject(

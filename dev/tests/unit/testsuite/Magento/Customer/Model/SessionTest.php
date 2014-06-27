@@ -48,6 +48,16 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     protected $_httpContextMock;
 
     /**
+     * @var \Magento\Framework\UrlFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $urlFactoryMock;
+
+    /**
+     * @var \Magento\Customer\Service\V1\CustomerAccountService|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $customerAccountServiceMock;
+
+    /**
      * @var \Magento\Customer\Model\Session
      */
     protected $_model;
@@ -58,13 +68,24 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $this->_storageMock = $this->getMock('Magento\Customer\Model\Session\Storage', [], [], '', false);
         $this->_eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
         $this->_httpContextMock = $this->getMock('Magento\Framework\App\Http\Context', [], [], '', false);
+        $this->urlFactoryMock = $this->getMock('Magento\Framework\UrlFactory', [], [], '', false);
+        $this->customerAccountServiceMock = $this->getMock(
+            'Magento\Customer\Service\V1\CustomerAccountService',
+            [],
+            [],
+            '',
+            false
+        );
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_model = $helper->getObject('Magento\Customer\Model\Session',
+        $this->_model = $helper->getObject(
+            'Magento\Customer\Model\Session',
             [
                 'converter' => $this->_converterMock,
                 'storage' => $this->_storageMock,
                 'eventManager' => $this->_eventManagerMock,
-                'httpContext' => $this->_httpContextMock
+                'httpContext' => $this->_httpContextMock,
+                'urlFactory' => $this->urlFactoryMock,
+                'customerAccountService' => $this->customerAccountServiceMock,
             ]
         );
     }
@@ -109,4 +130,92 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($customer, $this->_model->getCustomer());
     }
 
+    public function testAuthenticate()
+    {
+        $urlMock = $this->getMock('Magento\Framework\Url', array(), array(), '', false);
+        $urlMock->expects($this->exactly(2))
+            ->method('getUrl')
+            ->will($this->returnValue(''));
+        $urlMock->expects($this->once())
+            ->method('getRebuiltUrl')
+            ->will($this->returnValue(''));
+        $this->urlFactoryMock->expects($this->exactly(3))
+            ->method('create')
+            ->will($this->returnValue($urlMock));
+
+        $responseMock = $this->getMock('Magento\Framework\App\Response\Http', array(), array(), '', false);
+        $responseMock->expects($this->once())
+            ->method('setRedirect')
+            ->with('')
+            ->will($this->returnValue(''));
+
+        $actionMock = $this->getMock('Magento\Framework\App\Action\Action', array(), array(), '', false);
+        $actionMock->expects($this->once())
+            ->method('getResponse')
+            ->will($this->returnValue($responseMock));
+
+        $this->assertFalse($this->_model->authenticate($actionMock));
+    }
+
+    public function testLoginById()
+    {
+        $customerId = 1;
+
+        $customerDataMock = $this->prepareLoginDataMock($customerId);
+
+        $this->customerAccountServiceMock->expects($this->once())
+            ->method('getCustomer')
+            ->with($this->equalTo($customerId))
+            ->will($this->returnValue($customerDataMock));
+
+        $this->assertTrue($this->_model->loginById($customerId));
+    }
+
+    public function testLogin()
+    {
+        $customerId = 1;
+        $username = 'TestName';
+        $password = 'TestPassword';
+
+        $customerDataMock = $this->prepareLoginDataMock($customerId);
+
+        $this->customerAccountServiceMock->expects($this->once())
+            ->method('authenticate')
+            ->with($this->equalTo($username), $this->equalTo($password))
+            ->will($this->returnValue($customerDataMock));
+
+        $this->assertTrue($this->_model->login($username, $password));
+    }
+
+    /**
+     * @param $customerId
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function prepareLoginDataMock($customerId)
+    {
+        $customerDataMock = $this->getMock('Magento\Customer\Service\V1\Data\Customer', array(), array(), '', false);
+        $customerDataMock->expects($this->once())
+            ->method('getId')
+            ->will($this->returnValue($customerId));
+
+        $customerMock = $this->getMock('Magento\Customer\Model\Customer', array(), array(), '', false);
+        $customerMock->expects($this->once())
+            ->method('getId')
+            ->will($this->returnValue($customerId));
+        $customerMock->expects($this->once())
+            ->method('isConfirmationRequired')
+            ->will($this->returnValue(true));
+        $customerMock->expects($this->never())
+            ->method('getConfirmation')
+            ->will($this->returnValue($customerId));
+
+        $this->_converterMock->expects($this->once())
+            ->method('createCustomerModel')
+            ->with($customerDataMock)
+            ->will($this->returnValue($customerMock));
+
+        $this->_httpContextMock->expects($this->exactly(3))
+            ->method('setValue');
+        return $customerDataMock;
+    }
 }

@@ -31,6 +31,12 @@ use Mtf\Repository\AbstractRepository;
  */
 class TaxRule extends AbstractRepository
 {
+    /**
+     * @param array $defaultConfig
+     * @param array $defaultData
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function __construct(array $defaultConfig = [], array $defaultData = [])
     {
         $this->_data['custom_rule'] = [

@@ -35,6 +35,7 @@ class Position implements \Magento\Framework\Option\ArrayInterface
     /**
      * Get available options
      *
+     * @codeCoverageIgnore
      * @return array
      */
     public function toOptionArray()

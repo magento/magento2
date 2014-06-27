@@ -108,6 +108,8 @@ abstract class AssertTaxRuleApplying extends AbstractConstraint
      * @param array $shipping
      * @param TaxRule $initialTaxRule
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function processAssert(
         FixtureFactory $fixtureFactory,

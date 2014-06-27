@@ -53,7 +53,7 @@ class ProductServiceTest extends \PHPUnit_Framework_TestCase
     protected $_objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Catalog\Service\V1\Data\SearchResultsBuilder
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Catalog\Service\V1\Data\Product\SearchResultsBuilder
      */
     protected $searchResultsBuilderMock;
 
@@ -100,8 +100,9 @@ class ProductServiceTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['create'])
             ->getMock();
 
-        $this->searchResultsBuilderMock = $this->getMockBuilder('Magento\Catalog\Service\V1\Data\SearchResultsBuilder')
-            ->disableOriginalConstructor()
+        $this->searchResultsBuilderMock = $this->getMockBuilder(
+                'Magento\Catalog\Service\V1\Data\Product\SearchResultsBuilder'
+            )->disableOriginalConstructor()
             ->getMock();
 
         $this->metadataServiceMock = $this->getMockBuilder(

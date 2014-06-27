@@ -103,6 +103,8 @@ class UpdateTaxRuleEntityTest extends Injectable
      * @param AddressInjectable $address
      * @param array $shipping
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function testUpdateTaxRule(
         TaxRule $initialTaxRule,

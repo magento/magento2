@@ -26,6 +26,7 @@ namespace Magento\Catalog\Service\V1;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Catalog\Service\V1\Data\Eav\AttributeMetadata;
+use Magento\Catalog\Service\V1\Data\Eav\Product\Attribute\FrontendLabel;
 
 /**
  * Class ProductMetadataService
@@ -44,16 +45,6 @@ class ProductMetadataService implements ProductMetadataServiceInterface
     private $scopeResolver;
 
     /**
-     * @var Data\Eav\OptionBuilder
-     */
-    private $optionBuilder;
-
-    /**
-     * @var Data\Eav\ValidationRuleBuilder
-     */
-    private $validationRuleBuilder;
-
-    /**
      * @var Data\Eav\AttributeMetadataBuilder
      */
     private $attributeMetadataBuilder;
@@ -61,21 +52,15 @@ class ProductMetadataService implements ProductMetadataServiceInterface
     /**
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
-     * @param Data\Eav\OptionBuilder $optionBuilder
-     * @param Data\Eav\ValidationRuleBuilder $validationRuleBuilder
      * @param Data\Eav\AttributeMetadataBuilder $attributeMetadataBuilder
      */
     public function __construct(
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\App\ScopeResolverInterface $scopeResolver,
-        Data\Eav\OptionBuilder $optionBuilder,
-        Data\Eav\ValidationRuleBuilder $validationRuleBuilder,
         Data\Eav\AttributeMetadataBuilder $attributeMetadataBuilder
     ) {
         $this->eavConfig = $eavConfig;
         $this->scopeResolver = $scopeResolver;
-        $this->optionBuilder = $optionBuilder;
-        $this->validationRuleBuilder = $validationRuleBuilder;
         $this->attributeMetadataBuilder = $attributeMetadataBuilder;
     }
 
@@ -159,18 +144,16 @@ class ProductMetadataService implements ProductMetadataServiceInterface
         $data[AttributeMetadata::SCOPE] = $attribute->isScopeGlobal()
             ? 'global' : ($attribute->isScopeWebsite() ? 'website' : 'store');
 
-        // fill frontend labels
-        $data[AttributeMetadata::FRONTEND_LABEL] = array(
-            array(
-                'store_id' => 0,
-                'label' => $attribute->getFrontendLabel()
-            )
+        $data[AttributeMetadata::FRONTEND_LABEL] = [];
+        $data[AttributeMetadata::FRONTEND_LABEL][0] = array(
+            FrontendLabel::STORE_ID => 0,
+            FrontendLabel::LABEL => $attribute->getFrontendLabel()
         );
         if (is_array($attribute->getStoreLabels())) {
             foreach ($attribute->getStoreLabels() as $storeId => $label) {
-                $data[AttributeMetadata::FRONTEND_LABEL][] = array(
-                    'store_id' => $storeId,
-                    'label' => $label
+                $data[AttributeMetadata::FRONTEND_LABEL][$storeId] = array(
+                    FrontendLabel::STORE_ID => $storeId,
+                    FrontendLabel::LABEL => $label
                 );
             }
         }

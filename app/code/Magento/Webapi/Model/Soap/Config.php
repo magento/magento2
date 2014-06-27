@@ -155,7 +155,7 @@ class Config
                         self::KEY_METHOD => $methodName,
                         self::KEY_IS_REQUIRED => (bool)$methodMetadata[Converter::KEY_SECURE],
                         self::KEY_IS_SECURE => $methodMetadata[Converter::KEY_SECURE],
-                        self::KEY_ACL_RESOURCES => array_keys($methodMetadata[Converter::KEY_ACL_RESOURCES]),
+                        self::KEY_ACL_RESOURCES => $methodMetadata[Converter::KEY_ACL_RESOURCES],
                     ];
                     $this->_soapServices[$serviceName][self::KEY_CLASS] = $serviceClass;
                 }

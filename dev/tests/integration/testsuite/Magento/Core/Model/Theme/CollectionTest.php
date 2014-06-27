@@ -93,7 +93,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
                 'expectedData' => array(
                     'area' => 'frontend',
                     'theme_title' => 'Default',
-                    'theme_version' => '2.0.0.0',
+                    'theme_version' => '0.1.0',
                     'parent_id' => null,
                     'parent_theme_path' => null,
                     'theme_path' => 'magento_default',
@@ -122,7 +122,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             array(
                 'area' => 'space_area',
                 'theme_title' => 'Space theme',
-                'theme_version' => '2.0.0.0',
+                'theme_version' => '0.1.0',
                 'parent_id' => null,
                 'is_featured' => false,
                 'theme_path' => 'default_space',

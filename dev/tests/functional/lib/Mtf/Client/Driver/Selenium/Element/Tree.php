@@ -67,6 +67,7 @@ abstract class Tree extends Element
      *
      * @param ElementInterface $target
      * @throws \BadMethodCallException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function dragAndDrop(ElementInterface $target)
     {
@@ -82,7 +83,6 @@ abstract class Tree extends Element
     public function getValue()
     {
         throw new \BadMethodCallException('Not applicable for this class of elements (TreeElement)');
-
     }
 
     /**
@@ -91,6 +91,7 @@ abstract class Tree extends Element
      *
      * @param array $keys
      * @throws \BadMethodCallException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function keys(array $keys)
     {

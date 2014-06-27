@@ -104,25 +104,25 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
             array(
                 'default_default',
                 array(array(
-                    'version' => '2.0.0.9',
+                    'version' => '0.1.0',
                     'media' => array('preview_image' => 'media/default_default.jpg'),
                 ))),
             array(
                 'default_test',
                 array(array(
-                    'version' => '2.1.0.0',
+                    'version' => '0.1.1',
                     'media' => array('preview_image' => ''),
                 ))),
             array(
                 'default_test2',
                 array(array(
-                    'version' => '2.0.0.0',
+                    'version' => '0.1.2',
                     'media' => array('preview_image' => ''),
                 ))),
             array(
                 'test_default',
                 array(array(
-                    'version' => '2.0.1.0',
+                    'version' => '0.1.3',
                     'media' => array('preview_image' => 'media/test_default.jpg'),
                 ))),
         );

@@ -37,6 +37,12 @@ class Option extends \Magento\Framework\Service\Data\AbstractObject
 
     const VALUE = 'value';
 
+    const ORDER = 'order';
+
+    const STORE_LABELS = 'store_labels';
+
+    const IS_DEFAULT = 'default';
+
     /**
      * Get option label
      *
@@ -50,10 +56,40 @@ class Option extends \Magento\Framework\Service\Data\AbstractObject
     /**
      * Get option value
      *
-     * @return string
+     * @return string|null
      */
     public function getValue()
     {
         return $this->_get(self::VALUE);
+    }
+
+    /**
+     * Get option order
+     *
+     * @return int|null
+     */
+    public function getOrder()
+    {
+        return $this->_get(self::ORDER);
+    }
+
+    /**
+     * is default
+     *
+     * @return bool|null
+     */
+    public function isDefault()
+    {
+        return $this->_get(self::IS_DEFAULT);
+    }
+
+    /**
+     * Set option label for store scopes
+     *
+     * @return \Magento\Catalog\Service\V1\Data\Eav\Option\Label[]|null
+     */
+    public function getStoreLabels()
+    {
+        return $this->_get(Option::STORE_LABELS);
     }
 }

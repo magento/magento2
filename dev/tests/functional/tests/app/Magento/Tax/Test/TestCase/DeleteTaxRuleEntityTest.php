@@ -98,6 +98,8 @@ class DeleteTaxRuleEntityTest extends Injectable
      * @param TaxRule $taxRule
      * @param AddressInjectable $address
      * @param array $shipping
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function testDeleteTaxRule(
         TaxRule $taxRule,

@@ -300,6 +300,10 @@
                         // Get integration name either from current element or from neighbor column
                         var integrationName = $(ctx).attr('data-row-name')
                             || $(ctx).parents('tr').find('.col-name').html().trim();
+                        if (integrationName.indexOf('<span') > -1) {
+                            // Remove unsecure URL warning from popup window title if it is present
+                            integrationName = integrationName.substring(0, integrationName.indexOf('<span'));
+                        }
                     } catch (e) {
                         throw 'Unable to find integration name';
                     }

@@ -56,7 +56,7 @@ class ValidationTest extends \PHPUnit_Framework_TestCase
                 array(
                     'theme_code' => 'Magento/iphone',
                     'theme_title' => 'Iphone',
-                    'theme_version' => '2.0.0.0',
+                    'theme_version' => '2.0.0',
                     'parent_theme' => array('default', 'default'),
                     'theme_path' => 'Magento/iphone',
                     'preview_image' => 'images/preview.png'

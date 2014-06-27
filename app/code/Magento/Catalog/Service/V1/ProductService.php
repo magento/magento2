@@ -74,7 +74,7 @@ class ProductService implements ProductServiceInterface
     private $converter;
 
     /**
-     * @var Data\SearchResultsBuilder
+     * @var \Magento\Catalog\Service\V1\Data\Product\SearchResultsBuilder
      */
     private $searchResultsBuilder;
 
@@ -86,7 +86,7 @@ class ProductService implements ProductServiceInterface
      * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollection
      * @param ProductMetadataServiceInterface $metadataService
      * @param \Magento\Catalog\Service\V1\Data\Converter $converter
-     * @param Data\SearchResultsBuilder $searchResultsBuilder
+     * @param \Magento\Catalog\Service\V1\Data\Product\SearchResultsBuilder $searchResultsBuilder
      */
     public function __construct(
         Product\Initialization\Helper $initializationHelper,
@@ -96,7 +96,7 @@ class ProductService implements ProductServiceInterface
         \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollection,
         ProductMetadataServiceInterface $metadataService,
         \Magento\Catalog\Service\V1\Data\Converter $converter,
-        Data\SearchResultsBuilder $searchResultsBuilder
+        \Magento\Catalog\Service\V1\Data\Product\SearchResultsBuilder $searchResultsBuilder
     ) {
         $this->initializationHelper = $initializationHelper;
         $this->productMapper = $productMapper;

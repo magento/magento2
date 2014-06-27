@@ -103,11 +103,5 @@ T: {{var telephone}}
 {{depend vat_id}}<br/>VAT: {{var vat_id}}{{/depend}}|]]></pdf>
             </address_templates>
         </customer>
-        <export>
-            <customer_page_size>
-                <customer>10000</customer>
-                <address>5000</address>
-            </customer_page_size>
-        </export>
     </default>
 </config>

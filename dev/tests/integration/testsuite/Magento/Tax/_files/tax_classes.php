@@ -65,7 +65,10 @@ $taxRate = array(
 );
 $rate = $objectManager->create('Magento\Tax\Model\Calculation\Rate')->setData($taxRate)->save();
 
-$objectManager->get('Magento\Framework\Registry')->register('_fixture/Magento_Tax_Model_Calculation_Rate', $rate);
+/** @var Magento\Framework\Registry $registry */
+$registry = $objectManager->get('Magento\Framework\Registry');
+$registry->unregister('_fixture/Magento_Tax_Model_Calculation_Rate');
+$registry->register('_fixture/Magento_Tax_Model_Calculation_Rate', $rate);
 
 $ruleData = array(
     'code' => 'Test Rule',
@@ -78,7 +81,8 @@ $ruleData = array(
 
 $taxRule = $objectManager->create('Magento\Tax\Model\Calculation\Rule')->setData($ruleData)->save();
 
-$objectManager->get('Magento\Framework\Registry')->register('_fixture/Magento_Tax_Model_Calculation_Rule', $taxRule);
+$registry->unregister('_fixture/Magento_Tax_Model_Calculation_Rule');
+$registry->register('_fixture/Magento_Tax_Model_Calculation_Rule', $taxRule);
 
 $ruleData['code'] = 'Test Rule Duplicate';
 

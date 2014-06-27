@@ -318,7 +318,7 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Db
             }
 
             foreach ($field as $key => $value) {
-                $this->addFieldToSelect($value, is_string($key) ? $key : null, false);
+                $this->addFieldToSelect($value, is_string($key) ? $key : null);
             }
 
             $this->_fieldsToSelectChanged = true;
@@ -375,17 +375,18 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Db
         if ($isAlias) {
             if (isset($this->_fieldsToSelect[$field])) {
                 unset($this->_fieldsToSelect[$field]);
+                $this->_fieldsToSelectChanged = true;
             }
         } else {
             foreach ($this->_fieldsToSelect as $key => $value) {
                 if ($value === $field) {
                     unset($this->_fieldsToSelect[$key]);
+                    $this->_fieldsToSelectChanged = true;
                     break;
                 }
             }
         }
 
-        $this->_fieldsToSelectChanged = true;
         return $this;
     }
 
@@ -433,10 +434,9 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Db
     /**
      * Get model instance
      *
-     * @param array $args
      * @return string
      */
-    public function getModelName($args = array())
+    public function getModelName()
     {
         return $this->_model;
     }

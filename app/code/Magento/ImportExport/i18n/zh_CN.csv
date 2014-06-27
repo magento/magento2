@@ -17,8 +17,6 @@
 "Entity Attributes","编辑属性"
 "Entity adapter object must be an instance of \Magento\ImportExport\Model\Import\Entity\Abstract","实体适配器对象必须为\Magento\ImportExport\Model\Import\Entity\Abstract的实例"
 "Entity is unknown","未知实体"
-"Entity type model must be an instance of \Magento\ImportExport\Model\Export\Entity\Product\Type\AbstractType","实体类型模块必须为\Magento\ImportExport\Model\Export\Entity\Product\Type\AbstractType的实例"
-"Entity type model must be an instance of \Magento\ImportExport\Model\Import\Entity\Product\Type\Abstract","实体类型模块必须为\Magento\ImportExport\Model\Import\Entity\Product\Type\Abstract的实例"
 "Error in data structure: behaviors are mixed","数据结构有误：行为是混合的"
 "Error in data structure: entity codes are mixed","数据结构有误：实体代码是混合的"
 "Export","导出"

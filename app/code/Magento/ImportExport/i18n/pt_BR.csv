@@ -17,8 +17,6 @@
 "Entity Attributes","Atributos da entidade"
 "Entity adapter object must be an instance of \Magento\ImportExport\Model\Import\Entity\Abstract","Objeto adaptador da entidade deve ser uma instância de \Magento\ImportExport\Model\Import\Entity\Abstract"
 "Entity is unknown","Entidade desconhecida"
-"Entity type model must be an instance of \Magento\ImportExport\Model\Export\Entity\Product\Type\AbstractType","Modelo de tipo de entidade deve ser uma instância de \Magento\ImportExport\Model\Export\Entity\Product\Type\AbstractType"
-"Entity type model must be an instance of \Magento\ImportExport\Model\Import\Entity\Product\Type\Abstract","Modelo de tipo de entidade deve ser uma instância de \Magento\ImportExport\Model\Import\Entity\Product\Type\Abstract"
 "Error in data structure: behaviors are mixed","Erro na estrutura de dados: os comportamentos estão misturados"
 "Error in data structure: entity codes are mixed","Erro na estrutura de dados: os códigos de entidade estão misturados"
 "Export","Exportar"

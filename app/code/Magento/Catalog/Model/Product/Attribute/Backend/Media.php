@@ -172,9 +172,7 @@ class Media extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         if ($this->getAttribute()->getIsRequired()) {
             $value = $object->getData($this->getAttribute()->getAttributeCode());
             if ($this->getAttribute()->isValueEmpty($value)) {
-                if (!(is_array($value) && count($value) > 0)) {
-                    return false;
-                }
+                return false;
             }
         }
         if ($this->getAttribute()->getIsUnique()) {

@@ -622,7 +622,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements IdentityIn
      *
      * @param int  $groupId   Retrieve attributes of the specified group
      * @param bool $skipSuper Not used
-     * @return array
+     * @return \Magento\Eav\Model\Entity\Attribute\AbstractAttribute[]
      */
     public function getAttributes($groupId = null, $skipSuper = false)
     {

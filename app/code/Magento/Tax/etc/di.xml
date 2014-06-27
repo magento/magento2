@@ -24,6 +24,12 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <preference for="Magento\Tax\Service\V1\TaxRateServiceInterface"
+                type="Magento\Tax\Service\V1\TaxRateService"/>
+    <preference for="Magento\Tax\Service\V1\TaxRuleServiceInterface"
+                type="Magento\Tax\Service\V1\TaxRuleService"/>
+    <preference for="Magento\Tax\Service\V1\TaxCalculationServiceInterface"
+                type="Magento\Tax\Service\V1\TaxCalculationService"/>
     <type name="Magento\Tax\Helper\Data">
         <arguments>
             <argument name="taxConfig" xsi:type="object">Magento\Tax\Model\Config\Proxy</argument>

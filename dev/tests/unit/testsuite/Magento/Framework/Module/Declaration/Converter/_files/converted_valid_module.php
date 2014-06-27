@@ -24,7 +24,7 @@
 return array(
     'Module_One' => array(
         'name' => 'Module_One',
-        'version' => '1.0.0.0',
+        'schema_version' => '1.0.0.0',
         'active' => true,
         'dependencies' => array(
             'modules' => array(),
@@ -38,7 +38,7 @@ return array(
     ),
     'Module_Two' => array(
         'name' => 'Module_Two',
-        'version' => '2.0.0.0',
+        'schema_version' => '2.0.0.0',
         'active' => false,
         'dependencies' => array(
             'modules' => array('Module_One'),

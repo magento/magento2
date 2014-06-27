@@ -25,44 +25,6 @@ namespace Magento\Test\Integrity;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
-    protected $_possibleLocales = array(
-        'de_DE',
-        'en_AU',
-        'en_GB',
-        'en_US',
-        'es_ES',
-        'es_XC',
-        'fr_FR',
-        'fr_XC',
-        'it_IT',
-        'ja_JP',
-        'nl_NL',
-        'pl_PL',
-        'zh_CN',
-        'zh_XC',
-        'pt_BR'
-    );
-
-    public function testExistingFilesDeclared()
-    {
-        $root = \Magento\TestFramework\Utility\Files::init()->getPathToSource();
-        $failures = array();
-        foreach (glob("{$root}/app/code/*/*", GLOB_ONLYDIR) as $modulePath) {
-            $localeFiles = glob("{$modulePath}/i18n/*.csv");
-            foreach ($localeFiles as $file) {
-                $file = realpath($file);
-                $assertLocale = str_replace('.csv', '', basename($file));
-                if (!in_array($assertLocale, $this->_possibleLocales)) {
-                    $failures[] = $file;
-                }
-            }
-        }
-        $this->assertEmpty(
-            $failures,
-            'Translation files exist, but not declared in configuration:' . "\n" . var_export($failures, 1)
-        );
-    }
-
     public function testPaymentMethods()
     {
         $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);

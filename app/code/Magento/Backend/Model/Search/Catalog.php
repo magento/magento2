@@ -81,7 +81,7 @@ class Catalog extends \Magento\Framework\Object
             'name'
         )->addAttributeToSelect(
             'description'
-        )->addSearchFilter(
+        )->addBackendSearchFilter(
             $this->getQuery()
         )->setCurPage(
             $this->getStart()

@@ -34,6 +34,9 @@ use Mtf\System\Event\EventManagerInterface;
 /**
  * Class CatalogProductDownloadable
  * Fixture for Downloadable product
+ *
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class CatalogProductDownloadable extends InjectableFixture
 {

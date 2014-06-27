@@ -36,7 +36,7 @@ class SchemaTest extends \PHPUnit_Framework_TestCase
         $xmlFile = file_get_contents($filename);
         $dom->loadXML($xmlFile);
         $errors = libxml_get_errors();
-        $this->assertTrue(empty($errors), print_r($errors, true));
+        $this->assertEmpty($errors, print_r($errors, true));
 
         $schemaLocations = [];
         preg_match('/xsi:noNamespaceSchemaLocation=\s*"([^"]+)"/s', $xmlFile, $schemaLocations);
@@ -53,9 +53,8 @@ xsi:noNamespaceSchemaLocation="../../../lib/internal/Magento/Framework/etc/somet
 
         $this->assertTrue(file_exists($schemaFile), "$filename refers to an invalid schema $schemaFile.");
 
-        $this->assertTrue($dom->schemaValidate($schemaFile), "$filename doesn't validate against $schemaFile");
-        $errors = libxml_get_errors();
-        $this->assertTrue(empty($errors), "Error validating $filename against $schemaFile\n" . print_r($errors, true));
+        $errors = \Magento\TestFramework\Utility\Validator::validateXml($dom, $schemaFile);
+        $this->assertEmpty($errors, "Error validating $filename against $schemaFile\n" . print_r($errors, true));
     }
 
 
@@ -68,13 +67,8 @@ xsi:noNamespaceSchemaLocation="../../../lib/internal/Magento/Framework/etc/somet
 
     public function getXmlFiles()
     {
-        $codeXml = $this->_getFiles(BP . '/app/code/Magento', '*.xml');
-        $codeXml = array_filter(
-            $codeXml,
-            function ($item) {
-                return strpos($item, "Dhl/etc/countries.xml") == false;
-            }
-        );
+        $codeXml = $this->_getFiles(BP . '/app', '*.xml');
+        $this->_filterSpecialCases($codeXml);
         $designXml = $this->_getFiles(BP . '/app/design', '*.xml');
         $libXml = $this->_getFiles(BP . '/lib/Magento', '*.xml');
         return $this->_dataSet(array_merge($codeXml, $designXml, $libXml));
@@ -89,21 +83,32 @@ xsi:noNamespaceSchemaLocation="../../../lib/internal/Magento/Framework/etc/somet
         return $files;
     }
 
+    /**
+     * Files that are exempt from validation
+     *
+     * @param array &$files
+     */
+    private function _filterSpecialCases(&$files)
+    {
+        $list = [
+            '#Dhl/etc/countries.xml$#',
+            '#app/etc/local.xml$#',
+            '#app/etc/[a-z]+/module.xml$#'
+        ];
+        foreach ($list as $pattern) {
+            foreach ($files as $key => $value) {
+                if (preg_match($pattern, $value)) {
+                    unset($files[$key]);
+                }
+            }
+        }
+    }
+
     protected function _dataSet($files)
     {
         $arrayWrap = function ($item) {
             return [$item];
         };
         return array_combine($files, array_map($arrayWrap, $files));
-    }
-
-    public function _getSchemaKey($schemaFilename)
-    {
-        $key = $schemaFilename;
-        $index = strpos($schemaFilename, "Magento");
-        if ($index) {
-            $key = substr($schemaFilename, $index);
-        }
-        return $key;
     }
 }

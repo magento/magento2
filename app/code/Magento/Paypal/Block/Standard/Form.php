@@ -76,26 +76,15 @@ class Form extends \Magento\Payment\Block\Form
     protected function _construct()
     {
         $this->_config = $this->_paypalConfigFactory->create()->setMethod($this->getMethodCode());
-        /** @var $mark \Magento\Framework\View\Element\Template */
-        $mark = $this->_layout->createBlock('Magento\Framework\View\Element\Template');
-        $mark->setTemplate(
-            'Magento_Paypal::payment/mark.phtml'
-        )->setPaymentAcceptanceMarkHref(
+        $mark = $this->_getMarkTemplate();
+        $mark->setPaymentAcceptanceMarkHref(
             $this->_config->getPaymentMarkWhatIsPaypalUrl($this->_localeResolver)
         )->setPaymentAcceptanceMarkSrc(
             $this->_config->getPaymentMarkImageUrl($this->_localeResolver->getLocaleCode())
         );
+
         // known issue: code above will render only static mark image
-        $this->setTemplate(
-            'Magento_Paypal::payment/redirect.phtml'
-        )->setRedirectMessage(
-            __('You will be redirected to the PayPal website when you place an order.')
-        )->setMethodTitle(
-            // Output PayPal mark, omit title
-            ''
-        )->setMethodLabelAfterHtml(
-            $mark->toHtml()
-        );
+        $this->_initializeRedirectTemplateWithMark($mark);
         return parent::_construct();
     }
 
@@ -107,5 +96,40 @@ class Form extends \Magento\Payment\Block\Form
     public function getMethodCode()
     {
         return $this->_methodCode;
+    }
+
+    /**
+     * Get initialized mark template
+     *
+     * @return \Magento\Framework\View\Element\Template
+     */
+    protected function _getMarkTemplate()
+    {
+        /** @var $mark \Magento\Framework\View\Element\Template */
+        $mark = $this->_layout->createBlock('Magento\Framework\View\Element\Template');
+        $mark->setTemplate(
+            'Magento_Paypal::payment/mark.phtml'
+        );
+        return $mark;
+    }
+
+    /**
+     * Initializes redirect template and set mark
+     * @param \Magento\Framework\View\Element\Template $mark
+     *
+     * @return void
+     */
+    protected function _initializeRedirectTemplateWithMark(\Magento\Framework\View\Element\Template $mark)
+    {
+        $this->setTemplate(
+            'Magento_Paypal::payment/redirect.phtml'
+        )->setRedirectMessage(
+            __('You will be redirected to the PayPal website when you place an order.')
+        )->setMethodTitle(
+            // Output PayPal mark, omit title
+            ''
+        )->setMethodLabelAfterHtml(
+            $mark->toHtml()
+        );
     }
 }

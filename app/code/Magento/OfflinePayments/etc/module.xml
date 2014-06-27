@@ -24,7 +24,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Module/etc/module.xsd">
-    <module name="Magento_OfflinePayments" version="1.6.0.0" active="true">
+    <module name="Magento_OfflinePayments" schema_version="1.6.0.0" active="true">
         <sequence>
             <module name="Magento_Core"/>
             <module name="Magento_Store"/>

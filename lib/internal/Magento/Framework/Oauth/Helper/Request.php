@@ -23,8 +23,6 @@
  */
 namespace Magento\Framework\Oauth\Helper;
 
-use Magento\Framework\Oauth\OauthInterface;
-
 class Request
 {
     /**#@+
@@ -41,55 +39,6 @@ class Request
     const HTTP_INTERNAL_ERROR = 500;
 
     /**#@-*/
-
-    /**
-     * Error code to error messages pairs
-     *
-     * @var array
-     */
-    protected $_errors = array(
-        OauthInterface::ERR_VERSION_REJECTED => 'version_rejected',
-        OauthInterface::ERR_PARAMETER_ABSENT => 'parameter_absent',
-        OauthInterface::ERR_PARAMETER_REJECTED => 'parameter_rejected',
-        OauthInterface::ERR_TIMESTAMP_REFUSED => 'timestamp_refused',
-        OauthInterface::ERR_NONCE_USED => 'nonce_used',
-        OauthInterface::ERR_SIGNATURE_METHOD_REJECTED => 'signature_method_rejected',
-        OauthInterface::ERR_SIGNATURE_INVALID => 'signature_invalid',
-        OauthInterface::ERR_CONSUMER_KEY_REJECTED => 'consumer_key_rejected',
-        OauthInterface::ERR_CONSUMER_KEY_INVALID => 'consumer_key_invalid',
-        OauthInterface::ERR_TOKEN_USED => 'token_used',
-        OauthInterface::ERR_TOKEN_EXPIRED => 'token_expired',
-        OauthInterface::ERR_TOKEN_REVOKED => 'token_revoked',
-        OauthInterface::ERR_TOKEN_REJECTED => 'token_rejected',
-        OauthInterface::ERR_VERIFIER_INVALID => 'verifier_invalid',
-        OauthInterface::ERR_PERMISSION_UNKNOWN => 'permission_unknown',
-        OauthInterface::ERR_PERMISSION_DENIED => 'permission_denied',
-        OauthInterface::ERR_METHOD_NOT_ALLOWED => 'method_not_allowed'
-    );
-
-    /**
-     * Error code to HTTP error code
-     *
-     * @var array
-     */
-    protected $_errorsToHttpCode = array(
-        OauthInterface::ERR_VERSION_REJECTED => self::HTTP_BAD_REQUEST,
-        OauthInterface::ERR_PARAMETER_ABSENT => self::HTTP_BAD_REQUEST,
-        OauthInterface::ERR_PARAMETER_REJECTED => self::HTTP_BAD_REQUEST,
-        OauthInterface::ERR_TIMESTAMP_REFUSED => self::HTTP_BAD_REQUEST,
-        OauthInterface::ERR_NONCE_USED => self::HTTP_UNAUTHORIZED,
-        OauthInterface::ERR_SIGNATURE_METHOD_REJECTED => self::HTTP_BAD_REQUEST,
-        OauthInterface::ERR_SIGNATURE_INVALID => self::HTTP_UNAUTHORIZED,
-        OauthInterface::ERR_CONSUMER_KEY_REJECTED => self::HTTP_UNAUTHORIZED,
-        OauthInterface::ERR_CONSUMER_KEY_INVALID => self::HTTP_UNAUTHORIZED,
-        OauthInterface::ERR_TOKEN_USED => self::HTTP_UNAUTHORIZED,
-        OauthInterface::ERR_TOKEN_EXPIRED => self::HTTP_UNAUTHORIZED,
-        OauthInterface::ERR_TOKEN_REVOKED => self::HTTP_UNAUTHORIZED,
-        OauthInterface::ERR_TOKEN_REJECTED => self::HTTP_UNAUTHORIZED,
-        OauthInterface::ERR_VERIFIER_INVALID => self::HTTP_UNAUTHORIZED,
-        OauthInterface::ERR_PERMISSION_UNKNOWN => self::HTTP_UNAUTHORIZED,
-        OauthInterface::ERR_PERMISSION_DENIED => self::HTTP_UNAUTHORIZED
-    );
 
     /**
      * Process HTTP request object and prepare for token validation
@@ -256,28 +205,14 @@ class Request
      */
     public function prepareErrorResponse(\Exception $exception, \Zend_Controller_Response_Http $response = null)
     {
-        $errorMap = $this->_errors;
-        $errorsToHttpCode = $this->_errorsToHttpCode;
-
-        $eMsg = $exception->getMessage();
+        $errorMsg = $exception->getMessage();
 
         if ($exception instanceof \Magento\Framework\Oauth\Exception) {
-            $eCode = $exception->getCode();
-
-            if (isset($errorMap[$eCode])) {
-                $errorMsg = $errorMap[$eCode];
-                $responseCode = $errorsToHttpCode[$eCode];
-            } else {
-                $errorMsg = 'unknown_problem&code=' . $eCode;
-                $responseCode = self::HTTP_INTERNAL_ERROR;
-            }
-            if (OauthInterface::ERR_PARAMETER_ABSENT == $eCode) {
-                $errorMsg .= '&oauth_parameters_absent=' . $eMsg;
-            } elseif ($eMsg) {
-                $errorMsg .= '&message=' . $eMsg;
-            }
+            $responseCode = self::HTTP_UNAUTHORIZED;
+        } elseif ($exception instanceof \Magento\Framework\Oauth\OauthInputException) {
+            $responseCode = self::HTTP_BAD_REQUEST;
         } else {
-            $errorMsg = 'internal_error&message=' . ($eMsg ? $eMsg : 'empty_message');
+            $errorMsg = 'internal_error&message=' . ($errorMsg ? $errorMsg : 'empty_message');
             $responseCode = self::HTTP_INTERNAL_ERROR;
         }
 

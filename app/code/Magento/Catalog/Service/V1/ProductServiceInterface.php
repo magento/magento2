@@ -72,10 +72,10 @@ interface ProductServiceInterface
     public function update($id, \Magento\Catalog\Service\V1\Data\Product $product);
 
     /**
-     * get product list product
+     * Get product list
      *
      * @param \Magento\Framework\Service\V1\Data\SearchCriteria $searchCriteria
-     * @return \Magento\Catalog\Service\V1\Data\SearchResults containing Data\Product objects
+     * @return \Magento\Catalog\Service\V1\Data\Product\SearchResults containing Data\Product objects
      */
     public function search(\Magento\Framework\Service\V1\Data\SearchCriteria $searchCriteria);
 }

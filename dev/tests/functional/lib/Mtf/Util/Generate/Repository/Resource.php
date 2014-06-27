@@ -47,6 +47,7 @@ class Resource extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param mixed $value
      * @param null $field
      * @return \Magento\Framework\Model\Resource\Db\AbstractDb|void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function load(\Magento\Framework\Model\AbstractModel $object, $value, $field = null)
     {

@@ -62,6 +62,8 @@ class Links implements FixtureInterface
      *
      * @param string $key [optional]
      * @return mixed
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getData($key = null)
     {

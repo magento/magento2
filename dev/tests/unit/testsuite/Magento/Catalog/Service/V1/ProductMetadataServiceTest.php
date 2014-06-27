@@ -62,11 +62,14 @@ class ProductMetadataServiceTest extends \PHPUnit_Framework_TestCase
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $validationRuleBuilder = $helper->getObject('\Magento\Catalog\Service\V1\Data\Eav\ValidationRuleBuilder');
         $optionBuilder = $helper->getObject('\Magento\Catalog\Service\V1\Data\Eav\OptionBuilder');
+        $frontendLabelBuilder = $helper
+            ->getObject('\Magento\Catalog\Service\V1\Data\Eav\Product\Attribute\FrontendLabelBuilder');
         $attrMetadataBuilder = $objectManager->getObject(
             'Magento\Catalog\Service\V1\Data\Eav\AttributeMetadataBuilder',
             [
                 'optionBuilder' => $optionBuilder,
-                'validationRuleBuilder' => $validationRuleBuilder
+                'validationRuleBuilder' => $validationRuleBuilder,
+                'frontendLabelBuilder' => $frontendLabelBuilder,
             ]
         );
 
@@ -83,7 +86,9 @@ class ProductMetadataServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Magento\Framework\Service\Data\AbstractObject', $dto);
         $this->assertEquals($attributeMock->getFrontendInput(), $dto->getFrontendInput());
 
-        $this->assertTrue(is_array($dto->getFrontendLabel()));
-        $this->assertArrayHasKey('store_id', $dto->getFrontendLabel()[0]);
+        $this->assertEquals(0, $dto->getFrontendLabel()[0]->getStoreId());
+        $this->assertEquals(1, $dto->getFrontendLabel()[1]->getStoreId());
+        $this->assertEquals('English', $dto->getFrontendLabel()[0]->getLabel());
+        $this->assertEquals('France', $dto->getFrontendLabel()[1]->getLabel());
     }
 }

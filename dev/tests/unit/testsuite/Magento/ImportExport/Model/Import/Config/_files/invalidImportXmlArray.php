@@ -53,32 +53,25 @@ return array(
         '<?xml version="1.0"?><config><entity name="some_name" notallowd="aasd"/></config>',
         array("Element 'entity', attribute 'notallowd': The attribute 'notallowd' is not allowed.")
     ),
-    'producttype_with_same_name_attribute_value' => array(
-        '<?xml version="1.0"?><config><productType name="same_name" model="model_name" />' .
-        '<productType name="same_name" model="model_name" /></config>',
+    'entitytype_without_required_name_attribute' => array(
+        '<?xml version="1.0"?><config><entityType entity="entity_name" model="model_name" /></config>',
+        array("Element 'entityType': The attribute 'name' is required but missing.")
+    ),
+    'entitytype_without_required_model_attribute' => array(
+        '<?xml version="1.0"?><config><entityType entity="entity_name" name="some_name" /></config>',
+        array("Element 'entityType': The attribute 'model' is required but missing.")
+    ),
+    'entitytype_with_invalid_model_attribute_value' => array(
+        '<?xml version="1.0"?><config><entityType entity="entity_name" name="some_name" model="test1"/></config>',
         array(
-            "Element 'productType': Duplicate key-sequence ['same_name'] in unique " .
-            "identity-constraint 'uniqueProductTypeName'."
-        )
-    ),
-    'producttype_without_required_name_attribute' => array(
-        '<?xml version="1.0"?><config><productType model="model_name" /></config>',
-        array("Element 'productType': The attribute 'name' is required but missing.")
-    ),
-    'producttype_without_required_model_attribute' => array(
-        '<?xml version="1.0"?><config><productType name="some_name" /></config>',
-        array("Element 'productType': The attribute 'model' is required but missing.")
-    ),
-    'producttype_with_invalid_model_attribute_value' => array(
-        '<?xml version="1.0"?><config><productType name="some_name" model="test1"/></config>',
-        array(
-            "Element 'productType', attribute 'model': [facet 'pattern'] The value 'test1' is not " .
+            "Element 'entityType', attribute 'model': [facet 'pattern'] The value 'test1' is not " .
             "accepted by the pattern '[A-Za-z_\\\\\\\\]+'.",
-            "Element 'productType', attribute 'model': 'test1' is not a valid value of the atomic type 'modelName'."
+            "Element 'entityType', attribute 'model': 'test1' is not a valid value of the atomic type 'modelName'."
         )
     ),
-    'producttype_with_notallowed' => array(
-        '<?xml version="1.0"?><config><productType name="some_name" model="test" notallowed="test"/></config>',
-        array("Element 'productType', attribute 'notallowed': The attribute 'notallowed' is not allowed.")
+    'entitytype_with_notallowed' => array(
+        '<?xml version="1.0"?><config><entityType entity="entity_name" name="some_name" '
+            . 'model="test" notallowed="test"/></config>',
+        array("Element 'entityType', attribute 'notallowed': The attribute 'notallowed' is not allowed.")
     )
 );

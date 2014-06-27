@@ -34,6 +34,9 @@ use Mtf\System\Event\EventManagerInterface;
 /**
  * Class CatalogProductSimple
  * Product Simple fixture
+ *
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
 class CatalogProductSimple extends InjectableFixture
 {

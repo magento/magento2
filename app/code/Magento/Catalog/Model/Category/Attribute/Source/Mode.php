@@ -32,6 +32,7 @@ class Mode extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
     /**
      * {@inheritdoc}
+     * @codeCoverageIgnore
      */
     public function getAllOptions()
     {

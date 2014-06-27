@@ -398,17 +398,6 @@ class Grid extends \Magento\Backend\Block\Widget
     }
 
     /**
-     * Decode URL encoded filter value recursive callback method
-     *
-     * @param string &$value
-     * @return void
-     */
-    protected function _decodeFilter(&$value)
-    {
-        $value = $this->_backendHelper->decodeFilter($value);
-    }
-
-    /**
      * Apply pagination to collection
      *
      * @return void

@@ -41,6 +41,8 @@ class LogoutUser extends Ui
      *
      * @param FixtureInterface $fixture [optional]
      * @return mixed|string
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function persist(FixtureInterface $fixture = null)
     {

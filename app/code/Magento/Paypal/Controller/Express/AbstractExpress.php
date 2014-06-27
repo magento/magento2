@@ -26,6 +26,7 @@ namespace Magento\Paypal\Controller\Express;
 use Magento\Checkout\Model\Type\Onepage;
 use Magento\Framework\App\Action\Action as AppAction;
 use Magento\Checkout\Controller\Express\RedirectLoginInterface;
+use Magento\Paypal\Model\Api\ProcessableException as ApiProcessableException;
 
 /**
  * Abstract Express Checkout Controller
@@ -181,6 +182,9 @@ abstract class AbstractExpress extends AppAction implements RedirectLoginInterfa
                 $this->_checkout->setIsBillingAgreementRequested($isBaRequested);
             }
 
+            // Bill Me Later
+            $this->_checkout->setIsBml((bool)$this->getRequest()->getParam('bml'));
+
             // giropay
             $this->_checkout->prepareGiropayUrls(
                 $this->_url->getUrl('checkout/onepage/success'),
@@ -188,9 +192,11 @@ abstract class AbstractExpress extends AppAction implements RedirectLoginInterfa
                 $this->_url->getUrl('checkout/onepage/success')
             );
 
+            $button = (bool)$this->getRequest()->getParam(\Magento\Paypal\Model\Express\Checkout::PAYMENT_INFO_BUTTON);
             $token = $this->_checkout->start(
                 $this->_url->getUrl('*/*/return'),
-                $this->_url->getUrl('*/*/cancel')
+                $this->_url->getUrl('*/*/cancel'),
+                $button
             );
             $url = $this->_checkout->getRedirectUrl();
             if ($token && $url) {
@@ -268,10 +274,21 @@ abstract class AbstractExpress extends AppAction implements RedirectLoginInterfa
      */
     public function returnAction()
     {
+        if ($this->getRequest()->getParam('retry_authorization') == 'true'
+            && is_array($this->_getCheckoutSession()->getPaypalTransactionData())
+        ) {
+            $this->_forward('placeOrder');
+            return;
+        }
         try {
+            $this->_getCheckoutSession()->unsPaypalTransactionData();
             $this->_initCheckout();
             $this->_checkout->returnFromPaypal($this->_initToken());
-            $this->_redirect('*/*/review');
+            if ($this->_checkout->canSkipOrderReviewStep()) {
+                $this->_forward('placeOrder');
+            } else {
+                $this->_redirect('*/*/review');
+            }
             return;
         } catch (\Magento\Framework\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
@@ -386,47 +403,12 @@ abstract class AbstractExpress extends AppAction implements RedirectLoginInterfa
         } catch (\Magento\Framework\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addError(__('We can\'t update Order data.'));
+            $this->messageManager->addError(__('We can\'t update shipping method.'));
             $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
         }
         $this->getResponse()->setBody(
             '<script type="text/javascript">window.location.href = ' . $this->_url->getUrl('*/*/review') . ';</script>'
         );
-    }
-
-    /**
-     * Update Order (combined action for ajax and regular request)
-     *
-     * @return void
-     */
-    public function updateOrderAction()
-    {
-        try {
-            $isAjax = $this->getRequest()->getParam('isAjax');
-            $this->_initCheckout();
-            $this->_checkout->updateOrder($this->getRequest()->getParams());
-            if ($isAjax) {
-                $this->_view->loadLayout('paypal_express_review_details');
-                $this->getResponse()->setBody(
-                    $this->_view->getLayout()->getBlock('root')->setQuote($this->_getQuote())->toHtml()
-                );
-                return;
-            }
-        } catch (\Magento\Framework\Model\Exception $e) {
-            $this->messageManager->addError($e->getMessage());
-        } catch (\Exception $e) {
-            $this->messageManager->addError(__('We can\'t update Order data.'));
-            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
-        }
-        if ($isAjax) {
-            $this->getResponse()->setBody(
-                '<script type="text/javascript">window.location.href = '
-                . $this->_url->getUrl('*/*/review')
-                . ';</script>'
-            );
-        } else {
-            $this->_redirect('*/*/review');
-        }
     }
 
     /**
@@ -479,13 +461,75 @@ abstract class AbstractExpress extends AppAction implements RedirectLoginInterfa
             $this->_initToken(false); // no need in token anymore
             $this->_redirect('checkout/onepage/success');
             return;
+        } catch (ApiProcessableException $e) {
+            $this->_processPaypalApiError($e);
         } catch (\Magento\Framework\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
+            $this->_redirect('*/*/review');
         } catch (\Exception $e) {
             $this->messageManager->addError(__('We can\'t place the order.'));
             $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $this->_redirect('*/*/review');
         }
-        $this->_redirect('*/*/review');
+    }
+
+    /**
+     * Process PayPal API's processable errors
+     *
+     * @param \Magento\Paypal\Model\Api\ProcessableException $exception
+     * @return void
+     */
+    protected function _processPaypalApiError($exception)
+    {
+        switch ($exception->getCode()) {
+            case ApiProcessableException::API_MAX_PAYMENT_ATTEMPTS_EXCEEDED:
+            case ApiProcessableException::API_TRANSACTION_EXPIRED:
+                $this->getResponse()->setRedirect(
+                    $this->_getQuote()->getPayment()->getCheckoutRedirectUrl()
+                );
+                break;
+            case ApiProcessableException::API_DO_EXPRESS_CHECKOUT_FAIL:
+                $this->_redirectSameToken();
+                break;
+            case ApiProcessableException::API_UNABLE_TRANSACTION_COMPLETE:
+                if ($this->_config->getPaymentAction() == \Magento\Payment\Model\Method\AbstractMethod::ACTION_ORDER) {
+                    $paypalTransactionData = $this->_getCheckoutSession()->getPaypalTransactionData();
+                    $this->getResponse()->setRedirect(
+                        $this->_config->getExpressCheckoutOrderUrl($paypalTransactionData['transaction_id'])
+                    );
+                } else {
+                    $this->_redirectSameToken();
+                }
+                break;
+            default:
+                $this->_redirectToCartAndShowError($exception->getUserMessage());
+                break;
+        }
+    }
+
+    /**
+     * Redirect customer back to PayPal with the same token
+     *
+     * @return void
+     */
+    protected function _redirectSameToken()
+    {
+        $token = $this->_initToken();
+        $this->getResponse()->setRedirect(
+            $this->_config->getExpressCheckoutStartUrl($token)
+        );
+    }
+
+    /**
+     * Redirect customer to shopping cart and show error message
+     *
+     * @param string $errorMessage
+     * @return void
+     */
+    protected function _redirectToCartAndShowError($errorMessage)
+    {
+        $this->messageManager->addError($errorMessage);
+        $this->_redirect('checkout/cart');
     }
 
     /**
@@ -494,7 +538,7 @@ abstract class AbstractExpress extends AppAction implements RedirectLoginInterfa
      * @return void
      * @throws \Magento\Framework\Model\Exception
      */
-    private function _initCheckout()
+    protected function _initCheckout()
     {
         $quote = $this->_getQuote();
         if (!$quote->hasItems() || $quote->getHasError()) {

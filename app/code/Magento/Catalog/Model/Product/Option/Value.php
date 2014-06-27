@@ -295,19 +295,6 @@ class Value extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Prepare array of option values for duplicate
-     *
-     * @return array
-     */
-    public function prepareValueForDuplicate()
-    {
-        $this->setOptionId(null);
-        $this->setOptionTypeId(null);
-
-        return $this->__toArray();
-    }
-
-    /**
      * Duplicate product options value
      *
      * @param int $oldOptionId

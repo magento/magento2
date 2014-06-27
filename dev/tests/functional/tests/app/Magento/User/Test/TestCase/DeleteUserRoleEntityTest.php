@@ -80,12 +80,12 @@ class DeleteUserRoleEntityTest extends Injectable
     {
         $role = $fixtureFactory->createByCode('adminUserRole', ['dataSet' => 'default']);
         $role->persist();
-        $role_id = $role->getData('role_id');
+        $roleId = $role->getData('role_id');
         $adminUser = $fixtureFactory->createByCode(
             'adminUserInjectable',
             [
                 'dataSet' => 'custom_admin',
-                'data' => ['role_id' => $role_id]
+                'data' => ['role_id' => $roleId]
             ]
         );
         $adminUser->persist();

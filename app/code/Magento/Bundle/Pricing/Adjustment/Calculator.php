@@ -303,8 +303,12 @@ class Calculator implements BundleCalculatorInterface
     public function createSelectionPriceList($option, $bundleProduct)
     {
         $priceList = [];
+        $selections = $option->getSelections();
+        if ($selections === null) {
+            return $priceList;
+        }
         /* @var $selection \Magento\Bundle\Model\Selection|\Magento\Catalog\Model\Product */
-        foreach ($option->getSelections() as $selection) {
+        foreach ($selections as $selection) {
             if (!$selection->isSalable()) {
                 // @todo CatalogInventory Show out of stock Products
                 continue;

@@ -63,7 +63,7 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
         );
         $this->customerSession = $this->getMock(
             'Magento\Customer\Model\Session',
-            ['getCustomer'],
+            ['getCustomerId'],
             [],
             '',
             false,
@@ -91,13 +91,9 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(false));
 
         $customerId = 25;
-        $customer = $this->getMock('Magento\Customer\Model\Customer', ['__wakeUp', 'getId'], [], '', false, false);
-        $customer->expects($this->once())
-            ->method('getId')
-            ->will($this->returnValue($customerId));
         $this->customerSession->expects($this->once())
-            ->method('getCustomer')
-            ->will($this->returnValue($customer));
+            ->method('getCustomerId')
+            ->will($this->returnValue($customerId));
 
         $statuses = ['pending', 'processing', 'comlete'];
         $this->orderConfig->expects($this->once())

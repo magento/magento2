@@ -91,11 +91,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param array $value
-     * @param null|string $expected
-     * @dataProvider getProductTypesDataProvider
+     * @param array $configData
+     * @param string $entity
+     * @param string[] $expectedResult
+     * @dataProvider getEntityTypesDataProvider
      */
-    public function testGetProductTypes($value, $expected)
+    public function testGetEntityTypes($configData, $entity, $expectedResult)
     {
         $this->_configScopeMock->expects(
             $this->any()
@@ -106,20 +107,40 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue(false)
         );
-        $this->_readerMock->expects($this->any())->method('read')->will($this->returnValue($value));
+        $this->_readerMock->expects($this->any())->method('read')->will($this->returnValue($configData));
         $this->_model = new \Magento\ImportExport\Model\Import\Config(
             $this->_readerMock,
             $this->_configScopeMock,
             $this->_cacheId
         );
-        $this->assertEquals($expected, $this->_model->getProductTypes('productTypes'));
+        $this->assertEquals($expectedResult, $this->_model->getEntityTypes($entity));
     }
 
-    public function getProductTypesDataProvider()
+    public function getEntityTypesDataProvider()
     {
-        return array(
-            'productTypes_key_exist' => array(array('productTypes' => 'value'), 'value'),
-            'return_default_value' => array(array('key_one' => 'value'), null)
-        );
+        return [
+            'valid type' => [
+                [
+                    'entities' => [
+                        'catalog_product' => [
+                            'types' => ['configurable', 'simple']
+                        ]
+                    ]
+                ],
+                'catalog_product',
+                ['configurable', 'simple']
+            ],
+            'not existing entity' => [
+                [
+                    'entities' => [
+                        'catalog_product' => [
+                            'types' => ['configurable', 'simple']
+                        ]
+                    ]
+                ],
+                'not existing entity',
+                []
+            ],
+        ];
     }
 }

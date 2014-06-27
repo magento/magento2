@@ -92,4 +92,15 @@ class AttributeBuilder extends AbstractObjectBuilder
     {
         return $this->_set(Attribute::IS_USER_DEFINED, $isUserDefined);
     }
+
+    /**
+     * Set frontend input type
+     *
+     * @param string $type
+     * @return $this
+     */
+    public function setFrontendInput($type)
+    {
+        return $this->_set(Attribute::FRONTEND_INPUT, $type);
+    }
 }

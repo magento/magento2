@@ -33,6 +33,9 @@ use Mtf\System\Event\EventManagerInterface;
 
 /**
  * Class CatalogProductVirtual
+ *
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class CatalogProductVirtual extends InjectableFixture
 {

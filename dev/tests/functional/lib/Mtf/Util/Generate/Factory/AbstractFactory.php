@@ -153,6 +153,7 @@ abstract class AbstractFactory
      *
      * @param string $type
      * @return array
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function collectItems($type)
     {
@@ -203,6 +204,7 @@ abstract class AbstractFactory
      * @param string $location
      * @param string $path
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _processItem(& $items, & $rewrites, $filename, $location, $path)
     {
@@ -218,7 +220,7 @@ abstract class AbstractFactory
         }
         $annotations = \PHPUnit_Util_Test::parseTestMethodAnnotations($className);
 
-        list($fullLocationPath, $targetClassName) = explode($location . '/', $filename);
+        list(, $targetClassName) = explode($location . '/', $filename);
         $targetClassName = str_replace('.php', '', $targetClassName);
         $targetClassName = str_replace('/', '\\', $targetClassName);
 

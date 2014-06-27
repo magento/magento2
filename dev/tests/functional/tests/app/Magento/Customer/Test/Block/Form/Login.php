@@ -53,6 +53,8 @@ class Login extends Form
      * Login customer in the Frontend
      *
      * @param FixtureInterface $customer
+     *
+     * @SuppressWarnings(PHPMD.ConstructorWithNameAsEnclosingClass)
      */
     public function login(FixtureInterface $customer)
     {

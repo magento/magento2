@@ -87,6 +87,8 @@ class AdvancedSearchEntityTest extends Injectable
      * @param CmsIndex $cmsIndex
      * @param AdvancedSearch $searchPage
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function testSearch(
         array $products,

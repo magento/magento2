@@ -27,13 +27,15 @@ namespace Magento\Customer\Service\V1\Data;
 
 class Address extends \Magento\Framework\Service\Data\Eav\AbstractObject
 {
+    // FIXME: This constant relates to a quote address object, not this Data Object
+    const ADDRESS_TYPE_BILLING = 'billing';
+
+    // FIXME: This constant relates to a quote address object, not this Data Object
+    const ADDRESS_TYPE_SHIPPING = 'shipping';
+
     /**#@+
      * Constants defined for keys of array, makes typos less likely
      */
-    const ADDRESS_TYPE_BILLING = 'billing';
-
-    const ADDRESS_TYPE_SHIPPING = 'shipping';
-
     const KEY_COUNTRY_ID = 'country_id';
 
     const KEY_DEFAULT_BILLING = 'default_billing';

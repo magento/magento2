@@ -59,6 +59,7 @@ return array(
         'Magento\Store\Model\StorageFactory::_checkRequestStore'),
     array('_checkUrlSettings', 'Magento\Backend\Controller\Adminhtml\Action'),
     array('_collectOrigData', 'Magento\Catalog\Model\Resource\AbstractResource'),
+    array('_decodeFilter', 'Magento\Backend\Block\Widget\Grid'),
     array('_decodeInput', 'Magento\Catalog\Controller\Adminhtml\Product'),
     array('_emailOrderConfirmation', 'Magento\Checkout\Model\Type\AbstractType'),
     array('_escapeValue', 'Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter'),
@@ -152,8 +153,8 @@ return array(
     array('_parsePackageTheme', 'Magento\Widget\Model\Widget\Instance'),
     array('_parseXmlTrackingResponse', 'Magento\Fedex\Model\Carrier'),
     array('_prepareCondition', 'Magento\CatalogSearch\Model\Advanced'),
-    array('_prepareConfigurableProductData', 'Magento\ImportExport\Model\Export\Entity\Product'),
-    array('_prepareConfigurableProductPrice', 'Magento\ImportExport\Model\Export\Entity\Product'),
+    array('_prepareConfigurableProductData', 'Magento\CatalogImportExport\Model\Export\Product'),
+    array('_prepareConfigurableProductPrice', 'Magento\CatalogImportExport\Model\Export\Product'),
     array(
         '_prepareLastRecurringProfiles()',
         'Magento\Checkout\Block\Onepage\Success',
@@ -330,6 +331,7 @@ return array(
     array('createEntityTables', 'Magento\Eav\Model\Entity\Setup'),
     array('createOrderItem', 'Magento\CatalogInventory\Model\Observer'),
     array('debugRequest', 'Magento\Paypal\Model\Api\Standard'),
+    array('decodeFilter', 'Magento\Backend\Helper\Data'),
     array('decorateArray', 'Magento\Core\Helper\Data', 'Magento\Framework\Stdlib\ArrayUtils::decorateArray'),
     array('deleteAction', 'Magento\Catalog\Controller\Adminhtml\Product'),
     array('deleteConfig', 'Magento\Core\Model\Config'),
@@ -350,6 +352,26 @@ return array(
     array('flush', 'Magento\Framework\App\Cache', 'Magento_Cache_FrontendInterface::clean()'),
     array('flush', 'Magento\Framework\App\Cache\Proxy', 'Magento_Cache_FrontendInterface::clean()'),
     array('flush', 'Magento\Framework\App\CacheInterface', 'Magento_Cache_FrontendInterface::clean()'),
+    array(
+        'getProductTypes',
+        'Magento\ImportExport\Model\Import\Config',
+        'Magento\ImportExport\Model\Import\Config::getEntityTypes()'
+    ),
+    array(
+        'getProductTypes',
+        '\Magento\ImportExport\Model\Import\ConfigInterface',
+        '\Magento\ImportExport\Model\Import\ConfigInterface::getEntityTypes()'
+    ),
+    array(
+        'getProductTypes',
+        'Magento\ImportExport\Model\Export\Config',
+        'Magento\ImportExport\Model\Export\Config::getEntityTypes()'
+    ),
+    array(
+        'getProductTypes',
+        '\Magento\ImportExport\Model\Export\ConfigInterface',
+        '\Magento\ImportExport\Model\Export\ConfigInterface::getEntityTypes()'
+    ),
     array('forsedSave'),
     array('generateBlocks', '', 'generateElements()'),
     array('getAbsolutePath', '', 'normalizePath'),
@@ -731,7 +753,7 @@ return array(
     array('postDispatchMyAccountSave'),
     array('postDispatchSystemImportExportRun'),
     array('prepareAddressInfo', 'Magento\Sales\Block\Recurring\Profile\View'),
-    array('prepareAttributesForSave', 'Magento\ImportExport\Model\Import\Entity\Product'),
+    array('prepareAttributesForSave', 'Magento\CatalogImportExport\Model\Import\Product'),
     array('prepareFeesInfo', 'Magento\Sales\Block\Recurring\Profile\View'),
     array('prepareGoogleOptimizerScripts'),
     array('prepareRedirect', 'Magento\Core\Controller\Varien\Exception'),
@@ -996,6 +1018,7 @@ return array(
     array('getProductStatusModel', 'Magento\CatalogInventory\Model\Stock\Status'),
     array('getStorage', 'Magento\Cms\Helper\Wysiwyg\Images'),
     array('_getSession', 'Magento\Review\Helper\Action\Pager'),
+    array('expandSource', 'Magento\ImportExport\Model\Import'),
     array('_getProductType', 'Magento\Backend\Block\Catalog\Product\Edit\Tab\Super\Config\Matrix'),
     array('_getProductType', 'Magento\Backend\Block\Catalog\Product\Edit\Tab\Super\Config'),
     array('_getSession', 'Magento\Sales\Model\AdminOrder'),
@@ -1721,6 +1744,9 @@ return array(
         'Magento\Framework\View\Asset\ModuleNotation\Resolver::convertModuleNotationToPath'
     ],
     ['getViewFile', 'Magento\Framework\View\FileSystem', 'Magento\Framework\View\Asset\File::getSourceFile()'],
+    ['updateOrderAction', 'Magento\Paypal\Controller\Express\AbstractExpress'],
+    ['updateOrder', 'Magento\Paypal\Model\Express\Checkout'],
+    ['_matchBnCountryCode', 'Magento\Paypal\Model\Config'],
     ['convertOldColumnDefinition', 'Magento\Framework\DB\Helper\AbstractHelper'],
     ['changeItemStatus', 'Magento\CatalogInventory\Model\Stock\Status'],
     ['getWebsiteDefaultStoreId', 'Magento\CatalogInventory\Model\Stock\Status'],
@@ -1728,4 +1754,6 @@ return array(
     ['getProductData', 'Magento\CatalogInventory\Model\Resource\Stock\Status'],
     ['getProduct', 'Magento\CatalogInventory\Model\Stock\Item'],
     ['reset', 'Magento\CatalogInventory\Model\Stock\Item'],
+    ['prepareValueForDuplicate', 'Magento\Catalog\Model\Product\Option\Value'],
+    ['prepareOptionForDuplicate', '\Magento\Catalog\Model\Product\Option'],
 );

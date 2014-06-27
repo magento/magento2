@@ -60,42 +60,4 @@ $table = $installer->getConnection()->newTable(
 );
 $installer->getConnection()->createTable($table);
 
-/**
- * Add unique key for 'catalog_product_link_attribute_int' table
- */
-$installer->getConnection()->addIndex(
-    $installer->getTable('catalog_product_link_attribute_int'),
-    $installer->getIdxName(
-        'catalog_product_link_attribute_int',
-        array('product_link_attribute_id', 'link_id'),
-        \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
-    ),
-    array('product_link_attribute_id', 'link_id'),
-    \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
-);
-
-/**
- * Add foreign keys for 'catalog_product_link_attribute_int' table
- */
-$installer->getConnection()->addForeignKey(
-    $installer->getFkName('catalog_product_link_attribute_int', 'link_id', 'catalog_product_link', 'link_id'),
-    $installer->getTable('catalog_product_link_attribute_int'),
-    'link_id',
-    $installer->getTable('catalog_product_link'),
-    'link_id'
-);
-
-$installer->getConnection()->addForeignKey(
-    $installer->getFkName(
-        'catalog_product_link_attribute_int',
-        'product_link_attribute_id',
-        'catalog_product_link_attribute',
-        'product_link_attribute_id'
-    ),
-    $installer->getTable('catalog_product_link_attribute_int'),
-    'product_link_attribute_id',
-    $installer->getTable('catalog_product_link_attribute'),
-    'product_link_attribute_id'
-);
-
 $installer->endSetup();

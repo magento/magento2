@@ -44,6 +44,8 @@ Magento/Catalog/Model/Layer
 Magento/Catalog/Model/Layer/Search.php
 Magento/Catalog/Model/Layer/Category.php
 Magento/Catalog/Service/V1/Data
+Magento/CatalogImportExport/Model/Export
+Magento/CatalogImportExport/Model/Import
 Magento/CatalogRule/Block/Adminhtml/Promo/Catalog/Edit/Tab
 Magento/Checkout/Block/Onepage
 Magento/Cms/Block/Adminhtml/Page/Edit

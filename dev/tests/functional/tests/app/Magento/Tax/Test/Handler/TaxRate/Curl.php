@@ -94,10 +94,10 @@ class Curl extends AbstractCurl implements TaxRateInterface
      */
     protected function getTaxRateId($response)
     {
-        $data = json_decode($response);
-        if ($data->success !== true) {
+        $data = json_decode($response, true);
+        if ($data['success'] !== true) {
             throw new \Exception("Tax rate creation by curl handler was not successful! Response: $response");
         }
-        return isset($data->tax_calculation_rate_id) ? (int)$data->tax_calculation_rate_id : null;
+        return isset($data['tax_calculation_rate_id']) ? (int)$data['tax_calculation_rate_id'] : null;
     }
 }

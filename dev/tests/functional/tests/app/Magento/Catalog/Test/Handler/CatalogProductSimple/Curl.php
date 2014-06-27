@@ -83,6 +83,9 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
      * @param FixtureInterface $fixture [optional]
      * @return array
      * @throws \Exception
+     *
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function persist(FixtureInterface $fixture = null)
     {

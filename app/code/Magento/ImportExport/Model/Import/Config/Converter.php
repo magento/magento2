@@ -34,10 +34,10 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      */
     public function convert($source)
     {
-        $output = array('entities' => array(), 'productTypes' => array());
-        /** @var \DOMNodeList $events */
+        $output = array('entities' => array());
+        /** @var \DOMNodeList $entities */
         $entities = $source->getElementsByTagName('entity');
-        /** @var DOMNode $entityConfig */
+        /** @var \DOMNode $entityConfig */
         foreach ($entities as $entityConfig) {
             $attributes = $entityConfig->attributes;
             $name = $attributes->getNamedItem('name')->nodeValue;
@@ -49,19 +49,37 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 'name' => $name,
                 'label' => $label,
                 'behaviorModel' => $behaviorModel,
-                'model' => $model
+                'model' => $model,
+                'types' => [],
+                'relatedIndexers' => []
             );
         }
 
-        /** @var \DOMNodeList $events */
-        $productTypes = $source->getElementsByTagName('productType');
-        /** @var DOMNode $productTypeConfig */
-        foreach ($productTypes as $productTypeConfig) {
-            $attributes = $productTypeConfig->attributes;
+        /** @var \DOMNodeList $entityTypes */
+        $entityTypes = $source->getElementsByTagName('entityType');
+        /** @var \DOMNode $entityTypeConfig */
+        foreach ($entityTypes as $entityTypeConfig) {
+            $attributes = $entityTypeConfig->attributes;
             $name = $attributes->getNamedItem('name')->nodeValue;
             $model = $attributes->getNamedItem('model')->nodeValue;
+            $entity = $attributes->getNamedItem('entity')->nodeValue;
 
-            $output['productTypes'][$name] = array('name' => $name, 'model' => $model);
+            if (isset($output['entities'][$entity])) {
+                $output['entities'][$entity]['types'][$name] = array('name' => $name, 'model' => $model);
+            }
+        }
+
+        /** @var \DOMNodeList $relatedIndexers */
+        $relatedIndexers = $source->getElementsByTagName('relatedIndexer');
+        /** @var \DOMNode $relatedIndexerConfig */
+        foreach ($relatedIndexers as $relatedIndexerConfig) {
+            $attributes = $relatedIndexerConfig->attributes;
+            $name = $attributes->getNamedItem('name')->nodeValue;
+            $entity = $attributes->getNamedItem('entity')->nodeValue;
+
+            if (isset($output['entities'][$entity])) {
+                $output['entities'][$entity]['relatedIndexers'][$name] = array('name' => $name);
+            }
         }
         return $output;
     }

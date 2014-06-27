@@ -101,7 +101,7 @@ class Data extends \Magento\Core\Helper\Data
     }
 
     /**
-     * Retrieve size of bunch (how much products should be involved in one import iteration)
+     * Retrieve size of bunch (how many entities should be involved in one import iteration)
      *
      * @return int
      */

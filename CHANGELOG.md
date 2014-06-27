@@ -1,3 +1,81 @@
+2.0.0.0-dev84
+=============
+* Fixed bugs:
+  * Fixed an issue where an invalidly filled option did not become in focus after saving attempt on the Create New Order page in the backend
+  * Fixed an issue with the default configuration not being applied properly in the CAPTCHA configuration section
+  * Fixed an issue with optional State/Province fields on the Create New Order page being marked as required
+  * Fixed an issue with incorrect Customer model usage on session in community modules
+  * Fixed an issue where cache was not invalidated after applying catalog price rule
+  * Fixed an issue where an admin with custom permissions could not create Shopping Cart Price Rule/Catalog Price Rule
+  * Fixed an issue with REST request and response format being inconsistent
+  * Fixed an issue where there was an error on a bundle product page if bundle items contained an out of stock product
+  * Fixed a JS issue which appeared when adding associated products for a grouped product
+  * Fixed an issue where layered navigation was absent on the Advanced Search results page
+  * Fixed an issue where the leading "0" in numbers were truncated when exporting using Excel XML
+  * Fixed the price type attribute filter in Layered Navigation
+  * Fixed an issue with a fatal error in \Magento\Framework\ArchiveTest when bz2 extension was not installed
+  * Fixed an issue where an admin could search product by attributes set on the Store View level (except default store view)
+  * Fixed an issue where extra spaces in search values were not ignored during search and thus wrong search results were given
+* GitHub requests:
+  * [#542]  Fix ImportExport bug which occurs while importing multiple rows per entity
+  * [#544]  Performance tests not working
+* Framework improvements:
+  * Covered the following Magento application components with unit tests:
+      * `Customer/Model/Address.php`
+      * `Customer/Model/Address/AbstractAddress.php `
+      * `Customer/Model/Address/Converter.php`
+      * `Customer/Model/Customer.php`
+      * `Customer/Model/Customer/Attribute/Backend/Billing.php`
+      * `Customer/Model/Customer/Attribute/Backend/Shipping.php`
+      * `Customer/Model/Customer/Attribute/Backend/Store.php `
+      * `Customer/Model/Customer/Attribute/Backend/Website.php `
+      * `Customer/Model/Customer/Attribute/Backend/PasswordTest.php`
+      * `Customer/Helper/Address.php`
+      * `Customer/Helper/View.php`
+      * `Customer/Service/V1/CustomerAccountService.php`
+  * Covered Magento lib with unit tests:
+      * `lib/internal/Magento/Framework/Filter/*`
+      * `lib/internal/Magento/Framework/Model/Resource/Db/AbstractDb.php`
+      * `lib/internal/Magento/Framework/Model/Resource/Db/Collection/AbstractCollection.php`
+      * `lib/internal/Magento/Framework/File/Uploader.php`
+      * `lib/internal/Magento/Framework/File/Csv.php`
+      * `lib/internal/Magento/Framework/Less/File/Collector/Aggregated.php`
+      * `lib/internal/Magento/Framework/Less/File/Collector/Library.php`
+      * `lib/internal/Magento/Framework/Locale/Config.php`
+      * `lib/internal/Magento/Framework/Locale/Currency.php`
+      * `lib/internal/Magento/Framework/App/Config/Element.php`
+      * `lib/internal/Magento/Framework/App/Config/Value.php`
+      * `lib/internal/Magento/Framework/App/DefaultPath/DefaultPath.php`
+      * `lib/internal/Magento/Framework/App/EntryPoint/EntryPoint.php`
+      * `lib/internal/Magento/Framework/App/Helper/AbstractHelper.php`
+      * `lib/internal/Magento/Framework/App/Resource/ConnectionFactory.php`
+      * `lib/internal/Magento/Framework/App/Route/Config.php`
+  * Implemented the ability for a mobile client to get a partial response
+  * Added authentication support for mobile
+  * Refactored the Oauth lib exception not to reference module classes
+  * Moved the authorization services according to the new directory format: was \Magento\Authz\Service\AuthorizationV1Interface, became \Magento\Authz\Service\V1\AuthorizationInterface
+  * Moved the integration services according to the new directory format:
+    * Was \Magento\Integration\Service\IntegrationV1, became \Magento\Integration\Service\V1\Integration
+    * Was \Magento\Integration\Service\OauthV1, became \Magento\Integration\Service\V1\Oauth
+  * Improved security of the integration registration
+  * Introduced language packages with ability to inherit dictionaries
+* Improved modularity of ImportExport
+* Created Service API for Magento_Catalog module:
+   * Implemented Product Attribute Media API
+   * Implemented Product Group Price API
+   * Implemented Product Attribute Write API
+   * Implemented Product Attribute Options Read and Write API
+* Created Service for the Magento Tax module:
+  * Implemented Tax Rule Service
+  * Implemented Tax Rate Service
+  * Implemented Tax Calculation Data Objects
+  * Implemented Tax Calculation Builders
+  * Implemented Tax Calculation Service
+* Covered the part of the Catalog Module with unit tests
+* Added PayPall Bill Me Later button
+* Streamlined checkout experience
+* Improved order review page for PayPal Express Checkout
+
 2.0.0.0-dev83
 =============
 * Created the Service API for the Magento_Catalog Module:
@@ -221,7 +299,7 @@
   * Fixed price inconsistencies between catalog and shopping cart
   * Added support for maintaining consistent price including tax for customers with different tax rates
   * Added support for applying tax rules with different priorities to subtotal only
-  
+
 * Fixed bugs:
   * Removed the extra '%' sign in the error\notice message on Gift Card Accounts page on the backend
   * Fixed an issue with image uploading functionality in the Catalog configuration

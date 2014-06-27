@@ -26,18 +26,14 @@ namespace Magento\Paypal\Block\Express;
 class ShortcutTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Paypal\Block\Express\Shortcut|PHPUnit_Framework_MockObject_MockObject
+     * Alias
      */
-    protected $model;
-
-    protected function setUp()
-    {
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->model = $helper->getObject('Magento\Paypal\Block\Express\Shortcut');
-    }
+    const ALIAS = 'alias';
 
     public function testGetAlias()
     {
-        $this->assertEquals('product.info.addtocart.paypal', $this->model->getAlias());
+        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $model = $helper->getObject('Magento\Paypal\Block\Express\Shortcut', ['alias' => self::ALIAS]);
+        $this->assertEquals(self::ALIAS, $model->getAlias());
     }
 }

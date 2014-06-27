@@ -79,6 +79,109 @@
                         <frontend_class>paypal-enabler</frontend_class>
                         <attribute type="shared">1</attribute>
                     </field>
+                    <field id="enable_express_checkout_bml" sortOrder="21" extends="payment_all_paypal/express_checkout/express_checkout_required/enable_express_checkout_bml">
+                        <comment><![CDATA[Website Payments Pro lets you give customers access to financing through Bill Me Later&#174; - at no additional cost to you.
+                                        You get paid up front, even though customers have more time to pay. A pre-integrated payment button lets customers pay quickly with Bill Me Later&#174;.
+                                        <a href="https://www.paypal.com/webapps/mpp/promotional-financing" target="_blank">Learn More</a>]]>
+                        </comment>
+                        <requires>
+                            <field id="enable_wpp"/>
+                        </requires>
+                    </field>
+                    <group id="wpp_advertise_bml" showInDefault="1" showInWebsite="1" sortOrder="22" translate="label comment">
+                        <label>Advertise Bill Me Later</label>
+                        <comment>
+                            <![CDATA[<a href="https://financing.paypal.com/ppfinportal/content/whyUseFinancing" target="_blank">Why Advertise Financing?</a><br/>
+                                            <strong>Give your sales a boost when you advertise financing.</strong><br/>PayPal helps turn browsers into buyers with financing
+                                            from Bill Me Later&#174;. Your customers have more time to pay, while you get paid up front – at no additional cost to you.
+                                            Use PayPal’s free banner ads that let you advertise Bill Me Later&#174; financing as a payment option when your customers check out with PayPal.
+                                            The PayPal Advertising Program has been shown to generate additional purchases as well as increase consumer's average purchase sizes by 15%
+                                            or more. <a href="https://financing.paypal.com/ppfinportal/content/forrester" target="_blank">See Details</a>.]]>
+                        </comment>
+                        <field id="bml_publisher_id" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/bml_publisher_id" />
+                        <field id="bml_wizard" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/bml_wizard" />
+                        <group id="wpp_settings_bml_homepage" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20" translate="label">
+                            <label>Home Page</label>
+                            <field id="bml_homepage_display" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_homepage/bml_homepage_display"/>
+                            <field id="wpp_bml_homepage_position" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_homepage/bml_homepage_position"/>
+                            <field id="wpp_bml_homepage_size1" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1">
+                                <label>Size</label>
+                                <config_path>payment/paypal_express_bml/homepage_size</config_path>
+                                <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeHPH</source_model>
+                                <depends>
+                                    <field id="wpp_bml_homepage_position">0</field>
+                                </depends>
+                            </field>
+                            <field id="wpp_bml_homepage_size2" extends="payment_us/paypal_group_all_in_one/payflow_advanced/required_settings/advanced_advertise_bml/advanced_settings_bml_homepage/advanced_bml_homepage_size1">
+                                <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeHPS</source_model>
+                                <depends>
+                                    <field id="wpp_bml_homepage_position">1</field>
+                                </depends>
+                            </field>
+                        </group>
+                        <group id="wpp_settings_bml_categorypage" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="30" translate="label">
+                            <label>Catalog Category Page</label>
+                            <field id="bml_categorypage_display" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_categorypage/bml_categorypage_display"/>
+                            <field id="wpp_bml_categorypage_position" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_categorypage/bml_categorypage_position"/>
+                            <field id="wpp_bml_categorypage_size1" type="select" showInDefault="1" showInWebsite="1" sortOrder="30" translate="label">
+                                <label>Size</label>
+                                <config_path>payment/paypal_express_bml/categorypage_size</config_path>
+                                <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeCCPC</source_model>
+                                <attribute type="shared">1</attribute>
+                                <depends>
+                                    <field id="wpp_bml_categorypage_position">0</field>
+                                </depends>
+                            </field>
+                            <field id="wpp_bml_categorypage_size2" extends="payment_us/paypal_group_all_in_one/payflow_advanced/required_settings/advanced_advertise_bml/advanced_settings_bml_categorypage/advanced_bml_categorypage_size1">
+                                <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeCCPS</source_model>
+                                <depends>
+                                    <field id="wpp_bml_categorypage_position">1</field>
+                                </depends>
+                            </field>
+                        </group>
+                        <group id="wpp_settings_bml_productpage" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="40" translate="label">
+                            <label>Catalog Product Page</label>
+                            <field id="bml_productpage_display" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_productpage/bml_productpage_display" />
+                            <field id="wpp_bml_productpage_position" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_productpage/bml_productpage_position" />
+                            <field id="wpp_bml_productpage_size1" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" translate="label">
+                                <label>Size</label>
+                                <config_path>payment/paypal_express_bml/productpage_size</config_path>
+                                <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeCPPC</source_model>
+                                <attribute type="shared">1</attribute>
+                                <depends>
+                                    <field id="wpp_bml_productpage_position">0</field>
+                                </depends>
+                            </field>
+                            <field id="wpp_bml_productpage_size2" extends="payment_us/paypal_group_all_in_one/payflow_advanced/required_settings/advanced_advertise_bml/advanced_settings_bml_productpage/advanced_bml_productpage_size1">
+                                <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeCPPN</source_model>
+                                <depends>
+                                    <field id="wpp_bml_productpage_position">1</field>
+                                </depends>
+                            </field>
+
+                        </group>
+                        <group id="wpp_settings_bml_checkout" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="50" translate="label">
+                            <label>Checkout Cart Page</label>
+                            <field id="bml_checkout_display" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_checkout/bml_checkout_display"/>
+                            <field id="wpp_bml_checkout_position" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_checkout/bml_checkout_position"/>
+                            <field id="wppw_bml_checkout_size1" type="select" showInDefault="1" showInWebsite="1" sortOrder="30" translate="label">
+                                <label>Size</label>
+                                <config_path>payment/paypal_express_bml/checkout_size</config_path>
+                                <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeCheckoutC</source_model>
+                                <attribute type="shared">1</attribute>
+                                <depends>
+                                    <field id="wpp_bml_checkout_position">0</field>
+                                </depends>
+                            </field>
+                            <field id="wpp_bml_checkout_size2" extends="payment_us/paypal_group_all_in_one/payflow_advanced/required_settings/advanced_advertise_bml/advanced_settings_bml_checkout/advanced_bml_checkout_size1">
+                                <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeCheckoutN</source_model>
+                                <attribute type="shared">1</attribute>
+                                <depends>
+                                    <field id="wpp_bml_checkout_position">1</field>
+                                </depends>
+                            </field>
+                        </group>
+                    </group>
                 </group>
                 <group id="wpp_settings" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20">
                     <label>Basic Settings - PayPal Website Payments Pro</label>
@@ -250,6 +353,7 @@
                         <field id="solution_type" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/solution_type"/>
                         <field id="require_billing_address" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/require_billing_address"/>
                         <field id="allow_ba_signup" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/allow_ba_signup"/>
+                        <field id="skip_order_review_step" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/skip_order_review_step"/>
                     </group>
                 </group>
             </group>
@@ -639,6 +743,111 @@
                             <field id="enable_payflow_link"/>
                         </requires>
                     </field>
+
+                    <field id="enable_express_checkout_bml"  extends="payment_all_paypal/express_checkout/express_checkout_required/enable_express_checkout_bml" sortOrder="41">
+                        <comment><![CDATA[Payflow Link lets you give customers access to financing through Bill Me Later&#174; - at no additional cost to you.
+                        You get paid up front, even though customers have more time to pay. A pre-integrated payment button lets customers pay quickly with Bill Me Later&#174;.
+                        <a href="https:/www.paypal.com/webapps/mpp/promotional-financing" target="_blank">Learn More</a>]]>
+                        </comment>
+                        <config_path>payment/paypal_express_bml/active</config_path>
+                        <requires>
+                            <field id="enable_express_checkout"/>
+                        </requires>
+                    </field>
+                    <group id="payflow_link_advertise_bml"  translate="label comment" showInDefault="1" showInWebsite="1" sortOrder="42">
+                        <label>Advertise Bill Me Later</label>
+                        <comment>
+                            <![CDATA[<a href="https:/financing.paypal.com/ppfinportal/content/whyUseFinancing" target="_blank">Why Advertise Financing?</a><br/>
+                        <strong>Give your sales a boost when you advertise financing.</strong><br/>PayPal helps turn browsers into buyers with financing
+                        from Bill Me Later&#174;. Your customers have more time to pay, while you get paid up front – at no additional cost to you.
+                        Use PayPal’s free banner ads that let you advertise Bill Me Later&#174; financing as a payment option when your customers check out with PayPal.
+                        The PayPal Advertising Program has been shown to generate additional purchases as well as increase consumer's average purchase sizes by 15%
+                        or more. <a href="https:/financing.paypal.com/ppfinportal/content/forrester" target="_blank">See Details</a>.]]>
+                        </comment>
+                        <field id="bml_publisher_id" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/bml_publisher_id" />
+                        <field id="bml_wizard" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/bml_wizard" />
+                        <group id="payflow_link_settings_bml_homepage"  translate="label" showInWebsite="1" sortOrder="20" showInDefault="1" showInStore="1">
+                            <label>Home Page</label>
+                            <field id="bml_homepage_display" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_homepage/bml_homepage_display"/>
+                            <field id="payflow_link_bml_homepage_position" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_homepage/bml_homepage_position"/>
+                            <field id="payflow_link_bml_homepage_size1" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="30">
+                                <label>Size</label>
+                                <config_path>payment/paypal_express_bml/homepage_size</config_path>
+                                <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeHPH</source_model>
+                                <attribute type="shared">1</attribute>
+                                <depends>
+                                    <field id="payflow_link_bml_homepage_position">0</field>
+                                </depends>
+                            </field>
+                            <field id="payflow_link_bml_homepage_size2" extends="payment_all_paypal/payflow_link/payflow_link_required/payflow_link_advertise_bml/payflow_link_settings_bml_homepage/payflow_link_bml_homepage_size1">
+                                <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeHPS</source_model>
+                                <depends>
+                                    <field id="payflow_link_bml_homepage_position">1</field>
+                                </depends>
+                            </field>
+                        </group>
+                        <group id="payflow_link_settings_bml_categorypage"  translate="label" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Catalog Category Page</label>
+                            <field id="bml_categorypage_display" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_categorypage/bml_categorypage_display"/>
+                            <field id="payflow_link_bml_categorypage_position" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_categorypage/bml_categorypage_position" />
+                            <field id="payflow_link_bml_categorypage_size1" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="40">
+                                <label>Size</label>
+                                <config_path>payment/paypal_express_bml/categorypage_size</config_path>
+                                <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeCCPC</source_model>
+                                <attribute type="shared">1</attribute>
+                                <depends>
+                                    <field id="payflow_link_bml_categorypage_position">0</field>
+                                </depends>
+                            </field>
+                            <field id="payflow_link_bml_categorypage_size2" extends="payment_all_paypal/payflow_link/payflow_link_required/payflow_link_advertise_bml/payflow_link_settings_bml_categorypage/payflow_link_bml_categorypage_size1">
+                                <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeCCPS</source_model>
+                                <depends>
+                                    <field id="payflow_link_bml_categorypage_position">1</field>
+                                </depends>
+                            </field>
+                        </group>
+                        <group id="payflow_link_settings_bml_productpage"  translate="label" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="50">
+                            <label>Catalog Product Page</label>
+                            <field id="bml_productpage_display" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_productpage/bml_productpage_display" />
+                            <field id="payflow_link_bml_productpage_position" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_productpage/bml_productpage_position" />
+                            <field id="payflow_link_bml_productpage_size1" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="30">
+                                <label>Size</label>
+                                <config_path>payment/paypal_express_bml/productpage_size</config_path>
+                                <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeCPPC</source_model>
+                                <attribute type="shared">1</attribute>
+                                <depends>
+                                    <field id="payflow_link_bml_productpage_position">0</field>
+                                </depends>
+                            </field>
+                            <field id="payflow_link_bml_productpage_size2" extends="payment_all_paypal/payflow_link/payflow_link_required/payflow_link_advertise_bml/payflow_link_settings_bml_productpage/payflow_link_bml_productpage_size1">
+                                <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeCPPN</source_model>
+                                <depends>
+                                    <field id="payflow_link_bml_productpage_position">1</field>
+                                </depends>
+                            </field>
+                        </group>
+                        <group id="payflow_link_settings_bml_checkout"  translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="60">
+                            <label>Checkout Cart Page</label>
+                            <field id="bml_checkout_display" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_checkout/bml_checkout_display" />
+                            <field id="payflow_link_bml_checkout_position" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_checkout/bml_checkout_position" />
+                            <field id="payflow_link_bml_checkout_size1" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1">
+                                <label>Size</label>
+                                <config_path>payment/paypal_express_bml/checkout_size</config_path>
+                                <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeCheckoutC</source_model>
+                                <attribute type="shared">1</attribute>
+                                <depends>
+                                    <field id="payflow_link_bml_checkout_position">0</field>
+                                </depends>
+                            </field>
+                            <field id="payflow_link_bml_checkout_size2" extends="payment_all_paypal/payflow_link/payflow_link_required/payflow_link_advertise_bml/payflow_link_settings_bml_checkout/payflow_link_bml_checkout_size1">
+                                <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeCheckoutN</source_model>
+                                <attribute type="shared">1</attribute>
+                                <depends>
+                                    <field id="payflow_link_bml_checkout_position">1</field>
+                                </depends>
+                            </field>
+                        </group>
+                    </group>
                 </group>
                 <group id="settings_payflow_link" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20">
                     <label>Basic Settings - PayPal Payflow Link</label>
@@ -865,6 +1074,153 @@
                         </requires>
                         <frontend_class>paypal-enabler paypal-ec-enabler</frontend_class>
                     </field>
+
+                    <field id="enable_express_checkout_bml" translate="label comment" type="select" sortOrder="21" showInDefault="1" showInWebsite="1">
+                        <label>Enable Bill Me Later</label>
+                        <comment><![CDATA[PayPal Express Checkout lets you give customers access to financing through Bill Me Later&#174; - at no additional cost to you.
+                        You get paid up front, even though customers have more time to pay. A pre-integrated payment button lets customers pay quickly with Bill Me Later&#174;.
+                        <a href="https:/www.paypal.com/webapps/mpp/promotional-financing" target="_blank">Learn More</a>]]>
+                        </comment>
+                        <config_path>payment/paypal_express_bml/active</config_path>
+                        <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                        <attribute type="shared">1</attribute>
+                        <requires>
+                            <field id="enable_express_checkout"/>
+                        </requires>
+                        <frontend_class>paypal-bml</frontend_class>
+                    </field>
+                    <group id="advertise_bml" translate="label comment" showInDefault="1" showInWebsite="1" sortOrder="30">
+                        <label>Advertise Bill Me Later</label>
+                        <comment>
+                            <![CDATA[<a href="https:/financing.paypal.com/ppfinportal/content/whyUseFinancing" target="_blank">Why Advertise Financing?</a><br/>
+                        <strong>Give your sales a boost when you advertise financing.</strong><br/>PayPal helps turn browsers into buyers with financing
+                        from Bill Me Later&#174;. Your customers have more time to pay, while you get paid up front – at no additional cost to you.
+                        Use PayPal’s free banner ads that let you advertise Bill Me Later&#174; financing as a payment option when your customers check out with PayPal.
+                        The PayPal Advertising Program has been shown to generate additional purchases as well as increase consumer's average purchase sizes by 15%
+                        or more. <a href="https:/financing.paypal.com/ppfinportal/content/forrester" target="_blank">See Details</a>.]]>
+                        </comment>
+                        <field id="bml_publisher_id" translate="label comment tooltip" showInDefault="1" showInWebsite="1" sortOrder="10">
+                            <label>Publisher ID</label>
+                            <comment><![CDATA[Required to display a banner]]></comment>
+                            <config_path>payment/paypal_express_bml/publisher_id</config_path>
+                            <attribute type="shared">1</attribute>
+                        </field>
+                        <field id="bml_wizard" translate="button_label" sortOrder="15" showInDefault="1" showInWebsite="1">
+                            <label></label>
+                            <button_label>Get Publisher ID from PayPal</button_label>
+                            <button_url><![CDATA[https:/financing.paypal.com/ppfinportal/cart/index?dcp=4eff8563b9cc505e0b9afaff3256705081553c79]]></button_url>
+                            <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\BmlApiWizard</frontend_model>
+                        </field>
+                        <group id="settings_bml_homepage" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20">
+                            <label>Home Page</label>
+                            <field id="bml_homepage_display" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="10">
+                                <label>Display</label>
+                                <config_path>payment/paypal_express_bml/homepage_display</config_path>
+                                <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                                <attribute type="shared">1</attribute>
+                            </field>
+                            <field id="bml_homepage_position" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="20">
+                                <label>Position</label>
+                                <config_path>payment/paypal_express_bml/homepage_position</config_path>
+                                <source_model>Magento\Paypal\Model\System\Config\Source\BmlPosition::getBmlPositionsHP</source_model>
+                                <attribute type="shared">1</attribute>
+                            </field>
+                            <field id="bml_homepage_size1" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="30">
+                                <label>Size</label>
+                                <config_path>payment/paypal_express_bml/homepage_size</config_path>
+                                <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeHPH</source_model>
+                                <attribute type="shared">1</attribute>
+                                <depends>
+                                    <field id="bml_homepage_position">0</field>
+                                </depends>
+                            </field>
+                            <field id="bml_homepage_size2" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_homepage/bml_homepage_size1">
+                                <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeHPS</source_model>
+                                <depends>
+                                    <field id="bml_homepage_position">1</field>
+                                </depends>
+                            </field>
+                        </group>
+                        <group id="settings_bml_categorypage" translate="label" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Catalog Category Page</label>
+                            <field id="bml_categorypage_display" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="10">
+                                <label>Display</label>
+                                <config_path>payment/paypal_express_bml/categorypage_display</config_path>
+                                <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                                <attribute type="shared">1</attribute>
+                            </field>
+                            <field id="bml_categorypage_position" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="20">
+                                <label>Position</label>
+                                <config_path>payment/paypal_express_bml/categorypage_position</config_path>
+                                <source_model>Magento\Paypal\Model\System\Config\Source\BmlPosition::getBmlPositionsCCP</source_model>
+                                <attribute type="shared">1</attribute>
+                            </field>
+                            <field id="bml_categorypage_size1" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="30">
+                                <label>Size</label>
+                                <config_path>payment/paypal_express_bml/categorypage_size</config_path>
+                                <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeCCPC</source_model>
+                                <attribute type="shared">1</attribute>
+                                <depends><field id="bml_categorypage_position">0</field></depends>
+                            </field>
+                            <field id="bml_categorypage_size2" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_categorypage/bml_categorypage_size1">
+                                <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeCCPS</source_model>
+                                <depends><field id="bml_categorypage_position">1</field></depends>
+                            </field>
+                        </group>
+                        <group id="settings_bml_productpage" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="40">
+                            <label>Catalog Product Page</label>
+                            <field id="bml_productpage_display" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="10">
+                                <label>Display</label>
+                                <config_path>payment/paypal_express_bml/productpage_display</config_path>
+                                <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                                <attribute type="shared">1</attribute>
+                            </field>
+                            <field id="bml_productpage_position" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="20">
+                                <label>Position</label>
+                                <config_path>payment/paypal_express_bml/productpage_position</config_path>
+                                <source_model>Magento\Paypal\Model\System\Config\Source\BmlPosition::getBmlPositionsCPP</source_model>
+                                <attribute type="shared">1</attribute>
+                            </field>
+                            <field id="bml_productpage_size1" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="30">
+                                <label>Size</label>
+                                <config_path>payment/paypal_express_bml/productpage_size</config_path>
+                                <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeCPPC</source_model>
+                                <attribute type="shared">1</attribute>
+                                <depends><field id="bml_productpage_position">0</field></depends>
+                            </field>
+                            <field id="bml_productpage_size2" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_productpage/bml_productpage_size1">
+                                <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeCPPN</source_model>
+                                <depends><field id="bml_productpage_position">1</field></depends>
+                            </field>
+                        </group>
+                        <group id="settings_bml_checkout" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="50">
+                            <label>Checkout Cart Page</label>
+                            <field id="bml_checkout_display" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="10">
+                                <label>Display</label>
+                                <config_path>payment/paypal_express_bml/checkout_display</config_path>
+                                <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                                <attribute type="shared">1</attribute>
+                            </field>
+                            <field id="bml_checkout_position" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="20">
+                                <label>Position</label>
+                                <config_path>payment/paypal_express_bml/checkout_position</config_path>
+                                <source_model>Magento\Paypal\Model\System\Config\Source\BmlPosition::getBmlPositionsCheckout</source_model>
+                                <attribute type="shared">1</attribute>
+                            </field>
+                            <field id="bml_checkout_size1" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="30">
+                                <label>Size</label>
+                                <config_path>payment/paypal_express_bml/checkout_size</config_path>
+                                <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeCheckoutC</source_model>
+                                <attribute type="shared">1</attribute>
+                                <depends><field id="bml_checkout_position">0</field></depends>
+                            </field>
+                            <field id="bml_checkout_size2" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_checkout/bml_checkout_size1">
+                                <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeCheckoutN</source_model>
+                                <attribute type="shared">1</attribute>
+                                <depends><field id="bml_checkout_position">1</field></depends>
+                            </field>
+                        </group>
+                    </group>
                 </group>
                 <group id="settings_ec" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20">
                     <label>Basic Settings - PayPal Express Checkout</label>
@@ -1002,6 +1358,12 @@
                             </tooltip>
                             <config_path>payment/paypal_express/allow_ba_signup</config_path>
                             <source_model>Magento\Paypal\Model\Config::getExpressCheckoutBASignupOptions</source_model>
+                            <attribute type="shared">1</attribute>
+                        </field>
+                        <field id="skip_order_review_step" translate="label" type="select" sortOrder="95" showInDefault="1" showInWebsite="1">
+                            <label>Skip Order Review Step</label>
+                            <config_path>payment/paypal_express/skip_order_review_step</config_path>
+                            <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
                             <attribute type="shared">1</attribute>
                         </field>
                         <group id="express_checkout_billing_agreement" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="100">
@@ -1230,6 +1592,110 @@
                         </requires>
                         <frontend_class>paypal-enabler paypal-ec-separate</frontend_class>
                     </field>
+
+                    <field id="enable_express_checkout_bml"  extends="payment_all_paypal/express_checkout/express_checkout_required/enable_express_checkout_bml" sortOrder="21">
+                        <comment><![CDATA[Payments Pro Hosted Solution lets you give customers access to financing through Bill Me Later&#174; - at no additional cost to you.
+                        You get paid up front, even though customers have more time to pay. A pre-integrated payment button lets customers pay quickly with Bill Me Later&#174;.
+                        <a href="https:/www.paypal.com/webapps/mpp/promotional-financing" target="_blank">Learn More</a>]]>
+                        </comment>
+                        <requires>
+                            <field id="pphs_enable"/>
+                        </requires>
+                    </field>
+                    <group id="pphs_advertise_bml"  translate="label comment" showInDefault="1" showInWebsite="1" sortOrder="22">
+                        <label>Advertise Bill Me Later</label>
+                        <comment>
+                            <![CDATA[<a href="https:/financing.paypal.com/ppfinportal/content/whyUseFinancing" target="_blank">Why Advertise Financing?</a><br/>
+                            <strong>Give your sales a boost when you advertise financing.</strong><br/>PayPal helps turn browsers into buyers with financing
+                            from Bill Me Later&#174;. Your customers have more time to pay, while you get paid up front – at no additional cost to you.
+                            Use PayPal’s free banner ads that let you advertise Bill Me Later&#174; financing as a payment option when your customers check out with PayPal.
+                            The PayPal Advertising Program has been shown to generate additional purchases as well as increase consumer's average purchase sizes by 15%
+                            or more. <a href="https:/financing.paypal.com/ppfinportal/content/forrester" target="_blank">See Details</a>.]]>
+                        </comment>
+                        <field id="bml_publisher_id" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/bml_publisher_id" />
+                        <field id="bml_wizard" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/bml_wizard" />
+                        <group id="pphs_settings_bml_homepage"  translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20">
+                            <label>Home Page</label>
+                            <field id="bml_homepage_display" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_homepage/bml_homepage_display"/>
+                            <field id="pphs_bml_homepage_position" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_homepage/bml_homepage_position"/>
+                            <field id="pphs_bml_homepage_size1" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="30">
+                                <label>Size</label>
+                                <config_path>payment/paypal_express_bml/homepage_size</config_path>
+                                <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeHPH</source_model>
+                                <attribute type="shared">1</attribute>
+                                <depends>
+                                    <field id="pphs_bml_homepage_position">0</field>
+                                </depends>
+                            </field>
+                            <field id="pphs_bml_homepage_size2" extends="payment_all_paypal/payments_pro_hosted_solution/pphs_required_settings/pphs_advertise_bml/pphs_settings_bml_homepage/pphs_bml_homepage_size1">
+                                <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeHPS</source_model>
+                                <depends>
+                                    <field id="pphs_bml_homepage_position">1</field>
+                                </depends>
+                            </field>
+                        </group>
+                        <group id="pphs_settings_bml_categorypage"  translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="30">
+                            <label>Catalog Category Page</label>
+                            <field id="bml_categorypage_display" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_categorypage/bml_categorypage_display"/>
+                            <field id="pphs_bml_categorypage_position" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_categorypage/bml_categorypage_position" />
+                            <field id="pphs_bml_categorypage_size1" translate="label" showInDefault="1" showInWebsite="1" sortOrder="30" type="select">
+                                <label>Size</label>
+                                <config_path>payment/paypal_express_bml/categorypage_size</config_path>
+                                <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeCCPC</source_model>
+                                <attribute type="shared">1</attribute>
+                                <depends>
+                                    <field id="pphs_bml_categorypage_position">0</field>
+                                </depends>
+                            </field>
+                            <field id="pphs_bml_categorypage_size2" extends="payment_all_paypal/payments_pro_hosted_solution/pphs_required_settings/pphs_advertise_bml/pphs_settings_bml_categorypage/pphs_bml_categorypage_size1">
+                                <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeCCPS</source_model>
+                                <depends>
+                                    <field id="pphs_bml_categorypage_position">1</field>
+                                </depends>
+                            </field>
+                        </group>
+                        <group id="pphs_settings_bml_productpage"  translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="40">
+                            <label>Catalog Product Page</label>
+                            <field id="bml_productpage_display" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_productpage/bml_productpage_display" />
+                            <field id="pphs_bml_productpage_position" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_productpage/bml_productpage_position" />
+                            <field id="pphs_bml_productpage_size1" translate="label" type="select" showInWebsite="1" showInDefault="1" sortOrder="30">
+                                <label>Size</label>
+                                <config_path>payment/paypal_express_bml/productpage_size</config_path>
+                                <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeCPPC</source_model>
+                                <attribute type="shared">1</attribute>
+                                <depends>
+                                    <field id="pphs_bml_productpage_position">0</field>
+                                </depends>
+                            </field>
+                            <field id="pphs_bml_productpage_size2" extends="payment_all_paypal/payments_pro_hosted_solution/pphs_required_settings/pphs_advertise_bml/pphs_settings_bml_productpage/pphs_bml_productpage_size1">
+                                <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeCPPN</source_model>
+                                <depends>
+                                    <field id="pphs_bml_productpage_position">1</field>
+                                </depends>
+                            </field>
+                        </group>
+                        <group id="pphs_settings_bml_checkout"  translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="50">
+                            <label>Checkout Cart Page</label>
+                            <field id="bml_checkout_display" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_checkout/bml_checkout_display" />
+                            <field id="pphs_bml_checkout_position" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_checkout/bml_checkout_position" />
+                            <field id="pphs_bml_checkout_size1" translate="label" type="select" showInWebsite="1" showInDefault="1" sortOrder="30">
+                                <label>Size</label>
+                                <config_path>payment/paypal_express_bml/checkout_size</config_path>
+                                <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeCheckoutC</source_model>
+                                <attribute type="shared">1</attribute>
+                                <depends>
+                                    <field id="pphs_bml_checkout_position">0</field>
+                                </depends>
+                            </field>
+                            <field id="pphs_bml_checkout_size2" extends="payment_all_paypal/payments_pro_hosted_solution/pphs_required_settings/pphs_advertise_bml/pphs_settings_bml_checkout/pphs_bml_checkout_size1">
+                                <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeCheckoutN</source_model>
+                                <attribute type="shared">1</attribute>
+                                <depends>
+                                    <field id="pphs_bml_checkout_position">1</field>
+                                </depends>
+                            </field>
+                        </group>
+                    </group>
                 </group>
                 <group id="pphs_settings" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20">
                     <label>Basic Settings - PayPal Payments Pro Hosted Solution</label>
@@ -1394,7 +1860,7 @@
                                 <attribute type="shared">1</attribute>
                             </field>
                         </group>
-                        <field id="enable_payflow_advanced" translate="label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1">
+                        <field id="enable_payflow_advanced" translate="label comment" type="select" sortOrder="41" showInDefault="1" showInWebsite="1">
                             <label>Enable this Solution</label>
                             <config_path>payment/payflow_advanced/active</config_path>
                             <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
@@ -1410,6 +1876,110 @@
                                 <field id="enable_payflow_advanced"/>
                             </requires>
                         </field>
+                        <field id="enable_express_checkout_bml" sortOrder="42" extends="payment_all_paypal/express_checkout/express_checkout_required/enable_express_checkout_bml">
+                            <comment><![CDATA[PayPal Payments Advanced lets you give customers access to financing through Bill Me Later&#174; - at no additional cost to you.
+                                        You get paid up front, even though customers have more time to pay. A pre-integrated payment button lets customers pay quickly with Bill Me Later&#174;.
+                                        <a href="https://www.paypal.com/webapps/mpp/promotional-financing" target="_blank">Learn More</a>]]>
+                            </comment>
+                            <requires>
+                                <field id="enable_payflow_advanced"/>
+                            </requires>
+                        </field>
+
+                        <group id="advanced_advertise_bml" showInDefault="1" showInWebsite="1" sortOrder="43" translate="label comment">
+                            <label>Advertise Bill Me Later</label>
+                            <comment>
+                                <![CDATA[<a href="https://financing.paypal.com/ppfinportal/content/whyUseFinancing" target="_blank">Why Advertise Financing?</a><br/>
+                                            <strong>Give your sales a boost when you advertise financing.</strong><br/>PayPal helps turn browsers into buyers with financing
+                                            from Bill Me Later&#174;. Your customers have more time to pay, while you get paid up front – at no additional cost to you.
+                                            Use PayPal’s free banner ads that let you advertise Bill Me Later&#174; financing as a payment option when your customers check out with PayPal.
+                                            The PayPal Advertising Program has been shown to generate additional purchases as well as increase consumer's average purchase sizes by 15%
+                                            or more. <a href="https://financing.paypal.com/ppfinportal/content/forrester" target="_blank">See Details</a>.]]>
+                            </comment>
+                            <field id="bml_publisher_id" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/bml_publisher_id" />
+                            <field id="bml_wizard" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/bml_wizard" />
+                            <group id="advanced_settings_bml_homepage" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20" translate="label">
+                                <label>Home Page</label>
+                                <field id="bml_homepage_display" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_homepage/bml_homepage_display"/>
+                                <field id="advanced_bml_homepage_position" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_homepage/bml_homepage_position"/>
+                                <field id="advanced_bml_homepage_size1" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1">
+                                    <label>Size</label>
+                                    <config_path>payment/paypal_express_bml/homepage_size</config_path>
+                                    <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeHPH</source_model>
+                                    <depends>
+                                        <field id="advanced_bml_homepage_position">0</field>
+                                    </depends>
+                                </field>
+                                <field id="advanced_bml_homepage_size2" extends="payment_us/paypal_group_all_in_one/payflow_advanced/required_settings/advanced_advertise_bml/advanced_settings_bml_homepage/advanced_bml_homepage_size1">
+                                    <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeHPS</source_model>
+                                    <depends>
+                                        <field id="advanced_bml_homepage_position">1</field>
+                                    </depends>
+                                </field>
+                            </group>
+                            <group id="advanced_settings_bml_categorypage" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="30" translate="label">
+                                <label>Catalog Category Page</label>
+                                <field id="bml_categorypage_display" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_categorypage/bml_categorypage_display"/>
+                                <field id="advanced_bml_categorypage_position" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_categorypage/bml_categorypage_position"/>
+                                <field id="advanced_bml_categorypage_size1" type="select" showInDefault="1" showInWebsite="1" sortOrder="30" translate="label">
+                                    <label>Size</label>
+                                    <config_path>payment/paypal_express_bml/categorypage_size</config_path>
+                                    <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeCCPC</source_model>
+                                    <attribute type="shared">1</attribute>
+                                    <depends>
+                                        <field id="advanced_bml_categorypage_position">0</field>
+                                    </depends>
+                                </field>
+                                <field id="advanced_bml_categorypage_size2" extends="payment_us/paypal_group_all_in_one/payflow_advanced/required_settings/advanced_advertise_bml/advanced_settings_bml_categorypage/advanced_bml_categorypage_size1">
+                                    <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeCCPS</source_model>
+                                    <depends>
+                                        <field id="advanced_bml_categorypage_position">1</field>
+                                    </depends>
+                                </field>
+                            </group>
+                            <group id="advanced_settings_bml_productpage" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="40" translate="label">
+                                <label>Catalog Product Page</label>
+                                <field id="bml_productpage_display" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_productpage/bml_productpage_display" />
+                                <field id="advanced_bml_productpage_position" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_productpage/bml_productpage_position" />
+                                <field id="advanced_bml_productpage_size1" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" translate="label">
+                                    <label>Size</label>
+                                    <config_path>payment/paypal_express_bml/productpage_size</config_path>
+                                    <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeCPPC</source_model>
+                                    <attribute type="shared">1</attribute>
+                                    <depends>
+                                        <field id="advanced_bml_productpage_position">0</field>
+                                    </depends>
+                                </field>
+                                <field id="advanced_bml_productpage_size2" extends="payment_us/paypal_group_all_in_one/payflow_advanced/required_settings/advanced_advertise_bml/advanced_settings_bml_productpage/advanced_bml_productpage_size1">
+                                    <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeCPPN</source_model>
+                                    <depends>
+                                        <field id="advanced_bml_productpage_position">1</field>
+                                    </depends>
+                                </field>
+
+                            </group>
+                            <group id="advanced_settings_bml_checkout" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="50" translate="label">
+                                <label>Checkout Cart Page</label>
+                                <field id="bml_checkout_display" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_checkout/bml_checkout_display"/>
+                                <field id="advanced_bml_checkout_position" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_checkout/bml_checkout_position"/>
+                                <field id="advanced_bml_checkout_size1" type="select" showInDefault="1" showInWebsite="1" sortOrder="30" translate="label">
+                                    <label>Size</label>
+                                    <config_path>payment/paypal_express_bml/checkout_size</config_path>
+                                    <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeCheckoutC</source_model>
+                                    <attribute type="shared">1</attribute>
+                                    <depends>
+                                        <field id="advanced_bml_checkout_position">0</field>
+                                    </depends>
+                                </field>
+                                <field id="advanced_bml_checkout_size2" extends="payment_us/paypal_group_all_in_one/payflow_advanced/required_settings/advanced_advertise_bml/advanced_settings_bml_checkout/advanced_bml_checkout_size1">
+                                    <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeCheckoutN</source_model>
+                                    <attribute type="shared">1</attribute>
+                                    <depends>
+                                        <field id="advanced_bml_checkout_position">1</field>
+                                    </depends>
+                                </field>
+                            </group>
+                        </group>
                     </group>
                     <group id="settings_payments_advanced" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20">
                         <label>Basic Settings - PayPal Payments Advanced</label>
@@ -1572,6 +2142,116 @@
                                 <field id="enable_paypal_payflow"/>
                             </requires>
                         </field>
+
+
+                        <field id="enable_express_checkout_bml_payflow" translate="label" type="select" sortOrder="21" showInWebsite="1" showInDefault="1">
+                            <label>Enable Bill Me Later</label>
+                            <comment><![CDATA[PayPal Express Checkout Payflow Edition lets you give customers access to financing through Bill Me Later&#174; - at no additional cost to you.
+                            You get paid up front, even though customers have more time to pay. A pre-integrated payment button lets customers pay quickly with Bill Me Later&#174;.
+                            <a href="https:/www.paypal.com/webapps/mpp/promotional-financing" target="_blank">Learn More</a>]]>
+                            </comment>
+                            <config_path>payment/payflow_express_bml/active</config_path>
+                            <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                            <attribute type="shared">1</attribute>
+                            <frontend_class>paypal-bml</frontend_class>
+                            <requires>
+                                <field id="enable_paypal_payflow"/>
+                            </requires>
+                        </field>
+                        <group id="paypal_payflow_advertise_bml" translate="label comment" showInDefault="1" showInWebsite="1" sortOrder="22">
+                            <label>Advertise Bill Me Later</label>
+                            <comment>
+                                <![CDATA[<a href="https:/financing.paypal.com/ppfinportal/content/whyUseFinancing" target="_blank">Why Advertise Financing?</a><br/>
+                                <strong>Give your sales a boost when you advertise financing.</strong><br/>PayPal helps turn browsers into buyers with financing
+                                from Bill Me Later&#174;. Your customers have more time to pay, while you get paid up front – at no additional cost to you.
+                                Use PayPal’s free banner ads that let you advertise Bill Me Later&#174; financing as a payment option when your customers check out with PayPal.
+                                The PayPal Advertising Program has been shown to generate additional purchases as well as increase consumer's average purchase sizes by 15%
+                                or more. <a href="https:/financing.paypal.com/ppfinportal/content/forrester" target="_blank">See Details</a>.]]>
+                            </comment>
+                            <field id="bml_publisher_id" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/bml_publisher_id" />
+                            <field id="bml_wizard" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/bml_wizard" />
+                            <group id="paypal_payflow_settings_bml_homepage" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20">
+                                <label>Home Page</label>
+                                <field id="bml_homepage_display" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_homepage/bml_homepage_display"/>
+                                <field id="paypal_payflow_bml_homepage_position" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_homepage/bml_homepage_position"/>
+                                <field id="paypal_payflow_bml_homepage_size1" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="30">
+                                    <label>Size</label>
+                                    <config_path>payment/paypal_express_bml/homepage_size</config_path>
+                                    <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeHPH</source_model>
+                                    <attribute type="shared">1</attribute>
+                                    <depends>
+                                        <field id="paypal_payflow_bml_homepage_position">0</field>
+                                    </depends>
+                                </field>
+                                <field id="paypal_payflow_bml_homepage_size2" extends="payment_us/paypal_payment_gateways/paypal_payflowpro_with_express_checkout/paypal_payflow_required/paypal_payflow_advertise_bml/paypal_payflow_settings_bml_homepage/paypal_payflow_bml_homepage_size1">
+                                    <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeHPS</source_model>
+                                    <depends>
+                                        <field id="paypal_payflow_bml_homepage_position">1</field>
+                                    </depends>
+                                </field>
+                            </group>
+                            <group id="paypal_payflow_settings_bml_categorypage" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="30">
+                                <label>Catalog Category Page</label>
+                                <field id="bml_categorypage_display" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_categorypage/bml_categorypage_display"/>
+                                <field id="paypal_payflow_bml_categorypage_position" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_categorypage/bml_categorypage_position" />
+                                <field id="paypal_payflow_bml_categorypage_size1" translate="label" sortOrder="30" showInWebsite="1" showInDefault="1" type="select">
+                                    <label>Size</label>
+                                    <config_path>payment/paypal_express_bml/categorypage_size</config_path>
+                                    <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeCCPC</source_model>
+                                    <attribute type="shared">1</attribute>
+                                    <depends>
+                                        <field id="paypal_payflow_bml_categorypage_position">0</field>
+                                    </depends>
+                                </field>
+                                <field id="paypal_payflow_bml_categorypage_size2" extends="payment_us/paypal_payment_gateways/paypal_payflowpro_with_express_checkout/paypal_payflow_required/paypal_payflow_advertise_bml/paypal_payflow_settings_bml_categorypage/paypal_payflow_bml_categorypage_size1">
+                                    <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeCCPS</source_model>
+                                    <depends>
+                                        <field id="paypal_payflow_bml_categorypage_position">1</field>
+                                    </depends>
+                                </field>
+                            </group>
+                            <group id="paypal_payflow_settings_bml_productpage" translate="label" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="40">
+                                <label>Catalog Product Page</label>
+                                <field id="bml_productpage_display" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_productpage/bml_productpage_display" />
+                                <field id="paypal_payflow_bml_productpage_position" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_productpage/bml_productpage_position" />
+                                <field id="paypal_payflow_bml_productpage_size1" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="30">
+                                    <label>Size</label>
+                                    <config_path>payment/paypal_express_bml/productpage_size</config_path>
+                                    <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeCPPC</source_model>
+                                    <attribute type="shared">1</attribute>
+                                    <depends>
+                                        <field id="paypal_payflow_bml_productpage_position">0</field>
+                                    </depends>
+                                </field>
+                                <field id="paypal_payflow_bml_productpage_size2" extends="payment_us/paypal_payment_gateways/paypal_payflowpro_with_express_checkout/paypal_payflow_required/paypal_payflow_advertise_bml/paypal_payflow_settings_bml_productpage/paypal_payflow_bml_productpage_size1">
+                                    <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeCPPN</source_model>
+                                    <depends>
+                                        <field id="paypal_payflow_bml_productpage_position">1</field>
+                                    </depends>
+                                </field>
+                            </group>
+                            <group id="paypal_payflow_settings_bml_checkout" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="50">
+                                <label>Checkout Cart Page</label>
+                                <field id="bml_checkout_display" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_checkout/bml_checkout_display" />
+                                <field id="paypal_payflow_bml_checkout_position" translate="label" extends="payment_all_paypal/express_checkout/express_checkout_required/advertise_bml/settings_bml_checkout/bml_checkout_position" />
+                                <field id="paypal_payflow_bml_checkout_size1" translate="label" type="select" showInDefault="1" showInWebsite="1" sortOrder="30">
+                                    <label>Size</label>
+                                    <config_path>payment/paypal_express_bml/checkout_size</config_path>
+                                    <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeCheckoutC</source_model>
+                                    <attribute type="shared">1</attribute>
+                                    <depends>
+                                        <field id="paypal_payflow_bml_checkout_position">0</field>
+                                    </depends>
+                                </field>
+                                <field id="paypal_payflow_bml_checkout_size2" extends="payment_us/paypal_payment_gateways/paypal_payflowpro_with_express_checkout/paypal_payflow_required/paypal_payflow_advertise_bml/paypal_payflow_settings_bml_checkout/paypal_payflow_bml_checkout_size1">
+                                    <source_model>Magento\Paypal\Model\System\Config\Source\BmlSize::getBmlSizeCheckoutN</source_model>
+                                    <attribute type="shared">1</attribute>
+                                    <depends>
+                                        <field id="paypal_payflow_bml_checkout_position">1</field>
+                                    </depends>
+                                </field>
+                            </group>
+                        </group>
                     </group>
                     <group id="settings_paypal_payflow" translate="label">
                         <group id="settings_paypal_payflow_advanced" translate="label">
@@ -1656,12 +2336,14 @@
                                 <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
                                 <attribute type="shared">1</attribute>
                             </field>
+                            <field id="skip_order_review_step" sortOrder="50" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/skip_order_review_step"/>
                         </group>
                     </group>
                 </group>
             </group>
             <group id="paypal_alternative_payment_methods">
                 <group id="express_checkout_us">
+                    <attribute type="activity_path">payment/paypal_express/active</attribute>
                     <attribute type="activity_path">payment/payflow_express/active</attribute>
                 </group>
             </group>
@@ -1745,6 +2427,7 @@
                             <field id="solution_type" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/solution_type" />
                             <field id="require_billing_address" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/require_billing_address" />
                             <field id="allow_ba_signup" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/allow_ba_signup" />
+                            <field id="skip_order_review_step" extends="payment_all_paypal/express_checkout/settings_ec/settings_ec_advanced/skip_order_review_step" />
                         </group>
                     </group>
                 </group>
@@ -1758,7 +2441,13 @@
                 <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Group</frontend_model>
                 <comment>Add another payment method to your existing solution or as a stand-alone option.</comment>
                 <help_url>https://www.paypal-marketing.com/emarketing/partner/na/merchantlineup/home.page#mainTab=checkoutlineup&amp;subTab=newlineup</help_url>
-                <group id="express_checkout_de" extends="payment_all_paypal/express_checkout"/>
+                <group id="express_checkout_de" extends="payment_all_paypal/express_checkout">
+                    <group id="settings_ec">
+                        <group id="settings_ec_advanced">
+                            <field id="solution_type" showInDefault="0" showInWebsite="0"/>
+                        </group>
+                    </group>
+                </group>
             </group>
         </section>
         <section id="payment_other" extends="payment" showInDefault="0" showInWebsite="0" showInStore="0">
@@ -1777,6 +2466,7 @@
             <group id="paypal_payment_solutions">
                 <group id="wps_other" sortOrder="20"/>
                 <group id="express_checkout_other" sortOrder="50">
+                    <attribute type="activity_path">payment/paypal_express/active</attribute>
                     <attribute type="activity_path">payment/payflow_express/active</attribute>
                 </group>
                 <group id="wpp_ca" extends="payment_all_paypal/wpp" sortOrder="10"/>

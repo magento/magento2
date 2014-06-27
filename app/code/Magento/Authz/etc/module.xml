@@ -24,7 +24,10 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Module/etc/module.xsd">
-    <module name="Magento_Authz" version="1.0.0.0" active="true">
+    <module name="Magento_Authz" schema_version="1.0.0.0" active="true">
+        <sequence>
+            <module name="Magento_User"/>
+        </sequence>
         <depends>
             <!--TODO: Dependency on Magento_User is temporary and should be eliminated when ACL is made global-->
             <module name="Magento_User"/>

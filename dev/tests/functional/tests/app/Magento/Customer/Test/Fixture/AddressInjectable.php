@@ -28,6 +28,8 @@ use Mtf\Fixture\InjectableFixture;
 
 /**
  * Class AddressInjectable
+ *
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class AddressInjectable extends InjectableFixture
 {

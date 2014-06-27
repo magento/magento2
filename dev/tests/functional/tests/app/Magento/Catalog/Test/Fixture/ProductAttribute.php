@@ -120,6 +120,8 @@ class ProductAttribute extends DataFixture
 
     /**
      * {inheritdoc}
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _initData()
     {

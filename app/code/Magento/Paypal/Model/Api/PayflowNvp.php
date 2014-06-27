@@ -153,7 +153,8 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
         'ECI' => 'centinel_eci',
         'XID' => 'centinel_xid',
         'VPAS' => 'centinel_vpas_result',
-        'ECISUBMITTED3DS' => 'centinel_eci_result'
+        'ECISUBMITTED3DS' => 'centinel_eci_result',
+        'USERSELECTEDFUNDINGSOURCE' => 'funding_source'
     );
 
     /**
@@ -264,7 +265,8 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
         'HDRBORDERCOLOR',
         'HDRBACKCOLOR',
         'PAYFLOWCOLOR',
-        'LOCALECODE'
+        'LOCALECODE',
+        'USERSELECTEDFUNDINGSOURCE'
     );
 
     /**
@@ -448,6 +450,9 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
      * @param \Magento\Framework\Logger\AdapterFactory $logAdapterFactory
      * @param \Magento\Directory\Model\CountryFactory $countryFactory
+     * @param \Magento\Paypal\Model\Api\ProcessableExceptionFactory $processableExceptionFactory
+     * @param \Magento\Framework\Model\ExceptionFactory $frameworkExceptionFactory
+     * @param \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory
      * @param \Magento\Framework\Math\Random $mathRandom
      * @param array $data
      */
@@ -458,10 +463,12 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
         \Magento\Directory\Model\RegionFactory $regionFactory,
         \Magento\Framework\Logger\AdapterFactory $logAdapterFactory,
         \Magento\Directory\Model\CountryFactory $countryFactory,
+        \Magento\Paypal\Model\Api\ProcessableExceptionFactory $processableExceptionFactory,
+        \Magento\Framework\Model\ExceptionFactory $frameworkExceptionFactory,
+        \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory,
         \Magento\Framework\Math\Random $mathRandom,
         array $data = array()
     ) {
-        $this->mathRandom = $mathRandom;
         parent::__construct(
             $customerAddress,
             $logger,
@@ -469,8 +476,12 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
             $regionFactory,
             $logAdapterFactory,
             $countryFactory,
+            $processableExceptionFactory,
+            $frameworkExceptionFactory,
+            $curlFactory,
             $data
         );
+        $this->mathRandom = $mathRandom;
     }
 
     /**

@@ -68,7 +68,7 @@ class Xml implements \Magento\Webapi\Controller\Rest\Response\RendererInterface
     /**
      * Format object|array to valid XML.
      *
-     * @param array|\Magento\Framework\Object $data
+     * @param object|array|int|string|bool|float|null $data
      * @return string
      */
     public function render($data)

@@ -43,6 +43,21 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
      */
     protected $_objectManager;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Store\Model\StoreManagerInterface
+     */
+    protected $storeManagerMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Model\CustomerFactory
+     */
+    protected $customerFactoryMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Service\V1\Data\CustomerBuilder
+     */
+    protected $customerBuilderMock;
+
     public function setUp()
     {
         $this->_objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
@@ -72,6 +87,28 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
 
         $this->_attributeMetadata = $this->getMock(
             'Magento\Customer\Service\V1\Data\Eav\AttributeMetadata',
+            array(),
+            array(),
+            '',
+            false
+        );
+
+        $this->customerBuilderMock = $this->getMock(
+            'Magento\Customer\Service\V1\Data\CustomerBuilder',
+            array(),
+            array(),
+            '',
+            false
+        );
+        $this->customerFactoryMock = $this->getMock(
+            'Magento\Customer\Model\CustomerFactory',
+            array('create'),
+            array(),
+            '',
+            false
+        );
+        $this->storeManagerMock = $this->getMock(
+            'Magento\Store\Model\StoreManagerInterface',
             array(),
             array(),
             '',
@@ -142,7 +179,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
             'Magento\Customer\Model\CustomerFactory'
         )->disableOriginalConstructor()->getMock();
 
-        $converter = new Converter($customerBuilder, $customerFactory);
+        $converter = new Converter($customerBuilder, $customerFactory, $this->storeManagerMock);
         $customerDataObject = $converter->createCustomerFromModel($customerModelMock);
 
         $customerBuilder = $this->_objectManager->getObject(
@@ -163,6 +200,117 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         $expectedCustomerData = $customerBuilder->create();
 
         $this->assertEquals($expectedCustomerData, $customerDataObject);
+    }
+
+    protected function prepareGetCustomerModel($customerId)
+    {
+        $customerMock = $this->getMock('Magento\Customer\Model\Customer', array(), array(), '', false);
+        $customerMock->expects($this->once())
+            ->method('load')
+            ->with($customerId)
+            ->will($this->returnSelf());
+        $customerMock->expects($this->once())
+            ->method('getId')
+            ->will($this->returnValue($customerId));
+
+        $this->customerFactoryMock->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($customerMock));
+
+        $converter = new Converter($this->customerBuilderMock, $this->customerFactoryMock, $this->storeManagerMock);
+        return $converter;
+    }
+
+    public function testGetCustomerModel()
+    {
+        $customerId = 1;
+        $converter = $this->prepareGetCustomerModel($customerId);
+        $this->assertInstanceOf('Magento\Customer\Model\Customer', $converter->getCustomerModel($customerId));
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
+     * @expectedExceptionMessage No such entity with customerId
+     */
+    public function testGetCustomerModelException()
+    {
+        $customerId = 0;
+        $converter = $this->prepareGetCustomerModel($customerId);
+        $this->assertInstanceOf('Magento\Customer\Model\Customer', $converter->getCustomerModel($customerId));
+    }
+
+    /**
+     * @param $websiteId
+     * @param $customerEmail
+     * @param $customerId
+     */
+    protected function prepareGetCustomerModelByEmail($websiteId, $customerEmail, $customerId)
+    {
+        $customerMock = $this->getMock(
+            'Magento\Customer\Model\Customer',
+            array('setWebsiteId', 'loadByEmail', 'getId', '__wakeup'),
+            array(),
+            '',
+            false
+        );
+        $customerMock->expects($this->once())
+            ->method('setWebsiteId')
+            ->with($websiteId)
+            ->will($this->returnSelf());
+        $customerMock->expects($this->once())
+            ->method('loadByEmail')
+            ->with($customerEmail)
+            ->will($this->returnSelf());
+        $customerMock->expects($this->once())
+            ->method('getId')
+            ->will($this->returnValue($customerId));
+
+        $this->customerFactoryMock->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($customerMock));
+    }
+
+    public function testGetCustomerModelByEmail()
+    {
+        $customerId = 1;
+        $websiteId = 1;
+        $customerEmail = 'test@example.com';
+        $this->prepareGetCustomerModelByEmail($websiteId, $customerEmail, $customerId);
+
+        $storeMock = $this->getMock('Magento\Store\Model\Store', array(), array(), '', false);
+        $storeMock->expects($this->once())
+            ->method('getWebsiteId')
+            ->will($this->returnValue($websiteId));
+
+        $this->storeManagerMock->expects($this->once())
+            ->method('getDefaultStoreView')
+            ->will($this->returnValue($storeMock));
+
+        $converter = new Converter($this->customerBuilderMock, $this->customerFactoryMock, $this->storeManagerMock);
+        $this->assertInstanceOf(
+            'Magento\Customer\Model\Customer',
+            $converter->getCustomerModelByEmail('test@example.com')
+        );
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
+     * @expectedExceptionMessage No such entity with email
+     */
+    public function testGetCustomerModelByEmailException()
+    {
+        $customerId = 0;
+        $websiteId = 1;
+        $customerEmail = 'test@example.com';
+        $this->prepareGetCustomerModelByEmail($websiteId, $customerEmail, $customerId);
+
+        $this->storeManagerMock->expects($this->never())->method('getDefaultStoreView');
+
+        $converter = new Converter($this->customerBuilderMock, $this->customerFactoryMock, $this->storeManagerMock);
+        $this->assertInstanceOf(
+            'Magento\Customer\Model\Customer',
+            $converter->getCustomerModelByEmail('test@example.com', $websiteId)
+        );
     }
 
     /**

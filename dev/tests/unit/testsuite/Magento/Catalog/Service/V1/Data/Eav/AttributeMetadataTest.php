@@ -101,12 +101,16 @@ class AttributeMetadataTest extends \PHPUnit_Framework_TestCase
         $validationRuleBuilder = $objectManager->getObject(
             'Magento\Catalog\Service\V1\Data\Eav\ValidationRuleBuilder'
         );
+        $frontendLabelBuilder = $objectManager->getObject(
+            'Magento\Catalog\Service\V1\Data\Eav\Product\Attribute\FrontendLabelBuilder'
+        );
 
         $attributeBuilder = $objectManager->getObject(
             'Magento\Catalog\Service\V1\Data\Eav\AttributeMetadataBuilder',
             [
                 'optionBuilder' => $optionBuilder,
-                'validationRuleBuilder' => $validationRuleBuilder
+                'validationRuleBuilder' => $validationRuleBuilder,
+                'frontendLabelBuilder' => $frontendLabelBuilder
             ]
         );
         $attributeBuilder->populateWithArray([AttributeMetadata::APPLY_TO => $applyTo]);

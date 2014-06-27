@@ -29,6 +29,9 @@ abstract class AbstractConfig extends \PHPUnit_Framework_TestCase
 {
     public function testXmlFiles()
     {
+        if (null === $this->_getXmlName()) {
+            $this->markTestSkipped('No XML validation of files requested');
+        }
         $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
         $invoker(
             /**

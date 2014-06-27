@@ -23,7 +23,6 @@
  */
 namespace Magento\Integration\Model\Oauth\Nonce;
 
-use Magento\Framework\Oauth\OauthInterface;
 use Magento\Framework\Oauth\ConsumerInterface;
 use Magento\Framework\Oauth\NonceGeneratorInterface;
 
@@ -96,9 +95,8 @@ class Generator implements NonceGeneratorInterface
         try {
             $timestamp = (int)$timestamp;
             if ($timestamp <= 0 || $timestamp > time() + self::TIME_DEVIATION) {
-                throw new \Magento\Framework\Oauth\Exception(
-                    __('Incorrect timestamp value in the oauth_timestamp parameter'),
-                    OauthInterface::ERR_TIMESTAMP_REFUSED
+                throw new \Magento\Framework\Oauth\OauthInputException(
+                    'Incorrect timestamp value in the oauth_timestamp parameter'
                 );
             }
 
@@ -107,8 +105,8 @@ class Generator implements NonceGeneratorInterface
 
             if ($nonceObj->getNonce()) {
                 throw new \Magento\Framework\Oauth\Exception(
-                    __('The nonce is already being used by the consumer with ID %1', $consumer->getId()),
-                    OauthInterface::ERR_NONCE_USED
+                    'The nonce is already being used by the consumer with ID %1',
+                    [$consumer->getId()]
                 );
             }
 
@@ -116,7 +114,7 @@ class Generator implements NonceGeneratorInterface
         } catch (\Magento\Framework\Oauth\Exception $exception) {
             throw $exception;
         } catch (\Exception $exception) {
-            throw new \Magento\Framework\Oauth\Exception(__('An error occurred validating the nonce'));
+            throw new \Magento\Framework\Oauth\Exception('An error occurred validating the nonce');
         }
     }
 }

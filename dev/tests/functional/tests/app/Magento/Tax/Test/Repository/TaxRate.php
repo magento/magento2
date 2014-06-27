@@ -28,9 +28,17 @@ use Mtf\Repository\AbstractRepository;
 
 /**
  * Class TaxRate Repository
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  */
 class TaxRate extends AbstractRepository
 {
+    /**
+     * @param array $defaultConfig
+     * @param array $defaultData
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function __construct(array $defaultConfig = [], array $defaultData = [])
     {
         $this->_data['US-CA-*-Rate 1'] = [

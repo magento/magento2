@@ -31,4 +31,14 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="advancedSearchFilterList" type="Magento\Catalog\Model\Layer\FilterList">
+        <arguments>
+            <argument name="filterableAttributes" xsi:type="object">Magento\CatalogSearch\Model\Layer\Advanced\FilterableAttributeList</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\CatalogSearch\Model\Layer\Advanced\FilterableAttributeList">
+        <arguments>
+            <argument name="layer" xsi:type="object">Magento\CatalogSearch\Model\Layer\Advanced</argument>
+        </arguments>
+    </type>
 </config>

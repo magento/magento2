@@ -33,6 +33,7 @@ use Magento\Framework\ObjectManager as MagentoObjectManager;
  * Class ObjectManagerFactory
  *
  * @api
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ObjectManagerFactory
 {
@@ -77,7 +78,10 @@ class ObjectManagerFactory
         $directories = isset($arguments[\Magento\Framework\App\Filesystem::PARAM_APP_DIRS])
             ? $arguments[\Magento\Framework\App\Filesystem::PARAM_APP_DIRS]
             : array();
-        $directoryList = new \Magento\Framework\App\Filesystem\DirectoryList(realpath(MTF_BP . '../../../../'), $directories);
+        $directoryList = new \Magento\Framework\App\Filesystem\DirectoryList(
+            realpath(MTF_BP . '../../../../'),
+            $directories
+        );
         (new \Magento\Framework\Autoload\IncludePath())->addIncludePath(
             array($directoryList->getDir(\Magento\Framework\App\Filesystem::GENERATION_DIR))
         );
@@ -104,8 +108,10 @@ class ObjectManagerFactory
      * @param array $arguments
      * @return \Magento\Framework\App\Arguments
      */
-    protected function createAppArguments(\Magento\Framework\App\Filesystem\DirectoryList $directoryList, array $arguments)
-    {
+    protected function createAppArguments(
+        \Magento\Framework\App\Filesystem\DirectoryList $directoryList,
+        array $arguments
+    ) {
         return new \Magento\Framework\App\Arguments(
             $arguments,
             new \Magento\Framework\App\Arguments\Loader(

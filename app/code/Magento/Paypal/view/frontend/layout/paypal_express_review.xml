@@ -36,10 +36,6 @@
     </referenceBlock>
     <referenceContainer name="content">
         <block class="Magento\Paypal\Block\Express\Review" name="paypal.express.review" template="express/review.phtml">
-            <block class="Magento\Paypal\Block\Express\Review\Billing" name="express.review.billing" as="billing"
-                   template="express/review/address.phtml" cacheable="false"/>
-            <block class="Magento\Paypal\Block\Express\Review\Shipping" name="express.review.shipping" as="shipping"
-                   template="express/review/address.phtml" cacheable="false"/>
             <block class="Magento\Paypal\Block\Express\Review" name="express.review.shipping.method"
                    as="shipping_method" template="express/review/shipping/method.phtml"/>
             <block class="Magento\Paypal\Block\Express\Review\Details" name="paypal.express.review.details" as="details"

@@ -25,8 +25,6 @@
  */
 namespace Magento\Integration\Helper\Oauth;
 
-use Magento\Framework\Oauth\OauthInterface;
-
 class RequestTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Framework\Oauth\Helper\Request */
@@ -57,25 +55,9 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array(
-                new \Magento\Framework\Oauth\Exception('msg', OauthInterface::ERR_VERSION_REJECTED),
+                new \Magento\Framework\Oauth\OauthInputException('msg'),
                 new \Zend_Controller_Response_Http(),
-                array('version_rejected&message=msg', \Magento\Framework\Oauth\Helper\Request::HTTP_BAD_REQUEST)
-            ),
-            array(
-                new \Magento\Framework\Oauth\Exception('msg', 255),
-                new \Zend_Controller_Response_Http(),
-                array(
-                    'unknown_problem&code=255&message=msg',
-                    \Magento\Framework\Oauth\Helper\Request::HTTP_INTERNAL_ERROR
-                )
-            ),
-            array(
-                new \Magento\Framework\Oauth\Exception('param', OauthInterface::ERR_PARAMETER_ABSENT),
-                new \Zend_Controller_Response_Http(),
-                array(
-                    'parameter_absent&oauth_parameters_absent=param',
-                    \Magento\Framework\Oauth\Helper\Request::HTTP_BAD_REQUEST
-                )
+                array('msg', \Magento\Framework\Oauth\Helper\Request::HTTP_BAD_REQUEST)
             ),
             array(
                 new \Exception('msg'),

@@ -29,6 +29,11 @@ namespace Magento\Paypal\Block\Adminhtml\System\Config;
 class ApiWizard extends \Magento\Backend\Block\System\Config\Form\Field
 {
     /**
+     * Path to block template
+     */
+    const WIZARD_TEMPLATE = 'system/config/api_wizard.phtml';
+
+    /**
      * Set template to itself
      *
      * @return $this
@@ -37,7 +42,7 @@ class ApiWizard extends \Magento\Backend\Block\System\Config\Form\Field
     {
         parent::_prepareLayout();
         if (!$this->getTemplate()) {
-            $this->setTemplate('system/config/api_wizard.phtml');
+            $this->setTemplate(static::WIZARD_TEMPLATE);
         }
         return $this;
     }

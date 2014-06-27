@@ -34,33 +34,43 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
      */
     public function convert($source)
     {
-        $output = array('entities' => array(), 'productTypes' => array(), 'fileFormats' => array());
+        $output = array('entities' => array(), 'fileFormats' => array());
         /** @var \DOMNodeList $entities */
         $entities = $source->getElementsByTagName('entity');
-        /** @var DOMNode $entityConfig */
+        /** @var \DOMNode $entityConfig */
         foreach ($entities as $entityConfig) {
             $attributes = $entityConfig->attributes;
             $name = $attributes->getNamedItem('name')->nodeValue;
             $label = $attributes->getNamedItem('label')->nodeValue;
             $model = $attributes->getNamedItem('model')->nodeValue;
+            $entityAttributeFilterType = $attributes->getNamedItem('entityAttributeFilterType')->nodeValue;
 
-            $output['entities'][$name] = array('name' => $name, 'label' => $label, 'model' => $model);
+            $output['entities'][$name] = array(
+                'name' => $name,
+                'label' => $label,
+                'model' => $model,
+                'types' => [],
+                'entityAttributeFilterType' => $entityAttributeFilterType
+            );
         }
 
-        /** @var \DOMNodeList $productTypes */
-        $productTypes = $source->getElementsByTagName('productType');
-        /** @var DOMNode $productTypeConfig */
-        foreach ($productTypes as $productTypeConfig) {
-            $attributes = $productTypeConfig->attributes;
+        /** @var \DOMNodeList $entityTypes */
+        $entityTypes = $source->getElementsByTagName('entityType');
+        /** @var \DOMNode $entityTypeConfig */
+        foreach ($entityTypes as $entityTypeConfig) {
+            $attributes = $entityTypeConfig->attributes;
             $model = $attributes->getNamedItem('model')->nodeValue;
             $name = $attributes->getNamedItem('name')->nodeValue;
+            $entity = $attributes->getNamedItem('entity')->nodeValue;
 
-            $output['productTypes'][$name] = array('name' => $name, 'model' => $model);
+            if (isset($output['entities'][$entity])) {
+                $output['entities'][$entity]['types'][$name] = array('name' => $name, 'model' => $model);
+            }
         }
 
         /** @var \DOMNodeList $fileFormats */
         $fileFormats = $source->getElementsByTagName('fileFormat');
-        /** @var DOMNode $fileFormatConfig */
+        /** @var \DOMNode $fileFormatConfig */
         foreach ($fileFormats as $fileFormatConfig) {
             $attributes = $fileFormatConfig->attributes;
             $name = $attributes->getNamedItem('name')->nodeValue;

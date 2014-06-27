@@ -72,7 +72,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeCollectionFactory
      * @param \Zend_Db_Adapter_Abstract $connection
-     * 
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -135,6 +135,22 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
     }
 
     /**
+     * Add backend search query filter (search by all stores)
+     *
+     * @param string $query
+     * @return $this
+     */
+    public function addBackendSearchFilter($query)
+    {
+        $this->_searchQuery = $query;
+        $this->addFieldToFilter(
+            'entity_id',
+            array('in' => new \Zend_Db_Expr($this->_getSearchEntityIdsSql($query, false)))
+        );
+        return $this;
+    }
+
+    /**
      * Retrieve collection of all attributes
      *
      * @return \Magento\Framework\Data\Collection\Db
@@ -192,9 +208,10 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
      * Retrieve SQL for search entities
      *
      * @param mixed $query
+     * @param bool $searchOnlyInCurrentStore Search only in current store or in all stores
      * @return string
      */
-    protected function _getSearchEntityIdsSql($query)
+    protected function _getSearchEntityIdsSql($query, $searchOnlyInCurrentStore = true)
     {
         $tables = array();
         $selects = array();
@@ -226,6 +243,15 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
             }
         }
 
+        if ($searchOnlyInCurrentStore) {
+            $joinCondition = $this->getConnection()->quoteInto(
+                't1.entity_id = t2.entity_id AND t1.attribute_id = t2.attribute_id AND t2.store_id = ?',
+                $this->getStoreId()
+            );
+        } else {
+            $joinCondition = 't1.entity_id = t2.entity_id AND t1.attribute_id = t2.attribute_id';
+        }
+
         $ifValueId = $this->getConnection()->getIfNullSql('t2.value', 't1.value');
         foreach ($tables as $table => $attributeIds) {
             $selects[] = $this->getConnection()->select()->from(
@@ -233,10 +259,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
                 'entity_id'
             )->joinLeft(
                 array('t2' => $table),
-                $this->getConnection()->quoteInto(
-                    't1.entity_id = t2.entity_id AND t1.attribute_id = t2.attribute_id AND t2.store_id = ?',
-                    $this->getStoreId()
-                ),
+                $joinCondition,
                 array()
             )->where(
                 't1.attribute_id IN (?)',

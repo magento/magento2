@@ -42,6 +42,8 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     const KEY_FORCE = 'force';
     const KEY_VALUE = 'value';
     const KEY_DATA_PARAMETERS = 'parameters';
+    const KEY_SOURCE = 'source';
+    const KEY_METHOD = 'method';
     /**#@-*/
 
     /**
@@ -67,6 +69,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
 
             $resources = $route->getElementsByTagName('resource');
             $resourceReferences = [];
+            $resourcePermissionSet = [];
             /** @var \DOMElement $resource */
             foreach ($resources as $resource) {
                 if ($resource->nodeType != XML_ELEMENT_NODE) {
@@ -75,8 +78,10 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 $ref = $resource->attributes->getNamedItem('ref')->nodeValue;
                 $resourceReferences[$ref] = true;
                 // For SOAP
-                $result[self::KEY_SERVICES][$serviceClass][$serviceMethod][self::KEY_ACL_RESOURCES][$ref] = true;
+                $resourcePermissionSet[] = $ref;
             }
+            $result[self::KEY_SERVICES][$serviceClass][$serviceMethod][self::KEY_ACL_RESOURCES][]
+                = $resourcePermissionSet;
 
             $parameters = $route->getElementsByTagName('parameter');
             $data = [];
@@ -93,6 +98,14 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                     self::KEY_FORCE => $force,
                     self::KEY_VALUE => ($value === 'null') ? null : $value,
                 ];
+                $sourceNode = $parameter->attributes->getNamedItem('source');
+                if ($sourceNode) {
+                    $data[$name][self::KEY_SOURCE] = $sourceNode->nodeValue;
+                }
+                $methodNode = $parameter->attributes->getNamedItem('method');
+                if ($methodNode) {
+                    $data[$name][self::KEY_METHOD] = $methodNode->nodeValue;
+                }
             }
 
             $method = $route->attributes->getNamedItem('method')->nodeValue;

@@ -683,6 +683,8 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc
     protected function _buildBasicRequest(\Magento\Framework\Object $payment)
     {
         $request = new \Magento\Framework\Object();
+        /** @var \Magento\Paypal\Model\Config $config */
+        $config = $this->_configFactory->create();
         $request->setUser(
             $this->getConfigData('user')
         )->setVendor(
@@ -693,6 +695,9 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc
             $this->getConfigData('pwd')
         )->setVerbosity(
             $this->getConfigData('verbosity')
+        )->setData(
+            'BNCODE',
+            $config->getBuildNotationCode()
         )->setTender(
             self::TENDER_CC
         )->setRequestId(

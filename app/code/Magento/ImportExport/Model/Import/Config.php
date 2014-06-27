@@ -49,12 +49,26 @@ class Config extends \Magento\Framework\Config\Data implements \Magento\ImportEx
     }
 
     /**
-     * Retrieve import product types configuration
+     * Retrieve import entity types configuration
      *
+     * @param string $entity
      * @return array
      */
-    public function getProductTypes()
+    public function getEntityTypes($entity)
     {
-        return $this->get('productTypes');
+        $entities = $this->getEntities();
+        return isset($entities[$entity]) ? $entities[$entity]['types'] : [];
+    }
+
+    /**
+     * Retrieve a list of indexes which are affected by import of the specified entity.
+     *
+     * @param string $entity
+     * @return array
+     */
+    public function getRelatedIndexers($entity)
+    {
+        $entities = $this->getEntities();
+        return isset($entities[$entity]) ? $entities[$entity]['relatedIndexers'] : [];
     }
 }

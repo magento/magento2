@@ -62,8 +62,8 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
         );
         $this->groupServiceMock = $this->getMockBuilder('\Magento\Customer\Service\V1\CustomerGroupServiceInterface')
             ->getMock();
-        $this->searchResults = $this->objectManager
-            ->getObject('\Magento\Customer\Service\V1\Data\SearchResultsBuilder')->create();
+        $this->searchResults = $this->objectManager->getObject('Magento\Customer\Service\V1\Data\SearchResultsBuilder')
+            ->create();
 
         $this->serviceCollection = $this->objectManager
             ->getObject(

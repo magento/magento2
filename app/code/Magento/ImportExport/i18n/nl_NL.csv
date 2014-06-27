@@ -17,8 +17,6 @@
 "Entity Attributes","Eenheidattributen"
 "Entity adapter object must be an instance of \Magento\ImportExport\Model\Import\Entity\Abstract","Entiteit adapterobject moet een instantie zijn van Magento_ImportExport_model_Import_Entity_Abstract"
 "Entity is unknown","Entiteit is onbekend"
-"Entity type model must be an instance of \Magento\ImportExport\Model\Export\Entity\Product\Type\AbstractType","Entiteit type model moet een instantie zijn van \Magento\ImportExport\Model\Export_Entiteit_Product_Type_Abstract"
-"Entity type model must be an instance of \Magento\ImportExport\Model\Import\Entity\Product\Type\Abstract","Entiteit type model moet een instantie zijn van \Magento\ImportExport\Model\Import_Entiteit_Product_Type_Abstract"
 "Error in data structure: behaviors are mixed","Fout in datastructuur: gedragingen zijn gemengd"
 "Error in data structure: entity codes are mixed","Fout in datastructuur: entiteitcodes zijn gemengd"
 "Export","Export"

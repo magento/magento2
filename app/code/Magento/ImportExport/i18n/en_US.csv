@@ -17,8 +17,6 @@
 "Entity Attributes","Entity Attributes"
 "Entity adapter object must be an instance of \Magento\ImportExport\Model\Import\Entity\Abstract","Entity adapter object must be an instance of \Magento\ImportExport\Model\Import\Entity\Abstract"
 "Entity is unknown","Entity is unknown"
-"Entity type model must be an instance of \Magento\ImportExport\Model\Export\Entity\Product\Type\AbstractType","Entity type model must be an instance of \Magento\ImportExport\Model\Export\Entity\Product\Type\AbstractType"
-"Entity type model must be an instance of \Magento\ImportExport\Model\Import\Entity\Product\Type\Abstract","Entity type model must be an instance of \Magento\ImportExport\Model\Import\Entity\Product\Type\Abstract"
 "Error in data structure: behaviors are mixed","Error in data structure: behaviors are mixed"
 "Error in data structure: entity codes are mixed","Error in data structure: entity codes are mixed"
 "Export","Export"

@@ -22,305 +22,85 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Test class for \Magento\Paypal\Model\Payflowlink
- *
- */
 namespace Magento\Paypal\Model;
+
+use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 class PayflowlinkTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var
-     */
-    protected $_modelClass;
+    /** @var Payflowlink */
+    protected $model;
 
-    /**
-     * Paypal sent request
-     *
-     * @var \Magento\Framework\Object
-     */
-    public static $request;
+    /** @var  \Magento\Sales\Model\Order\Payment|\PHPUnit_Framework_MockObject_MockObject */
+    protected $infoInstance;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_moduleListMock;
+    /** @var  \Magento\Paypal\Model\Payflow\Request|\PHPUnit_Framework_MockObject_MockObject */
+    protected $payflowRequest;
 
-    /**#@+
-     *
-     * Test response parameters
-     */
-    const PARAMETER_FIRSTNAME = 'Firstname';
+    /** @var  \Magento\Paypal\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
+    protected $paypalConfig;
 
-    const PARAMETER_LASTNAME = 'Lastname';
+    /** @var  \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject */
+    protected $store;
 
-    const PARAMETER_ADDRESS = '111 Streetname Street';
-
-    const PARAMETER_CITY = 'City';
-
-    const PARAMETER_STATE = 'State';
-
-    const PARAMETER_ZIP = '11111';
-
-    const PARAMETER_COUNTRY = 'Country';
-
-    const PARAMETER_PHONE = '111-11-11';
-
-    const PARAMETER_EMAIL = 'email@example.com';
-
-    const PARAMETER_NAMETOSHIP = 'Name to ship';
-
-    const PARAMETER_ADDRESSTOSHIP = '112 Streetname Street';
-
-    const PARAMETER_CITYTOSHIP = 'City to ship';
-
-    const PARAMETER_STATETOSHIP = 'State to ship';
-
-    const PARAMETER_ZIPTOSHIP = '22222';
-
-    const PARAMETER_COUNTRYTOSHIP = 'Country to ship';
-
-    const PARAMETER_PHONETOSHIP = '222-22-22';
-
-    const PARAMETER_EMAILTOSHIP = 'emailtoship@example.com';
-
-    const PARAMETER_FAXTOSHIP = '333-33-33';
-
-    const PARAMETER_METHOD = 'CC';
-
-    const PARAMETER_CSCMATCH = 'Y';
-
-    const PARAMETER_AVSADDR = 'X';
-
-    const PARAMETER_AVSZIP = 'N';
-
-    const PARAMETER_TYPE = 'A';
-
-    /**#@-*/
     protected function setUp()
     {
-        $order = $this->getMockBuilder('Magento\Sales\Model\Order')->disableOriginalConstructor()->getMock();
-        $payment = $this->getMockBuilder(
-            'Magento\Sales\Model\Order\Payment'
-        )->disableOriginalConstructor()->setMethods(
-            array('getOrder', '__wakeup')
-        )->getMock();
-        $payment->expects($this->any())->method('getOrder', '__wakeup')->will($this->returnValue($order));
-        $request = new \Magento\Paypal\Model\Payflow\Request();
-        $this->_modelClass = $this->getMock(
+        $this->store = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
+        $storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $storeManager->expects($this->any())
+            ->method('getStore')
+            ->will($this->returnValue($this->store));
+        $this->paypalConfig = $this->getMock('Magento\Paypal\Model\Config', [], [], '', false);
+        $configFactory = $this->getMock('Magento\Paypal\Model\ConfigFactory', ['create']);
+        $configFactory->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($this->paypalConfig));
+        $this->payflowRequest = $this->getMock('Magento\Paypal\Model\Payflow\Request', [], [], '', false);
+        $this->payflowRequest->expects($this->any())
+            ->method('__call')
+            ->will($this->returnCallback(function ($method) {
+                if (strpos($method, 'set') === 0) {
+                    return $this->payflowRequest;
+                }
+                return null;
+            }));
+        $requestFactory = $this->getMock('Magento\Paypal\Model\Payflow\RequestFactory', ['create']);
+        $requestFactory->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($this->payflowRequest));
+        $this->infoInstance = $this->getMock('Magento\Sales\Model\Order\Payment', [], [], '', false);
+
+        $helper = new ObjectManagerHelper($this);
+        $this->model = $helper->getObject(
             'Magento\Paypal\Model\Payflowlink',
-            array(
-                'getResponse',
-                '_postRequest',
-                '_processTokenErrors',
-                'getInfoInstance',
-                '_generateSecureSilentPostHash',
-                '_buildTokenRequest',
-                '_getCallbackUrl'
-            ),
-            array(),
-            '',
-            false
+            [
+                'storeManager' => $storeManager,
+                'configFactory' => $configFactory,
+                'requestFactory' => $requestFactory,
+            ]
         );
-        $this->_modelClass->expects($this->any())->method('getResponse')->will($this->returnValue($request));
-        $this->_modelClass->expects($this->any())->method('getInfoInstance')->will($this->returnValue($payment));
-        $this->_modelClass->expects(
-            $this->any()
-        )->method(
-            '_generateSecureSilentPostHash'
-        )->will(
-            $this->returnValue(md5('1234567890'))
-        );
-        $this->_modelClass->expects($this->any())->method('_postRequest')->will($this->returnValue(true));
-        $this->_modelClass->expects($this->any())->method('_processTokenErrors')->will($this->returnValue(true));
-    }
-
-    public function testSetResponseData()
-    {
-        // Setting legacy parameters
-        /** @var $model \Magento\Paypal\Model\Payflowlink */
-        $model = $this->_modelClass;
-        $model->setResponseData(
-            array(
-                'NAME' => self::PARAMETER_FIRSTNAME . ' ' . self::PARAMETER_LASTNAME,
-                'FIRSTNAME' => self::PARAMETER_FIRSTNAME,
-                'LASTNAME' => self::PARAMETER_LASTNAME,
-                'ADDRESS' => self::PARAMETER_ADDRESS,
-                'CITY' => self::PARAMETER_CITY,
-                'STATE' => self::PARAMETER_STATE,
-                'ZIP' => self::PARAMETER_ZIP,
-                'COUNTRY' => self::PARAMETER_COUNTRY,
-                'PHONE' => self::PARAMETER_PHONE,
-                'EMAIL' => self::PARAMETER_EMAIL,
-                'NAMETOSHIP' => self::PARAMETER_NAMETOSHIP,
-                'ADDRESSTOSHIP' => self::PARAMETER_ADDRESSTOSHIP,
-                'CITYTOSHIP' => self::PARAMETER_CITYTOSHIP,
-                'STATETOSHIP' => self::PARAMETER_STATETOSHIP,
-                'ZIPTOSHIP' => self::PARAMETER_ZIPTOSHIP,
-                'COUNTRYTOSHIP' => self::PARAMETER_COUNTRYTOSHIP,
-                'PHONETOSHIP' => self::PARAMETER_PHONETOSHIP,
-                'EMAILTOSHIP' => self::PARAMETER_EMAILTOSHIP,
-                'FAXTOSHIP' => self::PARAMETER_FAXTOSHIP,
-                'METHOD' => self::PARAMETER_METHOD,
-                'CSCMATCH' => self::PARAMETER_CSCMATCH,
-                'AVSDATA' => self::PARAMETER_AVSADDR . self::PARAMETER_AVSZIP,
-                'TYPE' => self::PARAMETER_TYPE
-            )
-        );
-
-        $this->_assertResponseData($model);
-
-        // Setting new parameters
-        /** @var $model \Magento\Paypal\Model\Payflowlink */
-        $model = $this->_modelClass;
-        $model->setResponseData(
-            array(
-                'BILLTOFIRSTNAME' => self::PARAMETER_FIRSTNAME,
-                'BILLTOLASTNAME' => self::PARAMETER_LASTNAME,
-                'BILLTOSTREET' => self::PARAMETER_ADDRESS,
-                'BILLTOCITY' => self::PARAMETER_CITY,
-                'BILLTOSTATE' => self::PARAMETER_STATE,
-                'BILLTOZIP' => self::PARAMETER_ZIP,
-                'BILLTOCOUNTRY' => self::PARAMETER_COUNTRY,
-                'BILLTOPHONE' => self::PARAMETER_PHONE,
-                'BILLTOEMAIL' => self::PARAMETER_EMAIL,
-                'SHIPTOFIRSTNAME' => self::PARAMETER_NAMETOSHIP,
-                'SHIPTOSTREET' => self::PARAMETER_ADDRESSTOSHIP,
-                'SHIPTOCITY' => self::PARAMETER_CITYTOSHIP,
-                'SHIPTOSTATE' => self::PARAMETER_STATETOSHIP,
-                'SHIPTOZIP' => self::PARAMETER_ZIPTOSHIP,
-                'SHIPTOCOUNTRY' => self::PARAMETER_COUNTRYTOSHIP,
-                'SHIPTOPHONE' => self::PARAMETER_PHONETOSHIP,
-                'SHIPTOEMAIL' => self::PARAMETER_EMAILTOSHIP,
-                'SHIPTOFAX' => self::PARAMETER_FAXTOSHIP,
-                'TENDER' => self::PARAMETER_METHOD,
-                'CVV2MATCH' => self::PARAMETER_CSCMATCH,
-                'AVSADDR' => self::PARAMETER_AVSADDR,
-                'AVSZIP' => self::PARAMETER_AVSZIP,
-                'TRXTYPE' => self::PARAMETER_TYPE
-            )
-        );
-        $this->_assertResponseData($model);
+        $this->model->setInfoInstance($this->infoInstance);
     }
 
     /**
-     * @dataProvider defaultRequestParameters
+     * @expectedException \Magento\Framework\Model\Exception
      */
-    public function testDefaultRequestParameters($cscrequired, $cscedit, $emailcustomer, $urlmethod)
+    public function testInitialize()
     {
-        $params = array($cscrequired, $cscedit, $emailcustomer, $urlmethod);
-        /** @var $model \Magento\Paypal\Model\Payflowlink */
-        $model = $this->_modelClass;
-        $this->_prepareRequest($model, $params);
-
-        // check whether all parameters were sent
-        $request = \Magento\Paypal\Model\PayflowlinkTest::$request;
-        $this->_assertRequestBaseParameters($model);
-        $this->assertEquals($cscrequired, $request->getCscrequired());
-        $this->assertEquals($cscedit, $request->getCscedit());
-        $this->assertEquals($emailcustomer, $request->getEmailcustomer());
-        $this->assertEquals($urlmethod, $request->getUrlmethod());
-    }
-
-    /**
-     * Prepare request for test
-     *
-     * @param \Magento\Paypal\Model\Payflowlink $model
-     * @param array() $params
-     */
-    protected function _prepareRequest(\Magento\Paypal\Model\Payflowlink $model, $params)
-    {
-        $request = new \Magento\Paypal\Model\Payflow\Request();
-        $request->setCancelurl(
-            '/paypal/' . $model->getCallbackController() . '/' . 'cancelPayment'
-        )->setErrorurl(
-            '/paypal/' . $model->getCallbackController() . '/' . 'returnUrl'
-        )->setSilentpost(
-            'TRUE'
-        )->setSilentposturl(
-            '/paypal/' . $model->getCallbackController() . '/' . 'silentPost'
-        )->setReturnurl(
-            '/paypal/' . $model->getCallbackController() . '/' . 'returnUrl'
-        )->setTemplate(
-            'minLayout'
-        )->setDisablereceipt(
-            'TRUE'
-        )->setCscrequired(
-            $params[0]
-        )->setCscedit(
-            $params[1]
-        )->setEmailcustomer(
-            $params[2]
-        )->setUrlmethod(
-            $params[3]
+        $order = $this->getMock('Magento\Sales\Model\Order', [], [], '', false);
+        $this->infoInstance->expects($this->any())
+            ->method('getOrder')
+            ->will($this->returnValue($order));
+        $this->paypalConfig->expects($this->once())
+            ->method('getBuildNotationCode')
+            ->will($this->returnValue('build notation code'));
+        $this->payflowRequest->expects($this->once())
+            ->method('setData')
+            ->with('BNCODE', 'build notation code')
+            ->will($this->returnSelf());
+        $this->model->initialize(
+            \Magento\Paypal\Model\Config::PAYMENT_ACTION_AUTH,
+            new \Magento\Framework\Object()
         );
-        $model->expects($this->any())->method('_buildTokenRequest')->will($this->returnValue($request));
-
-        $checkRequest = create_function('$request', 'Magento\Paypal\Model\PayflowlinkTest::$request = $request;');
-        $model->expects($this->any())->method('_postRequest')->will($this->returnCallback($checkRequest));
-        \Magento\Paypal\Model\PayflowlinkTest::$request = null;
-        $model->initialize(\Magento\Paypal\Model\Config::PAYMENT_ACTION_AUTH, new \Magento\Framework\Object());
-    }
-
-    /**
-     * Assert request not configurable parameters
-     *
-     * @param \Magento\Paypal\Model\Payflowlink $model
-     */
-    protected function _assertRequestBaseParameters(\Magento\Paypal\Model\Payflowlink $model)
-    {
-        $controllerPath = '/paypal/' . $model->getCallbackController() . '/';
-        $request = \Magento\Paypal\Model\PayflowlinkTest::$request;
-        $this->assertEquals($controllerPath . 'cancelPayment', $request->getData('cancelurl'));
-        $this->assertEquals($controllerPath . 'returnUrl', $request->getData('errorurl'));
-        $this->assertEquals($controllerPath . 'silentPost', $request->getData('silentposturl'));
-        $this->assertEquals($controllerPath . 'returnUrl', $request->getData('returnurl'));
-        $this->assertEquals(\Magento\Paypal\Model\Payflowlink::LAYOUT_TEMPLATE, $request->getData('template'));
-        $this->assertEquals('TRUE', $request->getData('silentpost'));
-        $this->assertEquals('TRUE', $request->getData('disablereceipt'));
-    }
-
-    /**
-     * Assert response data
-     *
-     * @param \Magento\Paypal\Model\Payflowlink $model
-     */
-    protected function _assertResponseData(\Magento\Paypal\Model\Payflowlink $model)
-    {
-        $data = $model->getResponse()->getData();
-        $this->assertEquals(self::PARAMETER_FIRSTNAME . ' ' . self::PARAMETER_LASTNAME, $data['name']);
-        $this->assertEquals(self::PARAMETER_FIRSTNAME, $data['firstname']);
-        $this->assertEquals(self::PARAMETER_LASTNAME, $data['lastname']);
-        $this->assertEquals(self::PARAMETER_ADDRESS, $data['address']);
-        $this->assertEquals(self::PARAMETER_CITY, $data['city']);
-        $this->assertEquals(self::PARAMETER_STATE, $data['state']);
-        $this->assertEquals(self::PARAMETER_ZIP, $data['zip']);
-        $this->assertEquals(self::PARAMETER_COUNTRY, $data['country']);
-        $this->assertEquals(self::PARAMETER_PHONE, $data['phone']);
-        $this->assertEquals(self::PARAMETER_EMAIL, $data['email']);
-        $this->assertEquals(self::PARAMETER_NAMETOSHIP, $data['nametoship']);
-        $this->assertEquals(self::PARAMETER_ADDRESSTOSHIP, $data['addresstoship']);
-        $this->assertEquals(self::PARAMETER_CITYTOSHIP, $data['citytoship']);
-        $this->assertEquals(self::PARAMETER_STATETOSHIP, $data['statetoship']);
-        $this->assertEquals(self::PARAMETER_ZIPTOSHIP, $data['ziptoship']);
-        $this->assertEquals(self::PARAMETER_COUNTRYTOSHIP, $data['countrytoship']);
-        $this->assertEquals(self::PARAMETER_PHONETOSHIP, $data['phonetoship']);
-        $this->assertEquals(self::PARAMETER_EMAILTOSHIP, $data['emailtoship']);
-        $this->assertEquals(self::PARAMETER_FAXTOSHIP, $data['faxtoship']);
-        $this->assertEquals(self::PARAMETER_METHOD, $data['method']);
-        $this->assertEquals(self::PARAMETER_CSCMATCH, $data['cscmatch']);
-        $this->assertEquals(self::PARAMETER_AVSADDR . self::PARAMETER_AVSZIP, $data['avsdata']);
-        $this->assertEquals(self::PARAMETER_TYPE, $data['type']);
-    }
-
-    /**
-     * Data Provider for test defaultRequestParameters
-     *
-     * @return array
-     */
-    public function defaultRequestParameters()
-    {
-        return array(array('TRUE', 'TRUE', 'FALSE', 'GET'), array('FALSE', 'FALSE', 'TRUE', 'POST'));
     }
 }

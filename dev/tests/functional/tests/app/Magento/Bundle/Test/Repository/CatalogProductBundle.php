@@ -32,6 +32,12 @@ use Mtf\Repository\AbstractRepository;
  */
 class CatalogProductBundle extends AbstractRepository
 {
+    /**
+     * @param array $defaultConfig
+     * @param array $defaultData
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function __construct(array $defaultConfig = [], array $defaultData = [])
     {
         $this->_data['BundleDynamic_sku_1073507449'] = [

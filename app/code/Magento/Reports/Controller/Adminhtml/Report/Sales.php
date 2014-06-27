@@ -217,6 +217,7 @@ class Sales extends AbstractReport
     public function exportTaxExcelAction()
     {
         $fileName = 'tax.xml';
+        /** @var \Magento\Reports\Block\Adminhtml\Sales\Tax\Grid $grid */
         $grid = $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Sales\Tax\Grid');
         $this->_initReportAction($grid);
         return $this->_fileFactory->create($fileName, $grid->getExcelFile($fileName), \Magento\Framework\App\Filesystem::VAR_DIR);

@@ -97,8 +97,7 @@ class Observer
     {
         if (is_null($subjectId)) {
             if ($this->_customerSession->isLoggedIn()) {
-                $customer = $this->_customerSession->getCustomer();
-                $subjectId = $customer->getId();
+                $subjectId = $this->_customerSession->getCustomerId();
             } else {
                 $subjectId = $this->_logVisitor->getId();
                 $subtype = 1;

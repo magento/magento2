@@ -68,4 +68,29 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('custom_backend', $this->_helper->getAreaFrontName());
     }
+
+    /**
+     * @param array $inputString
+     * @param array $expected
+     *
+     * @dataProvider getPrepareFilterStringValuesDataProvider
+     */
+    public function testPrepareFilterStringValues(array $inputString, array $expected)
+    {
+        $inputString = base64_encode(http_build_query($inputString));
+
+        $actual = $this->_helper->prepareFilterString($inputString);
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function getPrepareFilterStringValuesDataProvider()
+    {
+        return array(
+            'both_spaces_value' => array(
+                array('field' => ' value '),
+                array('field' => 'value')
+            )
+        );
+    }
 }
