@@ -65,10 +65,6 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
             'Search' => 3,
             'Catalog, Search' => 4
         ],
-        'tax_class_id' => [
-            'None' => 0,
-            'Taxable Goods' => 2
-        ],
         'website_ids' => [
             'Main Website' => 1
         ],
@@ -87,6 +83,9 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
      * @param FixtureInterface $fixture [optional]
      * @return array
      * @throws \Exception
+     *
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function persist(FixtureInterface $fixture = null)
     {
@@ -94,30 +93,28 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
         $prefix = isset($config['input_prefix']) ? $config['input_prefix'] : null;
         // @todo remove "if" when fixtures refactored
         if ($fixture instanceof InjectableFixture) {
-            $fields = $fixture->getData();
-            // Apply a placeholder for data
-            array_walk_recursive(
-                $fields,
-                function (&$item, $key, $placeholder) {
-                    $item = isset($placeholder[$key][$item]) ? $placeholder[$key][$item] : $item;
-                },
-                $this->placeholderData
-            );
-
-            $fields = $this->prepareStockData($fields);
-
-            if ($prefix) {
-                $data[$prefix] = $fields;
-            } else {
-                $data = $fields;
+            $fields = $this->replacePlaceholder($fixture->getData(), $this->placeholderData);
+            // Getting Tax class id
+            if ($fixture->hasData('tax_class_id')) {
+                $taxClassId = $fixture->getDataFieldConfig('tax_class_id')['source']->getTaxClass()->getId();
+                $fields['tax_class_id'] = ($taxClassId === null)
+                    ? $this->getTaxClassId($fields['tax_class_id'])
+                    : $taxClassId;
             }
+            $fields = $this->prepareStockData($fields);
+            if (!empty($fields['category_ids'])) {
+                $categoryIds = [];
+                foreach ($fields['category_ids'] as $categoryData) {
+                    $categoryIds[] = $categoryData['id'];
+                }
+                $fields['category_ids'] = $categoryIds;
+            }
+
+            $data = $prefix ? [$prefix => $fields] : $fields;
         } else {
             $data = $this->_prepareData($fixture->getData('fields'), $prefix);
         }
 
-        if ($fixture->getData('category_id')) {
-            $data['product']['category_ids'] = $fixture->getData('category_id');
-        }
         $url = $this->_getUrl($config);
         $curl = new BackendDecorator(new CurlTransport(), new Config);
         $curl->addOption(CURLOPT_HEADER, 1);
@@ -131,6 +128,69 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
         preg_match("~Location: [^\s]*\/id\/(\d+)~", $response, $matches);
         $id = isset($matches[1]) ? $matches[1] : null;
         return ['id' => $id];
+    }
+
+    /**
+     * Getting tax class id from tax rule page
+     *
+     * @param string $taxClassName
+     * @return int
+     * @throws \Exception
+     */
+    protected function getTaxClassId($taxClassName)
+    {
+        $url = $_ENV['app_backend_url'] . 'tax/rule/new/';
+        $curl = new BackendDecorator(new CurlTransport(), new Config);
+        $curl->addOption(CURLOPT_HEADER, 1);
+        $curl->write(CurlInterface::POST, $url, '1.0', array(), array());
+        $response = $curl->read();
+        $curl->close();
+
+        preg_match('~<option value="(\d+)".*>' . $taxClassName . '</option>~', $response, $matches);
+        if (!isset($matches[1]) || empty($matches[1])) {
+            throw new \Exception('Product tax class id ' . $taxClassName . ' undefined!');
+        }
+
+        return (int)$matches[1];
+    }
+
+    /**
+     * Replace placeholder data in fixture data
+     *
+     * @param array $data
+     * @param array $placeholders
+     * @return array
+     */
+    private function replacePlaceholder(array $data, array $placeholders)
+    {
+        foreach ($data as $key => $value) {
+            if (!isset($placeholders[$key])) {
+                continue;
+            }
+            if (is_array($value)) {
+                $data[$key] = $this->replacePlaceholderValues($value, $placeholders[$key]);
+            } else {
+                $data[$key] = isset($placeholders[$key][$value]) ? $placeholders[$key][$value] : $value;
+            }
+        }
+        return $data;
+    }
+
+    /**
+     * Replace placeholder data in fixture values
+     *
+     * @param array $data
+     * @param array $placeholders
+     * @return array
+     */
+    private function replacePlaceholderValues(array $data, array $placeholders)
+    {
+        foreach ($data as $key => $value) {
+            if (isset($placeholders[$value])) {
+                $data[$key] = $placeholders[$value];
+            }
+        }
+        return $data;
     }
 
     /**
@@ -151,7 +211,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
         if (empty($fields['stock_data']['qty'])) {
             $fields['stock_data']['qty'] = isset($fields['qty']) ? $fields['qty'] : null;
         }
-        if (!empty($fields['stock_data']['qty']) || !empty($fields['stock_data']['is_in_stock'])) {
+        if (!empty($fields['stock_data']['qty'])) {
             $fields['stock_data']['manage_stock'] = 1;
         }
 

@@ -270,6 +270,8 @@
 "Enable Quantity Increments","Enable Quantity Increments"
 "Enable WYSIWYG","Enable WYSIWYG"
 "Enabled","Enabled"
+"Entity type model must be an instance of \Magento\CatalogImportExport\Model\ImportExport\Export\Product\Type\AbstractType","Entity type model must be an instance of \Magento\CatalogImportExport\Model\ImportExport\Export\Product\Type\AbstractType"
+"Entity type model must be an instance of \Magento\CatalogImportExport\Model\ImportExport\Import\Product\Type\AbstractType","Entity type model must be an instance of \Magento\CatalogImportExport\Model\ImportExport\Import\Product\Type\AbstractType"
 "Error during retrieval of option value: %s","Error during retrieval of option value: %s"
 "Exclude","Exclude"
 "Expand All","Expand All"

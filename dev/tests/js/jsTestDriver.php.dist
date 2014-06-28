@@ -32,7 +32,7 @@ return array(
         '/dev/tests/js/framework',
         '/lib/web/mage/translate.js',
         '/lib/web/mage/webapi.js',
-        '/lib/web/jquery/jquery-ui-timepicker-addon-1.0.1.js',
+        '/lib/web/jquery/jquery-ui-timepicker-addon.js',
         '/lib/web/jquery/jquery.tmpl.min.js',
         '/dev/tests/js/framework',
         '/app/code/Magento/DesignEditor/view/adminhtml/web/js/base.js',

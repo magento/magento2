@@ -67,7 +67,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 'Magento\Framework\Module\Service\FooV1Interface' => [
                     'someMethod' => [
                         'resources' => [
-                            'Magento_TestModule1::resource1' => true,
+                            [
+                                'Magento_TestModule1::resource1'
+                            ]
                         ],
                         'secure' => false,
                     ],
@@ -75,7 +77,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 'Magento\Framework\Module\Service\BarV1Interface' => [
                     'someMethod' => [
                         'resources' => [
-                            'Magento_TestModule1::resource2' => true,
+                            [
+                                'Magento_TestModule1::resource2'
+                            ]
                         ],
                         'secure' => false,
                     ],
@@ -115,7 +119,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                         'method' => 'someMethod',
                         'inputRequired' => '',
                         'isSecure' => '',
-                        'resources' => array('Magento_TestModule1::resource1')
+                        'resources' => array(array('Magento_TestModule1::resource1'))
                     )
                 ),
                 'class' => 'Magento\Framework\Module\Service\FooV1Interface'
@@ -131,7 +135,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             'class' => 'Magento\Framework\Module\Service\BarV1Interface',
             'method' => 'someMethod',
             'isSecure' => false,
-            'resources' => array('Magento_TestModule1::resource2')
+            'resources' => array(array('Magento_TestModule1::resource2'))
         );
         $methodInfo = $this->_soapConfig->getServiceMethodInfo(
             'moduleBarV1SomeMethod',

@@ -269,6 +269,8 @@
 "Enable Quantity Increments","Sta Quantity Incrementen toe"
 "Enable WYSIWYG","Sta WYSIWYG toe"
 "Enabled","Aan"
+"Entity type model must be an instance of \Magento\CatalogImportExport\Model\ImportExport\Export\Product\Type\AbstractType","Entiteit type model moet een instantie zijn van \Magento\CatalogImportExport\Model\ImportExport\Export\Product\Type\AbstractType"
+"Entity type model must be an instance of \Magento\CatalogImportExport\Model\ImportExport\Import\Product\Type\AbstractType","Entiteit type model moet een instantie zijn van \Magento\CatalogImportExport\Model\ImportExport\Import\Product\Type\AbstractType"
 "Error during retrieval of option value: %s","Fout bij het ophalen van optie waarde: %s"
 "Exclude","Sluit Uit"
 "Expand All","Klap Alles Uit"

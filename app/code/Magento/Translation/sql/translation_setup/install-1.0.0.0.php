@@ -94,9 +94,6 @@ $table = $installer->getConnection()
         ),
         array('store_id', 'locale', 'crc_string', 'string'),
         array('type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE)
-    )->addIndex(
-        $installer->getIdxName('translation', array('store_id')),
-        array('store_id')
     )->addForeignKey(
         $installer->getFkName('translation', 'store_id', 'store', 'store_id'),
         'store_id',

@@ -33,5 +33,7 @@
      alt="<?php echo __('Acceptance Mark') ?>" class="paypal icon"/>
 <a href="<?php echo $this->getPaymentAcceptanceMarkHref() ?>"
    onclick="javascript:window.open('<?php echo $this->getPaymentAcceptanceMarkHref() ?>','olcwhatispaypal','toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=yes, ,left=0, top=0, width=400, height=350'); return false;"
-   class="action paypal about"><?php echo __('What is PayPal?') ?></a>
+   class="action paypal about">
+    <?php if($this->getPaymentWhatIs()) {echo __($this->getPaymentWhatIs());} else {echo __('What is PayPal?');} ?>
+</a>
 <!-- PayPal Logo -->

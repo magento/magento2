@@ -424,9 +424,6 @@ $table = $installer->getConnection()->newTable(
     array('variable_id', 'store_id'),
     array('type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE)
 )->addIndex(
-    $installer->getIdxName('core_variable_value', array('variable_id')),
-    array('variable_id')
-)->addIndex(
     $installer->getIdxName('core_variable_value', array('store_id')),
     array('store_id')
 )->addForeignKey(

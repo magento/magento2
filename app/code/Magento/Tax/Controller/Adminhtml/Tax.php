@@ -155,4 +155,24 @@ class Tax extends \Magento\Backend\App\Action
     {
         return $this->_authorization->isAllowed('Magento_Tax::manage_tax');
     }
+
+    /**
+     * Set tax ignore notification flag and redirect back
+     *
+     * @return \Magento\Framework\App\ResponseInterface
+     */
+    public function ignoreTaxNotificationAction()
+    {
+        $section = $this->getRequest()->getParam('section');
+        if ($section) {
+            try {
+                $path = 'tax/notification/ignore_' . $section;
+                $this->_objectManager->get('\Magento\Core\Model\Resource\Config')->saveConfig($path, 1, \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT, 0);
+            } catch (Exception $e) {
+                $this->messageManager->addError($e->getMessage());
+            }
+        }
+
+        $this->getResponse()->setRedirect($this->_redirect->getRefererUrl());
+    }
 }

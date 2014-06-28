@@ -35,8 +35,8 @@ class Grid extends \Magento\Framework\Filter\Object
     {
         $out = array();
         if (is_array($grid)) {
-            foreach ($grid as $i => $array) {
-                $out[$i] = parent::filter($array);
+            foreach ($grid as $key => $gridItem) {
+                $out[$key] = parent::filter($gridItem);
             }
         }
         return $out;

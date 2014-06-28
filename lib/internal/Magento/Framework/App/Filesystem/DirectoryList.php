@@ -67,7 +67,7 @@ class DirectoryList extends \Magento\Framework\Filesystem\DirectoryList
         Filesystem::DI_DIR => array('path' => 'var/di'),
         Filesystem::GENERATION_DIR => array('path' => 'var/generation'),
         Filesystem::HTTP => array('path' => ''),
-        Filesystem::LOCALE_DIR => array('path' => ''),
+        Filesystem::LOCALE_DIR => array('path' => 'app/i18n'),
         Filesystem::SYS_TMP_DIR => array(
             'path' => '',
             'read_only' => false,

@@ -702,16 +702,8 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      */
     public function sendNewAccountEmail($type = 'registered', $backUrl = '', $storeId = '0')
     {
-        /**
-         * 'registered'   welcome email, when confirmation is disabled
-         * 'confirmed'    welcome email, when confirmation is enabled
-         * 'confirmation' email with confirmation link
-         */
-        $types = array(
-            'registered' => self::XML_PATH_REGISTER_EMAIL_TEMPLATE,
-            'confirmed' => self::XML_PATH_CONFIRMED_EMAIL_TEMPLATE,
-            'confirmation' => self::XML_PATH_CONFIRM_EMAIL_TEMPLATE
-        );
+        $types = $this->getTemplateTypes();
+
         if (!isset($types[$type])) {
             throw new \Magento\Framework\Model\Exception(__('Wrong transactional account email type'));
         }
@@ -1300,5 +1292,23 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     protected function _createCustomerAttribute()
     {
         return $this->_attributeFactory->create();
+    }
+
+    /**
+     * @return array
+     */
+    protected function getTemplateTypes()
+    {
+        /**
+         * 'registered'   welcome email, when confirmation is disabled
+         * 'confirmed'    welcome email, when confirmation is enabled
+         * 'confirmation' email with confirmation link
+         */
+        $types = array(
+            'registered'   => self::XML_PATH_REGISTER_EMAIL_TEMPLATE,
+            'confirmed'    => self::XML_PATH_CONFIRMED_EMAIL_TEMPLATE,
+            'confirmation' => self::XML_PATH_CONFIRM_EMAIL_TEMPLATE,
+        );
+        return $types;
     }
 }

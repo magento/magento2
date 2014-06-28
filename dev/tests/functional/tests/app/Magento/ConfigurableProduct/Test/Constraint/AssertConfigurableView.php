@@ -94,7 +94,7 @@ class AssertConfigurableView extends AbstractConstraint
                 ->getProductPriceBlock($configurable->getName())
                 ->getPrice();
             \PHPUnit_Framework_Assert::assertEquals(
-                '$' . $price['price_regular_price'],
+                $price['price_regular_price'],
                 $pricePresetData['product_price'],
                 'Product price on category page is not correct.'
             );

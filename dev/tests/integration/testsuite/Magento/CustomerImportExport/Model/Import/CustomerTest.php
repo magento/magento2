@@ -1,0 +1,288 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ */
+namespace Magento\CustomerImportExport\Model\Import;
+
+use Magento\ImportExport\Model\Import;
+
+/**
+ * Test for class \Magento\CustomerImportExport\Model\Import\Customer which covers validation logic
+ */
+class CustomerTest extends \PHPUnit_Framework_TestCase
+{
+    /**
+     * Model object which used for tests
+     *
+     * @var Customer|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_model;
+
+    /**
+     * Customer data
+     *
+     * @var array
+     */
+    protected $_customerData;
+
+    /**
+     * @var \Magento\Framework\Filesystem\Directory\Write
+     */
+    protected $directoryWrite;
+
+    /**
+     * Create all necessary data for tests
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\CustomerImportExport\Model\Import\Customer');
+        $this->_model->setParameters(['behavior' => Import::BEHAVIOR_ADD_UPDATE]);
+
+        $propertyAccessor = new \ReflectionProperty($this->_model, '_messageTemplates');
+        $propertyAccessor->setAccessible(true);
+        $propertyAccessor->setValue($this->_model, array());
+
+        $this->_customerData = [
+            'firstname' => 'Firstname',
+            'lastname' => 'Lastname',
+            'group_id' => 1,
+            Customer::COLUMN_EMAIL => 'customer@example.com',
+            Customer::COLUMN_WEBSITE => 'base',
+            Customer::COLUMN_STORE => 'default',
+            'store_id' => 1,
+            'website_id' => 1,
+            'password' => 'password'
+        ];
+
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\Framework\App\Filesystem');
+        $this->directoryWrite = $filesystem
+            ->getDirectoryWrite(\Magento\Framework\App\Filesystem::ROOT_DIR);
+    }
+
+    /**
+     * Test importData() method
+     *
+     * @magentoDataFixture Magento/Customer/_files/import_export/customer.php
+     */
+    public function testImportData()
+    {
+        // 3 customers will be imported.
+        // 1 of this customers is already exist, but its first and last name were changed in file
+        $expectAddedCustomers = 5;
+
+        $source = new \Magento\ImportExport\Model\Import\Source\Csv(
+            __DIR__ . '/_files/customers_to_import.csv',
+            $this->directoryWrite
+        );
+
+        /** @var $customersCollection \Magento\Customer\Model\Resource\Customer\Collection */
+        $customersCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Customer\Model\Resource\Customer\Collection'
+        );
+        $customersCollection->addAttributeToSelect('firstname', 'inner')->addAttributeToSelect('lastname', 'inner');
+
+        $existCustomersCount = count($customersCollection->load());
+
+        $customersCollection->resetData();
+        $customersCollection->clear();
+
+        $this->_model
+            ->setParameters(['behavior' => Import::BEHAVIOR_ADD_UPDATE])
+            ->setSource($source)
+            ->isDataValid();
+
+        $this->_model->importData();
+
+        $customers = $customersCollection->getItems();
+
+        $addedCustomers = count($customers) - $existCustomersCount;
+
+        $this->assertEquals($expectAddedCustomers, $addedCustomers, 'Added unexpected amount of customers');
+
+        /** @var $objectManager \Magento\TestFramework\ObjectManager */
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        $existingCustomer = $objectManager->get(
+            'Magento\Framework\Registry'
+        )->registry(
+                '_fixture/Magento_ImportExport_Customer'
+            );
+
+        $updatedCustomer = $customers[$existingCustomer->getId()];
+
+        $this->assertNotEquals(
+            $existingCustomer->getFirstname(),
+            $updatedCustomer->getFirstname(),
+            'Firstname must be changed'
+        );
+
+        $this->assertNotEquals(
+            $existingCustomer->getLastname(),
+            $updatedCustomer->getLastname(),
+            'Lastname must be changed'
+        );
+
+        $this->assertNotEquals(
+            $existingCustomer->getCreatedAt(),
+            $updatedCustomer->getCreatedAt(),
+            'Creation date must be changed'
+        );
+    }
+
+    /**
+     * Test importData() method (delete behavior)
+     *
+     * @magentoDataFixture Magento/Customer/_files/import_export/customers.php
+     */
+    public function testDeleteData()
+    {
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()
+            ->loadArea(\Magento\Framework\App\Area::AREA_FRONTEND);
+        $source = new \Magento\ImportExport\Model\Import\Source\Csv(
+            __DIR__ . '/_files/customers_to_import.csv',
+            $this->directoryWrite
+        );
+
+        /** @var $customerCollection \Magento\Customer\Model\Resource\Customer\Collection */
+        $customerCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Customer\Model\Resource\Customer\Collection'
+        );
+        $this->assertEquals(3, $customerCollection->count(), 'Count of existing customers are invalid');
+
+
+        $this->_model->setParameters(
+            array('behavior' => Import::BEHAVIOR_DELETE)
+        )->setSource(
+                $source
+            )->isDataValid();
+
+        $this->_model->importData();
+
+        $customerCollection->resetData();
+        $customerCollection->clear();
+        $this->assertEmpty($customerCollection->count(), 'Customers were not imported');
+    }
+
+    public function testGetEntityTypeCode()
+    {
+        $this->assertEquals('customer', $this->_model->getEntityTypeCode());
+    }
+
+    public function testValidateRowDuplicateEmail()
+    {
+        $this->_model->validateRow($this->_customerData, 0);
+        $this->assertEquals(0, $this->_model->getErrorsCount());
+
+        $this->_customerData[Customer::COLUMN_EMAIL] = strtoupper(
+            $this->_customerData[Customer::COLUMN_EMAIL]
+        );
+        $this->_model->validateRow($this->_customerData, 1);
+        $this->assertEquals(1, $this->_model->getErrorsCount());
+        $this->assertArrayHasKey(
+            Customer::ERROR_DUPLICATE_EMAIL_SITE,
+            $this->_model->getErrorMessages()
+        );
+    }
+
+    public function testValidateRowInvalidEmail()
+    {
+        $this->_customerData[Customer::COLUMN_EMAIL] = 'wrong_email@format';
+        $this->_model->validateRow($this->_customerData, 0);
+        $this->assertEquals(1, $this->_model->getErrorsCount());
+        $this->assertArrayHasKey(
+            Customer::ERROR_INVALID_EMAIL,
+            $this->_model->getErrorMessages()
+        );
+    }
+
+    public function testValidateRowInvalidWebsite()
+    {
+        $this->_customerData[Customer::COLUMN_WEBSITE] = 'not_existing_web_site';
+        $this->_model->validateRow($this->_customerData, 0);
+        $this->assertEquals(1, $this->_model->getErrorsCount());
+        $this->assertArrayHasKey(
+            Customer::ERROR_INVALID_WEBSITE,
+            $this->_model->getErrorMessages()
+        );
+    }
+
+    public function testValidateRowInvalidStore()
+    {
+        $this->_customerData[Customer::COLUMN_STORE] = 'not_existing_web_store';
+        $this->_model->validateRow($this->_customerData, 0);
+        $this->assertEquals(1, $this->_model->getErrorsCount());
+        $this->assertArrayHasKey(
+            Customer::ERROR_INVALID_STORE,
+            $this->_model->getErrorMessages()
+        );
+    }
+
+    public function testValidateRowPasswordLengthIncorrect()
+    {
+        $this->_customerData['password'] = '12345';
+        $this->_model->validateRow($this->_customerData, 0);
+        $this->assertEquals(1, $this->_model->getErrorsCount());
+        $this->assertArrayHasKey(
+            Customer::ERROR_PASSWORD_LENGTH, $this->_model->getErrorMessages()
+        );
+    }
+
+    public function testValidateRowPasswordLengthCorrect()
+    {
+        $this->_customerData['password'] = '1234567890';
+        $this->_model->validateRow($this->_customerData, 0);
+        $this->assertEquals(0, $this->_model->getErrorsCount());
+    }
+
+    /**
+     * @magentoDataFixture Magento/Customer/_files/import_export/customers.php
+     */
+    public function testValidateRowAttributeRequired()
+    {
+        unset($this->_customerData['firstname']);
+        unset($this->_customerData['lastname']);
+        unset($this->_customerData['group_id']);
+
+        $this->_model->validateRow($this->_customerData, 0);
+        $this->assertEquals(0, $this->_model->getErrorsCount());
+
+        $this->_customerData[Customer::COLUMN_EMAIL] = 'new.customer@example.com';
+        $this->_model->validateRow($this->_customerData, 1);
+        $this->assertGreaterThan(0, $this->_model->getErrorsCount());
+        $this->assertArrayHasKey(Customer::ERROR_VALUE_IS_REQUIRED, $this->_model->getErrorMessages());
+    }
+
+    public function testValidateEmailForDeleteBehavior()
+    {
+        $this->_customerData[Customer::COLUMN_EMAIL] = 'new.customer@example.com';
+        $this->_model->setParameters(array('behavior' => Import::BEHAVIOR_DELETE));
+        $this->_model->validateRow($this->_customerData, 0);
+        $this->assertGreaterThan(0, $this->_model->getErrorsCount());
+        $this->assertArrayHasKey(
+            Customer::ERROR_CUSTOMER_NOT_FOUND, $this->_model->getErrorMessages()
+        );
+    }
+}

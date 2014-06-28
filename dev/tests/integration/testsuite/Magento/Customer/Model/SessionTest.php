@@ -44,13 +44,9 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 
     public function testLoginById()
     {
-        $this->markTestSkipped('MAGETWO-18328');
-        $oldSessionId = $this->_customerSession->getSessionId();
         $this->assertTrue($this->_customerSession->loginById(1));
         // fixture
         $this->assertTrue($this->_customerSession->isLoggedIn());
-        $newSessionId = $this->_customerSession->getSessionId();
-        $this->assertNotEquals($oldSessionId, $newSessionId);
     }
 
     /**

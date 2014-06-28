@@ -28,6 +28,7 @@
         <arguments>
             <argument name="relatedCacheTypes" xsi:type="array">
                 <item name="blockCache" xsi:type="string">block_html</item>
+                <item name="fullPageCache" xsi:type="string">full_page</item>
             </argument>
         </arguments>
     </type>

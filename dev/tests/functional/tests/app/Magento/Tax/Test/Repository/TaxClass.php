@@ -31,6 +31,12 @@ use Mtf\Repository\AbstractRepository;
  */
 class TaxClass extends AbstractRepository
 {
+    /**
+     * @param array $defaultConfig
+     * @param array $defaultData
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function __construct(array $defaultConfig = [], array $defaultData = [])
     {
         $this->_data['Taxable Goods'] = [
@@ -57,6 +63,16 @@ class TaxClass extends AbstractRepository
         $this->_data['product_tax_class'] = [
             'class_name' => 'Product Tax Class %isolation%',
             'class_type' => 'PRODUCT',
+        ];
+
+        $this->_data['None'] = [
+            'class_name' => 'None',
+            'class_type' => 'PRODUCT',
+            'id' => '0',
+        ];
+
+        $this->_data['all'] = [
+            'class_name' => 'All',
         ];
     }
 }

@@ -23,17 +23,21 @@
  */
 namespace Magento\Catalog\Model\Layer;
 
+use Magento\Catalog\Model\Layer\Filter\Item;
+use Magento\Framework\Model\Exception;
+use Magento\Framework\Object;
+
 /**
  * Layered navigation state model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class State extends \Magento\Framework\Object
+class State extends Object
 {
     /**
      * Add filter item to layer state
      *
-     * @param   \Magento\Catalog\Model\Layer\Filter\Item $filter
+     * @param   Item $filter
      * @return  $this
      */
     public function addFilter($filter)
@@ -47,14 +51,14 @@ class State extends \Magento\Framework\Object
     /**
      * Set layer state filter items
      *
-     * @param  array $filters
+     * @param  Item[] $filters
      * @return $this
-     * @throws \Magento\Framework\Model\Exception
+     * @throws Exception
      */
     public function setFilters($filters)
     {
         if (!is_array($filters)) {
-            throw new \Magento\Framework\Model\Exception(__('The filters must be an array.'));
+            throw new Exception(__('The filters must be an array.'));
         }
         $this->setData('filters', $filters);
         return $this;
@@ -63,7 +67,7 @@ class State extends \Magento\Framework\Object
     /**
      * Get applied to layer filter items
      *
-     * @return array
+     * @return Item[]
      */
     public function getFilters()
     {

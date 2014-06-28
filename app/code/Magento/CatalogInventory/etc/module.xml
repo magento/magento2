@@ -24,7 +24,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Module/etc/module.xsd">
-    <module name="Magento_CatalogInventory" version="1.6.0.0.4" active="true">
+    <module name="Magento_CatalogInventory" schema_version="1.6.0.0.4" active="true">
         <sequence>
             <module name="Magento_Catalog"/>
         </sequence>
@@ -36,7 +36,6 @@
             <module name="Magento_Backend"/>
             <module name="Magento_Index"/>
             <module name="Magento_Sales"/>
-            <module name="Magento_CatalogSearch"/>
             <module name="Magento_Eav"/>
         </depends>
     </module>

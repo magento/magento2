@@ -24,7 +24,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Module/etc/module.xsd">
-    <module name="Magento_GoogleShopping" version="1.6.0.0.1" active="true">
+    <module name="Magento_GoogleShopping" schema_version="1.6.0.0.1" active="true">
         <sequence>
             <module name="Magento_Catalog"/>
         </sequence>

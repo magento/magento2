@@ -59,23 +59,13 @@ class Sortby extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     public function validate($object)
     {
         $attributeCode = $this->getAttribute()->getName();
-        $postDataConfig = $object->getData('use_post_data_config');
-        if ($postDataConfig) {
-            $isUseConfig = in_array($attributeCode, $postDataConfig);
-        } else {
-            $isUseConfig = false;
-            $postDataConfig = array();
-        }
+        $postDataConfig = $object->getData('use_post_data_config') ?: array();
+        $isUseConfig = in_array($attributeCode, $postDataConfig);
 
         if ($this->getAttribute()->getIsRequired()) {
             $attributeValue = $object->getData($attributeCode);
-            if ($this->getAttribute()->isValueEmpty($attributeValue)) {
-                if (is_array($attributeValue) && count($attributeValue) > 0) {
-                } else {
-                    if (!$isUseConfig) {
-                        return false;
-                    }
-                }
+            if ($this->getAttribute()->isValueEmpty($attributeValue) && !$isUseConfig) {
+                return false;
             }
         }
 
@@ -87,30 +77,21 @@ class Sortby extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
         }
 
         if ($attributeCode == 'default_sort_by') {
-            if ($available = $object->getData('available_sort_by')) {
-                if (!is_array($available)) {
-                    $available = explode(',', $available);
-                }
-                $data = !in_array(
-                    'default_sort_by',
-                    $postDataConfig
-                ) ? $object->getData(
-                    $attributeCode
-                ) : $this->_scopeConfig->getValue(
-                    "catalog/frontend/default_sort_by",
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            $available = $object->getData('available_sort_by') ?: array();
+            $available = is_array($available) ? $available : explode(',', $available);
+            $data = !in_array(
+                'default_sort_by',
+                $postDataConfig
+            ) ? $object->getData(
+                $attributeCode
+            ) : $this->_scopeConfig->getValue(
+                "catalog/frontend/default_sort_by",
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
+            if (!in_array($data, $available) && !in_array('available_sort_by', $postDataConfig)) {
+                throw new \Magento\Framework\Model\Exception(
+                    __('Default Product Listing Sort by does not exist in Available Product Listing Sort By.')
                 );
-                if (!in_array($data, $available)) {
-                    throw new \Magento\Framework\Model\Exception(
-                        __('Default Product Listing Sort by does not exist in Available Product Listing Sort By.')
-                    );
-                }
-            } else {
-                if (!in_array('available_sort_by', $postDataConfig)) {
-                    throw new \Magento\Framework\Model\Exception(
-                        __('Default Product Listing Sort by does not exist in Available Product Listing Sort By.')
-                    );
-                }
             }
         }
 

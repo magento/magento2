@@ -52,6 +52,11 @@ class Bootstrap
     private $_dbVendorName;
 
     /**
+     * @var \Magento\Framework\Simplexml\Element
+     */
+    private $dbConfig;
+
+    /**
      * @var \Magento\TestFramework\Application
      */
     private $_application;
@@ -139,6 +144,16 @@ class Bootstrap
     }
 
     /**
+     * Retrieve the database configuration
+     *
+     * @return \Magento\Framework\Simplexml\Element
+     */
+    public function getDbConfig()
+    {
+        return $this->dbConfig;
+    }
+
+    /**
      * Perform bootstrap actions required to completely setup the testing environment
      */
     public function runBootstrap()
@@ -210,17 +225,17 @@ class Bootstrap
         $appMode
     ) {
         $localConfigXml = $this->_loadConfigFiles($localConfigFiles);
-        $dbConfig = $localConfigXml->connection;
-        $this->_dbVendorName = $this->_determineDbVendorName($dbConfig);
+        $this->dbConfig = $localConfigXml->connection;
+        $this->_dbVendorName = $this->_determineDbVendorName($this->dbConfig);
         $sandboxUniqueId = $this->_calcConfigFilesHash($localConfigFiles);
         $installDir = "{$this->_tmpDir}/sandbox-{$this->_dbVendorName}-{$sandboxUniqueId}";
         $dbClass = 'Magento\TestFramework\Db\\' . ucfirst($this->_dbVendorName);
         /** @var $dbInstance \Magento\TestFramework\Db\AbstractDb */
         $dbInstance = new $dbClass(
-            (string)$dbConfig->host,
-            (string)$dbConfig->username,
-            (string)$dbConfig->password,
-            (string)$dbConfig->dbName,
+            (string)$this->dbConfig->host,
+            (string)$this->dbConfig->username,
+            (string)$this->dbConfig->password,
+            (string)$this->dbConfig->dbName,
             $this->_tmpDir,
             $this->_shell
         );

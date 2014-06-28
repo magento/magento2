@@ -142,16 +142,17 @@ class AbstractAddress extends \Magento\Framework\Model\AbstractModel
     public function getName()
     {
         $name = '';
-        $config = $this->_eavConfig;
-        if ($config->getAttribute('customer_address', 'prefix')->getIsVisible() && $this->getPrefix()) {
+        if ($this->_eavConfig->getAttribute('customer_address', 'prefix')->getIsVisible() && $this->getPrefix()) {
             $name .= $this->getPrefix() . ' ';
         }
         $name .= $this->getFirstname();
-        if ($config->getAttribute('customer_address', 'middlename')->getIsVisible() && $this->getMiddlename()) {
+        if ($this->_eavConfig->getAttribute('customer_address', 'middlename')->getIsVisible()
+            && $this->getMiddlename()
+        ) {
             $name .= ' ' . $this->getMiddlename();
         }
         $name .= ' ' . $this->getLastname();
-        if ($config->getAttribute('customer_address', 'suffix')->getIsVisible() && $this->getSuffix()) {
+        if ($this->_eavConfig->getAttribute('customer_address', 'suffix')->getIsVisible() && $this->getSuffix()) {
             $name .= ' ' . $this->getSuffix();
         }
         return $name;
@@ -170,7 +171,7 @@ class AbstractAddress extends \Magento\Framework\Model\AbstractModel
         $lines = explode("\n", $this->getStreetFull());
         if (0 === $line || $line === null) {
             return $lines;
-        } else if (isset($lines[$line - 1])) {
+        } elseif (isset($lines[$line - 1])) {
             return $lines[$line - 1];
         } else {
             return '';
@@ -253,7 +254,7 @@ class AbstractAddress extends \Magento\Framework\Model\AbstractModel
     {
         if (is_array($key)) {
             $key = $this->_implodeStreetField($key);
-        } else if ($key == 'street') {
+        } elseif ($key == 'street') {
             $value = $this->_implodeStreetValue($value);
         }
         return parent::setData($key, $value);
@@ -313,24 +314,17 @@ class AbstractAddress extends \Magento\Framework\Model\AbstractModel
         $regionId = $this->getData('region_id');
         $region = $this->getData('region');
 
-        if ($regionId) {
-            if ($this->getRegionModel($regionId)->getCountryId() == $this->getCountryId()) {
-                $region = $this->getRegionModel($regionId)->getName();
-                $this->setData('region', $region);
-            }
-        }
-
-        if (!empty($region) && is_string($region)) {
-            $this->setData('region', $region);
-        } elseif (!$regionId && is_numeric($region)) {
+        if (!$regionId && is_numeric($region)) {
             if ($this->getRegionModel($region)->getCountryId() == $this->getCountryId()) {
                 $this->setData('region', $this->getRegionModel($region)->getName());
                 $this->setData('region_id', $region);
             }
-        } elseif ($regionId && !$region) {
+        } elseif ($regionId) {
             if ($this->getRegionModel($regionId)->getCountryId() == $this->getCountryId()) {
                 $this->setData('region', $this->getRegionModel($regionId)->getName());
             }
+        } elseif (is_string($region)) {
+            $this->setData('region', $region);
         }
 
         return $this->getData('region');

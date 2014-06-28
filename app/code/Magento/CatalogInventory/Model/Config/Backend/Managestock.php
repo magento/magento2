@@ -66,12 +66,7 @@ class Managestock extends \Magento\Framework\App\Config\Value
      */
     protected function _afterSave()
     {
-        $oldValue = $this->_config->getValue(
-            \Magento\CatalogSearch\Model\Fulltext::XML_PATH_CATALOG_SEARCH_TYPE,
-            $this->getScope(),
-            $this->getScopeId()
-        );
-        if ($this->getValue() != $oldValue) {
+        if ($this->isValueChanged()) {
             $this->_stockStatus->rebuild();
         }
 

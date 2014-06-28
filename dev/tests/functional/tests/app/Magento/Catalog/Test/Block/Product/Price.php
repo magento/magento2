@@ -24,7 +24,6 @@
 namespace Magento\Catalog\Test\Block\Product;
 
 use Mtf\Block\Block;
-use Mtf\Factory\Factory;
 use Mtf\Client\Element\Locator;
 
 /**
@@ -171,7 +170,9 @@ class Price extends Block
             $priceElement = $this->_rootElement->find($this->regularPriceClass, Locator::SELECTOR_CSS);
         }
         // return the actual value of the price
-        return $priceElement->find($this->priceClass, Locator::SELECTOR_CSS)->getText();
+        $element = $priceElement->find($this->priceClass, Locator::SELECTOR_CSS);
+        $price = preg_replace('#[^\d\.\s]+#umis', '', $element->getText());
+        return number_format(trim($price), 2);
     }
 
     /**
@@ -181,13 +182,10 @@ class Price extends Block
      */
     public function getSpecialPrice()
     {
-        return $this->_rootElement->find(
-            $this->specialPriceClass,
-            Locator::SELECTOR_CSS
-        )->find(
-            $this->priceClass,
-            Locator::SELECTOR_CSS
-        )->getText();
+        $element = $this->_rootElement->find($this->specialPriceClass, Locator::SELECTOR_CSS)
+            ->find($this->priceClass, Locator::SELECTOR_CSS);
+        $price = preg_replace('#[^\d\.\s]+#umis', '', $element->getText());
+        return number_format(trim($price), 2);
     }
 
     /**

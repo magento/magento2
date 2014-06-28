@@ -94,6 +94,13 @@
                         <argument name="type" xsi:type="string">text</argument>
                     </arguments>
                 </block>
+                <block class="Magento\Backend\Block\Widget\Grid\Column" as="calculate_subtotal">
+                    <arguments>
+                        <argument name="header" xsi:type="string" translate="true">Subtotal Only</argument>
+                        <argument name="index" xsi:type="string">calculate_subtotal</argument>
+                        <argument name="type" xsi:type="string">text</argument>
+                    </arguments>
+                </block>
                 <block class="Magento\Backend\Block\Widget\Grid\Column" as="position">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Sort Order</argument>

@@ -36,6 +36,9 @@ class ClassTest extends \PHPUnit_Framework_TestCase
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
 
+    /**
+     * @magentoDbIsolation enabled
+     */
     public function testCheckClassCanBeDeletedCustomerClassAssertException()
     {
         /** @var $model \Magento\Tax\Model\ClassModel */
@@ -92,6 +95,7 @@ class ClassTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @magentoDbIsolation enabled
      * @dataProvider classesDataProvider
      */
     public function testCheckClassCanBeDeletedPositiveResult($classType)

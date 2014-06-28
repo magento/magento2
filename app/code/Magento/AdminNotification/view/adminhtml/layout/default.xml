@@ -30,7 +30,7 @@
         <block class="Magento\AdminNotification\Block\Window" name="notification_window" as="notification_window" acl="Magento_AdminNotification::show_toolbar" template="notification/window.phtml"/>
     </referenceContainer>
     <referenceContainer name="header">
-        <block class="Magento\AdminNotification\Block\ToolbarEntry" template="toolbar_entry.phtml" />
+        <block class="Magento\AdminNotification\Block\ToolbarEntry" before="user" template="toolbar_entry.phtml" />
     </referenceContainer>
     <referenceBlock name="head">
         <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminnotification-toolbar-entry-js" after="jquery-jquery-js">

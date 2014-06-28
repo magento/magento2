@@ -30,7 +30,7 @@ interface RendererInterface
     /**
      * Render content in a certain format.
      *
-     * @param array|object $data
+     * @param object|array|int|string|bool|float|null $data
      * @return string
      */
     public function render($data);

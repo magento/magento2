@@ -177,19 +177,20 @@ class Data extends AbstractHelper
         $data = array();
         $filterString = base64_decode($filterString);
         parse_str($filterString, $data);
-        array_walk_recursive($data, array($this, 'decodeFilter'));
+        array_walk_recursive(
+            $data,
+            // @codingStandardsIgnoreStart
+            /**
+             * Decodes URL-encoded string and trims whitespaces from the beginning and end of a string
+             *
+             * @param string $value
+             */
+            // @codingStandardsIgnoreEnd
+            function (&$value) {
+                $value = trim(rawurldecode($value));
+            }
+        );
         return $data;
-    }
-
-    /**
-     * Decode URL encoded filter value recursive callback method
-     *
-     * @param string &$value
-     * @return void
-     */
-    public function decodeFilter(&$value)
-    {
-        $value = rawurldecode($value);
     }
 
     /**

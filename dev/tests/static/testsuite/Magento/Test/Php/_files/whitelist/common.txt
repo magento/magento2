@@ -57,8 +57,10 @@ app/code/Magento/Customer/Controller
 app/code/Magento/Customer/Helper
 app/code/Magento/Customer/Model/Address/Config
 app/code/Magento/Customer/Model/Address/Config.php
-app/code/Magento/Customer/Model/ImportExport/Import/CustomerComposite.php
 app/code/Magento/Customer/Service
+app/code/Magento/CustomerImportExport/Model/Import/CustomerComposite.php
+app/code/Magento/CustomerImportExport/Model/Resource/Import/Customer/Storage.php
+app/code/Magento/CustomerImportExport/Model/Resource/Import/CustomerComposite/Data.php
 app/code/Magento/Directory/Model/Currency/DefaultLocator.php
 app/code/Magento/Directory/Model/Resource/Region
 app/code/Magento/Eav/Model/Cache/Type.php
@@ -75,8 +77,6 @@ app/code/Magento/ImportExport/Model/Export/ConfigInterface.php
 app/code/Magento/ImportExport/Model/Import/Config
 app/code/Magento/ImportExport/Model/Import/Config.php
 app/code/Magento/ImportExport/Model/Import/ConfigInterface.php
-app/code/Magento/Customer/Model/Resource/ImportExport/Import/Customer/Storage.php
-app/code/Magento/Customer/Model/Resource/ImportExport/Import/CustomerComposite/Data.php
 app/code/Magento/ImportExport/Controller/Adminhtml/Import.php
 app/code/Magento/Index/Model/Indexer/Config
 app/code/Magento/Index/Model/Indexer/Config.php
@@ -118,6 +118,7 @@ app/code/Magento/Webapi
 app/code/Magento/GroupedProduct
 app/code/Magento/Wishlist/Block/Link.php
 dev/shell
+dev/tests/functional
 dev/tests/integration
 dev/tests/js
 dev/tests/performance

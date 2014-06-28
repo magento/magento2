@@ -31,6 +31,9 @@ use Magento\Bundle\Pricing\Price\BundleSelectionFactory;
 use Magento\Framework\Pricing\Adjustment\Calculator as CalculatorBase;
 use Magento\Bundle\Model\Product\Price;
 use Magento\Bundle\Pricing\Price\BundleOptionPrice;
+use Magento\Tax\Model\Calculation as TaxCalculation;
+use Magento\Store\Model\Store;
+use Magento\Tax\Helper\Data as TaxHelper;
 
 /**
  * Bundle price calculator
@@ -53,19 +56,28 @@ class Calculator implements BundleCalculatorInterface
     protected $selectionFactory;
 
     /**
+     * Tax helper, needed to get rounding setting
+     *
+     * @var TaxHelper
+     */
+    protected $taxHelper;
+    /**
      * @param CalculatorBase $calculator
      * @param AmountFactory $amountFactory
      * @param BundleSelectionFactory $bundleSelectionFactory
+     * @param TaxHelper $taxHelper
      * @return Calculator
      */
     public function __construct(
         CalculatorBase $calculator,
         AmountFactory $amountFactory,
-        BundleSelectionFactory $bundleSelectionFactory
+        BundleSelectionFactory $bundleSelectionFactory,
+        TaxHelper $taxHelper
     ) {
         $this->calculator = $calculator;
         $this->amountFactory = $amountFactory;
         $this->selectionFactory = $bundleSelectionFactory;
+        $this->taxHelper = $taxHelper;
     }
 
     /**
@@ -254,11 +266,24 @@ class Calculator implements BundleCalculatorInterface
         foreach ($selectionPriceList as $selectionPrice) {
             $amountList[] = $selectionPrice->getAmount();
         }
+        /** @var  Store $store */
+        $store = $bundleProduct->getStore();
+        $roundingMethod = $this->taxHelper->getCalculationAgorithm($store);
         /** @var \Magento\Framework\Pricing\Amount\AmountInterface $itemAmount */
         foreach ($amountList as $itemAmount) {
-            $fullAmount += $itemAmount->getValue();
-            foreach ($itemAmount->getAdjustmentAmounts() as $code => $adjustment) {
-                $adjustments[$code] = isset($adjustments[$code]) ? $adjustments[$code] + $adjustment : $adjustment;
+            if ($roundingMethod != TaxCalculation::CALC_TOTAL_BASE) {
+                //We need to round the individual selection first
+                $fullAmount += $store->roundPrice($itemAmount->getValue());
+                foreach ($itemAmount->getAdjustmentAmounts() as $code => $adjustment) {
+                    $adjustment = $store->roundPrice($adjustment);
+                    $adjustments[$code] = isset($adjustments[$code]) ? $adjustments[$code] + $adjustment : $adjustment;
+                }
+            } else {
+                $fullAmount += $itemAmount->getValue();
+                foreach ($itemAmount->getAdjustmentAmounts() as $code => $adjustment) {
+                    $adjustments[$code] = isset($adjustments[$code]) ? $adjustments[$code] + $adjustment : $adjustment;
+                }
+
             }
         }
         if ($exclude && isset($adjustments[$exclude])) {
@@ -278,8 +303,12 @@ class Calculator implements BundleCalculatorInterface
     public function createSelectionPriceList($option, $bundleProduct)
     {
         $priceList = [];
+        $selections = $option->getSelections();
+        if ($selections === null) {
+            return $priceList;
+        }
         /* @var $selection \Magento\Bundle\Model\Selection|\Magento\Catalog\Model\Product */
-        foreach ($option->getSelections() as $selection) {
+        foreach ($selections as $selection) {
             if (!$selection->isSalable()) {
                 // @todo CatalogInventory Show out of stock Products
                 continue;

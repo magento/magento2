@@ -516,27 +516,6 @@ class Option extends AbstractModel
     }
 
     /**
-     * Prepare array of options for duplicate
-     *
-     * @return array
-     */
-    public function prepareOptionForDuplicate()
-    {
-        $this->setProductId(null);
-        $this->setOptionId(null);
-        $newOption = $this->__toArray();
-        if ($_values = $this->getValues()) {
-            $newValuesArray = array();
-            foreach ($_values as $_value) {
-                $newValuesArray[] = $_value->prepareValueForDuplicate();
-            }
-            $newOption['values'] = $newValuesArray;
-        }
-
-        return $newOption;
-    }
-
-    /**
      * Duplicate options for product
      *
      * @param int $oldProductId

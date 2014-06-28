@@ -831,8 +831,8 @@ input.mage-error ~ .addafter {
 .fieldset {
     background: #fff;
     border: 0;
-    margin: 0 0 20px;
-    padding: 5px 18px 18px;
+    margin: 0;
+    padding: 5px 18px 38px;
     position: relative;
 }
 
@@ -1012,7 +1012,9 @@ input.mage-error ~ .addafter {
     margin: 0 0 29px;
 }
 
-.with-note .note, .field .note {
+.with-note .note,
+.field .note,
+.data-table .note {
     .style19();
 }
 
@@ -3675,10 +3677,11 @@ tr.dynamic-grid input.input-text {
     float: none;
 }
 
-.fpt-item-container select {
-    width: 100%;
-
-    &:first-child {
+.data-table .fpt-item-container {
+    td {
+        vertical-align: top;
+    }
+    select:first-child {
         margin-bottom: 8px;
     }
 }
@@ -3686,6 +3689,7 @@ tr.dynamic-grid input.input-text {
 .eq-ie9 {
     .col-1-layout,
     .catalog-product-edit,
+    .catalog-product-new,
     .sales-order-view,
     .catalog-category-edit {
         table.data {

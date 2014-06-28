@@ -40,7 +40,7 @@
     <filter>
         <whitelist addUncoveredFilesFromWhiteList="true">
             <directory suffix=".php">../../../app/code/Magento</directory>
-            <directory suffix=".php">../../../lib/Magento</directory>
+            <directory suffix=".php">../../../lib/internal/Magento</directory>
             <exclude>
                 <directory suffix=".php">../../../app/code/Magento/*/sql</directory>
                 <directory suffix=".php">../../../app/code/Magento/*/data</directory>
@@ -63,6 +63,8 @@
         <!-- Memory usage and estimated leaks thresholds -->
         <!--<const name="TESTS_MEM_USAGE_LIMIT" value="1024M"/>-->
         <const name="TESTS_MEM_LEAK_LIMIT" value=""/>
+        <!-- Path to Percona Toolkit bin directory -->
+        <!--<const name="PERCONA_TOOLKIT_BIN_DIR" value=""/>-->
         <!-- CSV Profiler Output file -->
         <!--<const name="TESTS_PROFILER_FILE" value="profiler.csv"/>-->
         <!-- Bamboo compatible CSV Profiler Output file name -->

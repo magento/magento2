@@ -68,7 +68,7 @@ class Filesystem extends \Magento\Framework\Filesystem
     const LIB_WEB = 'lib_web';
 
     /**
-     * Files with translation of system labels and messages from en_US to other languages
+     * Language packages
      */
     const LOCALE_DIR = 'i18n';
 

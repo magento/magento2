@@ -251,6 +251,10 @@
         },
 
         selectionPrice: function(optionId, selectionId) {
+            //Those constants need to be in sync with Magento\Bundle\Block\Catalog\Product\View\Type\Bundle
+            var TOTAL_ROUNDING = 2;
+            var ROW_ROUNDING = 1;
+            var UNIT_ROUNDING = 0;
             var qty = null,
                 config = this.options.bundleConfig,
                 configOption = config.options[optionId];
@@ -281,7 +285,19 @@
                 });
             }
 
-            return [price * qty, exclTaxPrice * qty, inclTaxPrice * qty];
+            if (this.options.bundleConfig.isFixedPrice || this.options.roundingMethod == TOTAL_ROUNDING) {
+                return [price * qty, exclTaxPrice * qty, inclTaxPrice * qty];
+            } else if (this.options.roundingMethod == UNIT_ROUNDING) {
+                price = Math.round(price * 100) / 100;
+                exclTaxPrice = Math.round(exclTaxPrice * 100) / 100;
+                inclTaxPrice = Math.round(inclTaxPrice * 100) / 100;
+                return [price * qty, exclTaxPrice * qty, inclTaxPrice * qty];
+            } else {
+                var rowTotal = Math.round(price * qty * 100) /100;
+                var rowTotalExclTax = Math.round(exclTaxPrice * qty * 100) /100;
+                var rowTotalInclTax = Math.round(inclTaxPrice * qty * 100) /100;
+                return [rowTotal, rowTotalExclTax, rowTotalInclTax];
+            }
         },
 
         populateQty: function(optionId, selectionId) {

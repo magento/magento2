@@ -61,13 +61,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\ImportExport\Model\Export\RowCustomizer\Composite">
-        <arguments>
-            <argument name="customizers" xsi:type="array">
-                <item name="configurableProduct" xsi:type="string">Magento\ConfigurableProduct\Model\Export\RowCustomizer</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\Eav\Model\Entity\Setup\PropertyMapper\Composite">
         <arguments>
             <argument name="propertyMappers" xsi:type="array">

@@ -24,7 +24,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Module/etc/module.xsd">
-    <module name="Magento_Webapi" version="1.0.0.4" active="true">
+    <module name="Magento_Webapi" schema_version="1.0.0.4" active="true">
         <sequence>
             <module name="Magento_Core"/>
             <module name="Magento_Store"/>
@@ -38,6 +38,7 @@
             <module name="Magento_Backend"/>
             <module name="Magento_User"/>
             <module name="Magento_Authz"/>
+            <module name="Magento_Customer"/>
         </depends>
     </module>
 </config>

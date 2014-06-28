@@ -30,7 +30,6 @@ use Magento\Customer\Service\V1\Data\AddressBuilder;
 use Magento\Customer\Model\Address as AddressModel;
 use Magento\Customer\Model\Address\AbstractAddress;
 use Magento\Customer\Service\V1\Data\Region;
-use Magento\Customer\Service\V1\Data\RegionBuilder;
 use Magento\Customer\Service\V1\CustomerMetadataServiceInterface;
 use Magento\Customer\Service\V1\Data\AddressConverter;
 
@@ -55,32 +54,24 @@ class Converter
     protected $_addressFactory;
 
     /**
-     * @var RegionBuilder
-     */
-    private $_regionBuilder;
-
-    /**
      * Customer metadata service
      *
      * @var \Magento\Customer\Service\V1\CustomerMetadataServiceInterface
      */
-    private $_metadataService;
+    protected $_metadataService;
 
     /**
      * @param AddressBuilder $addressBuilder
      * @param AddressFactory $addressFactory
-     * @param RegionBuilder $regionBuilder
      * @param CustomerMetadataServiceInterface $metadataService
      */
     public function __construct(
         AddressBuilder $addressBuilder,
         AddressFactory $addressFactory,
-        RegionBuilder $regionBuilder,
         CustomerMetadataServiceInterface $metadataService
     ) {
         $this->_addressBuilder = $addressBuilder;
         $this->_addressFactory = $addressFactory;
-        $this->_regionBuilder = $regionBuilder;
         $this->_metadataService = $metadataService;
     }
 
@@ -110,7 +101,7 @@ class Converter
         // Set all attributes
         $attributes = AddressConverter::toFlatArray($address);
         foreach ($attributes as $attributeCode => $attributeData) {
-            if (Address::KEY_REGION == $attributeCode && $address->getRegion() instanceof Region) {
+            if (Address::KEY_REGION === $attributeCode && $address->getRegion() instanceof Region) {
                 $addressModel->setDataUsingMethod(Region::KEY_REGION, $address->getRegion()->getRegion());
                 $addressModel->setDataUsingMethod(Region::KEY_REGION_CODE, $address->getRegion()->getRegionCode());
                 $addressModel->setDataUsingMethod(Region::KEY_REGION_ID, $address->getRegion()->getRegionId());
@@ -170,9 +161,7 @@ class Converter
         }
 
         if ($addressModel->getCustomerId() || $addressModel->getParentId()) {
-            $customerId = $addressModel->getCustomerId() ? $addressModel
-                ->getCustomerId() : $addressModel
-                ->getParentId();
+            $customerId = $addressModel->getCustomerId() ?: $addressModel->getParentId();
             $this->_addressBuilder->setCustomerId($customerId);
         }
 

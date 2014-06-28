@@ -28,6 +28,7 @@ use Magento\Tax\Model\Sales\Total\Quote\SetupUtil;
 $taxCalculationData['excluding_tax_apply_tax_before_discount'] = [
     'config_data' => [
         SetupUtil::CONFIG_OVERRIDES => [
+            Config::CONFIG_XML_PATH_APPLY_AFTER_DISCOUNT => 0,
             Config::CONFIG_XML_PATH_SHIPPING_TAX_CLASS => SetupUtil::PRODUCT_TAX_CLASS_1,
         ],
         SetupUtil::TAX_RATE_OVERRIDES => [

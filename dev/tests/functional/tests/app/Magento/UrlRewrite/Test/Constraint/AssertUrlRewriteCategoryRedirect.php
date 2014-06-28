@@ -27,7 +27,7 @@ namespace Magento\UrlRewrite\Test\Constraint;
 use Mtf\Client\Browser;
 use Mtf\Constraint\AbstractConstraint;
 use Magento\UrlRewrite\Test\Fixture\UrlRewrite;
-use Magento\Catalog\Test\Fixture\CatalogCategoryEntity;
+use Magento\Catalog\Test\Fixture\CatalogCategory;
 
 /**
  * Class AssertUrlRewriteCategoryRedirect
@@ -46,24 +46,28 @@ class AssertUrlRewriteCategoryRedirect extends AbstractConstraint
      * Assert check URL rewrite category redirect
      *
      * @param UrlRewrite $urlRewrite
-     * @param CatalogCategoryEntity $category
+     * @param CatalogCategory $category
      * @param Browser $browser
      * @return void
      */
     public function processAssert(
         UrlRewrite $urlRewrite,
-        CatalogCategoryEntity $category,
+        CatalogCategory $category,
         Browser $browser
     ) {
         $browser->open($_ENV['app_frontend_url'] . $urlRewrite->getRequestPath());
-        $url = strtolower($category->getName());
+        $url = $urlRewrite->getOptions() == 'No'
+            ? $urlRewrite->getRequestPath()
+            : strtolower($category->getName()) . '.html';
+
         \PHPUnit_Framework_Assert::assertEquals(
             $browser->getUrl(),
-            $_ENV['app_frontend_url'] . $url . '.html',
+            $_ENV['app_frontend_url'] . $url,
             'URL rewrite category redirect false.'
-            . "\nExpected: " . $_ENV['app_frontend_url'] . $url . '.html'
+            . "\nExpected: " . $_ENV['app_frontend_url'] . $url
             . "\nActual: " . $browser->getUrl()
         );
+
     }
 
     /**

@@ -66,7 +66,7 @@ class IntegrationServiceV1Test extends \PHPUnit_Framework_TestCase
         )->disableOriginalConstructor()->setMethods(
             array('create')
         )->getMock();
-        $this->subjectMock = $this->getMock('Magento\Integration\Service\IntegrationV1', array(), array(), '', false);
+        $this->subjectMock = $this->getMock('Magento\Integration\Service\V1\Integration', array(), array(), '', false);
         $this->integrationV1Plugin = new \Magento\Webapi\Model\Plugin\IntegrationServiceV1(
             $this->authzServiceMock,
             $this->userIdentifierFactoryMock

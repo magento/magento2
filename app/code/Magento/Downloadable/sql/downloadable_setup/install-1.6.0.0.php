@@ -99,9 +99,6 @@ $table = $installer->getConnection()->newTable(
     array(),
     'Sample Type'
 )->addIndex(
-    $installer->getIdxName('downloadable_link', 'product_id'),
-    'product_id'
-)->addIndex(
     $installer->getIdxName('downloadable_link', array('product_id', 'sort_order')),
     array('product_id', 'sort_order')
 )->addForeignKey(
@@ -434,9 +431,6 @@ $table = $installer->getConnection()->newTable(
     ),
     array('link_id', 'store_id'),
     array('type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE)
-)->addIndex(
-    $installer->getIdxName('downloadable_link_title', 'link_id'),
-    'link_id'
 )->addForeignKey(
     $installer->getFkName('downloadable_link_title', 'link_id', 'downloadable_link', 'link_id'),
     'link_id',
@@ -552,9 +546,6 @@ $table = $installer->getConnection()->newTable(
     ),
     array('sample_id', 'store_id'),
     array('type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE)
-)->addIndex(
-    $installer->getIdxName('downloadable_sample_title', 'sample_id'),
-    'sample_id'
 )->addForeignKey(
     $installer->getFkName('downloadable_sample_title', 'sample_id', 'downloadable_sample', 'sample_id'),
     'sample_id',

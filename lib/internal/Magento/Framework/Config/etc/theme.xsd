@@ -56,7 +56,7 @@
 
     <xs:simpleType name="version">
         <xs:restriction base="xs:string">
-            <xs:pattern value="(\d+.\d+.\d+.\d+(\-[a-zA-Z0-9]+)?)|\*"></xs:pattern>
+            <xs:pattern value="(\d+.\d+.\d+(\-[a-zA-Z0-9]+)?)|\*"></xs:pattern>
         </xs:restriction>
     </xs:simpleType>
 

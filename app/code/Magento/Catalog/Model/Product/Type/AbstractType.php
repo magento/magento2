@@ -21,14 +21,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Catalog\Model\Product\Type;
 
 /**
  * Abstract model for product type implementation
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Catalog\Model\Product\Type;
-
 abstract class AbstractType
 {
     /**
@@ -76,13 +73,13 @@ abstract class AbstractType
 
     const CALCULATE_PARENT = 1;
 
-    /**
+    /**#@+
      * values for shipment type (invoice etc)
-     *
      */
     const SHIPMENT_SEPARATELY = 1;
 
     const SHIPMENT_TOGETHER = 0;
+    /**#@-*/
 
     /**
      * Process modes
@@ -132,14 +129,14 @@ abstract class AbstractType
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * Core event manager proxy
      *
      * @var \Magento\Framework\Event\ManagerInterface
      */
-    protected $_eventManager = null;
+    protected $_eventManager;
 
     /**
      * @var \Magento\Framework\Logger
@@ -266,15 +263,13 @@ abstract class AbstractType
      * Get array of product set attributes
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @return array
+     * @return \Magento\Eav\Model\Entity\Attribute\AbstractAttribute[]
      */
     public function getSetAttributes($product)
     {
-        return $product->getResource()->loadAllAttributes(
-            $product
-        )->getSortedAttributes(
-            $product->getAttributeSetId()
-        );
+        return $product->getResource()
+            ->loadAllAttributes($product)
+            ->getSortedAttributes($product->getAttributeSetId());
     }
 
     /**
@@ -302,7 +297,7 @@ abstract class AbstractType
      * Retrieve product type attributes
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @return array
+     * @return \Magento\Eav\Model\Entity\Attribute\AbstractAttribute[]
      */
     public function getEditableAttributes($product)
     {
@@ -440,13 +435,14 @@ abstract class AbstractType
      * @param string $processMode
      * @return array|string
      */
-    public function processConfiguration(\Magento\Framework\Object $buyRequest, $product, $processMode = self::PROCESS_MODE_LITE)
-    {
-        $_products = $this->_prepareProduct($buyRequest, $product, $processMode);
-
+    public function processConfiguration(
+        \Magento\Framework\Object $buyRequest,
+        $product,
+        $processMode = self::PROCESS_MODE_LITE
+    ) {
+        $products = $this->_prepareProduct($buyRequest, $product, $processMode);
         $this->processFileQueue();
-
-        return $_products;
+        return $products;
     }
 
     /**
@@ -583,25 +579,18 @@ abstract class AbstractType
     {
         $transport = new \StdClass();
         $transport->options = array();
-        foreach ($product->getOptions() as $_option) {
-            /* @var $_option \Magento\Catalog\Model\Product\Option */
-            $group = $_option->groupFactory(
-                $_option->getType()
-            )->setOption(
-                $_option
-            )->setProduct(
-                $product
-            )->setRequest(
-                $buyRequest
-            )->setProcessMode(
-                $processMode
-            )->validateUserValue(
-                $buyRequest->getOptions()
-            );
+        foreach ($product->getOptions() as $option) {
+            /* @var $option \Magento\Catalog\Model\Product\Option */
+            $group = $option->groupFactory($option->getType())
+                ->setOption($option)
+                ->setProduct($product)
+                ->setRequest($buyRequest)
+                ->setProcessMode($processMode)
+                ->validateUserValue($buyRequest->getOptions());
 
             $preparedValue = $group->prepareForCart();
             if ($preparedValue !== null) {
-                $transport->options[$_option->getId()] = $preparedValue;
+                $transport->options[$option->getId()] = $preparedValue;
             }
         }
 
@@ -659,15 +648,10 @@ abstract class AbstractType
                 if ($option) {
                     $confItemOption = $product->getCustomOption(self::OPTION_PREFIX . $option->getId());
 
-                    $group = $option->groupFactory(
-                        $option->getType()
-                    )->setOption(
-                        $option
-                    )->setProduct(
-                        $product
-                    )->setConfigurationItemOption(
-                        $confItemOption
-                    );
+                    $group = $option->groupFactory($option->getType())
+                        ->setOption($option)
+                        ->setProduct($product)
+                        ->setConfigurationItemOption($confItemOption);
 
                     $optionArr['options'][] = array(
                         'label' => $option->getTitle(),
@@ -812,13 +796,9 @@ abstract class AbstractType
 
                     $confItemOption = $product->getCustomOption(self::OPTION_PREFIX . $optionId);
 
-                    $group = $option->groupFactory(
-                        $option->getType()
-                    )->setOption(
-                        $option
-                    )->setListener(
-                        new \Magento\Framework\Object()
-                    );
+                    $group = $option->groupFactory($option->getType())
+                        ->setOption($option)
+                        ->setListener(new \Magento\Framework\Object());
 
                     $optionSku = $group->getOptionSku($confItemOption->getValue(), $skuDelimiter);
                     if ($optionSku) {
@@ -971,7 +951,7 @@ abstract class AbstractType
         }
 
         if (isset($config['can_use_qty_decimals'])) {
-            $this->_canUseQtyDecimals = (bool)$config['can_use_qty_decimals'];
+            $this->_canUseQtyDecimals = (bool) $config['can_use_qty_decimals'];
         }
 
         return $this;

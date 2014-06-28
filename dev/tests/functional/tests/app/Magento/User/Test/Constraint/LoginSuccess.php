@@ -45,6 +45,8 @@ class LoginSuccess extends AbstractConstraint
      *
      * @param AdminUserInjectable $fixture
      * @param Dashboard $dashboard
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function processAssert(AdminUserInjectable $fixture, Dashboard $dashboard)
     {

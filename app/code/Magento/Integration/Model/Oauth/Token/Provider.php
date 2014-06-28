@@ -23,7 +23,6 @@
  */
 namespace Magento\Integration\Model\Oauth\Token;
 
-use Magento\Framework\Oauth\OauthInterface;
 use Magento\Framework\Oauth\TokenProviderInterface;
 
 class Provider implements TokenProviderInterface
@@ -76,8 +75,7 @@ class Provider implements TokenProviderInterface
         $expiry = $this->_dataHelper->getConsumerExpirationPeriod();
         if ($this->_date->timestamp() - $consumerTS > $expiry) {
             throw new \Magento\Framework\Oauth\Exception(
-                __('Consumer key has expired'),
-                OauthInterface::ERR_CONSUMER_KEY_INVALID
+                'Consumer key has expired'
             );
         }
         return true;
@@ -91,8 +89,7 @@ class Provider implements TokenProviderInterface
         $token = $this->getTokenByConsumerId($consumer->getId());
         if ($token->getType() != \Magento\Integration\Model\Oauth\Token::TYPE_VERIFIER) {
             throw new \Magento\Framework\Oauth\Exception(
-                __('Cannot create request token because consumer token is not a verifier token'),
-                OauthInterface::ERR_TOKEN_REJECTED
+                'Cannot create request token because consumer token is not a verifier token'
             );
         }
         $requestToken = $token->createRequestToken($token->getId(), $consumer->getCallbackUrl());
@@ -108,8 +105,7 @@ class Provider implements TokenProviderInterface
 
         if (!$this->_isTokenAssociatedToConsumer($token, $consumer)) {
             throw new \Magento\Framework\Oauth\Exception(
-                __('Request token is not associated with the specified consumer'),
-                OauthInterface::ERR_TOKEN_REJECTED
+                'Request token is not associated with the specified consumer'
             );
         }
 
@@ -117,8 +113,7 @@ class Provider implements TokenProviderInterface
         // In this flow (token flow) the token has to be of type "request" else its marked as reused.
         if (\Magento\Integration\Model\Oauth\Token::TYPE_REQUEST != $token->getType()) {
             throw new \Magento\Framework\Oauth\Exception(
-                __('Token is already being used'),
-                OauthInterface::ERR_TOKEN_USED
+                'Token is already being used'
             );
         }
 
@@ -136,7 +131,7 @@ class Provider implements TokenProviderInterface
         $token = $this->getTokenByConsumerId($consumer->getId());
         if (\Magento\Integration\Model\Oauth\Token::TYPE_REQUEST != $token->getType()) {
             throw new \Magento\Framework\Oauth\Exception(
-                __('Cannot get access token because consumer token is not a request token')
+                'Cannot get access token because consumer token is not a request token'
             );
         }
         $accessToken = $token->convertToAccess();
@@ -152,20 +147,17 @@ class Provider implements TokenProviderInterface
 
         if (!$this->_isTokenAssociatedToConsumer($token, $consumer)) {
             throw new \Magento\Framework\Oauth\Exception(
-                __('Token is not associated with the specified consumer'),
-                OauthInterface::ERR_TOKEN_REJECTED
+                'Token is not associated with the specified consumer'
             );
         }
         if (\Magento\Integration\Model\Oauth\Token::TYPE_ACCESS != $token->getType()) {
             throw new \Magento\Framework\Oauth\Exception(
-                __('Token is not an access token'),
-                OauthInterface::ERR_TOKEN_REJECTED
+                'Token is not an access token'
             );
         }
         if ($token->getRevoked()) {
             throw new \Magento\Framework\Oauth\Exception(
-                __('Access token has been revoked'),
-                OauthInterface::ERR_TOKEN_REVOKED
+                'Access token has been revoked'
             );
         }
 
@@ -183,15 +175,13 @@ class Provider implements TokenProviderInterface
 
         if (\Magento\Integration\Model\Oauth\Token::TYPE_ACCESS != $token->getType()) {
             throw new \Magento\Framework\Oauth\Exception(
-                __('Token is not an access token'),
-                OauthInterface::ERR_TOKEN_REJECTED
+                'Token is not an access token'
             );
         }
 
         if ($token->getRevoked()) {
             throw new \Magento\Framework\Oauth\Exception(
-                __('Access token has been revoked'),
-                OauthInterface::ERR_TOKEN_REVOKED
+                'Access token has been revoked'
             );
         }
 
@@ -213,8 +203,7 @@ class Provider implements TokenProviderInterface
     {
         if (strlen($consumerKey) != \Magento\Framework\Oauth\Helper\Oauth::LENGTH_CONSUMER_KEY) {
             throw new \Magento\Framework\Oauth\Exception(
-                __('Consumer key is not the correct length'),
-                OauthInterface::ERR_CONSUMER_KEY_REJECTED
+                'Consumer key is not the correct length'
             );
         }
 
@@ -222,8 +211,7 @@ class Provider implements TokenProviderInterface
 
         if (!$consumer->getId()) {
             throw new \Magento\Framework\Oauth\Exception(
-                __('A consumer having the specified key does not exist'),
-                OauthInterface::ERR_CONSUMER_KEY_REJECTED
+                'A consumer having the specified key does not exist'
             );
         }
 
@@ -242,20 +230,17 @@ class Provider implements TokenProviderInterface
     {
         if (!is_string($oauthVerifier)) {
             throw new \Magento\Framework\Oauth\Exception(
-                __('Verifier is invalid'),
-                OauthInterface::ERR_VERIFIER_INVALID
+                'Verifier is invalid'
             );
         }
         if (!$this->validateOauthToken($oauthVerifier)) {
             throw new \Magento\Framework\Oauth\Exception(
-                __('Verifier is not the correct length'),
-                OauthInterface::ERR_VERIFIER_INVALID
+                'Verifier is not the correct length'
             );
         }
         if ($tokenVerifier != $oauthVerifier) {
             throw new \Magento\Framework\Oauth\Exception(
-                __('Token verifier and verifier token do not match'),
-                OauthInterface::ERR_VERIFIER_INVALID
+                'Token verifier and verifier token do not match'
             );
         }
     }
@@ -273,8 +258,8 @@ class Provider implements TokenProviderInterface
 
         if (!$consumer->getId()) {
             throw new \Magento\Framework\Oauth\Exception(
-                __('A consumer with the ID %1 does not exist', $consumerId),
-                OauthInterface::ERR_TOKEN_REJECTED
+                'A consumer with the ID %1 does not exist',
+                [$consumerId]
             );
         }
 
@@ -292,8 +277,7 @@ class Provider implements TokenProviderInterface
     {
         if (!$this->validateOauthToken($token)) {
             throw new \Magento\Framework\Oauth\Exception(
-                __('Token is not the correct length'),
-                OauthInterface::ERR_TOKEN_REJECTED
+                'Token is not the correct length'
             );
         }
 
@@ -301,8 +285,7 @@ class Provider implements TokenProviderInterface
 
         if (!$tokenObj->getId()) {
             throw new \Magento\Framework\Oauth\Exception(
-                __('Specified token does not exist'),
-                OauthInterface::ERR_TOKEN_REJECTED
+                'Specified token does not exist'
             );
         }
 
@@ -322,8 +305,8 @@ class Provider implements TokenProviderInterface
 
         if (!$token->getId()) {
             throw new \Magento\Framework\Oauth\Exception(
-                __('A token with consumer ID %1 does not exist', $consumerId),
-                OauthInterface::ERR_TOKEN_REJECTED
+                'A token with consumer ID %1 does not exist',
+                [$consumerId]
             );
         }
 

@@ -24,7 +24,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Module/etc/module.xsd">
-    <module name="Magento_Paypal" version="1.6.0.3" active="true">
+    <module name="Magento_Paypal" schema_version="1.6.0.3" active="true">
         <sequence>
             <module name="Magento_Checkout"/>
             <module name="Magento_Sales"/>

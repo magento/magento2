@@ -66,7 +66,7 @@ jQuery(function($) {
         collapsableArea = $('> .collapse', collapsableWrapper),
         stockAvailabilityField = $('#quantity_and_stock_status'),
         qtyField = $('#qty'),
-        currentProductTemplateControl = $('#product-template-suggest-container .actions-split > .action-toggle'),
+        currentProductTemplateControl = $('#product-template-suggest-container .action-dropdown > .action-toggle'),
         attributesInput = $("input[name='attributes[]']", variationsContainer),
         hasVariations = <?php echo ($this->getProduct()->getTypeId() == Configurable::TYPE_CODE || $this->getRequest()->has('attributes')) ? 'true' : 'false' ?>,
         isLocked = function (element) {

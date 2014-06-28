@@ -22,14 +22,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\CatalogInventory\Model\Resource\Indexer\Stock;
 
 /**
  * CatalogInventory Default Stock Status Indexer Resource Model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\CatalogInventory\Model\Resource\Indexer\Stock;
-
 class DefaultStock extends \Magento\Catalog\Model\Resource\Product\Indexer\AbstractIndexer implements StockInterface
 {
     /**
@@ -145,7 +142,7 @@ class DefaultStock extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
      */
     public function setIsComposite($flag)
     {
-        $this->_isComposite = (bool)$flag;
+        $this->_isComposite = (bool) $flag;
         return $this;
     }
 
@@ -189,9 +186,7 @@ class DefaultStock extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
         );
         $this->_addWebsiteJoinToSelect($select, true);
         $this->_addProductWebsiteJoinToSelect($select, 'cw.website_id', 'e.entity_id');
-        $select->columns(
-            'cw.website_id'
-        )->join(
+        $select->columns('cw.website_id')->join(
             array('cis' => $this->getTable('cataloginventory_stock')),
             '',
             array('stock_id')
@@ -199,14 +194,9 @@ class DefaultStock extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
             array('cisi' => $this->getTable('cataloginventory_stock_item')),
             'cisi.stock_id = cis.stock_id AND cisi.product_id = e.entity_id',
             array()
-        )->columns(
-            array('qty' => $qtyExpr)
-        )->where(
-            'cw.website_id != 0'
-        )->where(
-            'e.type_id = ?',
-            $this->getTypeId()
-        );
+        )->columns(array('qty' => $qtyExpr))
+            ->where('cw.website_id != 0')
+            ->where('e.type_id = ?', $this->getTypeId());
 
         // add limitation of status
         $condition = $adapter->quoteInto('=?', \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);

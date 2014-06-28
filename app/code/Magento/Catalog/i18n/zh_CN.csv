@@ -318,16 +318,16 @@ Edit,编辑
 "Edit Review",编辑评论
 "Edit Search",编辑搜索
 "Edit Search '%s'","编辑搜索 '%s'"
-"Edit Set Name",编辑集名称
-Email,电子邮件
-"Email to a Friend",给朋友发邮件
-Empty,空
-"Enable MAP",启用映射
-"Enable Qty Increments",启用数量增量
-"Enable Quantity Increments",启用数量增量
-"Enable WYSIWYG",启用所见即所得
-Enabled,已启用
-"Enter Name for New Attribute Set",为新的属性集输入名称
+"Edit Set Name","编辑集名称"
+"Email","电子邮件"
+"Email to a Friend","给朋友发邮件"
+"Empty","空"
+"Enable MAP","启用映射"
+"Enable Quantity Increments","启用数量增量"
+"Enable WYSIWYG","启用所见即所得"
+"Enabled","已启用"
+"Entity type model must be an instance of \Magento\CatalogImportExport\Model\ImportExport\Export\Product\Type\AbstractType","实体类型模块必须为\Magento\CatalogImportExport\Model\ImportExport\Export\Product\Type\AbstractType的实例"
+"Entity type model must be an instance of \Magento\CatalogImportExport\Model\ImportExport\Import\Product\Type\AbstractType","实体类型模块必须为\Magento\CatalogImportExport\Model\ImportExport\Import\Product\Type\AbstractType的实例"
 "Error during retrieval of option value: %s","获取选项值 %s的过程中出错"
 "Example format: 200x300.",格式例：200x300.
 Exclude,排除
@@ -1014,3 +1014,4 @@ save,保存
 "select all",全选
 "start typing to search category",开始输入来搜索分类
 "unselect all",撤销全选
+"Enter Name for New Attribute Set",为新的属性集输入名称

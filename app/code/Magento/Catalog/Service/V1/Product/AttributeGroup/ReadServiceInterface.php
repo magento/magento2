@@ -31,6 +31,7 @@ interface ReadServiceInterface
      *
      * @param string $attributeSetId
      * @return \Magento\Catalog\Service\V1\Data\Eav\AttributeGroup[]
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getList($attributeSetId);
 }

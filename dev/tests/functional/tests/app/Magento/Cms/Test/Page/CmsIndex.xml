@@ -60,4 +60,10 @@
         <locator>//*[@data-ui-id="language-switcher"]</locator>
         <strategy>css selector</strategy>
     </block>
+    <block>
+        <name>cartSidebarBlock</name>
+        <class>Magento\Checkout\Test\Block\Cart\Sidebar</class>
+        <locator>[data-block="minicart"]</locator>
+        <strategy>css selector</strategy>
+    </block>
 </page>

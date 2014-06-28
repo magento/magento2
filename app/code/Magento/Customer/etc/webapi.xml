@@ -140,7 +140,7 @@
     <route url="/V1/customerAccounts" method="POST">
         <service class="Magento\Customer\Service\V1\CustomerAccountServiceInterface" method="createCustomer"/>
         <resources>
-            <resource ref="Magento_Customer::customer"/>
+            <resource ref="anonymous"/>
         </resources>
     </route>
     <route url="/V1/customerAccounts" method="PUT">
@@ -154,6 +154,15 @@
         <resources>
             <resource ref="Magento_Customer::customer"/>
         </resources>
+    </route>
+    <route url="/V1/customer/me" method="GET">
+        <service class="Magento\Customer\Service\V1\CustomerAccountServiceInterface" method="getCustomer"/>
+        <resources>
+            <resource ref="self"/>
+        </resources>
+        <data>
+            <parameter name="customerId" force="true" source="session" method="getUserId">null</parameter>
+        </data>
     </route>
     <route url="/V1/customerAccounts/:customerId/customer" method="GET">
         <service class="Magento\Customer\Service\V1\CustomerAccountServiceInterface" method="getCustomer"/>

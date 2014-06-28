@@ -100,21 +100,16 @@ class GroupPrice extends AbstractPrice implements GroupPriceInterface, BasePrice
      */
     public function getStoredGroupPrice()
     {
-        if (null !== $this->storedGroupPrice) {
-            return $this->storedGroupPrice;
-        }
-
-        $this->storedGroupPrice = $this->product->getData('group_price');
-
         if (null === $this->storedGroupPrice) {
-            $attribute = $this->product->getResource()->getAttribute('group_price');
+            $resource = $this->product->getResource();
+            $attribute =  $resource->getAttribute('group_price');
             if ($attribute) {
                 $attribute->getBackend()->afterLoad($this->product);
                 $this->storedGroupPrice = $this->product->getData('group_price');
             }
-        }
-        if (null === $this->storedGroupPrice || !is_array($this->storedGroupPrice)) {
-            $this->storedGroupPrice = [];
+            if (null === $this->storedGroupPrice || !is_array($this->storedGroupPrice)) {
+                $this->storedGroupPrice = [];
+            }
         }
         return $this->storedGroupPrice;
     }

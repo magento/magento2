@@ -76,9 +76,6 @@ $table = $installer->getConnection()->newTable(
     array('entity_id', 'all_groups', 'customer_group_id', 'website_id'),
     array('type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE)
 )->addIndex(
-    $installer->getIdxName('catalog_product_entity_group_price', array('entity_id')),
-    array('entity_id')
-)->addIndex(
     $installer->getIdxName('catalog_product_entity_group_price', array('customer_group_id')),
     array('customer_group_id')
 )->addIndex(

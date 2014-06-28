@@ -128,6 +128,8 @@ class Form extends FormInterface
      * @param FixtureInterface $fixture
      * @param Element $element
      * @return $this|void
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function fill(FixtureInterface $fixture, Element $element = null)
     {
@@ -237,5 +239,17 @@ class Form extends FormInterface
     public function openAdditionalSettings()
     {
         $this->_rootElement->find($this->additionalSettings)->click();
+    }
+
+    /**
+     * Getting all options in Tax Rate multi select list
+     *
+     * @return array
+     */
+    public function getAllTaxRates()
+    {
+        /** @var \Mtf\Client\Driver\Selenium\Element\MultiselectlistElement $taxRates */
+        $taxRates = $this->_rootElement->find($this->taxRateBlock, Locator::SELECTOR_CSS, 'multiselectlist');
+        return $taxRates->getAllValues();
     }
 }

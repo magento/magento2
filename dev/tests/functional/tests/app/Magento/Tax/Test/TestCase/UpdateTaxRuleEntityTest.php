@@ -74,15 +74,10 @@ class UpdateTaxRuleEntityTest extends Injectable
      */
     public function __prepare(FixtureFactory $fixtureFactory)
     {
-        $productSimple = $fixtureFactory->createByCode('catalogProductSimple', ['dataSet' => '100_dollar_product']);
-        $productSimple->persist();
         $customer = $fixtureFactory->createByCode('customerInjectable', ['dataSet' => 'default']);
         $customer->persist();
 
-        return [
-            'productSimple' => $productSimple,
-            'customer' => $customer,
-        ];
+        return ['customer' => $customer];
     }
 
     /**
@@ -108,6 +103,8 @@ class UpdateTaxRuleEntityTest extends Injectable
      * @param AddressInjectable $address
      * @param array $shipping
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function testUpdateTaxRule(
         TaxRule $initialTaxRule,

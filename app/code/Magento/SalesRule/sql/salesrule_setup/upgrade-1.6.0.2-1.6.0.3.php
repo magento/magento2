@@ -52,9 +52,6 @@ $table = $connection->newTable(
     array('unsigned' => true, 'nullable' => false, 'primary' => true),
     'Website Id'
 )->addIndex(
-    $installer->getIdxName('salesrule_website', array('rule_id')),
-    array('rule_id')
-)->addIndex(
     $installer->getIdxName('salesrule_website', array('website_id')),
     array('website_id')
 )->addForeignKey(
@@ -96,9 +93,6 @@ $table = $connection->newTable(
     null,
     array('unsigned' => true, 'nullable' => false, 'primary' => true),
     'Customer Group Id'
-)->addIndex(
-    $installer->getIdxName('salesrule_customer_group', array('rule_id')),
-    array('rule_id')
 )->addIndex(
     $installer->getIdxName('salesrule_customer_group', array('customer_group_id')),
     array('customer_group_id')

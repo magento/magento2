@@ -238,6 +238,12 @@
     vertical-align: top;
 }
 
+#product_options_container .data-table td.opt-price-type,
+#product_options_container .data-table td.select-opt-price-type,
+#product_options_container .data-table td.select-opt-price{
+    width: 13%;
+}
+
 #product_options_container .product-option-scope-checkbox {
     margin: 10px 5px 10px 0;
 }

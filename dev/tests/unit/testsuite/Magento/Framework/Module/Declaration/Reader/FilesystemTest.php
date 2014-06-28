@@ -70,7 +70,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $expectedResult = array(
             'Module_One' => array(
                 'name' => 'Module_One',
-                'version' => '1.0.0.0',
+                'schema_version' => '1.0.0.0',
                 'active' => true,
                 'dependencies' => array(
                     'modules' => array(),
@@ -84,7 +84,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
             ),
             'Module_Four' => array(
                 'name' => 'Module_Four',
-                'version' => '1.0.0.0',
+                'schema_version' => '1.0.0.0',
                 'active' => true,
                 'dependencies' => array(
                     'modules' => array('Module_One'),
@@ -93,7 +93,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
             ),
             'Module_Three' => array(
                 'name' => 'Module_Three',
-                'version' => '1.0.0.0',
+                'schema_version' => '1.0.0.0',
                 'active' => true,
                 'dependencies' => array(
                     'modules' => array('Module_Four'),

@@ -24,6 +24,11 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <preference for="Magento\Catalog\Service\V1\ProductMetadataServiceInterface" type="Magento\Catalog\Service\V1\ProductMetadataService" />
+    <preference for="Magento\Catalog\Service\V1\ProductServiceInterface" type="Magento\Catalog\Service\V1\ProductService" />
+    <preference for="Magento\Catalog\Service\V1\Product\Attribute\ReadServiceInterface" type="Magento\Catalog\Service\V1\Product\Attribute\ReadService" />
+    <preference for="Magento\Catalog\Service\V1\Product\Attribute\WriteServiceInterface" type="Magento\Catalog\Service\V1\Product\Attribute\WriteService" />
+    <preference for="Magento\Catalog\Service\V1\ProductAttributeServiceInterface" type="Magento\Catalog\Service\V1\ProductAttributeService" />
     <preference for="Magento\Catalog\Model\ProductTypes\ConfigInterface" type="Magento\Catalog\Model\ProductTypes\Config" />
     <preference for="Magento\Catalog\Model\ProductOptions\ConfigInterface" type="Magento\Catalog\Model\ProductOptions\Config" />
     <preference for="Magento\Catalog\Model\Product\PriceModifierInterface" type="Magento\Catalog\Model\Product\PriceModifier\Composite" />
@@ -39,9 +44,13 @@
     <preference for="Magento\Catalog\Service\V1\Product\AttributeSet\ReadServiceInterface" type="Magento\Catalog\Service\V1\Product\AttributeSet\ReadService" />
     <preference for="Magento\Catalog\Service\V1\Product\AttributeSet\WriteServiceInterface" type="Magento\Catalog\Service\V1\Product\AttributeSet\WriteService" />
     <preference for="Magento\Catalog\Service\V1\Product\AttributeSet\AttributeServiceInterface" type="Magento\Catalog\Service\V1\Product\AttributeSet\AttributeService" />
+    <preference for="Magento\Catalog\Service\V1\Product\Attribute\Media\ReadServiceInterface" type="\Magento\Catalog\Service\V1\Product\Attribute\Media\ReadService" />
+    <preference for="\Magento\Catalog\Service\V1\Product\Attribute\Media\WriteServiceInterface" type="\Magento\Catalog\Service\V1\Product\Attribute\Media\WriteService" />
     <preference for="Magento\Catalog\Service\V1\Product\Link\ReadServiceInterface" type="Magento\Catalog\Service\V1\Product\Link\ReadService" />
     <preference for="Magento\Catalog\Service\V1\Product\Link\WriteServiceInterface" type="Magento\Catalog\Service\V1\Product\Link\WriteService" />
     <preference for="Magento\Catalog\Service\V1\Product\Link\Data\ProductLink\DataMapperInterface" type="Magento\Catalog\Service\V1\Product\Link\Data\ProductLink\DataMapper\Composite" />
+    <preference for="Magento\Catalog\Service\V1\Product\GroupPriceServiceInterface" type="Magento\Catalog\Service\V1\Product\GroupPriceService" />
+    <preference for="Magento\Catalog\Service\V1\Product\TierPriceServiceInterface" type="Magento\Catalog\Service\V1\Product\TierPriceService" />
     <type name="Magento\Log\Model\Resource\Log">
         <plugin name="catalogLog" type="Magento\Catalog\Model\Plugin\Log" />
     </type>
@@ -214,10 +223,6 @@
         <arguments>
             <argument name="indexer" xsi:type="object" shared="false">Magento\Indexer\Model\IndexerInterface</argument>
         </arguments>
-    </type>
-    <type name="Magento\ImportExport\Model\Import">
-        <plugin name="catalogProductFlatIndexerImport" type="\Magento\Catalog\Model\Indexer\Product\Flat\Plugin\Import" />
-        <plugin name="invalidatePriceIndexerOnImport" type="\Magento\Catalog\Model\Indexer\Product\Price\Plugin\Import" />
     </type>
     <type name="Magento\CatalogRule\Model\Rule">
         <plugin name="reindexPriceOnRuleApply" type="\Magento\Catalog\Model\Indexer\Product\Price\Plugin\CatalogRule" />

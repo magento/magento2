@@ -51,6 +51,7 @@
                         <argument name="type" xsi:type="string">text</argument>
                         <argument name="index" xsi:type="string">name</argument>
                         <argument name="id" xsi:type="string">name</argument>
+                        <argument name="renderer" xsi:type="string">Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Name</argument>
                         <argument name="escape" xsi:type="string">1</argument>
                     </arguments>
                 </block>

@@ -96,7 +96,11 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         $order->setData('state', $orderState);
         $this->_prepareOrderPayment(
             $order,
-            array('canReviewPayment' => $canReviewPayment, 'canFetchTransactionInfo' => $canUpdatePayment)
+            [
+                'canReviewPayment' => $canReviewPayment,
+                'canFetchTransactionInfo' => $canUpdatePayment,
+                'canVoid' => true
+            ]
         );
         $this->_prepareOrderItems($order, $allInvoiced);
 
@@ -130,6 +134,12 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             $actionFlags[\Magento\Sales\Model\Order::ACTION_FLAG_CANCEL]
         ) && $actionFlags[\Magento\Sales\Model\Order::ACTION_FLAG_CANCEL] === false
         ) {
+            $expectedResult = false;
+        }
+
+        if (isset($actionFlags[\Magento\Sales\Model\Order::ACTION_FLAG_UNHOLD])
+        && $actionFlags[\Magento\Sales\Model\Order::ACTION_FLAG_UNHOLD] == false
+        && $orderState == \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW) {
             $expectedResult = false;
         }
 

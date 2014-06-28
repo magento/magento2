@@ -72,7 +72,7 @@
             </xs:element>
         </xs:all>
         <xs:attribute name="name" type="moduleName" use="required" />
-        <xs:attribute name="version" type="moduleVersion" use="optional" />
+        <xs:attribute name="schema_version" type="schemaVersion" use="optional" />
         <xs:attribute name="active" type="xs:boolean" use="optional" />
     </xs:complexType>
 
@@ -162,10 +162,10 @@
         </xs:restriction>
     </xs:simpleType>
 
-    <xs:simpleType name="moduleVersion">
+    <xs:simpleType name="schemaVersion">
         <xs:annotation>
             <xs:documentation>
-                Module version attribute can contain only [0-9.].
+                Schema version attribute can contain only [0-9.].
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">

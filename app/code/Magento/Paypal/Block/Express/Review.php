@@ -240,8 +240,6 @@ class Review extends \Magento\Framework\View\Element\Template
     {
         $methodInstance = $this->_quote->getPayment()->getMethodInstance();
         $this->setPaymentMethodTitle($methodInstance->getTitle());
-        $this->setUpdateOrderSubmitUrl($this->getUrl("{$this->_controllerPath}/updateOrder"));
-        $this->setUpdateShippingMethodsUrl($this->getUrl("{$this->_controllerPath}/updateShippingMethods"));
 
         $this->setShippingRateRequired(true);
         if ($this->_quote->getIsVirtual()) {
@@ -263,11 +261,13 @@ class Review extends \Magento\Framework\View\Element\Template
                 }
             }
 
+            $canEditShippingAddress = $this->_quote->getMayEditShippingAddress() && $this->_quote->getPayment()
+                ->getAdditionalInformation(\Magento\Paypal\Model\Express\Checkout::PAYMENT_INFO_BUTTON) == 1;
             // misc shipping parameters
             $this->setShippingMethodSubmitUrl(
                 $this->getUrl("{$this->_controllerPath}/saveShippingMethod")
             )->setCanEditShippingAddress(
-                $this->_quote->getMayEditShippingAddress()
+                $canEditShippingAddress
             )->setCanEditShippingMethod(
                 $this->_quote->getMayEditShippingMethod()
             );

@@ -29,10 +29,14 @@ use Mtf\System\Config;
 use Mtf\Handler\HandlerFactory;
 use Mtf\Fixture\FixtureFactory;
 use Mtf\Repository\RepositoryFactory;
+use Mtf\System\Event\EventManagerInterface;
 
 /**
  * Class CatalogProductDownloadable
  * Fixture for Downloadable product
+ *
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class CatalogProductDownloadable extends InjectableFixture
 {
@@ -54,6 +58,7 @@ class CatalogProductDownloadable extends InjectableFixture
      * @param RepositoryFactory $repositoryFactory
      * @param FixtureFactory $fixtureFactory
      * @param HandlerFactory $handlerFactory
+     * @param EventManagerInterface $eventManager
      * @param array $data
      * @param string $dataSet
      * @param bool $persist
@@ -63,6 +68,7 @@ class CatalogProductDownloadable extends InjectableFixture
         RepositoryFactory $repositoryFactory,
         FixtureFactory $fixtureFactory,
         HandlerFactory $handlerFactory,
+        EventManagerInterface $eventManager,
         array $data = [],
         $dataSet = '',
         $persist = false
@@ -72,6 +78,7 @@ class CatalogProductDownloadable extends InjectableFixture
             $repositoryFactory,
             $fixtureFactory,
             $handlerFactory,
+            $eventManager,
             $data,
             $dataSet,
             $persist
@@ -95,7 +102,7 @@ class CatalogProductDownloadable extends InjectableFixture
         'name' => 'DownloadableProduct_%isolation%',
         'sku' => 'DownloadableProduct_%isolation%',
         'price' => '100',
-        'tax_class' => 'Taxable Goods',
+        'tax_class_id' => ['dataSet' => 'Taxable Goods'],
         'description' => 'This is description for downloadable product',
         'short_description' => 'This is short description for downloadable product',
         'quantity_and_stock_status_qty' => '1',
@@ -542,7 +549,8 @@ class CatalogProductDownloadable extends InjectableFixture
         'is_required' => '0',
         'default_value' => '2',
         'input' => 'select',
-        'group' => 'product-details'
+        'group' => 'product-details',
+        'source' => 'Magento\Catalog\Test\Fixture\CatalogProductSimple\TaxClass',
     ];
 
     protected $thumbnail = [

@@ -69,10 +69,19 @@ class Search extends Block
     protected $placeholder = '//input[@id="search" and contains(@placeholder, "%s")]';
 
     /**
+     * Css selector advanced search button
+     *
+     * @var string
+     */
+    protected $advancedSearchSelector = '.action.advanced';
+
+    /**
      * Search products by a keyword
      *
      * @param string $keyword
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.ConstructorWithNameAsEnclosingClass)
      */
     public function search($keyword)
     {
@@ -120,8 +129,21 @@ class Search extends Block
             $searchAutocomplete .= sprintf($this->searchItemAmount, $amount);
         }
 
-        $this->waitForElementVisible($searchAutocomplete, Locator::SELECTOR_XPATH);
-        return $this->_rootElement->find($searchAutocomplete, Locator::SELECTOR_XPATH)
-            ->isVisible();
+        $rootElement = $this->_rootElement;
+        return (bool)$this->_rootElement->waitUntil(
+            function () use ($rootElement, $searchAutocomplete) {
+                return $rootElement->find($searchAutocomplete, Locator::SELECTOR_XPATH)->isVisible() ? true : null;
+            }
+        );
+    }
+
+    /**
+     * Click advanced search button
+     *
+     * @return void
+     */
+    public function clickAdvancedSearchButton()
+    {
+        $this->_rootElement->find($this->advancedSearchSelector)->click();
     }
 }

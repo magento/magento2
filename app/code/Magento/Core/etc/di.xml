@@ -271,11 +271,6 @@
             <argument name="cacheId" xsi:type="string">fieldset_config</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Locale\Hierarchy\Config">
-        <arguments>
-            <argument name="reader" xsi:type="object">Magento\Framework\Locale\Hierarchy\Config\Reader</argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\DB\Helper">
         <arguments>
             <argument name="modulePrefix" xsi:type="string">core</argument>

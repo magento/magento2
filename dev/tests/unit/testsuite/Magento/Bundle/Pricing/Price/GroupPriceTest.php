@@ -26,88 +26,178 @@ namespace Magento\Bundle\Pricing\Price;
 class GroupPriceTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var GroupPrice
+     * @var \Magento\Bundle\Pricing\Price\GroupPrice
      */
-    protected $model;
+    protected $groupPrice;
 
     /**
-     * @var \Magento\Framework\Pricing\Object\SaleableInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $saleable;
+    protected $productMock;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceInfo\Base |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Resource\Product|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $priceInfo;
+    protected $productResourceMock;
 
+    /**
+     * @var \Magento\Framework\Pricing\Adjustment\Calculator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $calculatorMock;
+
+    /**
+     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $customerSessionMock;
+
+    /**
+     * @var \Magento\Customer\Model\Customer|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $customerMock;
+
+    /**
+     * @var \Magento\Catalog\Model\Entity\Attribute|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $attributeMock;
+
+    /**
+     * @var \Magento\Catalog\Model\Product\Attribute\Backend\Groupprice|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $backendMock;
+
+    /**
+     * @var \Magento\Framework\Pricing\PriceInfo\Base|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $priceInfoMock;
+
+    /**
+     * @var \Magento\Catalog\Pricing\Price\RegularPrice|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $regularPrice;
+    /**
+     * Set up test case
+     */
     public function setUp()
     {
-        $this->saleable = $this->getMockBuilder('Magento\Catalog\Model\Product')
-            ->setMethods(['getPriceInfo', 'getCustomerGroupId', 'getData', '__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->priceInfo = $this->getMock('Magento\Framework\Pricing\PriceInfo\Base', [], [], '', false);
-
-        $this->saleable->expects($this->once())
+        $this->productMock = $this->getMock(
+            'Magento\Catalog\Model\Product',
+            ['__wakeup', 'getCustomerGroupId', 'getPriceInfo', 'getResource', 'getData'],
+            [],
+            '',
+            false
+        );
+        $this->productResourceMock = $this->getMock(
+            'Magento\Catalog\Model\Resource\Product',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->calculatorMock = $this->getMock(
+            'Magento\Framework\Pricing\Adjustment\Calculator',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->customerSessionMock = $this->getMock(
+            'Magento\Customer\Model\Session',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->customerMock = $this->getMock(
+            'Magento\Customer\Model\Customer',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->attributeMock = $this->getMock(
+            'Magento\Catalog\Model\Entity\Attribute',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->backendMock = $this->getMock(
+            'Magento\Catalog\Model\Product\Attribute\Backend\Groupprice',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->priceInfoMock = $this->getMock(
+            'Magento\Framework\Pricing\PriceInfo\Base',
+            ['getPrice'],
+            [],
+            '',
+            false
+        );
+        $this->regularPrice = $this->getMock(
+            'Magento\Catalog\Pricing\Price\RegularPrice',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->productMock->expects($this->once())
             ->method('getPriceInfo')
-            ->will($this->returnValue($this->priceInfo));
+            ->will($this->returnValue($this->priceInfoMock));
 
-        $objectHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->model = $objectHelper->getObject(
-            'Magento\Bundle\Pricing\Price\GroupPrice',
-            [
-                'saleableItem' => $this->saleable
-            ]
+        $this->groupPrice = new \Magento\Bundle\Pricing\Price\GroupPrice(
+            $this->productMock,
+            1,
+            $this->calculatorMock,
+            $this->customerSessionMock
         );
     }
 
-    /**
-     * @param $regularPrice
-     * @param $storedGroupPrice
-     * @param $value
-     * @param $percent
-     * @dataProvider getValueDataProvider
-     */
-    public function testGetValue($regularPrice, $storedGroupPrice, $value, $percent)
+    public function testGetValue()
     {
-        $customerGroupId = 234;
-
-        $this->saleable->expects($this->atLeastOnce())
+        $this->priceInfoMock->expects($this->once())
+            ->method('getPrice')
+            ->with($this->equalTo('regular_price'))
+            ->will($this->returnValue($this->regularPrice));
+        $this->regularPrice->expects($this->once())
+            ->method('getValue')
+            ->will($this->returnValue(100));
+        $this->productMock->expects($this->once())
             ->method('getCustomerGroupId')
-            ->will($this->returnValue($customerGroupId));
-
-        $this->saleable->expects($this->once())
+            ->will($this->returnValue(null));
+        $this->customerSessionMock->expects($this->once())
+            ->method('getCustomerGroupId')
+            ->will($this->returnValue(3));
+        $this->productMock->expects($this->once())
+            ->method('getResource')
+            ->will($this->returnValue($this->productResourceMock));
+        $this->productResourceMock->expects($this->once())
+            ->method('getAttribute')
+            ->with($this->equalTo('group_price'))
+            ->will($this->returnValue($this->attributeMock));
+        $this->attributeMock->expects($this->once())
+            ->method('getBackend')
+            ->will($this->returnValue($this->backendMock));
+        $this->backendMock->expects($this->once())
+            ->method('afterLoad')
+            ->with($this->equalTo($this->productMock))
+            ->will($this->returnValue($this->backendMock));
+        $this->productMock->expects($this->once())
             ->method('getData')
-            ->with('group_price')
-            ->will($this->returnValue($storedGroupPrice));
+            ->with(
+                $this->equalTo('group_price'),
+                $this->equalTo(null)
+            )
+            ->will($this->returnValue(
+                [
+                    [
+                        'cust_group' => 3,
+                        'website_price' => 80
+                    ]
+                ]
 
-        if (!empty($storedGroupPrice)) {
-            $price = $this->getMock('Magento\Framework\Pricing\Price\PriceInterface');
-            $this->priceInfo->expects($this->once())
-                ->method('getPrice')
-                ->with(\Magento\Catalog\Pricing\Price\RegularPrice::PRICE_CODE)
-                ->will($this->returnValue($price));
-            $price->expects($this->once())
-                ->method('getValue')
-                ->will($this->returnValue($regularPrice));
-        }
-        $this->assertEquals($value, $this->model->getValue());
-        $this->assertEquals($percent, $this->model->getDiscountPercent());
-    }
-
-    /**
-     * @return array
-     */
-    public function getValueDataProvider()
-    {
-        return array(
-            ['regularPrice' => 100, 'storedGroupPrice'
-                => [['cust_group' => 234, 'website_price' => 40]], 'value' => 60, 'percent' => 60],
-            ['regularPrice' => 75, 'storedGroupPrice'
-                => [['cust_group' => 234, 'website_price' => 40]], 'value' => 45, 'percent' => 60],
-            ['regularPrice' => 75, 'storedGroupPrice'
-                => [], 'value' => false, 'percent' => null],
-        );
+            ));
+        $this->assertEquals(20, $this->groupPrice->getValue());
     }
 }

@@ -49,4 +49,19 @@
         <area>category</area>
         <class>Magento\Catalog\Test\Page\Category\CatalogCategoryView</class>
     </catalogCategoryView>
+    <catalogProductAttributeIndex>
+        <mca>catalog/product_attribute/index</mca>
+        <area>adminhtml</area>
+        <class>Magento\Catalog\Test\Page\Adminhtml\CatalogProductAttributeIndex</class>
+    </catalogProductAttributeIndex>
+    <catalogProductAttributeNew>
+        <mca>catalog/product_attribute/new</mca>
+        <area>adminhtml</area>
+        <class>Magento\Catalog\Test\Page\Adminhtml\CatalogProductAttributeNew</class>
+    </catalogProductAttributeNew>
+    <catalogCategoryEdit>
+        <mca>catalog/category/edit</mca>
+        <area>adminhtml</area>
+        <class>Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryEdit</class>
+    </catalogCategoryEdit>
 </page>

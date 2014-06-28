@@ -67,13 +67,6 @@ class Translate implements \Magento\Framework\TranslateInterface
     protected $_dataScope;
 
     /**
-     * Locale hierarchy (empty by default)
-     *
-     * @var array
-     */
-    protected $_localeHierarchy = [];
-
-    /**
      * @var \Magento\Framework\View\DesignInterface
      */
     protected $_viewDesign;
@@ -134,8 +127,12 @@ class Translate implements \Magento\Framework\TranslateInterface
     protected $_csvParser;
 
     /**
+     * @var \Magento\Framework\App\Language\Dictionary
+     */
+    protected $packDictionary;
+
+    /**
      * @param \Magento\Framework\View\DesignInterface $viewDesign
-     * @param \Magento\Framework\Locale\Hierarchy\Config $config
      * @param \Magento\Framework\Cache\FrontendInterface $cache
      * @param \Magento\Framework\View\FileSystem $viewFileSystem
      * @param \Magento\Framework\Module\ModuleList $moduleList
@@ -147,12 +144,12 @@ class Translate implements \Magento\Framework\TranslateInterface
      * @param \Magento\Framework\App\Filesystem $filesystem
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\File\Csv $csvParser
+     * @param \Magento\Framework\App\Language\Dictionary $packDictionary
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\View\DesignInterface $viewDesign,
-        \Magento\Framework\Locale\Hierarchy\Config $config,
         \Magento\Framework\Cache\FrontendInterface $cache,
         \Magento\Framework\View\FileSystem $viewFileSystem,
         \Magento\Framework\Module\ModuleList $moduleList,
@@ -163,7 +160,8 @@ class Translate implements \Magento\Framework\TranslateInterface
         \Magento\Framework\App\State $appState,
         \Magento\Framework\App\Filesystem $filesystem,
         \Magento\Framework\App\RequestInterface $request,
-        \Magento\Framework\File\Csv $csvParser
+        \Magento\Framework\File\Csv $csvParser,
+        \Magento\Framework\App\Language\Dictionary $packDictionary
     ) {
         $this->_viewDesign = $viewDesign;
         $this->_cache = $cache;
@@ -176,8 +174,8 @@ class Translate implements \Magento\Framework\TranslateInterface
         $this->_appState = $appState;
         $this->request = $request;
         $this->directory = $filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::ROOT_DIR);
-        $this->_localeHierarchy = $config->getHierarchy();
         $this->_csvParser = $csvParser;
+        $this->packDictionary = $packDictionary;
     }
 
     /**
@@ -201,10 +199,9 @@ class Translate implements \Magento\Framework\TranslateInterface
         }
         $this->_data = [];
 
-        foreach ($this->_moduleList->getModules() as $module) {
-            $this->_loadModuleTranslation($module['name']);
-        }
+        $this->_loadModuleTranslation($forceReload);
         $this->_loadThemeTranslation($forceReload);
+        $this->_loadPackTranslation($forceReload);
         $this->_loadDbTranslation($forceReload);
 
         if (!$forceReload) {
@@ -263,32 +260,16 @@ class Translate implements \Magento\Framework\TranslateInterface
     /**
      * Load data from module translation files
      *
-     * @param string $moduleName
+     * @param bool $forceReload
      * @return $this
      */
-    protected function _loadModuleTranslation($moduleName)
+    protected function _loadModuleTranslation($forceReload = false)
     {
-        $requiredLocaleList = $this->_composeRequiredLocaleList($this->getLocale());
-        foreach ($requiredLocaleList as $locale) {
-            $moduleFilePath = $this->_getModuleTranslationFile($moduleName, $locale);
-            $this->_addData($this->_getFileData($moduleFilePath));
+        foreach ($this->_moduleList->getModules() as $module) {
+            $moduleFilePath = $this->_getModuleTranslationFile($module['name'], $this->getLocale());
+            $this->_addData($this->_getFileData($moduleFilePath), false, $forceReload);
         }
         return $this;
-    }
-
-    /**
-     * Compose the list of locales which are required to translate text entity based on given locale
-     *
-     * @param string $locale
-     * @return string[]
-     */
-    protected function _composeRequiredLocaleList($locale)
-    {
-        $requiredLocaleList = array($locale);
-        if (isset($this->_localeHierarchy[$locale])) {
-            $requiredLocaleList = array_merge($this->_localeHierarchy[$locale], $requiredLocaleList);
-        }
-        return $requiredLocaleList;
     }
 
     /**
@@ -342,14 +323,23 @@ class Translate implements \Magento\Framework\TranslateInterface
             return $this;
         }
 
-        $requiredLocaleList = $this->_composeRequiredLocaleList($this->getLocale());
-        foreach ($requiredLocaleList as $locale) {
-            $file = $this->_getThemeTranslationFile($locale);
-            if ($file) {
-                $this->_addData($this->_getFileData($file), 'theme' . $this->_config['theme'], $forceReload);
-            }
+        $file = $this->_getThemeTranslationFile($this->getLocale());
+        if ($file) {
+            $this->_addData($this->_getFileData($file), 'theme' . $this->_config['theme'], $forceReload);
         }
         return $this;
+    }
+
+    /**
+     * Load translation dictionary from language packages
+     *
+     * @param bool $forceReload
+     * @return void
+     */
+    protected function _loadPackTranslation($forceReload = false)
+    {
+        $data = $this->packDictionary->getDictionary($this->getLocale());
+        $this->_addData($data, 'language_pack', $forceReload);
     }
 
     /**
@@ -360,11 +350,8 @@ class Translate implements \Magento\Framework\TranslateInterface
      */
     protected function _loadDbTranslation($forceReload = false)
     {
-        $requiredLocaleList = $this->_composeRequiredLocaleList($this->getLocale());
-        foreach ($requiredLocaleList as $locale) {
-            $arr = $this->_translateResource->getTranslationArray(null, $locale);
-            $this->_addData($arr, $this->getConfig('scope'), $forceReload);
-        }
+        $arr = $this->_translateResource->getTranslationArray(null, $this->getLocale());
+        $this->_addData($arr, $this->getConfig('scope'), $forceReload);
         return $this;
     }
 
@@ -377,7 +364,7 @@ class Translate implements \Magento\Framework\TranslateInterface
      */
     protected function _getModuleTranslationFile($moduleName, $locale)
     {
-        $file = $this->_modulesReader->getModuleDir(\Magento\Framework\App\Filesystem::LOCALE_DIR, $moduleName);
+        $file = $this->_modulesReader->getModuleDir('i18n', $moduleName);
         $file .= '/' . $locale . '.csv';
         return $file;
     }
@@ -391,7 +378,7 @@ class Translate implements \Magento\Framework\TranslateInterface
     protected function _getThemeTranslationFile($locale)
     {
         return $this->_viewFileSystem->getLocaleFileName(
-            \Magento\Framework\App\Filesystem::LOCALE_DIR . '/' . $locale . '.csv',
+            'i18n' . '/' . $locale . '.csv',
             ['area' => $this->getConfig('area')]
         );
     }

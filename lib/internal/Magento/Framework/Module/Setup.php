@@ -209,7 +209,7 @@ class Setup implements \Magento\Framework\Module\Updater\SetupInterface
     public function applyDataUpdates()
     {
         $dataVer = $this->_resourceResource->getDataVersion($this->_resourceName);
-        $configVer = $this->_moduleConfig['version'];
+        $configVer = $this->_moduleConfig['schema_version'];
         if ($dataVer !== false) {
             $status = version_compare($configVer, $dataVer);
             if ($status == self::VERSION_COMPARE_GREATER) {
@@ -229,7 +229,7 @@ class Setup implements \Magento\Framework\Module\Updater\SetupInterface
     public function applyUpdates()
     {
         $dbVer = $this->_resourceResource->getDbVersion($this->_resourceName);
-        $configVer = $this->_moduleConfig['version'];
+        $configVer = $this->_moduleConfig['schema_version'];
 
         // Module is installed
         if ($dbVer !== false) {

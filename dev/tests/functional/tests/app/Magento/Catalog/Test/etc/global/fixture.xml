@@ -168,11 +168,11 @@
             <input_prefix>product</input_prefix>
         </data_config>
     </catalogProductGrouped>
-    <catalogCategoryEntity module="Magento_Catalog">
+    <catalogCategory module="Magento_Catalog">
         <type>flat</type>
         <entity_type>catalog_category_entity</entity_type>
         <collection>Magento\Catalog\Model\Resource\Category\Collection</collection>
-    </catalogCategoryEntity>
+    </catalogCategory>
     <catalogProductVirtual module="Magento_Catalog">
         <type>eav</type>
         <entity_type>catalog_product</entity_type>
@@ -212,4 +212,12 @@
             <input_prefix>product</input_prefix>
         </data_config>
     </catalogProductVirtual>
+    <catalogProductAttribute module="Magento_Catalog">
+        <type>composite</type>
+        <entities>
+            <eav_attribute>eav_attribute</eav_attribute>
+            <catalog_eav_attribute>catalog_eav_attribute</catalog_eav_attribute>
+        </entities>
+        <collection>Magento\Catalog\Model\Resource\Attribute</collection>
+    </catalogProductAttribute>
 </fixture>

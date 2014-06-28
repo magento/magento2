@@ -28,7 +28,8 @@
         <xs:complexType>
             <xs:choice maxOccurs="unbounded">
                 <xs:element name="entity" type="entityDeclaration" minOccurs="0" maxOccurs="unbounded" />
-                <xs:element name="productType" type="productTypeDeclaration" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element name="entityType" type="entityTypeDeclaration" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element name="relatedIndexer" type="relatedIndexerDeclaration" minOccurs="0" maxOccurs="unbounded" />
             </xs:choice>
         </xs:complexType>
         <xs:unique name="uniqueEntityName">
@@ -38,15 +39,6 @@
                 </xs:documentation>
             </xs:annotation>
             <xs:selector xpath="entity"/>
-            <xs:field xpath="@name"/>
-        </xs:unique>
-        <xs:unique name="uniqueProductTypeName">
-            <xs:annotation>
-                <xs:documentation>
-                    Import product type name must be unique.
-                </xs:documentation>
-            </xs:annotation>
-            <xs:selector xpath="productType"/>
             <xs:field xpath="@name"/>
         </xs:unique>
     </xs:element>
@@ -63,14 +55,25 @@
         <xs:attribute name="behaviorModel" type="modelName" use="optional" />
     </xs:complexType>
 
-    <xs:complexType name="productTypeDeclaration">
+    <xs:complexType name="entityTypeDeclaration">
         <xs:annotation>
             <xs:documentation>
-                Import product type declaration.
+                Import entity type declaration.
             </xs:documentation>
         </xs:annotation>
+        <xs:attribute name="entity" type="xs:string" use="required" />
         <xs:attribute name="name" type="xs:string" use="required" />
         <xs:attribute name="model" type="modelName" use="required" />
+    </xs:complexType>
+
+    <xs:complexType name="relatedIndexerDeclaration">
+        <xs:annotation>
+            <xs:documentation>
+                Related index type declaration.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="entity" type="xs:string" use="required" />
+        <xs:attribute name="name" type="xs:string" use="required" />
     </xs:complexType>
 
     <xs:simpleType name="modelName">

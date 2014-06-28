@@ -129,6 +129,8 @@ class Option extends Block
      * @param array $fields
      * @param Element $context
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function fillBundleOption(array $fields, Element $context)
     {

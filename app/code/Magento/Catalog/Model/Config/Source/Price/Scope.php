@@ -27,6 +27,8 @@ class Scope implements \Magento\Framework\Option\ArrayInterface
 {
     /**
      * {@inheritdoc}
+     *
+     * @codeCoverageIgnore
      */
     public function toOptionArray()
     {

@@ -26,7 +26,7 @@
 <page mca="tax/rate/index" >
     <block>
         <name>gridPageActions</name>
-        <class>Magento\Backend\Test\Block\GridPageActions</class>
+        <class>Magento\Tax\Test\Block\Adminhtml\Rate\GridPageActions</class>
         <locator>.page-main-actions</locator>
         <strategy>css selector</strategy>
     </block>

@@ -270,6 +270,7 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
             'default_value' => '1',
             'is_required' => false,
             'is_user_defined' => false,
+            'frontend_input' => 'text'
         );
 
         // Use magento object for simplicity
@@ -299,6 +300,10 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
         $this->attributeBuilderMock->expects($this->once())
             ->method('setIsUserDefined')
             ->with($attributeData['is_user_defined'])
+            ->will($this->returnSelf());
+        $this->attributeBuilderMock->expects($this->once())
+            ->method('setFrontendInput')
+            ->with($attributeData['frontend_input'])
             ->will($this->returnSelf());
 
         $dataObjectMock = $this->getMock(

@@ -38,7 +38,7 @@ class SetupTest extends \PHPUnit_Framework_TestCase
     /**
      * Integration service mock
      *
-     * @var \Magento\Integration\Service\IntegrationV1Interface
+     * @var \Magento\Integration\Service\V1\IntegrationInterface
      */
     protected $integrationServiceMock;
 
@@ -77,7 +77,7 @@ class SetupTest extends \PHPUnit_Framework_TestCase
         )->getMock();
 
         $this->integrationServiceMock = $this->getMockBuilder(
-            '\Magento\Integration\Service\IntegrationV1'
+            '\Magento\Integration\Service\V1\Integration'
         )->disableOriginalConstructor()->setMethods(
             array('findByName')
         )->getMock();

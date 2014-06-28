@@ -18,8 +18,8 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
- * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
 namespace Magento\Tax\Test\Constraint;
@@ -103,13 +103,16 @@ class AssertTaxRateForm extends AbstractConstraint
     protected function verifyForm(array $formData, array $fixtureData)
     {
         $errorMessages = [];
+        $skippedFields = [
+            'id',
+        ];
 
         foreach ($fixtureData as $key => $value) {
-            if ($key === 'id') {
+            if (in_array($key, $skippedFields)) {
                 continue;
             }
             if ($value !== $formData[$key]) {
-                $errorMessages[] = "Data in " . $key . " field not equal."
+                $errorMessages[] = "Data in " . $key . " field is not equal."
                     . "\nExpected: " . $value
                     . "\nActual: " . $formData[$key];
             }

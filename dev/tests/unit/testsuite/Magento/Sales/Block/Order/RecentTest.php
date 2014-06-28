@@ -63,7 +63,7 @@ class RecentTest extends \PHPUnit_Framework_TestCase
         );
         $this->customerSession = $this->getMock(
             'Magento\Customer\Model\Session',
-            ['getCustomer'],
+            ['getCustomerId'],
             [],
             '',
             false,
@@ -88,13 +88,9 @@ class RecentTest extends \PHPUnit_Framework_TestCase
         $this->context->expects($this->once())
             ->method('getLayout')
             ->will($this->returnValue($layout));
-        $customer = $this->getMock('Magento\Customer\Model\Customer', ['__wakeUp', 'getId'], [], '', false, false);
-        $customer->expects($this->once())
-            ->method('getId')
-            ->will($this->returnValue($customerId));
         $this->customerSession->expects($this->once())
-            ->method('getCustomer')
-            ->will($this->returnValue($customer));
+            ->method('getCustomerId')
+            ->will($this->returnValue($customerId));
 
         $statuses = ['pending', 'processing', 'complete'];
         $this->orderConfig->expects($this->once())

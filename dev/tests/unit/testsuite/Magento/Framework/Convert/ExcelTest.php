@@ -35,18 +35,21 @@ class ExcelTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     private $_testData = array(
-        array('ID', 'Name', 'Email', 'Group', 'Telephone', 'ZIP', 'Country', 'State/Province'),
-        array(1, 'Jon Doe', 'jon.doe@magento.com', 'General', '310-111-1111', 90232, 'United States', 'California')
+        array('ID', 'Name', 'Email', 'Group', 'Telephone', '+Telephone', 'ZIP', '0ZIP', 'Country', 'State/Province'),
+        array(
+            1, 'Jon Doe', 'jon.doe@magento.com', 'General', '310-111-1111', '+310-111-1111', 90232, '090232',
+            'United States', 'California'
+        )
     );
 
     protected $_testHeader = array(
-        'HeaderID', 'HeaderName', 'HeaderEmail', 'HeaderGroup', 'HeaderPhone', 'HeaderZIP',
-        'HeaderCountry', 'HeaderRegion',
+        'HeaderID', 'HeaderName', 'HeaderEmail', 'HeaderGroup', 'HeaderPhone', 'Header+Phone',
+        'HeaderZIP', 'Header0ZIP', 'HeaderCountry', 'HeaderRegion',
     );
 
     protected $_testFooter = array(
-        'FooterID', 'FooterName', 'FooterEmail', 'FooterGroup', 'FooterPhone', 'FooterZIP',
-        'FooterCountry', 'FooterRegion',
+        'FooterID', 'FooterName', 'FooterEmail', 'FooterGroup', 'FooterPhone', 'Footer+Phone',
+        'FooterZIP', 'Footer0ZIP', 'FooterCountry', 'FooterRegion',
     );
 
     /**
@@ -56,7 +59,7 @@ class ExcelTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getSampleOutputFile()
     {
-        return __DIR__ . '/_files/output.txt';
+        return __DIR__ . '/_files/sample.xml';
     }
 
     /**
@@ -85,8 +88,10 @@ class ExcelTest extends \PHPUnit_Framework_TestCase
         $convert = new \Magento\Framework\Convert\Excel(new \ArrayIterator($this->_testData));
         $convert->setDataHeader($this->_testHeader);
         $convert->setDataFooter($this->_testFooter);
-        $isEqual = (file_get_contents($this->_getSampleOutputFile()) == $convert->convert());
-        $this->assertTrue($isEqual, 'Failed asserting that data is the same.');
+        $this->assertXmlStringEqualsXmlString(
+            file_get_contents($this->_getSampleOutputFile()),
+            $convert->convert()
+        );
     }
 
     /**
@@ -149,8 +154,10 @@ class ExcelTest extends \PHPUnit_Framework_TestCase
     public function testWrite()
     {
         $file = $this->_writeFile();
-        $isEqual = file_get_contents($file) == file_get_contents($this->_getSampleOutputFile());
-        $this->assertTrue($isEqual, 'Failed asserting that data from files is the same.');
+        $this->assertXmlStringEqualsXmlString(
+            file_get_contents($this->_getSampleOutputFile()),
+            file_get_contents($file)
+        );
     }
 
     /**

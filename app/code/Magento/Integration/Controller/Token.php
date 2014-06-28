@@ -23,8 +23,8 @@
  */
 namespace Magento\Integration\Controller;
 
-use Magento\Integration\Service\OauthV1Interface as IntegrationOauthService;
-use Magento\Integration\Service\IntegrationV1Interface as IntegrationService;
+use Magento\Integration\Service\V1\OauthInterface as IntegrationOauthService;
+use Magento\Integration\Service\V1\IntegrationInterface as IntegrationService;
 use Magento\Integration\Model\Integration as IntegrationModel;
 
 /**

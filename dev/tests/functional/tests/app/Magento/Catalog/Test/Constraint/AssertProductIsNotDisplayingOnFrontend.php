@@ -27,7 +27,7 @@ namespace Magento\Catalog\Test\Constraint;
 use Mtf\Fixture\FixtureInterface;
 use Magento\Cms\Test\Page\CmsIndex;
 use Mtf\Constraint\AbstractConstraint;
-use Magento\Catalog\Test\Fixture\CatalogCategoryEntity;
+use Magento\Catalog\Test\Fixture\CatalogCategory;
 use Magento\CatalogSearch\Test\Page\CatalogsearchResult;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
@@ -57,7 +57,7 @@ class AssertProductIsNotDisplayingOnFrontend extends AbstractConstraint
      * @param CatalogCategoryView $catalogCategoryView
      * @param CmsIndex $cmsIndex
      * @param FixtureInterface $product
-     * @param CatalogCategoryEntity $category
+     * @param CatalogCategory $category
      */
     public function processAssert(
         CatalogProductView $catalogProductView,
@@ -65,7 +65,7 @@ class AssertProductIsNotDisplayingOnFrontend extends AbstractConstraint
         CatalogCategoryView $catalogCategoryView,
         CmsIndex $cmsIndex,
         FixtureInterface $product,
-        CatalogCategoryEntity $category
+        CatalogCategory $category
     ) {
         $errors = [];
         // Check the product page is not available

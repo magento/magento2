@@ -23,9 +23,9 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../lib/internal/Magento/Framework/Module/etc/module.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../lib/internal/Magento/Framework/Module/etc/module.xsd">
     <!-- commented text -->
-    <module name="Module_One" version="1.0.0.0" active="true">
+    <module name="Module_One" schema_version="1.0.0.0" active="true">
         <depends>
             <!-- commented text -->
             <extension name="spl" />
@@ -36,7 +36,7 @@
             </choice>
         </depends>
     </module>
-    <module name="Module_Two" version="2.0.0.0" active="false">
+    <module name="Module_Two" schema_version="2.0.0.0" active="false">
         <sequence>
             <module name="Module_One" />
         </sequence>

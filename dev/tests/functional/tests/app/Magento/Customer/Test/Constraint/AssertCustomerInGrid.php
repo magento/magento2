@@ -48,6 +48,8 @@ class AssertCustomerInGrid extends AbstractConstraint
      * @param CustomerIndex $pageCustomerIndex
      * @param CustomerInjectable $initialCustomer [optional]
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function processAssert(
         CustomerInjectable $customer,

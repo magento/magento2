@@ -145,6 +145,7 @@ class ReadService implements ReadServiceInterface
                 ->setDefaultValue($attribute->getDefaultValue())
                 ->setIsRequired((boolean)$attribute->getData('is_required'))
                 ->setIsUserDefined((boolean)$attribute->getData('is_user_defined'))
+                ->setFrontendInput($attribute->getData('frontend_input'))
                 ->create();
         }
         return $attributes;

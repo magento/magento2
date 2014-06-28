@@ -139,4 +139,35 @@ class FieldsProvider implements FieldsProviderInterface
 
         return $attributes;
     }
+
+    /**
+     * Collect fields for the entity with composite type
+     *
+     * @param array $fixture
+     * @return array
+     */
+    protected function compositeCollectFields(array $fixture)
+    {
+        $entityTypes = $fixture['entities'];
+
+        /** @var $connection \Magento\Framework\DB\Adapter\AdapterInterface */
+        $connection = $this->resource->getConnection('core_write');
+        $fields = [];
+        foreach ($entityTypes as $entityType) {
+            $fields = array_merge($fields, $connection->describeTable($entityType));
+        }
+
+        $attributes = [];
+        foreach ($fields as $code => $field) {
+            $attributes[$code] = [
+                'attribute_code' => $code,
+                'backend_type' => $field['DATA_TYPE'],
+                'is_required' => ($field['PRIMARY'] || $field['IDENTITY']),
+                'default_value' => $field['DEFAULT'],
+                'input' => ''
+            ];
+        }
+
+        return $attributes;
+    }
 }

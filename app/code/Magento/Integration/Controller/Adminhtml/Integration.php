@@ -26,7 +26,7 @@ namespace Magento\Integration\Controller\Adminhtml;
 use Magento\Backend\App\Action;
 use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
 use Magento\Integration\Exception as IntegrationException;
-use Magento\Integration\Service\OauthV1Interface as IntegrationOauthService;
+use Magento\Integration\Service\V1\OauthInterface as IntegrationOauthService;
 use Magento\Integration\Model\Integration as IntegrationModel;
 
 /**
@@ -52,7 +52,7 @@ class Integration extends Action
     /** @var \Magento\Framework\Logger */
     protected $_logger;
 
-    /** @var \Magento\Integration\Service\IntegrationV1Interface */
+    /** @var \Magento\Integration\Service\V1\IntegrationInterface */
     private $_integrationService;
 
     /** @var IntegrationOauthService */
@@ -64,6 +64,9 @@ class Integration extends Action
     /** @var \Magento\Integration\Helper\Data */
     protected $_integrationData;
 
+    /** @var  \Magento\Integration\Model\Resource\Integration\Collection */
+    protected $_integrationCollection;
+
     /**
      * @var \Magento\Framework\Escaper
      */
@@ -73,21 +76,23 @@ class Integration extends Action
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Logger $logger
-     * @param \Magento\Integration\Service\IntegrationV1Interface $integrationService
+     * @param \Magento\Integration\Service\V1\IntegrationInterface $integrationService
      * @param IntegrationOauthService $oauthService
      * @param \Magento\Core\Helper\Data $coreHelper
      * @param \Magento\Integration\Helper\Data $integrationData
      * @param \Magento\Framework\Escaper $escaper
+     * @param \Magento\Integration\Model\Resource\Integration\Collection $integrationCollection
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Logger $logger,
-        \Magento\Integration\Service\IntegrationV1Interface $integrationService,
+        \Magento\Integration\Service\V1\IntegrationInterface $integrationService,
         IntegrationOauthService $oauthService,
         \Magento\Core\Helper\Data $coreHelper,
         \Magento\Integration\Helper\Data $integrationData,
-        \Magento\Framework\Escaper $escaper
+        \Magento\Framework\Escaper $escaper,
+        \Magento\Integration\Model\Resource\Integration\Collection $integrationCollection
     ) {
         parent::__construct($context);
         $this->_registry = $registry;
@@ -97,6 +102,7 @@ class Integration extends Action
         $this->_coreHelper = $coreHelper;
         $this->_integrationData = $integrationData;
         $this->escaper = $escaper;
+        $this->_integrationCollection = $integrationCollection;
         parent::__construct($context);
     }
 
@@ -107,6 +113,13 @@ class Integration extends Action
      */
     public function indexAction()
     {
+        $unsecureEndpointsCount = $this->_integrationCollection->addUnsecureEndpointFilter()->getSize();
+        if ($unsecureEndpointsCount > 0) {
+            // @codingStandardsIgnoreStart
+            $this->messageManager->addNotice(__('Warning! Integrations not using HTTPS are insecure and potentially expose private or personally identifiable information')
+            // @codingStandardsIgnoreEnd
+            );
+        }
         $this->_view->loadLayout();
         $this->_setActiveMenu('Magento_Integration::system_integrations');
         $this->_addBreadcrumb(__('Integrations'), __('Integrations'));

@@ -35,12 +35,14 @@ class UrlRewrite extends AbstractRepository
     /**
      * @param array $defaultConfig
      * @param array $defaultData
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(array $defaultConfig = [], array $defaultData = [])
     {
         $this->_data['default'] = [
             'request_path' => 'test-test-test%isolation%.html',
-            'options' => 'No',
+            'options' => 'Temporary (302)',
             'store_id' => 'Default Store View'
         ];
     }

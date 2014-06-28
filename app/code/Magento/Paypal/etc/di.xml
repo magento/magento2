@@ -51,4 +51,37 @@
             <argument name="proFactory" xsi:type="object">Magento\Paypal\Model\Payflow\ProFactory</argument>
         </arguments>
     </type>
+    <preference for="Magento\Paypal\Helper\Shortcut\ValidatorInterface" type="Magento\Paypal\Helper\Shortcut\Validator"/>
+    <type name="Magento\Paypal\Block\Express\Shortcut">
+        <arguments>
+            <argument name="paymentMethodCode" xsi:type="const">Magento\Paypal\Model\Config::METHOD_WPP_EXPRESS</argument>
+            <argument name="startAction" xsi:type="string">paypal/express/start/button/1</argument>
+            <argument name="checkoutType" xsi:type="string">Magento\Paypal\Model\Express\Checkout</argument>
+            <argument name="alias" xsi:type="string">product.info.addtocart.paypal</argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Paypal\Block\PayflowExpress\Shortcut" type="Magento\Paypal\Block\Express\Shortcut">
+        <arguments>
+            <argument name="paymentMethodCode" xsi:type="const">Magento\Paypal\Model\Config::METHOD_WPP_PE_EXPRESS</argument>
+            <argument name="startAction" xsi:type="string">paypal/payflowexpress/start/button/1</argument>
+            <argument name="checkoutType" xsi:type="string">Magento\Paypal\Model\PayflowExpress\Checkout</argument>
+            <argument name="alias" xsi:type="string">product.info.addtocart.payflow</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Paypal\Block\Bml\Shortcut">
+        <arguments>
+            <argument name="paymentMethodCode" xsi:type="const">Magento\Paypal\Model\Config::METHOD_WPP_EXPRESS</argument>
+            <argument name="startAction" xsi:type="string">paypal/bml/start/button/1</argument>
+            <argument name="bmlMethodCode" xsi:type="const">Magento\Paypal\Model\Config::METHOD_WPP_BML</argument>
+            <argument name="alias" xsi:type="string">product.info.addtocart.paypalbml</argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Paypal\Block\Payflow\Bml\Shortcut" type="Magento\Paypal\Block\Bml\Shortcut">
+        <arguments>
+            <argument name="paymentMethodCode" xsi:type="const">Magento\Paypal\Model\Config::METHOD_WPP_PE_EXPRESS</argument>
+            <argument name="startAction" xsi:type="string">paypal/payflowbml/start/button/1</argument>
+            <argument name="bmlMethodCode" xsi:type="const">Magento\Paypal\Model\Config::METHOD_WPP_PE_BML</argument>
+            <argument name="alias" xsi:type="string">product.info.addtocart.payflowbml</argument>
+        </arguments>
+    </virtualType>
 </config>

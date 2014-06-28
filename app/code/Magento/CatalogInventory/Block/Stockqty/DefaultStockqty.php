@@ -22,14 +22,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\CatalogInventory\Block\Stockqty;
 
 /**
  * Product stock qty default block
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\CatalogInventory\Block\Stockqty;
-
 class DefaultStockqty extends AbstractStockqty implements \Magento\Framework\View\Block\IdentityInterface
 {
     /**

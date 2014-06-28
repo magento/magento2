@@ -23,89 +23,123 @@
  */
 /** @var $this \Magento\Paypal\Block\Express\Review */
 
-$billingBlock = $this->getChildBlock('billing')->setFieldNamePrefix('billing')->setHideEmailAddress(true);
-$shippingAddress = $this->getShippingAddress();
 ?>
 <hgroup class="page title">
     <h1 class="title"><span class="base"><?php echo __('Review Order') ?></span></h1>
 </hgroup>
-<?php echo $this->getLayout()->getMessagesBlock()->toHtml() ?>
 <div class="paypal review view">
-    <div class="paypal subtitle caption"><strong>Please confirm your addresses</strong></div>
+    <?php if ($this->getShippingAddress()): ?>
+        <div class="block shipping information">
+            <div class="title"><strong><?php echo __('Shipping Information') ?></strong></div>
+            <div class="content">
+                <div class="box shipping address">
+                    <strong class="subtitle">
+                        <?php echo __('Shipping Address') ?>
+                        <?php if ($this->getCanEditShippingAddress()): ?>
+                            <a href="<?php echo $this->getEditUrl() ?>"
+                               class="action edit"><span><?php echo __('Edit') ?></span></a>
+                        <?php endif; ?>
+                    </strong>
 
-    <form method="post" id="order-review-form" action="<?php echo $this->getPlaceOrderUrl() ?>"
-          class="form paypal review">
-        <?php if (!$billingBlock->isCustomerLoggedIn()): ?>
-            <fieldset class="fieldset customer email">
-                <legend class="legend"><span><?php echo __('Customer Information') ?></span></legend>
-                <br>
-
-                <div id="customer-info-form" class="field email required">
-                    <label for="customer:email" class="label"><?php echo __('Email Address') ?></label>
-
-                    <div class="control">
-                        <input type="email" name="customer-email" id="customer:email"
-                               value="<?php echo $this->escapeHtml($billingBlock->getAddress()->getEmail()) ?>"
-                               title="<?php echo __('Email Address') ?>" class="input-text"/>
+                    <div class="content">
+                        <address><?php echo $this->renderAddress($this->getShippingAddress()) ?></address>
                     </div>
                 </div>
-            </fieldset>
-        <?php endif ?>
 
-        <fieldset class="fieldset billing address" id="billing-address">
-            <legend class="legend"><span><?php echo __('Billing Address') ?></span></legend>
-            <br>
-            <?php if ($shippingAddress): ?>
-                <?php echo $billingBlock->setShowAsShippingCheckbox(true)->toHtml(); ?>
-            <?php else: ?>
-                <?php echo $billingBlock->toHtml(); ?>
-            <?php endif; ?>
-        </fieldset>
+                <div class="box shipping method">
+                    <strong class="subtitle"><?php echo __('Shipping Method') ?></strong>
 
-        <?php if ($shippingAddress): ?>
-            <fieldset class="fieldset shipping address" id="shipping-address">
-                <legend class="legend"><span><?php echo __('Shipping Address') ?></span></legend>
-                <br>
-                <?php echo $this->getChildBlock('shipping')->setFieldNamePrefix('shipping')->setHideEmailAddress(true)->toHtml(); ?>
-            </fieldset>
-
-            <fieldset class="fieldset shipping method">
-                <legend class="legend"><span><?php echo __('Shipping Method') ?></span></legend>
-                <br>
-                <?php echo $this->getChildBlock('shipping_method')->toHtml(); ?>
-            </fieldset>
-        <?php endif; ?>
-
-        <div class="paypal review items">
-            <div class="paypal subtitle caption">
-                <strong><?php echo __('Items in Your Shopping Cart') ?></strong>
-                <a href="<?php echo $this->getUrl('checkout/cart') ?>"
-                   class="action edit"><?php echo __('Edit Shopping Cart') ?></a>
-            </div>
-
-            <div id="details-reload">
-                <?php echo $this->getChildHtml('details') ?>
+                    <div class="content">
+                        <form method="post" id="shipping-method-form"
+                              action="<?php echo $this->escapeHtml($this->getShippingMethodSubmitUrl()) ?>"
+                              class="form">
+                            <?php if ($this->getCanEditShippingMethod() || !$this->getCurrentShippingRate()): ?>
+                                <?php if ($groups = $this->getShippingRateGroups()): ?>
+                                    <?php $currentRate = $this->getCurrentShippingRate(); ?>
+                                    <div class="field shipping required">
+                                        <select name="shipping_method" id="shipping-method" class="select">
+                                            <?php if (!$currentRate): ?>
+                                                <option value="">
+                                                    <?php echo __('Please select a shipping method...') ?>
+                                                </option>
+                                            <?php endif; ?>
+                                            <?php foreach ($groups as $code => $rates): ?>
+                                                <optgroup
+                                                    label="<?php echo $this->escapeHtml($this->getCarrierName($code)) ?>">
+                                                    <?php foreach ($rates as $rate): ?>
+                                                        <option
+                                                            value="<?php echo $this->renderShippingRateValue($rate) ?>"<?php echo ($currentRate === $rate) ? ' selected="selected"' : ''; ?>>
+                                                            <?php echo $this->renderShippingRateOption($rate) ?>
+                                                        </option>
+                                                    <?php endforeach; ?>
+                                                </optgroup>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                    <div class="actions">
+                                        <button id="update-shipping-method-submit" type="submit" class="action update">
+                                            <span><?php echo __('Update Shipping Method') ?></span></button>
+                                    </div>
+                                <?php else: ?>
+                                    <p><?php echo __('Sorry, no quotes are available for this order at this time.') ?></p>
+                                <?php endif; ?>
+                            <?php else: ?>
+                                <p><?php echo $this->renderShippingRateOption($this->getCurrentShippingRate()) ?></p>
+                            <?php endif; ?>
+                        </form>
+                    </div>
+                </div>
             </div>
         </div>
+    <?php endif; ?>
 
-        <?php echo $this->getChildHtml('agreements'); ?>
-        <div class="actions" id="review-buttons-container">
-            <button type="button" id="review-button" value="<?php echo __('Place Order') ?>" class="action checkout">
-                <span><?php echo __('Place Order') ?></span></button>
-            <button type="button" id="review-submit" value="<?php echo __('Place Order') ?>" class="action checkout">
-                <span><?php echo __('Place Order') ?></span></button>
-            <button type="button" id="update-order" class="action update">
-                <span><?php echo __('Update Order Data') ?></span></button>
-            <span class="please-wait load indicator" id="review-please-wait" style="display: none;" data-text="<?php echo __('Submitting order information...') ?>">
-               <span><?php echo __('Submitting order information...') ?></span>
-            </span>
+    <div class="block billing information">
+        <div class="title"><strong><?php echo __('Billing Information') ?></strong></div>
+        <div class="content">
+            <div class="box billing">
+                <strong class="subtitle">
+                    <?php echo __('Payment Method') ?>
+                    <?php if ($this->getEditUrl()): ?><a href="<?php echo $this->getEditUrl() ?>" class="action edit">
+                        <span><?php echo __('Edit Payment Information') ?></span></a><?php endif ?>
+                </strong>
+
+                <div class="content">
+                    <?php echo $this->escapeHtml($this->getPaymentMethodTitle()) ?>
+                </div>
+            </div>
         </div>
-    </form>
+    </div>
+
+    <div class="paypal review items">
+        <div class="paypal subtitle caption">
+            <strong><?php echo __('Items in Your Shopping Cart') ?></strong>
+            <a href="<?php echo $this->getUrl('checkout/cart') ?>"
+               class="action edit"><span><?php echo __('Edit Shopping Cart') ?></span></a>
+        </div>
+
+        <div id="details-reload">
+            <?php echo $this->getChildHtml('details') ?>
+        </div>
+
+        <form method="post" id="order-review-form" action="<?php echo $this->getPlaceOrderUrl() ?>" class="form">
+            <?php echo $this->getChildHtml('agreements'); ?>
+            <div class="actions" id="review-buttons-container">
+                <button type="button" id="review-button" value="<?php echo __('Place Order') ?>"
+                        class="action checkout"><span><?php echo __('Place Order') ?></span></button>
+                <button type="button" id="review-submit" value="<?php echo __('Place Order') ?>"
+                        class="action checkout"><span><?php echo __('Place Order') ?></span></button>
+                <span class="please-wait load indicator" id="review-please-wait" style="display: none;" data-text="<?php echo __('Submitting order information...') ?>">
+                   <span><?php echo __('Submitting order information...') ?></span>
+                </span>
+            </div>
+        </form>
+    </div>
 </div>
 <script type="text/javascript">
     jQuery('#order-review-form').mage('validation', {}).mage('orderReview', {
+        shippingSubmitFormSelector: '#shipping-method-form',
+        shippingSelector: '#shipping-method',
         shippingMethodUpdateUrl: '<?php echo $this->escapeHtml($this->getUpdateShippingMethodsUrl()) ?>',
-        updateOrderSubmitUrl: '<?php echo $this->escapeHtml($this->getUpdateOrderSubmitUrl()) ?>',
         isAjax: <?php echo $this->getUseAjax() ? 'true' : 'false' ?>
     });
 </script>

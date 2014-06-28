@@ -32,7 +32,7 @@ $theme = $objectManager->create('Magento\Framework\View\Design\ThemeInterface');
 $theme->setThemePath(
     'test/test'
 )->setThemeVersion(
-    '2.0.0.0'
+    '0.1.0'
 )->setArea(
     'frontend'
 )->setThemeTitle(

@@ -38,20 +38,6 @@
                     <param name="_current">1</param>
                 </argument>
             </arguments>
-            <block class="Magento\Backend\Block\Widget\Grid\Export" name="admin.block.customer.grid.export" as="grid.export">
-                <arguments>
-                    <argument name="exportTypes" xsi:type="array">
-                        <item name="csv" xsi:type="array">
-                            <item name="urlPath" xsi:type="string">customer/*/exportCsv</item>
-                            <item name="label" xsi:type="string" translate="true">CSV</item>
-                        </item>
-                        <item name="excel" xsi:type="array">
-                            <item name="urlPath" xsi:type="string">customer/*/exportXml</item>
-                            <item name="label" xsi:type="string" translate="true">Excel XML</item>
-                        </item>
-                    </argument>
-                </arguments>
-            </block>
             <block class="Magento\Backend\Block\Widget\Grid\Massaction" name="admin.block.customer.grid.massaction" as="grid.massaction">
                 <arguments>
                     <argument name="massaction_id_field" xsi:type="string">entity_id</argument>

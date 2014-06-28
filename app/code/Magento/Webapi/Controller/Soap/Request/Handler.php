@@ -109,7 +109,15 @@ class Handler
             throw new WebapiException(__("Operation allowed only in HTTPS"));
         }
 
-        if (!$this->_authorizationService->isAllowed($serviceMethodInfo[SoapConfig::KEY_ACL_RESOURCES])) {
+        $isAllowed = false;
+        foreach ($serviceMethodInfo[SoapConfig::KEY_ACL_RESOURCES] as $resources) {
+            if ($this->_authorizationService->isAllowed($resources)) {
+                $isAllowed = true;
+                break;
+            }
+        }
+
+        if (!$isAllowed) {
             // TODO: Consider passing Integration ID instead of Consumer ID
             throw new ServiceAuthorizationException(
                 "Not Authorized.",

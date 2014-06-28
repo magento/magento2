@@ -35,8 +35,8 @@ if ($this->isOrPositionBefore()) {
     $labelPosition = ' after';
 }
 ?>
-<div data-label="or" class="paypal checkout <?php echo $labelPosition ?> paypal-logo">
-    <?php $shortcutHtmlId = $this->getShortcutHtmlId() ?>
+<?php $shortcutHtmlId = $this->getShortcutHtmlId() ?>
+<div data-label="or" class="paypal checkout <?php echo $labelPosition ?> paypal-logo <?php echo $shortcutHtmlId ?>">
     <input type="image" data-action="checkout-form-submit" data-checkout-url="<?php echo $this->getCheckoutUrl() ?>"
            src="<?php echo $this->getImageUrl() ?>"
            alt="<?php echo __('Checkout with PayPal'); ?>"
@@ -50,10 +50,14 @@ if ($this->isOrPositionBefore()) {
         $confirmationUrl = $this->getConfirmationUrl();
         $isInCatalogProduct = $this->getIsInCatalogProduct();
     endif; ?>
+    <?php if ($this->getAdditionalLinkImage()): ?>
+        <?php $linkImage = $this->getAdditionalLinkImage() ?>
+        <a href="<?php echo $linkImage['href']?>"><img src="<?php echo $linkImage['src']?>" /></a>
+    <?php endif; ?>
     <script type="text/javascript">
         (function ($) {
             head.js("<?php echo $this->getViewFileUrl('Magento_Paypal::js/paypal-checkout.js') ?>", head.ready(function () {
-                $('.paypal-logo').paypalCheckout({
+                $('.paypal-logo.<?php echo $shortcutHtmlId ?>').paypalCheckout({
                     confirmMessage: "<?php echo $this->escapeJsQuote($this->getConfirmationMessage())?>",
                     confirmUrl: "<?php echo !empty($confirmationUrl) ? $confirmationUrl : false ?>",
                     isCatalogProduct: "<?php echo !empty($isInCatalogProduct) ? $isInCatalogProduct : false ?>",

@@ -1100,7 +1100,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         $cacheKey = $this->_getTableName($tableName, $schemaName);
         $ddl = $this->loadDdlCache($cacheKey, self::DDL_CREATE);
         if ($ddl === false) {
-            $sql = 'SHOW CREATE TABLE ' . $this->quoteIdentifier($tableName);
+            $sql = 'SHOW CREATE TABLE ' . $this->quoteIdentifier($this->_getTableName($tableName, $schemaName));
             $ddl = $this->rawFetchRow($sql, 'Create Table');
             $this->saveDdlCache($cacheKey, self::DDL_CREATE, $ddl);
         }

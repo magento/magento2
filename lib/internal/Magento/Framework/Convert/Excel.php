@@ -150,7 +150,7 @@ class Excel
 
         foreach ($row as $value) {
             $value = htmlspecialchars($value);
-            $dataType = is_numeric($value) ? 'Number' : 'String';
+            $dataType = is_numeric($value) && $value[0] !== '+' && $value[0] !== '0' ? 'Number' : 'String';
 
             $value = str_replace("\r\n", '&#10;', $value);
             $value = str_replace("\r", '&#10;', $value);

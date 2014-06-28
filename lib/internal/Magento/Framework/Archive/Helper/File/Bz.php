@@ -31,10 +31,14 @@ class Bz extends \Magento\Framework\Archive\Helper\File
 {
     /**
      * {@inheritdoc}
+     * @throws \RuntimeException
      */
     protected function _open($mode)
     {
-        $this->_fileHandler = @bzopen($this->_filePath, $mode);
+        if (!extension_loaded('bz2')) {
+            throw new \RuntimeException('PHP extension bz2 is required.');
+        }
+        $this->_fileHandler = bzopen($this->_filePath, $mode);
 
         if (false === $this->_fileHandler) {
             throw new \Magento\Framework\Exception('Failed to open file ' . $this->_filePath);
@@ -46,7 +50,7 @@ class Bz extends \Magento\Framework\Archive\Helper\File
      */
     protected function _write($data)
     {
-        $result = @bzwrite($this->_fileHandler, $data);
+        $result = bzwrite($this->_fileHandler, $data);
 
         if (false === $result) {
             throw new \Magento\Framework\Exception('Failed to write data to ' . $this->_filePath);

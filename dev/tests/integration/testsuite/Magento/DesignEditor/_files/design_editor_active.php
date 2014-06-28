@@ -43,7 +43,7 @@ $theme->setData(
         'area' => 'frontend',
         'parent_id' => null,
         'theme_path' => 'Magento/blank',
-        'theme_version' => '2.0.0.0',
+        'theme_version' => '0.1.0',
         'theme_title' => 'Default',
         'preview_image' => 'media/preview_image.jpg',
         'is_featured' => '0'

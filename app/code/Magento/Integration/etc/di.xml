@@ -24,8 +24,8 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <preference for="Magento\Integration\Service\IntegrationV1Interface" type="Magento\Integration\Service\IntegrationV1" />
-    <preference for="Magento\Integration\Service\OauthV1Interface" type="Magento\Integration\Service\OauthV1" />
+    <preference for="Magento\Integration\Service\V1\IntegrationInterface" type="Magento\Integration\Service\V1\Integration" />
+    <preference for="Magento\Integration\Service\V1\OauthInterface" type="Magento\Integration\Service\V1\Oauth" />
     <preference for="Magento\Framework\Oauth\ConsumerInterface" type="Magento\Integration\Model\Oauth\Consumer"/>
     <preference for="Magento\Framework\Oauth\NonceGeneratorInterface" type="Magento\Integration\Model\Oauth\Nonce\Generator"/>
     <preference for="Magento\Framework\Oauth\TokenProviderInterface" type="Magento\Integration\Model\Oauth\Token\Provider"/>

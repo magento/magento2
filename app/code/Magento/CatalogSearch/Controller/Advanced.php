@@ -92,18 +92,16 @@ class Advanced extends \Magento\Framework\App\Action\Action
      */
     public function resultAction()
     {
-        $this->_view->loadLayout();
         try {
             $this->_catalogSearchAdvanced->addFilters($this->getRequest()->getQuery());
         } catch (\Magento\Framework\Model\Exception $e) {
             $this->messageManager->addError($e->getMessage());
-            $defaultUrl = $this->_urlFactory->create()->addQueryParams(
-                $this->getRequest()->getQuery()
-            )->getUrl(
-                '*/*/'
-            );
+            $defaultUrl = $this->_urlFactory->create()
+                ->addQueryParams($this->getRequest()->getQuery())
+                ->getUrl('*/*/');
             $this->getResponse()->setRedirect($this->_redirect->error($defaultUrl));
         }
+        $this->_view->loadLayout();
         $this->_view->renderLayout();
     }
 }

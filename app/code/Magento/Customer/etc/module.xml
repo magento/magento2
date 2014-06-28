@@ -24,7 +24,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Module/etc/module.xsd">
-    <module name="Magento_Customer" version="1.6.2.0.5" active="true">
+    <module name="Magento_Customer" schema_version="1.6.2.0.5" active="true">
         <sequence>
             <module name="Magento_Eav"/>
             <module name="Magento_Directory"/>
@@ -46,7 +46,6 @@
             <module name="Magento_Review"/>
             <module name="Magento_Tax"/>
             <module name="Magento_PageCache"/>
-            <module name="Magento_ImportExport"/>
         </depends>
     </module>
 </config>

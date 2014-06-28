@@ -310,7 +310,7 @@ abstract class AbstractEntity
     protected function _saveValidatedBunches()
     {
         $source = $this->_getSource();
-        $productDataSize = 0;
+        $currentDataSize = 0;
         $bunchRows = array();
         $startNewBunch = false;
         $nextRowBackup = array();
@@ -325,7 +325,7 @@ abstract class AbstractEntity
                 $this->_dataSourceModel->saveBunch($this->getEntityTypeCode(), $this->getBehavior(), $bunchRows);
 
                 $bunchRows = $nextRowBackup;
-                $productDataSize = strlen(serialize($bunchRows));
+                $currentDataSize = strlen(serialize($bunchRows));
                 $startNewBunch = false;
                 $nextRowBackup = array();
             }
@@ -345,12 +345,12 @@ abstract class AbstractEntity
 
                     $isBunchSizeExceeded = $bunchSize > 0 && count($bunchRows) >= $bunchSize;
 
-                    if ($productDataSize + $rowSize >= $maxDataSize || $isBunchSizeExceeded) {
+                    if ($currentDataSize + $rowSize >= $maxDataSize || $isBunchSizeExceeded) {
                         $startNewBunch = true;
                         $nextRowBackup = array($source->key() => $rowData);
                     } else {
                         $bunchRows[$source->key()] = $rowData;
-                        $productDataSize += $rowSize;
+                        $currentDataSize += $rowSize;
                     }
                 }
                 $source->next();

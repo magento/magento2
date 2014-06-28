@@ -30,4 +30,12 @@
     <referenceContainer name="content">
         <block class="Magento\Framework\View\Element\Template" name="checkout.onepage.paypal.js" after="checkout.onepage" template="Magento_Paypal::onepage.phtml"/>
     </referenceContainer>
+    <referenceContainer name="top.container">
+        <block class="Magento\Paypal\Block\Bml\Banners" name="bml.center.logo" template="bml.phtml">
+            <arguments>
+                <argument name="section" xsi:type="string">checkout</argument>
+                <argument name="position" xsi:type="number">0</argument>
+            </arguments>
+        </block>
+    </referenceContainer>
 </layout>

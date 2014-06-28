@@ -1338,7 +1338,7 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     *
+     * @magentoAppArea adminhtml
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
@@ -1346,7 +1346,6 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testDeleteCustomerWithAddress()
     {
-        $this->markTestSkipped('MAGETWO-22014');
         //Verify address is created for the customer;
         $result = $this->_customerAddressService->getAddresses(1);
         $this->assertEquals(2, count($result));

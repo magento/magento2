@@ -28,6 +28,7 @@ use Magento\Customer\Model\Customer;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Checkout\Model\Type\Onepage;
 use Magento\Sales\Model\Quote;
+use Magento\Paypal\Model\Express\Checkout;
 
 class CheckoutTest extends \PHPUnit_Framework_TestCase
 {
@@ -195,6 +196,104 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         );
+    }
+
+    /**
+     * Verify that an order placed with an existing customer can re-use the customer addresses.
+     *
+     * @magentoDataFixture Magento/Paypal/_files/quote_payment_express_with_customer.php
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
+     */
+    public function testReturnFromPaypal()
+    {
+        $quote = $this->_getFixtureQuote();
+        $paypalConfigMock = $this->getMock('Magento\Paypal\Model\Config', [], [], '', false);
+        $apiTypeFactory = $this->getMock('Magento\Paypal\Model\Api\Type\Factory', [], [], '', false);
+        $paypalInfo = $this->getMock('Magento\Paypal\Model\Info', [], [], '', false);
+        $checkoutModel = $this->_objectManager->create(
+            'Magento\Paypal\Model\Express\Checkout',
+            [
+                'params' => ['quote' => $quote, 'config' => $paypalConfigMock],
+                'apiTypeFactory' => $apiTypeFactory,
+                'paypalInfo' => $paypalInfo
+            ]
+        );
+
+        $api = $this->getMock(
+            'Magento\Paypal\Model\Api\Nvp',
+            ['call', 'getExportedShippingAddress', 'getExportedBillingAddress'],
+            [],
+            '',
+            false
+        );
+        $api->expects($this->any())->method('call')->will($this->returnValue(array()));
+        $apiTypeFactory->expects($this->any())->method('create')->will($this->returnValue($api));
+
+        $exportedBillingAddress = $this->_getExportedAddressFixture($quote->getBillingAddress()->getData());
+        $api->expects($this->any())
+            ->method('getExportedBillingAddress')
+            ->will($this->returnValue($exportedBillingAddress));
+
+        $exportedShippingAddress = $this->_getExportedAddressFixture($quote->getShippingAddress()->getData());
+        $api->expects($this->any())
+            ->method('getExportedShippingAddress')
+            ->will($this->returnValue($exportedShippingAddress));
+
+
+        $paypalInfo->expects($this->once())->method('importToPayment')->with($api, $quote->getPayment());
+
+        $quote->getPayment()->setAdditionalInformation(Checkout::PAYMENT_INFO_BUTTON, 1);
+
+        $checkoutModel->returnFromPaypal('token');
+
+        $billingAddress = $quote->getBillingAddress();
+        $this->assertEquals($billingAddress->getEmail(), $quote->getCustomerEmail());
+        $this->assertEquals($billingAddress->getPrefix(), $quote->getCustomerPrefix());
+        $this->assertEquals($billingAddress->getFirstname(), $quote->getCustomerFirstname());
+        $this->assertEquals($billingAddress->getMiddlename(), $quote->getCustomerMiddlename());
+        $this->assertEquals($billingAddress->getLastname(), $quote->getCustomerLastname());
+        $this->assertEquals($billingAddress->getSuffix(), $quote->getCustomerSuffix());
+        $this->assertTrue($billingAddress->getShouldIgnoreValidation());
+        $this->assertContains('exported', $billingAddress->getFirstname());
+
+        $shippingAddress = $quote->getShippingAddress();
+        $this->assertTrue((bool)$shippingAddress->getSameAsBilling());
+        $this->assertNull($shippingAddress->getPrefix());
+        $this->assertNull($shippingAddress->getMiddlename());
+        $this->assertNull($shippingAddress->getLastname());
+        $this->assertNull($shippingAddress->getSuffix());
+        $this->assertTrue($shippingAddress->getShouldIgnoreValidation());
+        $this->assertContains('exported', $shippingAddress->getFirstname());
+
+        $paymentAdditionalInformation = $quote->getPayment()->getAdditionalInformation();
+        $this->assertArrayHasKey(Checkout::PAYMENT_INFO_TRANSPORT_SHIPPING_METHOD, $paymentAdditionalInformation);
+        $this->assertArrayHasKey(Checkout::PAYMENT_INFO_TRANSPORT_PAYER_ID, $paymentAdditionalInformation);
+        $this->assertArrayHasKey(Checkout::PAYMENT_INFO_TRANSPORT_TOKEN, $paymentAdditionalInformation);
+        $this->assertTrue($quote->getPayment()->hasMethod());
+
+        $this->assertTrue($quote->getTotalsCollectedFlag());
+        $this->assertFalse($quote->hasDataChanges());
+    }
+
+    /**
+     * Prepare fixture for exported address
+     *
+     * @param array $addressData
+     * @return \Magento\Framework\Object
+     */
+    protected function _getExportedAddressFixture(array $addressData)
+    {
+        $addressDataKeys = ['firstname', 'lastname', 'street', 'city', 'telephone'];
+        $result = array();
+        foreach ($addressDataKeys as $key) {
+            if (isset($addressData[$key])) {
+                $result[$key] = 'exported' . $addressData[$key];
+            }
+        }
+        $fixture = new \Magento\Framework\Object($result);
+        $fixture->setExportedKeys($addressDataKeys);
+        return $fixture;
     }
 
     /**

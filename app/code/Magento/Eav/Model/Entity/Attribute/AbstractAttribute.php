@@ -536,9 +536,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractModel 
     public function isValueEmpty($value)
     {
         $attrType = $this->getBackend()->getType();
-        $isEmpty = is_array(
-            $value
-        ) ||
+        $isEmpty = (is_array($value) && count($value) == 0) ||
             $value === null ||
             $value === false && $attrType != 'int' ||
             $value === '' && ($attrType == 'int' ||

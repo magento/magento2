@@ -70,6 +70,8 @@ class CurlTransport implements CurlInterface
      * Apply current configuration array to curl resource
      *
      * @return $this
+     *
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function _applyConfig()
     {
@@ -131,11 +133,11 @@ class CurlTransport implements CurlInterface
      *
      * @param $method
      * @param $url
-     * @param string $http_ver
+     * @param string $httpVer
      * @param array $headers
      * @param array $params
      */
-    public function write($method, $url, $http_ver = '1.1', $headers = array(), $params = array())
+    public function write($method, $url, $httpVer = '1.1', $headers = array(), $params = array())
     {
         $this->_applyConfig();
         $options = array(
@@ -260,12 +262,12 @@ class CurlTransport implements CurlInterface
     /**
      * Extract the response code from a response string
      *
-     * @param string $response_str
+     * @param string $responseStr
      * @return int
      */
-    public static function extractCode($response_str)
+    public static function extractCode($responseStr)
     {
-        preg_match("|^HTTP/[\d\.x]+ (\d+)|", $response_str, $m);
+        preg_match("|^HTTP/[\d\.x]+ (\d+)|", $responseStr, $m);
 
         if (isset($m[1])) {
             return (int)$m[1];

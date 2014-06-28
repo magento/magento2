@@ -36,7 +36,7 @@ class TaxRateIndex extends BackendPage
     protected $_blocks = [
         'gridPageActions' => [
             'name' => 'gridPageActions',
-            'class' => 'Magento\Backend\Test\Block\GridPageActions',
+            'class' => 'Magento\Tax\Test\Block\Adminhtml\Rate\GridPageActions',
             'locator' => '.page-main-actions',
             'strategy' => 'css selector',
         ],
@@ -55,7 +55,7 @@ class TaxRateIndex extends BackendPage
     ];
 
     /**
-     * @return \Magento\Backend\Test\Block\GridPageActions
+     * @return \Magento\Tax\Test\Block\Adminhtml\Rate\GridPageActions
      */
     public function getGridPageActions()
     {

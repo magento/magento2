@@ -210,17 +210,17 @@ class Token extends \Magento\Framework\Model\AbstractModel
     public function authorize($userId, $userType)
     {
         if (!$this->getId() || !$this->getConsumerId()) {
-            throw new OauthException(__('Token is not ready to be authorized'));
+            throw new OauthException('Token is not ready to be authorized');
         }
         if ($this->getAuthorized()) {
-            throw new OauthException(__('Token is already authorized'));
+            throw new OauthException('Token is already authorized');
         }
         if (self::USER_TYPE_ADMIN == $userType) {
             $this->setAdminId($userId);
         } elseif (self::USER_TYPE_CUSTOMER == $userType) {
             $this->setCustomerId($userId);
         } else {
-            throw new OauthException(__('User type is unknown'));
+            throw new OauthException('User type is unknown');
         }
 
         $this->setVerifier($this->_oauthHelper->generateVerifier());
@@ -241,7 +241,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
     public function convertToAccess()
     {
         if (self::TYPE_REQUEST != $this->getType()) {
-            throw new OauthException(__('Cannot convert to access token due to token is not request type'));
+            throw new OauthException('Cannot convert to access token due to token is not request type');
         }
 
         $this->setType(self::TYPE_ACCESS);
@@ -289,7 +289,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
         } elseif ($this->getCustomerId()) {
             return self::USER_TYPE_CUSTOMER;
         } else {
-            throw new OauthException(__('User type is unknown'));
+            throw new OauthException('User type is unknown');
         }
     }
 

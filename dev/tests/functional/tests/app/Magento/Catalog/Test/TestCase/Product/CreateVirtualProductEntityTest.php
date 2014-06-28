@@ -25,7 +25,7 @@
 namespace Magento\Catalog\Test\TestCase\Product;
 
 use Mtf\TestCase\Injectable;
-use Magento\Catalog\Test\Fixture\CatalogCategoryEntity;
+use Magento\Catalog\Test\Fixture\CatalogCategory;
 use Magento\Catalog\Test\Fixture\CatalogProductVirtual;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
@@ -49,7 +49,7 @@ class CreateVirtualProductEntityTest extends Injectable
     /**
      * Category fixture
      *
-     * @var CatalogCategoryEntity
+     * @var CatalogCategory
      */
     protected $category;
 
@@ -70,10 +70,10 @@ class CreateVirtualProductEntityTest extends Injectable
     /**
      * Prepare data
      *
-     * @param CatalogCategoryEntity $category
+     * @param CatalogCategory $category
      * @return array
      */
-    public function __prepare(CatalogCategoryEntity $category)
+    public function __prepare(CatalogCategory $category)
     {
         $category->persist();
         return [
@@ -98,10 +98,10 @@ class CreateVirtualProductEntityTest extends Injectable
      * Run create product virtual entity test
      *
      * @param CatalogProductVirtual $product
-     * @param CatalogCategoryEntity $category
+     * @param CatalogCategory $category
      * @return void
      */
-    public function testCreate(CatalogProductVirtual $product, CatalogCategoryEntity $category)
+    public function testCreate(CatalogProductVirtual $product, CatalogCategory $category)
     {
         // Steps
         $this->productGrid->open();

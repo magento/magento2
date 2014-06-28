@@ -40,7 +40,8 @@ class AffectedAttributeSetForm extends ParentForm
      *
      * @var string
      */
-    protected $confirmButton = '//parent::div[div[@id="affected-attribute-set-form"]]//button[contains(@id,"confirm-button")]';
+    protected $confirmButton =
+        '//parent::div[div[@id="affected-attribute-set-form"]]//button[contains(@id,"confirm-button")]';
 
     /**
      * Locator buttons new name attribute set

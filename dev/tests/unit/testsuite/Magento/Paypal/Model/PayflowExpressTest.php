@@ -44,9 +44,11 @@ class PayflowExpressTest extends \PHPUnit_Framework_TestCase
         $proFactory = $this->getMockBuilder(
             'Magento\Paypal\Model\ProFactory'
         )->disableOriginalConstructor()->setMethods(['create'])->getMock();
+        $api = $this->getMock('Magento\Paypal\Model\Api\Nvp', [], [], '', false);
         $paypalPro = $this->getMockBuilder(
             'Magento\Paypal\Model\Pro'
         )->disableOriginalConstructor()->setMethods([])->getMock();
+        $paypalPro->expects($this->any())->method('getApi')->will($this->returnValue($api));
 
         $proFactory->expects($this->once())->method('create')->will($this->returnValue($paypalPro));
 

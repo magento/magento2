@@ -123,4 +123,22 @@ class MultiselectlistElement extends MultiselectElement
 
         return $options;
     }
+
+    /**
+     * Method that returns array with all options in multiple select list
+     *
+     * @return array
+     */
+    public function getAllValues()
+    {
+        $optionsValue = [];
+        $options = $this->getOptions();
+
+        foreach ($options as $option) {
+            /** @var Element $option */
+            $optionsValue[] = $option->getText();
+        }
+
+        return $optionsValue;
+    }
 }

@@ -73,6 +73,8 @@ class TaxClassIds implements FixtureInterface
      *
      * @param $key [optional]
      * @return mixed
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getData($key = null)
     {

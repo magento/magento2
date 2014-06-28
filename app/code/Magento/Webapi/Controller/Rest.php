@@ -23,16 +23,19 @@
  */
 namespace Magento\Webapi\Controller;
 
+use Magento\Authz\Model\UserIdentifier;
 use Magento\Authz\Service\AuthorizationV1Interface as AuthorizationService;
+use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Service\Data\AbstractObject;
 use Magento\Framework\Service\Data\Eav\AbstractObject as EavAbstractObject;
 use Magento\Framework\Service\EavDataObjectConverter;
 use Magento\Webapi\Controller\Rest\Request as RestRequest;
 use Magento\Webapi\Controller\Rest\Response as RestResponse;
+use Magento\Webapi\Controller\Rest\Response\PartialResponseProcessor;
 use Magento\Webapi\Controller\Rest\Router;
-use Magento\Webapi\Model\PathProcessor;
 use Magento\Webapi\Model\Config\Converter;
-use Magento\Framework\Exception\AuthorizationException;
+use Magento\Webapi\Model\PathProcessor;
+use Magento\Webapi\Controller\Rest\Router\Route;
 
 /**
  * Front controller for WebAPI REST area.
@@ -40,11 +43,15 @@ use Magento\Framework\Exception\AuthorizationException;
  * TODO: Consider warnings suppression removal
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Rest implements \Magento\Framework\App\FrontControllerInterface
 {
     /** @var Router */
     protected $_router;
+
+    /** @var Route */
+    protected $_route;
 
     /** @var RestRequest */
     protected $_request;
@@ -85,6 +92,16 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     protected $areaList;
 
     /**
+     * @var PartialResponseProcessor
+     */
+    protected $partialResponseProcessor;
+
+    /**
+     * @var \Magento\Framework\Session\Generic
+     */
+    protected $session;
+
+    /**
      * Initialize dependencies
      *
      * @param RestRequest $request
@@ -100,6 +117,8 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      * @param ErrorProcessor $errorProcessor
      * @param PathProcessor $pathProcessor
      * @param \Magento\Framework\App\AreaList $areaList
+     * @param PartialResponseProcessor $partialResponseProcessor
+     * @param \Magento\Framework\Session\Generic $session
      *
      * TODO: Consider removal of warning suppression
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -117,7 +136,9 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         ServiceArgsSerializer $serializer,
         ErrorProcessor $errorProcessor,
         PathProcessor $pathProcessor,
-        \Magento\Framework\App\AreaList $areaList
+        \Magento\Framework\App\AreaList $areaList,
+        PartialResponseProcessor $partialResponseProcessor,
+        \Magento\Framework\Session\Generic $session
     ) {
         $this->_router = $router;
         $this->_request = $request;
@@ -132,6 +153,8 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         $this->_errorProcessor = $errorProcessor;
         $this->_pathProcessor = $pathProcessor;
         $this->areaList = $areaList;
+        $this->partialResponseProcessor = $partialResponseProcessor;
+        $this->session = $session;
     }
 
     /**
@@ -150,22 +173,8 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
             if (!$this->_appState->isInstalled()) {
                 throw new \Magento\Webapi\Exception(__('Magento is not yet installed'));
             }
-            $oauthRequest = $this->_oauthHelper->prepareRequest($this->_request);
-            $consumerId = $this->_oauthService->validateAccessTokenRequest(
-                $oauthRequest,
-                $this->_oauthHelper->getRequestUrl($this->_request),
-                $this->_request->getMethod()
-            );
-            $this->_request->setConsumerId($consumerId);
-            $route = $this->_router->match($this->_request);
-
-            if (!$this->_authorizationService->isAllowed($route->getAclResources())) {
-                throw new AuthorizationException(
-                    AuthorizationException::NOT_AUTHORIZED,
-                    ['consumer_id' => $consumerId, 'resources' => implode(', ', $route->getAclResources())]
-                );
-            }
-
+            $this->_checkPermissions();
+            $route = $this->_getCurrentRoute();
             if ($route->isSecure() && !$this->_request->isSecure()) {
                 throw new \Magento\Webapi\Exception(__('Operation allowed only in HTTPS'));
             }
@@ -178,8 +187,11 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
             $service = $this->_objectManager->get($serviceClassName);
             /** @var \Magento\Framework\Service\Data\AbstractObject $outputData */
             $outputData = call_user_func_array([$service, $serviceMethodName], $inputParams);
-            $outputArray = $this->_processServiceOutput($outputData);
-            $this->_response->prepareResponse($outputArray);
+            $outputData = $this->_processServiceOutput($outputData);
+            if ($this->_request->getParam(PartialResponseProcessor::FILTER_PARAMETER) && is_array($outputData)) {
+                $outputData = $this->partialResponseProcessor->filter($outputData);
+            }
+            $this->_response->prepareResponse($outputData);
         } catch (\Exception $e) {
             $maskedException = $this->_errorProcessor->maskException($e);
             $this->_response->setException($maskedException);
@@ -251,9 +263,72 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     {
         foreach ($parameters as $name => $paramData) {
             if ($paramData[Converter::KEY_FORCE] || !isset($inputData[$name])) {
-                $inputData[$name] = $paramData[Converter::KEY_VALUE];
+                $value = isset($paramData['source']) && $paramData['source'] == 'session'
+                    ? $this->session->{$paramData['method']}()
+                    : $paramData[Converter::KEY_VALUE];
+                $inputData[$name] = $value;
             }
         }
         return $inputData;
+    }
+
+    /**
+     * Retrieve current route.
+     *
+     * @return Route
+     */
+    protected function _getCurrentRoute()
+    {
+        if (!$this->_route) {
+            $this->_route = $this->_router->match($this->_request);
+        }
+        return $this->_route;
+    }
+
+    /**
+     * Perform authentication and authorization.
+     *
+     * Authentication can be based on active customer/guest session or it can be based on OAuth headers.
+     *
+     * @throws \Magento\Framework\Exception\AuthorizationException
+     * @return void
+     */
+    protected function _checkPermissions()
+    {
+        /**
+         * All mobile clients are expected to pass session cookie along with the request which will allow
+         * to start session automatically. User ID and user type are initialized when session is created
+         * during login call.
+         */
+        $userId = $this->session->getUserId();
+        $userType = $this->session->getUserType();
+        $userIdentifier = null;
+        $consumerId = null;
+        if ($userType) {
+            /** @var \Magento\Authz\Model\UserIdentifier $userIdentifier */
+            $userIdentifier = $this->_objectManager->create(
+                'Magento\Authz\Model\UserIdentifier',
+                ['userType' => $userType, 'userId' => $userId]
+            );
+        } else {
+            $oauthRequest = $this->_oauthHelper->prepareRequest($this->_request);
+            $consumerId = $this->_oauthService->validateAccessTokenRequest(
+                $oauthRequest,
+                $this->_oauthHelper->getRequestUrl($this->_request),
+                $this->_request->getMethod()
+            );
+            $this->_request->setConsumerId($consumerId);
+        }
+
+        $route = $this->_getCurrentRoute();
+
+        if (!$this->_authorizationService->isAllowed($route->getAclResources(), $userIdentifier)) {
+            $params = ['resources' => implode(', ', $route->getAclResources())];
+            $userParam = $consumerId
+                ? ['consumer_id' => $consumerId]
+                : ['userType' => $userType, 'userId' => $userId];
+            $params = array_merge($params, $userParam);
+            throw new AuthorizationException(AuthorizationException::NOT_AUTHORIZED, $params);
+        }
     }
 }

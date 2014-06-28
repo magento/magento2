@@ -73,7 +73,7 @@ class Validator
                 'name' => 'available',
                 'class' => 'Zend_Validate_Regex',
                 'break' => true,
-                'options' => array('pattern' => '/^(\d+\.\d+\.\d+\.\d+(\-[a-zA-Z0-9]+)?)$|^\*$/'),
+                'options' => array('pattern' => '/^(\d+\.\d+\.\d+(\-[a-zA-Z0-9]+)?)$|^\*$/'),
                 'message' => __('Theme version has not compatible format.')
             )
         );

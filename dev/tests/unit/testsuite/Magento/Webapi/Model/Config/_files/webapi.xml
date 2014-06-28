@@ -34,6 +34,15 @@
             <parameter name="id" force="true">null</parameter>
         </data>
     </route>
+    <route url="/V1/customers/me/session" method="GET">
+        <service class="Magento\Customer\Service\V1\CustomerServiceInterface" method="getCustomer" />
+        <resources>
+            <resource ref="Magento_Customer::customer_self" />
+        </resources>
+        <data>
+            <parameter name="id" force="true" source="session" method="getUserId">null</parameter>
+        </data>
+    </route>
     <route url="/V1/customers/me" method="PUT" secure="true">
         <service class="Magento\Customer\Service\V1\CustomerServiceInterface" method="updateCustomer" />
         <resources>

@@ -101,6 +101,8 @@ class CreateProduct extends Curl
      * @param FixtureInterface $fixture [optional]
      * @return mixed|string
      * @throws \Exception
+     *
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function persist(FixtureInterface $fixture = null)
     {

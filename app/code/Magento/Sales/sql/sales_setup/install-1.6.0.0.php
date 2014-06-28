@@ -5868,9 +5868,6 @@ $table = $installer->getConnection()->newTable(
     array('order_id', 'payment_id', 'txn_id'),
     array('type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE)
 )->addIndex(
-    $installer->getIdxName('sales_payment_transaction', array('order_id')),
-    array('order_id')
-)->addIndex(
     $installer->getIdxName('sales_payment_transaction', array('parent_id')),
     array('parent_id')
 )->addIndex(

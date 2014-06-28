@@ -61,12 +61,12 @@ class AreaListTest extends \PHPUnit_Framework_TestCase
         $this->_resolverFactory->expects(
             $this->any()
         )->method(
-            'create'
-        )->with(
-            'testValue'
-        )->will(
-            $this->returnValue($resolverMock)
-        );
+                'create'
+            )->with(
+                'testValue'
+            )->will(
+                $this->returnValue($resolverMock)
+            );
 
         $actual = $this->_model->getCodeByFrontName('testFrontName');
         $this->assertEquals($expected, $actual);
@@ -78,7 +78,7 @@ class AreaListTest extends \PHPUnit_Framework_TestCase
         $this->_model = new \Magento\Framework\App\AreaList(
             $this->objectManagerMock,
             $this->_resolverFactory,
-            array('testArea'=>array('frontName' => 'testFrontName')),
+            array('testArea' => array('frontName' => 'testFrontName')),
             $expected
         );
 
@@ -115,12 +115,54 @@ class AreaListTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCodes()
     {
+        $areas = array('area1' => 'value1', 'area2' => 'value2');
         $this->_model = new \Magento\Framework\App\AreaList(
-            $this->objectManagerMock, $this->_resolverFactory, array('area1' => 'value1', 'area2' => 'value2'), ''
+            $this->objectManagerMock, $this->_resolverFactory, $areas, ''
         );
 
-        $expected = array(0 => 'area1', 1 => 'area2');
+        $expected = array_keys($areas);
         $actual = $this->_model->getCodes();
         $this->assertEquals($expected, $actual);
+    }
+
+    public function testGetDefaultRouter()
+    {
+        $areas = array('area1' => ['router' => 'value1'], 'area2' => 'value2');
+        $this->_model = new \Magento\Framework\App\AreaList(
+            $this->objectManagerMock, $this->_resolverFactory, $areas, ''
+        );
+
+        $this->assertEquals($this->_model->getDefaultRouter('area1'), $areas['area1']['router']);
+        $this->assertNull($this->_model->getDefaultRouter('area2'));
+    }
+
+    public function testGetArea()
+    {
+        /** @var \Magento\Framework\ObjectManager $objectManagerMock */
+        $objectManagerMock = $this->getObjectManagerMockGetArea();
+        $areas = array('area1' => ['router' => 'value1'], 'area2' => 'value2');
+        $this->_model = new AreaList(
+            $objectManagerMock, $this->_resolverFactory, $areas, ''
+        );
+
+        $this->assertEquals($this->_model->getArea('testArea'), 'ok');
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getObjectManagerMockGetArea()
+    {
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager', [], [], '', false);
+        $objectManagerMock
+            ->expects($this->any())
+            ->method('create')
+            ->with(
+                $this->equalTo('Magento\Framework\App\AreaInterface'),
+                $this->equalTo(array('areaCode' => 'testArea'))
+            )
+            ->will($this->returnValue('ok'));
+
+        return $objectManagerMock;
     }
 }

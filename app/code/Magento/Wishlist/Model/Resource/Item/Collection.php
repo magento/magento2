@@ -21,15 +21,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+namespace Magento\Wishlist\Model\Resource\Item;
 
 /**
  * Wishlist item collection
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Wishlist\Model\Resource\Item;
-
 class Collection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
@@ -270,7 +266,10 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     protected function _assignProducts()
     {
-        \Magento\Framework\Profiler::start('WISHLIST:' . __METHOD__, array('group' => 'WISHLIST', 'method' => __METHOD__));
+        \Magento\Framework\Profiler::start(
+            'WISHLIST:' . __METHOD__,
+            array('group' => 'WISHLIST', 'method' => __METHOD__)
+        );
         $productIds = array();
 
         $this->_productIds = array_merge($this->_productIds, array_keys($productIds));
@@ -282,11 +281,12 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
             $productCollection->setVisibility($this->_productVisibility->getVisibleInSiteIds());
         }
 
-        $productCollection->addPriceData()->addTaxPercents()->addIdFilter(
-            $this->_productIds
-        )->addAttributeToSelect(
-            $attributes
-        )->addOptionsToResult()->addUrlRewrite();
+        $productCollection->addPriceData()
+            ->addTaxPercents()
+            ->addIdFilter($this->_productIds)
+            ->addAttributeToSelect($attributes)
+            ->addOptionsToResult()
+            ->addUrlRewrite();
 
         if ($this->_productSalable) {
             $productCollection = $this->_adminhtmlSales->applySalableProductTypesFilter($productCollection);
@@ -464,13 +464,19 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
         $now = $this->_date->date();
         $gmtOffset = (int)$this->_date->getGmtOffset();
         if (isset($constraints['from'])) {
-            $lastDay = new \Magento\Framework\Stdlib\DateTime\Date($now, \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
+            $lastDay = new \Magento\Framework\Stdlib\DateTime\Date(
+                $now,
+                \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
+            );
             $lastDay->subSecond($gmtOffset)->subDay(intval($constraints['from']));
             $filter['to'] = $lastDay;
         }
 
         if (isset($constraints['to'])) {
-            $firstDay = new \Magento\Framework\Stdlib\DateTime\Date($now, \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
+            $firstDay = new \Magento\Framework\Stdlib\DateTime\Date(
+                $now,
+                \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
+            );
             $firstDay->subSecond($gmtOffset)->subDay(intval($constraints['to']) + 1);
             $filter['from'] = $firstDay;
         }

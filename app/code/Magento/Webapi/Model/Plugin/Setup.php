@@ -43,7 +43,7 @@ class Setup
     /**
      * Integration service
      *
-     * @var \Magento\Integration\Service\IntegrationV1Interface
+     * @var \Magento\Integration\Service\V1\IntegrationInterface
      */
     protected $_integrationService;
 
@@ -66,13 +66,13 @@ class Setup
      *
      * @param IntegrationConfig $integrationConfig
      * @param \Magento\Authz\Service\AuthorizationV1 $authzService
-     * @param \Magento\Integration\Service\IntegrationV1Interface $integrationService
+     * @param \Magento\Integration\Service\V1\IntegrationInterface $integrationService
      * @param \Magento\Authz\Model\UserIdentifier\Factory $userIdentifierFactory
      */
     public function __construct(
         IntegrationConfig $integrationConfig,
         \Magento\Authz\Service\AuthorizationV1 $authzService,
-        \Magento\Integration\Service\IntegrationV1Interface $integrationService,
+        \Magento\Integration\Service\V1\IntegrationInterface $integrationService,
         \Magento\Authz\Model\UserIdentifier\Factory $userIdentifierFactory
     ) {
         $this->_integrationConfig = $integrationConfig;

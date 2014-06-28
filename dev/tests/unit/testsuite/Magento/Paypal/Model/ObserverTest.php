@@ -92,23 +92,23 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         )->setMethods(
             array('createBlock')
         )->disableOriginalConstructor()->getMock();
-        $blocks = array('Magento\Paypal\Block\Express\Shortcut', 'Magento\Paypal\Block\PayflowExpress\Shortcut');
+        $blocks = [
+            'Magento\Paypal\Block\Express\Shortcut' => 'Magento\Paypal\Block\Express\Shortcut',
+            'Magento\Paypal\Block\PayflowExpress\Shortcut' => 'Magento\Paypal\Block\Express\Shortcut',
+            'Magento\Paypal\Block\Bml\Shortcut' => 'Magento\Paypal\Block\Bml\Shortcut',
+            'Magento\Paypal\Block\Payflow\Bml\Shortcut' => 'Magento\Paypal\Block\Bml\Shortcut'
+        ];
 
         $blockInstances = array();
-        foreach ($blocks as $atPosition => $blockName) {
-            $block = $this->getMockBuilder($blockName)->setMethods(null)->disableOriginalConstructor()->getMock();
+        $atPosition = 0;
+        foreach ($blocks as $blockName => $blockInstance) {
+            $block = $this->getMockBuilder($blockInstance)->setMethods(null)->disableOriginalConstructor()->getMock();
 
             $blockInstances[$blockName] = $block;
 
-            $layoutMock->expects(
-                new MethodInvokedAtIndex($atPosition)
-            )->method(
-                'createBlock'
-            )->with(
-                $blockName
-            )->will(
-                $this->returnValue($block)
-            );
+            $layoutMock->expects(new MethodInvokedAtIndex($atPosition))->method('createBlock')->with($blockName)
+                ->will($this->returnValue($block));
+            $atPosition++;
         }
 
         $shortcutButtonsMock = $this->getMockBuilder(
@@ -119,18 +119,18 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
         $shortcutButtonsMock->expects($this->any())->method('getLayout')->will($this->returnValue($layoutMock));
 
-        foreach ($blocks as $atPosition => $blockName) {
-            $shortcutButtonsMock->expects(
-                new MethodInvokedAtIndex($atPosition)
-            )->method(
-                'addShortcut'
-            )->with(
-                $this->identicalTo($blockInstances[$blockName])
-            );
+        $atPosition = 0;
+        foreach (array_keys($blocks) as $blockName) {
+            $shortcutButtonsMock->expects(new MethodInvokedAtIndex($atPosition))->method('addShortcut')
+                ->with($this->identicalTo($blockInstances[$blockName]));
+            $atPosition++;
         }
-
         $this->_event->setContainer($shortcutButtonsMock);
         $this->_model->addPaypalShortcuts($this->_observer);
+
+        foreach ($blockInstances as $instance) {
+            $this->assertEquals(\Magento\Paypal\Model\Observer::SHORTCUT_TEMPLATE, $instance->getTemplate());
+        }
     }
 
     /**

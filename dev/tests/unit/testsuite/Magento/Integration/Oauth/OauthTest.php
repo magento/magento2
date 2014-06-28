@@ -185,8 +185,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
     /**
      * \Magento\Framework\Oauth\OauthInterface::ERR_VERSION_REJECTED
      *
-     * @expectedException \Magento\Framework\Oauth\Exception
-     * @expectedExceptionCode 1
+     * @expectedException \Magento\Framework\Oauth\OauthInputException
      */
     public function testGetRequestTokenVersionRejected()
     {
@@ -200,7 +199,6 @@ class OauthTest extends \PHPUnit_Framework_TestCase
      * \Magento\Framework\Oauth\OauthInterface::ERR_CONSUMER_KEY_REJECTED
      *
      * @expectedException \Magento\Framework\Oauth\Exception
-     * @expectedExceptionCode 8
      */
     public function testGetRequestTokenConsumerKeyRejected()
     {
@@ -214,7 +212,6 @@ class OauthTest extends \PHPUnit_Framework_TestCase
      * \Magento\Framework\Oauth\OauthInterface::ERR_CONSUMER_KEY_REJECTED
      *
      * @expectedException \Magento\Framework\Oauth\Exception
-     * @expectedExceptionCode 8
      */
     public function testGetRequestTokenConsumerKeyNotFound()
     {
@@ -233,7 +230,6 @@ class OauthTest extends \PHPUnit_Framework_TestCase
      * \Magento\Framework\Oauth\OauthInterface::ERR_CONSUMER_KEY_INVALID
      *
      * @expectedException \Magento\Framework\Oauth\Exception
-     * @expectedExceptionCode 17
      */
     public function testGetRequestTokenOutdatedConsumerKey()
     {
@@ -300,8 +296,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
     /**
      * \Magento\Framework\Oauth\OauthInterface::ERR_TIMESTAMP_REFUSED
      *
-     * @expectedException \Magento\Framework\Oauth\Exception
-     * @expectedExceptionCode 4
+     * @expectedException \Magento\Framework\Oauth\OauthInputException
      * @dataProvider dataProviderForGetRequestTokenNonceTimestampRefusedTest
      */
     public function testGetRequestTokenOauthTimestampRefused($timestamp)
@@ -352,7 +347,6 @@ class OauthTest extends \PHPUnit_Framework_TestCase
      * \Magento\Framework\Oauth\OauthInterface::ERR_NONCE_USED
      *
      * @expectedException \Magento\Framework\Oauth\Exception
-     * @expectedExceptionCode 5
      */
     public function testGetRequestTokenNonceAlreadyUsed()
     {
@@ -367,7 +361,6 @@ class OauthTest extends \PHPUnit_Framework_TestCase
      * \Magento\Framework\Oauth\OauthInterface::ERR_CONSUMER_KEY_REJECTED
      *
      * @expectedException \Magento\Framework\Oauth\Exception
-     * @expectedExceptionCode 8
      */
     public function testGetRequestTokenNoConsumer()
     {
@@ -414,7 +407,6 @@ class OauthTest extends \PHPUnit_Framework_TestCase
      * \Magento\Framework\Oauth\OauthInterface::ERR_TOKEN_REJECTED
      *
      * @expectedException \Magento\Framework\Oauth\Exception
-     * @expectedExceptionCode 12
      */
     public function testGetRequestTokenTokenRejected()
     {
@@ -436,7 +428,6 @@ class OauthTest extends \PHPUnit_Framework_TestCase
      * \Magento\Framework\Oauth\OauthInterface::ERR_TOKEN_REJECTED
      *
      * @expectedException \Magento\Framework\Oauth\Exception
-     * @expectedExceptionCode 12
      */
     public function testGetRequestTokenTokenRejectedByType()
     {
@@ -458,8 +449,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
     /**
      * \Magento\Framework\Oauth\OauthInterface::ERR_SIGNATURE_METHOD_REJECTED
      *
-     * @expectedException \Magento\Framework\Oauth\Exception
-     * @expectedExceptionCode 6
+     * @expectedException \Magento\Framework\Oauth\OauthInputException
      */
     public function testGetRequestTokenSignatureMethodRejected()
     {
@@ -478,7 +468,6 @@ class OauthTest extends \PHPUnit_Framework_TestCase
      * \Magento\Framework\Oauth\OauthInterface::ERR_SIGNATURE_INVALID
      *
      * @expectedException \Magento\Framework\Oauth\Exception
-     * @expectedExceptionCode 7
      */
     public function testGetRequestTokenInvalidSignature()
     {
@@ -517,8 +506,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
     /**
      * \Magento\Framework\Oauth\OauthInterface::ERR_VERSION_REJECTED
      *
-     * @expectedException \Magento\Framework\Oauth\Exception
-     * @expectedExceptionCode 1
+     * @expectedException \Magento\Framework\Oauth\OauthInputException
      */
     public function testGetAccessTokenVersionRejected()
     {
@@ -531,8 +519,8 @@ class OauthTest extends \PHPUnit_Framework_TestCase
     /**
      * \Magento\Framework\Oauth\OauthInterface::ERR_PARAMETER_ABSENT
      *
-     * @expectedException \Magento\Framework\Oauth\Exception
-     * @expectedExceptionCode 2
+     * @expectedException \Magento\Framework\Oauth\OauthInputException
+     * @expectedExceptionMessage oauth_verifier is a required field.
      */
     public function testGetAccessTokenParameterAbsent()
     {
@@ -555,7 +543,6 @@ class OauthTest extends \PHPUnit_Framework_TestCase
      * \Magento\Framework\Oauth\OauthInterface::ERR_TOKEN_REJECTED
      *
      * @expectedException \Magento\Framework\Oauth\Exception
-     * @expectedExceptionCode 12
      */
     public function testGetAccessTokenTokenRejected()
     {
@@ -568,8 +555,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
     /**
      * \Magento\Framework\Oauth\OauthInterface::ERR_SIGNATURE_METHOD_REJECTED
      *
-     * @expectedException \Magento\Framework\Oauth\Exception
-     * @expectedExceptionCode 6
+     * @expectedException \Magento\Framework\Oauth\OauthInputException
      */
     public function testGetAccessTokenSignatureMethodRejected()
     {
@@ -583,7 +569,6 @@ class OauthTest extends \PHPUnit_Framework_TestCase
      * \Magento\Framework\Oauth\OauthInterface::ERR_TOKEN_USED
      *
      * @expectedException \Magento\Framework\Oauth\Exception
-     * @expectedExceptionCode 9
      */
     public function testGetAccessTokenTokenUsed()
     {
@@ -599,7 +584,6 @@ class OauthTest extends \PHPUnit_Framework_TestCase
      * \Magento\Framework\Oauth\OauthInterface::ERR_TOKEN_REJECTED
      *
      * @expectedException \Magento\Framework\Oauth\Exception
-     * @expectedExceptionCode 12
      */
     public function testGetAccessTokenConsumerIdDoesntMatch()
     {
@@ -614,7 +598,6 @@ class OauthTest extends \PHPUnit_Framework_TestCase
      * \Magento\Framework\Oauth\OauthInterface::ERR_VERIFIER_INVALID
      *
      * @expectedException \Magento\Framework\Oauth\Exception
-     * @expectedExceptionCode 13
      * @dataProvider dataProviderForGetAccessTokenVerifierInvalidTest
      */
     public function testGetAccessTokenVerifierInvalid($verifier, $verifierFromToken)
@@ -657,7 +640,6 @@ class OauthTest extends \PHPUnit_Framework_TestCase
      * \Magento\Framework\Oauth\OauthInterface::ERR_TOKEN_REJECTED
      *
      * @expectedException \Magento\Framework\Oauth\Exception
-     * @expectedExceptionCode 12
      */
     public function testValidateAccessTokenRequestTokenRejected()
     {
@@ -672,7 +654,6 @@ class OauthTest extends \PHPUnit_Framework_TestCase
      * \Magento\Framework\Oauth\OauthInterface::ERR_TOKEN_REJECTED
      *
      * @expectedException \Magento\Framework\Oauth\Exception
-     * @expectedExceptionCode 12
      */
     public function testValidateAccessTokenRequestTokenRejectedByType()
     {
@@ -687,7 +668,6 @@ class OauthTest extends \PHPUnit_Framework_TestCase
      * \Magento\Framework\Oauth\OauthInterface::ERR_TOKEN_REVOKED
      *
      * @expectedException \Magento\Framework\Oauth\Exception
-     * @expectedExceptionCode 11
      */
     public function testValidateAccessTokenRequestTokenRevoked()
     {
@@ -721,7 +701,6 @@ class OauthTest extends \PHPUnit_Framework_TestCase
      * \Magento\Framework\Oauth\OauthInterface::ERR_TOKEN_REJECTED
      *
      * @expectedException \Magento\Framework\Oauth\Exception
-     * @expectedExceptionCode 12
      */
     public function testValidateAccessTokenRejectedByType()
     {
@@ -735,7 +714,6 @@ class OauthTest extends \PHPUnit_Framework_TestCase
      * \Magento\Framework\Oauth\OauthInterface::ERR_TOKEN_REVOKED
      *
      * @expectedException \Magento\Framework\Oauth\Exception
-     * @expectedExceptionCode 11
      */
     public function testValidateAccessTokenRevoked()
     {
@@ -755,7 +733,6 @@ class OauthTest extends \PHPUnit_Framework_TestCase
      * \Magento\Framework\Oauth\OauthInterface::ERR_TOKEN_REJECTED
      *
      * @expectedException \Magento\Framework\Oauth\Exception
-     * @expectedExceptionCode 12
      */
     public function testValidateAccessTokenNoConsumer()
     {
@@ -816,9 +793,9 @@ class OauthTest extends \PHPUnit_Framework_TestCase
     public function testMissingParamForBuildAuthorizationHeader($expectedMessage, $request)
     {
         $this->setExpectedException(
-            '\Magento\Framework\Oauth\Exception',
+            '\Magento\Framework\Oauth\OauthInputException',
             $expectedMessage,
-            \Magento\Framework\Oauth\OauthInterface::ERR_PARAMETER_ABSENT
+            0
         );
 
         $requestUrl = 'http://www.example.com/endpoint';

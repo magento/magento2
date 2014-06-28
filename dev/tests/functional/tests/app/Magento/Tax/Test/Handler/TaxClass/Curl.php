@@ -66,10 +66,10 @@ class Curl extends AbstractCurl implements TaxClassInterface
      */
     protected function getClassId($response)
     {
-        $data = json_decode($response);
-        if ($data->success !== true) {
+        $data = json_decode($response, true);
+        if ($data['success'] !== true) {
             throw new \Exception("Tax class creation by curl handler was not successful! Response: $response");
         }
-        return isset($data->class_id) ? (int)$data->class_id : null;
+        return isset($data['class_id']) ? (int)$data['class_id'] : null;
     }
 }

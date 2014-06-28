@@ -33,6 +33,7 @@ class Attribute extends AbstractObject
     const IS_USER_DEFINED = 'is_user_defined';
     const LABEL = 'frontend_label';
     const DEFAULT_VALUE = 'default_value';
+    const FRONTEND_INPUT = 'frontend_input';
 
     /**
      * Get attribute ID
@@ -94,5 +95,15 @@ class Attribute extends AbstractObject
     public function getIsUserDefined()
     {
         return $this->_get(self::IS_USER_DEFINED);
+    }
+
+    /**
+     * Get frontend input type
+     *
+     * @return string
+     */
+    public function getFrontendInput()
+    {
+        return $this->_get(self::FRONTEND_INPUT);
     }
 }

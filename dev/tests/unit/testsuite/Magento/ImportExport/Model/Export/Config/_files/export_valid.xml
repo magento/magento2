@@ -24,9 +24,9 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../app/code/Magento/ImportExport/etc/export.xsd">
-    <entity name="name_one" label="Label_One" model="Model_One" />
-    <entity name="name_two" />
-    <productType name="name_two" model="Model_Two" />
+    <entity name="name_one" label="Label_One" model="Model_One" entityAttributeFilterType="name_one"/>
+    <entity name="name_two" entityAttributeFilterType="name_two"/>
+    <entityType entity="name_one" name="name_two" model="Model_Two" />
     <fileFormat name="name_three" label="Label_Three" model="Model_Three" />
     <fileFormat name="file_name" />
 </config>

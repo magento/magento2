@@ -96,7 +96,88 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue(serialize(array('routerCode' => ['frontName' => 'routerName'])))
         );
+
         $this->assertEquals('routerCode', $this->_config->getRouteByFrontName('routerName'));
+
+        // check internal caching in $this->_routes array
+        $this->assertEquals('routerCode', $this->_config->getRouteByFrontName('routerName'));
+    }
+
+    public function testGetRouteByFrontNameNoRoutes()
+    {
+        $this->_cacheMock->expects(
+            $this->once()
+        )->method(
+            'load'
+        )->with(
+            'areaCode::RoutesConfig'
+        )->will(
+            $this->returnValue(serialize(array()))
+        );
+
+        $this->assertFalse($this->_config->getRouteByFrontName('routerName'));
+
+        // check caching in $this->_routes array
+        $this->assertFalse($this->_config->getRouteByFrontName('routerName'));
+    }
+
+    public function testGetRouteByFrontNameNoCache()
+    {
+        $this->_cacheMock->expects(
+            $this->once()
+        )->method(
+            'load'
+        )->with(
+            'scope::RoutesConfig'
+        )->will(
+            $this->returnValue(serialize(false))
+        );
+
+        $routes = array(
+            'routerCode' => array(
+                'frontName' => 'routerName'
+            ),
+        );
+
+        $routers = array(
+            'default_router' => array(
+                'routes' => $routes,
+            ),
+        );
+
+        $this->_readerMock->expects(
+            $this->once()
+        )->method(
+            'read'
+        )->with(
+            'scope'
+        )->will(
+            $this->returnValue($routers)
+        );
+
+        $this->_areaList->expects(
+            $this->once()
+        )->method(
+            'getDefaultRouter'
+        )->with(
+            'scope'
+        )->will(
+            $this->returnValue('default_router')
+        );
+
+        $this->_cacheMock->expects(
+            $this->once()
+        )->method(
+            'save'
+        )->with(
+            serialize($routes),
+            'scope::RoutesConfig'
+        );
+
+        $this->assertEquals('routerCode', $this->_config->getRouteByFrontName('routerName', 'scope'));
+
+        // check caching in $this->_routes array
+        $this->assertEquals('routerCode', $this->_config->getRouteByFrontName('routerName', 'scope'));
     }
 
     public function testGetModulesByFrontName()

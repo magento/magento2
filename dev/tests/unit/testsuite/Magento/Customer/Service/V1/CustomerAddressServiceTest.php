@@ -270,7 +270,8 @@ class CustomerAddressServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->_customerConverter = new \Magento\Customer\Model\Converter(
             $customerBuilder,
-            $this->_customerFactoryMock
+            $this->_customerFactoryMock,
+            $this->_storeManagerMock
         );
 
         $this->_addressConverterMock = $this->getMockBuilder(

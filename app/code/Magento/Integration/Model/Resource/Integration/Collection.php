@@ -37,4 +37,14 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     {
         $this->_init('Magento\Integration\Model\Integration', 'Magento\Integration\Model\Resource\Integration');
     }
+
+    /**
+     * Get unsecure enpoints
+     *
+     * @return $this
+     */
+    public function addUnsecureEndpointFilter()
+    {
+        return $this->addFieldToFilter('endpoint', ['like' => 'http:%']);
+    }
 }

@@ -24,6 +24,7 @@
 namespace Magento\Paypal\Block\Express;
 
 use Magento\Catalog\Block as CatalogBlock;
+use Magento\Paypal\Helper\Shortcut\ValidatorInterface;
 
 /**
  * Paypal express checkout shortcut link
@@ -42,35 +43,28 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
      *
      * @var string
      */
-    protected $_paymentMethodCode = \Magento\Paypal\Model\Config::METHOD_WPP_EXPRESS;
+    protected $_paymentMethodCode = '';
 
     /**
      * Start express action
      *
      * @var string
      */
-    protected $_startAction = 'paypal/express/start';
+    protected $_startAction = '';
 
     /**
      * Express checkout model factory name
      *
      * @var string
      */
-    protected $_checkoutType = 'Magento\Paypal\Model\Express\Checkout';
+    protected $_checkoutType = '';
 
     /**
-     * Core registry
+     * Shortcut alias
      *
-     * @var \Magento\Framework\Registry
+     * @var string
      */
-    protected $_registry;
-
-    /**
-     * Payment data
-     *
-     * @var \Magento\Payment\Helper\Data
-     */
-    protected $_paymentData;
+    protected $_alias = '';
 
     /**
      * Paypal data
@@ -78,11 +72,6 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
      * @var \Magento\Paypal\Helper\Data
      */
     protected $_paypalData;
-
-    /**
-     * @var \Magento\Customer\Model\Session
-     */
-    protected $_customerSession;
 
     /**
      * @var \Magento\Paypal\Model\ConfigFactory
@@ -102,12 +91,7 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
     /**
      * @var \Magento\Framework\Math\Random
      */
-    protected $mathRandom;
-
-    /**
-     * @var \Magento\Catalog\Model\ProductTypes\ConfigInterface
-     */
-    protected $productTypeConfig;
+    protected $_mathRandom;
 
     /**
      * @var \Magento\Customer\Helper\Session\CurrentCustomer
@@ -120,45 +104,55 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
     protected $_localeResolver;
 
     /**
+     * @var ValidatorInterface
+     */
+    private $_shortcutValidator;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Paypal\Helper\Data $paypalData
-     * @param \Magento\Payment\Helper\Data $paymentData
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Paypal\Model\ConfigFactory $paypalConfigFactory
      * @param \Magento\Paypal\Model\Express\Checkout\Factory $checkoutFactory
      * @param \Magento\Framework\Math\Random $mathRandom
-     * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig
      * @param \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
+     * @param ValidatorInterface $shortcutValidator
+     * @param string $paymentMethodCode
+     * @param string $startAction
+     * @param string $checkoutType
+     * @param string $alias
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Paypal\Helper\Data $paypalData,
-        \Magento\Payment\Helper\Data $paymentData,
-        \Magento\Framework\Registry $registry,
-        \Magento\Customer\Model\Session $customerSession,
         \Magento\Paypal\Model\ConfigFactory $paypalConfigFactory,
         \Magento\Paypal\Model\Express\Checkout\Factory $checkoutFactory,
         \Magento\Framework\Math\Random $mathRandom,
-        \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig,
         \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
+        ValidatorInterface $shortcutValidator,
+        $paymentMethodCode,
+        $startAction,
+        $checkoutType,
+        $alias,
         \Magento\Checkout\Model\Session $checkoutSession = null,
         array $data = array()
     ) {
-        $this->_registry = $registry;
         $this->_paypalData = $paypalData;
-        $this->_paymentData = $paymentData;
-        $this->_customerSession = $customerSession;
         $this->_paypalConfigFactory = $paypalConfigFactory;
         $this->_checkoutSession = $checkoutSession;
         $this->_checkoutFactory = $checkoutFactory;
-        $this->mathRandom = $mathRandom;
-        $this->productTypeConfig = $productTypeConfig;
+        $this->_mathRandom = $mathRandom;
         $this->_localeResolver = $localeResolver;
+        $this->_shortcutValidator = $shortcutValidator;
+
+        $this->_paymentMethodCode = $paymentMethodCode;
+        $this->_startAction = $startAction;
+        $this->_checkoutType = $checkoutType;
+        $this->_alias = $alias;
+
         parent::__construct($context, $data);
         $this->_isScopePrivate = true;
         $this->currentCustomer = $currentCustomer;
@@ -170,48 +164,22 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
     protected function _beforeToHtml()
     {
         $result = parent::_beforeToHtml();
-        $params = array($this->_paymentMethodCode);
-        $config = $this->_paypalConfigFactory->create(array('params' => $params));
+        /** @var \Magento\Paypal\Model\Config $config */
+        $config = $this->_paypalConfigFactory->create();
+        $config->setMethod($this->_paymentMethodCode);
+
         $isInCatalog = $this->getIsInCatalogProduct();
+
+        if (!$this->_shortcutValidator->validate($this->_paymentMethodCode, $isInCatalog)) {
+            $this->_shouldRender = false;
+            return $result;
+        }
+
         $quote = $isInCatalog || !$this->_checkoutSession ? null : $this->_checkoutSession->getQuote();
-
-        // check visibility on cart or product page
-        $context = $isInCatalog ? 'visible_on_product' : 'visible_on_cart';
-        if (!$config->getConfigValue($context)) {
-            $this->_shouldRender = false;
-            return $result;
-        }
-
-        if ($isInCatalog) {
-            // Show PayPal shortcut on a product view page only if product has nonzero price
-            /** @var $currentProduct \Magento\Catalog\Model\Product */
-            $currentProduct = $this->_registry->registry('current_product');
-            if (!is_null($currentProduct)) {
-                $productPrice = (double)$currentProduct->getFinalPrice();
-                if (empty($productPrice) && !$this->productTypeConfig->isProductSet($currentProduct->getTypeId())) {
-                    $this->_shouldRender = false;
-                    return $result;
-                }
-            }
-        }
-        // validate minimum quote amount and validate quote for zero grandtotal
-        if (null !== $quote && (!$quote->validateMinimumAmount() ||
-            !$quote->getGrandTotal() && !$quote->hasNominalItems())
-        ) {
-            $this->_shouldRender = false;
-            return $result;
-        }
-
-        // check payment method availability
-        $methodInstance = $this->_paymentData->getMethodInstance($this->_paymentMethodCode);
-        if (!$methodInstance || !$methodInstance->isAvailable($quote)) {
-            $this->_shouldRender = false;
-            return $result;
-        }
 
         // set misc data
         $this->setShortcutHtmlId(
-            $this->mathRandom->getUniqueHash('ec_shortcut_')
+            $this->_mathRandom->getUniqueHash('ec_shortcut_')
         )->setCheckoutUrl(
             $this->getUrl($this->_startAction)
         );
@@ -220,6 +188,7 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
         if ($isInCatalog || null === $quote) {
             $this->setImageUrl($config->getExpressCheckoutShortcutImageUrl($this->_localeResolver->getLocaleCode()));
         } else {
+            /**@todo refactor checkout model. Move getCheckoutShortcutImageUrl to helper or separate model */
             $parameters = array('params' => array('quote' => $quote, 'config' => $config));
             $checkoutModel = $this->_checkoutFactory->create($this->_checkoutType, $parameters);
             $this->setImageUrl($checkoutModel->getCheckoutShortcutImageUrl());
@@ -282,6 +251,6 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
      */
     public function getAlias()
     {
-        return 'product.info.addtocart.paypal';
+        return $this->_alias;
     }
 }

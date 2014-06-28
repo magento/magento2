@@ -126,7 +126,7 @@ class Response extends \Magento\Webapi\Controller\Response
     /**
      * Perform rendering of response data.
      *
-     * @param array|null $outputData
+     * @param array|int|string|bool|float|null $outputData
      * @return $this
      */
     public function prepareResponse($outputData = null)
@@ -141,7 +141,7 @@ class Response extends \Magento\Webapi\Controller\Response
     /**
      * Render data using registered Renderer.
      *
-     * @param array|object $data
+     * @param array|int|string|bool|float|null $data
      * @return void
      */
     protected function _render($data)

@@ -524,3 +524,48 @@ test( "testValidateCCCvn", function() {
     ok($.validator.methods['validate-cc-cvn'].call(this, '123', null, ccType));
     ok(!$.validator.methods['validate-cc-cvn'].call(this, '1234', null, ccType));
 });
+
+test( "testValidateNumberRange", function() {
+    expect(14);
+    ok($.validator.methods['validate-number-range'].call(this, '-1', null, null));
+    ok($.validator.methods['validate-number-range'].call(this, '1', null, null));
+    ok($.validator.methods['validate-number-range'].call(this, '', null, null));
+    ok($.validator.methods['validate-number-range'].call(this, null, null, null));
+    ok($.validator.methods['validate-number-range'].call(this, '0', null, null));
+    ok(!$.validator.methods['validate-number-range'].call(this, 'asds', null, null));
+
+    ok($.validator.methods['validate-number-range'].call(this, '10', null, '10-20.06'));
+    ok($.validator.methods['validate-number-range'].call(this, '15', null, '10-20.06'));
+    ok(!$.validator.methods['validate-number-range'].call(this, '1', null, '10-20.06'));
+    ok(!$.validator.methods['validate-number-range'].call(this, '30', null, '10-20.06'));
+
+    var el1 = $('<input type="text" value="" class="validate-number-range number-range-10-20 number-range-10-100.20">').get(0);
+    ok($.validator.methods['validate-number-range'].call(this, '10', el1, null));
+    ok($.validator.methods['validate-number-range'].call(this, '15', el1, null));
+    ok(!$.validator.methods['validate-number-range'].call(this, '1', el1, null));
+    ok($.validator.methods['validate-number-range'].call(this, '30', el1, null));
+});
+
+
+
+test( "testValidateDigitsRange", function() {
+    expect(15);
+    ok($.validator.methods['validate-digits-range'].call(this, '-1', null, null));
+    ok($.validator.methods['validate-digits-range'].call(this, '1', null, null));
+    ok($.validator.methods['validate-digits-range'].call(this, '', null, null));
+    ok($.validator.methods['validate-digits-range'].call(this, null, null, null));
+    ok($.validator.methods['validate-digits-range'].call(this, '0', null, null));
+    ok(!$.validator.methods['validate-digits-range'].call(this, 'asds', null, null));
+
+    ok($.validator.methods['validate-digits-range'].call(this, '10', null, '10-20'));
+    ok($.validator.methods['validate-digits-range'].call(this, '15', null, '10-20'));
+    ok(!$.validator.methods['validate-digits-range'].call(this, '1', null, '10-20'));
+    ok(!$.validator.methods['validate-digits-range'].call(this, '30', null, '10-20'));
+    ok($.validator.methods['validate-digits-range'].call(this, '30', null, '10-20.06'));
+
+    var el1 = $('<input type="text" value="" class="validate-digits-range digits-range-10-20 digits-range-10-100.20">').get(0);
+    ok($.validator.methods['validate-digits-range'].call(this, '10', el1, null));
+    ok($.validator.methods['validate-digits-range'].call(this, '15', el1, null));
+    ok(!$.validator.methods['validate-digits-range'].call(this, '1', el1, null));
+    ok(!$.validator.methods['validate-digits-range'].call(this, '30', el1, null));
+});

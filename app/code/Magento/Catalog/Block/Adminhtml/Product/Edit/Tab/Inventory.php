@@ -25,8 +25,6 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Edit\Tab;
 
 /**
  * Product inventory data
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Inventory extends \Magento\Backend\Block\Widget
 {
@@ -40,14 +38,14 @@ class Inventory extends \Magento\Backend\Block\Widget
      *
      * @var \Magento\Catalog\Helper\Data
      */
-    protected $_catalogData = null;
+    protected $_catalogData;
 
     /**
      * Core registry
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @var \Magento\CatalogInventory\Model\Source\Stock
@@ -138,7 +136,10 @@ class Inventory extends \Magento\Backend\Block\Widget
             return $this->getStockItem()->getDataUsingMethod($field);
         }
 
-        return $this->_scopeConfig->getValue(\Magento\CatalogInventory\Model\Stock\Item::XML_PATH_ITEM . $field, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->_scopeConfig->getValue(
+            \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_ITEM . $field,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**
@@ -153,7 +154,10 @@ class Inventory extends \Magento\Backend\Block\Widget
             }
         }
 
-        return $this->_scopeConfig->getValue(\Magento\CatalogInventory\Model\Stock\Item::XML_PATH_ITEM . $field, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->_scopeConfig->getValue(
+            \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_ITEM . $field,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**
@@ -162,7 +166,10 @@ class Inventory extends \Magento\Backend\Block\Widget
      */
     public function getDefaultConfigValue($field)
     {
-        return $this->_scopeConfig->getValue(\Magento\CatalogInventory\Model\Stock\Item::XML_PATH_ITEM . $field, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->_scopeConfig->getValue(
+            \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_ITEM . $field,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**

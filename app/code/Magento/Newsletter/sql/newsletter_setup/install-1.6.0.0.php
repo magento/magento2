@@ -308,9 +308,6 @@ $table = $installer->getConnection()->newTable(
     $installer->getIdxName('newsletter_queue_link', array('subscriber_id')),
     array('subscriber_id')
 )->addIndex(
-    $installer->getIdxName('newsletter_queue_link', array('queue_id')),
-    array('queue_id')
-)->addIndex(
     $installer->getIdxName('newsletter_queue_link', array('queue_id', 'letter_sent_at')),
     array('queue_id', 'letter_sent_at')
 )->addForeignKey(

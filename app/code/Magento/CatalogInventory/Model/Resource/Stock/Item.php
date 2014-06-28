@@ -22,14 +22,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\CatalogInventory\Model\Resource\Stock;
 
 /**
  * Stock item resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\CatalogInventory\Model\Resource\Stock;
-
 class Item extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
@@ -89,15 +86,8 @@ class Item extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     protected function _getLoadSelect($field, $value, $object)
     {
-        $select = parent::_getLoadSelect(
-            $field,
-            $value,
-            $object
-        )->join(
-            array('p' => $this->getTable('catalog_product_entity')),
-            'product_id=p.entity_id',
-            array('type_id')
-        );
+        $select = parent::_getLoadSelect($field, $value, $object)
+            ->join(array('p' => $this->getTable('catalog_product_entity')), 'product_id=p.entity_id', array('type_id'));
         return $select;
     }
 

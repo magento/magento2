@@ -43,17 +43,17 @@ class AssertConfigurableInGrid extends AbstractConstraint
     /**
      * Assert product availability in products grid
      *
-     * @param CatalogProductConfigurable $product
+     * @param CatalogProductConfigurable $configurable
      * @param CatalogProductIndex $productPageGrid
      * @return void
      */
-    public function processAssert(CatalogProductConfigurable $product, CatalogProductIndex $productPageGrid)
+    public function processAssert(CatalogProductConfigurable $configurable, CatalogProductIndex $productPageGrid)
     {
-        $filter = ['sku' => $product->getSku()];
+        $filter = ['sku' => $configurable->getSku()];
         $productPageGrid->open();
         \PHPUnit_Framework_Assert::assertTrue(
             $productPageGrid->getProductGrid()->isRowVisible($filter),
-            'Product with sku \'' . $product->getSku() . '\' is absent in Products grid.'
+            'Product with sku \'' . $configurable->getSku() . '\' is absent in Products grid.'
         );
     }
 

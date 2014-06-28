@@ -620,39 +620,6 @@ class Index extends \Magento\Backend\App\Action
     }
 
     /**
-     * Export customer grid to CSV format
-     *
-     * @return \Magento\Framework\App\ResponseInterface
-     */
-    public function exportCsvAction()
-    {
-        $this->_view->loadLayout();
-        $fileName = 'customers.csv';
-        /** @var \Magento\Backend\Block\Widget\Grid\ExportInterface $exportBlock  */
-        $exportBlock = $this->_view->getLayout()->getChildBlock('admin.block.customer.grid', 'grid.export');
-        return $this->_fileFactory->create(
-            $fileName,
-            $exportBlock->getCsvFile(),
-            \Magento\Framework\App\Filesystem::VAR_DIR
-        );
-    }
-
-    /**
-     * Export customer grid to XML format
-     *
-     * @return \Magento\Framework\App\ResponseInterface
-     */
-    public function exportXmlAction()
-    {
-        $this->_view->loadLayout();
-        $fileName = 'customers.xml';
-        /** @var \Magento\Backend\Block\Widget\Grid\ExportInterface $exportBlock  */
-        $exportBlock = $this->_view->getLayout()->getChildBlock('admin.block.customer.grid', 'grid.export');
-        $content = $exportBlock->getExcelFile($fileName);
-        return $this->_fileFactory->create($fileName, $content, \Magento\Framework\App\Filesystem::VAR_DIR);
-    }
-
-    /**
      * Customer orders grid
      *
      * @return void
