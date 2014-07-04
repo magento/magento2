@@ -22,14 +22,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Shipping\Block\Adminhtml\View;
 
 /**
  * Adminhtml sales item renderer
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Shipping\Block\Adminhtml\View;
-
 class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
 {
     /**

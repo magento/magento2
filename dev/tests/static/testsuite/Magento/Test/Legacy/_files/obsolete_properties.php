@@ -339,4 +339,5 @@ return array(
     ['_inventoryModel', 'Magento\AdvancedCheckout\Model\Resource\Sku\Errors\Grid\Collection'],
     ['_productInstance', 'Magento\CatalogInventory\Model\Stock\Item'],
     ['_regionBuilder', 'Magento\Customer\Model\Address\Converter'],
+    ['_scopeConfig', 'Magento\CatalogInventory\Helper\Minsaleqty', 'scopeConfig'],
 );

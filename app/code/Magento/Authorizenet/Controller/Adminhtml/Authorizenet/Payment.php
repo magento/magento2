@@ -84,6 +84,8 @@ class Payment extends \Magento\Backend\App\Action
         }
 
         $this->_sessionQuote->getQuote()->getPayment()->save();
-        $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result));
+        $this->getResponse()->representJson(
+            $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result)
+        );
     }
 }

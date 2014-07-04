@@ -290,6 +290,34 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     );
 
     /**
+     * @var array
+     */
+    protected $defaultStockData = [
+        'manage_stock' => 1,
+        'use_config_manage_stock' => 1,
+        'qty' => 0,
+        'min_qty' => 0,
+        'use_config_min_qty' => 1,
+        'min_sale_qty' => 1,
+        'use_config_min_sale_qty' => 1,
+        'max_sale_qty' => 10000,
+        'use_config_max_sale_qty' => 1,
+        'is_qty_decimal' => 0,
+        'backorders' => 0,
+        'use_config_backorders' => 1,
+        'notify_stock_qty' => 1,
+        'use_config_notify_stock_qty' => 1,
+        'enable_qty_increments' => 0,
+        'use_config_enable_qty_inc' => 1,
+        'qty_increments' => 0,
+        'use_config_qty_increments' => 1,
+        'is_in_stock' => 0,
+        'low_stock_date' => null,
+        'stock_status_changed_auto' => 0,
+        'is_decimal_divided' => 0
+    ];
+
+    /**
      * Column names that holds images files names
      *
      * @var string[]
@@ -360,7 +388,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $_catalogData = null;
 
     /**
-     * @var \Magento\CatalogInventory\Service\V1\StockItem
+     * @var \Magento\CatalogInventory\Service\V1\StockItemService
      */
     protected $stockItemService;
 
@@ -437,11 +465,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $_stockResItemFac;
 
     /**
-     * @var \Magento\CatalogInventory\Model\Stock\ItemFactory
-     */
-    protected $_stockItemFactory;
-
-    /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
      */
     protected $_localeDate;
@@ -450,6 +473,16 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @var \Magento\Framework\Stdlib\DateTime
      */
     protected $dateTime;
+
+    /**
+     * @var \Magento\Index\Model\Indexer
+     */
+    protected $indexer;
+
+    /**
+     * @var \Magento\Indexer\Model\Indexer
+     */
+    protected $newIndexer;
 
     /**
      * @var \Magento\Framework\Logger
@@ -470,7 +503,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\Stdlib\String $string
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\CatalogInventory\Service\V1\StockItem $stockItemService
+     * @param \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\ImportExport\Model\Import\Config $importConfig
      * @param \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceFactory $resourceFactory
@@ -486,10 +519,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param \Magento\CatalogImportExport\Model\Import\UploaderFactory $uploaderFactory
      * @param \Magento\Framework\App\Filesystem $filesystem
      * @param \Magento\CatalogInventory\Model\Resource\Stock\ItemFactory $stockResItemFac
-     * @param \Magento\CatalogInventory\Model\Stock\ItemFactory $stockItemFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\Logger $logger
+     * @param \Magento\Index\Model\Indexer $indexer
+     * @param \Magento\Indexer\Model\Indexer $newIndexer
      * @param array $data
      */
     public function __construct(
@@ -501,7 +535,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\Stdlib\String $string,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\CatalogInventory\Service\V1\StockItem $stockItemService,
+        \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\ImportExport\Model\Import\Config $importConfig,
         \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceFactory $resourceFactory,
@@ -517,10 +551,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         \Magento\CatalogImportExport\Model\Import\UploaderFactory $uploaderFactory,
         \Magento\Framework\App\Filesystem $filesystem,
         \Magento\CatalogInventory\Model\Resource\Stock\ItemFactory $stockResItemFac,
-        \Magento\CatalogInventory\Model\Stock\ItemFactory $stockItemFactory,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Logger $logger,
+        \Magento\Index\Model\Indexer $indexer,
+        \Magento\Indexer\Model\Indexer $newIndexer,
         array $data = array()
     ) {
         $this->_eventManager = $eventManager;
@@ -539,9 +574,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->_uploaderFactory = $uploaderFactory;
         $this->_mediaDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::MEDIA_DIR);
         $this->_stockResItemFac = $stockResItemFac;
-        $this->_stockItemFactory = $stockItemFactory;
         $this->_localeDate = $localeDate;
         $this->dateTime = $dateTime;
+        $this->indexer = $indexer;
+        $this->newIndexer = $newIndexer;
         $this->_logger = $logger;
         parent::__construct($coreData, $importExportData, $importData, $config, $resource, $resourceHelper, $string);
         $this->_optionEntity = isset(
@@ -624,12 +660,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $this->_deleteProducts();
         } else {
             $this->_saveProducts();
-            $this->_saveStockItem();
-            $this->_saveLinks();
-            $this->getOptionEntity()->importData();
-            foreach ($this->_productTypeModels as $productType => $productTypeModel) {
+            foreach ($this->_productTypeModels as $productTypeModel) {
                 $productTypeModel->saveData();
             }
+            $this->_saveLinks();
+            $this->_saveStockItem();
+            $this->getOptionEntity()->importData();
         }
         $this->_eventManager->dispatch('catalog_product_import_finish_before', array('adapter' => $this));
         return true;
@@ -1289,6 +1325,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                                 'attribute_set_id' => $this->_newSku[$rowSku]['attr_set_id'],
                                 'type_id' => $this->_newSku[$rowSku]['type_id'],
                                 'sku' => $rowSku,
+                                'has_options' => isset($rowData['has_options']) ? $rowData['has_options'] : 0,
                                 'created_at' => $this->dateTime->now(),
                                 'updated_at' => $this->dateTime->now()
                             );
@@ -1725,38 +1762,12 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected function _saveStockItem()
     {
-        $defaultStockData = array(
-            'manage_stock' => 1,
-            'use_config_manage_stock' => 1,
-            'qty' => 0,
-            'min_qty' => 0,
-            'use_config_min_qty' => 1,
-            'min_sale_qty' => 1,
-            'use_config_min_sale_qty' => 1,
-            'max_sale_qty' => 10000,
-            'use_config_max_sale_qty' => 1,
-            'is_qty_decimal' => 0,
-            'backorders' => 0,
-            'use_config_backorders' => 1,
-            'notify_stock_qty' => 1,
-            'use_config_notify_stock_qty' => 1,
-            'enable_qty_increments' => 0,
-            'use_config_enable_qty_inc' => 1,
-            'qty_increments' => 0,
-            'use_config_qty_increments' => 1,
-            'is_in_stock' => 0,
-            'low_stock_date' => null,
-            'stock_status_changed_auto' => 0,
-            'is_decimal_divided' => 0
-        );
-
         /** @var $stockResource \Magento\CatalogInventory\Model\Resource\Stock\Item */
         $stockResource = $this->_stockResItemFac->create();
         $entityTable = $stockResource->getMainTable();
-
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
             $stockData = array();
-
+            $productIdsToReindex = array();
             // Format bunch to stock data rows
             foreach ($bunch as $rowNum => $rowData) {
                 if (!$this->isRowAllowedToImport($rowData, $rowNum)) {
@@ -1769,45 +1780,47 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
                 $row = array();
                 $row['product_id'] = $this->_newSku[$rowData[self::COL_SKU]]['entity_id'];
-                $row['stock_id'] = 1;
+                $productIdsToReindex[] = $row['product_id'];
+                $row['stock_id'] = \Magento\CatalogInventory\Model\Stock\Item::DEFAULT_STOCK_ID;
 
-                /** @var $stockItem \Magento\CatalogInventory\Model\Stock\Item */
-                $stockItem = $this->_stockItemFactory->create();
-                $stockItem->loadByProduct($row['product_id']);
-                $existStockData = $stockItem->getData();
+                $stockItemDo = $this->stockItemService->getStockItem($row['product_id']);
+                $existStockData = $stockItemDo->__toArray();
 
                 $row = array_merge(
-                    $defaultStockData,
-                    array_intersect_key($existStockData, $defaultStockData),
-                    array_intersect_key($rowData, $defaultStockData),
+                    $this->defaultStockData,
+                    array_intersect_key($existStockData, $this->defaultStockData),
+                    array_intersect_key($rowData, $this->defaultStockData),
                     $row
                 );
 
-                $stockItem->setData($row);
-
                 if ($this->stockItemService->isQty($this->_newSku[$rowData[self::COL_SKU]]['type_id'])) {
-                    if ($stockItem->verifyNotification()) {
-                        $stockItem->setLowStockDate(
-                            $this->_localeDate->date(
-                                null,
-                                null,
-                                null,
-                                false
-                            )->toString(
-                                \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
-                            )
+                    if ($this->stockItemService->verifyNotification($row['product_id'])) {
+                        $row['low_stock_date'] = $this->_localeDate->date(
+                            null,
+                            null,
+                            null,
+                            false
+                        )->toString(
+                            \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
                         );
                     }
-                    $stockItem->setStockStatusChangedAuto((int)(!$stockItem->verifyStock()));
+                    $row['stock_status_changed_auto'] = (int) !$this->stockItemService->verifyStock($row['product_id']);
                 } else {
-                    $stockItem->setQty(0);
+                    $row['qty'] = 0;
                 }
-                $stockData[] = $stockItem->unsetOldData()->getData();
+                $stockData[] = $row;
             }
 
             // Insert rows
-            if ($stockData) {
+            if (!empty($stockData)) {
                 $this->_connection->insertOnDuplicate($entityTable, $stockData);
+            }
+
+            if ($productIdsToReindex) {
+                $this->indexer->getProcessByCode('cataloginventory_stock')->getIndexer()->reindexAll();
+                $this->indexer->getProcessByCode('catalog_product_attribute')->getIndexer()->reindexAll();
+                $this->newIndexer->load('catalog_product_category')->reindexList($productIdsToReindex);
+                $this->newIndexer->load('catalog_product_price')->reindexList($productIdsToReindex);
             }
         }
         return $this;

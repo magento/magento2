@@ -75,7 +75,7 @@ class Widget extends \Magento\Backend\App\Action
                 $this->_coreRegistry->register('current_category', $category);
             }
             $categoryTreeBlock = $this->_getCategoryTreeBlock()->setSelectedCategories(explode(',', $selected));
-            $this->getResponse()->setBody($categoryTreeBlock->getTreeJson($category));
+            $this->getResponse()->representJson($categoryTreeBlock->getTreeJson($category));
         }
     }
 

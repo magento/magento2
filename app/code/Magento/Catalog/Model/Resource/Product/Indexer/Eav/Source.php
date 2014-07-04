@@ -138,19 +138,25 @@ class Source extends AbstractEav
             array('store_id', 'website_id')
         )->joinLeft(
             array('d' => $this->getTable('catalog_product_entity_int')),
-            '1 = 1 AND d.store_id = 0',
+            '1 = 1 AND (d.store_id = 0 OR d.store_id = s.store_id)',
             array('entity_id', 'attribute_id', 'value')
-        )->joinInner(
+        )->joinLeft(
             array('d2' => $this->getTable('catalog_product_entity_int')),
             sprintf(
-                'd.entity_id = d2.entity_id AND d2.attribute_id = %s AND d2.value = %s AND d.store_id = 0',
+                'd.entity_id = d2.entity_id AND d2.attribute_id = %s AND d2.value = %s AND d.store_id = d2.store_id',
                 $this->_eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, 'status')->getId(),
                 ProductStatus::STATUS_ENABLED
             ),
             array()
         )->where(
             's.store_id != 0'
-        );
+        )->where(
+            'd.value IS NOT NULL'
+        )->where(
+            'd2.value IS NOT NULL'
+        )->group(array(
+            's.store_id', 's.website_id', 'd.entity_id', 'd.attribute_id', 'd.value'
+        ));
 
         if (!is_null($entityIds)) {
             $subSelect->where('d.entity_id IN(?)', $entityIds);
@@ -248,7 +254,7 @@ class Source extends AbstractEav
             array('value' => $productValueExpression)
         )->where(
             'pvd.store_id=?',
-            \Magento\Store\Model\Store::DEFAULT_STORE_ID
+            $adapter->getIfNullSql('pvs.store_id', \Magento\Store\Model\Store::DEFAULT_STORE_ID)
         )->where(
             'cs.store_id!=?',
             \Magento\Store\Model\Store::DEFAULT_STORE_ID

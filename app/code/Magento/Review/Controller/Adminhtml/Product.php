@@ -370,7 +370,7 @@ class Product extends \Magento\Backend\App\Action
             $response->setError(1);
             $response->setMessage(__('We can\'t get the product ID.'));
         }
-        $this->getResponse()->setBody($response->toJSON());
+        $this->getResponse()->representJson($response->toJSON());
     }
 
     /**

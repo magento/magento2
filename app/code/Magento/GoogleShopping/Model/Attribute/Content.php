@@ -42,7 +42,7 @@ class Content extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
     {
         $mapValue = $this->getProductAttributeValue($product);
         $description = $this->getGroupAttributeDescription();
-        if (!is_null($description)) {
+        if (!is_null($description) && !is_null($description->getAttributeId())) {
             $mapValue = $description->getProductAttributeValue($product);
         }
 

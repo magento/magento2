@@ -301,7 +301,7 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
             }
         }
         if ($isNeedCreateLabel) {
-            $this->getResponse()->setBody($responseAjax->toJson());
+            $this->getResponse()->representJson($responseAjax->toJson());
         } else {
             $this->_redirect('sales/order/view', array('order_id' => $shipment->getOrderId()));
         }
@@ -383,9 +383,12 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
             $response = array('error' => true, 'message' => __('Cannot add tracking number.'));
         }
         if (is_array($response)) {
-            $response = $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response);
+            $this->getResponse()->representJson(
+                $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response)
+            );
+        } else {
+            $this->getResponse()->setBody($response);
         }
-        $this->getResponse()->setBody($response);
     }
 
     /**
@@ -417,9 +420,12 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
             $response = array('error' => true, 'message' => __('Cannot load track with retrieving identifier.'));
         }
         if (is_array($response)) {
-            $response = $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response);
+            $this->getResponse()->representJson(
+                $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response)
+            );
+        } else {
+            $this->getResponse()->setBody($response);
         }
-        $this->getResponse()->setBody($response);
     }
 
     /**
@@ -448,12 +454,16 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
             $response = $this->_view->getLayout()->getBlock('shipment_comments')->toHtml();
         } catch (\Magento\Framework\Model\Exception $e) {
             $response = array('error' => true, 'message' => $e->getMessage());
-            $response = $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response);
         } catch (\Exception $e) {
             $response = array('error' => true, 'message' => __('Cannot add new comment.'));
-            $response = $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response);
         }
-        $this->getResponse()->setBody($response);
+        if (is_array($response)) {
+            $this->getResponse()->representJson(
+                $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response)
+            );
+        } else {
+            $this->getResponse()->setBody($response);
+        }
     }
 
     /**
@@ -546,7 +556,7 @@ class Shipment extends \Magento\Sales\Controller\Adminhtml\Shipment\AbstractShip
             $response->setMessage(__('An error occurred while creating shipping label.'));
         }
 
-        $this->getResponse()->setBody($response->toJson());
+        $this->getResponse()->representJson($response->toJson());
     }
 
     /**

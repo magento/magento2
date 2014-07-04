@@ -39,7 +39,7 @@ class DefaultStockqtyTest extends \PHPUnit_Framework_TestCase
     protected $registryMock;
 
     /**
-     * @var \Magento\CatalogInventory\Service\V1\StockItem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Service\V1\StockItemService|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $stockItemService;
 
@@ -47,7 +47,13 @@ class DefaultStockqtyTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->registryMock = $this->getMock('Magento\Framework\Registry', array(), array(), '', false);
-        $this->stockItemService = $this->getMock('Magento\CatalogInventory\Service\V1\StockItem', [], [], '', false);
+        $this->stockItemService = $this->getMock(
+            'Magento\CatalogInventory\Service\V1\StockItemService',
+            [],
+            [],
+            '',
+            false
+        );
 
         $this->block = $objectManager->getObject(
             'Magento\CatalogInventory\Block\Stockqty\DefaultStockqty',

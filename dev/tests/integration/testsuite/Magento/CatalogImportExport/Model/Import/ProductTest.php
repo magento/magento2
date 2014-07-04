@@ -529,7 +529,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         ) . "\n";
         $data = 'data://text/plain;base64,' . base64_encode($data);
 
-        $fixture = new \Magento\ImportExport\Model\Import\Source\Csv($data);
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $fixture = $objectManager->create(
+            'Magento\ImportExport\Model\Import\Source\Csv',
+            array('$fileOrStream' => $data)
+        );
 
         foreach (\Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Catalog\Model\Resource\Product\Collection'
@@ -537,7 +541,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             $this->fail("Unexpected precondition - product exists: '{$product->getId()}'.");
         }
 
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $uploader = $this->getMock(
             'Magento\CatalogImportExport\Model\Import\Uploader',
             array('init'),
@@ -675,5 +678,46 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             count($upsellProductIds),
             "There should not be any linked upsell SKUs. The original" . " product SKU linked does not import cleanly."
         );
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/categories.php
+     * @magentoDataFixture Magento/Core/_files/store.php
+     * @magentoDataFixture Magento/Catalog/Model/Layer/Filter/_files/attribute_with_option.php
+     * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_attribute.php
+     */
+    public function testProductsWithMultipleStores()
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        $filesystem = $objectManager->create('Magento\Framework\App\Filesystem');
+        $directory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::ROOT_DIR);
+
+        $source = new \Magento\ImportExport\Model\Import\Source\Csv(
+            __DIR__ . '/_files/products_multiple_stores.csv',
+            $directory
+        );
+        $this->_model->setParameters(
+            array('behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product')
+        )->setSource(
+            $source
+        )->isDataValid();
+
+        $this->_model->importData();
+
+        /** @var \Magento\Catalog\Model\Product $product */
+        $product = $objectManager->create('Magento\Catalog\Model\Product');
+        $id = $product->getIdBySku('Configurable 03');
+        $product->load($id);
+        $this->assertEquals('1', $product->getHasOptions());
+
+        $objectManager->get('Magento\Store\Model\StoreManagerInterface')->setCurrentStore('fixturestore');
+
+        /** @var \Magento\Catalog\Model\Product $simpleProduct */
+        $simpleProduct = $objectManager->create('Magento\Catalog\Model\Product');
+        $id = $simpleProduct->getIdBySku('Configurable 03-option_0');
+        $simpleProduct->load($id);
+        $this->assertEquals('Option Label', $simpleProduct->getAttributeText('attribute_with_option'));
+        $this->assertEquals(array(2, 4), $simpleProduct->getAvailableInCategories());
     }
 }

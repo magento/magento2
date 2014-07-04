@@ -242,7 +242,10 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
         $fieldset->addField(
             'uses_per_customer',
             'text',
-            array('name' => 'uses_per_customer', 'label' => __('Uses per Customer'))
+            array('name' => 'uses_per_customer',
+                  'label' => __('Uses per Customer'),
+                  'note' => __('Usage limit enforced for logged in customers only.')
+            )
         );
 
         $dateFormat = $this->_localeDate->getDateFormat(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT);

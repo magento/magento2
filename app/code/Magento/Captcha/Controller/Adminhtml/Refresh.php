@@ -47,7 +47,7 @@ class Refresh extends \Magento\Backend\App\Action
         )->setIsAjax(
             true
         )->toHtml();
-        $this->getResponse()->setBody(json_encode(array('imgSrc' => $captchaModel->getImgSrc())));
+        $this->getResponse()->representJson(json_encode(array('imgSrc' => $captchaModel->getImgSrc())));
         $this->_actionFlag->set('', self::FLAG_NO_POST_DISPATCH, true);
     }
 }

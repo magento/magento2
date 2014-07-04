@@ -188,6 +188,11 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
     protected $_scopeConfig;
 
     /**
+     * @var \Magento\CatalogInventory\Service\V1\StockItemService
+     */
+    protected $stockItemService;
+
+    /**
      * @param \Magento\Framework\ObjectManager $objectManager
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Registry $coreRegistry
@@ -205,6 +210,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
      * @param \Magento\Customer\Helper\Data $customerHelper
      * @param CustomerGroupServiceInterface $customerGroupService
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
      * @param array $data
      */
     public function __construct(
@@ -225,6 +231,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
         \Magento\Customer\Helper\Data $customerHelper,
         CustomerGroupServiceInterface $customerGroupService,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService,
         array $data = array()
     ) {
         $this->_objectManager = $objectManager;
@@ -244,6 +251,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
         $this->_customerHelper = $customerHelper;
         $this->_customerGroupService = $customerGroupService;
         $this->_scopeConfig = $scopeConfig;
+        $this->stockItemService = $stockItemService;
         parent::__construct($data);
     }
 
@@ -979,12 +987,11 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
                     }
 
                     if ($item) {
-                        if ($item->getProduct()->getStockItem()) {
-                            if (!$item->getProduct()->getStockItem()->getIsQtyDecimal()) {
-                                $itemQty = (int)$itemQty;
-                            } else {
-                                $item->setIsQtyDecimal(1);
-                            }
+                        $stockItemDo = $this->stockItemService->getStockItem($item->getProduct()->getId());
+                        if ($stockItemDo->getStockId() && !$stockItemDo->getIsQtyDecimal()) {
+                            $itemQty = (int)$itemQty;
+                        } else {
+                            $item->setIsQtyDecimal(1);
                         }
                         $itemQty = $itemQty > 0 ? $itemQty : 1;
                         if (isset($info['custom_price'])) {

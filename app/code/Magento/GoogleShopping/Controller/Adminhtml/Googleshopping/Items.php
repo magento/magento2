@@ -348,9 +348,8 @@ class Items extends \Magento\Backend\App\Action
     public function statusAction()
     {
         if ($this->getRequest()->isAjax()) {
-            $this->getResponse()->setHeader('Content-Type', 'application/json');
             $params = array('is_running' => $this->_getFlag()->isLocked());
-            return $this->getResponse()->setBody(
+            return $this->getResponse()->representJson(
                 $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($params)
             );
         }
@@ -377,10 +376,7 @@ class Items extends \Magento\Backend\App\Action
             )
         );
         if ($this->getRequest()->isAjax()) {
-            $this->getResponse()->setHeader(
-                'Content-Type',
-                'application/json'
-            )->setBody(
+            $this->getResponse()->representJson(
                 $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode(array('redirect' => $redirectUrl))
             );
         } else {

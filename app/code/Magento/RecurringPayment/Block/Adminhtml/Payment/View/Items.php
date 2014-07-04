@@ -25,8 +25,6 @@ namespace Magento\RecurringPayment\Block\Adminhtml\Payment\View;
 
 /**
  * Adminhtml recurring payment items grid
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
 {
@@ -34,6 +32,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      * Retrieve required options from parent
      *
      * @return void
+     * @throws \Magento\Framework\Model\Exception
      */
     protected function _beforeToHtml()
     {

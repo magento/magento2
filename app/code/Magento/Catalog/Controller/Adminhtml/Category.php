@@ -174,8 +174,7 @@ class Category extends \Magento\Backend\App\Action
                 'category_prepare_ajax_response',
                 array('response' => $eventResponse, 'controller' => $this)
             );
-            $this->getResponse()->setHeader('Content-type', 'application/json', true);
-            $this->getResponse()->setBody(
+            $this->getResponse()->representJson(
                 $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($eventResponse->getData())
             );
             return;
@@ -246,7 +245,7 @@ class Category extends \Magento\Backend\App\Action
             if (!($category = $this->_initCategory())) {
                 return;
             }
-            $this->getResponse()->setBody(
+            $this->getResponse()->representJson(
                 $this->_view->getLayout()->createBlock(
                     'Magento\Catalog\Block\Adminhtml\Category\Tree'
                 )->getTreeJson(
@@ -512,7 +511,7 @@ class Category extends \Magento\Backend\App\Action
 
         $block = $this->_view->getLayout()->createBlock('Magento\Catalog\Block\Adminhtml\Category\Tree');
         $root = $block->getRoot();
-        $this->getResponse()->setBody(
+        $this->getResponse()->representJson(
             $this->_objectManager->get(
                 'Magento\Core\Helper\Data'
             )->jsonEncode(
@@ -543,7 +542,7 @@ class Category extends \Magento\Backend\App\Action
         $categoryId = (int)$this->getRequest()->getParam('id');
         if ($categoryId) {
             $category = $this->_objectManager->create('Magento\Catalog\Model\Category')->load($categoryId);
-            $this->getResponse()->setBody(
+            $this->getResponse()->representJson(
                 $this->_objectManager->get(
                     'Magento\Core\Helper\Data'
                 )->jsonEncode(
@@ -560,7 +559,7 @@ class Category extends \Magento\Backend\App\Action
      */
     public function suggestCategoriesAction()
     {
-        $this->getResponse()->setBody(
+        $this->getResponse()->representJson(
             $this->_view->getLayout()->createBlock(
                 'Magento\Catalog\Block\Adminhtml\Category\Tree'
             )->getSuggestedCategoriesJson(

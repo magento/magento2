@@ -229,7 +229,7 @@ class Attribute extends \Magento\Backend\App\Action
                 $response->setHtmlMessage($this->_view->getLayout()->getMessagesBlock()->getGroupedHtml());
             }
         }
-        $this->getResponse()->setBody($response->toJson());
+        $this->getResponse()->representJson($response->toJson());
     }
 
     /**

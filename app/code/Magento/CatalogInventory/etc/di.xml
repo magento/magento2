@@ -25,6 +25,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
     <preference for="Magento\CatalogInventory\Service\V1\StockStatusServiceInterface" type="Magento\CatalogInventory\Service\V1\StockStatusService" />
+    <preference for="Magento\CatalogInventory\Service\V1\StockItemServiceInterface" type="Magento\CatalogInventory\Service\V1\StockItemService" />
     <type name="Magento\CatalogInventory\Model\Observer">
         <arguments>
             <argument name="resourceIndexerStock" xsi:type="object">Magento\CatalogInventory\Model\Resource\Indexer\Stock\Proxy</argument>

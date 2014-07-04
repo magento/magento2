@@ -108,7 +108,7 @@ class Editor extends \Magento\Backend\App\Action
             $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
             $response = array('error' => __('Sorry, but we can\'t load the theme list.'));
         }
-        $this->getResponse()->setBody($coreHelper->jsonEncode($response));
+        $this->getResponse()->representJson($coreHelper->jsonEncode($response));
     }
 
     /**
@@ -204,12 +204,9 @@ class Editor extends \Magento\Backend\App\Action
             $response = array('message' => $successMessage, 'themeId' => $themeCustomization->getId());
         } catch (\Exception $e) {
             $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
-            $this->getResponse()->setBody(
-                $coreHelper->jsonEncode(array('error' => __('This theme is not assigned.')))
-            );
             $response = array('error' => true, 'message' => __('This theme is not assigned.'));
         }
-        $this->getResponse()->setBody($coreHelper->jsonEncode($response));
+        $this->getResponse()->representJson($coreHelper->jsonEncode($response));
     }
 
     /**
@@ -239,7 +236,7 @@ class Editor extends \Magento\Backend\App\Action
             $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
             $response = array('error' => true, 'message' => __('This theme is not saved.'));
         }
-        $this->getResponse()->setBody($coreHelper->jsonEncode($response));
+        $this->getResponse()->representJson($coreHelper->jsonEncode($response));
     }
 
     /**
@@ -281,7 +278,7 @@ class Editor extends \Magento\Backend\App\Action
 
         /** @var $coreHelper \Magento\Core\Helper\Data */
         $coreHelper = $this->_objectManager->get('Magento\Core\Helper\Data');
-        $this->getResponse()->setBody($coreHelper->jsonEncode($response));
+        $this->getResponse()->representJson($coreHelper->jsonEncode($response));
     }
 
     /**
@@ -359,7 +356,7 @@ class Editor extends \Magento\Backend\App\Action
         }
         /** @var $coreHelper \Magento\Core\Helper\Data */
         $coreHelper = $this->_objectManager->get('Magento\Core\Helper\Data');
-        $this->getResponse()->setBody($coreHelper->jsonEncode($response));
+        $this->getResponse()->representJson($coreHelper->jsonEncode($response));
     }
 
     /**

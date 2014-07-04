@@ -1,3 +1,22 @@
+2.0.0.0-dev85
+=============
+* Service layer updates:
+  * Implemented API for the CatalogInventory module
+  * Refactored the external usages of the CatalogInventory module to service
+* Fixed bugs:
+  * Fixed an issue where a coupon usage option was not comprehensible enough
+  * Fixed an issue where products selection for adding to a bundle option was lost when switching between pages with product grids
+  * Fixed an issue where  Google Content was not sending the correct 'description' attribute
+  * Fixed an issue where custom attributes were not displayed in layered navigation after a product import
+  * Fixed an issue where the Category URL keys did not work correctly after saving
+  * Fixed an issue where an admin could not create a Target rule with a certain Products to Display condition
+  * Fixed a jQuery error on a product page in the Admin panel, which appeared when switching between product tabs
+* Framework Improvements:
+  * Created ProductsCustomOptions Service API for Catalog module
+  * Created DownloadableLink Service API for Catalog module
+* GitHub requests:
+  * [#257] JSON loading should follow OWASP recommendation
+
 2.0.0.0-dev84
 =============
 * Fixed bugs:

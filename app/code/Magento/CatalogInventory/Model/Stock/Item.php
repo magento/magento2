@@ -132,6 +132,11 @@ class Item extends \Magento\Framework\Model\AbstractModel
     const ENTITY = 'cataloginventory_stock_item';
 
     /**
+     * Default stock id
+     */
+    const DEFAULT_STOCK_ID = 1;
+
+    /**
      * @var array
      */
     private $_minSaleQtyCache = array();
@@ -179,9 +184,14 @@ class Item extends \Magento\Framework\Model\AbstractModel
     protected $_catalogInventoryMinsaleqty;
 
     /**
-     * @var \Magento\CatalogInventory\Service\V1\StockItem
+     * @var \Magento\CatalogInventory\Service\V1\StockItemService
      */
     protected $stockItemService;
+
+    /**
+     * @var \Magento\CatalogInventory\Model\Stock\ItemRegistry
+     */
+    protected $stockItemRegistry;
 
     /**
      * Core store config
@@ -238,7 +248,8 @@ class Item extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Index\Model\Indexer $indexer
      * @param Status $stockStatus
-     * @param \Magento\CatalogInventory\Service\V1\StockItem $stockItemService
+     * @param \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
+     * @param ItemRegistry $stockItemRegistry
      * @param \Magento\CatalogInventory\Helper\Minsaleqty $catalogInventoryMinsaleqty
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -256,7 +267,8 @@ class Item extends \Magento\Framework\Model\AbstractModel
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Index\Model\Indexer $indexer,
         Status $stockStatus,
-        \Magento\CatalogInventory\Service\V1\StockItem $stockItemService,
+        \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService,
+        \Magento\CatalogInventory\Model\Stock\ItemRegistry $stockItemRegistry,
         \Magento\CatalogInventory\Helper\Minsaleqty $catalogInventoryMinsaleqty,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
@@ -274,6 +286,7 @@ class Item extends \Magento\Framework\Model\AbstractModel
         $this->_indexer = $indexer;
         $this->_stockStatus = $stockStatus;
         $this->stockItemService = $stockItemService;
+        $this->stockItemRegistry = $stockItemRegistry;
         $this->_catalogInventoryMinsaleqty = $catalogInventoryMinsaleqty;
         $this->_scopeConfig = $scopeConfig;
         $this->_storeManager = $storeManager;
@@ -301,7 +314,7 @@ class Item extends \Magento\Framework\Model\AbstractModel
      */
     public function getStockId()
     {
-        return 1;
+        return self::DEFAULT_STOCK_ID;
     }
 
     /**
@@ -393,26 +406,6 @@ class Item extends \Magento\Framework\Model\AbstractModel
             $this->setData('store_id', $storeId);
         }
         return $storeId;
-    }
-
-    /**
-     * Adding stock data to product
-     *
-     * @param Product $product
-     * @return $this
-     */
-    public function assignProduct(Product $product)
-    {
-        if (!$this->getId() || !$this->getProductId()) {
-            $this->_getResource()->loadByProductId($this, $product->getId());
-            $this->setOrigData();
-        }
-
-        $this->setProduct($product);
-        $product->setStockItem($this);
-        $product->setIsInStock($this->getIsInStock());
-        $this->_stockStatus->assignProduct($product, $this->getStockId(), $this->getStockStatus());
-        return $this;
     }
 
     /**
@@ -902,11 +895,10 @@ class Item extends \Magento\Framework\Model\AbstractModel
     protected function _beforeSave()
     {
         parent::_beforeSave();
-        // see if quantity is defined for this item type
-        $typeId = $this->getTypeId();
-        if ($productTypeId = $this->getProductTypeId()) {
-            $typeId = $productTypeId;
-        }
+        /** @var \Magento\Catalog\Model\Product $product */
+        $product = $this->productFactory->create();
+        $product->load($this->getProductId());
+        $typeId = $product->getTypeId() ? $product->getTypeId() : $this->getTypeId();
 
         $isQty = $this->stockItemService->isQty($typeId);
 
@@ -1039,9 +1031,7 @@ class Item extends \Magento\Framework\Model\AbstractModel
                 foreach ($productsByGroups as $productsInGroup) {
                     $qty = 0;
                     foreach ($productsInGroup as $childProduct) {
-                        if ($childProduct->hasStockItem()) {
-                            $qty += $childProduct->getStockItem()->getStockQty();
-                        }
+                        $qty += $this->stockItemRegistry->retrieve($childProduct->getId())->getStockQty();
                     }
                     if (null === $stockQty || $qty < $stockQty) {
                         $stockQty = $qty;

@@ -23,7 +23,6 @@
  */
 namespace Magento\Catalog\Service\V1\Data;
 
-use Magento\Catalog\Service\V1\Data\ProductBuilder;
 use Magento\Catalog\Service\V1\Data\Product as ProductDataObject;
 
 /**

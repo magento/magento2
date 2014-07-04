@@ -30,9 +30,6 @@
     <event name="catalog_product_load_after">
         <observer name="inventory" instance="Magento\CatalogInventory\Model\Observer" method="addInventoryData" />
     </event>
-    <event name="catalog_product_clear">
-        <observer name="inventory" instance="Magento\CatalogInventory\Model\Observer" method="removeInventoryData" />
-    </event>
     <event name="catalog_product_collection_load_after">
         <observer name="inventory" instance="Magento\CatalogInventory\Model\Observer" method="addStockStatusToCollection" />
     </event>

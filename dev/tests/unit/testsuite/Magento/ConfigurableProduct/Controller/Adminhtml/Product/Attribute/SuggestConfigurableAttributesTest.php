@@ -104,7 +104,7 @@ class SuggestConfigurableAttributesTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue('body')
         );
-        $this->responseMock->expects($this->once())->method('setBody')->with('body');
+        $this->responseMock->expects($this->once())->method('representJson')->with('body');
         $this->suggestAttributes->indexAction();
     }
 }

@@ -99,8 +99,9 @@ class Index extends AbstractAction
                 }
             }
         }
-
-        $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($items));
+        $this->getResponse()->representJson(
+            $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($items)
+        );
     }
 
     /**

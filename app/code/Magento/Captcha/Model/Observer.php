@@ -246,7 +246,7 @@ class Observer
                 if (!$captchaModel->isCorrect($this->_getCaptchaString($controller->getRequest(), $formId))) {
                     $this->_actionFlag->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
                     $result = array('error' => 1, 'message' => __('Incorrect CAPTCHA'));
-                    $controller->getResponse()->setBody($this->_coreData->jsonEncode($result));
+                    $controller->getResponse()->representJson($this->_coreData->jsonEncode($result));
                 }
             }
         }
@@ -270,7 +270,7 @@ class Observer
                 if (!$captchaModel->isCorrect($this->_getCaptchaString($controller->getRequest(), $formId))) {
                     $this->_actionFlag->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
                     $result = array('error' => 1, 'message' => __('Incorrect CAPTCHA'));
-                    $controller->getResponse()->setBody($this->_coreData->jsonEncode($result));
+                    $controller->getResponse()->representJson($this->_coreData->jsonEncode($result));
                 }
             }
         }

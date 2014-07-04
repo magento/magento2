@@ -51,33 +51,33 @@ class AbstractItems extends \Magento\Backend\Block\Template
      *
      * @var bool|null
      */
-    protected $_canEditQty = null;
+    protected $_canEditQty;
 
     /**
      * Core registry
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
-     * @var \Magento\Catalog\Model\ProductFactory
+     * @var \Magento\CatalogInventory\Service\V1\StockItemService
      */
-    protected $_productFactory;
+    protected $stockItemService;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Catalog\Model\ProductFactory $productFactory
+     * @param \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
      * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Catalog\Model\ProductFactory $productFactory,
+        \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService,
         \Magento\Framework\Registry $registry,
         array $data = array()
     ) {
-        $this->_productFactory = $productFactory;
+        $this->stockItemService = $stockItemService;
         $this->_coreRegistry = $registry;
         parent::__construct($context, $data);
     }
@@ -331,14 +331,14 @@ class AbstractItems extends \Magento\Backend\Block\Template
     public function displayPriceInclTax(\Magento\Framework\Object $item)
     {
         $qty = $item->getQtyOrdered() ? $item->getQtyOrdered() : ($item->getQty() ? $item->getQty() : 1);
-        $baseTax = $item->getTaxBeforeDiscount() ? $item
-            ->getTaxBeforeDiscount() : ($item
-            ->getTaxAmount() ? $item
-            ->getTaxAmount() : 0);
-        $tax = $item->getBaseTaxBeforeDiscount() ? $item
-            ->getBaseTaxBeforeDiscount() : ($item
-            ->getBaseTaxAmount() ? $item
-            ->getBaseTaxAmount() : 0);
+
+        $baseTax = $item->getTaxBeforeDiscount()
+            ? $item->getTaxBeforeDiscount()
+            : ($item->getTaxAmount() ? $item->getTaxAmount() : 0);
+
+        $tax = $item->getBaseTaxBeforeDiscount()
+            ? $item->getBaseTaxBeforeDiscount()
+            : ($item->getBaseTaxAmount() ? $item->getBaseTaxAmount() : 0);
 
         $basePriceTax = 0;
         $priceTax = 0;
@@ -362,14 +362,13 @@ class AbstractItems extends \Magento\Backend\Block\Template
      */
     public function displaySubtotalInclTax($item)
     {
-        $baseTax = $item->getTaxBeforeDiscount() ? $item
-            ->getTaxBeforeDiscount() : ($item
-            ->getTaxAmount() ? $item
-            ->getTaxAmount() : 0);
-        $tax = $item->getBaseTaxBeforeDiscount() ? $item
-            ->getBaseTaxBeforeDiscount() : ($item
-            ->getBaseTaxAmount() ? $item
-            ->getBaseTaxAmount() : 0);
+        $baseTax = $item->getTaxBeforeDiscount()
+            ? $item->getTaxBeforeDiscount()
+            : ($item->getTaxAmount() ? $item->getTaxAmount() : 0);
+
+        $tax = $item->getBaseTaxBeforeDiscount()
+            ? $item->getBaseTaxBeforeDiscount()
+            : ($item->getBaseTaxAmount() ? $item->getBaseTaxAmount() : 0);
 
         return $this->displayPrices($item->getBaseRowTotal() + $baseTax, $item->getRowTotal() + $tax);
     }
@@ -397,7 +396,7 @@ class AbstractItems extends \Magento\Backend\Block\Template
     }
 
     /**
-     * Retrieve tax with persent html content
+     * Retrieve tax with percent html content
      *
      * @param \Magento\Framework\Object $item
      * @return string
@@ -462,11 +461,8 @@ class AbstractItems extends \Magento\Backend\Block\Template
          * Disable editing of quantity of item if creating of shipment forced
          * and ship partially disabled for order
          */
-        if ($this->getOrder()->getForcedShipmentWithInvoice() && ($this->canShipPartially(
-            $this->getOrder()
-        ) || $this->canShipPartiallyItem(
-            $this->getOrder()
-        ))
+        if ($this->getOrder()->getForcedShipmentWithInvoice()
+            && ($this->canShipPartially($this->getOrder()) || $this->canShipPartiallyItem($this->getOrder()))
         ) {
             return false;
         }
@@ -527,11 +523,11 @@ class AbstractItems extends \Magento\Backend\Block\Template
      */
     public function canReturnToStock()
     {
-        if ($this->_scopeConfig->getValue(
+        $canSubtract = $this->_scopeConfig->getValue(
             \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_CAN_SUBTRACT,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        )
-        ) {
+        );
+        if ($canSubtract) {
             return true;
         } else {
             return false;
@@ -546,20 +542,21 @@ class AbstractItems extends \Magento\Backend\Block\Template
      */
     public function canReturnItemToStock($item = null)
     {
-        $canReturnToStock = $this->_scopeConfig->getValue(
-            \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_CAN_SUBTRACT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
-        if (!is_null($item)) {
+        if (null !== $item) {
             if (!$item->hasCanReturnToStock()) {
-                $product = $this->_productFactory->create()->load($item->getOrderItem()->getProductId());
-                if ($product->getId() && $product->getStockItem()->getManageStock()) {
+                $productId = $item->getOrderItem()->getProductId();
+                if ($productId && $this->stockItemService->getManageStock($productId)) {
                     $item->setCanReturnToStock(true);
                 } else {
                     $item->setCanReturnToStock(false);
                 }
             }
             $canReturnToStock = $item->getCanReturnToStock();
+        } else {
+            $canReturnToStock = $this->_scopeConfig->getValue(
+                \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_CAN_SUBTRACT,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
         }
         return $canReturnToStock;
     }

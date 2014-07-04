@@ -149,7 +149,7 @@ class Variable extends Action
             $response->setError(true);
             $response->setHtmlMessage($this->_view->getLayout()->getMessagesBlock()->getGroupedHtml());
         }
-        $this->getResponse()->setBody($response->toJson());
+        $this->getResponse()->representJson($response->toJson());
     }
 
     /**
@@ -223,7 +223,7 @@ class Variable extends Action
             true
         );
         $variables = array($storeContactVariabls, $customVariables);
-        $this->getResponse()->setBody(\Zend_Json::encode($variables));
+        $this->getResponse()->representJson(\Zend_Json::encode($variables));
     }
 
     /**

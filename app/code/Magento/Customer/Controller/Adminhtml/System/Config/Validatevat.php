@@ -85,6 +85,6 @@ class Validatevat extends \Magento\Backend\App\Action
         );
 
         $body = $coreHelper->jsonEncode(array('valid' => $valid, 'group' => $groupId, 'success' => $success));
-        $this->getResponse()->setBody($body);
+        $this->getResponse()->representJson($body);
     }
 }

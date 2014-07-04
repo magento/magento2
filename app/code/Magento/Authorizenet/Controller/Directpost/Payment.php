@@ -207,7 +207,9 @@ class Payment extends \Magento\Framework\App\Action\Action
             );
         } else {
             $result = array('error_messages' => __('Please choose a payment method.'), 'goto_section' => 'payment');
-            $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result));
+            $this->getResponse()->representJson(
+                $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result)
+            );
         }
     }
 
@@ -219,7 +221,7 @@ class Payment extends \Magento\Framework\App\Action\Action
     public function returnQuoteAction()
     {
         $this->_returnCustomerQuote();
-        $this->getResponse()->setBody(
+        $this->getResponse()->representJson(
             $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode(array('success' => 1))
         );
     }

@@ -136,7 +136,7 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
         );
         $testHtml = '<div>Some test html</div>';
         $this->chooserBlockMock->expects($this->once())->method('getTreeJson')->will($this->returnValue($testHtml));
-        $this->responseMock->expects($this->once())->method('setBody')->with($this->equalTo($testHtml));
+        $this->responseMock->expects($this->once())->method('representJson')->with($this->equalTo($testHtml));
         $this->controller->categoriesJsonAction();
     }
 }

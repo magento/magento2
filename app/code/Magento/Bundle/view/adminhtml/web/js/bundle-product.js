@@ -91,6 +91,8 @@
                 bSelection.gridSelection.set(optionIndex, $H({}));
                 bSelection.gridRemoval = $H({});
                 bSelection.gridSelectedProductSkus = productSkus;
+
+                $selectionGrid.on('contentUpdated', bSelection.gridUpdateCallback);
                 $selectionGrid.on('change', '.col-id input', function () {//_on can't be used because of grid reloading
                     var tr = $(this).closest('tr');
                     if ($(this).is(':checked')) {

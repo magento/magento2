@@ -183,7 +183,7 @@ class Urlrewrite extends Action
     public function categoriesJsonAction()
     {
         $categoryId = $this->getRequest()->getParam('id', null);
-        $this->getResponse()->setBody(
+        $this->getResponse()->representJson(
             $this->_objectManager->get(
                 'Magento\Backend\Block\Urlrewrite\Catalog\Category\Tree'
             )->getTreeArray(

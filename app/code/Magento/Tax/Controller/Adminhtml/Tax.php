@@ -74,7 +74,7 @@ class Tax extends \Magento\Backend\App\Action
                 )
             );
         }
-        $this->getResponse()->setBody($responseContent);
+        $this->getResponse()->representJson($responseContent);
     }
 
     /**
@@ -108,7 +108,7 @@ class Tax extends \Magento\Backend\App\Action
                 array('success' => false, 'error_message' => __('Something went wrong deleting this tax class.'))
             );
         }
-        $this->getResponse()->setBody($responseContent);
+        $this->getResponse()->representJson($responseContent);
     }
 
     /**

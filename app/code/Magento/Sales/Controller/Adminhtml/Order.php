@@ -346,7 +346,7 @@ class Order extends \Magento\Backend\App\Action
             }
             if (is_array($response)) {
                 $response = $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response);
-                $this->getResponse()->setBody($response);
+                $this->getResponse()->representJson($response);
             }
         }
     }

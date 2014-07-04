@@ -164,6 +164,9 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($sku, $this->_model->getAttributeById($sku->getId(), $product));
     }
 
+    /**
+     * @magentoAppIsolation enabled
+     */
     public function testIsVirtual()
     {
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(

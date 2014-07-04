@@ -42,7 +42,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Downloadable/_files/product_with_files.php
+     * @magentoDataFixture Magento/Downloadable/_files/product_downloadable_with_files.php
      * @magentoAppArea adminhtml
      */
     public function testDeleteTypeSpecificData()

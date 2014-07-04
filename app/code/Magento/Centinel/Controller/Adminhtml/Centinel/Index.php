@@ -71,7 +71,9 @@ class Index extends \Magento\Backend\App\Action
             $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
             $result['message'] = __('Validation failed.');
         }
-        $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result));
+        $this->getResponse()->representJson(
+            $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result)
+        );
     }
 
     /**

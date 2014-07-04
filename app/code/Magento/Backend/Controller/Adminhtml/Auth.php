@@ -67,7 +67,7 @@ class Auth extends AbstractAction
      */
     public function deniedJsonAction()
     {
-        $this->getResponse()->setBody($this->_getDeniedJson());
+        $this->getResponse()->representJson($this->_getDeniedJson());
     }
 
     /**

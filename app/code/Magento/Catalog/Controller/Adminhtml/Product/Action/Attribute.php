@@ -48,24 +48,32 @@ class Attribute extends Action
     protected $_catalogProduct;
 
     /**
+     * @var \Magento\CatalogInventory\Service\V1\Data\StockItemBuilder
+     */
+    protected $stockItemBuilder;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Catalog\Helper\Product\Edit\Action\Attribute $helper
      * @param \Magento\Catalog\Model\Indexer\Product\Flat\Processor $productFlatIndexerProcessor
      * @param \Magento\Catalog\Model\Indexer\Product\Price\Processor $productPriceIndexerProcessor
      * @param \Magento\Catalog\Helper\Product $catalogProduct
+     * @param \Magento\CatalogInventory\Service\V1\Data\StockItemBuilder $stockItemBuilder
      */
     public function __construct(
         Action\Context $context,
         \Magento\Catalog\Helper\Product\Edit\Action\Attribute $helper,
         \Magento\Catalog\Model\Indexer\Product\Flat\Processor $productFlatIndexerProcessor,
         \Magento\Catalog\Model\Indexer\Product\Price\Processor $productPriceIndexerProcessor,
-        \Magento\Catalog\Helper\Product $catalogProduct
+        \Magento\Catalog\Helper\Product $catalogProduct,
+        \Magento\CatalogInventory\Service\V1\Data\StockItemBuilder $stockItemBuilder
     ) {
         parent::__construct($context);
         $this->_helper = $helper;
         $this->_productFlatIndexerProcessor = $productFlatIndexerProcessor;
         $this->_productPriceIndexerProcessor = $productPriceIndexerProcessor;
         $this->_catalogProduct = $catalogProduct;
+        $this->stockItemBuilder = $stockItemBuilder;
     }
 
     /**
@@ -148,31 +156,18 @@ class Attribute extends Action
                     ->updateAttributes($this->_helper->getProductIds(), $attributesData, $storeId);
             }
             if ($inventoryData) {
-                $stockItem = $this->_objectManager->create('Magento\CatalogInventory\Model\Stock\Item');
-                $stockItem->setProcessIndexEvents(false);
-                $stockItemSaved = false;
+                /** @var \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService */
+                $stockItemService = $this->_objectManager
+                    ->create('Magento\CatalogInventory\Service\V1\StockItemService');
 
                 foreach ($this->_helper->getProductIds() as $productId) {
-                    $stockItem->setData(array());
-                    $stockItem->loadByProduct($productId)->setProductId($productId);
-
-                    $stockDataChanged = false;
-                    foreach ($inventoryData as $k => $v) {
-                        $stockItem->setDataUsingMethod($k, $v);
-                        if ($stockItem->dataHasChangedFor($k)) {
-                            $stockDataChanged = true;
-                        }
+                    $stockItemDo = $stockItemService->getStockItem($productId);
+                    if (!$stockItemDo->getProductId()) {
+                        $inventoryData[] = $productId;
                     }
-                    if ($stockDataChanged) {
-                        $stockItem->save();
-                        $stockItemSaved = true;
-                    }
-                }
 
-                if ($stockItemSaved) {
-                    $this->_objectManager->get('Magento\Index\Model\Indexer')->indexEvents(
-                        \Magento\CatalogInventory\Model\Stock\Item::ENTITY,
-                        \Magento\Index\Model\Event::TYPE_SAVE
+                    $stockItemService->saveStockItem(
+                        $this->stockItemBuilder->mergeDataObjectWithArray($stockItemDo, $inventoryData)
                     );
                 }
             }
@@ -297,6 +292,6 @@ class Attribute extends Action
             $response->setHtmlMessage($this->_view->getLayout()->getMessagesBlock()->getGroupedHtml());
         }
 
-        $this->getResponse()->setBody($response->toJson());
+        $this->getResponse()->representJson($response->toJson());
     }
 }

@@ -170,11 +170,14 @@ class Payment extends \Magento\Sales\Controller\Adminhtml\Order\Create
                     'sales/order_create/'
                 );
             }
-
-            $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result));
+            $this->getResponse()->representJson(
+                $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result)
+            );
         } else {
             $result = array('error_messages' => __('Please choose a payment method.'));
-            $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result));
+            $this->getResponse()->representJson(
+                $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result)
+            );
         }
     }
 
@@ -238,7 +241,7 @@ class Payment extends \Magento\Sales\Controller\Adminhtml\Order\Create
     public function returnQuoteAction()
     {
         $this->_returnQuote();
-        $this->getResponse()->setBody(
+        $this->getResponse()->representJson(
             $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode(array('success' => 1))
         );
     }

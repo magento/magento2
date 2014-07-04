@@ -36,7 +36,7 @@ class Files extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Fi
     public function treeJsonAction()
     {
         try {
-            $this->getResponse()->setBody(
+            $this->getResponse()->representJson(
                 $this->_view->getLayout()->createBlock(
                     'Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Files\Tree'
                 )->getTreeJson(
@@ -45,7 +45,9 @@ class Files extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Fi
             );
         } catch (\Exception $e) {
             $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
-            $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode(array()));
+            $this->getResponse()->representJson(
+                $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode(array())
+            );
         }
     }
 
@@ -66,7 +68,9 @@ class Files extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Fi
             );
         } catch (\Exception $e) {
             $result = array('error' => true, 'message' => $e->getMessage());
-            $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result));
+            $this->getResponse()->representJson(
+                $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result)
+            );
         }
     }
 }

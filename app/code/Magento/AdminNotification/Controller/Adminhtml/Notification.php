@@ -95,7 +95,7 @@ class Notification extends \Magento\Backend\App\AbstractAction
         } catch (\Exception $e) {
             $responseData['success'] = false;
         }
-        $this->getResponse()->setBody(
+        $this->getResponse()->representJson(
             $this->_objectManager->create('Magento\Core\Helper\Data')->jsonEncode($responseData)
         );
     }

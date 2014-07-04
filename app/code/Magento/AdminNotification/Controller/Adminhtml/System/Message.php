@@ -41,10 +41,7 @@ class Message extends \Magento\Backend\App\AbstractAction
         foreach ($messageCollection->getItems() as $item) {
             $result[] = array('severity' => $item->getSeverity(), 'text' => $item->getText());
         }
-        $this->getResponse()->setHeader(
-            'Content-Type',
-            'application/json'
-        )->setBody(
+        $this->getResponse()->representJson(
             $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result)
         );
     }

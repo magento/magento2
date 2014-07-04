@@ -202,7 +202,7 @@ class Observer
                     $result['redirect'] = false;
                     $result['success'] = false;
                     $controller->getResponse()->clearHeader('Location');
-                    $controller->getResponse()->setBody($this->_coreData->jsonEncode($result));
+                    $controller->getResponse()->representJson($this->_coreData->jsonEncode($result));
                 }
             }
         }

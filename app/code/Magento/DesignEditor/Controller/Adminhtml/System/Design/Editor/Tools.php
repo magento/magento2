@@ -80,7 +80,9 @@ class Tools extends \Magento\Backend\App\Action
             $response = array('error' => true, 'message' => __('We cannot upload the CSS file.'));
             $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
         }
-        $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response));
+        $this->getResponse()->representJson(
+            $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response)
+        );
     }
 
     /**
@@ -114,7 +116,9 @@ class Tools extends \Magento\Backend\App\Action
             $response = array('error' => true, 'message' => __('We can\'t save the custom css file.'));
             $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
         }
-        $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response));
+        $this->getResponse()->representJson(
+            $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response)
+        );
     }
 
     /**
@@ -130,7 +134,9 @@ class Tools extends \Magento\Backend\App\Action
             $customization = $editableTheme->getCustomization();
             $customJsFiles = $customization->getFilesByType(\Magento\Framework\View\Design\Theme\Customization\File\Js::TYPE);
             $result = array('error' => false, 'files' => $customization->generateFileInfo($customJsFiles));
-            $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result));
+            $this->getResponse()->representJson(
+                $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result)
+            );
         } catch (\Exception $e) {
             $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
         }
@@ -165,7 +171,9 @@ class Tools extends \Magento\Backend\App\Action
             $response = array('error' => true, 'message' => __('We cannot upload the JS file.'));
             $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
         }
-        $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response));
+        $this->getResponse()->representJson(
+            $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response)
+        );
     }
 
     /**
@@ -210,7 +218,9 @@ class Tools extends \Magento\Backend\App\Action
             $result = array('error' => true, 'message' => __('We cannot upload the CSS file.'));
             $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
         }
-        $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result));
+        $this->getResponse()->representJson(
+            $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result)
+        );
     }
 
     /**
@@ -244,7 +254,9 @@ class Tools extends \Magento\Backend\App\Action
             $result = array('error' => true, 'message' => __('We can\'t save image sizes.'));
             $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
         }
-        $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result));
+        $this->getResponse()->representJson(
+            $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result)
+        );
     }
 
     /**
@@ -286,7 +298,9 @@ class Tools extends \Magento\Backend\App\Action
             $response = array('error' => true, 'message' => $errorMessage);
             $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
         }
-        $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response));
+        $this->getResponse()->representJson(
+            $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response)
+        );
     }
 
     /**
@@ -330,7 +344,9 @@ class Tools extends \Magento\Backend\App\Action
             $response = array('error' => true, 'message' => $errorMessage);
             $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
         }
-        $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response));
+        $this->getResponse()->representJson(
+            $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response)
+        );
     }
 
     /**
@@ -377,7 +393,9 @@ class Tools extends \Magento\Backend\App\Action
             $response = array('error' => true, 'message' => $errorMessage);
             $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
         }
-        $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response));
+        $this->getResponse()->representJson(
+            $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response)
+        );
     }
 
     /**
@@ -430,7 +448,9 @@ class Tools extends \Magento\Backend\App\Action
             $response = array('error' => true, 'message' => $errorMessage);
             $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
         }
-        $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response));
+        $this->getResponse()->representJson(
+            $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response)
+        );
     }
 
     /**
@@ -464,7 +484,9 @@ class Tools extends \Magento\Backend\App\Action
             $response = array('error' => true, 'message' => $errorMessage);
             $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
         }
-        $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response));
+        $this->getResponse()->representJson(
+            $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response)
+        );
     }
 
     /**

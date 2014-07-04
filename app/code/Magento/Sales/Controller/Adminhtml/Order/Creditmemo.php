@@ -274,17 +274,21 @@ class Creditmemo extends \Magento\Sales\Controller\Adminhtml\Creditmemo\Abstract
     public function updateQtyAction()
     {
         try {
-            $creditmemo = $this->_initCreditmemo(true);
+            $this->_initCreditmemo(true);
             $this->_view->loadLayout();
             $response = $this->_view->getLayout()->getBlock('order_items')->toHtml();
         } catch (\Magento\Framework\Model\Exception $e) {
             $response = array('error' => true, 'message' => $e->getMessage());
-            $response = $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response);
         } catch (\Exception $e) {
             $response = array('error' => true, 'message' => __('Cannot update the item\'s quantity.'));
-            $response = $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response);
         }
-        $this->getResponse()->setBody($response);
+        if (is_array($response)) {
+            $this->getResponse()->representJson(
+                $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response)
+            );
+        } else {
+            $this->getResponse()->setBody($response);
+        }
     }
 
     /**
@@ -431,12 +435,16 @@ class Creditmemo extends \Magento\Sales\Controller\Adminhtml\Creditmemo\Abstract
             $response = $this->_view->getLayout()->getBlock('creditmemo_comments')->toHtml();
         } catch (\Magento\Framework\Model\Exception $e) {
             $response = array('error' => true, 'message' => $e->getMessage());
-            $response = $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response);
         } catch (\Exception $e) {
             $response = array('error' => true, 'message' => __('Cannot add new comment.'));
-            $response = $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response);
         }
-        $this->getResponse()->setBody($response);
+        if (is_array($response)) {
+            $this->getResponse()->representJson(
+                $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response)
+            );
+        } else {
+            $this->getResponse()->setBody($response);
+        }
     }
 
     /**

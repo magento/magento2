@@ -125,7 +125,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             $this->returnValue('encoded response')
         );
         $response->expects($this->once())->method('clearHeader')->with('Location');
-        $response->expects($this->once())->method('setBody')->with('encoded response');
+        $response->expects($this->once())->method('representJson')->with('encoded response');
         $this->model->addAdditionalFieldsToResponseFrontend($observer);
     }
 }

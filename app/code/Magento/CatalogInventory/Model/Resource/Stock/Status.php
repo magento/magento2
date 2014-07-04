@@ -100,17 +100,13 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $websites = array_keys($object->getWebsites($websiteId));
         $adapter = $this->_getWriteAdapter();
         foreach ($websites as $websiteId) {
-            $select = $adapter->select()->from(
-                $this->getMainTable()
-            )->where(
-                'product_id = :product_id'
-            )->where(
-                'website_id = :website_id'
-            )->where(
-                'stock_id = :stock_id'
-            );
+            $select = $adapter->select()->from($this->getMainTable())
+                ->where('product_id = :product_id')
+                ->where('website_id = :website_id')
+                ->where('stock_id = :stock_id');
             $bind = array(':product_id' => $productId, ':website_id' => $websiteId, ':stock_id' => $stockId);
-            if ($row = $adapter->fetchRow($select, $bind)) {
+            $row = $adapter->fetchRow($select, $bind);
+            if ($row) {
                 $bind = array('qty' => $qty, 'stock_status' => $status);
                 $where = array(
                     $adapter->quoteInto('product_id=?', (int)$row['product_id']),
@@ -148,19 +144,11 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $productIds = array($productIds);
         }
 
-        $select = $this->_getReadAdapter()->select()->from(
-            $this->getMainTable(),
-            array('product_id', 'stock_status')
-        )->where(
-            'product_id IN(?)',
-            $productIds
-        )->where(
-            'stock_id=?',
-            (int)$stockId
-        )->where(
-            'website_id=?',
-            (int)$websiteId
-        );
+        $select = $this->_getReadAdapter()->select()
+            ->from($this->getMainTable(), array('product_id', 'stock_status'))
+            ->where('product_id IN(?)', $productIds)
+            ->where('stock_id=?', (int) $stockId)
+            ->where('website_id=?', (int) $websiteId);
         return $this->_getReadAdapter()->fetchPairs($select);
     }
 
@@ -212,13 +200,10 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $select = $this->_getReadAdapter()->select()->from(
             array('e' => $this->getTable('catalog_product_entity')),
             array('entity_id', 'type_id')
-        )->order(
-            'entity_id ASC'
-        )->where(
-            'entity_id > :entity_id'
-        )->limit(
-            $limit
-        );
+        )
+            ->order('entity_id ASC')
+            ->where('entity_id > :entity_id')
+            ->limit($limit);
         return $this->_getReadAdapter()->fetchPairs($select, array(':entity_id' => $lastEntityId));
     }
 
@@ -311,19 +296,10 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $adapter = $this->_getReadAdapter();
 
         if ($storeId === null || $storeId == \Magento\Store\Model\Store::DEFAULT_STORE_ID) {
-            $select = $adapter->select()->from(
-                $attributeTable,
-                array('entity_id', 'value')
-            )->where(
-                'entity_id IN (?)',
-                $productIds
-            )->where(
-                'attribute_id = ?',
-                $attribute->getAttributeId()
-            )->where(
-                'store_id = ?',
-                \Magento\Store\Model\Store::DEFAULT_STORE_ID
-            );
+            $select = $adapter->select()->from($attributeTable, array('entity_id', 'value'))
+                ->where('entity_id IN (?)', $productIds)
+                ->where('attribute_id = ?', $attribute->getAttributeId())
+                ->where('store_id = ?', \Magento\Store\Model\Store::DEFAULT_STORE_ID);
 
             $rows = $adapter->fetchPairs($select);
         } else {

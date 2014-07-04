@@ -344,7 +344,9 @@ class Onepage extends Action
         if ($this->getRequest()->isPost()) {
             $method = $this->getRequest()->getPost('method');
             $result = $this->getOnepage()->saveCheckoutMethod($method);
-            $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result));
+            $this->getResponse()->representJson(
+                $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result)
+            );
         }
     }
 
@@ -388,7 +390,9 @@ class Onepage extends Action
                 }
             }
 
-            $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result));
+            $this->getResponse()->representJson(
+                $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result)
+            );
         }
     }
 
@@ -414,7 +418,9 @@ class Onepage extends Action
                     'html' => $this->_getShippingMethodsHtml()
                 );
             }
-            $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result));
+            $this->getResponse()->representJson(
+                $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result)
+            );
         }
     }
 
@@ -438,7 +444,7 @@ class Onepage extends Action
                     array('request' => $this->getRequest(), 'quote' => $this->getOnepage()->getQuote())
                 );
                 $this->getOnepage()->getQuote()->collectTotals();
-                $this->getResponse()->setBody(
+                $this->getResponse()->representJson(
                     $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result)
                 );
 
@@ -449,7 +455,9 @@ class Onepage extends Action
                 );
             }
             $this->getOnepage()->getQuote()->collectTotals()->save();
-            $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result));
+            $this->getResponse()->representJson(
+                $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result)
+            );
         }
     }
 
@@ -494,7 +502,9 @@ class Onepage extends Action
             $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
             $result['error'] = __('Unable to set Payment Method');
         }
-        $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result));
+        $this->getResponse()->representJson(
+            $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result)
+        );
     }
 
     /**
@@ -564,7 +574,7 @@ class Onepage extends Action
                 $result['error_messages'] = __(
                     'Please agree to all the terms and conditions before placing the order.'
                 );
-                $this->getResponse()->setBody(
+                $this->getResponse()->representJson(
                     $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result)
                 );
                 return;
@@ -643,7 +653,9 @@ class Onepage extends Action
             $result['redirect'] = $redirectUrl;
         }
 
-        $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result));
+        $this->getResponse()->representJson(
+            $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result)
+        );
     }
 
     /**

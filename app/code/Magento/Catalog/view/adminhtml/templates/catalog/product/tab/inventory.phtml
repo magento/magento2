@@ -207,9 +207,10 @@
         <span><?php echo __('Enable Qty Increments') ?></span>
     </label>
     <div class="control">
+        <?php $qtyIncrementsEnabled = $this->getFieldValue('enable_qty_increments'); ?>
         <select id="inventory_enable_qty_increments" name="<?php echo $this->getFieldSuffix() ?>[stock_data][enable_qty_increments]" <?php echo $_readonly;?>>
-            <option value="1"><?php echo __('Yes') ?></option>
-            <option value="0"<?php if ($this->getConfigFieldValue('enable_qty_increments') == 0): ?> selected="selected"<?php endif; ?>><?php echo __('No') ?></option>
+            <option value="1"<?php if ($qtyIncrementsEnabled): ?> selected="selected"<?php endif; ?>><?php echo __('Yes') ?></option>
+            <option value="0"<?php if (!$qtyIncrementsEnabled): ?> selected="selected"<?php endif; ?>><?php echo __('No') ?></option>
         </select>
         <input type="hidden" id="inventory_enable_qty_increments_default" value="<?php echo $this->getDefaultConfigValue('enable_qty_increments'); ?>">
         <?php $_checked = ($this->getFieldValue('use_config_enable_qty_inc') || $this->IsNew()) ? 'checked="checked"' : '' ?>

@@ -257,12 +257,16 @@ class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
             $response = $this->_view->getLayout()->getBlock('order_items')->toHtml();
         } catch (Exception $e) {
             $response = array('error' => true, 'message' => $e->getMessage());
-            $response = $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response);
         } catch (\Exception $e) {
             $response = array('error' => true, 'message' => __('Cannot update item quantity.'));
-            $response = $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response);
         }
-        $this->getResponse()->setBody($response);
+        if (is_array($response)) {
+            $this->getResponse()->representJson(
+                $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response)
+            );
+        } else {
+            $this->getResponse()->setBody($response);
+        }
     }
 
     /**
@@ -467,12 +471,16 @@ class Invoice extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
             $response = $this->_view->getLayout()->getBlock('invoice_comments')->toHtml();
         } catch (Exception $e) {
             $response = array('error' => true, 'message' => $e->getMessage());
-            $response = $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response);
         } catch (\Exception $e) {
             $response = array('error' => true, 'message' => __('Cannot add new comment.'));
-            $response = $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response);
         }
-        $this->getResponse()->setBody($response);
+        if (is_array($response)) {
+            $this->getResponse()->representJson(
+                $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response)
+            );
+        } else {
+            $this->getResponse()->setBody($response);
+        }
     }
 
     /**

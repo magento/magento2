@@ -57,7 +57,7 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Zend_Db_Adapter_Abstract $connection
-     * 
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -179,7 +179,7 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
                 $attributeIds
             )->where(
                 't_d.store_id = ?',
-                0
+                $adapter->getIfNullSql('t_s.store_id', \Magento\Store\Model\Store::DEFAULT_STORE_ID)
             );
         } else {
             $select = parent::_getLoadAttributesSelect($table)->where('store_id = ?', $this->getDefaultStoreId());

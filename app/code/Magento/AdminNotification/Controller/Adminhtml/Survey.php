@@ -40,7 +40,7 @@ class Survey extends \Magento\Backend\App\Action
         if ($this->getRequest()->getParam('isAjax', false)) {
             $this->_objectManager->get('Magento\AdminNotification\Model\Survey')->saveSurveyViewed(true);
         }
-        $this->getResponse()->setBody(\Zend_Json::encode(array('survey_decision_saved' => 1)));
+        $this->getResponse()->representJson(\Zend_Json::encode(array('survey_decision_saved' => 1)));
     }
 
     /**

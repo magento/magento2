@@ -26,7 +26,7 @@ namespace Magento\CatalogInventory\Service\V1;
 /**
  * Stock item interface
  */
-interface StockItemInterface
+interface StockItemServiceInterface
 {
     /**
      * @param int $productId
@@ -35,36 +35,25 @@ interface StockItemInterface
     public function getStockItem($productId);
 
     /**
+     * @param string $productSku
+     * @return \Magento\CatalogInventory\Service\V1\Data\StockItem
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function getStockItemBySku($productSku);
+
+    /**
      * @param \Magento\CatalogInventory\Service\V1\Data\StockItem $stockItem
      * @return \Magento\CatalogInventory\Service\V1\Data\StockItem
      */
     public function saveStockItem($stockItem);
 
     /**
-     * @param int $productId
-     * @param int $qty
-     * @return $this
+     * @param string $productSku
+     * @param \Magento\CatalogInventory\Service\V1\Data\StockItemDetails $stockItemDetailsDo
+     * @return string
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function subtractQty($productId, $qty);
-
-    /**
-     * @param int $productId
-     * @return bool
-     */
-    public function canSubtractQty($productId);
-
-    /**
-     * @param int $productId
-     * @param int $qty
-     * @return $this
-     */
-    public function addQty($productId, $qty);
-
-    /**
-     * @param int $productId
-     * @return int
-     */
-    public function getMinQty($productId);
+    public function saveStockItemBySku($productSku, Data\StockItemDetails $stockItemDetailsDo);
 
     /**
      * @param int $productId
@@ -80,12 +69,6 @@ interface StockItemInterface
 
     /**
      * @param int $productId
-     * @return int
-     */
-    public function getNotifyStockQty($productId);
-
-    /**
-     * @param int $productId
      * @return bool
      */
     public function getEnableQtyIncrements($productId);
@@ -98,28 +81,9 @@ interface StockItemInterface
 
     /**
      * @param int $productId
-     * @return int
-     */
-    public function getBackorders($productId);
-
-    /**
-     * @param int $productId
      * @return int mixed
      */
     public function getManageStock($productId);
-
-    /**
-     * @param int $productId
-     * @return bool
-     */
-    public function getCanBackInStock($productId);
-
-    /**
-     * @param int $productId
-     * @param int $qty
-     * @return bool
-     */
-    public function checkQty($productId, $qty);
 
     /**
      * @param int $productId
@@ -162,13 +126,6 @@ interface StockItemInterface
      * @return int
      */
     public function getStockQty($productId);
-
-    /**
-     * @param int $productId
-     * @param int $qty
-     * @return bool
-     */
-    public function checkQtyIncrements($productId, $qty);
 
     /**
      * @param int $productTypeId

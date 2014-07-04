@@ -289,4 +289,40 @@
             <resource ref="Magento_Catalog::catalog"/>
         </resources>
     </route>
+    <route url="/V1/products/options/types" method="GET">
+        <service class="Magento\Catalog\Service\V1\Product\CustomOptions\ReadServiceInterface" method="getTypes"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/:productSku/options" method="GET">
+        <service class="Magento\Catalog\Service\V1\Product\CustomOptions\ReadServiceInterface" method="getList"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/:productSku/options/:optionId" method="GET">
+        <service class="Magento\Catalog\Service\V1\Product\CustomOptions\ReadServiceInterface" method="get"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/:productSku/options" method="POST">
+        <service class="Magento\Catalog\Service\V1\Product\CustomOptions\WriteServiceInterface" method="add"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/:productSku/options/:optionId" method="PUT">
+        <service class="Magento\Catalog\Service\V1\Product\CustomOptions\WriteServiceInterface" method="update"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
+    <route url="/V1/products/:productSku/options/:optionId" method="DELETE">
+        <service class="Magento\Catalog\Service\V1\Product\CustomOptions\WriteServiceInterface" method="remove"/>
+        <resources>
+            <resource ref="Magento_Catalog::catalog"/>
+        </resources>
+    </route>
 </routes>

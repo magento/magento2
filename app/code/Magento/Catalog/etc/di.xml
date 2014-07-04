@@ -51,6 +51,10 @@
     <preference for="Magento\Catalog\Service\V1\Product\Link\Data\ProductLink\DataMapperInterface" type="Magento\Catalog\Service\V1\Product\Link\Data\ProductLink\DataMapper\Composite" />
     <preference for="Magento\Catalog\Service\V1\Product\GroupPriceServiceInterface" type="Magento\Catalog\Service\V1\Product\GroupPriceService" />
     <preference for="Magento\Catalog\Service\V1\Product\TierPriceServiceInterface" type="Magento\Catalog\Service\V1\Product\TierPriceService" />
+    <preference for="Magento\Catalog\Service\V1\Product\CustomOptions\ReadServiceInterface" type="Magento\Catalog\Service\V1\Product\CustomOptions\ReadService" />
+    <preference for="Magento\Catalog\Service\V1\Product\CustomOptions\Data\Option\Metadata\ReaderInterface" type="Magento\Catalog\Service\V1\Product\CustomOptions\Data\Option\Metadata\Reader" />
+    <preference for="Magento\Catalog\Service\V1\Product\CustomOptions\WriteServiceInterface" type="Magento\Catalog\Service\V1\Product\CustomOptions\WriteService" />
+    <preference for="Magento\Catalog\Service\V1\Product\CustomOptions\Data\Option\Metadata\ConverterInterface" type="Magento\Catalog\Service\V1\Product\CustomOptions\Data\Option\Metadata\Converter\Composite" />
     <type name="Magento\Log\Model\Resource\Log">
         <plugin name="catalogLog" type="Magento\Catalog\Model\Plugin\Log" />
     </type>
@@ -398,6 +402,45 @@
         <arguments>
             <argument name="converters" xsi:type="array">
                 <item name="default" xsi:type="object">\Magento\Catalog\Service\V1\Product\Link\Data\ProductLink\ProductEntity\DefaultConverter</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Service\V1\Product\CustomOptions\Data\Option\Metadata\Reader">
+        <arguments>
+            <argument name="valueReaders" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\Catalog\Service\V1\Product\CustomOptions\Data\Option\Metadata\Reader\DefaultReader</item>
+                <item name="field" xsi:type="object">Magento\Catalog\Service\V1\Product\CustomOptions\Data\Option\Metadata\Reader\Text</item>
+                <item name="area" xsi:type="object">Magento\Catalog\Service\V1\Product\CustomOptions\Data\Option\Metadata\Reader\Text</item>
+                <item name="file" xsi:type="object">Magento\Catalog\Service\V1\Product\CustomOptions\Data\Option\Metadata\Reader\File</item>
+                <item name="drop_down" xsi:type="object">Magento\Catalog\Service\V1\Product\CustomOptions\Data\Option\Metadata\Reader\Select</item>
+                <item name="radio" xsi:type="object">Magento\Catalog\Service\V1\Product\CustomOptions\Data\Option\Metadata\Reader\Select</item>
+                <item name="checkbox" xsi:type="object">Magento\Catalog\Service\V1\Product\CustomOptions\Data\Option\Metadata\Reader\Select</item>
+                <item name="multiple" xsi:type="object">Magento\Catalog\Service\V1\Product\CustomOptions\Data\Option\Metadata\Reader\Select</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Service\V1\Product\CustomOptions\Data\Option\Metadata\Converter\Composite">
+        <arguments>
+            <argument name="converters" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\Catalog\Service\V1\Product\CustomOptions\Data\Option\Metadata\Converter\DefaultConverter</item>
+                <item name="drop_down" xsi:type="object">Magento\Catalog\Service\V1\Product\CustomOptions\Data\Option\Metadata\Converter\Select</item>
+                <item name="radio" xsi:type="object">Magento\Catalog\Service\V1\Product\CustomOptions\Data\Option\Metadata\Converter\Select</item>
+                <item name="checkbox" xsi:type="object">Magento\Catalog\Service\V1\Product\CustomOptions\Data\Option\Metadata\Converter\Select</item>
+                <item name="multiple" xsi:type="object">Magento\Catalog\Service\V1\Product\CustomOptions\Data\Option\Metadata\Converter\Select</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Option\Validator\Pool">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\Catalog\Model\Product\Option\Validator\DefaultValidator</item>
+                <item name="drop_down" xsi:type="object">Magento\Catalog\Model\Product\Option\Validator\Select</item>
+                <item name="radio" xsi:type="object">Magento\Catalog\Model\Product\Option\Validator\Select</item>
+                <item name="checkbox" xsi:type="object">Magento\Catalog\Model\Product\Option\Validator\Select</item>
+                <item name="multiple" xsi:type="object">Magento\Catalog\Model\Product\Option\Validator\Select</item>
+                <item name="text" xsi:type="object">Magento\Catalog\Model\Product\Option\Validator\Text</item>
+                <item name="area" xsi:type="object">Magento\Catalog\Model\Product\Option\Validator\Text</item>
+                <item name="file" xsi:type="object">Magento\Catalog\Model\Product\Option\Validator\File</item>
             </argument>
         </arguments>
     </type>

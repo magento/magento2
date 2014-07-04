@@ -27,7 +27,12 @@
     <block class="Magento\Theme\Block\Html" name="root" output="1" template="print.phtml">
         <block class="Magento\Theme\Block\Html\Head" name="head" as="head"/>
         <container name="after_body_start" as="after_body_start" label="Page Top"/>
-        <container name="content" as="content" label="Main Content Area"/>
+        <container name="main" as="main" label="Main Content Container" htmlTag="div" htmlClass="column main">
+            <container name="content.top" label="Main Content Top"/>
+            <container name="content" label="Main Content Area"/>
+            <container name="content.aside" label="Main Content Aside"/>
+            <container name="content.bottom" label="Main Content Bottom"/>
+        </container>
     </block>
     <update handle="default_head_blocks"/>
     <referenceBlock name="head">

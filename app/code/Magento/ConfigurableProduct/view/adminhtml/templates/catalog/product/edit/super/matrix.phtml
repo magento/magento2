@@ -131,7 +131,7 @@ $productByUsedAttributes = $this->getAssociatedProducts();
                     <td class="col-price" data-column="price">
                         <?php echo $this->renderPrice($price);?>
                     </td>
-                    <td class="col-qty" data-column="qty"><?php echo $product->getStockItem()->getQty()?></td>
+                    <td class="col-qty" data-column="qty"><?php echo $this->getProductStockQty($product->getId()) ?></td>
                     <td class="col-weight" data-column="weight"><?php echo $product->getWeight()?></td>
                     <?php
                     foreach ($usedProductAttributes as $attribute) {

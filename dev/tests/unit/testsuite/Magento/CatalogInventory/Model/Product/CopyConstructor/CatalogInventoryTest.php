@@ -28,49 +28,77 @@ class CatalogInventoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\CatalogInventory\Model\Product\CopyConstructor\CatalogInventory
      */
-    protected $_model;
+    protected $model;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_productMock;
+    protected $productMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_duplicateMock;
+    protected $duplicateMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Service\V1\Data\StockItem|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_stockItemMock;
+    protected $stockItemDoMock;
+
+    /**
+     * @var \Magento\TestFramework\Helper\ObjectManager
+     */
+    protected $objectManager;
+
+    /**
+     * @var \Magento\CatalogInventory\Service\V1\StockItemService|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $stockItemServiceMock;
 
     protected function setUp()
     {
-        $this->_model = new \Magento\CatalogInventory\Model\Product\CopyConstructor\CatalogInventory();
-
-        $this->_productMock = $this->getMock(
+        $this->productMock = $this->getMock(
             '\Magento\Catalog\Model\Product',
-            array('__wakeup', 'getStockItem'),
+            array('__wakeup'),
             array(),
             '',
             false
         );
 
-        $this->_duplicateMock = $this->getMock(
+        $this->duplicateMock = $this->getMock(
             '\Magento\Catalog\Model\Product',
-            array('setStockData', 'unsStockItem', '__wakeup'),
+            array('setStockData', '__wakeup'),
             array(),
             '',
             false
         );
 
-        $this->_stockItemMock = $this->getMock(
-            'Magento\CatalogInventory\Model\Stock\Item',
-            array(),
-            array(),
+        $this->stockItemDoMock = $this->getMock(
+            'Magento\CatalogInventory\Service\V1\Data\StockItem',
+            [
+                'getStockId',
+                'isUseConfigEnableQtyInc',
+                'isEnableQtyIncrements',
+                'isUseConfigQtyIncrements',
+                'getQtyIncrements'
+            ],
+            [],
             '',
             false
+        );
+
+        $this->stockItemServiceMock = $this->getMock(
+            'Magento\CatalogInventory\Service\V1\StockItemService',
+            ['getStockItem'],
+            [],
+            '',
+            false
+        );
+
+        $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->model = $this->objectManager->getObject(
+            'Magento\CatalogInventory\Model\Product\CopyConstructor\CatalogInventory',
+            ['stockItemService' => $this->stockItemServiceMock]
         );
     }
 
@@ -83,12 +111,14 @@ class CatalogInventoryTest extends \PHPUnit_Framework_TestCase
             'use_config_backorders' => 1,
             'use_config_notify_stock_qty' => 1
         );
-        $this->_duplicateMock->expects($this->once())->method('unsStockItem');
-        $this->_productMock->expects($this->once())->method('getStockItem')->will($this->returnValue(null));
+        $this->stockItemDoMock->expects($this->any())->method('getStockId')->will($this->returnValue(false));
 
-        $this->_duplicateMock->expects($this->once())->method('setStockData')->with($expectedData);
+        $this->stockItemServiceMock->expects($this->once())
+            ->method('getStockItem')
+            ->will($this->returnValue($this->stockItemDoMock));
 
-        $this->_model->build($this->_productMock, $this->_duplicateMock);
+        $this->duplicateMock->expects($this->once())->method('setStockData')->with($expectedData);
+        $this->model->build($this->productMock, $this->duplicateMock);
     }
 
     public function testBuildWithCurrentProductStockItem()
@@ -104,19 +134,26 @@ class CatalogInventoryTest extends \PHPUnit_Framework_TestCase
             'use_config_qty_increments' => 'use_config_qty_increments',
             'qty_increments' => 'qty_increments'
         );
-        $this->_duplicateMock->expects($this->once())->method('unsStockItem');
-        $this->_productMock->expects(
-            $this->once()
-        )->method(
-            'getStockItem'
-        )->will(
-            $this->returnValue($this->_stockItemMock)
-        );
+        $this->stockItemServiceMock->expects($this->once())
+            ->method('getStockItem')
+            ->will($this->returnValue($this->stockItemDoMock));
 
-        $this->_stockItemMock->expects($this->any())->method('getData')->will($this->returnArgument(0));
+        $this->stockItemDoMock->expects($this->any())->method('getStockId')->will($this->returnValue(50));
 
-        $this->_duplicateMock->expects($this->once())->method('setStockData')->with($expectedData);
+        $this->stockItemDoMock->expects($this->any())
+            ->method('isUseConfigEnableQtyInc')
+            ->will($this->returnValue('use_config_enable_qty_inc'));
+        $this->stockItemDoMock->expects($this->any())
+            ->method('isEnableQtyIncrements')
+            ->will($this->returnValue('enable_qty_increments'));
+        $this->stockItemDoMock->expects($this->any())
+            ->method('isUseConfigQtyIncrements')
+            ->will($this->returnValue('use_config_qty_increments'));
+        $this->stockItemDoMock->expects($this->any())
+            ->method('getQtyIncrements')
+            ->will($this->returnValue('qty_increments'));
 
-        $this->_model->build($this->_productMock, $this->_duplicateMock);
+        $this->duplicateMock->expects($this->once())->method('setStockData')->with($expectedData);
+        $this->model->build($this->productMock, $this->duplicateMock);
     }
 }

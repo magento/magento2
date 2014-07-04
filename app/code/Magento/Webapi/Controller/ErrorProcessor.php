@@ -143,7 +143,7 @@ class ErrorProcessor
                 $stackTrace
             );
 
-        } else if ($exception instanceof WebapiException) {
+        } elseif ($exception instanceof WebapiException) {
             $maskedException = $exception;
         } else {
             $maskedException = new WebapiException(

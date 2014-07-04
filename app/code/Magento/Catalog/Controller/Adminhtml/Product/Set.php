@@ -182,7 +182,7 @@ class Set extends \Magento\Backend\App\Action
                 )->jsonEncode(
                     array('messages' => $block->getGroupedHtml(), 'error' => $hasError, 'id' => $model->getId())
                 );
-                $this->getResponse()->setBody($body);
+                $this->getResponse()->representJson($body);
             } else {
                 if ($hasError) {
                     $this->_redirect('catalog/*/add');
@@ -200,7 +200,7 @@ class Set extends \Magento\Backend\App\Action
                 $response['error'] = 0;
                 $response['url'] = $this->getUrl('catalog/*/');
             }
-            $this->getResponse()->setBody(
+            $this->getResponse()->representJson(
                 $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($response)
             );
         }

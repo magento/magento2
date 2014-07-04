@@ -808,7 +808,7 @@ HANDLE;
         $this->_viewMock->expects($this->once())->method('renderLayout');
 
         $this->_responseMock->expects($this->once())->method('getBody');
-        $this->_responseMock->expects($this->once())->method('setBody');
+        $this->_responseMock->expects($this->once())->method('representJson');
 
         $controller->tokensExchangeAction();
     }

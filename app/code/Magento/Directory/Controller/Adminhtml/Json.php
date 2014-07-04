@@ -54,6 +54,8 @@ class Json extends \Magento\Backend\App\Action
                 }
             }
         }
-        $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($arrRes));
+        $this->getResponse()->representJson(
+            $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($arrRes)
+        );
     }
 }

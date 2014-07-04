@@ -147,6 +147,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
      * @param \Magento\Directory\Model\CountryFactory $countryFactory
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Directory\Helper\Data $directoryData
+     * @param \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
      * @param \Magento\Framework\Logger $logger
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param Config $configHelper
@@ -168,6 +169,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
         \Magento\Directory\Model\CountryFactory $countryFactory,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Directory\Helper\Data $directoryData,
+        \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService,
         \Magento\Framework\Logger $logger,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
         Config $configHelper,
@@ -190,6 +192,7 @@ class Carrier extends AbstractCarrierOnline implements CarrierInterface
             $countryFactory,
             $currencyFactory,
             $directoryData,
+            $stockItemService,
             $data
         );
     }

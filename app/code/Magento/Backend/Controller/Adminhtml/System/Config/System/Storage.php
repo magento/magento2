@@ -180,6 +180,6 @@ class Storage extends \Magento\Backend\App\Action
         }
         $result['state'] = $state;
         $result = $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result);
-        $this->_response->setBody($result);
+        $this->_response->representJson($result);
     }
 }

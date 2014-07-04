@@ -280,7 +280,7 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
             $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
             $this->_actionFlag->set('', self::FLAG_NO_POST_DISPATCH, true);
             if ($this->getRequest()->getQuery('isAjax', false) || $this->getRequest()->getQuery('ajax', false)) {
-                $this->getResponse()->setBody(
+                $this->getResponse()->representJson(
                     $this->_objectManager->get(
                         'Magento\Core\Helper\Data'
                     )->jsonEncode(

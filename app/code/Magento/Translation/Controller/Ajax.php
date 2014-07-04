@@ -58,8 +58,7 @@ class Ajax extends \Magento\Framework\App\Action\Action
         } catch (\Exception $e) {
             $response = "{error:true,message:'" . $e->getMessage() . "'}";
         }
-        $this->getResponse()->setBody($response);
-
+        $this->getResponse()->representJson($response);
         $this->_actionFlag->set('', self::FLAG_NO_POST_DISPATCH, true);
     }
 }

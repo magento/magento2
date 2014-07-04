@@ -185,7 +185,7 @@ class Rate extends \Magento\Backend\App\Action
                 )
             );
         }
-        $this->getResponse()->setBody($responseContent);
+        $this->getResponse()->representJson($responseContent);
     }
 
     /**
@@ -321,7 +321,7 @@ class Rate extends \Magento\Backend\App\Action
                 array('success' => false, 'error_message' => __('An error occurred while deleting this tax rate.'))
             );
         }
-        $this->getResponse()->setBody($responseContent);
+        $this->getResponse()->representJson($responseContent);
     }
 
     /**

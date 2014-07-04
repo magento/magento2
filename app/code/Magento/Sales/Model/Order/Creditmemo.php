@@ -407,7 +407,7 @@ class Creditmemo extends \Magento\Sales\Model\AbstractModel
     }
 
     /**
-     * @return array
+     * @return \Magento\Sales\Model\Order\Creditmemo\Item[]
      */
     public function getAllItems()
     {

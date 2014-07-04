@@ -113,7 +113,9 @@ class File extends \Magento\Backend\App\Action
             $result = array('error' => $e->getMessage(), 'errorcode' => $e->getCode());
         }
 
-        $this->getResponse()->setBody($this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result));
+        $this->getResponse()->representJson(
+            $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result)
+        );
     }
 
     /**

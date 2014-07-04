@@ -84,7 +84,7 @@ class Context extends \Magento\Framework\View\Element\Template\Context
     protected $reviewRenderer;
 
     /**
-     * @var \Magento\CatalogInventory\Service\V1\StockItem
+     * @var \Magento\CatalogInventory\Service\V1\StockItemService
      */
     protected $stockItemService;
 
@@ -123,7 +123,7 @@ class Context extends \Magento\Framework\View\Element\Template\Context
      * @param \Magento\Theme\Helper\Layout $layoutHelper
      * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param ReviewRendererInterface $reviewRenderer
-     * @param \Magento\CatalogInventory\Service\V1\StockItem $stockItemService
+     * @param \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -162,7 +162,7 @@ class Context extends \Magento\Framework\View\Element\Template\Context
         \Magento\Theme\Helper\Layout $layoutHelper,
         \Magento\Catalog\Helper\Image $imageHelper,
         ReviewRendererInterface $reviewRenderer,
-        \Magento\CatalogInventory\Service\V1\StockItem $stockItemService
+        \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
     ) {
         $this->imageHelper = $imageHelper;
         $this->layoutHelper = $layoutHelper;
@@ -204,7 +204,7 @@ class Context extends \Magento\Framework\View\Element\Template\Context
     }
 
     /**
-     * @return \Magento\CatalogInventory\Service\V1\StockItem
+     * @return \Magento\CatalogInventory\Service\V1\StockItemService
      */
     public function getStockItemService()
     {

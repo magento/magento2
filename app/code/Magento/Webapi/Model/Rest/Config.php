@@ -36,30 +36,20 @@ class Config
      * HTTP methods supported by REST.
      */
     const HTTP_METHOD_GET = 'GET';
-
     const HTTP_METHOD_DELETE = 'DELETE';
-
     const HTTP_METHOD_PUT = 'PUT';
-
     const HTTP_METHOD_POST = 'POST';
-
     /**#@-*/
 
     /**#@+
      * Keys that a used for config internal representation.
      */
     const KEY_IS_SECURE = 'isSecure';
-
     const KEY_CLASS = 'class';
-
     const KEY_METHOD = 'method';
-
     const KEY_ROUTE_PATH = 'routePath';
-
     const KEY_ACL_RESOURCES = 'resources';
-
     const KEY_PARAMETERS = 'parameters';
-
     /*#@-*/
 
     /** @var ModelConfig */
@@ -98,17 +88,11 @@ class Config
             $this->_formatRoutePath($routeData[self::KEY_ROUTE_PATH])
         );
 
-        $route->setServiceClass(
-            $routeData[self::KEY_CLASS]
-        )->setServiceMethod(
-            $routeData[self::KEY_METHOD]
-        )->setSecure(
-            $routeData[self::KEY_IS_SECURE]
-        )->setAclResources(
-            $routeData[self::KEY_ACL_RESOURCES]
-        )->setParameters(
-            $routeData[self::KEY_PARAMETERS]
-        );
+        $route->setServiceClass($routeData[self::KEY_CLASS])
+            ->setServiceMethod($routeData[self::KEY_METHOD])
+            ->setSecure($routeData[self::KEY_IS_SECURE])
+            ->setAclResources($routeData[self::KEY_ACL_RESOURCES])
+            ->setParameters($routeData[self::KEY_PARAMETERS]);
         return $route;
     }
 
