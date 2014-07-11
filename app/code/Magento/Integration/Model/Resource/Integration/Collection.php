@@ -39,12 +39,15 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     }
 
     /**
-     * Get unsecure enpoints
+     * Add filter for finding integrations with unsecure URLs.
      *
      * @return $this
      */
-    public function addUnsecureEndpointFilter()
+    public function addUnsecureUrlsFilter()
     {
-        return $this->addFieldToFilter('endpoint', ['like' => 'http:%']);
+        return $this->addFieldToFilter(
+            ['endpoint', 'identity_link_url'],
+            [['like' => 'http:%'], ['like' => 'http:%']]
+        );
     }
 }

@@ -63,7 +63,7 @@ class Context
         } elseif ($value = strstr($path, '/app/design/')) {
             $type = self::CONTEXT_TYPE_THEME;
             $value = explode('/', $value);
-            $value = $value[3] . '/' . $value[4];
+            $value = $value[3] . '/' . $value[4] . '/' . $value[5];
         } elseif ($value = strstr($path, '/lib/web/')) {
             $type = self::CONTEXT_TYPE_LIB;
             $value = ltrim($value, '/');

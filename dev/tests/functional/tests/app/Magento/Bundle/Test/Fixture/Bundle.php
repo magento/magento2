@@ -53,9 +53,9 @@ class Bundle extends Product
     {
         parent::__construct($configuration, $placeholders);
 
-        $this->_placeholders['item1_simple1::getProductName'] = array($this, 'productProvider');
+        $this->_placeholders['item1_simple1::getName'] = array($this, 'productProvider');
         $this->_placeholders['item1_simple1::getProductId'] = array($this, 'productProvider');
-        $this->_placeholders['item1_virtual2::getProductName'] = array($this, 'productProvider');
+        $this->_placeholders['item1_virtual2::getName'] = array($this, 'productProvider');
         $this->_placeholders['item1_virtual2::getProductId'] = array($this, 'productProvider');
     }
 

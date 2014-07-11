@@ -170,7 +170,7 @@ class AuthorizationV1Test extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Webapi\ServiceException
+     * @expectedException \Magento\Framework\Exception\AuthorizationException
      * @expectedMessage The role associated with the specified user cannot be found.
      */
     public function testGetAllowedResourcesRoleNotFound()

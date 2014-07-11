@@ -38,10 +38,22 @@ class Name extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
      */
     public function render(\Magento\Framework\Object $row)
     {
+        /** @var \Magento\Integration\Model\Integration $row */
         $text = parent::render($row);
-        if (strpos($row->getEndpoint(), 'http:') === 0) {
+        if (!$this->isUrlSecure($row->getEndpoint()) || !$this->isUrlSecure($row->getIdentityLinkUrl())) {
             $text .= '<span class="icon-error"><span>Integration not secure</span></span>';
         }
         return $text;
+    }
+
+    /**
+     * Check if URL is secure.
+     *
+     * @param string $url
+     * @return bool
+     */
+    protected function isUrlSecure($url)
+    {
+        return (strpos($url, 'http:') !== 0);
     }
 }

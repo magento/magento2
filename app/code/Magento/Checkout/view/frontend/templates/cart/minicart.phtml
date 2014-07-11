@@ -25,9 +25,9 @@
 /** @var $this \Magento\Checkout\Block\Cart\Sidebar */
 ?>
 <?php if ($this->getInList()): ?>
-    <li data-block="minicart" class="minicart wrapper">
+    <li data-block="minicart" class="minicart-wrapper">
 <?php else:  ?>
-    <div data-block="minicart" class="minicart wrapper">
+    <div data-block="minicart" class="minicart-wrapper">
 <?php endif; ?>
 <?php $_cartQty = (float) $this->getSummaryCount() ?>
 <?php if (!$this->getIsLinkMode() || !$this->getIsNeedToDisplaySideBar()): ?>

@@ -112,8 +112,6 @@ $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Im
         <?php endforeach; ?>
     </ol>
 </div>
-<div class="toolbar-bottom">
-    <?php echo $this->getToolbarHtml() ?>
-</div>
+<?php echo $this->getToolbarHtml() ?>
 <?php endif; ?>
 <?php echo $time_taken = microtime(true) - $start; ?>

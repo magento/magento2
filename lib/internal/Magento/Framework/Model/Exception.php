@@ -30,6 +30,8 @@ namespace Magento\Framework\Model;
  */
 class Exception extends \Exception
 {
+    const ERROR_CODE_ENTITY_ALREADY_EXISTS = 456;
+
     /**
      * @var array
      */

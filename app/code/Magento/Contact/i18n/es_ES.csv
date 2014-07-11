@@ -1,19 +1,16 @@
+Email,"Correo electrónico"
+Name,Nombre
+Submit,Enviar
 "* Required Fields","* Campos Requeridos"
-"Comment","Comentario"
-"Contact Form","Formulario de contacto"
+Telephone,Telephone
+"Thanks for contacting us with your comments and questions. We'll respond to you very soon.","Thanks for contacting us with your comments and questions. We'll respond to you very soon."
+"We can't process your request right now. Sorry, that's all we know.","We can't process your request right now. Sorry, that's all we know."
 "Contact Information","Información de Contacto"
-"Contact Us","Contáctenos"
-"Contact Us Form","Formulario de contacto"
-"Contacts","Contactos"
-"Contacts Section","Sección de contactos"
-"Email","Correo electrónico"
-"Email Options","Opciones de correo electrónico"
-"Email Sender","Remitente del email"
-"Email Template","Plantilla de email"
-"Enable Contact Us","Activar Contactar"
-"Name","Nombre"
-"Send Emails To","Enviar correo electrónico a"
-"Submit","Enviar"
-"Phone","Teléfono"
-"Unable to submit your request. Please, try again later","No se ha podido enviar su solicitud. Por favor, inténtelo más tarde"
-"Your inquiry was submitted and will be responded to as soon as possible. Thank you for contacting us.","Su solicitud ha sido enviada y le responderemos con la mayor brevedad posible. Gracias por contactar con nosotros"
+Comment,Comentario
+"Email Template","Email Template"
+Contacts,Contacts
+"Contact Us",Contáctenos
+"Enable Contact Us","Enable Contact Us"
+"Email Options","Email Options"
+"Send Emails To","Send Emails To"
+"Email Sender","Email Sender"

@@ -30,6 +30,12 @@
 
 // Base
 
+html {
+    font-size: 62.5%;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+}
+
 body,
 html {
     height: 100%;
@@ -38,7 +44,10 @@ html {
 
 body {
     color: @baseColor;
-    font: @baseFontWeight @baseFontSize/@baseLineHeight @baseFont;
+    font-family: @baseFont;
+    line-height: @baseLineHeight;
+    font-weight: @baseFontWeight;
+    .font-size(@baseFontSize);
     background: @primary7;
 }
 

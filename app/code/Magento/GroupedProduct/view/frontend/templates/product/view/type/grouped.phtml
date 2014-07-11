@@ -33,17 +33,6 @@
 <?php $_product = $this->getProduct(); ?>
 <?php $_associatedProducts = $this->getAssociatedProducts(); ?>
 <?php $_hasAssociatedProducts = count($_associatedProducts) > 0; ?>
-<?php if ($this->displayProductStockStatus()): ?>
-    <?php if ($_product->isAvailable() && $_hasAssociatedProducts): ?>
-        <p class="stock available" title="<?php echo __('Availability') ?>">
-            <span><?php echo __('In stock') ?></span>
-        </p>
-    <?php else: ?>
-        <p class="stock unavailable" title="<?php echo __('Availability') ?>">
-            <span><?php echo __('Out of stock') ?></span>
-        </p>
-    <?php endif; ?>
-<?php endif; ?>
 
 <div class="wrapper table grouped">
     <table class="table data grouped" id="super-product-table">
@@ -51,26 +40,24 @@
         <thead>
         <tr>
             <th class="col item"><?php echo __('Product Name') ?></th>
-            <?php if ($this->getCanShowProductPrice($_product)): ?>
-                <th class="col price"><?php echo __('Price') ?></th>
-            <?php endif; ?>
             <?php if ($_product->isSaleable()): ?>
                 <th class="col qty"><?php echo __('Qty') ?></th>
             <?php endif; ?>
         </tr>
         </thead>
-        <tbody>
+
         <?php if ($_hasAssociatedProducts): ?>
         <?php foreach ($_associatedProducts as $_item): ?>
+        <tbody>
             <tr>
-                <td class="col item"><strong class="product name"><?php echo $this->escapeHtml($_item->getName()) ?></strong></td>
-                <?php if ($this->getCanShowProductPrice($_product)): ?>
-                <td class="col price">
-                    <?php if ($this->getCanShowProductPrice($_item)): ?>
-                    <?php echo $this->getProductPrice($_item) ?>
-                    <?php endif; ?>
+                <td class="col item">
+                    <strong class="product name"><?php echo $this->escapeHtml($_item->getName()) ?></strong>
+                    <?php if ($this->getCanShowProductPrice($_product)): ?>
+                        <?php if ($this->getCanShowProductPrice($_item)): ?>
+                            <?php echo $this->getProductPrice($_item) ?>
+                        <?php endif; ?>
+                     <?php endif; ?>
                 </td>
-                <?php endif; ?>
                 <?php if ($_product->isSaleable()): ?>
                 <td class="col qty">
                 <?php if ($_item->isSaleable()) : ?>
@@ -91,16 +78,33 @@
                 </td>
                 <?php endif; ?>
             </tr>
+            <?php if ($this->getCanShowProductPrice($_product)
+                && $this->getCanShowProductPrice($_item)
+                && trim($this->getProductPriceHtml(
+                    $_item,
+                    \Magento\Catalog\Pricing\Price\TierPrice::PRICE_CODE
+                ))): ?>
+                <tr class="row-tier-price">
+                    <td colspan="2">
+                        <?php echo $this->getProductPriceHtml(
+                            $_item,
+                            \Magento\Catalog\Pricing\Price\TierPrice::PRICE_CODE
+                        ) ?>
+                    </td>
+                </tr>
+            <?php endif; ?>
+        </tbody>
         <?php endforeach; ?>
         <?php else: ?>
+        <tbody>
             <tr>
                 <td class="unavailable"
                     colspan="<?php if ($_product->isSaleable()): ?>4<?php else : ?>3<?php endif; ?>">
                     <?php echo __('No options of this product are available.') ?>
                 </td>
             </tr>
-        <?php endif; ?>
         </tbody>
+        <?php endif; ?>
     </table>
 </div>
 <div id="validation-message-box"></div>

@@ -44,7 +44,7 @@
     </block>
     <block>
         <name>toolbar</name>
-        <class>\Magento\Catalog\Test\Block\Product\ProductList\Toolbar</class>
+        <class>Magento\Catalog\Test\Block\Product\ProductList\Toolbar</class>
         <locator>.pages .items</locator>
         <strategy>css selector</strategy>
     </block>

@@ -27,7 +27,8 @@ namespace Magento\User\Test\Repository;
 use Mtf\Repository\AbstractRepository;
 
 /**
- * Class Admin User Repository
+ * Class AdminUserInjectable
+ * Admin User Repository
  */
 class AdminUserInjectable extends AbstractRepository
 {
@@ -56,7 +57,17 @@ class AdminUserInjectable extends AbstractRepository
             'lastname' => 'LastName%isolation%',
             'email' => 'email%isolation%@example.com',
             'password' => '123123q',
+            'password_confirmation' => '123123q'
+        ];
+
+        $this->_data['custom_admin_with_default_role'] = [
+            'username' => 'AdminUser%isolation%',
+            'firstname' => 'FirstName%isolation%',
+            'lastname' => 'LastName%isolation%',
+            'email' => 'email%isolation%@example.com',
+            'password' => '123123q',
             'password_confirmation' => '123123q',
+            'role' => ['dataSet' => 'default']
         ];
     }
 }

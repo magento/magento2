@@ -38,8 +38,6 @@ class Config
 
     const XML_PATH_TAX_NOTIFICATION_IGNORE_PRICE_DISPLAY = 'tax/notification/ignore_price_display';
 
-    const XML_PATH_TAX_NOTIFICATION_IGNORE_FPT_CONFIGURATION = 'tax/notification/ignore_fpt_configuration';
-
     const XML_PATH_TAX_NOTIFICATION_INFO_URL = 'tax/notification/info_url';
 
     // tax classes
@@ -117,15 +115,6 @@ class Config
     const DISPLAY_TYPE_INCLUDING_TAX = 2;
 
     const DISPLAY_TYPE_BOTH = 3;
-
-    /**
-     * Indexes for FPT Configuration Types
-     */
-    const FPT_NOT_TAXED = 0;
-
-    const FPT_TAXED = 1;
-
-    const FPT_LOADED_DISPLAY_WITH_TAX = 2;
 
     /**
      * @var bool|null
@@ -793,21 +782,6 @@ class Config
     {
         return (bool)$this->_scopeConfig->getValue(
             self::XML_PATH_TAX_NOTIFICATION_IGNORE_DISCOUNT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $store
-        );
-    }
-
-    /**
-     * Check if warning about conflicting FPT configuration should be shown
-     *
-     * @param null|string|bool|int|Store $store
-     * @return bool
-     */
-    public function isConflictingFptTaxConfigurationSettingsIgnored($store = null)
-    {
-        return (bool)$this->_scopeConfig->getValue(
-            self::XML_PATH_TAX_NOTIFICATION_IGNORE_FPT_CONFIGURATION,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );

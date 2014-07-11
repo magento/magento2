@@ -24,12 +24,7 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
-    <update handle="page_two_columns_left"/>
-    <referenceContainer name="left">
-        <container name="checkout.progress.wrapper" label="Checkout Progress Wrapper" htmlTag="div" htmlId="checkout-progress-wrapper">
-            <block class="Magento\Checkout\Block\Onepage\Progress" name="checkout.progress" before="-" template="onepage/progress.phtml"/>
-        </container>
-    </referenceContainer>
+    <update handle="page_one_column"/>
     <referenceContainer name="content">
         <block class="Magento\Checkout\Block\Onepage" name="checkout.onepage" template="onepage.phtml">
             <block class="Magento\Checkout\Block\Onepage\Login" name="checkout.onepage.login" as="login" template="onepage/login.phtml" cacheable="false">
@@ -51,6 +46,9 @@
             </block>
             <block class="Magento\Checkout\Block\Onepage\Review" name="checkout.onepage.review" as="review" template="onepage/review.phtml" cacheable="false"/>
         </block>
+        <container name="checkout.progress.wrapper" label="Checkout Progress Wrapper" htmlTag="div" htmlClass="opc-block-progress-wrapper" htmlId="checkout-progress-wrapper" after="-">
+            <block class="Magento\Checkout\Block\Onepage\Progress" name="checkout.progress" before="-" template="onepage/progress.phtml"/>
+        </container>
     </referenceContainer>
     <update handle="customer_form_template_handle"/>
 </layout>

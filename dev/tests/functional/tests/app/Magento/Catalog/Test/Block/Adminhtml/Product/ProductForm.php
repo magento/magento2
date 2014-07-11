@@ -34,6 +34,7 @@ use Magento\Backend\Test\Block\Widget\Tab;
 use Magento\Backend\Test\Block\Widget\FormTabs;
 use Magento\Catalog\Test\Fixture\ConfigurableProduct;
 use Magento\Catalog\Test\Fixture\CatalogCategory;
+use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 
 /**
  * Class ProductForm
@@ -91,6 +92,20 @@ class ProductForm extends FormTabs
     protected $category;
 
     /**
+     * Attribute on the Product page
+     *
+     * @var string
+     */
+    protected $attribute = './/*[contains(@class,"label")]/span[text()="%s"]';
+
+    /**
+     * Attribute Search locator the Product page
+     *
+     * @var string
+     */
+    protected $attributeSearch = '#product-attribute-search-container';
+
+    /**
      * Fill the product form
      *
      * @param FixtureInterface $fixture
@@ -109,31 +124,15 @@ class ProductForm extends FormTabs
         if ($fixture instanceof InjectableFixture) {
             $status = $fixture->getStatus();
             if (($status === 'Product offline'
-                && $this->_rootElement->find(sprintf($this->onlineSwitcher, ':checked'))->isVisible())
+                    && $this->_rootElement->find(sprintf($this->onlineSwitcher, ':checked'))->isVisible())
                 || ($status === 'Product online'
-                && $this->_rootElement->find(sprintf($this->onlineSwitcher, ':not(:checked)'))->isVisible())
+                    && $this->_rootElement->find(sprintf($this->onlineSwitcher, ':not(:checked)'))->isVisible())
             ) {
                 $this->_rootElement->find(sprintf($this->onlineSwitcher, ''))->click();
             }
         }
 
         return parent::fill($fixture, $element);
-    }
-
-    /**
-     * Fill product variations
-     *
-     * @param ConfigurableProduct $variations
-     * @return void
-     */
-    public function fillVariations(ConfigurableProduct $variations)
-    {
-        $variationsBlock = Factory::getBlockFactory()->getMagentoCatalogAdminhtmlProductEditTabSuperConfig(
-            $this->_rootElement->find($this->variationsWrapper)
-        );
-        $variationsBlock->fillAttributeOptions($variations->getConfigurableAttributes());
-        $variationsBlock->generateVariations();
-        $variationsBlock->fillVariationsMatrix($variations->getVariationsMatrix());
     }
 
     /**
@@ -325,5 +324,36 @@ class ProductForm extends FormTabs
         }
 
         return $data;
+    }
+
+    /**
+     * Check visibility of the attribute on the product page
+     *
+     * @param mixed $productAttribute
+     * @return bool
+     */
+    public function checkAttributeLabel($productAttribute)
+    {
+        $frontendLabel = (is_array($productAttribute))
+            ? $productAttribute['frontend_label']
+            : $productAttribute->getFrontendLabel();
+        $attributeLabelLocator = sprintf($this->attribute, $frontendLabel);
+
+        return $this->_rootElement->find($attributeLabelLocator, Locator::SELECTOR_XPATH)->isVisible();
+    }
+
+    /**
+     * Call method that checking present attribute in search result
+     *
+     * @param CatalogProductAttribute $productAttribute
+     * @return bool
+     */
+    public function checkAttributeInSearchAttributeForm($productAttribute)
+    {
+        return $this->_rootElement->find(
+            $this->attributeSearch,
+            Locator::SELECTOR_CSS,
+            'Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Attributes\Search'
+        )->isExistAttributeInSearchResult($productAttribute);
     }
 }

@@ -70,9 +70,7 @@ class Converter
             $value = $productModel->getDataUsingMethod($attrCode);
             $value = $value ? $value : $productModel->getData($attrCode);
             if (null !== $value) {
-                if ($attrCode == 'entity_id') {
-                    $attributes[ProductDataObject::ID] = $value;
-                } else {
+                if ($attrCode != 'entity_id') {
                     $attributes[$attrCode] = $value;
                 }
             }

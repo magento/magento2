@@ -35,7 +35,7 @@
             </role_name>
         </fields>
     </role-info>
-    <role-resources-tab>
+    <role-resources>
         <class>\Magento\Backend\Test\Block\Widget\Tab</class>
         <selector>#role_info_tabs_account</selector>
         <strategy>css selector</strategy>
@@ -51,5 +51,5 @@
                 <strategy>css selector</strategy>
             </roles_resources>
         </fields>
-    </role-resources-tab>
+    </role-resources>
 </tabs>

@@ -25,7 +25,7 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd" label="Multishipping Checkout" design_abstraction="custom">
     <update handle="page_two_columns_left"/>
-    <referenceContainer name="left">
+    <referenceContainer name="sidebar.main">
         <block class="Magento\Multishipping\Block\Checkout\State" name="checkout_state" template="checkout/state.phtml"/>
     </referenceContainer>
 </layout>

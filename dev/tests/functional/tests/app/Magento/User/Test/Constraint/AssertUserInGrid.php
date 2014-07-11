@@ -44,13 +44,16 @@ class AssertUserInGrid extends AbstractConstraint
      * Asserts that user is present in User Grid.
      *
      * @param UserIndex $userIndex
-     * @param AdminUserInjectable $adminUser
+     * @param AdminUserInjectable $user
+     * @param AdminUserInjectable $customAdmin
      * @return void
      */
     public function processAssert(
         UserIndex $userIndex,
-        AdminUserInjectable $adminUser
+        AdminUserInjectable $user,
+        AdminUserInjectable $customAdmin = null
     ) {
+        $adminUser = ($user->hasData('password') || $user->hasData('username')) ? $user : $customAdmin;
         $filter = ['username' => $adminUser->getUsername()];
         $userIndex->open();
         \PHPUnit_Framework_Assert::assertTrue(

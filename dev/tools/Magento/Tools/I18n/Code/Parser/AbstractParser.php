@@ -24,7 +24,6 @@
 namespace Magento\Tools\I18n\Code\Parser;
 
 use Magento\Tools\I18n\Code;
-use Magento\Tools\I18n\Code\Parser\AdapterInterface;
 
 /**
  * Abstract parser

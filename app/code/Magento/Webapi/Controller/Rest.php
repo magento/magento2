@@ -324,10 +324,6 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
 
         if (!$this->_authorizationService->isAllowed($route->getAclResources(), $userIdentifier)) {
             $params = ['resources' => implode(', ', $route->getAclResources())];
-            $userParam = $consumerId
-                ? ['consumer_id' => $consumerId]
-                : ['userType' => $userType, 'userId' => $userId];
-            $params = array_merge($params, $userParam);
             throw new AuthorizationException(AuthorizationException::NOT_AUTHORIZED, $params);
         }
     }

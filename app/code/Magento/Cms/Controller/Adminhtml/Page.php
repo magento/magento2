@@ -25,8 +25,6 @@ namespace Magento\Cms\Controller\Adminhtml;
 
 /**
  * Cms manage pages controller
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Page extends \Magento\Backend\App\Action
 {
@@ -35,7 +33,7 @@ class Page extends \Magento\Backend\App\Action
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
@@ -112,12 +110,12 @@ class Page extends \Magento\Backend\App\Action
         $this->_title->add(__('Pages'));
 
         // 1. Get ID and create model
-        $id = $this->getRequest()->getParam('page_id');
+        $pageId = $this->getRequest()->getParam('page_id');
         $model = $this->_objectManager->create('Magento\Cms\Model\Page');
 
         // 2. Initial checking
-        if ($id) {
-            $model->load($id);
+        if ($pageId) {
+            $model->load($pageId);
             if (!$model->getId()) {
                 $this->messageManager->addError(__('This page no longer exists.'));
                 $this->_redirect('*/*/');
@@ -128,7 +126,7 @@ class Page extends \Magento\Backend\App\Action
         $this->_title->add($model->getId() ? $model->getTitle() : __('New Page'));
 
         // 3. Set entered data if was error when we do save
-        $data = $this->_objectManager->get('Magento\Backend\Model\Session')->getFormData(true);
+        $data = $this->_session->getFormData(true);
         if (!empty($data)) {
             $model->setData($data);
         }
@@ -138,8 +136,8 @@ class Page extends \Magento\Backend\App\Action
 
         // 5. Build edit form
         $this->_initAction()->_addBreadcrumb(
-            $id ? __('Edit Page') : __('New Page'),
-            $id ? __('Edit Page') : __('New Page')
+            $pageId ? __('Edit Page') : __('New Page'),
+            $pageId ? __('Edit Page') : __('New Page')
         );
 
         $this->_view->renderLayout();
@@ -157,11 +155,12 @@ class Page extends \Magento\Backend\App\Action
         if ($data) {
             $data = $this->_filterPostData($data);
             //init model and set data
+            /** @var \Magento\Cms\Model\Page $model */
             $model = $this->_objectManager->create('Magento\Cms\Model\Page');
 
-            $id = $this->getRequest()->getParam('page_id');
-            if ($id) {
-                $model->load($id);
+            $pageId = $this->getRequest()->getParam('page_id');
+            if ($pageId) {
+                $model->load($pageId);
             }
 
             $model->setData($data);
@@ -185,7 +184,7 @@ class Page extends \Magento\Backend\App\Action
                 // display success message
                 $this->messageManager->addSuccess(__('The page has been saved.'));
                 // clear previously saved data from session
-                $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData(false);
+                $this->_session->setFormData(false);
                 // check if 'Save and Continue'
                 if ($this->getRequest()->getParam('back')) {
                     $this->_redirect('*/*/edit', array('page_id' => $model->getId(), '_current' => true));
@@ -200,7 +199,7 @@ class Page extends \Magento\Backend\App\Action
                 $this->messageManager->addException($e, __('Something went wrong while saving the page.'));
             }
 
-            $this->_getSession()->setFormData($data);
+            $this->_session->setFormData($data);
             $this->_redirect('*/*/edit', array('page_id' => $this->getRequest()->getParam('page_id')));
             return;
         }
@@ -215,13 +214,13 @@ class Page extends \Magento\Backend\App\Action
     public function deleteAction()
     {
         // check if we know what should be deleted
-        $id = $this->getRequest()->getParam('page_id');
-        if ($id) {
-            $title = "";
+        $pageId = $this->getRequest()->getParam('page_id');
+        if ($pageId) {
+            $title = '';
             try {
                 // init model and delete
                 $model = $this->_objectManager->create('Magento\Cms\Model\Page');
-                $model->load($id);
+                $model->load($pageId);
                 $title = $model->getTitle();
                 $model->delete();
                 // display success message
@@ -241,7 +240,7 @@ class Page extends \Magento\Backend\App\Action
                 // display error message
                 $this->messageManager->addError($e->getMessage());
                 // go back to edit form
-                $this->_redirect('*/*/edit', array('page_id' => $id));
+                $this->_redirect('*/*/edit', array('page_id' => $pageId));
                 return;
             }
         }
@@ -301,9 +300,8 @@ class Page extends \Magento\Backend\App\Action
             if (!empty($data['layout_update_xml']) && !$validatorCustomLayout->isValid($data['layout_update_xml'])) {
                 $errorNo = false;
             }
-            if (!empty($data['custom_layout_update_xml']) && !$validatorCustomLayout->isValid(
-                $data['custom_layout_update_xml']
-            )
+            if (!empty($data['custom_layout_update_xml'])
+                && !$validatorCustomLayout->isValid($data['custom_layout_update_xml'])
             ) {
                 $errorNo = false;
             }

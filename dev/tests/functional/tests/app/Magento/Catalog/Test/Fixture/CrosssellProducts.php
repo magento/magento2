@@ -55,7 +55,7 @@ class CrosssellProducts extends AssignProducts
             /** @var $product \Magento\Catalog\Test\Fixture\Product */
             $productsArray['product_' . $key] = array(
                 'sku' => $product->getProductSku(),
-                'name' => $product->getProductName()
+                'name' => $product->getName()
             );
         }
         $this->_data['fields'][$this->assignType . '_products']['value'] = $productsArray;

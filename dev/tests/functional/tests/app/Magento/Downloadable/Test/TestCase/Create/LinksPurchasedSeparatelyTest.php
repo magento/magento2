@@ -106,11 +106,11 @@ class LinksPurchasedSeparatelyTest extends Functional
         $frontendHomePage->getTopmenu()->selectCategoryByName($product->getCategoryName());
 
         $productListBlock = $categoryPage->getListProductBlock();
-        $this->assertTrue($productListBlock->isProductVisible($product->getProductName()));
-        $productListBlock->openProductViewPage($product->getProductName());
+        $this->assertTrue($productListBlock->isProductVisible($product->getName()));
+        $productListBlock->openProductViewPage($product->getName());
 
         $productViewBlock = $productPage->getDownloadableViewBlock();
-        $this->assertEquals($product->getProductName(), $productViewBlock->getProductName());
+        $this->assertEquals($product->getName(), $productViewBlock->getProductName());
         $this->assertEquals(
             sprintf('%1.2f', $product->getProductPrice()),
             $productViewBlock->getProductPrice()['price_regular_price']

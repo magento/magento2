@@ -23,23 +23,23 @@
  */
 /* @var $this \Magento\Checkout\Block\Onepage\Progress */
 ?>
-<div class="block progress onepage opc-block-progress">
+<div class="opc-block-progress<?php if ($this->isStepComplete('billing')): ?> active<?php endif; ?><?php if ($this->isStepComplete('payment')): ?> order-review-step<?php endif; ?>">
     <div class="title">
         <strong><?php echo __('Your Checkout Progress') ?></strong>
     </div>
     <div class="content">
-        <dl>
+        <dl class="items">
         <?php if ($this->getCheckout()->getStepData('billing', 'is_show')): ?>
         <?php if ($this->isStepComplete('billing')): ?>
-            <dt class="complete">
-                <?php echo __('Billing Address') ?>
+            <dt class="item-title complete">
+                <span><?php echo __('Billing Address') ?></span>
                 <a href="#billing" data-goto-section="billing" class="action billing"><?php echo __('Change') ?></a>
             </dt>
-            <dd class="complete">
+            <dd class="item-content complete">
                 <address><?php echo $this->getBilling()->format('html') ?></address>
             </dd>
         <?php else: ?>
-            <dt>
+            <dt class="item-title">
                 <?php echo __('Billing Address') ?>
             </dt>
         <?php endif; ?>
@@ -47,27 +47,27 @@
 
         <?php if ($this->getCheckout()->getStepData('shipping', 'is_show')): ?>
         <?php if ($this->isStepComplete('shipping')): ?>
-            <dt class="complete">
-                <?php echo __('Shipping Address') ?>
+            <dt class="item-title complete">
+                <span><?php echo __('Shipping Address') ?></span>
                 <a href="#payment" data-goto-section="shipping" class="action shipping address"><?php echo __('Change') ?></a>
             </dt>
-            <dd class="complete">
+            <dd class="item-content complete">
                 <address><?php echo $this->getShipping()->format('html') ?></address>
             </dd>
         <?php else: ?>
-            <dt>
-                <?php echo __('Shipping Address') ?>
+            <dt class="item-title">
+                <span><?php echo __('Shipping Address') ?></span>
             </dt>
         <?php endif; ?>
         <?php endif; ?>
 
         <?php if ($this->getCheckout()->getStepData('shipping_method', 'is_show')): ?>
         <?php if ($this->isStepComplete('shipping_method')): ?>
-            <dt class="complete">
-                <?php echo __('Shipping Method') ?>
+            <dt class="item-title complete">
+                <span><?php echo __('Shipping Method') ?></span>
                 <a href="#shipping_method" data-goto-section="shipping_method" class="action shipping method"><?php echo __('Change') ?></a>
             </dt>
-            <dd class="complete">
+            <dd class="item-content complete">
                 <?php if ($this->getShippingMethod()): ?>
                     <?php echo $this->escapeHtml($this->getShippingDescription()) ?>
 
@@ -87,24 +87,24 @@
                 <?php endif; ?>
             </dd>
         <?php else: ?>
-            <dt>
-                <?php echo __('Shipping Method') ?>
+            <dt class="item-title">
+                <span><?php echo __('Shipping Method') ?></span>
             </dt>
         <?php endif; ?>
         <?php endif; ?>
 
         <?php if ($this->getCheckout()->getStepData('payment', 'is_show')): ?>
         <?php if ($this->isStepComplete('payment')): ?>
-            <dt class="complete">
-                <?php echo __('Payment Method') ?>
+            <dt class="item-title complete">
+                <span><?php echo __('Payment Method') ?></span>
                 <a href="#payment" data-goto-section="payment" class="action payment method"><?php echo __('Change') ?></a>
             </dt>
-            <dd class="complete">
+            <dd class="item-content complete">
                 <?php echo $this->getPaymentHtml() ?>
             </dd>
         <?php else: ?>
-            <dt>
-                <?php echo __('Payment Method') ?>
+            <dt class="item-title">
+                <span><?php echo __('Payment Method') ?></span>
             </dt>
         <?php endif; ?>
         <?php endif; ?>

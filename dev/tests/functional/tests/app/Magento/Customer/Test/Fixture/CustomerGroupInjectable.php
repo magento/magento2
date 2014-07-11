@@ -31,9 +31,16 @@ use Mtf\Fixture\InjectableFixture;
  */
 class CustomerGroupInjectable extends InjectableFixture
 {
+    /**
+     * @var string
+     */
+    // @codingStandardsIgnoreStart
+    protected $handlerInterface = 'Magento\Customer\Test\Handler\CustomerGroupInjectable\CustomerGroupInjectableInterface';
+    // @codingStandardsIgnoreEnd
+
     protected $defaultDataSet = [
         'customer_group_code' => 'customer_code_%isolation%',
-        'tax_class_id' => 'Retail Customer',
+        'tax_class_id' => ['dataSet' => 'customer_tax_class'],
     ];
 
     protected $customer_group_code = [
@@ -53,6 +60,11 @@ class CustomerGroupInjectable extends InjectableFixture
         'source' => 'Magento\Customer\Test\Fixture\CustomerGroup\TaxClassIds',
     ];
 
+    protected $customer_group_id = [
+        'attribute_code' => 'customer_group_id',
+        'backend_type' => 'virtual',
+    ];
+
     public function getCustomerGroupCode()
     {
         return $this->getData('customer_group_code');
@@ -61,5 +73,10 @@ class CustomerGroupInjectable extends InjectableFixture
     public function getTaxClassId()
     {
         return $this->getData('tax_class_id');
+    }
+
+    public function getCustomerGroupId()
+    {
+        return $this->getData('customer_group_id');
     }
 }

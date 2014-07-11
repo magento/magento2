@@ -1,0 +1,7 @@
+"We can't change the status because the current status doesn't match the real status.","We can't change the status because the current status doesn't match the real status."
+"The subscriber name is too long.","The subscriber name is too long."
+"The merchant's reference ID format is not supported.","The merchant's reference ID format is not supported."
+"The schedule description is too long.","The schedule description is too long."
+"You notified customer about invoice #%1.","You notified customer about invoice #%1."
+"Note: %1","Note: %1"
+"IPN ""%1""","IPN ""%1"""

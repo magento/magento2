@@ -46,7 +46,7 @@ class TaxRate extends \Magento\Framework\Service\Data\AbstractObject
     /**
      * Get id
      *
-     * @return int
+     * @return int|null
      */
     public function getId()
     {

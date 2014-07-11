@@ -304,9 +304,9 @@
     $.widget('mage.navigationMenu', $.mage.navigationMenu, {
         options: {
             responsive: false,
-            origNavPlaceholder: '.page.header',
+            origNavPlaceholder: '.page-header',
             mainContainer: 'body',
-            pageWrapper: '.page.wrapper',
+            pageWrapper: '.page-wrapper',
             openedMenuClass: 'opened',
             toggleActionPlaceholder: '.block.search',
             itemWithSubmenu: 'li.parent',
@@ -321,6 +321,19 @@
                     '<li class="action all">' +
                         '<a href="${ categoryURL }"><span>All ${ category }</span></a>' +
                     '</li>' +
+                '</script>',
+            navigationSectionsWrapperTemplate:
+                '<script type="text/x-jquery-tmpl">' +
+                    '<dl class="navigation-tabs" data-sections="tabs">' +
+                    '</dl>' +
+                '</script>',
+            navigationItemWrapperTemplate:
+                '<script type="text/x-jquery-tmpl">' +
+                    '<dt class="item title {{if active}}active{{/if}}" data-section="title">' +
+                        '<a class="switch" data-toggle="switch" href="#TODO">${ title }</a>' +
+                    '</dt>' +
+                    '<dd class="item content {{if active}}active{{/if}}" data-section="content">' +
+                    '</dd>' +
                 '</script>'
         },
 
@@ -434,6 +447,7 @@
             this.mainContainer.prepend(this.mobileNav);
             this.mobileNav.find('> ul').addClass('nav');
             this._insertExtraItems();
+            this._wrapItemsInSections();
             this.mobileNav.scroll($.proxy(
                 function() {
                     this._fixedBackLink();
@@ -462,42 +476,66 @@
 
         _insertExtraItems: function() {
             if ($('.header.panel .switcher').length) {
-                var settings = $('.header.panel')
+                var settings = $('.header.panel .switcher')
                     .clone()
                     .addClass('settings');
 
                 this.mobileNav.prepend(settings);
-
-                settings.wrapInner('<div class="content"></div>');
-                settings.prepend('<div class="title">Settings</div>');
-
-                settings.find('> .title')
-                    .dropdown({
-                        autoclose: false,
-                        menu: '> .content'
-                    });
-
-                settings.find('.switcher.language .options > strong')
-                    .dropdown({
-                        autoclose: false,
-                        menu: '.switcher.language .options > ul'
-                    });
-
-                settings.find('.switcher.currency .options > strong')
-                    .dropdown({
-                        autoclose: false,
-                        menu: '.switcher.currency .options > ul'
-                    });
             }
 
-            if ($('.header.links li').length) {
-                var account = $('.page.header .header.links')
+            if ($('.footer .switcher').length) {
+                var footerSettings = $('.footer .switcher')
+                    .clone()
+                    .addClass('settings');
+
+                this.mobileNav.prepend(footerSettings);
+            }
+
+
+            if ($('.header.panel .header.links li').length) {
+                var account = $('.header.panel > .header.links')
                     .clone()
                     .addClass('account');
 
                 this.mobileNav.prepend(account);
-
             }
+        },
+
+        _wrapItemsInSections: function() {
+            var account = $('> .account', this.mobileNav),
+                settings = $('> .settings', this.mobileNav),
+                nav = $('> .nav', this.mobileNav),
+                navigationSectionsWrapper = $(this.options.navigationSectionsWrapperTemplate).tmpl(),
+                navigationItemWrapper;
+
+            this.mobileNav.append(navigationSectionsWrapper);
+
+            if (nav.length) {
+                navigationItemWrapper = $(this.options.navigationItemWrapperTemplate).tmpl({
+                    title: 'Menu'
+                });
+                navigationSectionsWrapper.append(navigationItemWrapper);
+                navigationItemWrapper.eq(1).append(nav);
+            }
+
+            if (account.length) {
+                navigationItemWrapper = $(this.options.navigationItemWrapperTemplate).tmpl({
+                    title: 'Account'
+                });
+                navigationSectionsWrapper.append(navigationItemWrapper);
+                navigationItemWrapper.eq(1).append(account);
+            }
+
+            if (settings.length) {
+                navigationItemWrapper = $(this.options.navigationItemWrapperTemplate).tmpl({
+                    title: 'Settings'
+                });
+                navigationSectionsWrapper.append(navigationItemWrapper);
+                navigationItemWrapper.eq(1).append(settings);
+            }
+
+            navigationSectionsWrapper.addClass("navigation-tabs-" + navigationSectionsWrapper.find('[data-section="title"]').length);
+            navigationSectionsWrapper.terms();
         },
 
         _fixedBackLink: function() {

@@ -92,7 +92,14 @@ class MultiselectgrouplistElement extends MultiselectElement
      *
      * @var string
      */
-    protected $optionByNumber = './/optgroup[%d]/option[%d]';
+    protected $childOptionByNumber = './/optgroup[%d]/option[%d]';
+
+    /**
+     * Locator for search parent option
+     *
+     * @var string
+     */
+    protected $optionByNumber = './option[%d]';
 
     /**
      * Indent, four symbols non breaking space
@@ -271,19 +278,27 @@ class MultiselectgrouplistElement extends MultiselectElement
     {
         $options = [];
 
+        $countOption = 1;
+        $option = $this->find(sprintf($this->optionByNumber, $countOption), Locator::SELECTOR_XPATH);
+        while ($option->isVisible()) {
+            $options[] = $option;
+            ++$countOption;
+            $option = $this->find(sprintf($this->optionByNumber, $countOption), Locator::SELECTOR_XPATH);
+        }
+
         $countOptgroup = 1;
         $optgroup = $this->find(sprintf($this->optgroupByNumber, $countOptgroup), Locator::SELECTOR_XPATH);
         while ($optgroup->isVisible()) {
             $countOption = 1;
             $option = $this->find(
-                sprintf($this->optionByNumber, $countOptgroup, $countOption),
+                sprintf($this->childOptionByNumber, $countOptgroup, $countOption),
                 Locator::SELECTOR_XPATH
             );
             while ($option->isVisible()) {
                 $options[] = $option;
                 ++$countOption;
                 $option = $this->find(
-                    sprintf($this->optionByNumber, $countOptgroup, $countOption),
+                    sprintf($this->childOptionByNumber, $countOptgroup, $countOption),
                     Locator::SELECTOR_XPATH
                 );
             }

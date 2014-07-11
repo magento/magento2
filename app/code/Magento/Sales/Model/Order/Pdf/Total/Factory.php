@@ -58,9 +58,9 @@ class Factory
         $class = $class ?: $this->_defaultTotalModel;
         if (!is_a($class, 'Magento\Sales\Model\Order\Pdf\Total\DefaultTotal', true)) {
             throw new \Magento\Framework\Model\Exception(
-                __(
-                    "The PDF total model {$class} must be or extend " .
-                    "\\Magento\\Sales\\Model\\Order\\Pdf\\Total\\DefaultTotal."
+                sprintf(
+                    'The PDF total model %s must be or extend \Magento\Sales\Model\Order\Pdf\Total\DefaultTotal.',
+                    $class
                 )
             );
         }

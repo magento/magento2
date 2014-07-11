@@ -24,7 +24,7 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
-    <referenceContainer name="content.aside">
+    <referenceContainer name="sidebar.additional">
         <block class="Magento\Paypal\Block\Logo" name="paypal.partner.right.logo" template="partner/logo.phtml"/>
         <block class="Magento\Paypal\Block\Bml\Banners" name="bml.right.logo" template="bml.phtml">
             <arguments>

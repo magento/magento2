@@ -509,8 +509,10 @@ class Tax extends AbstractTotal
     ) {
         $qty = $item->getTotalQty();
         $inclTax = $item->getIsPriceInclTax();
-        $price = $item->getTaxableAmount() + $item->getExtraTaxableAmount();
-        $basePrice = $item->getBaseTaxableAmount() + $item->getBaseExtraTaxableAmount();
+        $price = $item->getTaxableAmount();
+        $basePrice = $item->getBaseTaxableAmount();
+        $extraTaxableAmount =  $item->getExtraTaxableAmount();
+        $baseExtraTaxableAmount =  $item->getBaseExtraTaxableAmount();
         $rateKey = ($taxId == null) ? (string)$rate : $taxId;
 
         $unitTaxBeforeDiscount = 0;
@@ -570,6 +572,13 @@ class Tax extends AbstractTotal
         }
         $rowTax = $this->_store->roundPrice(max(0, $qty * $unitTax));
         $baseRowTax = $this->_store->roundPrice(max(0, $qty * $baseUnitTax));
+
+        $extraTaxAmount = $this->_calculator->calcTaxAmount($extraTaxableAmount, $rate, $inclTax, true);
+        $rowExtraTaxAmount = $extraTaxAmount * $qty;
+        $baseExtraTaxAmount = $this->_calculator->calcTaxAmount($baseExtraTaxableAmount, $rate, $inclTax, true);
+        $rowBaseExtraTaxAmount = $baseExtraTaxAmount * $qty;
+        $rowTax += $rowExtraTaxAmount;
+        $baseRowTax += $rowBaseExtraTaxAmount;
         $item->setTaxAmount($item->getTaxAmount() + $rowTax);
         $item->setBaseTaxAmount($item->getBaseTaxAmount() + $baseRowTax);
         if (is_array($taxGroups)) {
@@ -708,8 +717,10 @@ class Tax extends AbstractTotal
         $recalculateRowTotalInclTax = false
     ) {
         $inclTax = $item->getIsPriceInclTax();
-        $subtotal = $taxSubtotal = $item->getTaxableAmount() + $item->getExtraRowTaxableAmount();
-        $baseSubtotal = $baseTaxSubtotal = $item->getBaseTaxableAmount() + $item->getBaseExtraRowTaxableAmount();
+        $subtotal = $taxSubtotal = $item->getTaxableAmount();
+        $baseSubtotal = $baseTaxSubtotal = $item->getBaseTaxableAmount();
+        $extraRowTaxableAmount = $item->getExtraRowTaxableAmount();
+        $baseExtraRowTaxableAmount = $item->getBaseExtraRowTaxableAmount();
         $rateKey = ($taxId == null) ? (string)$rate : $taxId;
 
         $hiddenTax = 0;
@@ -782,6 +793,12 @@ class Tax extends AbstractTotal
                 }
                 break;
         }
+        //round tax on extra taxable separately
+        $rowExtraTaxAmount = $this->_calculator->calcTaxAmount($extraRowTaxableAmount, $rate, $inclTax, true);
+        $baseRowExtraTaxAmount = $this->_calculator->calcTaxAmount($baseExtraRowTaxableAmount, $rate, $inclTax, true);
+        $rowTax += $rowExtraTaxAmount;
+        $baseRowTax += $baseRowExtraTaxAmount;
+
         $item->setTaxAmount($item->getTaxAmount() + max(0, $rowTax));
         $item->setBaseTaxAmount($item->getBaseTaxAmount() + max(0, $baseRowTax));
         if (is_array($taxGroups)) {
@@ -931,8 +948,10 @@ class Tax extends AbstractTotal
     ) {
         $inclTax = $item->getIsPriceInclTax();
         $rateKey = ($taxId == null) ? (string)$rate : $taxId;
-        $taxSubtotal = $subtotal = $item->getTaxableAmount() + $item->getExtraRowTaxableAmount();
-        $baseTaxSubtotal = $baseSubtotal = $item->getBaseTaxableAmount() + $item->getBaseExtraRowTaxableAmount();
+        $taxSubtotal = $subtotal = $item->getTaxableAmount();
+        $baseTaxSubtotal = $baseSubtotal = $item->getBaseTaxableAmount();
+        $extraTaxableAmount = $item->getExtraRowTaxableAmount();
+        $baseExtraTaxableAmount =  $item->getBaseExtraRowTaxableAmount();
 
         if (!isset($taxGroups[$rateKey]['totals'])) {
             $taxGroups[$rateKey]['totals'] = array();
@@ -957,6 +976,13 @@ class Tax extends AbstractTotal
                     $inclTax,
                     'base'
                 );
+
+                //Round extra tax amount separately
+                $extraTaxAmount = $this->_calculator->calcTaxAmount($extraTaxableAmount, $rate, $inclTax, true);
+                $baseExtraTaxAmount = $this->_calculator->calcTaxAmount($baseExtraTaxableAmount, $rate, $inclTax, true);
+                $rowTax += $extraTaxAmount;
+                $baseRowTax += $baseExtraTaxAmount;
+
                 $item->setTaxAmount($item->getTaxAmount() + max(0, $rowTax));
                 $item->setBaseTaxAmount($item->getBaseTaxAmount() + max(0, $baseRowTax));
                 break;
@@ -978,9 +1004,6 @@ class Tax extends AbstractTotal
 
                 $rowTax = $this->_deltaRound($rowTax, $rateKey, $inclTax);
                 $baseRowTax = $this->_deltaRound($baseRowTax, $rateKey, $inclTax, 'base');
-
-                $item->setTaxAmount($item->getTaxAmount() + max(0, $rowTax));
-                $item->setBaseTaxAmount($item->getBaseTaxAmount() + max(0, $baseRowTax));
 
                 //Calculate the Row taxes before discount
                 $rowTaxBeforeDiscount = $this->_calculator->calcTaxAmount(
@@ -1018,6 +1041,16 @@ class Tax extends AbstractTotal
                         'incl_tax' => $inclTax
                     );
                 }
+
+                //Round extra tax amount separately
+                $extraTaxAmount = $this->_calculator->calcTaxAmount($extraTaxableAmount, $rate, $inclTax, true);
+                $baseExtraTaxAmount = $this->_calculator->calcTaxAmount($baseExtraTaxableAmount, $rate, $inclTax, true);
+                $rowTax += $extraTaxAmount;
+                $baseRowTax += $baseExtraTaxAmount;
+
+                $item->setTaxAmount($item->getTaxAmount() + max(0, $rowTax));
+                $item->setBaseTaxAmount($item->getBaseTaxAmount() + max(0, $baseRowTax));
+
                 break;
         }
 

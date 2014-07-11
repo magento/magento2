@@ -28,6 +28,7 @@ use Mtf\Page\BackendPage;
 
 /**
  * Class CatalogProductAttributeIndex
+ * Product Attribute page
  */
 class CatalogProductAttributeIndex extends BackendPage
 {
@@ -35,7 +36,7 @@ class CatalogProductAttributeIndex extends BackendPage
 
     protected $_blocks = [
         'messagesBlock' => [
-            'name' => 'messageBlock',
+            'name' => 'messagesBlock',
             'class' => 'Magento\Core\Test\Block\Messages',
             'locator' => '#messages',
             'strategy' => 'css selector',
@@ -57,7 +58,7 @@ class CatalogProductAttributeIndex extends BackendPage
     /**
      * @return \Magento\Core\Test\Block\Messages
      */
-    public function getMessageBlock()
+    public function getMessagesBlock()
     {
         return $this->getBlockInstance('messagesBlock');
     }

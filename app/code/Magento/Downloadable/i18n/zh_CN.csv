@@ -1,91 +1,88 @@
-"Add","添加"
-"Add New Row","添加新行"
-"Add links and samples to downloadable product","为可下载产品添加链接与范例"
-"Alphanumeric, dash and underscore characters are recommended for filenames. Improper characters are replaced with '_'.","建议对文件名使用字母、横线，以及下划线字符。错误的字符将被使用 '_'替换。"
-"An error occurred while getting requested content. Please contact the store owner.","获取所请求内容时出错。请联系店铺所有者。"
-"An error occurred while getting the requested content.","获取所请求的内容时出错。"
-"An error occurred while getting the requested content. Please contact the store owner.","获取所请求的内容时出错。请联系店铺所有者。"
-"An error occurred while saving the file(s).","保存文件时出错。"
-"Availability:","可用性："
-"Back","返回"
-"Canceled","已取消"
-"Cannot connect to remote host, error: %s.","无法联系远程主机，错误：%s"
-"Catalog Product View (Downloadable)","分类产品视图（可下载）"
-"Category API","分类API"
-"Customer My Account Downloadable Items","客户我的帐户仪表板项目"
-"Date","日期"
-"Default Link Title","默认链接标题"
-"Default Maximum Number of Downloads","下载数量默认最大值"
-"Default Sample Title","默认范例标题"
-"Delete","删除"
-"Disable Guest Checkout if Cart Contains Downloadable Items","如果购物车包含可下载内容，则禁止来宾结账"
-"Downloadable Information","可下载的信息"
-"Downloadable Product","可下载产品"
-"Downloadable Product Options","可下载产品选项"
-"Downloadable Product Section","可下载产品区块"
-"Edit","编辑"
-"Edit item parameters","编辑项目参数"
-"Excl. Tax","不含税"
-"File","文件"
-"From:","来自："
-"Gift Message","礼品消息"
-"Go to <a href=""%s"">My Downloadable Products</a>","转到 <a href=""%s"">我的可下载产品</a>"
-"Guest checkout will only work with shareable.","来宾结账空能仅限可分享商品。"
-"In stock","现货"
-"Incl. Tax","含税"
-"Invalid download URL host.","无效的下载URL主机。"
-"Invalid download URL scheme.","无效的下载URL架构。"
-"Invalid download link type.","无效的下载链接类型。"
-"Invoiced","已出发票"
-"Links can be purchased separately","链接可单独购买"
-"List","列表"
-"Max. Downloads","最大下载数"
-"Message:","信息："
-"Move","移动"
-"My Downloadable Products","我的可下载产品"
-"Open Links in New Window","在新窗口打开链接"
-"Order","订单 #"
-"Order Item Status to Enable Downloads","订单项目状态为允许下载"
-"Order id cannot be null","订单编号不能为空"
+Back,返回
+Price,价格
+SKU,SKU
+Qty,Qty
+"Excl. Tax",不含税
+Total,Total
+"Incl. Tax",含税
+"Total incl. tax","Total incl. tax"
+"Move to Wishlist","Move to Wishlist"
+File,文件
+"Edit item parameters",编辑项目参数
+Edit,编辑
+"Remove item","Remove item"
+"All Files","All Files"
+[GLOBAL],[GLOBAL]
+"[STORE VIEW]","[STORE VIEW]"
+Delete,删除
+Status,状态
+"Sort Order",排序顺序
+Title,标题
+"Browse Files...","Browse Files..."
+"Use Default Value",使用默认值
+Ordered,已下单
+Invoiced,已出发票
+Shipped,已发货
+Refunded,已存储
+Canceled,已取消
+From:,来自：
+To:,至：
+Availability,Availability
+"In stock",现货
+"Out of stock",缺货
+"Gift Message",礼品消息
+Message:,信息：
+"Add New Row",添加新行
+"See price before order confirmation.",确认订单前显示价格。
+"What's this?",这是什么？
+"Unit Price Excl. Tax","Unit Price Excl. Tax"
+"Unit Price Incl. Tax","Unit Price Incl. Tax"
+"Subtotal Excl. Tax","Subtotal Excl. Tax"
+"Subtotal Incl. Tax","Subtotal Incl. Tax"
+"Order #","Order #"
+Date,日期
+"Upload Files","Upload Files"
+"Downloadable Information",可下载的信息
+Samples,Samples
+Links,Links
+Unlimited,无限
+"Something went wrong while getting the requested content.","Something went wrong while getting the requested content."
+"My Downloadable Products",我的可下载产品
+"Sorry, there was an error getting requested content. Please contact the store owner.","Sorry, there was an error getting requested content. Please contact the store owner."
+"We can't find the link you requested.","We can't find the link you requested."
+"Please log in to download your product or purchase <a href=""%1"">%2</a>.","Please log in to download your product or purchase <a href=""%1"">%2</a>."
+"Please log in to download your product.",请登录以下载您的产品
+"The link has expired.",该链接已过期。
+"The link is not available.",该链接不可用。
+"Please set resource file and link type.",请设置资源类型与链接类型。
+"Invalid download link type.",无效的下载链接类型。
+"Something went wrong while saving the file(s).","Something went wrong while saving the file(s)."
+"Order id cannot be null",订单编号不能为空
 "Order item id cannot be null","订购物品 id 不能为空"
-"Ordered","已下单"
-"Out of stock","缺货"
-"Pending","挂起"
-"Please log in to download your product or purchase <a href=""%s"">%s</a>.","请登录以下载您的产品或购买 <a href=""%s"">%s</a>。"
-"Please log in to download your product.","请登录以下载您的产品"
-"Please set resource file and link type.","请设置资源类型与链接类型。"
-"Please specify product link(s).","请指定产品链接。"
-"Price","价格"
-"Product downloadable links","产品下载链接"
-"Quantity","数量"
-"Refunded","已存储"
-"Remaining Downloads","剩余下载"
-"Remove","删除"
-"Remove Item","删除项目"
-"Remove links and samples from downloadable product","删除可下载产品的链接和范例"
-"Requested link does not exist.","所请求的链接不存在。"
-"Retrieve links and samples list from downloadable product","从可下载产品或去链接和范例列表"
-"Sample","范例"
-"See price before order confirmation.","确认订单前显示价格。"
-"Shareable","可分享"
-"Shipped","已发货"
-"Sort Order","排序顺序"
-"Start Download","开始下载"
-"Status","状态"
-"The file does not exist.","该文件不存在。"
-"The link has expired.","该链接已过期。"
-"The link is not available.","该链接不可用。"
-"There are files that were selected but not uploaded yet. Please upload or remove them first","有文件被选中，但尚未上传。请上传或先将其删除"
-"Title","标题"
-"To:","至："
-"U","U"
-"Unlimited","无限"
-"Use Content-Disposition","用户内容描述"
-"Use Default Value","使用默认值"
-"View Order","查看订单"
-"What's this?","这是什么？"
-"You have not purchased any downloadable products yet.","您尚未购买任何可下载的产品。"
-"attachment","附件"
-"download","下载"
-"inline","内联"
-"sample","示例"
+"Please specify product link(s).",请指定产品链接。
+attachment,附件
+inline,内联
+Pending,挂起
+sample,示例
+"Links can be purchased separately",链接可单独购买
+"Max. Downloads",最大下载数
+Shareable,可分享
+Sample,范例
+"Alphanumeric, dash and underscore characters are recommended for filenames. Improper characters are replaced with '_'.","建议对文件名使用字母、横线，以及下划线字符。错误的字符将被使用 '_'替换。"
+U,U
+"Go to <a href=""%1"">My Downloadable Products</a>","Go to <a href=""%1"">My Downloadable Products</a>"
+"Downloadable Products","Downloadable Products"
+"Remaining Downloads",剩余下载
+"View Order",查看订单
+"Start Download",开始下载
+"You have not purchased any downloadable products yet.",您尚未购买任何可下载的产品。
+download,下载
+"Downloadable Product Options","Downloadable Product Options"
+"Order Item Status to Enable Downloads","Order Item Status to Enable Downloads"
+"Default Maximum Number of Downloads","Default Maximum Number of Downloads"
+"Default Sample Title","Default Sample Title"
+"Default Link Title","Default Link Title"
+"Open Links in New Window","Open Links in New Window"
+"Use Content-Disposition","Use Content-Disposition"
+"Disable Guest Checkout if Cart Contains Downloadable Items","Disable Guest Checkout if Cart Contains Downloadable Items"
+"Guest checkout will only work with shareable.","Guest checkout will only work with shareable."

@@ -24,6 +24,7 @@
 
 .wrapper.table {
     .table-overflow();
+    position: relative; // to hide unnecessary horizontal scrollbar in Safari
     > table {
         .table-caption(@_table-caption-hide: true);
     }
@@ -35,6 +36,8 @@
 //--------------------------------------
 .responsive(@break) when (@break = @break-point-1) {
     .wrapper.table {
+        overflow-y: visible;
+        overflow-x: visible;
         > table {
             > thead,
             > tbody,

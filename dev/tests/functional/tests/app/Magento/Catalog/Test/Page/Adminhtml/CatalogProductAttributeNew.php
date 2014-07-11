@@ -28,6 +28,7 @@ use Mtf\Page\BackendPage;
 
 /**
  * Class CatalogProductAttributeNew
+ * Product Attribute New page
  */
 class CatalogProductAttributeNew extends BackendPage
 {

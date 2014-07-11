@@ -24,11 +24,10 @@
 
 .mixin-breadcrumbs(
     @_breadcrumbs-font-size: @breadcrumbs-font-size,
-    @_breadcrumbs-separator-symbol: @breadcrumbs-separator-symbol,
-    @_breadcrumbs-separator-color: @breadcrumbs-separator-color,
     @_breadcrumbs-display: @breadcrumbs-display,
+    @_breadcrumbs-container-margin: @breadcrumbs-container-margin,
     @_breadcrumbs-padding: @breadcrumbs-padding,
-    @_breadcrumbs-hide-label: @breadcrumbs-hide-label,
+
     // Breadcrumbs current
     @_breadcrumbs-current-color: @breadcrumbs-current-color,
     @_breadcrumbs-current-font-weight: @breadcrumbs-current-font-weight,
@@ -38,9 +37,11 @@
     @_breadcrumbs-current-gradient-direction: @breadcrumbs-current-gradient-direction,
     @_breadcrumbs-current-gradient-start-color: @breadcrumbs-current-gradient-start-color,
     @_breadcrumbs-current-gradient-end-color: @breadcrumbs-current-gradient-end-color,
+
     // Breadcrumbs link - gradient
     @_breadcrumbs-link-gradient: @breadcrumbs-link-gradient,
     @_breadcrumbs-link-gradient-direction: @breadcrumbs-link-gradient-direction,
+
     // Breadcrumbs link color
     @_breadcrumbs-link-color: @breadcrumbs-link-color,
     @_breadcrumbs-link-background: @breadcrumbs-link-background,
@@ -71,9 +72,23 @@
     @_breadcrumbs-link-border-active: @breadcrumbs-link-border-active,
     @_breadcrumbs-link-text-decoration-active: @breadcrumbs-link-text-decoration-active,
     @_breadcrumbs-link-gradient-start-color-active: @breadcrumbs-link-gradient-start-color-active,
-    @_breadcrumbs-link-gradient-end-color-active: @breadcrumbs-link-gradient-end-color-active
+    @_breadcrumbs-link-gradient-end-color-active: @breadcrumbs-link-gradient-end-color-active,
+
+    // Breadcrumbs separating symbol
+    @_breadcrumbs-separator-symbol: @breadcrumbs-separator-symbol,
+    @_breadcrumbs-separator-color: @breadcrumbs-separator-color,
+
+    // Use icon as a separating symbol
+    @_breadcrumbs-icon-use: @breadcrumbs-icon-use,
+    @_breadcrumbs-icon-font-content: @breadcrumbs-icon-font-content,
+    @_icon-font: @breadcrumbs-icon-font,
+    @_icon-font-size: @breadcrumbs-icon-font-size,
+    @_icon-font-line-height: @breadcrumbs-icon-font-line-height,
+    @_icon-font-color: @breadcrumbs-icon-font-color,
+    @_icon-font-margin: @breadcrumbs-icon-font-margin,
+    @_icon-font-vertical-align: @breadcrumbs-icon-font-vertical-align
 ) {
-    ._breadcrumbs-hide-label(@_breadcrumbs-hide-label);
+    .css(margin, @_breadcrumbs-container-margin);
     .items {
         .font-size(@_breadcrumbs-font-size);
         .css(color, @_breadcrumbs-current-color);
@@ -146,23 +161,28 @@
         .css(padding, @_breadcrumbs-padding);
         .css(font-weight, @_breadcrumbs-current-font-weight);
     }
-    .mixin-breadcrumbs-separator(@_breadcrumbs-separator-symbol: @_breadcrumbs-separator-symbol);
-}
 
-.mixin-breadcrumbs-separator(
-    @_breadcrumbs-separator-symbol: @breadcrumbs-separator-symbol,
-    @_breadcrumbs-separator-color: @breadcrumbs-separator-color
-) when not (@_breadcrumbs-separator-symbol = '') {
-    .item:not(:last-child) {
-        &:after {
-            .css(color, @_breadcrumbs-separator-color);
-            .css(content, @_breadcrumbs-separator-symbol);
+    & when not (@_breadcrumbs-separator-symbol = '') and not (@_breadcrumbs-separator-symbol = false) {  // Insert separating symbol to "content"
+        .item:not(:last-child) {
+            &:after {
+                .css(color, @_breadcrumbs-separator-color);
+                .css(content, @_breadcrumbs-separator-symbol);
+            }
         }
     }
-}
 
-._breadcrumbs-hide-label(@_breadcrumbs-hide-label) when (@_breadcrumbs-hide-label = true) {
-    .label {
-        .visually-hidden();
+    & when (@_breadcrumbs-icon-use = true) {  // Use font icon as a separating symbol
+        .item:not(:last-child) {
+            .icon-font(
+                @_icon-font-content: @_breadcrumbs-icon-font-content,
+                @_icon-font: @_icon-font,
+                @_icon-font-size: @_icon-font-size,
+                @_icon-font-line-height: @_icon-font-line-height,
+                @_icon-font-color: @_icon-font-color,
+                @_icon-font-margin: @_icon-font-margin,
+                @_icon-font-vertical-align: @_icon-font-vertical-align,
+                @_icon-font-position: after
+            );
+        }
     }
 }

@@ -61,13 +61,6 @@ class Notifications implements \Magento\AdminNotification\Model\System\MessageIn
      */
     protected $storesWithInvalidDiscountSettings;
 
-    /*
-     * Stores with conflicting FPT settings
-     *
-     * @var array
-     */
-    protected $storesWithConflictingFPTSettings;
-
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\UrlInterface $urlBuilder
@@ -203,53 +196,27 @@ class Notifications implements \Magento\AdminNotification\Model\System\MessageIn
     }
 
     /**
-     * Return list of store names which have not compatible tax calculation type and price display settings.
-     * Return true if settings are wrong for default store.
-     *
-     * @return array
-     */
-    public function getStoresWithConflictingFptTaxConfigurationSettings()
-    {
-        $storeNames = array();
-
-        // Will enable in future work
-        //$storeCollection = $this->storeManager->getStores(true);
-        //foreach ($storeCollection as $store) {
-        //    if ($this->weeeData->validateCatalogPricesAndFptConfiguration($store)) {
-        //        $website = $store->getWebsite();
-        //        $storeNames[] = $website->getName() . '(' . $store->getName() . ')';
-        //    }
-        //}
-
-        return $storeNames;
-    }
-
-    /**
      * Check whether notification is displayed
      * Checks if any of these settings are being ignored or valid:
      *      1. Wrong discount settings
      *      2. Wrong display settings
-     *      3. Conflicting FPT settings
      *
      * @return bool
      */
     public function isDisplayed()
     {
         // Check if we are ignoring all notifications
-        if ($this->taxConfig->isWrongDisplaySettingsIgnored() && $this->taxConfig->isWrongDiscountSettingsIgnored()
-            && $this->taxConfig->isConflictingFptTaxConfigurationSettingsIgnored()) {
+        if ($this->taxConfig->isWrongDisplaySettingsIgnored() && $this->taxConfig->isWrongDiscountSettingsIgnored()) {
             return false;
         }
 
         $this->storesWithInvalidDisplaySettings = $this->getStoresWithWrongDisplaySettings();
         $this->storesWithInvalidDiscountSettings = $this->getStoresWithWrongDiscountSettings();
-        $this->storesWithConflictingFPTSettings = $this->getStoresWithConflictingFptTaxConfigurationSettings();
 
         // Check if we have valid tax notifications
         if ((!empty($this->storesWithInvalidDisplaySettings) && !$this->taxConfig->isWrongDisplaySettingsIgnored())
             || (!empty($this->storesWithInvalidDiscountSettings) && !$this->taxConfig->isWrongDiscountSettingsIgnored())
-            || (!empty($this->storesWithConflictingFPTSettings)
-                && !$this->taxConfig->isConflictingFptTaxConfigurationSettingsIgnored())) {
+            ) {
             return true;
         }
 
@@ -293,24 +260,6 @@ class Notifications implements \Magento\AdminNotification\Model\System\MessageIn
             $messageDetails .= __(
                 'Click on the link to <a href="%1">ignore this notification</a>',
                 $this->getIgnoreTaxNotificationUrl('discount')
-            );
-            $messageDetails .= "</div><br>";
-        }
-
-        if (!empty($this->storesWithConflictingFPTSettings)
-            && !$this->taxConfig->isConflictingFptTaxConfigurationSettingsIgnored()
-        ) {
-            $messageDetails .= '<strong>';
-            $messageDetails .= __(
-                'Warning tax configuration can result in unexpected FPT prices on applicable devices. '
-            );
-            $messageDetails .= '</strong><br>';
-            $messageDetails .= __('Store(s) affected: ');
-            $messageDetails .= implode(', ', $this->storesWithConflictingFPTSettings);
-            $messageDetails .= '<br><div style="text-align:right">';
-            $messageDetails .= __(
-                'Click on the link to <a href="%1">ignore this notification</a>',
-                $this->getIgnoreTaxNotificationUrl('fpt_configuration')
             );
             $messageDetails .= "</div><br>";
         }

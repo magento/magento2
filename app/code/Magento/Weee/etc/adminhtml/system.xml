@@ -48,10 +48,6 @@
                     <label>Display Prices In Emails</label>
                     <source_model>Magento\Weee\Model\Config\Source\Display</source_model>
                 </field>
-                <field id="discount" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Apply Discounts To FPT</label>
-                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
-                </field>
                 <field id="apply_vat" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Apply Tax To FPT</label>
                     <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>

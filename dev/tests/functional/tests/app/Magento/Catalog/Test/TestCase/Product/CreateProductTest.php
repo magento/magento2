@@ -104,11 +104,11 @@ class CreateProductTest extends Functional
         $frontendHomePage->getTopmenu()->selectCategoryByName($product->getCategoryName());
         //Verification on category product list
         $productListBlock = $categoryPage->getListProductBlock();
-        $this->assertTrue($productListBlock->isProductVisible($product->getProductName()));
-        $productListBlock->openProductViewPage($product->getProductName());
+        $this->assertTrue($productListBlock->isProductVisible($product->getName()));
+        $productListBlock->openProductViewPage($product->getName());
         //Verification on product detail page
         $productViewBlock = $productPage->getViewBlock();
-        $this->assertEquals($product->getProductName(), $productViewBlock->getProductName());
+        $this->assertEquals($product->getName(), $productViewBlock->getProductName());
         $price = $productViewBlock->getProductPrice();
         $this->assertEquals(number_format($product->getProductPrice(), 2), $price['price_regular_price']);
     }

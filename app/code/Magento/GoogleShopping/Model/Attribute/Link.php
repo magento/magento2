@@ -25,8 +25,6 @@ namespace Magento\GoogleShopping\Model\Attribute;
 
 /**
  * Link attribute model
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Link extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
 {
@@ -86,7 +84,11 @@ class Link extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
     {
         $url = $product->getProductUrl(false);
         if ($url) {
-            if (!$this->_scopeConfig->isSetFlag('web/url/use_store', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)) {
+            $isStoreInUrl = $this->_scopeConfig->isSetFlag(
+                \Magento\Store\Model\Store::XML_PATH_STORE_IN_URL,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
+            if (!$isStoreInUrl) {
                 $urlInfo = parse_url($url);
                 $store = $product->getStore()->getCode();
                 if (isset($urlInfo['query']) && $urlInfo['query'] != '') {

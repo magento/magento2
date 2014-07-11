@@ -62,13 +62,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     );
 
     /**
-     * Core event manager proxy
-     *
-     * @var \Magento\Framework\Event\ManagerInterface
-     */
-    protected $_eventManager = null;
-
-    /**
      * Core store config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface

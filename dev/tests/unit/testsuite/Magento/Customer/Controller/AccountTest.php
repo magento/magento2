@@ -27,6 +27,9 @@
  */
 namespace Magento\Customer\Controller;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AccountTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -58,6 +61,26 @@ class AccountTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectManager;
+
+    /**
+     * @var \Magento\Customer\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $customerHelperMock;
+
+    /**
+     * @var \Magento\Framework\App\Response\RedirectInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $redirectMock;
+
+    /**
+     * @var \Magento\Framework\App\ViewInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $viewMock;
+
+    /**
+     * @var \Magento\Customer\Service\V1\CustomerAccountServiceInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $customerAccountServiceMock;
 
     /**
      * List of actions that are allowed for not authorized users
@@ -115,7 +138,6 @@ class AccountTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_formKeyValidator = $this->getMock(
             'Magento\Core\App\Action\FormKeyValidator',
             array(),
@@ -123,6 +145,26 @@ class AccountTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->customerHelperMock = $this->getMock(
+            'Magento\Customer\Helper\Data',
+            array(),
+            array(),
+            '',
+            false
+        );
+        $this->formFactoryMock = $this->getMock(
+            'Magento\Customer\Model\Metadata\FormFactory',
+            array(),
+            array(),
+            '',
+            false
+        );
+        $this->redirectMock = $this->getMockForAbstractClass('Magento\Framework\App\Response\RedirectInterface');
+        $this->viewMock = $this->getMockForAbstractClass('Magento\Framework\App\ViewInterface');
+        $this->customerAccountServiceMock =
+            $this->getMockForAbstractClass('Magento\Customer\Service\V1\CustomerAccountServiceInterface');
+
+        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->object = $objectManager->getObject(
             'Magento\Customer\Controller\Account',
             array(
@@ -132,6 +174,10 @@ class AccountTest extends \PHPUnit_Framework_TestCase
                 'url' => $this->url,
                 'objectManager' => $this->objectManager,
                 'formKeyValidator' => $this->_formKeyValidator,
+                'customerHelperData' => $this->customerHelperMock,
+                'redirect' => $this->redirectMock,
+                'view' => $this->viewMock,
+                'customerAccountService' => $this->customerAccountServiceMock,
                 ''
             )
         );
@@ -188,5 +234,97 @@ class AccountTest extends \PHPUnit_Framework_TestCase
         $this->url->expects($this->once())->method('isOwnOriginUrl')->with();
 
         $this->object->loginPostAction();
+    }
+
+    /**
+     * @return void
+     */
+    public function testCreateActionRegistrationDisabled()
+    {
+        $this->customerSession->expects($this->once())
+            ->method('isLoggedIn')
+            ->will($this->returnValue(false));
+
+        $this->customerHelperMock->expects($this->once())
+            ->method('isRegistrationAllowed')
+            ->will($this->returnValue(false));
+
+        $this->redirectMock->expects($this->once())
+            ->method('redirect')
+            ->with($this->response, '*/*', array())
+            ->will($this->returnValue(false));
+
+        $this->viewMock->expects($this->never())
+            ->method('loadLayout');
+        $this->viewMock->expects($this->never())
+            ->method('getLayout');
+        $this->viewMock->expects($this->never())
+            ->method('renderLayout');
+
+        $this->object->createAction();
+    }
+
+    /**
+     * @return void
+     */
+    public function testCreateActionRegistrationEnabled()
+    {
+        $this->customerSession->expects($this->once())
+            ->method('isLoggedIn')
+            ->will($this->returnValue(false));
+
+        $this->customerHelperMock->expects($this->once())
+            ->method('isRegistrationAllowed')
+            ->will($this->returnValue(true));
+
+        $this->redirectMock->expects($this->never())
+            ->method('redirect');
+
+        $layoutMock = $this->getMock(
+            'Magento\Framework\View\Layout',
+            array(),
+            array(),
+            '',
+            false
+        );
+        $layoutMock->expects($this->once())
+            ->method('initMessages')
+            ->will($this->returnSelf());
+
+        $this->viewMock->expects($this->once())
+            ->method('loadLayout')
+            ->will($this->returnSelf());
+        $this->viewMock->expects($this->once())
+            ->method('getLayout')
+            ->will($this->returnValue($layoutMock));
+        $this->viewMock->expects($this->once())
+            ->method('renderLayout')
+            ->will($this->returnSelf());
+
+        $this->object->createAction();
+    }
+
+    /**
+     * @return void
+     */
+    public function testCreatePostActionRegistrationDisabled()
+    {
+        $this->customerSession->expects($this->once())
+            ->method('isLoggedIn')
+            ->will($this->returnValue(false));
+
+        $this->customerHelperMock->expects($this->once())
+            ->method('isRegistrationAllowed')
+            ->will($this->returnValue(false));
+
+        $this->redirectMock->expects($this->once())
+            ->method('redirect')
+            ->with($this->response, '*/*/', array())
+            ->will($this->returnValue(false));
+
+        $this->customerAccountServiceMock->expects($this->never())
+            ->method('createCustomer');
+
+        $this->object->createPostAction();
     }
 }

@@ -47,8 +47,10 @@ class AssertTierPriceOnProductPage extends AbstractConstraint
      * @param FixtureInterface $product
      * @return void
      */
-    public function processAssert(CatalogProductView $catalogProductView, FixtureInterface $product)
-    {
+    public function processAssert(
+        CatalogProductView $catalogProductView,
+        FixtureInterface $product
+    ) {
         // TODO fix initialization url for frontend page
         //Open product view page
         $catalogProductView->init($product);

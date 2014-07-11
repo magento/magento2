@@ -1,3 +1,70 @@
+2.0.0.0-dev86
+=============
+* Service layer updates:
+  * Created Category service and methods
+  * Renamed attribute option service
+  * Implemented an API method to remove for attribute options
+  * Created TaxClass service and methods
+  * Created APIs for Tax service
+* Framework improvements:
+  * REST/SOAP calls uses default store if store code not provided
+  * Added a warning about using a not secure protocol for theidentity link URL
+  * Fixed exception masking and removed unnecessary exceptions from the Webapi framework
+* WEEE features parity:
+  * Fixed an issue with Tax calculations when FPT is enabled
+  * Fixed an issue where FPT was not included in the subtotal number on invoice pages
+  * Fixed an issue where FPT was not included in the subtotal number on credit memo pages
+  * Free shipping calculated with FPT
+  * Fixed an issue where discounts where applied to FPT
+  * Fixed an issue with rounding is the Tax detailed info
+  * Fixed issues with bundle product pricing with tier and special prices
+* Added an integrity test to verify that dictionary and code are synced
+* i18n Improvements:
+  * Improved the wording of the i18n CLI Tools
+  * Removed the helpers which became unused after i18n Improvements
+* Fixed bugs:
+  * Fixed an issue where configurable attributes were not chosen according to the hash tag
+  * Fixed an issue where the Compare Products functionality did not work correctly
+  * Fixed an issue where product attribute values were duplicated after import
+  * Fixed an issue were the scope of an attribute was not considered in catalog price rule conditions
+  * Fixed an issue where shipping address was not saved if it was added during checkout
+  * Fixed an issue where there was no POST request when saving a customer group
+  * Fixed an issue where an attribute template was not applied after changing it for the first time during product creation
+  * Fixed an issue where the Sale Report Grid with no results found contained an unnecessary empty Total section
+  * Fixed an issue where a notice was added to system.log when a product was added to cart
+  * Fixed integration test coverage failure
+  * Fixed an issue where a message about inequality of password and confirmation was displayed in the wrong place
+  * Fixed an issue with an XSS warning in 'Used for Sorting in Product Listing' property of Product Attribute
+  * Fixed an issue where an order was not displayed  on frontend if its order status was deleted
+  * Fixed an issue where  tier pricing was not displayed on a grouped product page
+  * Verified and fixed the content of errors returned from SOAP calls
+  * Fixed an issue where it was impossible to create a tax rule when using a complex Customer/Product tax class
+  * Fixed an issue where the Street Address line count setting was not applied.
+  * Fixed an issue where customers were not assigned to the correct VAT customer groups during admin order creation
+  * The unused translateArray method of AbstractHelper was removed
+  * Fixed an issue where localization did not work for strings containing a single quote (')
+  * Fixed issues with  the translate and the logging transformation tools
+  * Fixed an issue where it was impossible to create a URL rewrite for a CMS Page with Temporary (302) or Permanent (301) redirect
+* GitHub requests:
+  * [#598] Add Sort Order to Rules
+  * [#580] Set changed status on model to prevent status overwriting when model gets saved
+* Unit Tests Coverage:
+  * Part of the Catalog module covered with the unit tests
+* Added the following functional tests:
+  * Applying Several Catalog Price Rules
+  * Attribute Set Creation
+  * Category Deletion
+  * Customer Group Deletion
+  * Generating Sitemap
+  * Product Attribute Deletion
+  * Update Admin User
+  * Update Cms Page
+  * Update Customer Group
+  * Update Downloadable Product
+  * Update Product Attribute
+  * Update Sales Rule
+  * Update Sitemap
+
 2.0.0.0-dev85
 =============
 * Service layer updates:
@@ -9,7 +76,6 @@
   * Fixed an issue where  Google Content was not sending the correct 'description' attribute
   * Fixed an issue where custom attributes were not displayed in layered navigation after a product import
   * Fixed an issue where the Category URL keys did not work correctly after saving
-  * Fixed an issue where an admin could not create a Target rule with a certain Products to Display condition
   * Fixed a jQuery error on a product page in the Admin panel, which appeared when switching between product tabs
 * Framework Improvements:
   * Created ProductsCustomOptions Service API for Catalog module

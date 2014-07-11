@@ -61,13 +61,13 @@ $wishlistHelper = $this->helper('Magento\Wishlist\Helper\Data');
                                 <div class="product actions">
                                     <?php if ($product->isSaleable() && $product->isVisibleInSiteVisibility()): ?>
                                         <?php if ($product->getTypeInstance()->hasRequiredOptions($product)): ?>
-                                            <div class="primary"><a href="<?php echo $this->getItemAddToCartUrl($item) ?>" class="action tocart"><span><?php echo __('Add to Cart') ?></span></a></div>
+                                            <div class="primary"><a href="<?php echo $this->getItemAddToCartUrl($item) ?>" class="action tocart primary"><span><?php echo __('Add to Cart') ?></span></a></div>
                                         <?php else: ?>
                                             <?php
                                                 $postDataHelper = $this->helper('Magento\Core\Helper\PostData');
                                                 $postData = $postDataHelper->getPostData($this->getItemAddToCartUrl($item), ['product' => $product->getEntityId()])
                                             ?>
-                                            <div class="primary"><button type="button" class="action tocart" data-post='<?php echo $postData; ?>'><span><?php echo __('Add to Cart') ?></span></button></div>
+                                            <div class="primary"><button type="button" class="action tocart primary" data-post='<?php echo $postData; ?>'><span><?php echo __('Add to Cart') ?></span></button></div>
                                         <?php endif; ?>
                                     <?php endif; ?>
                                     <div class="secondary">

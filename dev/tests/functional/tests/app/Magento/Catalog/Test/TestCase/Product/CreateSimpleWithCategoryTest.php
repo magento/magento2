@@ -115,14 +115,14 @@ class CreateSimpleWithCategoryTest extends Functional
         //Verification on category product list
         $productListBlock = $categoryPage->getListProductBlock();
         $this->assertTrue(
-            $productListBlock->isProductVisible($product->getProductName()),
+            $productListBlock->isProductVisible($product->getName()),
             'Product is absent on category page.'
         );
 
         //Verification on product detail page
         $productViewBlock = $productPage->getViewBlock();
-        $productListBlock->openProductViewPage($product->getProductName());
-        $this->assertEquals($product->getProductName(), $productViewBlock->getProductName());
+        $productListBlock->openProductViewPage($product->getName());
+        $this->assertEquals($product->getName(), $productViewBlock->getProductName());
         $price = $productViewBlock->getProductPrice();
         $this->assertEquals(number_format($product->getProductPrice(), 2), $price['price_regular_price']);
     }

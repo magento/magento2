@@ -28,7 +28,7 @@
  */
 ?>
 <script id="add-recipient-tmpl" type="text/x-jQuery-tmpl">
-    <div class="actions toolbar">
+    <div class="actions-toolbar">
         <div class="secondary">
             <button type="button" id="btn-remove${_index_}" class="action remove"
                title="<?php echo $this->escapeJsQuote(__('Remove Email')) ?>"><span><?php echo $this->escapeJsQuote(__('Remove Email')) ?></span></button>
@@ -36,17 +36,17 @@
     </div>
     <fieldset class="fieldset">
         <div class="field name required">
-            <label for="recipients-name${_index_}" class="label"><span><?php echo __('Name:')?></span></label>
+            <label for="recipients-name${_index_}" class="label"><span><?php echo __('Name')?></span></label>
             <div class="control">
-                <input name="recipients[name][${_index_}]" type="text" title="<?php echo __('Name:') ?>" class="input-text"
+                <input name="recipients[name][${_index_}]" type="text" title="<?php echo __('Name') ?>" class="input-text"
                        id="recipients-name${_index_}" data-validate="{required:true}"/>
             </div>
         </div>
 
         <div class="field email required">
-            <label for="recipients-email${_index_}" class="label"><span><?php echo __('Email Address:') ?></span></label>
+            <label for="recipients-email${_index_}" class="label"><span><?php echo __('Email Address') ?></span></label>
             <div class="control">
-                <input name="recipients[email][${_index_}]" title="<?php echo __('Email Address:') ?>"
+                <input name="recipients[email][${_index_}]" title="<?php echo __('Email Address') ?>"
                        id="recipients-email${_index_}" type="email" class="input-text"
                        data-validate="{required:true, 'validate-email':true}"/>
             </div>
@@ -70,10 +70,10 @@
       class="form send friend" data-hasRequired="<?php echo __('* Required Fields') ?>">
     <fieldset class="fieldset sender" id="sender_options">
         <?php echo $this->getBlockHtml('formkey')?>
-        <legend class="legend"><span><?php echo __('Sender:') ?></span></legend>
+        <legend class="legend"><span><?php echo __('Sender') ?></span></legend>
         <br>
         <div class="field sender required">
-            <label for="sender-name" class="label"><span><?php echo __('Name:') ?></span></label>
+            <label for="sender-name" class="label"><span><?php echo __('Name') ?></span></label>
             <div class="control">
                 <input name="sender[name]" value="<?php echo $this->escapeHtml($this->getUserName()) ?>"
                        title="<?php echo __('Name') ?>" id="sender-name" type="text" class="input-text"
@@ -82,7 +82,7 @@
         </div>
 
         <div class="field email required">
-            <label for="sender-email" class="label"><span><?php echo __('Email:') ?></span></label>
+            <label for="sender-email" class="label"><span><?php echo __('Email') ?></span></label>
             <div class="control">
                 <input name="sender[email]" value="<?php echo $this->escapeHtml($this->getEmail()) ?>"
                        title="<?php echo __('Email Address') ?>" id="sender-email" type="text" class="input-text"
@@ -91,7 +91,7 @@
         </div>
 
         <div class="field text required">
-            <label for="sender-message" class="label"><span><?php echo __('Message:') ?></span></label>
+            <label for="sender-message" class="label"><span><?php echo __('Message') ?></span></label>
             <div class="control">
                 <textarea name="sender[message]" class="input-text" id="sender-message" cols="3" rows="3"
                           data-validate="{required:true}"><?php echo $this->escapeHtml($this->getMessage()) ?></textarea>
@@ -101,7 +101,7 @@
 
     <fieldset class="fieldset recipients">
         <?php echo $this->getBlockHtml('formkey')?>
-        <legend class="legend"><span><?php echo __('Recipient:') ?></span></legend>
+        <legend class="legend"><span><?php echo __('Recipient') ?></span></legend>
         <br />
         <div id="recipients-options"></div>
         <?php if ($this->getMaxRecipients()): ?>
@@ -109,7 +109,7 @@
                 <span><?php echo __('Maximum %1 email addresses allowed.', $this->getMaxRecipients()) ?></span>
             </div>
         <?php endif; ?>
-        <div class="actions toolbar">
+        <div class="actions-toolbar">
             <div class="secondary">
             <?php if (1 < $this->getMaxRecipients()): ?>
                 <button type="button" id="add-recipient-button" class="action add">
@@ -118,7 +118,7 @@
             </div>
         </div>
     </fieldset>
-    <div class="actions toolbar">
+    <div class="actions-toolbar">
         <div class="primary">
             <button type="submit"
                     class="action submit primary"<?php if (!$this->canSend()): ?> disabled="disabled"<?php endif ?>>

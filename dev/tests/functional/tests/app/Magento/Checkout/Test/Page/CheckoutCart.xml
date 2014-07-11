@@ -27,7 +27,7 @@
     <block>
         <name>cartBlock</name>
         <class>Magento\Checkout\Test\Block\Cart</class>
-        <locator>//div[contains(@class, "cart container")]</locator>
+        <locator>//div[contains(@class, "cart-container")]</locator>
         <strategy>xpath</strategy>
     </block>
     <block>

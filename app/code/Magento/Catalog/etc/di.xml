@@ -24,11 +24,22 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <preference for="Magento\Catalog\Service\V1\ProductMetadataServiceInterface" type="Magento\Catalog\Service\V1\ProductMetadataService" />
+    <preference for="Magento\Catalog\Service\V1\MetadataServiceInterface" type="Magento\Catalog\Service\V1\MetadataService" />
+    <preference for="Magento\Catalog\Service\V1\Product\MetadataServiceInterface" type="Magento\Catalog\Service\V1\Product\MetadataService" />
+    <preference for="Magento\Catalog\Service\V1\Category\MetadataServiceInterface" type="Magento\Catalog\Service\V1\Category\MetadataService" />
     <preference for="Magento\Catalog\Service\V1\ProductServiceInterface" type="Magento\Catalog\Service\V1\ProductService" />
+    <preference for="Magento\Catalog\Service\V1\Category\ReadServiceInterface" type="Magento\Catalog\Service\V1\Category\ReadService" />
+    <preference for="Magento\Catalog\Service\V1\Category\ProductLinks\ReadServiceInterface" type="Magento\Catalog\Service\V1\Category\ProductLinks\ReadService" />
+    <preference for="Magento\Catalog\Service\V1\Category\ProductLinks\WriteServiceInterface" type="Magento\Catalog\Service\V1\Category\ProductLinks\WriteService" />
     <preference for="Magento\Catalog\Service\V1\Product\Attribute\ReadServiceInterface" type="Magento\Catalog\Service\V1\Product\Attribute\ReadService" />
+    <preference for="Magento\Catalog\Service\V1\Category\Attribute\ReadServiceInterface" type="Magento\Catalog\Service\V1\Category\Attribute\ReadService" />
     <preference for="Magento\Catalog\Service\V1\Product\Attribute\WriteServiceInterface" type="Magento\Catalog\Service\V1\Product\Attribute\WriteService" />
+    <preference for="Magento\Catalog\Service\V1\Category\WriteServiceInterface" type="Magento\Catalog\Service\V1\Category\WriteService" />
+    <preference for="Magento\Catalog\Service\V1\Product\Attribute\OptionServiceInterface" type="Magento\Catalog\Service\V1\Product\Attribute\OptionService" />
     <preference for="Magento\Catalog\Service\V1\ProductAttributeServiceInterface" type="Magento\Catalog\Service\V1\ProductAttributeService" />
+    <preference for="Magento\Catalog\Service\V1\Category\Tree\ReadServiceInterface" type="Magento\Catalog\Service\V1\Category\Tree\ReadService" />
+    <preference for="Magento\Catalog\Service\V1\Product\Attribute\Option\ReadServiceInterface" type="Magento\Catalog\Service\V1\Product\Attribute\Option\ReadService" />
+    <preference for="Magento\Catalog\Service\V1\Product\Attribute\Option\WriteServiceInterface" type="Magento\Catalog\Service\V1\Product\Attribute\Option\WriteService" />
     <preference for="Magento\Catalog\Model\ProductTypes\ConfigInterface" type="Magento\Catalog\Model\ProductTypes\Config" />
     <preference for="Magento\Catalog\Model\ProductOptions\ConfigInterface" type="Magento\Catalog\Model\ProductOptions\Config" />
     <preference for="Magento\Catalog\Model\Product\PriceModifierInterface" type="Magento\Catalog\Model\Product\PriceModifier\Composite" />
@@ -45,7 +56,7 @@
     <preference for="Magento\Catalog\Service\V1\Product\AttributeSet\WriteServiceInterface" type="Magento\Catalog\Service\V1\Product\AttributeSet\WriteService" />
     <preference for="Magento\Catalog\Service\V1\Product\AttributeSet\AttributeServiceInterface" type="Magento\Catalog\Service\V1\Product\AttributeSet\AttributeService" />
     <preference for="Magento\Catalog\Service\V1\Product\Attribute\Media\ReadServiceInterface" type="\Magento\Catalog\Service\V1\Product\Attribute\Media\ReadService" />
-    <preference for="\Magento\Catalog\Service\V1\Product\Attribute\Media\WriteServiceInterface" type="\Magento\Catalog\Service\V1\Product\Attribute\Media\WriteService" />
+    <preference for="Magento\Catalog\Service\V1\Product\Attribute\Media\WriteServiceInterface" type="\Magento\Catalog\Service\V1\Product\Attribute\Media\WriteService" />
     <preference for="Magento\Catalog\Service\V1\Product\Link\ReadServiceInterface" type="Magento\Catalog\Service\V1\Product\Link\ReadService" />
     <preference for="Magento\Catalog\Service\V1\Product\Link\WriteServiceInterface" type="Magento\Catalog\Service\V1\Product\Link\WriteService" />
     <preference for="Magento\Catalog\Service\V1\Product\Link\Data\ProductLink\DataMapperInterface" type="Magento\Catalog\Service\V1\Product\Link\Data\ProductLink\DataMapper\Composite" />
@@ -442,6 +453,16 @@
                 <item name="area" xsi:type="object">Magento\Catalog\Model\Product\Option\Validator\Text</item>
                 <item name="file" xsi:type="object">Magento\Catalog\Model\Product\Option\Validator\File</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Service\V1\Product\MetadataService">
+        <arguments>
+            <argument name="metadataService" xsi:type="object">Magento\Catalog\Service\V1\MetadataService\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Service\V1\ProductService">
+        <arguments>
+            <argument name="searchResultsBuilder" xsi:type="object" shared="false">Magento\Catalog\Service\V1\Data\Product\SearchResultsBuilder</argument>
         </arguments>
     </type>
 </config>

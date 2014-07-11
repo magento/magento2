@@ -107,11 +107,11 @@ class BundleFixedTest extends Functional
         $frontendHomePage->getTopmenu()->selectCategoryByName($product->getCategoryName());
         //Verification on category product list
         $productListBlock = $categoryPage->getListProductBlock();
-        $this->assertTrue($productListBlock->isProductVisible($product->getProductName()));
-        $productListBlock->openProductViewPage($product->getProductName());
+        $this->assertTrue($productListBlock->isProductVisible($product->getName()));
+        $productListBlock->openProductViewPage($product->getName());
         //Verification on product detail page
         $productViewBlock = $productPage->getViewBlock();
-        $this->assertSame($product->getProductName(), $productViewBlock->getProductName());
+        $this->assertSame($product->getName(), $productViewBlock->getProductName());
         $this->assertEquals($product->getProductPrice(), $productViewBlock->getProductPrice());
 
         // @TODO: add click on "Customize and Add To Cart" button and assert options count

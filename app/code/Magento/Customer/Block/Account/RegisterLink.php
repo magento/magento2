@@ -71,7 +71,9 @@ class RegisterLink extends \Magento\Framework\View\Element\Html\Link
      */
     protected function _toHtml()
     {
-        if ($this->httpContext->getValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH)) {
+        if (!$this->_customerHelper->isRegistrationAllowed()
+            || $this->httpContext->getValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH)
+        ) {
             return '';
         }
         return parent::_toHtml();

@@ -88,7 +88,6 @@ class Tax extends \Magento\Backend\App\Action
         try {
             /** @var $classModel \Magento\Tax\Model\ClassModel */
             $classModel = $this->_objectManager->create('Magento\Tax\Model\ClassModel')->load($classId);
-            $classModel->checkClassCanBeDeleted();
             $classModel->delete();
             $responseContent = $this->_objectManager->get(
                 'Magento\Core\Helper\Data'

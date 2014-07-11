@@ -31,6 +31,7 @@ use Zend\Code\Reflection\ParameterReflection;
 use Magento\Framework\ObjectManager;
 use Magento\Webapi\Model\Config\ClassReflector\TypeProcessor;
 use Magento\Webapi\Model\Soap\Wsdl\ComplexTypeStrategy;
+use \Magento\Webapi\DeserializationException;
 
 class ServiceArgsSerializer
 {
@@ -159,20 +160,24 @@ class ServiceArgsSerializer
      */
     protected function _convertValue($value, $type)
     {
+        $isArrayType = $this->_typeProcessor->isArrayType($type);
+        if ($isArrayType && isset($value['item'])) {
+            $value = $this->_removeSoapItemNode($value);
+        }
         if ($this->_typeProcessor->isTypeSimple($type)) {
             $result = $this->_typeProcessor->processSimpleType($value, $type);
-        } elseif ($this->_typeProcessor->isArrayType($type)) {
-            if (isset($value['item'])) {
-                $value = $this->_removeSoapItemNode($value['item']);
-            }
-            // Initializing the result for array type else it will return null for empty array
-            $result = is_array($value) ? [] : null;
-            $itemType = $this->_typeProcessor->getArrayItemType($type);
-            foreach ($value as $key => $item) {
-                $result[$key] = $this->_createFromArray($itemType, $item);
-            }
         } else {
-            $result = $this->_createFromArray($type, $value);
+            /** Complex type or array of complex types */
+            if ($isArrayType) {
+                // Initializing the result for array type else it will return null for empty array
+                $result = is_array($value) ? [] : null;
+                $itemType = $this->_typeProcessor->getArrayItemType($type);
+                foreach ($value as $key => $item) {
+                    $result[$key] = $this->_createFromArray($itemType, $item);
+                }
+            } else {
+                $result = $this->_createFromArray($type, $value);
+            }
         }
         return $result;
     }
@@ -210,9 +215,19 @@ class ServiceArgsSerializer
      *
      * @param array|mixed $value
      * @return array
+     * @throws \InvalidArgumentException
      */
     protected function _removeSoapItemNode($value)
     {
+        if (isset($value['item'])) {
+            if (is_array($value['item'])) {
+                $value = $value['item'];
+            } else {
+                return [$value['item']];
+            }
+        } else {
+            throw new \InvalidArgumentException('Value must be an array and must contain "item" field.');
+        }
         /**
          * In case when only one Data object value is passed, it will not be wrapped into a subarray
          * within item node. If several Data object values are passed, they will be wrapped into

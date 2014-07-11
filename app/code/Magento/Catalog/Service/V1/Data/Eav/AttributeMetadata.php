@@ -33,6 +33,10 @@ class AttributeMetadata extends AbstractObject
     /**#@+
      * Constants used as keys into $_data
      */
+
+    const ID = 'id';
+    const CODE = 'code';
+
     const ATTRIBUTE_ID = 'attribute_id';
 
     const ATTRIBUTE_CODE = 'attribute_code';

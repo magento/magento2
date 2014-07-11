@@ -30,12 +30,9 @@
             media: '(min-width: 768px)',
             // Switch to Desktop Version
             entry: function() {
-                // minicart
-                $('.action.showcart').removeClass('is-disabled');
-
                 (function() {
 
-                    var productInfoMain = $('.product.info.main'),
+                    var productInfoMain = $('.product-info-main'),
                         productInfoAdditional = $("#product-info-additional");
 
                     if(productInfoAdditional.length) {
@@ -61,15 +58,6 @@
             },
             // Switch to Mobile Version
             exit: function() {
-                // minicart
-                $('.action.showcart').addClass('is-disabled');
-
-                $('.action.showcart').on( "click", function() {
-                    if ($(this).hasClass('is-disabled')) {
-                        window.location = $(this).attr("href");
-                    }
-                });
-
                 $('.action.toggle.checkout.progress')
                     .on('click.gotoCheckoutProgress', function(e){
                         var myWrapper = '#checkout-progress-wrapper';

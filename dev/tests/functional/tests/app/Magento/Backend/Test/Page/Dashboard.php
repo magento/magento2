@@ -55,6 +55,13 @@ class Dashboard extends Page
     protected $titleBlock = '.page-title';
 
     /**
+     * Top menu selector
+     *
+     * @var string
+     */
+    protected $menuBlock = '.navigation';
+
+    /**
      * Constructor
      */
     protected function _init()
@@ -83,6 +90,18 @@ class Dashboard extends Page
     {
         return Factory::getBlockFactory()->getMagentoThemeHtmlTitle(
             $this->_browser->find($this->titleBlock, Locator::SELECTOR_CSS)
+        );
+    }
+
+    /**
+     * Get Menu block
+     *
+     * @return \Magento\Backend\Test\Block\Menu
+     */
+    public function getMenuBlock()
+    {
+        return Factory::getBlockFactory()->getMagentoBackendMenu(
+            $this->_browser->find($this->menuBlock, Locator::SELECTOR_CSS)
         );
     }
 }

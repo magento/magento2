@@ -31,4 +31,7 @@
     <referenceContainer name="product.info.grouped.extra">
         <block class="Magento\GroupedProduct\Block\Stockqty\Type\Grouped" template="Magento_CatalogInventory::stockqty/composite.phtml"/>
     </referenceContainer>
+    <referenceContainer name="product.info.type">
+        <block class="Magento\GroupedProduct\Block\Product\View\Type\Grouped" as="product.info.grouped" template="product/view/type/default.phtml"/>
+    </referenceContainer>
 </layout>

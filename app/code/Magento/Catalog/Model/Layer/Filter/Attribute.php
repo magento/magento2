@@ -47,13 +47,17 @@ class Attribute extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
     protected $string;
 
     /**
-     * Constructor
-     *
-     * @param \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory
+     * @var \Magento\Framework\Filter\StripTags
+     */
+    protected $tagFilter;
+
+    /**
+     * @param ItemFactory $filterItemFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Layer $layer
      * @param \Magento\Catalog\Model\Resource\Layer\Filter\AttributeFactory $filterAttributeFactory
      * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Filter\StripTags $tagFilter
      * @param array $data
      */
     public function __construct(
@@ -62,11 +66,13 @@ class Attribute extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
         \Magento\Catalog\Model\Layer $layer,
         \Magento\Catalog\Model\Resource\Layer\Filter\AttributeFactory $filterAttributeFactory,
         \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Filter\StripTags $tagFilter,
         array $data = array()
     ) {
         $this->_resource = $filterAttributeFactory->create();
         $this->string = $string;
         $this->_requestVar = 'attribute';
+        $this->tagFilter = $tagFilter;
         parent::__construct($filterItemFactory, $storeManager, $layer, $data);
     }
 
@@ -145,14 +151,14 @@ class Attribute extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
                 if ($this->_getIsFilterableAttribute($attribute) == self::OPTIONS_ONLY_WITH_RESULTS) {
                     if (!empty($optionsCount[$option['value']])) {
                         $data[] = array(
-                            'label' => $option['label'],
+                            'label' => $this->tagFilter->filter($option['label']),
                             'value' => $option['value'],
                             'count' => $optionsCount[$option['value']]
                         );
                     }
                 } else {
                     $data[] = array(
-                        'label' => $option['label'],
+                        'label' => $this->tagFilter->filter($option['label']),
                         'value' => $option['value'],
                         'count' => isset($optionsCount[$option['value']]) ? $optionsCount[$option['value']] : 0
                     );

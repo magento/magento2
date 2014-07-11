@@ -25,7 +25,7 @@
 .login.container {
     .block {
         &.new {
-            .actions.toolbar {
+            .actions-toolbar {
                 margin-top: 25px;
             }
         }
@@ -203,17 +203,14 @@
     }
 }
 
-.widget,
-.block {
-    ol, ul {
-        .list-reset-styles();
 
-        li {
-            margin-bottom: 6px;
-        }
-        strong {
-            font-weight: normal;
-        }
+.control.captcha-image {
+    .captcha-img {
+        float: left;
+        margin: 0 20px 0 0;
+    }
+    .action.reload {
+        margin: 10px 0 0;
     }
 }
 
@@ -226,7 +223,7 @@
         .block {
             &:extend(.blocks-2columns all);
             &.login {
-                .actions.toolbar {
+                .actions-toolbar {
                     > .primary {
                         margin-bottom: 0;
                         margin-right: 30px;
@@ -260,7 +257,8 @@
 
     // My account
     .account.layout-2-left {
-        .column.sidebar {
+        .sidebar-main,
+        .sidebar-additional {
             width: 22.3%;
         }
         .column.main {

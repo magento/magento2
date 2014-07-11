@@ -29,7 +29,7 @@
  */
 /** @var $this \Magento\Checkout\Block\Onepage\Login */
 ?>
-<div class="step login wrapper">
+<div class="login-wrapper">
 <?php echo $this->getChildHtml('login_before')?>
 <div class="block customer login">
     <div class="title"><strong><?php echo __('Login') ?></strong></div>
@@ -55,7 +55,7 @@
                     </div>
                 </div>
                 <?php echo $this->getChildHtml('form_additional_info'); ?>
-                <div class="actions toolbar">
+                <div class="actions-toolbar">
                     <input name="context" type="hidden" value="checkout" />
                     <div class="primary">
                         <button type="submit" class="action login primary" data-action="checkout-method-login"><span><?php echo __('Login') ?></span></button>
@@ -113,7 +113,7 @@
         <?php else: ?>
             <input type="hidden" name="checkout_method" id="login:register" value="register" checked="checked" />
         <?php endif; ?>
-        <div class="actions toolbar">
+        <div class="actions-toolbar">
             <div class="primary">
                 <?php if ($this->isAllowedGuestCheckout()): ?>
                     <button data-role="opc-continue" id="onepage-guest-register-button" type="button" class="action continue primary" data-checkout='{"isGuestCheckoutAllowed":true}'><span><?php echo __('Continue') ?></span></button>

@@ -70,13 +70,16 @@ class Page extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
      */
     const NOROUTE_PAGE_ID = 'no-route';
 
-    /**
+    /**#@+
      * Page's Statuses
      */
     const STATUS_ENABLED = 1;
-
     const STATUS_DISABLED = 0;
+    /**#@-*/
 
+    /**
+     * CMS page cache tag
+     */
     const CACHE_TAG = 'cms_page';
 
     /**

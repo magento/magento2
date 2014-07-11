@@ -87,17 +87,16 @@ abstract class AbstractAdapter implements AdapterInterface
             );
         }
         if (!isset($this->_phrases[$phrase])) {
-            $quote = '';
-            if ($this->_isFirstAndLastCharIsQuote($phrase)) {
-                $quote = $phrase[0];
-                $phrase = $this->_stripFirstAndLastChar($phrase);
+            $enclosureCharacter = $this->getEnclosureCharacter($phrase);
+            if (!empty($enclosureCharacter)) {
+                $phrase = $this->trimEnclosure($phrase);
             }
 
             $this->_phrases[$phrase] = array(
                 'phrase' => $phrase,
                 'file' => $this->_file,
                 'line' => $line,
-                'quote' => $quote
+                'quote' => $enclosureCharacter
             );
         }
     }
@@ -121,9 +120,42 @@ abstract class AbstractAdapter implements AdapterInterface
      */
     protected function _isFirstAndLastCharIsQuote($phrase)
     {
-        return ($phrase[0] == Phrase::QUOTE_DOUBLE ||
-            $phrase[0] == Phrase::QUOTE_SINGLE) && $phrase[0] == $phrase[strlen(
-                $phrase
-            ) - 1];
+        $firstCharacter = $phrase[0];
+        $lastCharacter = $phrase[strlen($phrase) - 1];
+        return $this->isQuote($firstCharacter) && $firstCharacter == $lastCharacter;
+    }
+
+    /**
+     * Get enclosing character if any
+     *
+     * @param string $phrase
+     * @return string
+     */
+    protected function getEnclosureCharacter($phrase)
+    {
+        $quote = '';
+        if ($this->_isFirstAndLastCharIsQuote($phrase)) {
+            $quote = $phrase[0];
+        }
+
+        return $quote;
+    }
+
+    /**
+     * @param string $phrase
+     * @return string
+     */
+    protected function trimEnclosure($phrase)
+    {
+        return $this->_stripFirstAndLastChar($phrase);
+    }
+
+    /**
+     * @param string $char
+     * @return bool
+     */
+    protected function isQuote($char)
+    {
+        return in_array($char, [Phrase::QUOTE_DOUBLE, Phrase::QUOTE_SINGLE]);
     }
 }

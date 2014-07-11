@@ -51,7 +51,7 @@ class AssertRoleInGrid extends AbstractConstraint
         UserRoleIndex $rolePage,
         AdminUserRole $role
     ) {
-        $filter = ['role_name' => $role->getRoleName()];
+        $filter = ['rolename' => $role->getRoleName()];
         $rolePage->open();
         \PHPUnit_Framework_Assert::assertTrue(
             $rolePage->getRoleGrid()->isRowVisible($filter),

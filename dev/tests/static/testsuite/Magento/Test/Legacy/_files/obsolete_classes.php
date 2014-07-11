@@ -2701,6 +2701,18 @@ return array(
         'Magento\Bundle\Pricing\Price\BasePrice',
         'Magento\Catalog\Pricing\Price\BasePrice'
     ],
-    ['\Magento\Bundle\Pricing\Price\BasePriceInterface'],
-    ['\Magento\Paypal\Block\PayflowExpress\Shortcut']
+    ['Magento\Bundle\Pricing\Price\BasePriceInterface'],
+    ['Magento\Banner\Helper\Data'],
+    ['Magento\Cms\Helper\Data'],
+    ['Magento\Cron\Helper\Data'],
+    ['Magento\Email\Helper\Data'],
+    ['Magento\GiftMessage\Helper\Data'],
+    ['Magento\Index\Helper\Data'],
+    ['Magento\Install\Helper\Data'],
+    ['Magento\Log\Helper\Data'],
+    ['Magento\Ogone\Helper\Data'],
+    ['Magento\Rule\Helper\Data'],
+    ['Magento\Theme\Helper\Data'],
+    ['Magento\Widget\Helper\Data'],
+    ['Magento\SalesArchive\Block\Adminhtml\Sales\Order\Grid\Massaction'],
 );

@@ -67,4 +67,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $groups = $this->_model->getGroups();
         $this->assertEquals($expected, $groups);
     }
+
+    protected function tearDown()
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var $cache \Magento\Framework\App\Cache */
+        $cache = $objectManager->create('Magento\Framework\App\Cache');
+        $cache->clean();
+    }
 }

@@ -427,6 +427,7 @@
         <attribute_set_id>
             <attribute_code>attribute_set_id</attribute_code>
             <backend_type>virtual</backend_type>
+            <group>product-details</group>
         </attribute_set_id>
         <qty>
             <attribute_code>qty</attribute_code>

@@ -27,11 +27,11 @@
 <?php if (!$_shippingRateGroups): ?>
     <p><?php echo __('Sorry, no quotes are available for this order at this time.') ?></p>
 <?php else: ?>
-    <dl class="items methods shipping">
+    <dl class="items methods-shipping">
     <?php $shippingCodePrice = array(); ?>
     <?php $_sole = count($_shippingRateGroups) == 1; foreach ($_shippingRateGroups as $code => $_rates): ?>
-        <dt class="item title <?php echo $code ?>"><?php echo $this->escapeHtml($this->getCarrierName($code)) ?></dt>
-        <dd class="item content <?php echo $code ?>">
+        <dt class="item-title <?php echo $code ?>"><?php echo $this->escapeHtml($this->getCarrierName($code)) ?></dt>
+        <dd class="item-content <?php echo $code ?>">
             <?php $_sole = $_sole && count($_rates) == 1; foreach ($_rates as $_rate): ?>
                 <?php $shippingCodePrice[] = '"'.$_rate->getCode().'":'.(float)$_rate->getPrice(); ?>
                 <div class="field choice">

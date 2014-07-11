@@ -22,6 +22,8 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Tax\Model;
+
 /**
  * Tax class model
  *
@@ -31,11 +33,7 @@
  * @method \Magento\Tax\Model\ClassModel setClassName(string $value)
  * @method string getClassType()
  * @method \Magento\Tax\Model\ClassModel setClassType(string $value)
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Tax\Model;
-
 class ClassModel extends \Magento\Framework\Model\AbstractModel
 {
     /**
@@ -87,7 +85,7 @@ class ClassModel extends \Magento\Framework\Model\AbstractModel
      * @return bool
      * @throws \Magento\Framework\Model\Exception
      */
-    public function checkClassCanBeDeleted()
+    protected function checkClassCanBeDeleted()
     {
         if (!$this->getId()) {
             throw new \Magento\Framework\Model\Exception(__('This class no longer exists.'));
@@ -113,5 +111,17 @@ class ClassModel extends \Magento\Framework\Model\AbstractModel
         }
 
         return true;
+    }
+
+    /**
+     * Validate tax class can be deleted
+     *
+     * @return $this
+     * @throws \Magento\Framework\Model\Exception
+     */
+    protected function _beforeDelete()
+    {
+        $this->checkClassCanBeDeleted();
+        return parent::_beforeDelete();
     }
 }

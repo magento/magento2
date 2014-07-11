@@ -31,27 +31,25 @@ class CssTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Framework\ObjectManager|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_objectManager;
 
-    protected function setUp()
-    {
-        $this->_model = $this->getMock(
-            'Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Css',
-            array('_getCurrentTheme'),
-            $this->_prepareModelArguments(),
-            '',
-            true
-        );
-    }
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $urlBuilder;
 
     /**
-     * @return array
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function _prepareModelArguments()
+    protected $urlCoder;
+
+    protected function setUp()
     {
         $this->_objectManager = $this->getMock('Magento\Framework\ObjectManager');
+        $this->urlBuilder = $this->getMock('Magento\Backend\Model\Url', [], [], '', false);
+        $this->urlCoder = $this->getMock('Magento\Framework\Encryption\UrlCoder', [], [], '', false);
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $constructArguments = $objectManagerHelper->getConstructArguments(
@@ -60,21 +58,24 @@ class CssTest extends \PHPUnit_Framework_TestCase
                 'formFactory' => $this->getMock('Magento\Framework\Data\FormFactory', array(), array(), '', false),
                 'objectManager' => $this->_objectManager,
                 'uploaderService' => $this->getMock(
-                    'Magento\Theme\Model\Uploader\Service',
-                    array(),
-                    array(),
-                    '',
-                    false
-                ),
-                'urlBuilder' => $this->getMock('Magento\Backend\Model\Url', array(), array(), '', false)
+                        'Magento\Theme\Model\Uploader\Service',
+                        array(),
+                        array(),
+                        '',
+                        false
+                    ),
+                'urlBuilder' => $this->urlBuilder,
+                'urlCoder' => $this->urlCoder
             )
         );
-        return $constructArguments;
-    }
 
-    protected function tearDown()
-    {
-        unset($this->_model);
+        $this->_model = $this->getMock(
+            'Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Css',
+            array('_getCurrentTheme'),
+            $constructArguments,
+            '',
+            true
+        );
     }
 
     public function testGetUploadCssFileNote()
@@ -140,5 +141,19 @@ class CssTest extends \PHPUnit_Framework_TestCase
         $method = $class->getMethod($name);
         $method->setAccessible(true);
         return $method;
+    }
+
+    /**
+     * @covers \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Css::getDownloadUrl
+     */
+    public function testGetterDownloadUrl()
+    {
+        $fileId = 1;
+        $themeId = 1;
+        $this->urlCoder->expects($this->atLeastOnce())->method('encode')->with($fileId)
+            ->will($this->returnValue('encoded'));
+        $this->urlBuilder->expects($this->atLeastOnce())->method('getUrl')
+            ->with($this->anything(), ['theme_id' => $themeId, 'file' => 'encoded']);
+        $this->_model->getDownloadUrl($fileId, $themeId);
     }
 }

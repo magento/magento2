@@ -85,7 +85,12 @@ class ServiceLocator
                 $parserContextual->addAdapter($type, $adapter);
             }
 
-            self::$_dictionaryGenerator = new Dictionary\Generator($parser, $parserContextual, self::_getFactory());
+            self::$_dictionaryGenerator = new Dictionary\Generator(
+                $parser,
+                $parserContextual,
+                self::_getFactory(),
+                new Dictionary\Options\ResolverFactory
+            );
         }
         return self::$_dictionaryGenerator;
     }

@@ -63,7 +63,7 @@ class AssertCategoryPage extends AbstractConstraint
         $product = $fixtureFactory->createByCode(
             'catalogProductSimple',
             [
-                'dataSet' => 'product_without_category',
+                'dataSet' => 'default',
                 'data' => [
                     'category_ids' => [
                         'category' => $initialCategory

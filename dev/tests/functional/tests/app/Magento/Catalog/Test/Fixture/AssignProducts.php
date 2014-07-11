@@ -41,9 +41,9 @@ class AssignProducts extends Product
         parent::__construct($configuration, $placeholders);
 
         $this->_placeholders[$this->assignType . '_simple::getProductSku'] = array($this, 'productProvider');
-        $this->_placeholders[$this->assignType . '_simple::getProductName'] = array($this, 'productProvider');
+        $this->_placeholders[$this->assignType . '_simple::getName'] = array($this, 'productProvider');
         $this->_placeholders[$this->assignType . '_configurable::getProductSku'] = array($this, 'productProvider');
-        $this->_placeholders[$this->assignType . '_configurable::getProductName'] = array($this, 'productProvider');
+        $this->_placeholders[$this->assignType . '_configurable::getName'] = array($this, 'productProvider');
     }
 
     /**
@@ -62,11 +62,11 @@ class AssignProducts extends Product
                     'value' => array(
                         'product_1' => array(
                             'sku' => '%' . $this->assignType . '_simple::getProductSku%',
-                            'name' => '%' . $this->assignType . '_simple::getProductName%'
+                            'name' => '%' . $this->assignType . '_simple::getName%'
                         ),
                         'product_2' => array(
                             'sku' => '%' . $this->assignType . '_configurable::getProductSku%',
-                            'name' => '%' . $this->assignType . '_configurable::getProductName%'
+                            'name' => '%' . $this->assignType . '_configurable::getName%'
                         )
                     ),
                     'group' => $type::GROUP

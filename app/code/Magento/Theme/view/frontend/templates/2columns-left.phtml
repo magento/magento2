@@ -41,7 +41,7 @@ $bodyCss = $this->getBodyClass() ? $this->getBodyClass() : '';
       <?php echo $this->getAddAttribute(); ?>
       data-mage-init='{"loaderAjax": {}, "loader": {}}'>
     <?php echo $this->getChildHtml('after_body_start') ?>
-    <div class="page wrapper">
+    <div class="page-wrapper">
         <?php echo $this->getChildHtml('global_notices') ?>
         <?php echo $this->getChildHtml('header_container') ?>
         <?php echo $this->getChildHtml('page_top') ?>
@@ -51,8 +51,11 @@ $bodyCss = $this->getBodyClass() ? $this->getBodyClass() : '';
                 <?php
                     echo $this->getChildHtml('main');
                     // Inside of <php> to avoid spaces between tags
-                    echo '<div class="column left sidebar">';
-                    echo $this->getChildHtml('left');
+                    echo '<div class="sidebar sidebar-main">';
+                    echo $this->getChildHtml('sidebar_main');
+                    echo '</div>';
+                    echo '<div class="sidebar sidebar-additional">';
+                    echo $this->getChildHtml('sidebar_additional');
                     echo '</div>';
                 ?>
             </div>

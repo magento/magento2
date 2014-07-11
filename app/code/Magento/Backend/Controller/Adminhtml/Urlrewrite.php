@@ -30,38 +30,140 @@ use Magento\Framework\Model\Exception;
 
 /**
  * URL rewrite adminhtml controller
- *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Urlrewrite extends Action
 {
+    /**
+     * Default id mode key
+     */
     const ID_MODE = 'id';
 
+    /**
+     * Product mode key
+     */
     const PRODUCT_MODE = 'product';
 
+    /**
+     * Category mode key
+     */
     const CATEGORY_MODE = 'category';
 
+    /**
+     * CMS mode key
+     */
     const CMS_PAGE_MODE = 'cms_page';
 
     /**
      * @var Product
      */
-    private $_product;
+    protected $product;
 
     /**
      * @var Category
      */
-    private $_category;
+    protected $category;
 
     /**
      * @var \Magento\Cms\Model\Page
      */
-    private $_cmsPage;
+    protected $cmsPage;
 
     /**
      * @var \Magento\UrlRewrite\Model\UrlRewrite
      */
-    private $_urlRewrite;
+    protected $urlRewrite;
+
+    /**
+     * @var \Magento\Catalog\Model\ProductFactory
+     */
+    protected $productFactory;
+
+    /**
+     * @var \Magento\Backend\Block\Urlrewrite\Selector
+     */
+    protected $rewriteSelector;
+
+    /**
+     * @var \Magento\Backend\Block\Urlrewrite\Catalog\Category\Tree
+     */
+    protected $categoryTree;
+
+    /**
+     * @var \Magento\UrlRewrite\Helper\UrlRewrite
+     */
+    protected $rewriteHelper;
+
+    /**
+     * @var \Magento\Cms\Model\Page\UrlrewriteFactory
+     */
+    protected $cmsRewriteFactory;
+
+    /**
+     * @var \Magento\Catalog\Model\CategoryFactory
+     */
+    protected $categoryFactory;
+
+    /**
+     * @var \Magento\UrlRewrite\Model\UrlRewriteFactory
+     */
+    protected $urlRewriteFactory;
+
+    /**
+     * @var \Magento\Cms\Model\PageFactory
+     */
+    protected $pageFactory;
+
+    /**
+     * @var \Magento\Catalog\Model\Url
+     */
+    protected $catalogUrl;
+
+    /**
+     * @var \Magento\Catalog\Model\Resource\UrlFactory
+     */
+    protected $catalogUrlFactory;
+
+    /**
+     * @param Action\Context $context
+     * @param \Magento\Catalog\Model\ProductFactory $productFactory
+     * @param \Magento\Backend\Block\Urlrewrite\Selector $rewriteSelector
+     * @param \Magento\Backend\Block\Urlrewrite\Catalog\Category\Tree $categoryTree
+     * @param \Magento\UrlRewrite\Helper\UrlRewrite $rewriteHelper
+     * @param \Magento\Cms\Model\Page\UrlrewriteFactory $cmsRewriteFactory
+     * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
+     * @param \Magento\UrlRewrite\Model\UrlRewriteFactory $urlRewriteFactory
+     * @param \Magento\Cms\Model\PageFactory $pageFactory
+     * @param \Magento\Catalog\Model\Url $catalogUrl
+     * @param \Magento\Catalog\Model\Resource\UrlFactory $catalogUrlFactory
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Catalog\Model\ProductFactory $productFactory,
+        \Magento\Backend\Block\Urlrewrite\Selector $rewriteSelector,
+        \Magento\Backend\Block\Urlrewrite\Catalog\Category\Tree $categoryTree,
+        \Magento\UrlRewrite\Helper\UrlRewrite $rewriteHelper,
+        \Magento\Cms\Model\Page\UrlrewriteFactory $cmsRewriteFactory,
+        \Magento\Catalog\Model\CategoryFactory $categoryFactory,
+        \Magento\UrlRewrite\Model\UrlRewriteFactory $urlRewriteFactory,
+        \Magento\Cms\Model\PageFactory $pageFactory,
+        \Magento\Catalog\Model\Url $catalogUrl,
+        \Magento\Catalog\Model\Resource\UrlFactory $catalogUrlFactory
+    ) {
+        $this->productFactory = $productFactory;
+        $this->rewriteSelector = $rewriteSelector;
+        $this->categoryTree = $categoryTree;
+        $this->rewriteHelper = $rewriteHelper;
+        $this->cmsRewriteFactory = $cmsRewriteFactory;
+        $this->categoryFactory = $categoryFactory;
+        $this->urlRewriteFactory = $urlRewriteFactory;
+        $this->pageFactory = $pageFactory;
+        $this->catalogUrl = $catalogUrl;
+        $this->catalogUrlFactory = $catalogUrlFactory;
+        parent::__construct($context);
+    }
+
 
     /**
      * Show URL rewrites index page
@@ -90,7 +192,7 @@ class Urlrewrite extends Action
         $this->_view->loadLayout();
         $this->_setActiveMenu('Magento_Catalog::catalog_urlrewrite');
 
-        $mode = $this->_getMode();
+        $mode = $this->getMode();
 
         switch ($mode) {
             case self::PRODUCT_MODE:
@@ -99,10 +201,10 @@ class Urlrewrite extends Action
                     '',
                     array(
                         'data' => array(
-                            'category' => $this->_getCategory(),
-                            'product' => $this->_getProduct(),
+                            'category' => $this->getCategory(),
+                            'product' => $this->getProduct(),
                             'is_category_mode' => $this->getRequest()->has('category'),
-                            'url_rewrite' => $this->_getUrlRewrite()
+                            'url_rewrite' => $this->getUrlRewrite()
                         )
                     )
                 );
@@ -112,7 +214,7 @@ class Urlrewrite extends Action
                     'Magento\Backend\Block\Urlrewrite\Catalog\Category\Edit',
                     '',
                     array(
-                        'data' => array('category' => $this->_getCategory(), 'url_rewrite' => $this->_getUrlRewrite())
+                        'data' => array('category' => $this->getCategory(), 'url_rewrite' => $this->getUrlRewrite())
                     )
                 );
                 break;
@@ -121,7 +223,7 @@ class Urlrewrite extends Action
                     'Magento\Backend\Block\Urlrewrite\Cms\Page\Edit',
                     '',
                     array(
-                        'data' => array('cms_page' => $this->_getCmsPage(), 'url_rewrite' => $this->_getUrlRewrite())
+                        'data' => array('cms_page' => $this->getCmsPage(), 'url_rewrite' => $this->getUrlRewrite())
                     )
                 );
                 break;
@@ -130,7 +232,7 @@ class Urlrewrite extends Action
                 $editBlock = $this->_view->getLayout()->createBlock(
                     'Magento\Backend\Block\Urlrewrite\Edit',
                     '',
-                    array('data' => array('url_rewrite' => $this->_getUrlRewrite()))
+                    array('data' => array('url_rewrite' => $this->getUrlRewrite()))
                 );
                 break;
         }
@@ -147,18 +249,18 @@ class Urlrewrite extends Action
      *
      * @return string
      */
-    private function _getMode()
+    protected function getMode()
     {
-        if ($this->_getProduct()->getId() || $this->getRequest()->has('product')) {
+        if ($this->getProduct()->getId() || $this->getRequest()->has('product')) {
             $mode = self::PRODUCT_MODE;
-        } elseif ($this->_getCategory()->getId() || $this->getRequest()->has('category')) {
+        } elseif ($this->getCategory()->getId() || $this->getRequest()->has('category')) {
             $mode = self::CATEGORY_MODE;
-        } elseif ($this->_getCmsPage()->getId() || $this->getRequest()->has('cms_page')) {
+        } elseif ($this->getCmsPage()->getId() || $this->getRequest()->has('cms_page')) {
             $mode = self::CMS_PAGE_MODE;
         } elseif ($this->getRequest()->has('id')) {
             $mode = self::ID_MODE;
         } else {
-            $mode = $this->_objectManager->get('Magento\Backend\Block\Urlrewrite\Selector')->getDefaultMode();
+            $mode = $this->rewriteSelector->getDefaultMode();
         }
         return $mode;
     }
@@ -183,15 +285,7 @@ class Urlrewrite extends Action
     public function categoriesJsonAction()
     {
         $categoryId = $this->getRequest()->getParam('id', null);
-        $this->getResponse()->representJson(
-            $this->_objectManager->get(
-                'Magento\Backend\Block\Urlrewrite\Catalog\Category\Tree'
-            )->getTreeArray(
-                $categoryId,
-                true,
-                1
-            )
-        );
+        $this->getResponse()->setBody($this->categoryTree->getTreeArray($categoryId, true, 1));
     }
 
     /**
@@ -213,30 +307,23 @@ class Urlrewrite extends Action
      */
     public function saveAction()
     {
-        if ($data = $this->getRequest()->getPost()) {
-            /** @var $session \Magento\Backend\Model\Session */
-            $session = $this->_objectManager->get('Magento\Backend\Model\Session');
+        $data = $this->getRequest()->getPost();
+        if ($data) {
             try {
                 // set basic urlrewrite data
                 /** @var $model \Magento\UrlRewrite\Model\UrlRewrite */
-                $model = $this->_getUrlRewrite();
+                $model = $this->getUrlRewrite();
 
                 // Validate request path
                 $requestPath = $this->getRequest()->getParam('request_path');
-                $this->_objectManager->get('Magento\UrlRewrite\Helper\UrlRewrite')->validateRequestPath($requestPath);
+                $this->rewriteHelper->validateRequestPath($requestPath);
 
                 // Proceed and save request
-                $model->setIdPath(
-                    $this->getRequest()->getParam('id_path')
-                )->setTargetPath(
-                    $this->getRequest()->getParam('target_path')
-                )->setOptions(
-                    $this->getRequest()->getParam('options')
-                )->setDescription(
-                    $this->getRequest()->getParam('description')
-                )->setRequestPath(
-                    $requestPath
-                );
+                $model->setIdPath($this->getRequest()->getParam('id_path'))
+                    ->setTargetPath($this->getRequest()->getParam('target_path'))
+                    ->setOptions($this->getRequest()->getParam('options'))
+                    ->setDescription($this->getRequest()->getParam('description'))
+                    ->setRequestPath($requestPath);
 
                 if (!$model->getId()) {
                     $model->setIsSystem(0);
@@ -245,22 +332,22 @@ class Urlrewrite extends Action
                     $model->setStoreId($this->getRequest()->getParam('store_id', 0));
                 }
 
-                $this->_onUrlRewriteSaveBefore($model);
+                $this->onUrlRewriteSaveBefore($model);
 
                 // save and redirect
                 $model->save();
 
-                $this->_onUrlRewriteSaveAfter($model);
+                $this->onUrlRewriteSaveAfter($model);
 
                 $this->messageManager->addSuccess(__('The URL Rewrite has been saved.'));
                 $this->_redirect('adminhtml/*/');
                 return;
             } catch (Exception $e) {
                 $this->messageManager->addError($e->getMessage());
-                $session->setUrlrewriteData($data);
+                $this->_session->setUrlrewriteData($data);
             } catch (\Exception $e) {
                 $this->messageManager->addException($e, __('An error occurred while saving URL Rewrite.'));
-                $session->setUrlrewriteData($data);
+                $this->_session->setUrlrewriteData($data);
             }
         }
         $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($this->getUrl('*')));
@@ -272,10 +359,10 @@ class Urlrewrite extends Action
      * @param \Magento\UrlRewrite\Model\UrlRewrite $model
      * @return void
      */
-    protected function _onUrlRewriteSaveBefore($model)
+    protected function onUrlRewriteSaveBefore($model)
     {
-        $this->_handleCatalogUrlRewrite($model);
-        $this->_handleCmsPageUrlRewrite($model);
+        $this->handleCatalogUrlRewrite($model);
+        $this->handleCmsPageUrlRewrite($model);
     }
 
     /**
@@ -284,9 +371,9 @@ class Urlrewrite extends Action
      * @param \Magento\UrlRewrite\Model\UrlRewrite $model
      * @return void
      */
-    protected function _onUrlRewriteSaveAfter($model)
+    protected function onUrlRewriteSaveAfter($model)
     {
-        $this->_handleCmsPageUrlRewriteSave($model);
+        $this->handleCmsPageUrlRewriteSave($model);
     }
 
     /**
@@ -296,22 +383,20 @@ class Urlrewrite extends Action
      * @return void
      * @throws Exception
      */
-    protected function _handleCatalogUrlRewrite($model)
+    protected function handleCatalogUrlRewrite($model)
     {
-        $product = $this->_getInitializedProduct($model);
-        $category = $this->_getInitializedCategory($model);
+        $product = $this->getInitializedProduct($model);
+        $category = $this->getInitializedCategory($model);
 
         if ($product || $category) {
-            /** @var $catalogUrlModel \Magento\Catalog\Model\Url */
-            $catalogUrlModel = $this->_objectManager->get('Magento\Catalog\Model\Url');
-            $idPath = $catalogUrlModel->generatePath('id', $product, $category);
+            $idPath = $this->catalogUrl->generatePath('id', $product, $category);
             $model->setIdPath($idPath);
 
             // if redirect specified try to find friendly URL
             $generateTarget = true;
-            if ($this->_objectManager->get('Magento\UrlRewrite\Helper\UrlRewrite')->hasRedirectOptions($model)) {
+            if ($this->rewriteHelper->hasRedirectOptions($model)) {
                 /** @var $rewriteResource \Magento\Catalog\Model\Resource\Url */
-                $rewriteResource = $this->_objectManager->create('Magento\Catalog\Model\Resource\Url');
+                $rewriteResource = $this->catalogUrlFactory->create();
                 /** @var $rewrite \Magento\UrlRewrite\Model\UrlRewrite */
                 $rewrite = $rewriteResource->getRewriteByIdPath($idPath, $model->getStoreId());
                 if (!$rewrite) {
@@ -328,7 +413,7 @@ class Urlrewrite extends Action
                 }
             }
             if ($generateTarget) {
-                $model->setTargetPath($catalogUrlModel->generatePath('target', $product, $category));
+                $model->setTargetPath($this->catalogUrl->generatePath('target', $product, $category));
             }
         }
     }
@@ -339,10 +424,10 @@ class Urlrewrite extends Action
      * @param \Magento\UrlRewrite\Model\UrlRewrite $model
      * @return Product|null
      */
-    private function _getInitializedProduct($model)
+    protected function getInitializedProduct($model)
     {
         /** @var $product Product */
-        $product = $this->_getProduct();
+        $product = $this->getProduct();
         if ($product->getId()) {
             $model->setProductId($product->getId());
         } else {
@@ -358,10 +443,10 @@ class Urlrewrite extends Action
      * @param \Magento\UrlRewrite\Model\UrlRewrite $model
      * @return Category|null
      */
-    private function _getInitializedCategory($model)
+    protected function getInitializedCategory($model)
     {
         /** @var $category Category */
-        $category = $this->_getCategory();
+        $category = $this->getCategory();
         if ($category->getId()) {
             $model->setCategoryId($category->getId());
         } else {
@@ -377,24 +462,24 @@ class Urlrewrite extends Action
      * @return void
      * @throws \Magento\Framework\Model\Exception
      */
-    private function _handleCmsPageUrlRewrite($model)
+    protected function handleCmsPageUrlRewrite($model)
     {
         /** @var $cmsPage \Magento\Cms\Model\Page */
-        $cmsPage = $this->_getCmsPage();
+        $cmsPage = $this->getCmsPage();
         if (!$cmsPage->getId()) {
             return;
         }
 
         /** @var $cmsPageUrlRewrite \Magento\Cms\Model\Page\Urlrewrite */
-        $cmsPageUrlRewrite = $this->_objectManager->create('Magento\Cms\Model\Page\Urlrewrite');
+        $cmsPageUrlRewrite = $this->cmsRewriteFactory->create();
         $idPath = $cmsPageUrlRewrite->generateIdPath($cmsPage);
         $model->setIdPath($idPath);
 
         // if redirect specified try to find friendly URL
         $generateTarget = true;
-        if ($this->_objectManager->get('Magento\UrlRewrite\Helper\UrlRewrite')->hasRedirectOptions($model)) {
+        if ($model->getId() && $this->rewriteHelper->hasRedirectOptions($model)) {
             /** @var $rewriteResource \Magento\Catalog\Model\Resource\Url */
-            $rewriteResource = $this->_objectManager->create('Magento\Catalog\Model\Resource\Url');
+            $rewriteResource = $this->catalogUrlFactory->create();
             /** @var $rewrite \Magento\UrlRewrite\Model\UrlRewrite */
             $rewrite = $rewriteResource->getRewriteByIdPath($idPath, $model->getStoreId());
             if (!$rewrite) {
@@ -416,16 +501,16 @@ class Urlrewrite extends Action
      * @param \Magento\UrlRewrite\Model\UrlRewrite $model
      * @return void
      */
-    private function _handleCmsPageUrlRewriteSave($model)
+    protected function handleCmsPageUrlRewriteSave($model)
     {
         /** @var $cmsPage \Magento\Cms\Model\Page */
-        $cmsPage = $this->_getCmsPage();
+        $cmsPage = $this->getCmsPage();
         if (!$cmsPage->getId()) {
             return;
         }
 
         /** @var $cmsRewrite \Magento\Cms\Model\Page\Urlrewrite */
-        $cmsRewrite = $this->_objectManager->create('Magento\Cms\Model\Page\Urlrewrite');
+        $cmsRewrite = $this->cmsRewriteFactory->create();
         $cmsRewrite->load($model->getId(), 'url_rewrite_id');
         if (!$cmsRewrite->getId()) {
             $cmsRewrite->setUrlRewriteId($model->getId());
@@ -441,13 +526,13 @@ class Urlrewrite extends Action
      */
     public function deleteAction()
     {
-        if ($this->_getUrlRewrite()->getId()) {
+        if ($this->getUrlRewrite()->getId()) {
             try {
-                $this->_getUrlRewrite()->delete();
+                $this->getUrlRewrite()->delete();
                 $this->messageManager->addSuccess(__('The URL Rewrite has been deleted.'));
             } catch (\Exception $e) {
                 $this->messageManager->addException($e, __('An error occurred while deleting URL Rewrite.'));
-                $this->_redirect('adminhtml/*/edit/', array('id' => $this->_getUrlRewrite()->getId()));
+                $this->_redirect('adminhtml/*/edit/', array('id' => $this->getUrlRewrite()->getId()));
                 return;
             }
         }
@@ -469,21 +554,21 @@ class Urlrewrite extends Action
      *
      * @return Category
      */
-    private function _getCategory()
+    protected function getCategory()
     {
-        if (!$this->_category) {
-            $this->_category = $this->_objectManager->create('Magento\Catalog\Model\Category');
-            $categoryId = (int)$this->getRequest()->getParam('category', 0);
+        if (!$this->category) {
+            $this->category = $this->categoryFactory->create();
+            $categoryId = (int) $this->getRequest()->getParam('category', 0);
 
-            if (!$categoryId && $this->_getUrlRewrite()->getId()) {
-                $categoryId = $this->_getUrlRewrite()->getCategoryId();
+            if (!$categoryId && $this->getUrlRewrite()->getId()) {
+                $categoryId = $this->getUrlRewrite()->getCategoryId();
             }
 
             if ($categoryId) {
-                $this->_category->load($categoryId);
+                $this->category->load($categoryId);
             }
         }
-        return $this->_category;
+        return $this->category;
     }
 
     /**
@@ -491,21 +576,21 @@ class Urlrewrite extends Action
      *
      * @return Product
      */
-    private function _getProduct()
+    protected function getProduct()
     {
-        if (!$this->_product) {
-            $this->_product = $this->_objectManager->create('Magento\Catalog\Model\Product');
-            $productId = (int)$this->getRequest()->getParam('product', 0);
+        if (!$this->product) {
+            $this->product = $this->productFactory->create();
+            $productId = (int) $this->getRequest()->getParam('product', 0);
 
-            if (!$productId && $this->_getUrlRewrite()->getId()) {
-                $productId = $this->_getUrlRewrite()->getProductId();
+            if (!$productId && $this->getUrlRewrite()->getId()) {
+                $productId = $this->getUrlRewrite()->getProductId();
             }
 
             if ($productId) {
-                $this->_product->load($productId);
+                $this->product->load($productId);
             }
         }
-        return $this->_product;
+        return $this->product;
     }
 
     /**
@@ -513,25 +598,25 @@ class Urlrewrite extends Action
      *
      * @return \Magento\Cms\Model\Page
      */
-    private function _getCmsPage()
+    protected function getCmsPage()
     {
-        if (!$this->_cmsPage) {
-            $this->_cmsPage = $this->_objectManager->create('Magento\Cms\Model\Page');
-            $cmsPageId = (int)$this->getRequest()->getParam('cms_page', 0);
+        if (!$this->cmsPage) {
+            $this->cmsPage = $this->pageFactory->create();
+            $cmsPageId = (int) $this->getRequest()->getParam('cms_page', 0);
 
-            if (!$cmsPageId && $this->_getUrlRewrite()->getId()) {
-                $urlRewriteId = $this->_getUrlRewrite()->getId();
+            if (!$cmsPageId && $this->getUrlRewrite()->getId()) {
+                $urlRewriteId = $this->getUrlRewrite()->getId();
                 /** @var $cmsUrlRewrite \Magento\Cms\Model\Page\Urlrewrite */
-                $cmsUrlRewrite = $this->_objectManager->create('Magento\Cms\Model\Page\Urlrewrite');
+                $cmsUrlRewrite = $this->cmsRewriteFactory->create();
                 $cmsUrlRewrite->load($urlRewriteId, 'url_rewrite_id');
                 $cmsPageId = $cmsUrlRewrite->getCmsPageId();
             }
 
             if ($cmsPageId) {
-                $this->_cmsPage->load($cmsPageId);
+                $this->cmsPage->load($cmsPageId);
             }
         }
-        return $this->_cmsPage;
+        return $this->cmsPage;
     }
 
     /**
@@ -539,16 +624,16 @@ class Urlrewrite extends Action
      *
      * @return \Magento\UrlRewrite\Model\UrlRewrite
      */
-    private function _getUrlRewrite()
+    protected function getUrlRewrite()
     {
-        if (!$this->_urlRewrite) {
-            $this->_urlRewrite = $this->_objectManager->create('Magento\UrlRewrite\Model\UrlRewrite');
+        if (!$this->urlRewrite) {
+            $this->urlRewrite = $this->urlRewriteFactory->create();
 
-            $urlRewriteId = (int)$this->getRequest()->getParam('id', 0);
+            $urlRewriteId = (int) $this->getRequest()->getParam('id', 0);
             if ($urlRewriteId) {
-                $this->_urlRewrite->load((int)$this->getRequest()->getParam('id', 0));
+                $this->urlRewrite->load((int) $this->getRequest()->getParam('id', 0));
             }
         }
-        return $this->_urlRewrite;
+        return $this->urlRewrite;
     }
 }

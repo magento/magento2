@@ -24,6 +24,8 @@
 namespace Magento\Sales\Model\Resource\Order;
 
 use Magento\Framework\Model\Exception;
+use Magento\Framework\App\Resource;
+use Magento\Framework\Logger;
 
 /**
  * Order status resource model
@@ -37,14 +39,33 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @var string
      */
-    protected $_labelsTable;
+    protected $labelsTable;
 
     /**
      * Status state table
      *
      * @var string
      */
-    protected $_stateTable;
+    protected $stateTable;
+
+    /**
+     * @var \Magento\Framework\Logger
+     */
+    protected $logger;
+
+    /**
+     * Class constructor
+     *
+     * @param \Magento\Framework\App\Resource $resource
+     * @param Logger $logger
+     */
+    public function __construct(
+        Resource $resource,
+        Logger $logger
+    ) {
+        $this->logger = $logger;
+        parent::__construct($resource);
+    }
 
     /**
      * Internal constructor
@@ -55,8 +76,8 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         $this->_init('sales_order_status', 'status');
         $this->_isPkAutoIncrement = false;
-        $this->_labelsTable = $this->getTable('sales_order_status_label');
-        $this->_stateTable = $this->getTable('sales_order_status_state');
+        $this->labelsTable = $this->getTable('sales_order_status_label');
+        $this->stateTable = $this->getTable('sales_order_status_state');
     }
 
     /**
@@ -74,7 +95,7 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 $this->getMainTable(),
                 array('label')
             )->join(
-                array('state_table' => $this->_stateTable),
+                array('state_table' => $this->stateTable),
                 $this->getMainTable() . '.status = state_table.status',
                 'status'
             )->where(
@@ -94,18 +115,18 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Store labels getter
      *
-     * @param \Magento\Framework\Model\AbstractModel $status
+     * @param \Magento\Sales\Model\Order\Status $status
      * @return array
      */
-    public function getStoreLabels(\Magento\Framework\Model\AbstractModel $status)
+    public function getStoreLabels(\Magento\Sales\Model\Order\Status $status)
     {
-        $select = $this->_getWriteAdapter()->select()->from(
-            $this->_labelsTable,
-            array('store_id', 'label')
-        )->where(
-            'status = ?',
-            $status->getStatus()
-        );
+        $select = $this->_getWriteAdapter()->select()
+            ->from(['ssl' => $this->labelsTable], [])
+            ->where('status = ?', $status->getStatus())
+            ->columns([
+                'store_id',
+                'label'
+            ]);
         return $this->_getReadAdapter()->fetchPairs($select);
     }
 
@@ -119,7 +140,7 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         if ($object->hasStoreLabels()) {
             $labels = $object->getStoreLabels();
-            $this->_getWriteAdapter()->delete($this->_labelsTable, array('status = ?' => $object->getStatus()));
+            $this->_getWriteAdapter()->delete($this->labelsTable, array('status = ?' => $object->getStatus()));
             $data = array();
             foreach ($labels as $storeId => $label) {
                 if (empty($label)) {
@@ -128,7 +149,7 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 $data[] = array('status' => $object->getStatus(), 'store_id' => $storeId, 'label' => $label);
             }
             if (!empty($data)) {
-                $this->_getWriteAdapter()->insertMultiple($this->_labelsTable, $data);
+                $this->_getWriteAdapter()->insertMultiple($this->labelsTable, $data);
             }
         }
         return parent::_afterSave($object);
@@ -147,13 +168,13 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         if ($isDefault) {
             $this->_getWriteAdapter()->update(
-                $this->_stateTable,
+                $this->stateTable,
                 ['is_default' => 0],
                 ['state = ?' => $state]
             );
         }
         $this->_getWriteAdapter()->insertOnDuplicate(
-            $this->_stateTable,
+            $this->stateTable,
             [
                 'status' => $status,
                 'state' => $state,
@@ -174,51 +195,104 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
      */
     public function unassignState($status, $state)
     {
-        $select = $this->_getWriteAdapter()->select()->from(
-            $this->_stateTable,
-            array('qty' => new \Zend_Db_Expr('COUNT(*)'))
-        )->where(
-            'state = ?',
-            $state
-        );
-
-        if ($this->_getWriteAdapter()->fetchOne($select) == 1) {
-            throw new Exception(__('The last status can\'t be unassigned from its current state.'));
-        }
-        $select = $this->_getWriteAdapter()->select()->from(
-            $this->_stateTable,
-            'is_default'
-        )->where(
-            'state = ?',
-            $state
-        )->where(
-            'status = ?',
-            $status
-        )->limit(
-            1
-        );
-        $isDefault = $this->_getWriteAdapter()->fetchOne($select);
-        $this->_getWriteAdapter()->delete($this->_stateTable, array('state = ?' => $state, 'status = ?' => $status));
-
-        if ($isDefault) {
-            $select = $this->_getWriteAdapter()->select()->from(
-                $this->_stateTable,
-                'status'
-            )->where(
-                'state = ?',
-                $state
-            )->limit(
-                1
+        $this->_getWriteAdapter()->beginTransaction();
+        try {
+            $isStateDefault = $this->checkIsStateDefault($state, $status);
+            $this->_getWriteAdapter()->delete(
+                $this->stateTable,
+                [
+                    'state = ?' => $state,
+                    'status = ?' => $status
+                ]
             );
-            $defaultStatus = $this->_getWriteAdapter()->fetchOne($select);
-            if ($defaultStatus) {
-                $this->_getWriteAdapter()->update(
-                    $this->_stateTable,
-                    array('is_default' => 1),
-                    array('state = ?' => $state, 'status = ?' => $defaultStatus)
-                );
+            if ($isStateDefault) {
+                $newDefaultStatus = $this->getStatusByState($state);
+                if ($newDefaultStatus) {
+                    $this->_getWriteAdapter()->update(
+                        $this->stateTable,
+                        ['is_default' => 1],
+                        [
+                            'state = ?' => $state,
+                            'status = ?' => $newDefaultStatus
+                        ]
+                    );
+                }
             }
+            $this->_getWriteAdapter()->commit();
+        } catch (\Exception $e) {
+            $this->_getWriteAdapter()->rollBack();
+            throw new Exception('Cannot unassing status from state');
         }
+
         return $this;
+    }
+
+    /**
+     * Check is this state last
+     *
+     * @param string $state
+     * @return bool
+     */
+    public function checkIsStateLast($state)
+    {
+        return (1 == $this->_getWriteAdapter()->fetchOne(
+            $this->_getWriteAdapter()->select()
+                ->from(['sss' => $this->stateTable], [])
+                ->where('state = ?', $state)
+                ->columns([new\Zend_Db_Expr('COUNT(1)')])
+        ));
+    }
+
+    /**
+     * Check is this status used in orders
+     *
+     * @param string $status
+     * @return bool
+     */
+    public function checkIsStatusUsed($status)
+    {
+        return (bool)$this->_getWriteAdapter()->fetchOne(
+            $this->_getWriteAdapter()->select()
+                ->from(['sfo' => $this->getTable('sales_flat_order')], [])
+                ->where('status = ?', $status)
+                ->limit(1)
+                ->columns([new \Zend_Db_Expr(1)])
+        );
+    }
+
+    /**
+     * Check is this pair of state and status default
+     *
+     * @param string $state
+     * @param string $status
+     * @return bool
+     */
+    protected function checkIsStateDefault($state, $status)
+    {
+        return (bool)$this->_getWriteAdapter()->fetchOne(
+            $this->_getWriteAdapter()->select()
+                ->from(['sss' => $this->stateTable], [])
+                ->where('state = ?', $state)
+                ->where('status = ?', $status)
+                ->limit(1)
+                ->columns(['is_default'])
+        );
+    }
+
+    /**
+     * Returns any possible status for state
+     *
+     * @param string $state
+     * @return string
+     */
+    protected function getStatusByState($state)
+    {
+        return (string)$this->_getWriteAdapter()->fetchOne(
+            $select = $this->_getWriteAdapter()->select()
+                ->from(['sss' => $this->stateTable, []])
+                ->where('state = ?', $state)
+                ->limit(1)
+                ->columns(['status'])
+        );
     }
 }

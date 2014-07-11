@@ -28,7 +28,8 @@ use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Options;
 
 /**
  * Class OptionField
- * Form "Text field" on tab product "Custom options"
+ *
+ * @package Magento\Catalog\Test\Block\Adminhtml\Product\Edit\CustomOptionsTab
  */
 class OptionField extends Options
 {

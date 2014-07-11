@@ -78,20 +78,14 @@ class DeleteAdminUserEntityTest extends Injectable
      */
     public function __prepare(FixtureFactory $fixtureFactory)
     {
-        $role = $fixtureFactory->createByCode('adminUserRole', ['dataSet' => 'default']);
-        $role->persist();
-        $roleId = $role->getData('role_id');
-        $adminUser = $fixtureFactory->createByCode(
+        $user = $fixtureFactory->createByCode(
             'adminUserInjectable',
-            [
-                'dataSet' => 'custom_admin',
-                'data' => ['role_id' => $roleId]
-            ]
+            ['dataSet' => 'custom_admin_with_default_role']
         );
-        $adminUser->persist();
+        $user->persist();
 
         return [
-            'adminUser' => $adminUser
+            'user' => $user
         ];
     }
 
@@ -119,21 +113,21 @@ class DeleteAdminUserEntityTest extends Injectable
     /**
      * Runs Delete User Entity test
      *
-     * @param AdminUserInjectable $adminUser
+     * @param AdminUserInjectable $user
      * @param string $isDefaultUser
      * @return void
      */
     public function testDeleteAdminUserEntity(
-        AdminUserInjectable $adminUser,
+        AdminUserInjectable $user,
         $isDefaultUser
     ) {
         $filter = [
-            'username' => $adminUser->getUsername()
+            'username' => $user->getUsername()
         ];
         //Steps
         if ($isDefaultUser == 0) {
             $this->adminAuthLogin->open();
-            $this->adminAuthLogin->getLoginBlock()->fill($adminUser);
+            $this->adminAuthLogin->getLoginBlock()->fill($user);
             $this->adminAuthLogin->getLoginBlock()->submit();
         }
         $this->userIndex->open();

@@ -1,0 +1,119 @@
+// /**
+// //  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+//  *
+//  * @category    design
+//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+//  */
+
+.opc-wrapper {
+    .gift-message {
+        > legend {
+            margin-left: 0;
+            padding: 0;
+        }
+        .field.choice {
+            font-weight: @font-weight-base;
+            margin: 0 0 20px 20px;
+            &:before {
+                display: none;
+            }
+        }
+        .activate.message {
+            display: inline-block;
+            margin: 0 0 10px;
+        }
+        .options-items {
+            background: @sidebar-background;
+            display: block;
+            margin: 20px 0 0;
+            padding: 20px 20px 20px 10px;
+            .order-title {
+                margin-top: 10px;
+                margin-bottom: 0;
+            }
+            .order-options {
+                margin: 0 0 20px 20px;
+            }
+            .block.message {
+                margin-bottom: 10px;
+            }
+            .items {
+                .list-reset-styles();
+                .item {
+                    border-bottom: @border-width-base solid @border-color-base;
+                    margin-bottom: 20px;
+                    padding-bottom: 10px;
+                    .product {
+                        .photo {
+                            margin: 10px 0;
+                        }
+                    }
+                    &:last-child {
+                        border-bottom: 0;
+                        padding-bottom: 0;
+                    }
+                }
+            }
+            .number {
+                font-size: @font-size-s;
+            }
+        }
+    }
+}
+
+.responsive(@break) when (@break = @break-point-1) {
+    .opc-wrapper {
+        .gift-message {
+            .options-items .order-options {
+                margin-left: 45px;
+            }
+            .item {
+                border-bottom: @border-width-base solid @border-color-base;
+                margin-bottom: 20px;
+                padding-bottom: 10px;
+                &:extend(.add-clearfix-desktop all);
+                .product {
+                    float: left;
+                    margin-right: 20px;
+                    .photo {
+                        margin: 10px 0;
+                    }
+                    .name {
+                        text-overflow: ellipsis;
+                        overflow: hidden;
+                        max-width: 145px;
+                    }
+                }
+                .options {
+                    overflow: hidden;
+                }
+            }
+            .price.box > .price {
+                display: block;
+            }
+        }
+        .extra-options-container {
+            .price.box {
+                font-weight: normal;
+                margin-left: 45px;
+            }
+        }
+    }
+}

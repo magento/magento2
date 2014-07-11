@@ -66,11 +66,11 @@ class CatalogCategoryView extends FrontendPage
             'strategy' => 'css selector',
         ],
         'viewBlock' => [
-            'name' => 'descriptionBlock',
+            'name' => 'viewBlock',
             'class' => 'Magento\Catalog\Test\Block\Category\View',
             'locator' => '.category.view',
             'strategy' => 'css selector',
-        ]
+        ],
     ];
 
     /**

@@ -21,3 +21,33 @@
 //  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
 //  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 //  */
+
+// Popup working with dropdown dialog
+.ui-dialog.popup {
+  width: 420px;
+  .action.close {
+    position: @popup-button-close-position;
+    ._popup-button-close-icon(
+      @popup-button-close-icon,
+      @popup-icon-font-content,
+      @popup-icon-font,
+      @popup-icon-font-size,
+      @popup-icon-font-line-height,
+      @popup-icon-font-color,
+      @popup-icon-font-color-hover,
+      @popup-icon-font-color-active,
+      @popup-icon-font-margin,
+      @popup-icon-font-vertical-align,
+      @popup-icon-font-position,
+      @popup-icon-font-text-hide
+    );
+    ._popup-button-close-reset(
+      @popup-button-close-reset
+    );
+    .css(top, @popup-button-close-position-top);
+    .css(right, @popup-button-close-position-right);
+    .css(bottom, @popup-button-close-position-bottom);
+    .css(left, @popup-button-close-position-left);
+    z-index: 1001;
+  }
+}

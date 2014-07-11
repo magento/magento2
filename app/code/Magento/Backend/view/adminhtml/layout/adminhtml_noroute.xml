@@ -27,9 +27,7 @@
     <referenceContainer name="content">
         <block class="Magento\Framework\View\Element\Text" name="content.noRoute">
             <action method="setText">
-                <argument translate="true" name="text" xsi:type="string">
-                    <![CDATA[<h1 class="page-heading">404 Error</h1><p>Page not found.</p>]]>
-                </argument>
+                <argument translate="true" name="text" xsi:type="string"><![CDATA[<h1 class="page-heading">404 Error</h1><p>Page not found.</p>]]></argument>
             </action>
         </block>
     </referenceContainer>

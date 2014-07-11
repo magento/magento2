@@ -39,11 +39,11 @@ use Mtf\Util\Protocol\CurlTransport\BackendDecorator;
 class Curl extends AbstractCurl implements CatalogProductSimpleInterface
 {
     /**
-     * Placeholder for data sent Curl
+     * Mapping values for data.
      *
      * @var array
      */
-    protected $placeholderData = [
+    protected $mappingData = [
         'manage_stock' => [
             'Yes' => 1,
             'No' => 0
@@ -54,6 +54,10 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
         'inventory_manage_stock' => [
             'Yes' => 1,
             'No' => 0
+        ],
+        'is_in_stock' => [
+            'In Stock' => 1,
+            'Out of Stock' => 0
         ],
         'quantity_and_stock_status' => [
             'In Stock' => 1,
@@ -91,43 +95,9 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
     {
         $config = $fixture->getDataConfig();
         $prefix = isset($config['input_prefix']) ? $config['input_prefix'] : null;
-        // @todo remove "if" when fixtures refactored
-        if ($fixture instanceof InjectableFixture) {
-            $fields = $this->replacePlaceholder($fixture->getData(), $this->placeholderData);
-            // Getting Tax class id
-            if ($fixture->hasData('tax_class_id')) {
-                $taxClassId = $fixture->getDataFieldConfig('tax_class_id')['source']->getTaxClass()->getId();
-                $fields['tax_class_id'] = ($taxClassId === null)
-                    ? $this->getTaxClassId($fields['tax_class_id'])
-                    : $taxClassId;
-            }
-            $fields = $this->prepareStockData($fields);
-            if (!empty($fields['category_ids'])) {
-                $categoryIds = [];
-                foreach ($fields['category_ids'] as $categoryData) {
-                    $categoryIds[] = $categoryData['id'];
-                }
-                $fields['category_ids'] = $categoryIds;
-            }
+        $data = $this->prepareData($fixture, $prefix);
 
-            $data = $prefix ? [$prefix => $fields] : $fields;
-        } else {
-            $data = $this->_prepareData($fixture->getData('fields'), $prefix);
-        }
-
-        $url = $this->_getUrl($config);
-        $curl = new BackendDecorator(new CurlTransport(), new Config);
-        $curl->addOption(CURLOPT_HEADER, 1);
-        $curl->write(CurlInterface::POST, $url, '1.0', array(), $data);
-        $response = $curl->read();
-        $curl->close();
-
-        if (!strpos($response, 'data-ui-id="messages-message-success"')) {
-            throw new \Exception("Product creation by curl handler was not successful! Response: $response");
-        }
-        preg_match("~Location: [^\s]*\/id\/(\d+)~", $response, $matches);
-        $id = isset($matches[1]) ? $matches[1] : null;
-        return ['id' => $id];
+        return ['id' => $this->createProduct($data, $config)];
     }
 
     /**
@@ -155,75 +125,6 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
     }
 
     /**
-     * Replace placeholder data in fixture data
-     *
-     * @param array $data
-     * @param array $placeholders
-     * @return array
-     */
-    private function replacePlaceholder(array $data, array $placeholders)
-    {
-        foreach ($data as $key => $value) {
-            if (!isset($placeholders[$key])) {
-                continue;
-            }
-            if (is_array($value)) {
-                $data[$key] = $this->replacePlaceholderValues($value, $placeholders[$key]);
-            } else {
-                $data[$key] = isset($placeholders[$key][$value]) ? $placeholders[$key][$value] : $value;
-            }
-        }
-        return $data;
-    }
-
-    /**
-     * Replace placeholder data in fixture values
-     *
-     * @param array $data
-     * @param array $placeholders
-     * @return array
-     */
-    private function replacePlaceholderValues(array $data, array $placeholders)
-    {
-        foreach ($data as $key => $value) {
-            if (isset($placeholders[$value])) {
-                $data[$key] = $placeholders[$value];
-            }
-        }
-        return $data;
-    }
-
-    /**
-     * Preparation of stock data
-     *
-     * @param array $fields
-     * @return array
-     */
-    protected function prepareStockData(array $fields)
-    {
-        $fields['stock_data']['manage_stock'] = 0;
-
-        if (empty($fields['stock_data']['is_in_stock'])) {
-            $fields['stock_data']['is_in_stock'] = isset($fields['quantity_and_stock_status'])
-                ? $fields['quantity_and_stock_status']
-                : (isset($fields['inventory_manage_stock']) ? $fields['inventory_manage_stock'] : null);
-        }
-        if (empty($fields['stock_data']['qty'])) {
-            $fields['stock_data']['qty'] = isset($fields['qty']) ? $fields['qty'] : null;
-        }
-        if (!empty($fields['stock_data']['qty'])) {
-            $fields['stock_data']['manage_stock'] = 1;
-        }
-
-        $fields['quantity_and_stock_status'] = [
-            'qty' => $fields['stock_data']['qty'],
-            'is_in_stock' => $fields['stock_data']['is_in_stock']
-        ];
-
-        return $this->filter($fields);
-    }
-
-    /**
      * Remove items from a null
      *
      * @param array $data
@@ -244,28 +145,107 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
     /**
      * Prepare POST data for creating product request
      *
-     * @param array $params
+     * @param FixtureInterface $fixture
      * @param string|null $prefix
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected function _prepareData($params, $prefix = null)
+    protected function prepareData(FixtureInterface $fixture, $prefix = null)
     {
-        $data = array();
-        foreach ($params as $key => $values) {
-            $value = $this->_getValue($values);
-            //do not add this data if value does not exist
-            if (null === $value) {
-                continue;
+        $fields = $this->replaceMappingData($fixture->getData());
+        $fields = $this->prepareStockData($fields);
+        // Getting Tax class id
+        if ($fixture->hasData('tax_class_id')) {
+            $taxClassId = $fixture->getDataFieldConfig('tax_class_id')['source']->getTaxClass()->getId();
+            $fields['tax_class_id'] = ($taxClassId === null)
+                ? $this->getTaxClassId($fields['tax_class_id'])
+                : $taxClassId;
+        }
+
+        if (!empty($fields['category_ids'])) {
+            $categoryIds = [];
+            foreach ($fields['category_ids'] as $categoryData) {
+                $categoryIds[] = $categoryData['id'];
             }
-            if (isset($values['input_name'])) {
-                $data[$values['input_name']] = $value;
-            } elseif ($prefix) {
-                $data[$prefix][$key] = $value;
-            } else {
-                $data[$key] = $value;
+            $fields['category_ids'] = $categoryIds;
+        }
+
+        if (!empty($fields['website_ids'])) {
+            foreach ($fields['website_ids'] as &$value) {
+                $value = isset($this->mappingData['website_ids'][$value])
+                    ? $this->mappingData['website_ids'][$value]
+                    : $value;
             }
         }
+
+        // Getting Attribute Set id
+        if ($fixture->hasData('attribute_set_id')) {
+            $attributeSetId = $fixture
+                ->getDataFieldConfig('attribute_set_id')['source']
+                ->getAttributeSet()
+                ->getAttributeSetId();
+            $fields['attribute_set_id'] = $attributeSetId;
+        }
+
+        $data = $prefix ? [$prefix => $fields] : $fields;
+
         return $data;
+    }
+
+    /**
+     * Preparation of stock data
+     *
+     * @param array $fields
+     * @return array
+     */
+    protected function prepareStockData(array $fields)
+    {
+        $fields['stock_data']['manage_stock'] = 0;
+
+        if (!isset($fields['stock_data']['is_in_stock'])) {
+            $fields['stock_data']['is_in_stock'] = isset($fields['quantity_and_stock_status'])
+                ? $fields['quantity_and_stock_status']
+                : (isset($fields['inventory_manage_stock']) ? $fields['inventory_manage_stock'] : null);
+        }
+        if (!isset($fields['stock_data']['qty'])) {
+            $fields['stock_data']['qty'] = isset($fields['qty']) ? $fields['qty'] : null;
+        }
+        if (!empty($fields['stock_data']['qty'])) {
+            $fields['stock_data']['manage_stock'] = 1;
+        }
+
+        $fields['quantity_and_stock_status'] = [
+            'qty' => $fields['stock_data']['qty'],
+            'is_in_stock' => $fields['stock_data']['is_in_stock']
+        ];
+
+        return $this->filter($fields);
+    }
+
+    /**
+     * Create product via curl
+     *
+     * @param array $data
+     * @param array $config
+     * @return int|null
+     * @throws \Exception
+     */
+    protected function createProduct(array $data, array $config)
+    {
+        $url = $this->getUrl($config);
+        $curl = new BackendDecorator(new CurlTransport(), new Config);
+        $curl->addOption(CURLOPT_HEADER, 1);
+        $curl->write(CurlInterface::POST, $url, '1.0', array(), $data);
+        $response = $curl->read();
+        $curl->close();
+
+        if (!strpos($response, 'data-ui-id="messages-message-success"')) {
+            throw new \Exception("Product creation by curl handler was not successful! Response: $response");
+        }
+        preg_match("~Location: [^\s]*\/id\/(\d+)~", $response, $matches);
+        return isset($matches[1]) ? $matches[1] : null;
     }
 
     /**
@@ -274,7 +254,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
      * @param array $values
      * @return null|mixed
      */
-    protected function _getValue($values)
+    protected function getValue($values)
     {
         if (!isset($values['value'])) {
             return null;
@@ -288,7 +268,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
      * @param array $config
      * @return string
      */
-    protected function _getUrl(array $config)
+    protected function getUrl(array $config)
     {
         $requestParams = isset($config['create_url_params']) ? $config['create_url_params'] : array();
         $params = '';

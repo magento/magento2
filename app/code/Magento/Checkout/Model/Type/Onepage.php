@@ -826,34 +826,39 @@ class Onepage
         $shipping = $quote->isVirtual() ? null : $quote->getShippingAddress();
 
         $customer = $this->_customerAccountService->getCustomer($this->getCustomerSession()->getCustomerId());
-        if (!$billing->getCustomerId() || $billing->getSaveInAddressBook()) {
-            $billingAddress = $billing->exportCustomerAddressData();
-            $billing->setCustomerAddressData($billingAddress);
-        }
-        if ($shipping && !$shipping->getSameAsBilling() && (!$shipping->getCustomerId() ||
-            $shipping->getSaveInAddressBook())
+        $hasDefaultBilling = (bool) $customer->getDefaultBilling();
+        $hasDefaultShipping = (bool) $customer->getDefaultShipping();
+
+        if ($shipping && !$shipping->getSameAsBilling() &&
+            (!$shipping->getCustomerId() || $shipping->getSaveInAddressBook())
         ) {
             $shippingAddress = $shipping->exportCustomerAddressData();
+            if (!$hasDefaultShipping) {
+                //Make provided address as default shipping address
+                $shippingAddress = $this->_addressBuilder
+                    ->populate($shippingAddress)
+                    ->setDefaultShipping(true)
+                    ->create();
+                $hasDefaultShipping = true;
+            }
+            $quote->addCustomerAddressData($shippingAddress);
             $shipping->setCustomerAddressData($shippingAddress);
         }
 
-        if (isset($billingAddress)) {
-            if (!$customer->getDefaultBilling() || !$customer->getDefaultShipping()) {
-                $billingAddress = $this->_addressBuilder->populate(
-                    $billingAddress
-                )->setDefaultBilling(
-                    !$customer->getDefaultBilling()
-                )->setDefaultShipping(
-                    !$customer->getDefaultShipping()
-                )->create();
+        if (!$billing->getCustomerId() || $billing->getSaveInAddressBook()) {
+            $billingAddress = $billing->exportCustomerAddressData();
+            if (!$hasDefaultBilling) {
+                //Make provided address as default shipping address
+                $this->_addressBuilder->populate($billingAddress);
+                if (!$hasDefaultShipping) {
+                    //Make provided address as default shipping address
+                    $this->_addressBuilder->setDefaultShipping(true);
+                }
+                $this->_addressBuilder->setDefaultBilling(true);
+                $billingAddress = $this->_addressBuilder->create();
             }
-
             $quote->addCustomerAddressData($billingAddress);
-        }
-
-        if ($shipping && isset($shippingAddress) && !$customer->getDefaultShipping()) {
-            $shippingAddress = $this->_addressBuilder->populate($shippingAddress)->setDefaultShipping(true)->create();
-            $quote->addCustomerAddressData($shippingAddress);
+            $billing->setCustomerAddressData($billingAddress);
         }
     }
 

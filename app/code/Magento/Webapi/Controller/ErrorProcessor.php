@@ -44,6 +44,8 @@ class ErrorProcessor
 
     const DEFAULT_RESPONSE_CHARSET = 'UTF-8';
 
+    const INTERNAL_SERVER_ERROR_MSG = 'Internal Error. Details are available in Magento log file. Report ID: %s';
+
     /**#@+
      * Error data representation formats.
      */
@@ -111,8 +113,8 @@ class ErrorProcessor
      */
     public function maskException(\Exception $exception)
     {
-        $stackTrace = ($this->_appState->getMode() === State::MODE_DEVELOPER) ?
-            $stackTrace = $exception->getTrace() : null;
+        $isDevMode = $this->_appState->getMode() === State::MODE_DEVELOPER;
+        $stackTrace = $isDevMode ? $exception->getTrace() : null;
 
         if ($exception instanceof LocalizedException) {
             // Map HTTP codes for LocalizedExceptions according to exception type
@@ -146,9 +148,18 @@ class ErrorProcessor
         } elseif ($exception instanceof WebapiException) {
             $maskedException = $exception;
         } else {
+            $message = $exception->getMessage();
+            $code = $exception->getCode();
+            //if not in Dev mode, make sure the message and code is masked for unanticipated exceptions
+            if (!$isDevMode) {
+                /** Log information about actual exception */
+                $reportId = $this->_logException($exception);
+                $message = sprintf(self::INTERNAL_SERVER_ERROR_MSG, $reportId);
+                $code = 0;
+            }
             $maskedException = new WebapiException(
-                $exception->getMessage(),
-                $exception->getCode(),
+                $message,
+                $code,
                 WebapiException::HTTP_INTERNAL_ERROR,
                 [],
                 '',

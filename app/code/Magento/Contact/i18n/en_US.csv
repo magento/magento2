@@ -1,19 +1,16 @@
+Email,Email
+Name,Name
+Submit,Submit
 "* Required Fields","* Required Fields"
-"Comment","Comment"
-"Contact Form","Contact Form"
+Telephone,Telephone
+"Thanks for contacting us with your comments and questions. We'll respond to you very soon.","Thanks for contacting us with your comments and questions. We'll respond to you very soon."
+"We can't process your request right now. Sorry, that's all we know.","We can't process your request right now. Sorry, that's all we know."
 "Contact Information","Contact Information"
-"Contact Us","Contact Us"
-"Contact Us Form","Contact Us Form"
-"Contacts","Contacts"
-"Contacts Section","Contacts Section"
-"Email","Email"
-"Email Options","Email Options"
-"Email Sender","Email Sender"
+Comment,Comment
 "Email Template","Email Template"
+Contacts,Contacts
+"Contact Us","Contact Us"
 "Enable Contact Us","Enable Contact Us"
-"Name","Name"
+"Email Options","Email Options"
 "Send Emails To","Send Emails To"
-"Submit","Submit"
-"Phone","Phone"
-"Unable to submit your request. Please, try again later","Unable to submit your request. Please, try again later"
-"Your inquiry was submitted and will be responded to as soon as possible. Thank you for contacting us.","Your inquiry was submitted and will be responded to as soon as possible. Thank you for contacting us."
+"Email Sender","Email Sender"

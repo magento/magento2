@@ -28,6 +28,8 @@ use Magento\Tax\Model\Calculation;
 
 /**
  * Catalog bundle product info block
+ * 
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
 {
@@ -165,6 +167,10 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
      * Returns JSON encoded config to be used in JS scripts
      *
      * @return string
+     * 
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getJsonConfig()
     {
@@ -207,12 +213,21 @@ class Bundle extends \Magento\Catalog\Block\Product\View\AbstractView
                     ->getTierPriceList();
 
                 foreach ($tierPrices as &$tierPriceInfo) {
+                    /** @var \Magento\Framework\Pricing\Amount\Base $price */
                     $price = $tierPriceInfo['price'];
+
+                    $priceBaseAmount = $price->getBaseAmount();
+                    $priceValue = $price->getValue();
+
+                    $bundleProductPrice = $this->_productPrice->create();
+                    $priceBaseAmount = $bundleProductPrice->getLowestPrice($currentProduct, $priceBaseAmount);
+                    $priceValue = $bundleProductPrice->getLowestPrice($currentProduct, $priceValue);
+
                     $tierPriceInfo['price'] = $this->priceCurrency->convert(
-                        $this->_taxData->displayPriceIncludingTax() ? $price->getValue() : $price->getBaseAmount()
+                        $this->_taxData->displayPriceIncludingTax() ? $priceValue : $priceBaseAmount
                     );
-                    $tierPriceInfo['exclTaxPrice'] = $this->priceCurrency->convert($price->getBaseAmount());
-                    $tierPriceInfo['inclTaxPrice'] = $this->priceCurrency->convert($price->getValue());
+                    $tierPriceInfo['exclTaxPrice'] = $this->priceCurrency->convert($priceBaseAmount);
+                    $tierPriceInfo['inclTaxPrice'] = $this->priceCurrency->convert($priceValue);
                 }
                 // break the reference with the last element
 

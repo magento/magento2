@@ -67,13 +67,13 @@ class LoginUserTest extends Injectable
     /**
      * Test admin login to backend
      *
-     * @param AdminUserInjectable $adminUser
+     * @param AdminUserInjectable $user
      */
-    public function test(AdminUserInjectable $adminUser)
+    public function test(AdminUserInjectable $user)
     {
         // Steps
         $this->loginPage->open();
-        $this->loginPage->getLoginBlock()->fill($adminUser);
+        $this->loginPage->getLoginBlock()->fill($user);
         $this->loginPage->getLoginBlock()->submit();
     }
 }

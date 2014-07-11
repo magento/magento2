@@ -72,9 +72,9 @@
             <pageCustomerIndexNew class="Magento\Customer\Test\Page\Adminhtml\CustomerIndexNew" />
         </require>
     </assertCustomerInvalidEmail>
-    <assertCustomerGroupSuccessCreateMessage module="Magento_Customer">
+    <assertCustomerGroupSuccessSaveMessage module="Magento_Customer">
         <severeness>low</severeness>
-    </assertCustomerGroupSuccessCreateMessage>
+    </assertCustomerGroupSuccessSaveMessage>
     <assertCustomerGroupInGrid module="Magento_Customer">
         <severeness>low</severeness>
     </assertCustomerGroupInGrid>
@@ -93,4 +93,13 @@
             <registerPage class="Magento\Customer\Test\Page\CustomerAccountCreate" />
         </require>
     </assertCustomerFailRegisterMessage>
+    <assertCustomerGroupSuccessDeleteMessage module="Magento_Customer">
+        <severeness>high</severeness>
+        <require>
+            <customerGroupIndex class="Magento\Customer\Test\Page\Adminhtml\CustomerGroupIndex" />
+        </require>
+    </assertCustomerGroupSuccessDeleteMessage>
+    <assertCustomerGroupForm module="Magento_Customer">
+        <severeness>low</severeness>
+    </assertCustomerGroupForm>
 </constraint>

@@ -54,18 +54,22 @@ class AssertProductAttributeIsConfigurable extends AbstractConstraint
      * Assert check whether the attribute is used to create a configurable products
      *
      * @param CatalogProductAttribute $productAttribute
+     * @param CatalogProductAttribute $attribute
      * @param CatalogProductIndex $productGrid
      * @param FixtureFactory $fixtureFactory
      * @param CatalogProductNew $newProductPage
      */
     public function processAssert
     (
-        CatalogProductAttribute $productAttribute,
+        CatalogProductAttribute $attribute,
         CatalogProductIndex $productGrid,
         FixtureFactory $fixtureFactory,
-        CatalogProductNew $newProductPage
+        CatalogProductNew $newProductPage,
+        CatalogProductAttribute $productAttribute = null
     ) {
-        $this->attributeFrontendLabel = $productAttribute->getFrontendLabel();
+        $this->attributeFrontendLabel = ($productAttribute)
+            ? $productAttribute->getFrontendLabel()
+            : $attribute->getFrontendLabel();
         $productGrid->open();
         $productGrid->getProductBlock()->addProduct('configurable');
 

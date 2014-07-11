@@ -113,8 +113,8 @@ class Integration extends Action
      */
     public function indexAction()
     {
-        $unsecureEndpointsCount = $this->_integrationCollection->addUnsecureEndpointFilter()->getSize();
-        if ($unsecureEndpointsCount > 0) {
+        $unsecureIntegrationsCount = $this->_integrationCollection->addUnsecureUrlsFilter()->getSize();
+        if ($unsecureIntegrationsCount > 0) {
             // @codingStandardsIgnoreStart
             $this->messageManager->addNotice(__('Warning! Integrations not using HTTPS are insecure and potentially expose private or personally identifiable information')
             // @codingStandardsIgnoreEnd

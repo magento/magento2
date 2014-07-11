@@ -864,10 +864,10 @@ HANDLE;
 
         $integrationCollection = $this->getMockBuilder('\Magento\Integration\Model\Resource\Integration\Collection')
             ->disableOriginalConstructor()
-            ->setMethods(['addUnsecureEndpointFilter', 'getSize'])
+            ->setMethods(['addUnsecureUrlsFilter', 'getSize'])
             ->getMock();
         $integrationCollection->expects($this->any())
-            ->method('addUnsecureEndpointFilter')
+            ->method('addUnsecureUrlsFilter')
             ->will($this->returnValue($integrationCollection));
         $integrationCollection->expects($this->any())
             ->method('getSize')

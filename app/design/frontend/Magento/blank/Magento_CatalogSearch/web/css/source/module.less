@@ -29,7 +29,6 @@
 @autocomplete-item-amount-color: #999;
 
 .block.search {
-    position: relative;
     .title {
         display: none;
     }
@@ -53,7 +52,7 @@
     .control {
         border-top: 1px solid @border-color-base;
         clear: both;
-        margin: 0 -90px -1px -20px;
+        margin: 0 -20px -1px;
         padding: 0 20px;
     }
 
@@ -72,39 +71,41 @@
 }
 
 .search.autocomplete {
-  position: absolute;
-  top: 31px;
-  left: 15px;
-  z-index: 3;
-  background: @autocomplete-background;
-  border: @autocomplete-border;
-  border-top: 0;
-  overflow: hidden;
-  display: none;
-  &:extend(.add-box-sizing all);
-  ul {
-    li {
-      border-top: @autocomplete-item-border;
-      cursor: pointer;
-      padding: 5px 40px 5px 10px;
-      margin: 0;
-      position: relative;
-      text-align: left;
-      white-space: normal;
-      &:first-child {
-        border-top: none;
-      }
-      &:hover, &.selected {
-        background: @autocomplete-item-hover;
-      }
-      .amount {
-        color: @autocomplete-item-amount-color;
-        position: absolute;
-        right: 7px;
-        top: 5px;
-      }
+    display: none;
+    position: absolute;
+    z-index: 3;
+    overflow: hidden;
+    margin-top: -15px;
+    &:extend(.add-box-sizing all);
+    ul {
+        li {
+            &:not(:empty) {
+                background: @autocomplete-background;
+                border: @autocomplete-border;
+                border-top: 0;
+            }
+            border-top: @autocomplete-item-border;
+            cursor: pointer;
+            padding: 5px 40px 5px 10px;
+            margin: 0;
+            position: relative;
+            text-align: left;
+            white-space: normal;
+            &:first-child {
+                border-top: none;
+            }
+            &:hover,
+            &.selected {
+                background: @autocomplete-item-hover;
+            }
+            .amount {
+                color: @autocomplete-item-amount-color;
+                position: absolute;
+                right: 7px;
+                top: 5px;
+            }
+        }
     }
-  }
 }
 
 .form.search.advanced {
@@ -154,6 +155,7 @@
 //--------------------------------------
 .responsive(@break) when (@break = @break-point-1) {
     .block.search {
+        position: relative;
         float: right;
         padding-left: 15px;
         width: 250px;
@@ -198,8 +200,6 @@
         }
     }
     .search.autocomplete {
-        top: 100%;
-        left: 15px;
         margin-top: 0;
     }
 }

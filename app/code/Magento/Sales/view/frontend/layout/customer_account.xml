@@ -32,5 +32,4 @@
             </arguments>
         </block>
     </referenceBlock>
-    <move element="sale.reorder.sidebar" destination="left"/>
 </layout>

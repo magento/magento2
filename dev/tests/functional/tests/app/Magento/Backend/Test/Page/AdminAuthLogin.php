@@ -51,7 +51,7 @@ class AdminAuthLogin extends Page
      *
      * @var string
      */
-    protected $headerBlock = '.page-header';
+    protected $headerBlock = '.page-header .admin-user';
 
     /**
      * Global messages block

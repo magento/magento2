@@ -23,6 +23,14 @@
  */
 namespace Magento\Sales\Model\Order;
 
+use Magento\Framework\Model\Exception;
+
+/**
+ * Class Status
+ *
+ * @method string getStatus()
+ * @method string getLabel()
+ */
 class Status extends \Magento\Framework\Model\AbstractModel
 {
     /**
@@ -83,6 +91,21 @@ class Status extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * @param string $state
+     * @return void
+     * @throws Exception
+     */
+    protected function validateBeforeUnassign($state)
+    {
+        if ($this->getResource()->checkIsStateLast($state)) {
+            throw new Exception(__('The last status can\'t be unassigned from its current state.'));
+        }
+        if ($this->getResource()->checkIsStatusUsed($this->getStatus())) {
+            throw new Exception(__('Status can\'t be unassigned, because it is used by existing order(s).'));
+        }
+    }
+
+    /**
      * Unassigns order status from particular state
      *
      * @param string $state
@@ -91,18 +114,15 @@ class Status extends \Magento\Framework\Model\AbstractModel
      */
     public function unassignState($state)
     {
-        /** @var \Magento\Sales\Model\Resource\Order\Status $resource */
-        $resource = $this->_getResource();
-        $resource->beginTransaction();
-        try {
-            $resource->unassignState($this->getStatus(), $state);
-            $resource->commit();
-            $params = ['status' => $this->getStatus(), 'state' => $state];
-            $this->_eventManager->dispatch('sales_order_status_unassign', $params);
-        } catch (\Exception $e) {
-            $resource->rollBack();
-            throw $e;
-        }
+        $this->validateBeforeUnassign($state);
+        $this->getResource()->unassignState($this->getStatus(), $state);
+        $this->_eventManager->dispatch(
+            'sales_order_status_unassign',
+            [
+                'status' => $this->getStatus(),
+                'state' => $state
+            ]
+        );
         return $this;
     }
 

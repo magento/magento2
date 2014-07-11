@@ -116,6 +116,10 @@ class AssertProductForm extends AbstractConstraint
             $this->formattingOptions
         );
 
+        if (isset($compareData['special_price'])) {
+            $compareData['special_price'] = ['special_price' => $compareData['special_price']];
+        }
+
         return $compareData;
     }
 

@@ -51,10 +51,10 @@ class AssertProductAttributeSaveMessage extends AbstractConstraint
     {
         \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_MESSAGE,
-            $attributeIndex->getMessageBlock()->getSuccessMessages(),
+            $attributeIndex->getMessagesBlock()->getSuccessMessages(),
             'Wrong success message is displayed.'
             . "\nExpected: " . self::SUCCESS_MESSAGE
-            . "\nActual: " . $attributeIndex->getMessageBlock()->getSuccessMessages()
+            . "\nActual: " . $attributeIndex->getMessagesBlock()->getSuccessMessages()
         );
     }
 

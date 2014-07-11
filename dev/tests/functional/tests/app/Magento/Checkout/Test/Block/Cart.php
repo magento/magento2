@@ -31,6 +31,7 @@ use Magento\Catalog\Test\Fixture\Product;
 use Magento\Catalog\Test\Fixture\SimpleProduct;
 use Magento\Catalog\Test\Fixture\ConfigurableProduct;
 use Magento\Checkout\Test\Block\Onepage\Link;
+use Mtf\Fixture\FixtureInterface;
 
 /**
  * Class Cart
@@ -122,7 +123,7 @@ class Cart extends Block
     /**
      * Get unit price for the specified item in the cart
      *
-     * @param Product $product
+     * @param FixtureInterface $product
      * @param string $currency
      * @return float
      */
@@ -258,12 +259,12 @@ class Cart extends Block
     /**
      * Return the name of the specified product.
      *
-     * @param Product $product
+     * @param FixtureInterface $product
      * @return string
      */
     private function getProductName($product)
     {
-        $productName = $product->getProductName();
+        $productName = $product->getName();
         if ($product instanceof ConfigurableProduct) {
             $productOptions = $product->getProductOptions();
             if (!empty($productOptions)) {

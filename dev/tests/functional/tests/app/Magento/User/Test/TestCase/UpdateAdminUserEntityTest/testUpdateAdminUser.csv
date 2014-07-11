@@ -1,0 +1,4 @@
+"user/data/username";"user/data/firstname";"user/data/lastname";"user/data/email";"user/data/password";"user/data/password_confirmation";"user/data/is_active";"useSalesRoleFromDataSet";"loginAsDefaultAdmin";"constraint"
+"NewAdminUser%isolation%";"NewFirstName%isolation%";"NewLastName%isolation%";"NewEmail%isolation%@example.com";"123123qa";"123123qa";"-";"-";"0";"assertUserSuccessSaveMessage, assertUserInGrid, assertUserSuccessLogOut, assertUserSuccessLogin"
+"-";"-";"-";"-";"-";"-";"-";"1";"0";"assertUserSuccessSaveMessage, assertUserInGrid, assertUserSuccessLogOut, assertUserSuccessLogin, assertUserRoleSalesRestrictedAccess"
+"-";"-";"-";"-";"-";"-";"Inactive";"-";"1";"assertUserSuccessSaveMessage, assertUserInGrid, assertUserSuccessLogOut, assertUserWrongCredentialsMessage"

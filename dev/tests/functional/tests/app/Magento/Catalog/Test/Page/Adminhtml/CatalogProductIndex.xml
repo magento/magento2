@@ -48,10 +48,4 @@
         <locator>[id="page:main-container"]</locator>
         <strategy>css selector</strategy>
     </block>
-    <block>
-        <name>addNewSplitButtonBlock</name>
-        <class>Magento\Catalog\Test\Block\Backend\AddNewSplitButton</class>
-        <locator>[id="add_new_product"]</locator>
-        <strategy>css selector</strategy>
-    </block>
 </page>

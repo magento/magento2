@@ -71,13 +71,13 @@
             <default_value>0</default_value>
             <input></input>
         </user_id>
-        <role_name>
-            <attribute_code>role_name</attribute_code>
+        <rolename>
+            <attribute_code>rolename</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required></is_required>
             <default_value></default_value>
             <input></input>
-        </role_name>
+        </rolename>
         <user_type>
             <attribute_code>user_type</attribute_code>
             <backend_type>varchar</backend_type>

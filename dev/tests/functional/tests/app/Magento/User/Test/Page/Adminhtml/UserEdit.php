@@ -48,8 +48,14 @@ class UserEdit extends BackendPage
         ],
         'userForm' => [
             'name' => 'userForm',
-            'class' => 'Magento\User\Test\Block\Adminhtml\User\Edit\Form',
+            'class' => 'Magento\User\Test\Block\Adminhtml\User\UserForm',
             'locator' => '[id="page:main-container"]',
+            'strategy' => 'css selector',
+        ],
+        'rolesGrid' => [
+            'name' => 'rolesGrid',
+            'class' => 'Magento\User\Test\Block\Adminhtml\User\Tab\Role\Grid',
+            'locator' => '[id="permissionsUserRolesGrid"]',
             'strategy' => 'css selector',
         ],
     ];
@@ -71,10 +77,18 @@ class UserEdit extends BackendPage
     }
 
     /**
-     * @return \Magento\User\Test\Block\Adminhtml\User\Edit\Form
+     * @return \Magento\User\Test\Block\Adminhtml\User\UserForm
      */
     public function getUserForm()
     {
         return $this->getBlockInstance('userForm');
+    }
+
+    /**
+     * @return \Magento\User\Test\Block\Adminhtml\User\Tab\Role\Grid
+     */
+    public function getRolesGrid()
+    {
+        return $this->getBlockInstance('rolesGrid');
     }
 }

@@ -38,8 +38,14 @@
     </block>
     <block>
         <name>userForm</name>
-        <class>Magento\User\Test\Block\Adminhtml\User\Edit\Form</class>
+        <class>Magento\User\Test\Block\Adminhtml\User\UserForm</class>
         <locator>[id="page:main-container"]</locator>
+        <strategy>css selector</strategy>
+    </block>
+    <block>
+        <name>rolesGrid</name>
+        <class>Magento\User\Test\Block\Adminhtml\User\Tab\Role\Grid</class>
+        <locator>[id="permissionsUserRolesGrid"]</locator>
         <strategy>css selector</strategy>
     </block>
 </page>

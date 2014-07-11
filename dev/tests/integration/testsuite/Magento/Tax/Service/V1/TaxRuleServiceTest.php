@@ -149,7 +149,7 @@ class TaxRuleServiceTest extends \PHPUnit_Framework_TestCase
         $ruleId = $taxRuleModel->getId();
 
         $taxRateId = $registry->registry('_fixture/Magento_Tax_Model_Calculation_Rate')->getId();
-        $customerTaxClassIds = array_unique($taxRuleModel->getCustomerTaxClasses());
+        $customerTaxClassIds = array_values(array_unique($taxRuleModel->getCustomerTaxClasses()));
 
         // Call getTaxRule and verify
         $taxRule = $this->taxRuleService->getTaxRule($ruleId);

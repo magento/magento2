@@ -64,4 +64,24 @@
         <area>adminhtml</area>
         <class>Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryEdit</class>
     </catalogCategoryEdit>
+    <catalogProductSetIndex>
+        <mca>catalog/product_set/index</mca>
+        <area>adminhtml</area>
+        <class>Magento\Catalog\Test\Page\Adminhtml\CatalogProductSetIndex</class>
+    </catalogProductSetIndex>
+    <catalogProductSetEdit>
+        <mca>catalog/product_set/edit</mca>
+        <area>adminhtml</area>
+        <class>Magento\Catalog\Test\Page\Adminhtml\CatalogProductSetEdit</class>
+    </catalogProductSetEdit>
+    <catalogCategoryEdit>
+        <mca>catalog/category/edit</mca>
+        <area>adminhtml</area>
+        <class>Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryEdit</class>
+    </catalogCategoryEdit>
+    <catalogProductSetAdd>
+        <mca>catalog/product_set/add</mca>
+        <area>adminhtml</area>
+        <class>Magento\Catalog\Test\Page\Adminhtml\CatalogProductSetAdd</class>
+    </catalogProductSetAdd>
 </page>

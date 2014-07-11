@@ -105,7 +105,7 @@ if ($exist = $this->getRecentlyComparedProducts()) {
                                         <?php endif; ?>
 
                                         <?php if($showWishlist || $showCompare): ?>
-                                            <div class="secondary addto links" data-role="add-to-links">
+                                            <div class="secondary-addto-links" data-role="add-to-links">
                                                 <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllow() && $showWishlist): ?>
                                                     <a href="#"
                                                        data-post='<?php echo $this->getAddToWishlistParams($_item); ?>'

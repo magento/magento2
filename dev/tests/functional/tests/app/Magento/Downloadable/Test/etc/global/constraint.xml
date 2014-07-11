@@ -27,9 +27,9 @@
     <assertDownloadableSamplesData module="Magento_Downloadable">
         <severeness>low</severeness>
     </assertDownloadableSamplesData>
-    <assertDownloadableLinks module="Magento_Downloadable">
+    <assertDownloadableLinksData module="Magento_Downloadable">
         <severeness>low</severeness>
-    </assertDownloadableLinks>
+    </assertDownloadableLinksData>
     <assertDownloadableProductForm module="Magento_Downloadable">
         <severeness>low</severeness>
     </assertDownloadableProductForm>

@@ -45,10 +45,9 @@ class Factory
         } else {
             switch (pathinfo($filename, \PATHINFO_EXTENSION)) {
                 case 'csv':
+                default:
                     $writer = new Dictionary\Writer\Csv($filename);
                     break;
-                default:
-                    throw new \InvalidArgumentException(sprintf('Writer for "%s" is not exist.', $filename));
             }
         }
         return $writer;

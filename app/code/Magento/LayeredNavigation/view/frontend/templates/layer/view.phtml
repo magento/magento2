@@ -32,26 +32,27 @@
 
 <?php if($this->canShowBlock()): ?>
     <div class="block filter">
-        <div class="title">
+        <div class="block-title filter-title">
             <strong><?php echo __('Shop By') ?></strong>
+            <span class="block-triger filter-trigger"><?php echo __('Filter') ?> <span class="qty counter"><?php echo count($this->getLayer()->getState()->getActiveFilters()) ?></span></span>
         </div>
 
-        <div class="content">
+        <div class="block-content filter-content">
             <?php echo $this->getChildHtml('state') ?>
 
             <?php if ($this->getLayer()->getState()->getFilters()): ?>
-                <div class="actions">
-                    <a href="<?php echo $this->getClearUrl() ?>" class="action clear"><span><?php echo __('Clear All') ?></span></a>
+                <div class="block-actions filter-actions">
+                    <a href="<?php echo $this->getClearUrl() ?>" class="action clear filter-clear"><span><?php echo __('Clear All') ?></span></a>
                 </div>
             <?php endif; ?>
 
-            <strong class="subtitle"><?php echo __('Shopping Options') ?></strong>
+            <strong class="block-subtitle filter-subtitle"><?php echo __('Shopping Options') ?></strong>
 
-            <dl class="options" id="narrow-by-list">
+            <dl class="filter-options" id="narrow-by-list">
                 <?php foreach ($this->getFilters() as $filter): ?>
                     <?php if ($filter->getItemsCount()): ?>
-                        <dt><?php echo __($filter->getName()) ?></dt>
-                        <dd><?php echo $this->getChildBlock('renderer')->render($filter); ?></dd>
+                        <dt class="filter-options-title"><?php echo $this->escapeHtml(__($filter->getName())) ?></dt>
+                        <dd class="filter-options-content"><?php echo $this->getChildBlock('renderer')->render($filter); ?></dd>
                     <?php endif; ?>
                 <?php endforeach; ?>
             </dl>

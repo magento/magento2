@@ -112,8 +112,11 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             array(2, 2),
             array(3, 3),
             array(4, 4),
-            array(5, 4),
-            array(10, 4)
+            array(5, 5),
+            array(10, 10),
+            array(15, 15),
+            array(20, 20),
+            array(21, 20),
         );
     }
 

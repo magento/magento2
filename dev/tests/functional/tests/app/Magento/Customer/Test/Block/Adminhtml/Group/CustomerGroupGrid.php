@@ -29,8 +29,6 @@ use Magento\Backend\Test\Block\Widget\Grid;
 /**
  * Class CustomerGroupGrid
  * Adminhtml customer group grid
- *
- * @package  Magento\Customer\Test\Block\Adminhtml\Group
  */
 class CustomerGroupGrid extends Grid
 {
@@ -44,4 +42,11 @@ class CustomerGroupGrid extends Grid
             'selector' => '#customerGroupGrid_filter_type'
         ]
     ];
+
+    /**
+     * Locator value for grid to click
+     *
+     * @var string
+     */
+    protected $editLink = 'td[data-column="time"]';
 }

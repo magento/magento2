@@ -28,7 +28,7 @@ if ($this->hasRequiredOptions()) {
     $required = ' data-hasrequired="' . __('* Required Fields') . '"';
 }
 ?>
-<div class="product options wrapper" id="product-options-wrapper"<?php echo $required; ?>>
+<div class="product-options-wrapper" id="product-options-wrapper"<?php echo $required; ?>>
     <fieldset class="fieldset">
         <?php echo $this->getChildHtml('', true);?>
     </fieldset>

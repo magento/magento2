@@ -81,32 +81,32 @@
     }
 
     > .title {
-        &:extend(.opc.wrapper .step.title all);
+        &:extend(.opc-wrapper .step.title all);
     }
 
     .fieldset.gift.message {
-        &:extend(.opc.wrapper .fieldset.gift.message all);
+        &:extend(.opc-wrapper .fieldset.gift.message all);
         margin: 0;
     }
 
     .field.wrapping {
-        &:extend(.opc.wrapper .field.wrapping all);
+        &:extend(.opc-wrapper .field.wrapping all);
     }
 
     .activate.message {
-        &:extend(.opc.wrapper .activate.message all);
+        &:extend(.opc-wrapper .activate.message all);
     }
 
     .hidden {
-        &:extend(.opc.wrapper .hidden all);
+        &:extend(.opc-wrapper .hidden all);
     }
 
     .options.individual {
-        &:extend(.opc.wrapper .options.individual all);
+        &:extend(.opc-wrapper .options.individual all);
     }
 
     .items.methods {
-        &:extend(.opc.wrapper .items.methods all);
+        &:extend(.opc-wrapper .items.methods all);
     }
 
     .block.billing {
@@ -120,10 +120,10 @@
 
     .data.table {
         .col.subtotal {
-            &:extend(.opc.wrapper .data.table .col.subtotal all);
+            &:extend(.opc-wrapper .data.table .col.subtotal all);
         }
         .amount {
-            &:extend(.opc.wrapper .data.table .amount all);
+            &:extend(.opc-wrapper .data.table .amount all);
         }
     }
 
@@ -171,13 +171,13 @@
                     vertical-align: middle;
                 }
             }
-            .actions.toolbar {
+            .actions-toolbar {
                 .primary .action {
                     margin-right: 10px;
                 }
             }
             .column.main & {
-                .actions.toolbar {
+                .actions-toolbar {
                     &:extend(.reset-left-margin-desktop all);
                 }
                 .block:not(.widget):not(.widget) .content .box.items {
@@ -197,6 +197,9 @@
 
         .checkout.review .grand.totals {
             &:extend(.add-clearfix-desktop all);
+        }
+        &.success {
+            overflow: hidden;
         }
     }
 }

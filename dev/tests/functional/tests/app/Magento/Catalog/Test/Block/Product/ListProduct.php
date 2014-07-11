@@ -54,7 +54,7 @@ class ListProduct extends Block
      *
      * @var string
      */
-    protected $productDetailsSelector = '//*[@class="product details" and .//*[@title="%s"]]';
+    protected $productDetailsSelector = '//*[contains(@class, "product details") and .//*[@title="%s"]]';
 
     /**
      * Product name

@@ -60,7 +60,7 @@
                     <input class="input-text" data-validate="{<?php if ($this->isZipCodeRequired()):?> 'required-entry':true,<?php endif;?>'validate-zip':true}" type="text" id="postcode" name="estimate_postcode" value="<?php echo $this->escapeHtml($this->getEstimatePostcode()) ?>" />
                 </div>
             </div>
-            <div class="actions toolbar">
+            <div class="actions-toolbar">
                 <div class="primary">
                     <button type="submit" class="action quote primary"><span><?php echo __('Get a Quote') ?></span></button>
                 </div>
@@ -112,8 +112,10 @@
                     </dd>
                 <?php endforeach; ?>
             </dl>
-            <div class="actions">
-                <button type="submit" class="action update" name="do" value="<?php echo __('Update Total') ?>"><span><?php echo __('Update Total') ?></span></button>
+            <div class="actions-toolbar">
+                <div class="primary">
+                    <button type="submit" class="action primary update" name="do" value="<?php echo __('Update Total') ?>"><span><?php echo __('Update Total') ?></span></button>
+                </div>
             </div>
         </fieldset>
     </form>

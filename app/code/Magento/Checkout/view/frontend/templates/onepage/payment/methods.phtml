@@ -29,20 +29,20 @@
  * @var $this \Magento\Checkout\Block\Onepage\Payment\Methods
  */
 ?>
-<dl class="items methods payment">
+<dl class="items methods-payment">
 <?php
     $methods = $this->getMethods();
     $oneMethod = count($methods) <= 1;
 ?>
 <?php if (empty($methods)): ?>
-    <dt class="item title">
+    <dt class="item-title">
         <?php echo __('No Payment Methods') ?>
     </dt>
 <?php else:
     foreach ($methods as $_method):
         $_code = $_method->getCode();
 ?>
-    <dt class="item title <?php echo $_code ?>">
+    <dt class="item-title <?php echo $_code ?>">
     <?php if(!$oneMethod): ?>
         <input id="p_method_<?php echo $_code ?>" value="<?php echo $_code ?>" type="radio" name="payment[method]" title="<?php echo $this->escapeHtml($_method->getTitle()) ?>" <?php if($this->getSelectedMethodCode()==$_code): ?> checked="checked"<?php endif; ?> class="radio" />
     <?php else: ?>
@@ -52,7 +52,7 @@
         <label for="p_method_<?php echo $_code ?>"><?php echo $this->escapeHtml($this->getMethodTitle($_method)) ?> <?php echo $this->getMethodLabelAfterHtml($_method) ?></label>
     </dt>
     <?php if ($html = $this->getPaymentMethodFormHtml($_method)): ?>
-    <dd class="item content <?php echo $_code ?>">
+    <dd class="item-content <?php echo $_code ?>">
         <?php echo $html; ?>
     </dd>
     <?php endif; ?>

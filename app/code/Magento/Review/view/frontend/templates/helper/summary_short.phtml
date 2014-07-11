@@ -40,7 +40,7 @@
     </div>
     <?php endif;?>
     <div class="reviews actions">
-        <a class="action view" href="<?php echo $urlForm ?>"><?php echo $this->getReviewsCount() ?><span><?php echo __('Review(s)') ?></span></a>
+        <a class="action view" href="<?php echo $urlForm ?>"><?php echo $this->getReviewsCount() ?>&nbsp;<span><?php echo ($this->getReviewsCount() == 1) ? __('Review') : __('Reviews') ?></span></a>
     </div>
 </div>
 <?php elseif ($this->getDisplayIfEmpty()): ?>

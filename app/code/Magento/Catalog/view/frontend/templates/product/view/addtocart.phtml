@@ -27,34 +27,36 @@
 <?php $_product = $this->getProduct(); ?>
 <?php $buttonTitle = __('Add to Cart'); ?>
 <?php if ($_product->isSaleable()): ?>
-<div class="box tocart">
-    <?php if ($this->shouldRenderQuantity()): ?>
-    <div class="field qty">
-        <label class="label" for="qty"><span><?php echo __('Qty') ?></span></label>
-        <div class="control">
-            <input type="number"
-                   name="qty"
-                   id="qty"
-                   maxlength="12"
-                   value="<?php echo $this->getProductDefaultQty() * 1 ?>"
-                   title="<?php echo __('Qty') ?>" class="input-text qty"
-                <?php if ($_product->getStockItem() && $_product->getStockItem()->getIsQtyDecimal()) : ?>
-                    data-validate="{required:true, 'validate-greater-than-zero':true}"
-                <?php else: ?>
-                    data-validate="{required:true, digits:true}"
-                <?php endif; ?> />
+<div class="box-tocart">
+    <fieldset class="fieldset">
+        <?php if ($this->shouldRenderQuantity()): ?>
+        <div class="field qty">
+            <label class="label" for="qty"><span><?php echo __('Qty') ?></span></label>
+            <div class="control">
+                <input type="number"
+                       name="qty"
+                       id="qty"
+                       maxlength="12"
+                       value="<?php echo $this->getProductDefaultQty() * 1 ?>"
+                       title="<?php echo __('Qty') ?>" class="input-text qty"
+                    <?php if ($_product->getStockItem() && $_product->getStockItem()->getIsQtyDecimal()) : ?>
+                        data-validate="{required:true, 'validate-greater-than-zero':true}"
+                    <?php else: ?>
+                        data-validate="{required:true, digits:true}"
+                    <?php endif; ?> />
+            </div>
         </div>
-    </div>
-    <?php endif; ?>
-    <div class="actions">
-        <button type="submit"
-                title="<?php echo $buttonTitle ?>"
-                class="action primary tocart"
-                id="product-addtocart-button">
-            <span><?php echo $buttonTitle ?></span>
-        </button>
-        <?php echo $this->getChildHtml('', true) ?>
-    </div>
+        <?php endif; ?>
+        <div class="actions">
+            <button type="submit"
+                    title="<?php echo $buttonTitle ?>"
+                    class="action primary tocart"
+                    id="product-addtocart-button">
+                <span><?php echo $buttonTitle ?></span>
+            </button>
+            <?php echo $this->getChildHtml('', true) ?>
+        </div>
+    </fieldset>
 </div>
 <?php endif; ?>
 

@@ -72,13 +72,17 @@ class TaxRuleConverter
             $this->taxRuleDataObjectBuilder->setCode($ruleModel->getCode());
         }
         if (!is_null($ruleModel->getCustomerTaxClasses())) {
-            $this->taxRuleDataObjectBuilder->setCustomerTaxClassIds(array_unique($ruleModel->getCustomerTaxClasses()));
+            $this->taxRuleDataObjectBuilder->setCustomerTaxClassIds(
+                $this->_getUniqueValues($ruleModel->getCustomerTaxClasses())
+            );
         }
         if (!is_null($ruleModel->getProductTaxClasses())) {
-            $this->taxRuleDataObjectBuilder->setProductTaxClassIds(array_unique($ruleModel->getProductTaxClasses()));
+            $this->taxRuleDataObjectBuilder->setProductTaxClassIds(
+                $this->_getUniqueValues($ruleModel->getProductTaxClasses())
+            );
         }
         if (!is_null($ruleModel->getRates())) {
-            $this->taxRuleDataObjectBuilder->setTaxRateIds(array_unique($ruleModel->getRates()));
+            $this->taxRuleDataObjectBuilder->setTaxRateIds($this->_getUniqueValues($ruleModel->getRates()));
         }
         if (!is_null($ruleModel->getPriority())) {
             $this->taxRuleDataObjectBuilder->setPriority($ruleModel->getPriority());
@@ -109,5 +113,16 @@ class TaxRuleConverter
         $taxRuleModel->setPriority($taxRuleDataObject->getPriority());
         $taxRuleModel->setPosition($taxRuleDataObject->getSortOrder());
         return $taxRuleModel;
+    }
+
+    /**
+     * Get unique values of indexed array.
+     *
+     * @param array $values
+     * @return array
+     */
+    protected function _getUniqueValues($values)
+    {
+        return array_values(array_unique($values));
     }
 }

@@ -39,13 +39,13 @@
     <block>
         <name>titleBlock</name>
         <class>Magento\Theme\Test\Block\Html\Title</class>
-        <locator>.page.title</locator>
+        <locator>.page-title</locator>
         <strategy>css selector</strategy>
     </block>
     <block>
         <name>footerBlock</name>
         <class>Magento\Theme\Test\Block\Html\Footer</class>
-        <locator>footer.footer</locator>
+        <locator>footer.page-footer</locator>
         <strategy>css selector</strategy>
     </block>
     <block>

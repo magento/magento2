@@ -41,8 +41,6 @@ Magento/Sales/Model/Service/Quote
 Magento/Catalog/Block/Product
 Magento/Catalog/Model/Resource/Product
 Magento/Catalog/Model/Layer
-Magento/Catalog/Model/Layer/Search.php
-Magento/Catalog/Model/Layer/Category.php
 Magento/Catalog/Service/V1/Data
 Magento/CatalogImportExport/Model/Export
 Magento/CatalogImportExport/Model/Import
@@ -120,9 +118,11 @@ var/generation
 Magento/Newsletter/Block/Adminhtml/Template/Grid/Renderer
 Magento/Newsletter/Model/Template/Filter
 Magento/Newsletter/Model/Resource/Subscriber
+Magento/Tax/Service/V1/Data
 Magento/CatalogInventory/Model/Resource/Stock/Item
 lib/internal/Magento/Framework/Filesystem/Driver
 Magento/OfflineShipping/Model/Carrier
 Magento/Usps/Model/Carrier
 Magento/Dhl/Model
 Magento/Shipping/Model
+Magento/Catalog/Service/V1/Category

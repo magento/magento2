@@ -49,7 +49,7 @@ class ClassTest extends \PHPUnit_Framework_TestCase
         )->getFirstItem();
 
         $this->setExpectedException('Magento\Framework\Model\Exception');
-        $model->checkClassCanBeDeleted();
+        $model->delete();
     }
 
     /**
@@ -91,7 +91,7 @@ class ClassTest extends \PHPUnit_Framework_TestCase
         )->save();
 
         $this->setExpectedException('Magento\Framework\Model\Exception');
-        $model->checkClassCanBeDeleted();
+        $model->delete();
     }
 
     /**
@@ -105,7 +105,7 @@ class ClassTest extends \PHPUnit_Framework_TestCase
         $model->setClassName('TaxClass' . uniqid())->setClassType($classType)->isObjectNew(true);
         $model->save();
 
-        $this->assertTrue($model->checkClassCanBeDeleted());
+        $model->delete();
     }
 
     public function classesDataProvider()
@@ -135,7 +135,7 @@ class ClassTest extends \PHPUnit_Framework_TestCase
             'You cannot delete this tax class because it is used in' .
             ' Tax Rules. You have to delete the rules it is used in first.'
         );
-        $model->checkClassCanBeDeleted();
+        $model->delete();
     }
 
     /**
@@ -157,6 +157,6 @@ class ClassTest extends \PHPUnit_Framework_TestCase
             'You cannot delete this tax class because it is used in' .
             ' Tax Rules. You have to delete the rules it is used in first.'
         );
-        $model->checkClassCanBeDeleted();
+        $model->delete();
     }
 }

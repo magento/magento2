@@ -31,8 +31,8 @@
         <strategy>css selector</strategy>
     </block>
     <block>
-        <name>formPageActions</name>
-        <class>Magento\Backend\Test\Block\FormPageActions</class>
+        <name>sitemapPageActions</name>
+        <class>Magento\Sitemap\Test\Block\Adminhtml\SitemapPageActions</class>
         <locator>.page-main-actions</locator>
         <strategy>css selector</strategy>
     </block>

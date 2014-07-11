@@ -49,9 +49,9 @@
         <entity_type>customer_address</entity_type>
         <collection>Magento\Customer\Model\Resource\Address\Collection</collection>
     </addressInjectable>
-    <customerGroup module="Magento_Customer">
+    <customerGroupInjectable module="Magento_Customer">
         <type>flat</type>
         <entity_type>customer_group</entity_type>
         <collection>Magento\Customer\Model\Resource\Group\Collection</collection>
-    </customerGroup>
+    </customerGroupInjectable>
 </fixture>

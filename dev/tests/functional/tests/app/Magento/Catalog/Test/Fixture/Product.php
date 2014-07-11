@@ -235,7 +235,7 @@ class Product extends DataFixture
      *
      * @return string
      */
-    public function getProductName()
+    public function getName()
     {
         return $this->getData('fields/name/value');
     }
@@ -291,7 +291,7 @@ class Product extends DataFixture
         if (isset($fields['url'])) {
             return $fields['url'];
         } else {
-            return trim(strtolower(preg_replace('#[^0-9a-z]+#i', '-', $this->getProductName())), '-');
+            return trim(strtolower(preg_replace('#[^0-9a-z]+#i', '-', $this->getName())), '-');
         }
     }
 

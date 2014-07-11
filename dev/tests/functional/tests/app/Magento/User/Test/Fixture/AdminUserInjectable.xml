@@ -145,6 +145,10 @@
             <attribute_code>role_id</attribute_code>
             <backend_type>virtual</backend_type>
         </role_id>
+        <password_confirmation>
+            <attribute_code>password_confirmation</attribute_code>
+            <backend_type>virtual</backend_type>
+        </password_confirmation>
     </fields>
     <repository_class>Magento\User\Test\Repository\AdminUserInjectable</repository_class>
     <handler_interface>Magento\User\Test\Handler\AdminUser\AdminUserInterface</handler_interface>

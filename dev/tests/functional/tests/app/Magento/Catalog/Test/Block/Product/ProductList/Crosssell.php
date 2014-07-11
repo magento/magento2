@@ -53,12 +53,7 @@ class Crosssell extends Block
      */
     public function verifyProductCrosssell(FixtureInterface $crosssell)
     {
-        $productName = ($crosssell instanceof InjectableFixture)
-            /** @var CatalogProductSimple $crosssell */
-            ? $crosssell->getName()
-            /** @var Product $crosssell */
-            : $crosssell->getProductName();
-        $match = $this->_rootElement->find(sprintf($this->linkSelector, $productName), Locator::SELECTOR_CSS);
+        $match = $this->_rootElement->find(sprintf($this->linkSelector, $crosssell->getName()), Locator::SELECTOR_CSS);
         return $match->isVisible();
     }
 
@@ -71,7 +66,7 @@ class Crosssell extends Block
     public function clickLink($product)
     {
         $this->_rootElement->find(
-            sprintf($this->linkSelector, $product->getProductName()),
+            sprintf($this->linkSelector, $product->getName()),
             Locator::SELECTOR_CSS
         )->click();
     }

@@ -123,14 +123,14 @@ class CreateConfigurableTest extends Functional
         //Verification on category product list
         $productListBlock = $categoryPage->getListProductBlock();
         $this->assertTrue(
-            $productListBlock->isProductVisible($product->getProductName()),
+            $productListBlock->isProductVisible($product->getName()),
             'Product is absent on category page.'
         );
         //Verification on product detail page
         $productViewBlock = $productPage->getViewBlock();
-        $productListBlock->openProductViewPage($product->getProductName());
+        $productListBlock->openProductViewPage($product->getName());
         $this->assertEquals(
-            $product->getProductName(),
+            $product->getName(),
             $productViewBlock->getProductName(),
             'Product name does not correspond to specified.'
         );

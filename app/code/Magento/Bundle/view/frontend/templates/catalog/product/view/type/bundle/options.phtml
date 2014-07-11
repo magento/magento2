@@ -45,6 +45,7 @@ $helper = $this->helper('Magento\Catalog\Helper\Output');
             <legend id="customizeTitle" class="legend title">
                 <span><?php echo __('Customize %1', $helper->productAttribute($product, $product->getName(), 'name')) ?></span>
             </legend><br />
+            <?php echo $this->getChildHtml('product_info_bundle_options_top');?>
             <?php foreach ($options as $option): ?>
                 <?php if (!$option->getSelections()): ?>
                     <?php continue; ?>

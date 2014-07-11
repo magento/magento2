@@ -29,12 +29,10 @@ use Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertCustomerGroupAlreadyExists
- *
- * @package Magento\Customer\Test\Constraint
  */
 class AssertCustomerGroupAlreadyExists extends AbstractConstraint
 {
-    const SUCCESS_MESSAGE = 'Customer Group already exists.';
+    const ERROR_MESSAGE = 'Customer Group already exists.';
 
     /**
      * Constraint severeness
@@ -53,7 +51,7 @@ class AssertCustomerGroupAlreadyExists extends AbstractConstraint
     {
         $actualMessage = $customerGroupNew->getMessagesBlock()->getErrorMessages();
         \PHPUnit_Framework_Assert::assertEquals(
-            self::SUCCESS_MESSAGE,
+            self::ERROR_MESSAGE,
             $actualMessage,
             'Wrong error message is displayed.'
         );

@@ -29,7 +29,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Catalog\Service\V1\Data\Eav\AttributeMetadata;
 use Magento\Catalog\Service\V1\Data\Eav\Product\Attribute\FrontendLabel;
-use Magento\Catalog\Service\V1\ProductMetadataServiceInterface;
+use Magento\Catalog\Service\V1\Product\MetadataServiceInterface;
 
 /**
  * Class WriteService
@@ -177,7 +177,7 @@ class WriteService implements WriteServiceInterface
      */
     public function remove($attributeId)
     {
-        $model = $this->eavConfig->getAttribute(ProductMetadataServiceInterface::ENTITY_TYPE_PRODUCT, $attributeId);
+        $model = $this->eavConfig->getAttribute(MetadataServiceInterface::ENTITY_TYPE, $attributeId);
         if (!$model || !$model->getId()) {
             //product attribute does not exist
             throw NoSuchEntityException::singleField(AttributeMetadata::ATTRIBUTE_ID, $attributeId);

@@ -168,10 +168,7 @@ class Index extends \Magento\Backend\App\Action
                         )
                     );
                     $backupManager->setErrorMessage(
-                        __(
-                            "Something went wrong '
-                        . 'putting your store into maintenance mode."
-                        )
+                        __('Something went wrong putting your store into maintenance mode.')
                     );
                     return $this->getResponse()->representJson($response->toJson());
                 }
@@ -322,10 +319,7 @@ class Index extends \Magento\Backend\App\Action
                         )
                     );
                     $backupManager->setErrorMessage(
-                        __(
-                            "Something went wrong '
-                        . 'putting your store into maintenance mode."
-                        )
+                        __('Something went wrong putting your store into maintenance mode.')
                     );
                     return $this->getResponse()->representJson($response->toJson());
                 }

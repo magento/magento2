@@ -59,10 +59,10 @@ class CatalogProductIndex extends BackendPage
             'locator' => '[id="page:main-container"]',
             'strategy' => 'css selector',
         ],
-        'addNewSplitButtonBlock' => [
-            'name' => 'addNewSplitButtonBlock',
-            'class' => 'Magento\Catalog\Test\Block\Backend\AddNewSplitButton',
-            'locator' => '[id="add_new_product"]',
+        'FormPageActions' => [
+            'name' => 'GridPageActions',
+            'class' => 'Magento\Catalog\Test\Block\Adminhtml\Product\FormPageActions',
+            'locator' => '#add_new_product',
             'strategy' => 'css selector',
         ],
     ];
@@ -97,13 +97,5 @@ class CatalogProductIndex extends BackendPage
     public function getAccessDeniedBlock()
     {
         return $this->getBlockInstance('accessDeniedBlock');
-    }
-
-    /**
-     * @return \Magento\Catalog\Test\Block\Backend\AddNewSplitButton
-     */
-    public function getAddNewSpliteButtonBlock()
-    {
-        return $this->getBlockInstance('addNewSplitButtonBlock');
     }
 }

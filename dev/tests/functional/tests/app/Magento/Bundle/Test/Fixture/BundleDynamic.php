@@ -98,7 +98,7 @@ class BundleDynamic extends Bundle
                             'assigned_products' => array(
                                 'assigned_product_0' => array(
                                     'search_data' => array(
-                                        'name' => '%item1_simple1::getProductName%',
+                                        'name' => '%item1_simple1::getName%',
                                     ),
                                     'data' => array(
                                         'selection_qty' => array(
@@ -111,7 +111,7 @@ class BundleDynamic extends Bundle
                                 ),
                                 'assigned_product_1' => array(
                                     'search_data' => array(
-                                        'name' => '%item1_virtual2::getProductName%',
+                                        'name' => '%item1_virtual2::getName%',
                                     ),
                                     'data' => array(
                                         'selection_qty' => array(

@@ -88,6 +88,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $form = $block->getForm();
 
         $this->assertEquals('edit_form', $form->getId());
+        $this->assertEquals('post', $form->getMethod());
         $baseFieldSet = $form->getElement('base_fieldset');
         $this->assertNotNull($baseFieldSet);
         $groupCodeElement = $form->getElement('customer_group_code');
@@ -120,6 +121,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $form = $block->getForm();
 
         $this->assertEquals('edit_form', $form->getId());
+        $this->assertEquals('post', $form->getMethod());
         $baseFieldSet = $form->getElement('base_fieldset');
         $this->assertNotNull($baseFieldSet);
         $groupCodeElement = $form->getElement('customer_group_code');

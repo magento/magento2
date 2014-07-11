@@ -198,7 +198,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
             if ($lines <= 0) {
                 $lines = 2;
             }
-            $this->_streetLines[$websiteId] = min(4, $lines);
+            $this->_streetLines[$websiteId] = min($lines, 20);
         }
 
         return $this->_streetLines[$websiteId];

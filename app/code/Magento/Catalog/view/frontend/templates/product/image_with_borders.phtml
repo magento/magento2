@@ -22,21 +22,16 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<?php /** @var $this \Magento\Catalog\Block\Product\Image */ ?>
+<?php /** @var $this \Magento\Catalog\Block\Product\Image */
 
-<span class="img photo container"
-      style="width:<?php echo $this->getProductImageView()->getWidth()?>px;
-             height:<?php echo $this->getProductImageView()->getHeight()?>px;
-             display: block; position: relative;
-             overflow: hidden"><img class="photo image"
-                                    style="display: block;
-                                           position: absolute;
-                                           top: 0;
-                                           bottom: 0;
-                                           left: 0;
-                                           right: 0;
-                                           margin: auto;"
-                                           <?php echo $this->getAddAttribute(); ?>
-                                           src="<?php echo $this->getProductImageView()->getUrl() ?>"
-                                           alt="<?php echo $this->stripTags($this->getProductImageView()->getLabel(), null, true) ?>"/>
+$ratio = $this->getProductImageView()->getHeight() / $this->getProductImageView()->getWidth() * 100;
+?>
+<span class="product-image-container"
+      style="width:<?php echo $this->getProductImageView()->getWidth()?>px;">
+    <span class="product-image-wrapper"
+          style="padding-bottom: <?php echo $ratio?>%;">
+        <img class="product-image-photo"
+             <?php echo $this->getAddAttribute(); ?>
+             src="<?php echo $this->getProductImageView()->getUrl() ?>"
+             alt="<?php echo $this->stripTags($this->getProductImageView()->getLabel(), null, true) ?>"/></span>
 </span>

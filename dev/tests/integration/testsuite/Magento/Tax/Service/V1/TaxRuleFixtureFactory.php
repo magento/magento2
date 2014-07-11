@@ -155,7 +155,7 @@ class TaxRuleFixtureFactory
         /** @var \Magento\Tax\Model\ClassModel $class */
         $class = $this->objectManager->create('Magento\Tax\Model\ClassModel');
         foreach ($classIds as $classId) {
-            $class->setId($classId);
+            $class->load($classId);
             $class->delete();
         }
     }

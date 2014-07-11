@@ -124,7 +124,7 @@
 //    Input quantity
 //--------------------------------------
 .input-qty {
-    .form-element-size(@_width: 50px);
+    .form-element-size(@_width: 47px);
     text-align: center;
 }
 
@@ -201,7 +201,7 @@
 //    Action with icon remove with text for desktop
 //--------------------------------------
 .responsive(@break) when (@break = @break-point-1) {
-    .action-remove-desktop {
+    .action-remove-desktop when not (@form-field-type-inline-label-width = false) and not (@form-field-type-inline-label-width = '') {
         top: 6px;
         margin-left: @form-field-type-inline-label-width + 50%;
     }
@@ -225,7 +225,7 @@
                 &:extend(.action-remove all);
             }
         }
-        .actions.toolbar {
+        .actions-toolbar {
             > .secondary {
                 .action.add {
                     margin-top: @indent-l-base;
@@ -234,7 +234,7 @@
             }
         }
         .fields {
-            .actions.toolbar {
+            .actions-toolbar {
                 margin: 0;
             }
         }
@@ -263,7 +263,7 @@
 //    Margin for forms
 //--------------------------------------
 .responsive(@break) when (@break = @break-point-1) {
-    .margin-for-forms-desktop {
+    .margin-for-forms-desktop when not (@form-field-type-inline-label-width = false) and not (@form-field-type-inline-label-width = '') {
         margin-left: @form-field-type-inline-label-width;
     }
 }
@@ -325,7 +325,7 @@
     .icon-font(
         @_icon-font-content: @icon-down,
         @_icon-font-size: 34px,
-        @_icon-font-line-height: @icon-font-line-height,
+        @_icon-font-line-height: 1.2,
         @_icon-font-position: after,
         @_icon-font-display: block
     );
@@ -334,4 +334,62 @@
         right: 5px;
         top: 0;
     }
+}
+
+//
+//    Split button
+//--------------------------------------
+
+.abstract-split-button {
+    .dropdown-split(
+        @_options-selector : ~".items",
+        @_dropdown-split-button-border-radius-fix: true
+    );
+    vertical-align: middle;
+}
+
+//
+//    Action addto
+//--------------------------------------
+.abstract-action-addto {
+    &:extend(.action-link-button all);
+    .button-s();
+}
+
+//
+//    Large button
+//--------------------------------------
+.abstract-button-l {
+    .button-l();
+}
+
+//
+//   Button as a link
+//--------------------------------------
+.abstract-action-button-as-link {
+    .button-as-link();
+    border-radius: 0;
+    font-weight: @font-weight-base;
+    font-size: inherit;
+}
+
+//
+//   Button revert secondary color
+//--------------------------------------
+.abstract-revert-secondary-color {
+    .button-revert-secondary-color();
+}
+
+//
+//   Button revert secondary size
+//--------------------------------------
+.abstract-revert-secondary-size {
+    .button-revert-secondary-size();
+}
+
+//
+//    Box-tocart block
+//--------------------------------------
+.abstract-box-tocart {
+    margin: @indent-s-base 0;
 }

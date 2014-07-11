@@ -42,4 +42,10 @@
         <locator>#messages</locator>
         <strategy>css selector</strategy>
     </block>
+    <block>
+        <name>accessDeniedBlock</name>
+        <class>Magento\Backend\Test\Block\Denied</class>
+        <locator>#anchor-content</locator>
+        <strategy>css selector</strategy>
+    </block>
 </page>

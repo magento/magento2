@@ -62,6 +62,7 @@
             <backend_type>int</backend_type>
             <is_required></is_required>
             <default_value>0</default_value>
+            <source>Magento\Catalog\Test\Fixture\CatalogCategory\ParentId</source>
             <input></input>
         </parent_id>
         <created_at>

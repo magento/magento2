@@ -321,7 +321,7 @@ jQuery(function($) {
                         }
                         var $elementToMove = $('.fieldset>.field[data-attribute-code="' + elementId + '"]');
                         if ($elementToMove.length === 0) {
-                            $elementToMove = $element;
+                            $elementToMove = $element.clone();
                         }
                         if (index === 0) {
                             $elementToMove.prependTo(fieldSet);
@@ -337,7 +337,7 @@ jQuery(function($) {
                 $newPage.find('#product_info_tabs .fieldset').each(updateFieldsetElements);
 
                 fieldsetContainer = $(fieldSet).parents('[data-ui-id*=-tab-content-]').first();
-                var newFieldsetContainer = $newPage.find('[data-ui-id='+$(fieldsetContainer).data('uiId')+']');
+                var newFieldsetContainer = $newPage.find('[data-ui-id=' + $(fieldsetContainer).data('uiId') + ']');
                 if (newFieldsetContainer.length == 0) {
                     $(fieldsetContainer).find('fieldset .field')
                         .addClass('ignore-validate')
