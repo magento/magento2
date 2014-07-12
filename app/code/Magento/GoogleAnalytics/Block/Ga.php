@@ -94,9 +94,9 @@ class Ga extends \Magento\Framework\View\Element\Template
         if ($pageName && substr($pageName, 0, 1) == '/' && strlen($pageName) > 1) {
             $optPageURL = ", '{$this->escapeJsQuote($pageName)}'";
         }
-        return "\n_gaq.push(['_setAccount', '{$this->escapeJsQuote(
+        return "\nga('create', '{$this->escapeJsQuote(
             $accountId
-        )}']);\n_gaq.push(['_trackPageview'{$optPageURL}]);\n";
+        )}');\nga('send', 'pageview'{$optPageURL});\n";
     }
 
     /**
@@ -114,7 +114,7 @@ class Ga extends \Magento\Framework\View\Element\Template
 
         $collection = $this->_salesOrderCollection->create();
         $collection->addFieldToFilter('entity_id', array('in' => $orderIds));
-        $result = array();
+        $result = array( "ga('require', 'ec', 'ec.js');" );
         foreach ($collection as $order) {
             if ($order->getIsVirtual()) {
                 $address = $order->getBillingAddress();
@@ -122,28 +122,25 @@ class Ga extends \Magento\Framework\View\Element\Template
                 $address = $order->getShippingAddress();
             }
             $result[] = sprintf(
-                "_gaq.push(['_addTrans', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s']);",
+                "ga('ecommerce:addTransaction', {'id':'%s', 'affiliation':'%s', 'revenue':'%s', 'shipping':'%s', 'tax':'%s'});",
                 $order->getIncrementId(),
                 $this->escapeJsQuote($this->_storeManager->getStore()->getFrontendName()),
                 $order->getBaseGrandTotal(),
-                $order->getBaseTaxAmount(),
                 $order->getBaseShippingAmount(),
-                $this->escapeJsQuote($this->escapeHtml($address->getCity())),
-                $this->escapeJsQuote($this->escapeHtml($address->getRegion())),
-                $this->escapeJsQuote($this->escapeHtml($address->getCountry()))
+                $order->getBaseTaxAmount()
             );
             foreach ($order->getAllVisibleItems() as $item) {
                 $result[] = sprintf(
-                    "_gaq.push(['_addItem', '%s', '%s', '%s', '%s', '%s', '%s']);",
+                    "ga('ecommerce:addItem', {'id':'%s', 'name':'%s', 'sku':'%s', 'category':'%s', 'price':'%s', 'quantity':'%s'});",
                     $order->getIncrementId(),
-                    $this->escapeJsQuote($item->getSku()),
                     $this->escapeJsQuote($item->getName()),
+                    $this->escapeJsQuote($item->getSku()),
                     null, // there is no "category" defined for the order item
                     $item->getBasePrice(),
                     $item->getQtyOrdered()
                 );
             }
-            $result[] = "_gaq.push(['_trackTrans']);";
+            $result[] = "ga('ecommerce:send');";
         }
         return implode("\n", $result);
     }
