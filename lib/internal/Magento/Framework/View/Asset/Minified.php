@@ -26,7 +26,7 @@ namespace Magento\Framework\View\Asset;
 /**
  * Minified page asset
  */
-class Minified implements LocalInterface
+class Minified implements LocalInterface, MergeableInterface
 {
     /**#@+
      * Strategies for verifying whether the files need to be minified
