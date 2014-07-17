@@ -293,6 +293,6 @@ class ComplexTypeStrategyTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getDomElementMock()
     {
-        return $this->getMockBuilder('DOMElement')->disableOriginalConstructor()->getMock();
+        return $this->getMockBuilder('DOMElement')->getMock();
     }
 }

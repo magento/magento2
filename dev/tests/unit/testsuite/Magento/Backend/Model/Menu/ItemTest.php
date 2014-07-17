@@ -251,7 +251,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
     public function testGetChildrenCreatesSubmenuOnFirstCall()
     {
-        $menuMock = $this->getMock('Magento\Backend\Model\Menu', array(), array(), '', false);
+        $menuMock = $this->getMock('Magento\Backend\Model\Menu');
 
         $this->_menuFactoryMock->expects($this->once())->method('create')->will($this->returnValue($menuMock));
 

@@ -384,7 +384,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $productModelMock = $this->getMock('stdClass', array('getProductEntitiesInfo'), array(), '', false);
+        $productModelMock = $this->getMock('stdClass', array('getProductEntitiesInfo'));
         $productModelMock->expects(
             $this->any()
         )->method(
@@ -884,7 +884,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
 
     public function testParseRequiredData()
     {
-        $modelData = $this->getMock('stdClass', array('getNextBunch'), array(), '', false);
+        $modelData = $this->getMock('stdClass', array('getNextBunch'));
         $modelData->expects(
             $this->at(0)
         )->method(
@@ -896,7 +896,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
         );
         $modelData->expects($this->at(1))->method('getNextBunch')->will($this->returnValue(null));
 
-        $productModel = $this->getMock('stdClass', array('getProductEntitiesInfo'), array(), '', false);
+        $productModel = $this->getMock('stdClass', array('getProductEntitiesInfo'));
         $productModel->expects($this->any())->method('getProductEntitiesInfo')->will($this->returnValue(array()));
 
         $productEntity = $this->getMock(

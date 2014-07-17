@@ -71,7 +71,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $layoutMock = $this->getMock('Magento\Framework\View\Layout', array(), array(), '', false, false);
         $helperMock = $this->getMock('Magento\Backend\Helper\Data', array(), array(), '', false, false);
         $menuConfigMock = $this->getMock('Magento\Backend\Model\Menu\Config', array(), array(), '', false, false);
-        $menuMock = $this->getMock('Magento\Backend\Model\Menu', array(), array(), '', false, false);
+        $menuMock = $this->getMock('Magento\Backend\Model\Menu');
         $menuItemMock = $this->getMock('Magento\Backend\Model\Menu\Item', array(), array(), '', false, false);
         $urlBuilder = $this->getMock('Magento\Backend\Model\Url', array(), array(), '', false, false);
         $this->_configStructureMock = $this->getMock(

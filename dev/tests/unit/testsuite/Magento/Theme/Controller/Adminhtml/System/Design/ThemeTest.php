@@ -190,7 +190,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
 
     public function testIndexAction()
     {
-        $menuModel = $this->getMock('\Magento\Backend\Model\Menu', array(), array(), '', false);
+        $menuModel = $this->getMock('Magento\Backend\Model\Menu');
         $menuModel->expects($this->once())
             ->method('getParentItems')
             ->with($this->equalTo('Magento_Theme::system_design_theme'))

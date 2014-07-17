@@ -60,7 +60,7 @@ class CaptchaFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $captchaType = 'wrong_instance';
 
-        $defaultCaptchaMock = $this->getMock('stdClass', array(), array(), '', false);
+        $defaultCaptchaMock = $this->getMock('stdClass');
 
         $this->_objectManagerMock->expects(
             $this->once()
