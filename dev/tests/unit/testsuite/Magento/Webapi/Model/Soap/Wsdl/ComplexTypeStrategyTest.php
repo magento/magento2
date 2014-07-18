@@ -98,7 +98,7 @@ class ComplexTypeStrategyTest extends \PHPUnit_Framework_TestCase
 
         $this->_wsdl->expects($this->any())->method('toDomDocument')->will($this->returnValue(new \DOMDocument()));
 
-        $schemaMock = $this->_getDomElementMock();
+        $schemaMock = $this->getMock('DOMElement', [], ['a']);
         $schemaMock->expects($this->any())->method('appendChild');
         $this->_wsdl->expects($this->any())->method('getSchema')->will($this->returnValue($schemaMock));
 
@@ -244,7 +244,7 @@ class ComplexTypeStrategyTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_wsdl->expects($this->any())->method('toDomDocument')->will($this->returnValue(new \DOMDocument()));
-        $schemaMock = $this->_getDomElementMock();
+        $schemaMock = $this->getMock('DOMElement', [], ['a']);
         $schemaMock->expects($this->any())->method('appendChild');
         $this->_wsdl->expects($this->any())->method('getSchema')->will($this->returnValue($schemaMock));
         $this->_typeProcessor->expects(
@@ -284,15 +284,5 @@ class ComplexTypeStrategyTest extends \PHPUnit_Framework_TestCase
             $annotationDoc,
             $complexType->getElementsByTagName("xsd:documentation")->item(0)->nodeValue
         );
-    }
-
-    /**
-     * Create mock for DOMElement.
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function _getDomElementMock()
-    {
-        return $this->getMockBuilder('DOMElement')->disableOriginalConstructor()->getMock();
     }
 }

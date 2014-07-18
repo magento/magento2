@@ -93,7 +93,11 @@ class UrlTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_menuMock = $this->getMock('Magento\Backend\Model\Menu', array(), array(), '', false);
+        $this->_menuMock = $this->getMock(
+            'Magento\Backend\Model\Menu',
+            [],
+            [$this->getMock('Magento\Framework\Logger', [], [], '', false)]
+        );
 
         $this->_menuConfigMock = $this->getMock('Magento\Backend\Model\Menu\Config', array(), array(), '', false);
         $this->_menuConfigMock->expects($this->any())->method('getMenu')->will($this->returnValue($this->_menuMock));
