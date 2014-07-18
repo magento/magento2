@@ -24,20 +24,14 @@
  */
 -->
 <fixture>
-    <review module="Magento_Review">
-        <type>flat</type>
-        <entity_type>review</entity_type>
+    <reviewInjectable module="Magento_Review">
+        <type>composite</type>
+        <entities>
+            <review>review</review>
+            <review_detail>review_detail</review_detail>
+        </entities>
         <collection>Magento\Review\Model\Resource\Review\Collection</collection>
-        <identifier />
-        <fields>
-            <id>
-                <attribute_code>id</attribute_code>
-                <backend_type>virtual</backend_type>
-            </id>
-        </fields>
-        <data_set />
-        <data_config />
-    </review>
+    </reviewInjectable>
     <rating module="Magento_Review">
         <type>flat</type>
         <entity_type>rating</entity_type>

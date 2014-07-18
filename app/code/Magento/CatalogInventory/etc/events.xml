@@ -72,10 +72,4 @@
     <event name="prepare_catalog_product_index_select">
         <observer name="cataloginventory" instance="Magento\CatalogInventory\Model\Observer" method="prepareCatalogProductIndexSelect" />
     </event>
-    <event name="end_index_events_cataloginventory_stock_item_save">
-        <observer name="cataloginventory" instance="Magento\CatalogInventory\Model\Observer" method="reindexProductsMassAction" />
-    </event>
-    <event name="end_process_event_cataloginventory_stock_item_save">
-        <observer name="cataloginventory" instance="Magento\CatalogInventory\Model\Observer" method="reindexProductsMassAction" />
-    </event>
 </config>

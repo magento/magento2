@@ -21,26 +21,26 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
 namespace Magento\Tax\Service\V1\Data;
 
+/**
+ * Service data object for a tax percentage rate associated with a location.
+ */
 class TaxRate extends \Magento\Framework\Service\Data\AbstractObject
 {
     /**#@+
      * Constants defined for keys of array, makes typos less likely
      */
     const KEY_ID = 'id';
-
     const KEY_COUNTRY_ID = 'country_id';
-
     const KEY_REGION_ID = 'region_id';
-
+    const KEY_REGION_NAME = 'region_name';
     const KEY_POSTCODE = 'postcode';
-
     const KEY_ZIP_RANGE = 'zip_range';
-
     const KEY_PERCENTAGE_RATE = 'percentage_rate';
-
     const KEY_CODE = 'code';
+    const KEY_TITLES = 'titles';
     /**#@-*/
 
     /**
@@ -71,6 +71,16 @@ class TaxRate extends \Magento\Framework\Service\Data\AbstractObject
     public function getRegionId()
     {
         return $this->_get(self::KEY_REGION_ID);
+    }
+
+    /**
+     * Get region name
+     *
+     * @return string|null
+     */
+    public function getRegionName()
+    {
+        return $this->_get(self::KEY_REGION_NAME);
     }
 
     /**
@@ -111,5 +121,15 @@ class TaxRate extends \Magento\Framework\Service\Data\AbstractObject
     public function getCode()
     {
         return $this->_get(self::KEY_CODE);
+    }
+
+    /**
+     * Get tax rate titles
+     *
+     * @return \Magento\Tax\Service\V1\Data\TaxRateTitle[]|null
+     */
+    public function getTitles()
+    {
+        return $this->_get(self::KEY_TITLES);
     }
 }

@@ -366,9 +366,10 @@ class AttributePriceTest extends \PHPUnit_Framework_TestCase
             'showBothPrices' => false,
             'defaultTax' => 0,
             'currentTax' => 0,
-            'inclTaxTitle' => __('Incl. Tax')
+            'inclTaxTitle' => __('Incl. Tax'),
+            'customerId' => 1
         ];
-        $this->assertEquals($expectedTaxConfig, $this->attribute->getTaxConfig());
+        $this->assertEquals($expectedTaxConfig, $this->attribute->getTaxConfig(1));
     }
 
     /**
@@ -383,8 +384,9 @@ class AttributePriceTest extends \PHPUnit_Framework_TestCase
             'defaultTax' => 0,
             'currentTax' => 0,
             'inclTaxTitle' => __('Incl. Tax'),
-            'product' => $this->saleableItemMock
+            'product' => $this->saleableItemMock,
+            'customerId' => 1
         ];
-        $this->assertEquals($expectedAdjustmentConfig, $this->attribute->prepareAdjustmentConfig());
+        $this->assertEquals($expectedAdjustmentConfig, $this->attribute->prepareAdjustmentConfig(1));
     }
 }

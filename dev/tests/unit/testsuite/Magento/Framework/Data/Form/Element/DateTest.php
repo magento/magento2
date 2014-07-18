@@ -107,13 +107,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
     protected function getFormMock($exactly)
     {
         $functions = array('getFieldNameSuffix', 'getHtmlIdPrefix', 'getHtmlIdSuffix');
-        $formMock = $this->getMock(
-            'stdClass',
-            $functions,
-            array(),
-            '',
-            false
-        );
+        $formMock = $this->getMock('stdClass', $functions);
         foreach ($functions as $method) {
             switch($exactly) {
                 case 'once':

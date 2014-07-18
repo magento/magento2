@@ -49,14 +49,14 @@ class Main extends \Magento\Backend\Block\Widget\Grid\Container
     protected $_productFactory;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccount
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Backend\Block\Widget\Context $context,
         \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccount,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Framework\Registry $registry,
@@ -102,7 +102,7 @@ class Main extends \Magento\Backend\Block\Widget\Grid\Container
             } else {
                 $this->_headerText = __('Pending Reviews');
             }
-            $this->_removeButton('add');
+            $this->buttonList->remove('add');
         } else {
             if ($customerName) {
                 $this->_headerText = __('All Reviews of Customer `%1`', $customerName);

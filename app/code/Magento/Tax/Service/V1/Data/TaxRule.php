@@ -47,6 +47,8 @@ class TaxRule extends AbstractObject
     const PRIORITY = 'priority';
 
     const SORT_ORDER = 'sort_order';
+
+    const CALCULATE_SUBTOTAL = 'calculate_subtotal';
     /**#@-*/
 
     /**
@@ -117,5 +119,15 @@ class TaxRule extends AbstractObject
     public function getSortOrder()
     {
         return $this->_get(self::SORT_ORDER);
+    }
+
+    /**
+     * Get calculate subtotal.
+     *
+     * @return int|null
+     */
+    public function getCalculateSubtotal()
+    {
+        return $this->_get(self::CALCULATE_SUBTOTAL);
     }
 }

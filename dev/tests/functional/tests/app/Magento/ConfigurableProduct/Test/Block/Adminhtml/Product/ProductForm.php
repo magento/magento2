@@ -31,7 +31,6 @@ use Mtf\Factory\Factory;
 use Mtf\Util\XmlConverter;
 use Mtf\Block\BlockFactory;
 use Mtf\Client\Element\Locator;
-use Mtf\Fixture\FixtureInterface;
 use Magento\Catalog\Test\Fixture\CatalogCategory;
 use Magento\Catalog\Test\Block\Adminhtml\Product\ProductForm as ParentForm;
 
@@ -74,14 +73,14 @@ class ProductForm extends ParentForm
      *
      * @var string
      */
-    protected $variationsTab = '[data-ui-id="product-tabs-tab-content-super-config"] .title';
+    protected $variationsTab = '#product_info_tabs_super_config_content .title';
 
     /**
      * Variations wrapper selector
      *
      * @var string
      */
-    protected $variationsWrapper = '[data-ui-id="product-tabs-tab-content-super-config"]';
+    protected $variationsWrapper = '#product_info_tabs_super_config_content';
 
     /**
      * @param Element $element
@@ -138,43 +137,6 @@ class ProductForm extends ParentForm
     }
 
     /**
-     * Fill the product form
-     *
-     * @param FixtureInterface $fixture
-     * @param Element|null $element
-     * @return $this
-     */
-    public function fill(FixtureInterface $fixture, Element $element = null)
-    {
-        $this->fillCategory($fixture);
-        parent::fill($fixture);
-        if ($fixture->getAttributeOptions()) {
-            $this->_rootElement->find($this->productDetailsTab)->click();
-            $this->clickCreateNewVariationSet();
-            $attributeBlockForm = $this->getConfigurableAttributeEditBlock();
-            $attributeBlockForm->fillAttributeOption($fixture->getAttributeOptions());
-        }
-        if ($fixture->getConfigurableOptions()) {
-            $this->browser->switchToFrame();
-            $this->variationsFill($fixture->getConfigurableOptions());
-        }
-    }
-
-    /**
-     * Save product
-     *
-     * @param FixtureInterface $fixture
-     * @return \Magento\Backend\Test\Block\Widget\Form|void
-     */
-    public function save(FixtureInterface $fixture = null)
-    {
-        parent::save($fixture);
-        if ($this->getAffectedAttributeSetBlock()->isVisible()) {
-            $this->getAffectedAttributeSetBlock()->chooseAttributeSet($fixture);
-        }
-    }
-
-    /**
      * Get variations block
      *
      * @return \Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Super\Config
@@ -190,6 +152,7 @@ class ProductForm extends ParentForm
      * Fill product variations
      *
      * @param array $variations
+     * @return void
      */
     public function variationsFill(array $variations)
     {
@@ -200,6 +163,8 @@ class ProductForm extends ParentForm
 
     /**
      * Open variations tab
+     *
+     * @return void
      */
     public function openVariationsTab()
     {
@@ -208,6 +173,8 @@ class ProductForm extends ParentForm
 
     /**
      * Click on 'Create New Variation Set' button
+     *
+     * @return void
      */
     public function clickCreateNewVariationSet()
     {

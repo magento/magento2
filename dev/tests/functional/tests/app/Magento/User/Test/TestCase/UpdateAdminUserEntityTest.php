@@ -25,8 +25,7 @@
 namespace Magento\User\Test\TestCase;
 
 use Magento\Backend\Test\Page\AdminAuthLogin;
-use Magento\Cms\Test\Page\CmsIndex;
-use Magento\User\Test\Fixture\AdminUserInjectable;
+use Magento\User\Test\Fixture\User;
 use Magento\User\Test\Fixture\AdminUserRole;
 use Mtf\Fixture\FixtureFactory;
 use Mtf\TestCase\Injectable;
@@ -76,17 +75,9 @@ class UpdateAdminUserEntityTest extends Injectable
     protected $adminAuth;
 
     /**
-     * Run preconditions for test.
-     *
-     * @param FixtureFactory $fixtureFactory
-     * @return array
+     * @var FixtureFactory
      */
-    public function __prepare(FixtureFactory $fixtureFactory)
-    {
-        $roleSales = $fixtureFactory->createByCode('adminUserRole', ['dataSet' => 'role_sales']);
-        $roleSales->persist();
-        return ['roleSales' => $roleSales];
-    }
+    protected $fixtureFactory;
 
     /**
      * Setup necessary data for test
@@ -96,7 +87,7 @@ class UpdateAdminUserEntityTest extends Injectable
      * @param Dashboard $dashboard
      * @param AdminAuthLogin $adminAuth
      * @param FixtureFactory $fixtureFactory
-     * @return array
+     * @return void
      */
     public function __inject(
         UserIndex $userIndex,
@@ -109,49 +100,61 @@ class UpdateAdminUserEntityTest extends Injectable
         $this->userEdit = $userEdit;
         $this->dashboard = $dashboard;
         $this->adminAuth = $adminAuth;
-
-        $customAdmin = $fixtureFactory->createByCode(
-            'adminUserInjectable',
-            ['dataSet' => 'custom_admin_with_default_role']
-        );
-        $customAdmin->persist();
-
-        return [
-            'customAdmin' => $customAdmin
-        ];
+        $this->fixtureFactory = $fixtureFactory;
     }
 
     /**
      * Runs Update Admin User test
      *
-     * @param AdminUserInjectable $user
-     * @param AdminUserInjectable $customAdmin
-     * @param AdminUserRole $roleSales
-     * @param string $useSalesRoleFromDataSet
+     * @param User $user
+     * @param User $initialUser
      * @param string $loginAsDefaultAdmin
-     * @return void
+     * @return array
      */
     public function testUpdateAdminUser(
-        AdminUserInjectable $user,
-        AdminUserInjectable $customAdmin,
-        AdminUserRole $roleSales,
-        $useSalesRoleFromDataSet,
+        User $user,
+        User $initialUser,
         $loginAsDefaultAdmin
     ) {
-        // Prepare data
-        $filter = ['username' => $customAdmin->getUsername()];
-        $userRole = $useSalesRoleFromDataSet != '-' ? $roleSales : null;
+        // Precondition
+        $initialUser->persist();
 
         // Steps
+        $filter = ['username' => $initialUser->getUsername()];
         if ($loginAsDefaultAdmin == '0') {
             $this->adminAuth->open();
-            $this->adminAuth->getLoginBlock()->fill($customAdmin);
+            $this->adminAuth->getLoginBlock()->fill($initialUser);
             $this->adminAuth->getLoginBlock()->submit();
         }
         $this->userIndex->open();
         $this->userIndex->getUserGrid()->searchAndOpen($filter);
-        $this->userEdit->getUserForm()->fillUser($user, $userRole);
+        $this->userEdit->getUserForm()->fill($user);
         $this->userEdit->getPageActions()->save();
+
+        return ['customAdmin' => $this->mergeUsers($user, $initialUser)];
+    }
+
+    /**
+     * Merging user data and returns custom user
+     *
+     * @param User $user
+     * @param User $initialUser
+     * @return User
+     */
+    protected function mergeUsers(
+        User $user,
+        User $initialUser
+    ) {
+        $data = array_merge($initialUser->getData(), $user->getData());
+        if (isset($data['role_id'])) {
+            $data['role_id'] = [
+                'role' => ($user->hasData('role_id'))
+                    ? $user->getDataFieldConfig('role_id')['source']->getRole()
+                    : $initialUser->getDataFieldConfig('role_id')['source']->getRole()
+            ];
+        }
+
+        return $this->fixtureFactory->createByCode('user', ['data' => $data]);
     }
 
     /**

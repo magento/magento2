@@ -39,6 +39,6 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Container
         $this->_controller = 'adminhtml_shopcart_product';
         $this->_headerText = __('Products in carts');
         parent::_construct();
-        $this->_removeButton('add');
+        $this->buttonList->remove('add');
     }
 }

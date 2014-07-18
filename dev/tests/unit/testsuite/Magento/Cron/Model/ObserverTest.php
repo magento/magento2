@@ -454,7 +454,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         )->method(
             'load'
         )->with(
-            $this->equalTo(\Magento\Cron\Model\Observer::CACHE_KEY_LAST_SCHEDULE_GENERATE_AT)
+            $this->equalTo(\Magento\Cron\Model\Observer::CACHE_KEY_LAST_SCHEDULE_GENERATE_AT . 'test_group')
         )->will(
             $this->returnValue(time() - 10000000)
         );
@@ -463,7 +463,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         )->method(
             'load'
         )->with(
-            $this->equalTo(\Magento\Cron\Model\Observer::CACHE_KEY_LAST_HISTORY_CLEANUP_AT)
+            $this->equalTo(\Magento\Cron\Model\Observer::CACHE_KEY_LAST_HISTORY_CLEANUP_AT . 'test_group')
         )->will(
             $this->returnValue(time() + 10000000)
         );
@@ -525,7 +525,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         )->method(
             'load'
         )->with(
-            $this->equalTo(\Magento\Cron\Model\Observer::CACHE_KEY_LAST_SCHEDULE_GENERATE_AT)
+            $this->equalTo(\Magento\Cron\Model\Observer::CACHE_KEY_LAST_SCHEDULE_GENERATE_AT . 'test_group')
         )->will(
             $this->returnValue(time() - 10000000)
         );
@@ -534,7 +534,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         )->method(
             'load'
         )->with(
-            $this->equalTo(\Magento\Cron\Model\Observer::CACHE_KEY_LAST_HISTORY_CLEANUP_AT)
+            $this->equalTo(\Magento\Cron\Model\Observer::CACHE_KEY_LAST_HISTORY_CLEANUP_AT . 'test_group')
         )->will(
             $this->returnValue(time() + 10000000)
         );

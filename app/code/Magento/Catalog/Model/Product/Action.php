@@ -50,11 +50,23 @@ class Action extends \Magento\Framework\Model\AbstractModel
     protected $categoryIndexer;
 
     /**
+     * @var \Magento\Eav\Model\Config
+     */
+    protected $_eavConfig;
+
+    /**
+     * @var \Magento\Catalog\Model\Indexer\Product\Eav\Processor
+     */
+    protected $_productEavIndexerProcessor;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Model\Product\WebsiteFactory $productWebsiteFactory
      * @param \Magento\Index\Model\Indexer $indexIndexer
      * @param \Magento\Indexer\Model\IndexerInterface $categoryIndexer
+     * @param \Magento\Eav\Model\Config $eavConfig
+     * @param \Magento\Catalog\Model\Indexer\Product\Eav\Processor $productEavIndexerProcessor
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -65,6 +77,8 @@ class Action extends \Magento\Framework\Model\AbstractModel
         \Magento\Catalog\Model\Product\WebsiteFactory $productWebsiteFactory,
         \Magento\Index\Model\Indexer $indexIndexer,
         \Magento\Indexer\Model\IndexerInterface $categoryIndexer,
+        \Magento\Eav\Model\Config $eavConfig,
+        \Magento\Catalog\Model\Indexer\Product\Eav\Processor $productEavIndexerProcessor,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
@@ -72,6 +86,8 @@ class Action extends \Magento\Framework\Model\AbstractModel
         $this->_productWebsiteFactory = $productWebsiteFactory;
         $this->_indexIndexer = $indexIndexer;
         $this->categoryIndexer = $categoryIndexer;
+        $this->_eavConfig = $eavConfig;
+        $this->_productEavIndexerProcessor = $productEavIndexerProcessor;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -128,6 +144,10 @@ class Action extends \Magento\Framework\Model\AbstractModel
             array('product_ids' => array_unique($productIds), 'attributes_data' => $attrData, 'store_id' => $storeId)
         );
 
+        if ($this->_hasIndexableAttributes($attrData)) {
+            $this->_productEavIndexerProcessor->reindexList(array_unique($productIds));
+        }
+
         // register mass action indexer event
         $this->_indexIndexer->processEntityAction(
             $this,
@@ -138,6 +158,37 @@ class Action extends \Magento\Framework\Model\AbstractModel
             $this->getCategoryIndexer()->reindexList(array_unique($productIds));
         }
         return $this;
+    }
+
+    /**
+     * Attributes array has indexable attributes
+     *
+     * @param array $attributesData
+     * @return bool
+     */
+    protected function _hasIndexableAttributes($attributesData)
+    {
+        foreach ($attributesData as $code => $value) {
+            if ($this->_attributeIsIndexable($code)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Check is attribute indexable in EAV
+     *
+     * @param \Magento\Catalog\Model\Resource\Eav\Attribute|string $attribute
+     * @return bool
+     */
+    protected function _attributeIsIndexable($attribute)
+    {
+        if (!$attribute instanceof \Magento\Catalog\Model\Resource\Eav\Attribute) {
+            $attribute = $this->_eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attribute);
+        }
+
+        return $attribute->isIndexable();
     }
 
     /**

@@ -67,7 +67,7 @@ class AttributeSelectorTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getUrl'
         )->with(
-            '*/product_attribute_suggestConfigurableAttributes'
+            '*/product_attribute/suggestConfigurableAttributes'
         )->will(
             $this->returnValue($source)
         );

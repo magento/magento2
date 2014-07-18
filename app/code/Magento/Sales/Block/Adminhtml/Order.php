@@ -43,7 +43,7 @@ class Order extends \Magento\Backend\Block\Widget\Grid\Container
         $this->_addButtonLabel = __('Create New Order');
         parent::_construct();
         if (!$this->_authorization->isAllowed('Magento_Sales::create')) {
-            $this->_removeButton('add');
+            $this->buttonList->remove('add');
         }
     }
 

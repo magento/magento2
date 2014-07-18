@@ -39,9 +39,9 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
 
         $this->_blockGroup = 'Magento_Backend';
         $this->_controller = 'system_account';
-        $this->_updateButton('save', 'label', __('Save Account'));
-        $this->_removeButton('delete');
-        $this->_removeButton('back');
+        $this->buttonList->update('save', 'label', __('Save Account'));
+        $this->buttonList->remove('delete');
+        $this->buttonList->remove('back');
     }
 
     /**

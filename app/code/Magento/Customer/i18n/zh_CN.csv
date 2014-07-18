@@ -182,7 +182,6 @@ Visitor,访客
 "Thank you for registering with %1.","Thank you for registering with %1."
 "If you are a registered VAT customer, please click <a href=""%1"">here</a> to enter you shipping address for proper VAT calculation","If you are a registered VAT customer, please click <a href=""%1"">here</a> to enter you shipping address for proper VAT calculation"
 "If you are a registered VAT customer, please click <a href=""%1"">here</a> to enter you billing address for proper VAT calculation","If you are a registered VAT customer, please click <a href=""%1"">here</a> to enter you billing address for proper VAT calculation"
-"Wrong customer account specified.",指定的客户帐户有误。
 "Bad request.",请求有误。
 "This confirmation key is invalid or has expired.","This confirmation key is invalid or has expired."
 "There was an error confirming the account","There was an error confirming the account"

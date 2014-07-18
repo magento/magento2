@@ -99,9 +99,14 @@ class TaxRuleFixtureFactory
         $rates = [];
         foreach ($ratesData as $rateData) {
             $code = "{$rateData['country']} - {$rateData['region']} - {$rateData['percentage']}";
+            $postcode = '*';
+            if (isset($rateData['postcode'])) {
+                $postcode = $rateData['postcode'];
+                $code = $code . " - " . $postcode;
+            }
             $taxRateBuilder->setCountryId($rateData['country'])
                 ->setRegionId($rateData['region'])
-                ->setPostcode('*')
+                ->setPostcode($postcode)
                 ->setCode($code)
                 ->setPercentageRate($rateData['percentage']);
 

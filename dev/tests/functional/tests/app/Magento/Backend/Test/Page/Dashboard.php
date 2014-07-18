@@ -24,50 +24,39 @@
 
 namespace Magento\Backend\Test\Page;
 
-use Mtf\Factory\Factory;
-use Mtf\Page\Page;
-use Mtf\Client\Element\Locator;
+use Mtf\Page\BackendPage;
 
 /**
  * Class Dashboard
  * Dashboard (Home) page for backend
- *
  */
-class Dashboard extends Page
+class Dashboard extends BackendPage
 {
     /**
      * URL part for backend authorization
      */
     const MCA = 'admin/dashboard';
 
-    /**
-     * Header panel block of dashboard page
-     *
-     * @var string
-     */
-    protected $adminPanelHeader = 'page-header';
-
-    /**
-     * Page title block
-     *
-     * @var string
-     */
-    protected $titleBlock = '.page-title';
-
-    /**
-     * Top menu selector
-     *
-     * @var string
-     */
-    protected $menuBlock = '.navigation';
-
-    /**
-     * Constructor
-     */
-    protected function _init()
-    {
-        $this->_url = $_ENV['app_backend_url'] . self::MCA;
-    }
+    protected $_blocks = [
+        'adminPanelHeader' => [
+            'name' => 'adminPanelHeader',
+            'class' => 'Magento\Backend\Test\Block\Page\Header',
+            'locator' => '.page-header',
+            'strategy' => 'css selector',
+        ],
+        'titleBlock' => [
+            'name' => 'titleBlock',
+            'class' => 'Magento\Theme\Test\Block\Html\Title',
+            'locator' => '.page-title',
+            'strategy' => 'css selector',
+        ],
+        'menuBlock' => [
+            'name' => 'menuBlock',
+            'class' => 'Magento\Backend\Test\Block\Menu',
+            'locator' => '.navigation',
+            'strategy' => 'css selector',
+        ],
+    ];
 
     /**
      * Get admin panel header block instance
@@ -76,9 +65,7 @@ class Dashboard extends Page
      */
     public function getAdminPanelHeader()
     {
-        return Factory::getBlockFactory()->getMagentoBackendPageHeader(
-            $this->_browser->find($this->adminPanelHeader, Locator::SELECTOR_CLASS_NAME)
-        );
+        return $this->getBlockInstance('adminPanelHeader');
     }
 
     /**
@@ -88,9 +75,7 @@ class Dashboard extends Page
      */
     public function getTitleBlock()
     {
-        return Factory::getBlockFactory()->getMagentoThemeHtmlTitle(
-            $this->_browser->find($this->titleBlock, Locator::SELECTOR_CSS)
-        );
+        return $this->getBlockInstance('titleBlock');
     }
 
     /**
@@ -100,8 +85,6 @@ class Dashboard extends Page
      */
     public function getMenuBlock()
     {
-        return Factory::getBlockFactory()->getMagentoBackendMenu(
-            $this->_browser->find($this->menuBlock, Locator::SELECTOR_CSS)
-        );
+        return $this->getBlockInstance('menuBlock');
     }
 }

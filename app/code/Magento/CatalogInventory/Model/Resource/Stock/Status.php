@@ -305,11 +305,10 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
         } else {
             $select = $adapter->select()->from(
                 array('t1' => $attributeTable),
-                array('value' => $adapter->getCheckSql('t2.value_id > 0', 't2.value', 't1.value'))
+                array('entity_id' => 't1.entity_id', 'value' => $adapter->getIfNullSql('t2.value', 't1.value'))
             )->joinLeft(
                 array('t2' => $attributeTable),
-                't1.entity_id = t2.entity_id AND t1.attribute_id = t2.attribute_id AND t2.store_id = ' . (int)$storeId,
-                array('t1.entity_id')
+                't1.entity_id = t2.entity_id AND t1.attribute_id = t2.attribute_id AND t2.store_id = ' . (int)$storeId
             )->where(
                 't1.store_id = ?',
                 \Magento\Store\Model\Store::DEFAULT_STORE_ID

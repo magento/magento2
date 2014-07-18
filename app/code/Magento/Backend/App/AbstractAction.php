@@ -227,7 +227,14 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
         }
 
         if ($request->isDispatched() && $request->getActionName() !== 'denied' && !$this->_isAllowed()) {
-            $this->_forward('denied');
+            $this->_response->setHeader('HTTP/1.1', '403 Forbidden');
+            $this->_response->setHttpResponseCode(403);
+            if (!$this->_auth->isLoggedIn()) {
+                return $this->_redirect('*/auth/login');
+            }
+            $this->_view->loadLayout(array('default', 'adminhtml_denied'), true, true, false);
+            $this->_view->renderLayout();
+            $this->_request->setDispatched(true);
             return $this->_response;
         }
 
@@ -313,35 +320,6 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
         }
 
         return $this;
-    }
-
-    /**
-     * @return void
-     */
-    public function deniedAction()
-    {
-        $this->getResponse()->setHeader('HTTP/1.1', '403 Forbidden');
-        if (!$this->_auth->isLoggedIn()) {
-            $this->_redirect('*/auth/login');
-            return;
-        }
-        $this->_view->loadLayout(array('default', 'adminhtml_denied'));
-        $this->_view->renderLayout();
-    }
-
-    /**
-     * No route action
-     *
-     * @param null $coreRoute
-     * @return void
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function norouteAction($coreRoute = null)
-    {
-        $this->getResponse()->setHeader('HTTP/1.1', '404 Not Found');
-        $this->getResponse()->setHeader('Status', '404 File not found');
-        $this->_view->loadLayout(array('default', 'adminhtml_noroute'));
-        $this->_view->renderLayout();
     }
 
     /**

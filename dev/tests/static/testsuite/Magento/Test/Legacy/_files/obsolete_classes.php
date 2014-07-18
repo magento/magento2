@@ -559,7 +559,7 @@ return array(
     ),
     array(
         'Mage_Adminhtml_Model_System_Config_Source_Shipping_Taxclass',
-        'Magento\Tax\Model\Config\Source\TaxClass\Product'
+        'Magento\Tax\Model\TaxClass\Source\Product'
     ),
     array(
         'Mage_Adminhtml_Model_System_Config_Source_Storage_Media_Database',
@@ -778,7 +778,7 @@ return array(
     array('Mage_Core_Block_Template_Facade'),
     array('Mage_Core_Block_Template_Smarty'),
     array('Mage_Core_Block_Template_Zend'),
-    array('Mage_Core_Controller_Magento_Router_Admin', 'Magento\Backend\App\Router\DefaultRouter'),
+    array('Mage_Core_Controller_Magento_Router_Admin', 'Magento\Backend\App\Router'),
     array('Mage_Core_Model_Convert'),
     array('Mage_Core_Model_Config_Fieldset', 'Magento\Core\Model\Fieldset\Config'),
     array('Mage_Core_Model_Config_Options', 'Magento\Framework\App\Filesystem'),
@@ -2701,6 +2701,8 @@ return array(
         'Magento\Bundle\Pricing\Price\BasePrice',
         'Magento\Catalog\Pricing\Price\BasePrice'
     ],
+    ['Magento\Cataloginventory\Model\Resource\Indexer\Stock'],
+    ['Magento\Catalog\Model\Product\Indexer\Eav'],
     ['Magento\Bundle\Pricing\Price\BasePriceInterface'],
     ['Magento\Banner\Helper\Data'],
     ['Magento\Cms\Helper\Data'],
@@ -2714,5 +2716,13 @@ return array(
     ['Magento\Rule\Helper\Data'],
     ['Magento\Theme\Helper\Data'],
     ['Magento\Widget\Helper\Data'],
+    ['Magento\Tax\Model\Resource\Calculation\Grid\Collection'],
+    ['Magento\Tax\Model\Resource\Rule\Grid\Collection'],
+    ['Magento\Tax\Model\Resource\Rule\Grid\Options\CustomerTaxClass'],
+    ['Magento\Tax\Model\Resource\Rule\Grid\Options\HashOptimized'],
+    ['Magento\Tax\Model\Resource\Rule\Grid\Options\ProductTaxClass'],
     ['Magento\SalesArchive\Block\Adminhtml\Sales\Order\Grid\Massaction'],
+    ['Magento\Catalog\Helper\Product\Price'],
+    ['Magento\Tax\Model\Config\Source\TaxClass\Product', 'Magento\Tax\Model\TaxClass\Source\Product'],
+    ['Magento\Tax\Model\Config\Source\TaxClass\Customer', 'Magento\Tax\Model\TaxClass\Source\Customer'],
 );

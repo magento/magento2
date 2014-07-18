@@ -24,7 +24,7 @@
 
 namespace Magento\User\Test\Constraint;
 
-use Magento\User\Test\Fixture\AdminUserInjectable;
+use Magento\User\Test\Fixture\User;
 use Mtf\Constraint\AbstractConstraint;
 use Magento\Backend\Test\Page\AdminAuthLogin;
 
@@ -46,12 +46,12 @@ class AssertUserWrongCredentialsMessage extends AbstractConstraint
      * Verify incorrect credentials message while login to admin
      *
      * @param AdminAuthLogin $adminAuth
-     * @param AdminUserInjectable $customAdmin
+     * @param User $customAdmin
      * @return void
      */
     public function processAssert(
         AdminAuthLogin $adminAuth,
-        AdminUserInjectable $customAdmin
+        User $customAdmin
     ) {
         $adminAuth->open();
         $adminAuth->getLoginBlock()->fill($customAdmin);

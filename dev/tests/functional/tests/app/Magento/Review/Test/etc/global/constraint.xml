@@ -42,4 +42,19 @@
     <assertProductRatingNotInProductPage module="Magento_Review">
         <severeness>middle</severeness>
     </assertProductRatingNotInProductPage>
+    <assertReviewSuccessSaveMessage module="Magento_Review">
+        <severeness>high</severeness>
+    </assertReviewSuccessSaveMessage>
+    <assertReviewCreationSuccessMessage module="Magento_Review">
+        <severeness>high</severeness>
+    </assertReviewCreationSuccessMessage>
+    <assertProductReviewInGrid module="Magento_Review">
+        <severeness>low</severeness>
+    </assertProductReviewInGrid>
+    <assertProductRatingOnReviewPage module="Magento_Review">
+        <severeness>middle</severeness>
+    </assertProductRatingOnReviewPage>
+    <assertProductRatingInProductPage module="Magento_Review">
+        <severeness>middle</severeness>
+    </assertProductRatingInProductPage>
 </constraint>

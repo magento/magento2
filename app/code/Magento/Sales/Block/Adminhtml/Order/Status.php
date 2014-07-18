@@ -40,7 +40,7 @@ class Status extends \Magento\Backend\Block\Widget\Grid\Container
         $this->_controller = 'adminhtml_order_status';
         $this->_headerText = __('Order Statuses');
         $this->_addButtonLabel = __('Create New Status');
-        $this->_addButton(
+        $this->buttonList->add(
             'assign',
             array(
                 'label' => __('Assign Status to State'),

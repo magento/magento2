@@ -138,4 +138,10 @@ interface StockItemServiceInterface
      * @return bool
      */
     public function getIsQtyTypeIds($filter = null);
+
+    /**
+     * @param int $stockData
+     * @return array
+     */
+    public function processIsInStock($stockData);
 }

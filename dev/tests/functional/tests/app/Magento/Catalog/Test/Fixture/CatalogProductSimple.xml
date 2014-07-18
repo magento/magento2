@@ -353,6 +353,7 @@
             <is_required>0</is_required>
             <default_value>Taxable Goods</default_value>
             <input>select</input>
+            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\TaxClass</source>
             <group>product-details</group>
         </tax_class_id>
         <thumbnail>
@@ -427,13 +428,9 @@
         <attribute_set_id>
             <attribute_code>attribute_set_id</attribute_code>
             <backend_type>virtual</backend_type>
+            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\AttributeSetId</source>
             <group>product-details</group>
         </attribute_set_id>
-        <qty>
-            <attribute_code>qty</attribute_code>
-            <input>input</input>
-            <group>product-details</group>
-        </qty>
         <custom_options>
             <attribute_code>custom_options</attribute_code>
             <backend_type>virtual</backend_type>
@@ -446,6 +443,7 @@
             <attribute_code>website_ids</attribute_code>
             <backend_type>virtual</backend_type>
             <default_value>Main Website</default_value>
+            <group>websites</group>
         </website_ids>
     </fields>
     <data_set>

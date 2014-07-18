@@ -24,6 +24,8 @@
 
 namespace Magento\UrlRewrite\Test\Block\Adminhtml\Catalog\Edit;
 
+use Mtf\Client\Element;
+use Mtf\Fixture\FixtureInterface;
 use Magento\Backend\Test\Block\Widget\Form as FormWidget;
 
 /**
@@ -32,5 +34,28 @@ use Magento\Backend\Test\Block\Widget\Form as FormWidget;
  */
 class Form extends FormWidget
 {
-    //
+    /**
+     * Fill the root form
+     *
+     * @param FixtureInterface $fixture
+     * @param Element|null $element
+     * @return $this
+     */
+    public function fill(FixtureInterface $fixture, Element $element = null)
+    {
+        $data = $fixture->getData();
+        $getData = $this->getData();
+        if (!$getData['target_path']) {
+            $entity = $fixture->getDataFieldConfig('id_path')['source']->getEntity();
+            $data['target_path'] = $entity->hasData('identifier')
+                ? $entity->getIdentifier()
+                : $entity->getUrlKey() . '.html';
+        }
+        // TODO: delete line after removing old fixture
+        $fields = isset($data['fields']) ? $data['fields'] : $data;
+        $mapping = $this->dataMapping($fields);
+        $this->_fill($mapping, $element);
+
+        return $this;
+    }
 }

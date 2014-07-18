@@ -28,7 +28,6 @@ use Mtf\Factory\Factory;
 
 /**
  * Class BundleDynamic
- *
  */
 class BundleDynamic extends Bundle
 {
@@ -83,42 +82,28 @@ class BundleDynamic extends Bundle
                 ),
                 'bundle_selections' => array(
                     'value' => array(
-                        'bundle_item_0' => array(
-                            'title' => array(
-                                'value' => 'Drop-down Option'
-                            ),
-                            'type' => array(
-                                'value' => 'Drop-down',
-                                'input_value' => 'select'
-                            ),
-                            'required' => array(
-                                'value' => 'Yes',
-                                'input_value' => '1'
-                            ),
-                            'assigned_products' => array(
-                                'assigned_product_0' => array(
-                                    'search_data' => array(
-                                        'name' => '%item1_simple1::getName%',
-                                    ),
-                                    'data' => array(
-                                        'selection_qty' => array(
-                                            'value' => 1
+                        'bundle_options' => array(
+                            'bundle_item_0' => array(
+                                'title' => 'Drop-down Option',
+                                'type' => 'Drop-down',
+                                'required' => 'Yes',
+                                'assigned_products' => array(
+                                    'assigned_product_0' => array(
+                                        'search_data' => array(
+                                            'name' => '%item1_simple1::getName%',
                                         ),
-                                        'product_id' => array(
-                                            'value' => '%item1_simple1::getProductId%'
+                                        'data' => array(
+                                            'selection_qty' => 1,
+                                            'product_id' => '%item1_simple1::getProductId%'
                                         )
-                                    )
-                                ),
-                                'assigned_product_1' => array(
-                                    'search_data' => array(
-                                        'name' => '%item1_virtual2::getName%',
                                     ),
-                                    'data' => array(
-                                        'selection_qty' => array(
-                                            'value' => 1
+                                    'assigned_product_1' => array(
+                                        'search_data' => array(
+                                            'name' => '%item1_virtual2::getName%',
                                         ),
-                                        'product_id' => array(
-                                            'value' => '%item1_virtual2::getProductId%'
+                                        'data' => array(
+                                            'selection_qty' => 1,
+                                            'product_id' => '%item1_virtual2::getProductId%'
                                         )
                                     )
                                 )

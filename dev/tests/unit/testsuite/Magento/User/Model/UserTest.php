@@ -248,7 +248,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
         );
 
 
-        $this->_model->sendPasswordResetNotificationEmail();
+        $this->assertInstanceOf('\Magento\User\Model\User', $this->_model->sendPasswordResetNotificationEmail());
     }
 
     public function testSendPasswordResetConfirmationEmail()
@@ -337,7 +337,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->_storetMock)
         );
 
-
-        $this->_model->sendPasswordResetConfirmationEmail();
+        $this->assertInstanceOf('\Magento\User\Model\User', $this->_model->sendPasswordResetConfirmationEmail());
     }
 }

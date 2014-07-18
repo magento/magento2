@@ -26,7 +26,6 @@ namespace Magento\Tax\Service\V1;
 
 use Magento\Framework\Exception\InputException;
 use Magento\Tax\Model\ClassModel as TaxClassModel;
-use Magento\Tax\Service\V1\Data\TaxClass as TaxClassDataObject;
 use Magento\Tax\Service\V1\Data\TaxClassBuilder;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -66,8 +65,8 @@ class TaxClassServiceTest extends \PHPUnit_Framework_TestCase
         $this->taxClassBuilder = $this->objectManager->create('Magento\Tax\Service\V1\Data\TaxClassBuilder');
         $this->taxClassModel = $this->objectManager->create('Magento\Tax\Model\ClassModel');
         $this->predefinedTaxClasses = [
-            TaxClassDataObject::TYPE_PRODUCT => 'Taxable Goods',
-            TaxClassDataObject::TYPE_CUSTOMER => 'Retail Customer'
+            TaxClassServiceInterface::TYPE_PRODUCT => 'Taxable Goods',
+            TaxClassServiceInterface::TYPE_CUSTOMER => 'Retail Customer'
         ];
     }
 
@@ -80,7 +79,7 @@ class TaxClassServiceTest extends \PHPUnit_Framework_TestCase
     {
         $taxClassDataObject = $this->taxClassBuilder
             ->setClassName(self::SAMPLE_TAX_CLASS_NAME)
-            ->setClassType(TaxClassDataObject::TYPE_CUSTOMER)
+            ->setClassType(TaxClassServiceInterface::TYPE_CUSTOMER)
             ->create();
         $taxClassId = $this->taxClassService->createTaxClass($taxClassDataObject);
         $this->assertEquals(self::SAMPLE_TAX_CLASS_NAME, $this->taxClassModel->load($taxClassId)->getClassName());
@@ -89,7 +88,7 @@ class TaxClassServiceTest extends \PHPUnit_Framework_TestCase
         $taxClassDataObject = $this->taxClassBuilder
             ->setClassId($taxClassId)
             ->setClassName(self::SAMPLE_TAX_CLASS_NAME . uniqid())
-            ->setClassType(TaxClassDataObject::TYPE_CUSTOMER)
+            ->setClassType(TaxClassServiceInterface::TYPE_CUSTOMER)
             ->create();
         //Should not be allowed to set the classId. Will throw InputException
         $this->taxClassService->createTaxClass($taxClassDataObject);
@@ -106,7 +105,7 @@ class TaxClassServiceTest extends \PHPUnit_Framework_TestCase
         //Testing against existing Tax classes which are already setup when the instance is installed
         $taxClassDataObject = $this->taxClassBuilder
             ->setClassName($this->predefinedTaxClasses[TaxClassModel::TAX_CLASS_TYPE_PRODUCT])
-            ->setClassType(TaxClassDataObject::TYPE_PRODUCT)
+            ->setClassType(TaxClassServiceInterface::TYPE_PRODUCT)
             ->create();
         $this->taxClassService->createTaxClass($taxClassDataObject);
     }
@@ -136,13 +135,13 @@ class TaxClassServiceTest extends \PHPUnit_Framework_TestCase
         $taxClassName = 'Get Me';
         $taxClassDataObject = $this->taxClassBuilder
             ->setClassName($taxClassName)
-            ->setClassType(TaxClassDataObject::TYPE_CUSTOMER)
+            ->setClassType(TaxClassServiceInterface::TYPE_CUSTOMER)
             ->create();
         $taxClassId = $this->taxClassService->createTaxClass($taxClassDataObject);
         $data = $this->taxClassService->getTaxClass($taxClassId);
         $this->assertEquals($taxClassId, $data->getClassId());
         $this->assertEquals($taxClassName, $data->getClassName());
-        $this->assertEquals(TaxClassDataObject::TYPE_CUSTOMER, $data->getClassType());
+        $this->assertEquals(TaxClassServiceInterface::TYPE_CUSTOMER, $data->getClassType());
     }
 
     /**
@@ -170,14 +169,14 @@ class TaxClassServiceTest extends \PHPUnit_Framework_TestCase
         // Verify if the tax class is deleted
         $this->setExpectedException(
             'Magento\Framework\Exception\NoSuchEntityException',
-            "No such entity with taxClassId = $taxClassId"
+            "No such entity with class_id = $taxClassId"
         );
         $this->taxClassService->deleteTaxClass($taxClassId);
     }
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with taxClassId = 99999
+     * @expectedExceptionMessage No such entity with class_id = 99999
      */
     public function testDeleteTaxClassInvalidData()
     {
@@ -222,7 +221,7 @@ class TaxClassServiceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with taxClassId = 99999
+     * @expectedExceptionMessage No such entity with class_id = 99999
      */
     public function testUpdateTaxClassWithInvalidClassId()
     {

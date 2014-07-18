@@ -45,8 +45,8 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         $this->_controller = 'adminhtml_category';
         $this->_mode = 'edit';
         parent::_construct();
-        $this->_removeButton('back');
-        $this->_removeButton('reset');
-        $this->_removeButton('save');
+        $this->buttonList->remove('back');
+        $this->buttonList->remove('reset');
+        $this->buttonList->remove('save');
     }
 }

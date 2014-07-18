@@ -55,6 +55,16 @@ class ItemBuilder extends \Magento\Framework\Service\Data\AbstractObjectBuilder
     }
 
     /**
+     * Convenience getter method for AppliedTaxBuilder
+     *
+     * @return AppliedTaxBuilder
+     */
+    public function getAppliedTaxBuilder()
+    {
+        return $this->appliedTaxBuilder;
+    }
+
+    /**
      * Set code (sku or shipping code)
      *
      * @param string $code
@@ -127,6 +137,18 @@ class ItemBuilder extends \Magento\Framework\Service\Data\AbstractObjectBuilder
     }
 
     /**
+     * Set row total including tax
+     *
+     * @param float $rowTotalInclTax
+     * @return $this
+     */
+    public function setRowTotalInclTax($rowTotalInclTax)
+    {
+        $this->_set(Item::KEY_ROW_TOTAL_INCL_TAX, $rowTotalInclTax);
+        return $this;
+    }
+
+    /**
      * Set tax amount
      *
      * @param float $taxAmount
@@ -171,6 +193,18 @@ class ItemBuilder extends \Magento\Framework\Service\Data\AbstractObjectBuilder
     public function setDiscountTaxCompensationAmount($discountTaxCompensationAmount)
     {
         $this->_set(Item::KEY_DISCOUNT_TAX_COMPENSATION_AMOUNT, $discountTaxCompensationAmount);
+        return $this;
+    }
+
+    /**
+     * Set applied taxes for the item
+     *
+     * @param \Magento\Tax\Service\V1\Data\TaxDetails\AppliedTax[] $appliedTaxes
+     * @return $this
+     */
+    public function setAppliedTaxes($appliedTaxes)
+    {
+        $this->_set(Item::KEY_APPLIED_TAXES, $appliedTaxes);
         return $this;
     }
 

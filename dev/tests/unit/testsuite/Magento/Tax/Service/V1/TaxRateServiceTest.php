@@ -27,9 +27,18 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Tax\Model\Calculation\Rate as RateModel;
 use Magento\Tax\Service\V1\Data\TaxRate;
 use Magento\TestFramework\Helper\ObjectManager;
+use Magento\Framework\Service\V1\Data\SearchCriteriaBuilder;
+use Magento\Tax\Model\Calculation\RateFactory;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class TaxRateServiceTest extends \PHPUnit_Framework_TestCase
 {
+    /** Sample values for testing */
+
+    const REGION_ID = 42;
+
     /**
      * @var TaxRateServiceInterface
      */
@@ -55,6 +64,26 @@ class TaxRateServiceTest extends \PHPUnit_Framework_TestCase
      */
     private $objectManager;
 
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    protected $searchCriteriaBuilder;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject | RateFactory
+     */
+    private $rateFactoryMock;
+
+    /**
+     * @var Data\TaxRateSearchResultsBuilder
+     */
+    private $taxRateSearchResultsBuilder;
+
+    /**
+     * @var  \Magento\Tax\Service\V1\Data\TaxRateBuilder'
+     */
+    private $taxRateBuilder;
+
     public function setUp()
     {
         $this->objectManager = new ObjectManager($this);
@@ -67,13 +96,26 @@ class TaxRateServiceTest extends \PHPUnit_Framework_TestCase
         $this->rateModelMock = $this->getMockBuilder('Magento\Tax\Model\Calculation\Rate')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->taxRateService = $this->objectManager->getObject(
-            'Magento\Tax\Service\V1\TaxRateService',
-            [
-                'rateRegistry' => $this->rateRegistryMock,
-                'converter' => $this->converterMock,
-            ]
+        $this->rateFactoryMock = $this->getMockBuilder('Magento\Tax\Model\Calculation\RateFactory')
+        ->disableOriginalConstructor()
+        ->getMock();
+        $this->taxRateSearchResultsBuilder = $this->objectManager->getObject(
+            'Magento\Tax\Service\V1\Data\TaxRateSearchResultsBuilder'
         );
+        $filterGroupBuilder = $this->objectManager
+            ->getObject('Magento\Framework\Service\V1\Data\Search\FilterGroupBuilder');
+        /** @var SearchCriteriaBuilder $searchBuilder */
+        $this->searchCriteriaBuilder = $this->objectManager->getObject(
+            'Magento\Framework\Service\V1\Data\SearchCriteriaBuilder',
+            ['filterGroupBuilder' => $filterGroupBuilder]
+        );
+
+        $zipRangeBuilder = $this->objectManager->getObject('Magento\Tax\Service\V1\Data\ZipRangeBuilder');
+        $this->taxRateBuilder = $this->objectManager->getObject(
+            'Magento\Tax\Service\V1\Data\TaxRateBuilder',
+            ['zipRangeBuilder' => $zipRangeBuilder]
+        );
+        $this->createService();
     }
 
     public function testCreateTaxRate()
@@ -86,20 +128,14 @@ class TaxRateServiceTest extends \PHPUnit_Framework_TestCase
             'zip_range' => ['from' => 78765, 'to' => 78780]
         ];
 
-        $zipRangeBuilder = $this->objectManager->getObject('Magento\Tax\Service\V1\Data\ZipRangeBuilder');
-        $taxRateBuilder = $this->objectManager->getObject(
-            'Magento\Tax\Service\V1\Data\TaxRateBuilder',
-            ['zipRangeBuilder' => $zipRangeBuilder]
-        );
-
-        $taxRateDataObject = $taxRateBuilder->populateWithArray($taxData)->create();
+        $taxRateDataObject =   $this->taxRateBuilder->populateWithArray($taxData)->create();
         $this->rateModelMock->expects($this->once())
             ->method('save')
             ->will($this->returnValue($this->rateModelMock));
         $this->converterMock->expects($this->once())
             ->method('createTaxRateModel')
             ->will($this->returnValue($this->rateModelMock));
-        $taxRate = $taxRateBuilder->populate($taxRateDataObject)->setPostcode('78765-78780')->create();
+        $taxRate =   $this->taxRateBuilder->populate($taxRateDataObject)->setPostcode('78765-78780')->create();
         $this->converterMock->expects($this->once())
             ->method('createTaxRateDataObjectFromModel')
             ->will($this->returnValue($taxRate));
@@ -124,12 +160,7 @@ class TaxRateServiceTest extends \PHPUnit_Framework_TestCase
             'code' => 'US-CA-*-Rate',
             'zip_range' => ['from' => 78765, 'to' => 78780]
         ];
-        $zipRangeBuilder = $this->objectManager->getObject('Magento\Tax\Service\V1\Data\ZipRangeBuilder');
-        $taxRateBuilder = $this->objectManager->getObject(
-            'Magento\Tax\Service\V1\Data\TaxRateBuilder',
-            ['zipRangeBuilder' => $zipRangeBuilder]
-        );
-        $taxRateDataObject = $taxRateBuilder->populateWithArray($taxData)->create();
+        $taxRateDataObject = $this->taxRateBuilder->populateWithArray($taxData)->create();
         $this->taxRateService->createTaxRate($taxRateDataObject);
     }
 
@@ -145,12 +176,8 @@ class TaxRateServiceTest extends \PHPUnit_Framework_TestCase
             'code' => 'US-CA-*-Rate',
             'zip_range' => ['from' => 78765, 'to' => 78780]
         ];
-        $zipRangeBuilder = $this->objectManager->getObject('Magento\Tax\Service\V1\Data\ZipRangeBuilder');
-        $taxRateBuilder = $this->objectManager->getObject(
-            'Magento\Tax\Service\V1\Data\TaxRateBuilder',
-            ['zipRangeBuilder' => $zipRangeBuilder]
-        );
-        $taxRateDataObject = $taxRateBuilder->populateWithArray($taxData)->create();
+
+        $taxRateDataObject =   $this->taxRateBuilder->populateWithArray($taxData)->create();
         $this->rateModelMock->expects($this->once())
             ->method('save')
             ->will($this->throwException(new \Magento\Framework\Model\Exception()));
@@ -194,8 +221,7 @@ class TaxRateServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateTaxRate()
     {
-        $taxRateBuilder = $this->objectManager->getObject('Magento\Tax\Service\V1\Data\TaxRateBuilder');
-        $taxRate = $taxRateBuilder
+        $taxRate = $this->taxRateBuilder
             ->setId(2)
             ->setCode('Rate-Code')
             ->setCountryId('US')
@@ -219,8 +245,7 @@ class TaxRateServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpdateTaxRateNoId()
     {
-        $taxRateBuilder = $this->objectManager->getObject('Magento\Tax\Service\V1\Data\TaxRateBuilder');
-        $taxRate = $taxRateBuilder
+        $taxRate = $this->taxRateBuilder
             ->setCode('Rate-Code')
             ->setCountryId('US')
             ->setPercentageRate(0.1)
@@ -240,11 +265,9 @@ class TaxRateServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpdateTaxRateMissingRequiredInfo()
     {
-        $taxRateBuilder = $this->objectManager->getObject('Magento\Tax\Service\V1\Data\TaxRateBuilder');
-        $taxRate = $taxRateBuilder
+        $taxRate = $this->taxRateBuilder
             ->setId(2)
             ->setCode('Rate-Code')
-            ->setCountryId('US')
             ->setPercentageRate(0.1)
             ->setRegionId('TX')
             ->create();
@@ -291,5 +314,125 @@ class TaxRateServiceTest extends \PHPUnit_Framework_TestCase
             ->method('delete')
             ->will($this->throwException(new \Exception('Bad error occurred')));
         $this->taxRateService->deleteTaxRate(1);
+    }
+
+    public function testSearchTaxRateEmpty()
+    {
+        $collectionMock = $this->getMockBuilder('Magento\Tax\Model\Resource\Calculation\Rate\Collection')
+            ->disableOriginalConstructor()
+            ->setMethods(['addFieldToFilter', 'getSize', 'load', 'joinRegionTable'])
+            ->getMock();
+
+        $this->mockReturnValue($collectionMock, ['getSize' => 0]);
+        $this->rateFactoryMock->expects($this->atLeastOnce())
+            ->method('create')
+            ->will($this->returnValue($this->rateModelMock));
+        $this->mockReturnValue(
+            $this->rateModelMock,
+            [
+                'load' => $this->returnSelf(),
+                'getCollection' => $collectionMock
+            ]
+        );
+
+        $filterBuilder = $this->objectManager->getObject('\Magento\Framework\Service\V1\Data\FilterBuilder');
+        $filter = $filterBuilder->setField(TaxRate::KEY_REGION_ID)->setValue(self::REGION_ID)->create();
+        $this->searchCriteriaBuilder->addFilter([$filter]);
+
+        $this->createService();
+        $searchCriteria = $this->searchCriteriaBuilder->create();
+        $searchCriteria->getSortOrders();
+        $searchResults = $this->taxRateService->searchTaxRates($searchCriteria);
+        $items = $searchResults->getItems();
+        $this->assertNotNull($searchResults);
+        $this->assertSame($searchCriteria, $searchResults->getSearchCriteria());
+        $this->assertEquals(0, $searchResults->getTotalCount());
+        $this->assertNotNull($items);
+        $this->assertTrue(empty($items));
+    }
+
+    public function testSearchTaxRate()
+    {
+        $collectionMock = $this->getMockBuilder('Magento\Tax\Model\Resource\Calculation\Rate\Collection')
+            ->disableOriginalConstructor()
+            ->setMethods(['addFieldToFilter', 'getSize', 'load', 'getIterator', 'joinRegionTable'])
+            ->getMock();
+
+        $this->mockReturnValue(
+            $collectionMock,
+            [
+                'getSize' => 1,
+                'getIterator' => new \ArrayIterator([$this->rateModelMock])
+            ]
+        );
+
+        $this->rateFactoryMock->expects($this->atLeastOnce())
+            ->method('create')
+            ->will($this->returnValue($this->rateModelMock));
+
+        $this->mockReturnValue(
+            $this->rateModelMock,
+            [
+                'load' => $this->returnSelf(),
+                'getCollection' => $collectionMock,
+            ]
+        );
+
+        $taxRate = $this->taxRateBuilder
+            ->setId(2)
+            ->setCode('Rate-Code')
+            ->setCountryId('US')
+            ->setPercentageRate(0.1)
+            ->setPostcode('55555')
+            ->setRegionId(self::REGION_ID)
+            ->create();
+        $this->converterMock->expects($this->once())
+            ->method('createTaxRateDataObjectFromModel')
+            ->with($this->rateModelMock)
+            ->will($this->returnValue($taxRate));
+
+        $filterBuilder = $this->objectManager->getObject('\Magento\Framework\Service\V1\Data\FilterBuilder');
+        $filter = $filterBuilder->setField(TaxRate::KEY_REGION_ID)->setValue(self::REGION_ID)->create();
+        $this->searchCriteriaBuilder
+            ->addFilter([$filter])
+            ->addSortOrder('id', \Magento\Framework\Service\V1\Data\SearchCriteria::SORT_ASC);
+
+        $this->createService();
+        $searchCriteria = $this->searchCriteriaBuilder->create();
+        $searchResults = $this->taxRateService->searchTaxRates($searchCriteria);
+        $items = $searchResults->getItems();
+        $this->assertNotNull($searchResults);
+        $this->assertSame($searchCriteria, $searchResults->getSearchCriteria());
+        $this->assertEquals(1, $searchResults->getTotalCount());
+        $this->assertNotNull($items);
+        $this->assertFalse(empty($items));
+        $this->assertEquals(self::REGION_ID, $items[0]->getRegionId());
+    }
+
+    /**
+     * @param \PHPUnit_Framework_MockObject_MockObject $mock
+     * @param array $valueMap
+     */
+    private function mockReturnValue($mock, $valueMap)
+    {
+        foreach ($valueMap as $method => $value) {
+            $mock->expects($this->any())->method($method)->will($this->returnValue($value));
+        }
+    }
+
+    /**
+     * create taxRateService
+     */
+    private function createService()
+    {
+        $this->taxRateService = $this->objectManager->getObject(
+            'Magento\Tax\Service\V1\TaxRateService',
+            [
+                'rateFactory' => $this->rateFactoryMock,
+                'rateRegistry' => $this->rateRegistryMock,
+                'converter' => $this->converterMock,
+                'taxRateSearchResultsBuilder' => $this->taxRateSearchResultsBuilder
+            ]
+        );
     }
 }

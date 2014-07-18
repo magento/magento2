@@ -52,7 +52,6 @@ State/Province,State/Province
 "The onepage checkout is disabled.","The onepage checkout is disabled."
 Checkout,Checkout
 "Unable to set Payment Method","Unable to set Payment Method"
-"Can not create invoice. Order was not found.","Can not create invoice. Order was not found."
 "Please agree to all the terms and conditions before placing the order.","Please agree to all the terms and conditions before placing the order."
 "Something went wrong processing your order. Please try again later.","Something went wrong processing your order. Please try again later."
 "We can't find the product.","We can't find the product."

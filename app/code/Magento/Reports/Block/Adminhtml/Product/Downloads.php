@@ -39,6 +39,6 @@ class Downloads extends \Magento\Backend\Block\Widget\Grid\Container
         $this->_controller = 'adminhtml_product_downloads';
         $this->_headerText = __('Downloads');
         parent::_construct();
-        $this->_removeButton('add');
+        $this->buttonList->remove('add');
     }
 }

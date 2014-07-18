@@ -90,6 +90,9 @@ class TaxRuleConverter
         if (!is_null($ruleModel->getPosition())) {
             $this->taxRuleDataObjectBuilder->setSortOrder($ruleModel->getPosition());
         }
+        if (!is_null($ruleModel->getCalculateSubtotal())) {
+            $this->taxRuleDataObjectBuilder->setCalculateSubtotal($ruleModel->getCalculateSubtotal());
+        }
         return $this->taxRuleDataObjectBuilder->create();
     }
 
@@ -112,6 +115,7 @@ class TaxRuleConverter
         $taxRuleModel->setCode($taxRuleDataObject->getCode());
         $taxRuleModel->setPriority($taxRuleDataObject->getPriority());
         $taxRuleModel->setPosition($taxRuleDataObject->getSortOrder());
+        $taxRuleModel->setCalculateSubtotal($taxRuleDataObject->getCalculateSubtotal());
         return $taxRuleModel;
     }
 

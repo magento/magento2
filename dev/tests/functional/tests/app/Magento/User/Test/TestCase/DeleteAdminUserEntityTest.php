@@ -29,7 +29,7 @@ use Magento\Backend\Test\Page\Dashboard;
 use Magento\User\Test\Page\Adminhtml\UserEdit;
 use Magento\User\Test\Page\Adminhtml\UserIndex;
 use Mtf\TestCase\Injectable;
-use Magento\User\Test\Fixture\AdminUserInjectable;
+use Magento\User\Test\Fixture\User;
 use Mtf\Fixture\FixtureFactory;
 
 /**
@@ -79,7 +79,7 @@ class DeleteAdminUserEntityTest extends Injectable
     public function __prepare(FixtureFactory $fixtureFactory)
     {
         $user = $fixtureFactory->createByCode(
-            'adminUserInjectable',
+            'user',
             ['dataSet' => 'custom_admin_with_default_role']
         );
         $user->persist();
@@ -113,12 +113,12 @@ class DeleteAdminUserEntityTest extends Injectable
     /**
      * Runs Delete User Entity test
      *
-     * @param AdminUserInjectable $user
+     * @param User $user
      * @param string $isDefaultUser
      * @return void
      */
     public function testDeleteAdminUserEntity(
-        AdminUserInjectable $user,
+        User $user,
         $isDefaultUser
     ) {
         $filter = [

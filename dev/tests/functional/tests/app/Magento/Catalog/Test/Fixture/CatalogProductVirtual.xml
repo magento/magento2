@@ -420,6 +420,10 @@
             <attribute_code>id</attribute_code>
             <backend_type>virtual</backend_type>
         </id>
+        <is_virtual>
+            <attribute_code>is_virtual</attribute_code>
+            <backend_type>virtual</backend_type>
+        </is_virtual>
         <type_id>
             <attribute_code>type_id</attribute_code>
             <backend_type>virtual</backend_type>
@@ -427,12 +431,9 @@
         <attribute_set_id>
             <attribute_code>attribute_set_id</attribute_code>
             <backend_type>virtual</backend_type>
-        </attribute_set_id>
-        <qty>
-            <attribute_code>qty</attribute_code>
-            <input>input</input>
+            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\AttributeSetId</source>
             <group>product-details</group>
-        </qty>
+        </attribute_set_id>
         <custom_options>
             <attribute_code>custom_options</attribute_code>
             <backend_type>virtual</backend_type>

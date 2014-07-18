@@ -36,7 +36,7 @@ body,td { color:#2f2f2f; font:11px/1.35em Verdana, Arial, Helvetica, sans-serif;
                                 Use the following values when prompted to log in:<br/>
                                 <strong>E-mail:</strong> {{var customer.email}}<br/>
                                 <strong>Password:</strong> Only you know that! (Hint: It’s the password you created at {{var store.getFrontendName()|escape}})<br/>
-                                Forgot your Account password? No problems. Click <a href="{{store url="customer/account/createpassword/" _query_id=$customer.id _query_token=$customer.rp_token}}">here</a> to reset it.
+                                Forgot your Account password? No problems. Click <a href="{{store url="customer/account/createPassword/" _query_id=$customer.id _query_token=$customer.rp_token}}">here</a> to reset it.
                             </p>
                             <p style="font-size:12px; line-height:16px; margin:0;">If you have any questions about your account or any other matter, please feel free to contact us at <a href="mailto:{{config path='trans_email/ident_support/email'}}" style="color:#1E7EC8;">{{config path='trans_email/ident_support/email'}}</a> or by phone at {{config path='general/store_information/phone'}}.</p>
                         </td>

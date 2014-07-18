@@ -29,6 +29,13 @@ namespace Magento\Tax\Service\V1;
  */
 interface TaxClassServiceInterface
 {
+    /**#@+
+     * Tax class type.
+     */
+    const TYPE_CUSTOMER = 'CUSTOMER';
+    const TYPE_PRODUCT = 'PRODUCT';
+    /**#@-*/
+
     /**
      * Create a Tax Class
      *
@@ -65,6 +72,7 @@ interface TaxClassServiceInterface
      * @param int $taxClassId
      * @return bool True if the tax class was deleted, false otherwise
      * @throws \Magento\Framework\Exception\NoSuchEntityException If tax class with $taxClassId does not exist
+     * @throws \Magento\Framework\Exception\CouldNotDeleteException
      */
     public function deleteTaxClass($taxClassId);
 
@@ -72,7 +80,7 @@ interface TaxClassServiceInterface
      * Retrieve tax classes which match a specific criteria.
      *
      * @param \Magento\Framework\Service\V1\Data\SearchCriteria $searchCriteria
-     * @return \Magento\Tax\Service\V1\Data\SearchResults containing Data\TaxClass
+     * @return \Magento\Tax\Service\V1\Data\TaxClassSearchResults containing Data\TaxClass
      * @throws \Magento\Framework\Exception\InputException
      */
     public function searchTaxClass(\Magento\Framework\Service\V1\Data\SearchCriteria $searchCriteria);

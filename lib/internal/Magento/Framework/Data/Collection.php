@@ -694,6 +694,18 @@ class Collection implements \IteratorAggregate, \Countable, \Magento\Framework\O
     }
 
     /**
+     * Load data with filter in place
+     *
+     * @param bool $printQuery
+     * @param bool $logQuery
+     * @return $this
+     */
+    public function loadWithFilter($printQuery = false, $logQuery = false)
+    {
+        return $this->loadData($printQuery, $logQuery);
+    }
+
+    /**
      * Convert collection to XML
      *
      * @return string

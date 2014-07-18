@@ -46,38 +46,6 @@ class Catalog extends \Magento\Framework\App\Action\Action
     }
 
     /**
-     * @return void
-     */
-    public function newAction()
-    {
-        $this->_genericAction('new');
-    }
-
-    /**
-     * @return void
-     */
-    public function specialAction()
-    {
-        $this->_genericAction('special');
-    }
-
-    /**
-     * @return void
-     */
-    public function salesruleAction()
-    {
-        $this->_genericAction('salesrule');
-    }
-
-    /**
-     * @return void
-     */
-    public function categoryAction()
-    {
-        $this->_genericAction('category');
-    }
-
-    /**
      * Render or forward to "no route" action if this type of RSS is disabled
      *
      * @param string $code

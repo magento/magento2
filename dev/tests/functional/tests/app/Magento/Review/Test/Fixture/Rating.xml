@@ -73,6 +73,11 @@
             <backend_type>virtual</backend_type>
             <group>rating_information</group>
         </stores>
+        <options>
+            <attribute_code>options</attribute_code>
+            <backend_type>virtual</backend_type>
+            <group>rating_information</group>
+        </options>
     </fields>
     <repository_class>Magento\Review\Test\Repository\Rating</repository_class>
     <handler_interface>Magento\Review\Test\Handler\Rating\RatingInterface</handler_interface>

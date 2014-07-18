@@ -53,10 +53,11 @@ interface ViewInterface
      * @param   string|null|bool $handles
      * @param   bool $generateBlocks
      * @param   bool $generateXml
+     * @param   bool $addActionHandles
      * @return  ViewInterface
      * @throws  \RuntimeException
      */
-    public function loadLayout($handles = null, $generateBlocks = true, $generateXml = true);
+    public function loadLayout($handles = null, $generateBlocks = true, $generateXml = true, $addActionHandles = true);
 
     /**
      * Generate layout xml

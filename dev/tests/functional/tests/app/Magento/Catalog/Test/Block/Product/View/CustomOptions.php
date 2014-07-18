@@ -145,11 +145,8 @@ class CustomOptions extends Block
                     $option['value'][] = $value;
                     $option['price'][] = $matches[1];
                 }
-            } elseif (($prices = $fieldElement->find(
-                $this->selectLocator,
-                Locator::SELECTOR_XPATH
-            )
-                ) && $prices->isVisible()
+            } elseif (($prices = $fieldElement->find($this->selectLocator, Locator::SELECTOR_XPATH))
+                && $prices->isVisible()
             ) {
                 $priceIndex = 0;
                 while (($price = $prices->find(sprintf($this->optionLocator, ++$priceIndex), Locator::SELECTOR_XPATH))

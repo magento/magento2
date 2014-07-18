@@ -157,7 +157,7 @@ class Inline implements \Magento\Framework\Translate\InlineInterface
      */
     public function processResponseBody(&$body, $isJson = false)
     {
-        if ($this->scope == 'admin' && !$this->isAllowed()) {
+        if (!$this->isAllowed()) {
             $this->stripInlineTranslations($body);
             return $this;
         }

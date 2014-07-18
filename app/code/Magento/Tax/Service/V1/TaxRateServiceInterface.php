@@ -65,4 +65,13 @@ interface TaxRateServiceInterface
      * @throws \Exception If something went wrong while performing the delete.
      */
     public function deleteTaxRate($rateId);
+
+    /**
+     * Search TaxRates
+     *
+     * @param \Magento\Framework\Service\V1\Data\SearchCriteria $searchCriteria
+     * @return \Magento\Tax\Service\V1\Data\TaxRateSearchResults containing Data\TaxRate objects
+     * @throws \Magento\Framework\Exception\InputException If there is a problem with the input
+     */
+    public function searchTaxRates(\Magento\Framework\Service\V1\Data\SearchCriteria $searchCriteria);
 }

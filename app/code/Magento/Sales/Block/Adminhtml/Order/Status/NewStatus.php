@@ -38,8 +38,8 @@ class NewStatus extends \Magento\Backend\Block\Widget\Form\Container
         $this->_mode = 'newStatus';
 
         parent::_construct();
-        $this->_updateButton('save', 'label', __('Save Status'));
-        $this->_removeButton('delete');
+        $this->buttonList->update('save', 'label', __('Save Status'));
+        $this->buttonList->remove('delete');
     }
 
     /**

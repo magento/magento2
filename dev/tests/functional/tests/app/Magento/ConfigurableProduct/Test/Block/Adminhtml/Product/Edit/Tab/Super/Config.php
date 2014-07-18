@@ -21,6 +21,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
 namespace Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Super;
 
 use Mtf\Client\Element;
@@ -127,13 +128,13 @@ class Config extends Tab
             return $this;
         }
         $attributes = $fields['configurable_attributes_data']['value'];
-        foreach ($attributes as $attribute) {
-            $this->selectAttribute($attribute['label']['value']);
+        foreach ($attributes['attributes_data'] as $attribute) {
+            $this->selectAttribute($attribute['title']);
         }
         $this->fillAttributeOptions($attributes);
         $this->generateVariations();
-        if (isset($fields['variations-matrix']['value'])) {
-            $this->fillVariationsMatrix($fields['variations-matrix']['value']);
+        if (!empty($attributes['matrix'])) {
+            $this->fillVariationsMatrix($attributes['matrix']);
         }
 
         return $this;
@@ -145,7 +146,7 @@ class Config extends Tab
      * @param array $fields
      * @return void
      */
-    public function fillVariationsMatrix($fields)
+    public function fillVariationsMatrix(array $fields)
     {
         $this->getMatrixBlock()->fillVariation($fields);
     }
@@ -158,8 +159,8 @@ class Config extends Tab
      */
     public function fillAttributeOptions(array $attributes)
     {
-        foreach ($attributes as $attribute) {
-            $this->getAttributeBlock($attribute['label']['value'])->fillAttributeOptions($attribute);
+        foreach ($attributes['attributes_data'] as $attribute) {
+            $this->getAttributeBlock($attribute['title'])->fillAttributeOptions($attribute);
         }
     }
 
@@ -188,9 +189,12 @@ class Config extends Tab
                 "//div[@class='mage-suggest-dropdown']//a[text()='$attributeName']",
                 Locator::SELECTOR_XPATH
             );
-            if ($attribute->isVisible()) {
-                $attribute->click();
-            }
+            $attribute->waitUntil(
+                function () use ($attribute) {
+                    return $attribute->isVisible() ? true : null;
+                }
+            );
+            $attribute->click();
         }
     }
 }

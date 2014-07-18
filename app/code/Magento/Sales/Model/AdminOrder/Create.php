@@ -193,6 +193,16 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
     protected $stockItemService;
 
     /**
+     * @var \Magento\Sales\Model\AdminOrder\EmailSender
+     */
+    protected $emailSender;
+
+    /**
+     * @var \Magento\Sales\Model\Quote\Item\Updater
+     */
+    protected $quoteItemUpdater;
+
+    /**
      * @param \Magento\Framework\ObjectManager $objectManager
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Registry $coreRegistry
@@ -210,7 +220,9 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
      * @param \Magento\Customer\Helper\Data $customerHelper
      * @param CustomerGroupServiceInterface $customerGroupService
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param EmailSender $emailSender
      * @param \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
+     * @param \Magento\Sales\Model\Quote\Item\Updater $quoteItemUpdater
      * @param array $data
      */
     public function __construct(
@@ -231,7 +243,9 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
         \Magento\Customer\Helper\Data $customerHelper,
         CustomerGroupServiceInterface $customerGroupService,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Sales\Model\AdminOrder\EmailSender $emailSender,
         \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService,
+        \Magento\Sales\Model\Quote\Item\Updater $quoteItemUpdater,
         array $data = array()
     ) {
         $this->_objectManager = $objectManager;
@@ -251,7 +265,9 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
         $this->_customerHelper = $customerHelper;
         $this->_customerGroupService = $customerGroupService;
         $this->_scopeConfig = $scopeConfig;
+        $this->emailSender = $emailSender;
         $this->stockItemService = $stockItemService;
+        $this->quoteItemUpdater = $quoteItemUpdater;
         parent::__construct($data);
     }
 
@@ -969,60 +985,41 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
     /**
      * Update quantity of order quote items
      *
-     * @param array $data
+     * @param array $items
      * @return $this
      * @throws \Exception|\Magento\Framework\Model\Exception
      */
-    public function updateQuoteItems($data)
+    public function updateQuoteItems($items)
     {
-        if (is_array($data)) {
-            try {
-                foreach ($data as $itemId => $info) {
-                    if (!empty($info['configured'])) {
-                        $item = $this->getQuote()->updateItem($itemId, new \Magento\Framework\Object($info));
-                        $itemQty = (double)$item->getQty();
-                    } else {
-                        $item = $this->getQuote()->getItemById($itemId);
-                        $itemQty = (double)$info['qty'];
-                    }
-
-                    if ($item) {
-                        $stockItemDo = $this->stockItemService->getStockItem($item->getProduct()->getId());
-                        if ($stockItemDo->getStockId() && !$stockItemDo->getIsQtyDecimal()) {
-                            $itemQty = (int)$itemQty;
-                        } else {
-                            $item->setIsQtyDecimal(1);
-                        }
-                        $itemQty = $itemQty > 0 ? $itemQty : 1;
-                        if (isset($info['custom_price'])) {
-                            $itemPrice = $this->_parseCustomPrice($info['custom_price']);
-                        } else {
-                            $itemPrice = null;
-                        }
-                        $noDiscount = !isset($info['use_discount']);
-
-                        if (empty($info['action']) || !empty($info['configured'])) {
-                            $item->setQty($itemQty);
-                            $item->setCustomPrice($itemPrice);
-                            $item->setOriginalCustomPrice($itemPrice);
-                            $item->setNoDiscount($noDiscount);
-                            $item->getProduct()->setIsSuperMode(true);
-                            $item->getProduct()->unsSkipCheckRequiredOption();
-                            $item->checkData();
-                        }
-                        if (!empty($info['action'])) {
-                            $this->moveQuoteItem($item, $info['action'], $itemQty);
-                        }
-                    }
-                }
-            } catch (\Magento\Framework\Model\Exception $e) {
-                $this->recollectCart();
-                throw $e;
-            } catch (\Exception $e) {
-                $this->_logger->logException($e);
-            }
-            $this->recollectCart();
+        if (!is_array($items)) {
+            return $this;
         }
+
+        try {
+            foreach ($items as $itemId => $info) {
+                if (!empty($info['configured'])) {
+                    $item = $this->getQuote()->updateItem($itemId, $this->_objectManager->create($info));
+                    $info['qty'] = (double)$item->getQty();
+                } else {
+                    $item = $this->getQuote()->getItemById($itemId);
+                    if (!$item) {
+                        continue;
+                    }
+                    $info['qty'] = (double)$info['qty'];
+                }
+                $item = $this->quoteItemUpdater->update($item, $info);
+                if ($item && !empty($info['action'])) {
+                    $this->moveQuoteItem($item, $info['action'], $item->getQty());
+                }
+            }
+        } catch (\Magento\Framework\Model\Exception $e) {
+            $this->recollectCart();
+            throw $e;
+        } catch (\Exception $e) {
+            $this->_logger->logException($e);
+        }
+        $this->recollectCart();
+
         return $this;
     }
 
@@ -1804,7 +1801,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
             $order->save();
         }
         if ($this->getSendConfirmation()) {
-            $order->sendNewOrderEmail();
+            $this->emailSender->send($order);
         }
 
         $this->_eventManager->dispatch('checkout_submit_all_after', array('order' => $order, 'quote' => $quote));

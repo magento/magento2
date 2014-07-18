@@ -136,77 +136,6 @@ class Api extends \Magento\Framework\App\Action\Action
     }
 
     /**
-     * Load place from layout to make POST on Ogone
-     *
-     * @return void
-     */
-    public function placeformAction()
-    {
-        $lastIncrementId = $this->_getCheckout()->getLastRealOrderId();
-        if ($lastIncrementId) {
-            $order = $this->_salesOrderFactory->create()->loadByIncrementId($lastIncrementId);
-            if ($order->getId()) {
-                $order->setState(
-                    \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT,
-                    \Magento\Ogone\Model\Api::PENDING_OGONE_STATUS,
-                    __('Start Ogone Processing')
-                );
-                $order->save();
-
-                $this->_getApi()->debugOrder($order);
-            }
-        }
-
-        $this->_getCheckout()->getQuote()->setIsActive(false)->save();
-        $this->_getCheckout()->setOgoneQuoteId($this->_getCheckout()->getQuoteId());
-        $this->_getCheckout()->setOgoneLastSuccessQuoteId($this->_getCheckout()->getLastSuccessQuoteId());
-        $this->_getCheckout()->clearQuote();
-
-        $this->_view->loadLayout();
-        $this->_view->renderLayout();
-    }
-
-    /**
-     * Display our pay page, need to Ogone payment with external pay page mode
-     *
-     * @return void
-     */
-    public function paypageAction()
-    {
-        $this->_view->loadLayout();
-        $this->_view->renderLayout();
-    }
-
-    /**
-     * Action to control postback data from Ogone
-     *
-     * @return null|false
-     */
-    public function postBackAction()
-    {
-        if (!$this->_validateOgoneData()) {
-            $this->getResponse()->setHeader("Status", "404 Not Found");
-            return false;
-        }
-
-        $this->_ogoneProcess();
-    }
-
-    /**
-     * Action to process Ogone offline data
-     *
-     * @return null|false
-     */
-    public function offlineProcessAction()
-    {
-        if (!$this->_validateOgoneData()) {
-            $this->getResponse()->setHeader("Status", "404 Not Found");
-            return false;
-        }
-        $this->_ogoneProcess();
-    }
-
-    /**
      * Made offline Ogone data processing, depending of incoming statuses
      *
      * @return void
@@ -234,22 +163,6 @@ class Api extends \Magento\Framework\App\Action\Action
                 $this->_exceptionProcess();
                 break;
         }
-    }
-
-    /**
-     * When payment gateway accept the payment, it will land to here
-     * need to change order status as processed Ogone
-     * update transaction id
-     *
-     * @return void
-     */
-    public function acceptAction()
-    {
-        if (!$this->_validateOgoneData()) {
-            $this->_redirect('checkout/cart');
-            return;
-        }
-        $this->_ogoneProcess();
     }
 
     /**
@@ -403,23 +316,6 @@ class Api extends \Magento\Framework\App\Action\Action
     }
 
     /**
-     * The payment result is uncertain
-     * exception status can be 52 or 92
-     * need to change order status as processing Ogone
-     * update transaction id
-     *
-     * @return void
-     */
-    public function exceptionAction()
-    {
-        if (!$this->_validateOgoneData()) {
-            $this->_redirect('checkout/cart');
-            return;
-        }
-        $this->_exceptionProcess();
-    }
-
-    /**
      * Process exception action by Ogone exception url
      *
      * @return void
@@ -476,23 +372,6 @@ class Api extends \Magento\Framework\App\Action\Action
     }
 
     /**
-     * When payment got decline
-     * need to change order status to cancelled
-     * take the user back to shopping cart
-     *
-     * @return void
-     */
-    public function declineAction()
-    {
-        if (!$this->_validateOgoneData()) {
-            $this->_redirect('checkout/cart');
-            return;
-        }
-        $this->_getCheckout()->setQuoteId($this->_getCheckout()->getOgoneQuoteId());
-        $this->_declineProcess();
-    }
-
-    /**
      * Process decline action by Ogone decline url
      *
      * @return void
@@ -503,36 +382,6 @@ class Api extends \Magento\Framework\App\Action\Action
         $comment = __('Declined Order on Ogone side');
         $this->messageManager->addError(__('The payment transaction has been declined.'));
         $this->_cancelOrder($status, $comment);
-    }
-
-    /**
-     * When user cancel the payment
-     * change order status to cancelled
-     * need to redirect user to shopping cart
-     *
-     * @return void
-     */
-    public function cancelAction()
-    {
-        if (!$this->_validateOgoneData()) {
-            $this->_redirect('checkout/cart');
-            return;
-        }
-        $this->_getCheckout()->setQuoteId($this->_getCheckout()->getOgoneQuoteId());
-        $this->_cancelProcess();
-    }
-
-    /**
-     * Process cancel action by cancel url
-     *
-     * @return $this
-     */
-    public function _cancelProcess()
-    {
-        $status = \Magento\Ogone\Model\Api::CANCEL_OGONE_STATUS;
-        $comment = __('The order was canceled on the Ogone side.');
-        $this->_cancelOrder($status, $comment);
-        return $this;
     }
 
     /**

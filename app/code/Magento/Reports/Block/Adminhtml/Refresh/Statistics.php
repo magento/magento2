@@ -41,6 +41,6 @@ class Statistics extends \Magento\Backend\Block\Widget\Grid\Container
         $this->_controller = 'adminhtml_refresh_statistics';
         $this->_headerText = __('Refresh Statistics');
         parent::_construct();
-        $this->_removeButton('add');
+        $this->buttonList->remove('add');
     }
 }

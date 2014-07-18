@@ -45,13 +45,6 @@ class Rule extends \Magento\Framework\Model\AbstractModel
     protected $_eventPrefix = 'tax_rule';
 
     /**
-     * Helper
-     *
-     * @var \Magento\Tax\Helper\Data
-     */
-    protected $_helper;
-
-    /**
      * Tax Model Class
      *
      * @var \Magento\Tax\Model\ClassModel
@@ -66,7 +59,6 @@ class Rule extends \Magento\Framework\Model\AbstractModel
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Tax\Helper\Data $taxHelper
      * @param \Magento\Tax\Model\ClassModel $taxClass
      * @param \Magento\Tax\Model\Calculation $calculation
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
@@ -76,7 +68,6 @@ class Rule extends \Magento\Framework\Model\AbstractModel
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Tax\Helper\Data $taxHelper,
         \Magento\Tax\Model\ClassModel $taxClass,
         \Magento\Tax\Model\Calculation $calculation,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
@@ -88,7 +79,6 @@ class Rule extends \Magento\Framework\Model\AbstractModel
 
         $this->_init('Magento\Tax\Model\Resource\Calculation\Rule');
 
-        $this->_helper = $taxHelper;
         $this->_taxClass = $taxClass;
     }
 
@@ -173,61 +163,6 @@ class Rule extends \Magento\Framework\Model\AbstractModel
     public function getProductTaxClasses()
     {
         return $this->getCalculationModel()->getProductTaxClasses($this->getId());
-    }
-
-    /**
-     * Check Customer Tax Class and if it is empty - use defaults
-     *
-     * @return int|array|null
-     */
-    public function getCustomerTaxClassWithDefault()
-    {
-        $customerClasses = $this->getAllOptionsForClass(\Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_CUSTOMER);
-        if (empty($customerClasses)) {
-            return null;
-        }
-
-        $configValue = $this->_helper->getDefaultCustomerTaxClass();
-        if (!empty($configValue)) {
-            return $configValue;
-        }
-
-        $firstClass = array_shift($customerClasses);
-        return isset($firstClass['value']) ? $firstClass['value'] : null;
-    }
-
-    /**
-     * Check Product Tax Class and if it is empty - use defaults
-     *
-     * @return int|array|null
-     */
-    public function getProductTaxClassWithDefault()
-    {
-        $productClasses = $this->getAllOptionsForClass(\Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_PRODUCT);
-        if (empty($productClasses)) {
-            return null;
-        }
-
-        $configValue = $this->_helper->getDefaultProductTaxClass();
-        if (!empty($configValue)) {
-            return $configValue;
-        }
-
-        $firstClass = array_shift($productClasses);
-        return isset($firstClass['value']) ? $firstClass['value'] : null;
-    }
-
-    /**
-     * Get all possible options for specified class name (customer|product)
-     *
-     * @param string $classFilter
-     * @return array
-     */
-    public function getAllOptionsForClass($classFilter)
-    {
-        $classes = $this->_taxClass->getCollection()->setClassTypeFilter($classFilter)->toOptionArray();
-
-        return $classes;
     }
 
     /**

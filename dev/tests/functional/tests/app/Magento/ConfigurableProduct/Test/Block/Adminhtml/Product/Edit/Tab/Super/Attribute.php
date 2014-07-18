@@ -91,26 +91,26 @@ class Attribute extends Block
     public function fillAttributeOptions(array $fields)
     {
         $row = 0;
-        foreach ($fields as $field) {
-            if (isset($field['option_label']['value'])) {
-                $optionRow = $this->getOptionRow($field['option_label']['value']);
+        foreach ($fields['options'] as $option) {
+            if (!empty($option['name'])) {
+                $optionRow = $this->getOptionRow($option['name']);
                 if (!$optionRow->isVisible()) {
                     $this->_rootElement->find($this->addOption)->click();
                     $optionRow = $this->getOptionNewRow($row);
-                    if (isset($field['option_label']['value'])) {
-                        $optionRow->find($this->labelValue)->setValue($field['option_label']['value']);
+                    if (isset($option['name'])) {
+                        $optionRow->find($this->labelValue)->setValue($option['name']);
                     }
                 }
-                if (isset($field['pricing_value']['value'])) {
+                if (isset($option['pricing_value'])) {
                     $optionRow->find($this->pricingValue, Locator::SELECTOR_CSS)
-                        ->setValue($field['pricing_value']['value']);
+                        ->setValue($option['pricing_value']);
                 }
-                if (isset($field['is_percent']['value']) && $field['is_percent']['value'] == 'Yes') {
+                if (isset($option['is_percent']) && $option['is_percent'] == 'Yes') {
                     $optionRow->find($this->priceTypeButton, Locator::SELECTOR_CSS)->click();
                     $optionRow->find($this->priceTypeValue . '//a[text()="%"]', Locator::SELECTOR_XPATH)->click();
                 }
                 $optionRow->find($this->include, Locator::SELECTOR_CSS, 'checkbox')
-                    ->setValue($field['include']['value']);
+                    ->setValue($option['include']);
             }
             ++$row;
         }

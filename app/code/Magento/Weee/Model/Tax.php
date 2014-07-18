@@ -238,12 +238,16 @@ class Tax extends \Magento\Framework\Model\AbstractModel
 
         if ($shipping) {
             $customerTaxClass = $shipping->getQuote()->getCustomerTaxClassId();
-            $calculator->setCustomerData($shipping->getQuote()->getCustomerData());
         } else {
             $customerTaxClass = null;
         }
 
-        $rateRequest = $calculator->getRateRequest($shipping, $billing, $customerTaxClass, $store);
+        $rateRequest = $calculator->getRateRequest(
+            $shipping,
+            $billing,
+            $customerTaxClass,
+            $store
+        );
         $defaultRateRequest = $calculator->getDefaultRateRequest($store);
 
         $discountPercent = 0;

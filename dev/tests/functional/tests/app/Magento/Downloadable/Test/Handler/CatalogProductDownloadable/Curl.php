@@ -24,43 +24,25 @@
 
 namespace Magento\Downloadable\Test\Handler\CatalogProductDownloadable;
 
+use Mtf\System\Config;
 use Mtf\Fixture\FixtureInterface;
-use Magento\Catalog\Test\Handler\CatalogProductSimple\Curl as AbstractCurl;
+use Magento\Catalog\Test\Handler\CatalogProductSimple\Curl as ProductCurl;
 
 /**
  * Class Curl
  * Create new downloadable product via curl
  */
-class Curl extends AbstractCurl implements CatalogProductDownloadableInterface
+class Curl extends ProductCurl implements CatalogProductDownloadableInterface
 {
     /**
-     * Post request for creating downloadable product
+     * Constructor
      *
-     * @param FixtureInterface $fixture [optional]
-     * @return array
+     * @param Config $configuration
      */
-    public function persist(FixtureInterface $fixture = null)
+    public function __construct(Config $configuration)
     {
-        $this->extendPlaceholder();
-        $config = $fixture->getDataConfig();
-        $prefix = isset($config['input_prefix']) ? $config['input_prefix'] : null;
-        $data = $this->prepareData($fixture, $prefix);
+        parent::__construct($configuration);
 
-        if ($prefix) {
-            $data['downloadable'] = $data[$prefix]['downloadable'];
-            unset($data[$prefix]['downloadable']);
-        }
-
-        return ['id' => $this->createProduct($data, $config)];
-    }
-
-    /**
-     * Expand basic placeholder
-     *
-     * @return void
-     */
-    protected function extendPlaceholder()
-    {
         $this->mappingData += [
             'links_purchased_separately' => [
                 'Yes' => 1,
@@ -72,5 +54,23 @@ class Curl extends AbstractCurl implements CatalogProductDownloadableInterface
                 'Use config' => 2
             ],
         ];
+    }
+
+    /**
+     * Prepare POST data for creating product request
+     *
+     * @param FixtureInterface $fixture
+     * @param string|null $prefix [optional]
+     * @return array
+     */
+    protected function prepareData(FixtureInterface $fixture, $prefix = null)
+    {
+        $data = parent::prepareData($fixture, null);
+        $downloadable = $data['downloadable'];
+        unset($data['downloadable']);
+        $data = $prefix ? [$prefix => $data] : $data;
+        $data['downloadable'] = $downloadable;
+
+        return $this->replaceMappingData($data);
     }
 }

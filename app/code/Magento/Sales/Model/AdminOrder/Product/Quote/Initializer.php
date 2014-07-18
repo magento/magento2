@@ -67,7 +67,7 @@ class Initializer
 
         $product->setCartQty($config->getQty());
 
-        $item = $quote->addProductAdvanced(
+        $item = $quote->addProduct(
             $product,
             $config,
             \Magento\Catalog\Model\Product\Type\AbstractType::PROCESS_MODE_FULL

@@ -26,7 +26,6 @@ namespace Magento\Catalog\Test\Handler\CatalogProductSimple;
 
 use Mtf\System\Config;
 use Mtf\Fixture\FixtureInterface;
-use Mtf\Fixture\InjectableFixture;
 use Mtf\Util\Protocol\CurlInterface;
 use Mtf\Util\Protocol\CurlTransport;
 use Mtf\Handler\Curl as AbstractCurl;
@@ -44,6 +43,19 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
      * @var array
      */
     protected $mappingData = [
+        'links_purchased_separately' => [
+            'Yes' => 1,
+            'No' => 0
+        ],
+        'is_shareable' => [
+            'Yes' => 1,
+            'No' => 0,
+            'Use config' => 2
+        ],
+        'required' => [
+            'Yes' => 1,
+            'No' => 0
+        ],
         'manage_stock' => [
             'Yes' => 1,
             'No' => 0
@@ -51,15 +63,15 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
         'is_virtual' => [
             'Yes' => 1
         ],
-        'inventory_manage_stock' => [
+        'use_config_enable_qty_increments' => [
+            'Yes' => 1,
+            'No' => 0
+        ],
+        'use_config_qty_increments' => [
             'Yes' => 1,
             'No' => 0
         ],
         'is_in_stock' => [
-            'In Stock' => 1,
-            'Out of Stock' => 0
-        ],
-        'quantity_and_stock_status' => [
             'In Stock' => 1,
             'Out of Stock' => 0
         ],
@@ -75,16 +87,13 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
         'status' => [
             'Product offline' => 2,
             'Product online' => 1
-        ],
-        'attribute_set_id' => [
-            'Default' => 4
         ]
     ];
 
     /**
      * Post request for creating simple product
      *
-     * @param FixtureInterface $fixture [optional]
+     * @param FixtureInterface|null $fixture [optional]
      * @return array
      * @throws \Exception
      *
@@ -125,28 +134,10 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
     }
 
     /**
-     * Remove items from a null
-     *
-     * @param array $data
-     * @return array
-     */
-    protected function filter(array $data)
-    {
-        foreach ($data as $key => $value) {
-            if ($value === null) {
-                unset($data[$key]);
-            } elseif (is_array($data[$key])) {
-                $data[$key] = $this->filter($data[$key]);
-            }
-        }
-        return $data;
-    }
-
-    /**
      * Prepare POST data for creating product request
      *
      * @param FixtureInterface $fixture
-     * @param string|null $prefix
+     * @param string|null $prefix [optional]
      * @return array
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -155,7 +146,6 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
     protected function prepareData(FixtureInterface $fixture, $prefix = null)
     {
         $fields = $this->replaceMappingData($fixture->getData());
-        $fields = $this->prepareStockData($fields);
         // Getting Tax class id
         if ($fixture->hasData('tax_class_id')) {
             $taxClassId = $fixture->getDataFieldConfig('tax_class_id')['source']->getTaxClass()->getId();
@@ -189,9 +179,9 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
             $fields['attribute_set_id'] = $attributeSetId;
         }
 
-        $data = $prefix ? [$prefix => $fields] : $fields;
+        $fields = $this->prepareStockData($fields);
 
-        return $data;
+        return $prefix ? [$prefix => $fields] : $fields;
     }
 
     /**
@@ -199,29 +189,54 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
      *
      * @param array $fields
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function prepareStockData(array $fields)
     {
-        $fields['stock_data']['manage_stock'] = 0;
+        if (isset($fields['quantity_and_stock_status']) && !is_array($fields['quantity_and_stock_status'])) {
+            $fields['quantity_and_stock_status'] = [
+                'qty' => $fields['qty'],
+                'is_in_stock' => $fields['quantity_and_stock_status']
+            ];
+        }
 
         if (!isset($fields['stock_data']['is_in_stock'])) {
-            $fields['stock_data']['is_in_stock'] = isset($fields['quantity_and_stock_status'])
-                ? $fields['quantity_and_stock_status']
+            $fields['stock_data']['is_in_stock'] = isset($fields['quantity_and_stock_status']['is_in_stock'])
+                ? $fields['quantity_and_stock_status']['is_in_stock']
                 : (isset($fields['inventory_manage_stock']) ? $fields['inventory_manage_stock'] : null);
         }
         if (!isset($fields['stock_data']['qty'])) {
-            $fields['stock_data']['qty'] = isset($fields['qty']) ? $fields['qty'] : null;
-        }
-        if (!empty($fields['stock_data']['qty'])) {
-            $fields['stock_data']['manage_stock'] = 1;
+            $fields['stock_data']['qty'] = isset($fields['quantity_and_stock_status']['qty'])
+                ? $fields['quantity_and_stock_status']['qty']
+                : null;
         }
 
-        $fields['quantity_and_stock_status'] = [
-            'qty' => $fields['stock_data']['qty'],
-            'is_in_stock' => $fields['stock_data']['is_in_stock']
-        ];
+        if (!isset($fields['stock_data']['manage_stock'])) {
+            $fields['stock_data']['manage_stock'] = (int)(!empty($fields['stock_data']['qty'])
+                || !empty($fields['stock_data']['is_in_stock']));
+        }
 
         return $this->filter($fields);
+    }
+
+    /**
+     * Remove items from a null
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function filter(array $data)
+    {
+        foreach ($data as $key => $value) {
+            if ($value === null) {
+                unset($data[$key]);
+            } elseif (is_array($data[$key])) {
+                $data[$key] = $this->filter($data[$key]);
+            }
+        }
+        return $data;
     }
 
     /**
@@ -245,21 +260,8 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
             throw new \Exception("Product creation by curl handler was not successful! Response: $response");
         }
         preg_match("~Location: [^\s]*\/id\/(\d+)~", $response, $matches);
-        return isset($matches[1]) ? $matches[1] : null;
-    }
 
-    /**
-     * Retrieve field value or return null if value does not exist
-     *
-     * @param array $values
-     * @return null|mixed
-     */
-    protected function getValue($values)
-    {
-        if (!isset($values['value'])) {
-            return null;
-        }
-        return isset($values['input_value']) ? $values['input_value'] : $values['value'];
+        return isset($matches[1]) ? $matches[1] : null;
     }
 
     /**
@@ -275,6 +277,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
         foreach ($requestParams as $key => $value) {
             $params .= $key . '/' . $value . '/';
         }
+
         return $_ENV['app_backend_url'] . 'catalog/product/save/' . $params . 'popup/1/back/edit';
     }
 }

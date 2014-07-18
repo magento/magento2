@@ -36,12 +36,12 @@ class Detail extends \Magento\Backend\Block\Widget\Grid\Container
     protected $_productFactory;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Backend\Block\Widget\Context $context,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         array $data = array()
     ) {
@@ -61,7 +61,7 @@ class Detail extends \Magento\Backend\Block\Widget\Grid\Container
         $this->_headerText = __('Reviews for %1', $product->getName());
 
         parent::_construct();
-        $this->_removeButton('add');
+        $this->buttonList->remove('add');
         $this->setBackUrl($this->getUrl('reports/report_review/product/'));
         $this->_addBackButton();
     }

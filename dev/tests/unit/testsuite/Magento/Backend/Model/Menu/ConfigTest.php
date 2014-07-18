@@ -121,7 +121,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->_menuMock = $this->getMock('Magento\Backend\Model\Menu', array(), array(), '', false);
+        $this->_menuMock = $this->getMock(
+            'Magento\Backend\Model\Menu',
+            [],
+            [$this->getMock('Magento\Framework\Logger', [], [], '', false)]
+        );
 
         $this->_menuBuilderMock = $this->getMock('Magento\Backend\Model\Menu\Builder', array(), array(), '', false);
 

@@ -154,10 +154,6 @@ class ActionTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(false)
         );
 
-        $this->_requestMock->expects($this->once())->method('getActionName')->will(
-            $this->returnValue(self::ACTION_NAME)
-        );
-
         // _forward expectations
         $this->_requestMock->expects($this->once())->method('initForward');
         $this->_requestMock->expects($this->once())->method('setParams')->with(self::$actionParams);
@@ -199,7 +195,7 @@ class ActionFake extends Action
     /**
      * Fake action to check a method call from a parent
      */
-    public function someactionAction()
+    public function execute()
     {
         $this->_forward(
             ActionTest::ACTION_NAME,

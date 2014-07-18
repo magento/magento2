@@ -63,6 +63,16 @@ class TaxDetailsBuilder extends \Magento\Framework\Service\Data\AbstractObjectBu
     }
 
     /**
+     * Convenience method that returns AppliedTaxBuilder
+     *
+     * @return TaxDetails\AppliedTaxBuilder
+     */
+    public function getAppliedTaxBuilder()
+    {
+        return $this->appliedTaxBuilder;
+    }
+
+    /**
      * Set subtotal
      *
      * @param float $subtotal
@@ -92,9 +102,9 @@ class TaxDetailsBuilder extends \Magento\Framework\Service\Data\AbstractObjectBu
      * @param float $discountAmount
      * @return $this
      */
-    public function setDiscountAmount($discountAmount)
+    public function setDiscountCompensationAmount($discountAmount)
     {
-        $this->_set(TaxDetails::KEY_DISCOUNT_AMOUNT, $discountAmount);
+        $this->_set(TaxDetails::KEY_DISCOUNT_TAX_COMPENSATION_AMOUNT, $discountAmount);
         return $this;
     }
 

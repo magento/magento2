@@ -743,7 +743,7 @@ abstract class AbstractBlock extends \Magento\Framework\Object implements BlockI
      * @param array $params
      * @return string
      */
-    protected function _getNotFoundUrl($route = '', $params = array('_direct' => 'core/index/notfound'))
+    protected function _getNotFoundUrl($route = '', $params = array('_direct' => 'core/index/notFound'))
     {
         return $this->getUrl($route, $params);
     }

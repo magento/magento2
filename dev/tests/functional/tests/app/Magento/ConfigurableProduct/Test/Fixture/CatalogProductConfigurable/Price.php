@@ -24,7 +24,6 @@
 
 namespace Magento\ConfigurableProduct\Test\Fixture\CatalogProductConfigurable;
 
-use Mtf\Fixture\FixtureFactory;
 use Mtf\Fixture\FixtureInterface;
 
 /**
@@ -33,23 +32,35 @@ use Mtf\Fixture\FixtureInterface;
  * Data keys:
  *  - preset (Price verification preset name)
  *  - value (Price value)
- *
  */
 class Price implements FixtureInterface
 {
     /**
-     * @var \Mtf\Fixture\FixtureFactory
+     * Prepared dataSet data
+     *
+     * @var array
      */
-    protected $fixtureFactory;
+    protected $data;
 
     /**
+     * Data set configuration settings
+     *
+     * @var array
+     */
+    protected $params;
+
+    /**
+     * Current preset
+     *
      * @var string
      */
     protected $currentPreset;
 
     /**
+     * Constructor
+     *
      * @param array $params
-     * @param array $data
+     * @param array $data [optional]
      */
     public function __construct(array $params, array $data = [])
     {
@@ -75,7 +86,7 @@ class Price implements FixtureInterface
     /**
      * Return prepared data set
      *
-     * @param $key [optional]
+     * @param string|null $key [optional]
      * @return mixed
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -102,19 +113,21 @@ class Price implements FixtureInterface
     {
         $presets = [
             'MAGETWO-23062' => [
-                'category_price' => '$100.00',
-                'product_price' => '$100.00',
-                'cart_price' => '$130.00'
+                'category_price' => '100.00',
+                'product_price' => '100.00',
+                'cart_price' => '154.00'
             ],
             'MAGETWO-23063' => [
-                'category_price' => '$100.00',
-                'product_price' => '$100.00',
-                'cart_price' => '$140.00'
+                'category_price' => '100.00',
+                'product_price' => '100.00',
+                'cart_price' => '140.00'
             ],
         ];
+
         if (!isset($presets[$this->currentPreset])) {
             return null;
         }
+
         return $presets[$this->currentPreset];
     }
 }

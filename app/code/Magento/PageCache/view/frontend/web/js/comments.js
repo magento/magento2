@@ -23,11 +23,18 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /*jshint browser:true jquery:true expr:true*/
-(function ($) {
+(function ($, win) {
     "use strict";
     $.fn.comments = function () {
         var elements = [];
         var lookup = function (el) {
+            if (el.is('iframe')) {
+                var hostName = win.location.hostname,
+                    iFrameHostName = $('<a>').prop('href', el.prop('src')).prop('hostname');
+                if (hostName != iFrameHostName) {
+                    return elements;
+                }
+            }
             el.contents().each(function (i, el) {
                 if (el.nodeType == 8) {
                     elements.push(el);
@@ -39,4 +46,4 @@
         lookup(this);
         return elements;
     };
-})(jQuery);
+})(jQuery, window);

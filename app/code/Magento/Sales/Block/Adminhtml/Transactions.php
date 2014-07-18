@@ -41,6 +41,6 @@ class Transactions extends \Magento\Backend\Block\Widget\Grid\Container
         $this->_blockGroup = 'Magento_Sales';
         $this->_headerText = __('Transactions');
         parent::_construct();
-        $this->_removeButton('add');
+        $this->buttonList->remove('add');
     }
 }

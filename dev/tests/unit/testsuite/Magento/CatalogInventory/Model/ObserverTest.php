@@ -58,19 +58,54 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
      */
     protected $event;
 
+    /**
+     * @var \Magento\CatalogInventory\Helper\Data |\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $catalogInventoryData;
+
+    /**
+     * @var \Magento\CatalogInventory\Model\Stock | \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stock;
+
+    /**
+     * @var \Magento\CatalogInventory\Model\Indexer\Stock\Processor | \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $stockIndexProcessor;
+
+    /**
+     * @var \Magento\Catalog\Model\Indexer\Product\Price\Processor | \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $priceIndexer;
+
     protected function setUp()
     {
         $this->stockItemRegistry = $this->getMockBuilder('Magento\CatalogInventory\Model\Stock\ItemRegistry')
             ->disableOriginalConstructor()
             ->getMock();
-
         $this->stockStatus = $this->getMockBuilder('Magento\CatalogInventory\Model\Stock\Status')
             ->disableOriginalConstructor()
             ->getMock();
-
         $this->stockFactory = $this->getMockBuilder('Magento\CatalogInventory\Model\StockFactory')
             ->setMethods(['create'])
             ->getMock();
+
+        $this->catalogInventoryData = $this->getMock('Magento\CatalogInventory\Helper\Data', [], [], '', false);
+        $this->stock = $this->getMock('Magento\CatalogInventory\Model\Stock', [], [], '', false);
+        $this->stockIndexProcessor = $this->getMock(
+            '\Magento\Catalog\Model\Indexer\Product\Stock\Processor',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->priceIndexer = $this->getMock(
+            '\Magento\Catalog\Model\Indexer\Product\Price\Processor',
+            [],
+            [],
+            '',
+            false
+        );
 
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->model = $objectManagerHelper->getObject(
@@ -84,7 +119,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
         $this->event = $this->getMockBuilder('Magento\Framework\Event')
             ->disableOriginalConstructor()
-            ->setMethods(['getProduct', 'getCollection'])
+            ->setMethods(['getProduct', 'getCollection', 'getCreditmemo'])
             ->getMock();
 
         $this->eventObserver = $this->getMockBuilder('Magento\Framework\Event\Observer')
@@ -193,5 +228,44 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
 
         $this->assertEquals($this->model, $this->model->addStockStatusToCollection($this->eventObserver));
+    }
+
+    public function refundOrderInventory()
+    {
+        $ids = ['1', '14'];
+        $items = [];
+        foreach ($ids as $id) {
+            $items[] = $this->getCreditMemoItem($id);
+        }
+        $creditMemo = $this->getMock('Magento\Sales\Model\Order\Creditmemo', [], [], '', false);
+        $creditMemo->expects($this->once())
+            ->method('getAllItems')
+            ->will($this->returnValue($items));
+
+        $this->event->expects($this->once())
+            ->method('getCreditmemo')
+            ->will($this->returnValue($creditMemo));
+
+        $this->catalogInventoryData->expects($this->once())
+            ->method('isAutoReturnEnabled')
+            ->will($this->returnValue(true));
+
+        $this->stock->expects($this->once())
+            ->method('revertProductsSale')
+            ->with($items);
+        $this->stockIndexProcessor->expects($this->once())
+            ->method('reidexList')
+            ->with($ids);
+
+        $this->model->refundOrderInventory($this->eventObserver);
+    }
+
+    private function getCreditMemoItem($productId)
+    {
+        $item = $this->getMock('Magento\Sales\Model\Order\Creditmemo\Item', [], [], '', false);
+        $item->expects($this->once())
+            ->method('getProductId')
+            ->will($this->returnValue($productId));
+        return $item;
     }
 }

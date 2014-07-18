@@ -40,14 +40,14 @@ class SearchResultsBuilder extends AbstractSearchResultsBuilder
      *
      * @param ObjectFactory $objectFactory
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param CustomerDetailsBuilder $customerDetailsObjectBuilder
+     * @param CustomerDetailsBuilder $itemObjectBuilder
      */
     public function __construct(
         ObjectFactory $objectFactory,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        CustomerDetailsBuilder $customerDetailsObjectBuilder
+        CustomerDetailsBuilder $itemObjectBuilder
     ) {
-        parent::__construct($objectFactory, $searchCriteriaBuilder, $customerDetailsObjectBuilder);
+        parent::__construct($objectFactory, $searchCriteriaBuilder, $itemObjectBuilder);
     }
 
     /**

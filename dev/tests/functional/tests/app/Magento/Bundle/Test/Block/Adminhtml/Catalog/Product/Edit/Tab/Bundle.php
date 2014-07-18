@@ -74,7 +74,7 @@ class Bundle extends Tab
         if (!isset($fields['bundle_selections'])) {
             return $this;
         }
-        $bundleOptions = $this->prepareBundleOptions($fields['bundle_selections']['value']);
+        $bundleOptions = $this->prepareBundleOptions($fields['bundle_selections']['value']['bundle_options']);
         $blocksNumber = 0;
         foreach ($bundleOptions as $bundleOption) {
             $this->_rootElement->find($this->addNewOption)->click();

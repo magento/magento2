@@ -36,11 +36,6 @@ use Magento\Customer\Service\V1\CustomerAccountServiceInterface as CustomerAccou
 class Grouped extends \Magento\GroupedProduct\Block\Product\View\Type\Grouped
 {
     /**
-     * @var \Magento\Catalog\Helper\Product\Price
-     */
-    protected $priceHelper;
-
-    /**
      * @var string
      */
     protected $_priceBlockDefaultTemplate = 'catalog/product/price.phtml';
@@ -58,7 +53,6 @@ class Grouped extends \Magento\GroupedProduct\Block\Product\View\Type\Grouped
     /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
-     * @param \Magento\Catalog\Helper\Product\Price $priceHelper
      * @param \Magento\Core\Helper\Data $coreHelper
      * @param CustomerAccountService $customerAccountService
      * @param array $data
@@ -66,14 +60,12 @@ class Grouped extends \Magento\GroupedProduct\Block\Product\View\Type\Grouped
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Framework\Stdlib\ArrayUtils $arrayUtils,
-        \Magento\Catalog\Helper\Product\Price $priceHelper,
         \Magento\Core\Helper\Data $coreHelper,
         CustomerAccountService $customerAccountService,
         array $data = array()
     ) {
         $this->_customerAccountService = $customerAccountService;
         $this->_coreHelper = $coreHelper;
-        $this->priceHelper = $priceHelper;
         parent::__construct(
             $context,
             $arrayUtils,
@@ -93,13 +85,6 @@ class Grouped extends \Magento\GroupedProduct\Block\Product\View\Type\Grouped
 
         $this->_block = 'Magento\Catalog\Block\Adminhtml\Product\Price';
         $this->_useLinkForAsLowAs = false;
-
-        if (is_null($this->priceHelper->getCustomer()->getId())
-            && $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID)
-        ) {
-            $customerId = $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID);
-            $this->priceHelper->setCustomer($this->_customerAccountService->getCustomer($customerId));
-        }
     }
 
     /**

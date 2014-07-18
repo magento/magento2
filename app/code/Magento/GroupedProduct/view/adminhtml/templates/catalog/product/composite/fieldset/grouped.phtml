@@ -53,7 +53,7 @@
             <?php if ($_hasAssociatedProducts): ?>
                 <?php $i = 0 ?>
             <?php foreach ($_associatedProducts as $_item): ?>
-                <?php $_finalPriceInclTax = $this->helper('Magento\Catalog\Helper\Product\Price')->getPrice($_item, $_item->getFinalPrice(), true) ?>
+                <?php $_finalPriceInclTax = $this->helper('Magento\Tax\Helper\Data')->getPrice($_item, $_item->getFinalPrice(), true) ?>
                 <tr class="<?php echo (++$i % 2) ? 'even' : 'odd' ?>">
                     <td class="col-id"><?php echo $_item->getId() ?></td>
                     <td class="col-sku"><?php echo $this->escapeHtml($_item->getSku()) ?></td>

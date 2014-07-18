@@ -288,6 +288,6 @@
             <input></input>
         </search_weight>
     </fields>
-    <repository_class>Magento\Catalog\Test\Repository\CatalogAttributeEntity</repository_class>
-    <handler_interface>Magento\Catalog\Test\Handler\CatalogAttributeEntity\CatalogAttributeEntityInterface</handler_interface>
+    <repository_class>Magento\Catalog\Test\Repository\CatalogProductAttribute</repository_class>
+    <handler_interface>Magento\Catalog\Test\Handler\CatalogProductAttribute\CatalogAttributeEntityInterface</handler_interface>
 </fixture>

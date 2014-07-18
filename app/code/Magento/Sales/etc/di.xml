@@ -79,4 +79,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Sales\Controller\OrderInterface">
+        <plugin name="authentication" type="\Magento\Sales\Controller\Order\Plugin\Authentication"/>
+    </type>
 </config>

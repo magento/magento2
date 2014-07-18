@@ -262,13 +262,6 @@
             <default_value></default_value>
             <input>price</input>
         </price>
-        <qty>
-            <attribute_code>quantity_and_stock_status][qty</attribute_code>
-            <backend_type>int</backend_type>
-            <is_required>0</is_required>
-            <default_value>1</default_value>
-            <input>select</input>
-        </qty>
         <related_tgtr_position_behavior>
             <attribute_code>related_tgtr_position_behavior</attribute_code>
             <backend_type>int</backend_type>
@@ -357,6 +350,8 @@
             <backend_type>int</backend_type>
             <is_required>0</is_required>
             <default_value>2</default_value>
+            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\TaxClass</source>
+            <group>product-details</group>
             <input>select</input>
         </tax_class_id>
         <thumbnail>
@@ -473,7 +468,5 @@
         <input_prefix>product</input_prefix>
     </data_config>
     <repository_class>Magento\Downloadable\Test\Repository\CatalogProductDownloadable</repository_class>
-    <handler_interface>
-        Magento\Downloadable\Test\Handler\CatalogProductDownloadable\CatalogProductDownloadableInterface
-    </handler_interface>
+    <handler_interface>Magento\Downloadable\Test\Handler\CatalogProductDownloadable\CatalogProductDownloadableInterface</handler_interface>
 </fixture>

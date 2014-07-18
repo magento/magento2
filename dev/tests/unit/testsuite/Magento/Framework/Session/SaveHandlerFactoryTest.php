@@ -30,7 +30,7 @@ class SaveHandlerFactoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreate($handlers, $saveClass, $saveMethod)
     {
-        $saveHandler = $this->getMock($saveClass, array(), array(), '', false);
+        $saveHandler = $this->getMock($saveClass);
         $objectManager = $this->getMock(
             '\Magento\Framework\ObjectManager\ObjectManager',
             array('create'),

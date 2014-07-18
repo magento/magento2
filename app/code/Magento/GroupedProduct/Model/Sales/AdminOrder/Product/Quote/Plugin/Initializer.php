@@ -54,7 +54,7 @@ class Initializer
         $item = $proceed($quote, $product, $config);
 
         if (is_string($item) && $product->getTypeId() != Grouped::TYPE_CODE) {
-            $item = $quote->addProductAdvanced(
+            $item = $quote->addProduct(
                 $product,
                 $config,
                 \Magento\Catalog\Model\Product\Type\AbstractType::PROCESS_MODE_LITE

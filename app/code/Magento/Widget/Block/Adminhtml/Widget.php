@@ -45,11 +45,11 @@ class Widget extends \Magento\Backend\Block\Widget\Form\Container
 
         $this->removeButton('reset');
         $this->removeButton('back');
-        $this->_updateButton('save', 'label', __('Insert Widget'));
-        $this->_updateButton('save', 'class', 'add-widget');
-        $this->_updateButton('save', 'id', 'insert_button');
-        $this->_updateButton('save', 'onclick', 'wWidget.insertWidget()');
-        $this->_updateButton('save', 'region', 'footer');
+        $this->buttonList->update('save', 'label', __('Insert Widget'));
+        $this->buttonList->update('save', 'class', 'add-widget');
+        $this->buttonList->update('save', 'id', 'insert_button');
+        $this->buttonList->update('save', 'onclick', 'wWidget.insertWidget()');
+        $this->buttonList->update('save', 'region', 'footer');
 
         $this->_formScripts[] = 'wWidget = new WysiwygWidget.Widget(' .
             '"widget_options_form", "select_widget_type", "widget_options", "' .

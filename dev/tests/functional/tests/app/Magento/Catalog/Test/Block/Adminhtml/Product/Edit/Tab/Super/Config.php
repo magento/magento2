@@ -151,9 +151,19 @@ class Config extends Tab
      * @param array $fields
      * @return void
      */
-    public function fillVariationsMatrix($fields)
+    public function fillVariationsMatrix(array $fields)
     {
-        $this->getMatrixBlock()->fillVariation($fields);
+        $variations = [];
+        foreach ($fields as $key => $field) {
+            foreach ($field['value'] as $fieldName => $value) {
+                $variations[$key][$fieldName] = $value['value'];
+            }
+            foreach ($field['configurable_attribute'] as $options) {
+                $variations[$key]['options_names'][] = $options['attribute_option'];
+            }
+        }
+
+        $this->getMatrixBlock()->fillVariation($variations);
     }
 
     /**

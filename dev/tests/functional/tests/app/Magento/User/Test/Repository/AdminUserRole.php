@@ -46,6 +46,12 @@ class AdminUserRole extends AbstractRepository
             'resource_access' => 'All'
         ];
 
+        $this->_data['Administrators'] = [
+            'rolename' => 'Administrators',
+            'resource_access' => 'All',
+            'role_id' => 1,
+        ];
+
         $this->_data['role_sales'] = [
             'rolename' => 'RoleName%isolation%',
             'resource_access' => 'Custom',

@@ -14,7 +14,6 @@ Code,Code
 "Sort Order",Sortierreihenfolge
 "Save and Continue Edit","Speichern und Bearbeitung fortsetzen"
 "Are you sure you want to do this?","Sind Sie sicher, dass sie das tun wollen?"
-"This rule no longer exists.","Diese Regel existiert nicht mehr."
 "New Rule","Neue Regel"
 Priority,Priorität
 "Edit Rule","Regel ändern"
@@ -80,13 +79,11 @@ State,Staat
 "New Tax Rule","New Tax Rule"
 "The tax rule has been saved.","Die Steuerregel wurde gespeichert."
 "Something went wrong saving this tax rule.","Something went wrong saving this tax rule."
-"This rule no longer exists","Diese Regel existiert nicht mehr."
+"This rule no longer exists.","Diese Regel existiert nicht mehr."
 "The tax rule has been deleted.","Die Steuerregel wurde gelöscht."
 "Something went wrong deleting this tax rule.","Something went wrong deleting this tax rule."
 "Something went wrong saving this tax class.","Something went wrong saving this tax class."
 "Something went wrong deleting this tax class.","Something went wrong deleting this tax class."
-"Invalid type of tax class specified.","Invalid type of tax class specified."
-"Invalid name of tax class specified.","Invalid name of tax class specified."
 "Shipping & Handling Tax","Versandkosten & Steuern"
 "Please fill all required fields with valid information.","Please fill all required fields with valid information."
 "Rate Percent should be a positive number.","Rate Percent should be a positive number."

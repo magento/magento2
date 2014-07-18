@@ -69,7 +69,7 @@ class SuggestConfigurableAttributes extends Action
      *
      * @return void
      */
-    public function indexAction()
+    public function execute()
     {
         $this->getResponse()->representJson(
             $this->coreHelper->jsonEncode(

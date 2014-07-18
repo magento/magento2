@@ -44,4 +44,8 @@
         <title translate="true">Product Price</title>
         <description translate="true">Index product prices</description>
     </indexer>
+    <indexer id="catalog_product_attribute" view_id="catalog_product_attribute" class="Magento\Catalog\Model\Indexer\Product\Eav">
+        <title translate="true">Product EAV</title>
+        <description translate="true">Index product EAV</description>
+    </indexer>
 </config>

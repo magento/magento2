@@ -1,3 +1,83 @@
+2.0.0.0-dev87
+=============
+* Service layer updates:
+  * Created Tax Calculation service
+  * Implemented search Tax Rates(search criteria) in TaxRate service
+  * Refactored Tax Helper to use Tax Service
+  * Validated and ensured that after helper fix, all modules with cross-dependencies use Tax Services
+  * Refactored Bundle, Catalog, Checkout, Customer, Downloadable, Review, Logging Modules to use Tax Services
+  * Refactored Internal Tax Module Blocks/Templates to use Tax Services
+* GitHub requests:
+  * [#579] (https://github.com/magento/magento2/pull/579) -- update GA code from ga.js to analytics.js
+  * [#584] (https://github.com/magento/magento2/issues/584) -- Merge and minify js - Exception
+  * [#585] (https://github.com/magento/magento2/pull/585) -- Add forgotten return statement
+  * [#592] (https://github.com/magento/magento2/issues/592) -- Module name pattern
+* Tax calculation updates:
+  * Separate and display Weee line item totals from Tax
+* Fixed bugs:
+  * Fixed an issue when Custom attribute template was not applied to a product  during product creation
+  * Fixed an issue when report grid with no results contained unnecessary empty "total" section
+  * Fixed an issue where MCRYPT_RIJNDAEL_128 Cipher was set instead of 256 version
+  * Fixed an issue when inline translate script was always included in the page even if it was not used
+  * Fixed an issue where URL Generation was affected by previously processed URLs
+  * Fixed an issue with cross-site scripting vulnerability via cookie exploitation
+  * Fixed an issue with incorrect success message after system variable was deleted
+  * Fixed an issue with category page not opening if it had bundle product with fixed price assigned to it
+  * Fixed an issue when subtotal price in a shopping cart was not updated if the product qty is changed
+  * Fixed an issue when syntax error appeared while creating new Google Content attribute mapping
+  * Fixed an issue with JS error when adding associated simple product to the grouped one
+  * Fixed an issue with incorrect items label for the cases when there are more than one item in the category
+  * Fixed an issue when configurable product was out of stock in Google Shopping while being in stock in the Magento backend
+  * Fixed an issue when swipe gesture in menu widget was not supported on mobile
+  * Fixed an issue when it was impossible to enter alpha-numeric zip code on the stage of  estimating shipping and tax rates
+  * Fixed an issue when it was impossible to edit gift card account
+  * Fixed an issue when custom price was not applied when editing an order
+  * Fixed an issue when  items were  not returned to stock after unsuccessful order was placed
+  * Fixed an issue when error message appeared "Cannot save the credit memo” while creating credit memo
+  * Fixed an issue when Catalog price rule was not shown for the product if price was less than a discount
+* Indexer implementation:
+  * Implemented a new Stock indexer
+  * Implemented a new EAV indexer
+  * Fixed failed L1 plan on phpunit 4.1.0
+  * Minor updates for integration test framework
+  * Split action controllers classes into action classes
+  * Added public MTF repository to the packagist.org
+* Added the following functional tests:
+  * Create Admin User
+  * Create Category
+  * Create Custom Url Rewrite
+  * Create Frontend Product Review
+  * Delete CMS Page
+  * Delete Product
+  * Delete System Variable
+  * Update Admin User Role
+  * Update Product Review
+* Indexer-less implementation of URL Rewrites functionality in new UrlRedirect module:
+  * Ported Admin UI from old UrlRewrite module
+  * Implemented URL Rewrites unified storage
+* Covered the following Magento application components with unit tests:
+  * `Magento/Bundle/Block/Sales/Order/Items/Renderer.php`
+  * `Magento/Bundle/Helper/Catalog/Product/Configuration.php`
+  * `Magento/Bundle/Helper/Data.php`
+  * `Magento/Bundle/Model/Option.php`
+  * `Magento/Bundle/Model/Plugin/PriceBackend.php`
+  * `Magento/Bundle/Model/Product/Attribute/Source/Price/View.php`
+  * `Magento/Bundle/Model/Sales/Order/Pdf/Items/AbstractItems.php`
+  * `Magento/Catalog/Model/Product/Attribute/Source/Msrp/Type/Enabled.php`
+  * `Magento/Catalog/Model/Product/Attribute/Source/Msrp/Type/Price.php`
+  * `Magento/Catalog/Model/Product/Visibility.php`
+  * `Magento/Eav/Model/Entity/Attribute/AbstractAttribute.php`
+  * `Magento/Eav/Model/Entity/Attribute/Source/AbstractSource.php`
+  * `Magento/Eav/Model/Entity/Attribute/Source/Boolean.php`
+  * `Magento/Eav/Model/Entity/Attribute/Source/Table.php`
+  * `Magento/Tax/Model/TaxClass/Source/Product.php`
+* Covered Magento library with unit tests :
+  * `lib/internal/Magento/Framework/Simplexml/Config/Cache/AbstractCache.php`
+  * `lib/internal/Magento/Framework/Simplexml/Config.php`
+  * `lib/internal/Magento/Framework/Stdlib/DateTime/DateTime.php`
+  * `lib/internal/Magento/Framework/Stdlib/DateTime/Timezone.php`
+  * `lib/internal/Magento/Framework/Stdlib/String.php`
+
 2.0.0.0-dev86
 =============
 * Service layer updates:
@@ -46,8 +126,8 @@
   * Fixed issues with  the translate and the logging transformation tools
   * Fixed an issue where it was impossible to create a URL rewrite for a CMS Page with Temporary (302) or Permanent (301) redirect
 * GitHub requests:
-  * [#598] Add Sort Order to Rules
-  * [#580] Set changed status on model to prevent status overwriting when model gets saved
+  * [#598] (https://github.com/magento/magento2/pull/598) -- Add Sort Order to Rules
+  * [#580] (https://github.com/magento/magento2/pull/580) -- Set changed status on model to prevent status overwriting when model gets saved
 * Unit Tests Coverage:
   * Part of the Catalog module covered with the unit tests
 * Added the following functional tests:
@@ -81,7 +161,7 @@
   * Created ProductsCustomOptions Service API for Catalog module
   * Created DownloadableLink Service API for Catalog module
 * GitHub requests:
-  * [#257] JSON loading should follow OWASP recommendation
+  * [#257] (https://github.com/magento/magento2/issues/257) -- JSON loading should follow OWASP recommendation
 
 2.0.0.0-dev84
 =============
@@ -102,8 +182,8 @@
   * Fixed an issue where an admin could search product by attributes set on the Store View level (except default store view)
   * Fixed an issue where extra spaces in search values were not ignored during search and thus wrong search results were given
 * GitHub requests:
-  * [#542]  Fix ImportExport bug which occurs while importing multiple rows per entity
-  * [#544]  Performance tests not working
+  * [#542] (https://github.com/magento/magento2/pull/542) -- Fix ImportExport bug which occurs while importing multiple rows per entity
+  * [#544] (https://github.com/magento/magento2/issues/544) -- Performance tests not working
 * Framework improvements:
   * Covered the following Magento application components with unit tests:
       * `Customer/Model/Address.php`

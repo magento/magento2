@@ -72,7 +72,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Weee\Model\Config $weeeConfig
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -182,12 +181,24 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Check if fixed taxes are used in system
      *
-     * @param Store $store
-     * @return bool
+     * @param   null|string|bool|int|Store $store
+     * @return  bool
      */
     public function isEnabled($store = null)
     {
         return $this->_weeeConfig->isEnabled($store);
+    }
+
+    /**
+     * Check if the FPT totals line(s) should be displayed with tax included
+     *
+     * @param   null|string|bool|int|Store $store
+     * @return  bool
+     */
+    public function displayTotalsInclTax($store = null)
+    {
+        // If catalog prices include tax, then display FPT totals with tax included
+        return $this->_taxData->priceIncludesTax($store);
     }
 
     /**
@@ -520,5 +531,26 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             );
         }
         return $totalTaxForWeeeTax;
+    }
+
+    /**
+     * Returns the total amount of FPT across all items.  Used for displaying the FPT totals line item.
+     *
+     * @param  \Magento\Sales\Model\Quote\Item\AbstractItem[] $items
+     * @param  null|string|bool|int|Store $store
+     * @return float
+     */
+    public function getTotalAmounts($items, $store = null)
+    {
+        $weeeTotal = 0;
+        $displayTotalsInclTax = $this->displayTotalsInclTax($store);
+        foreach ($items as $item) {
+            if ($displayTotalsInclTax) {
+                $weeeTotal += $this->getRowWeeeTaxInclTax($item);
+            } else {
+                $weeeTotal += $item->getWeeeTaxAppliedRowAmount();
+            }
+        }
+        return $weeeTotal;
     }
 }

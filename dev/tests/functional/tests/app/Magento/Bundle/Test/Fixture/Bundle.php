@@ -30,7 +30,6 @@ use Magento\Catalog\Test\Fixture\Product;
 
 /**
  * Class Bundle
- *
  */
 class Bundle extends Product
 {
@@ -88,10 +87,10 @@ class Bundle extends Product
     {
         $options = array();
         $bundleOptions = $this->getData('fields/bundle_selections/value');
-        foreach ($bundleOptions as $optionData) {
-            $optionName = $optionData['title']['value'];
+        foreach ($bundleOptions['bundle_options'] as $optionData) {
+            $optionName = $optionData['title'];
             foreach ($optionData['assigned_products'] as $productData) {
-                $options[$optionName] = $productData['search_data']['name'];
+                $options[$optionName][] = $productData['search_data']['name'];
             }
         }
         return $options;
@@ -115,19 +114,23 @@ class Bundle extends Product
      */
     public function getSelectionData()
     {
+        $typeMapping = [
+            'Drop-down' => 'select'
+        ];
         $options = $this->getData('checkout/selection');
-        $selectionData = array();
+        $selectionData = [];
         foreach ($options as $option => $selection) {
-            $selectionItem['type'] = $this->getData('fields/bundle_selections/value/' . $option . '/type/input_value');
+            $fieldPrefix = 'fields/bundle_selections/value/bundle_options/';
+            $selectionItem['type'] = $typeMapping[$this->getData($fieldPrefix . $option . '/type')];
             $selectionItem['qty'] = $this->getData(
-                'fields/bundle_selections/value/' . $option .
-                '/assigned_products/' . $selection . '/data/selection_qty/value'
+                $fieldPrefix . $option . '/assigned_products/' . $selection . '/data/selection_qty'
             );
             $selectionItem['value'] = $this->getData(
-                'fields/bundle_selections/value/' . $option . '/assigned_products/' . $selection . '/search_data/name'
+                $fieldPrefix . $option . '/assigned_products/' . $selection . '/search_data/name'
             );
             $selectionData[] = $selectionItem;
         }
+
         return $selectionData;
     }
 

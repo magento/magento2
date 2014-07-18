@@ -30,13 +30,7 @@ namespace Magento\Tax\Service\V1\Data;
 class TaxClass extends \Magento\Framework\Service\Data\AbstractObject
 {
     /**#@+
-     * Tax class type.
-     */
-    const TYPE_CUSTOMER = 'CUSTOMER';
-    const TYPE_PRODUCT = 'PRODUCT';
-    /**#@-*/
-
-    /**#@+
+     *
      * Tax class field key.
      */
     const KEY_ID = 'class_id';

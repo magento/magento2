@@ -43,10 +43,6 @@
                 <attribute_code>attribute_set_id</attribute_code>
                 <backend_type>virtual</backend_type>
             </attribute_set_id>
-            <qty>
-                <attribute_code>qty</attribute_code>
-                <input>input</input>
-            </qty>
         </fields>
         <data_set>
             <sku />
@@ -192,10 +188,6 @@
                 <attribute_code>attribute_set_id</attribute_code>
                 <backend_type>virtual</backend_type>
             </attribute_set_id>
-            <qty>
-                <attribute_code>qty</attribute_code>
-                <input>input</input>
-            </qty>
         </fields>
         <data_set>
             <sku />

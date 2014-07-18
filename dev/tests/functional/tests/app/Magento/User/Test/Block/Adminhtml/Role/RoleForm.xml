@@ -42,7 +42,7 @@
         <fields>
             <resource_access>
                 <input>select</input>
-                <selector>#all</selector>
+                <selector>[name="all"]</selector>
                 <strategy>css selector</strategy>
             </resource_access>
             <roles_resources>
@@ -52,4 +52,9 @@
             </roles_resources>
         </fields>
     </role-resources>
+    <in_role_users>
+        <class>\Magento\User\Test\Block\Adminhtml\Role\Tab\Role</class>
+        <selector>#role_info_tabs_roles</selector>
+        <strategy>css selector</strategy>
+    </in_role_users>
 </tabs>

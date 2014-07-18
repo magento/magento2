@@ -36,13 +36,14 @@ class EditTest extends \PHPUnit_Framework_TestCase
      *
      * @param array $blockAttributes
      * @param array $expected
+     *
+     * @magentoAppIsolation enabled
      */
     public function testPrepareLayout($blockAttributes, $expected)
     {
         /** @var $layout \Magento\Framework\View\LayoutInterface */
-        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\View\Layout',
-            array('area' => \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE)
+        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\View\LayoutInterface'
         );
 
         /** @var $block \Magento\Backend\Block\Urlrewrite\Catalog\Product\Edit */

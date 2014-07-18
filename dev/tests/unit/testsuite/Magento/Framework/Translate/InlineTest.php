@@ -182,9 +182,8 @@ class InlineTest extends \PHPUnit_Framework_TestCase
     public function testProcessResponseBody($scope, $body, $expected)
     {
         $isJson = true;
-        if ($scope == 'admin') {
-            $this->prepareIsAllowed(true, true, true, $scope);
-        }
+        $this->prepareIsAllowed(true, true, true, $scope);
+
         $jsonCall = is_array($body) ? 2 * (count($body) + 1)  : 2;
         $this->parserMock->expects(
             $this->exactly($jsonCall)
@@ -245,9 +244,8 @@ class InlineTest extends \PHPUnit_Framework_TestCase
     public function testProcessResponseBodyGetInlineScript($scope, $body, $expected)
     {
         $isJson = true;
-        if ($scope == 'admin') {
-            $this->prepareIsAllowed(true, true, true, $scope);
-        }
+        $this->prepareIsAllowed(true, true, true, $scope);
+
         $jsonCall = is_array($body) ? 2 * (count($body) + 1)  : 2;
         $this->parserMock->expects(
             $this->exactly($jsonCall)

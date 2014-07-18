@@ -41,14 +41,14 @@ class SearchResultsBuilder extends \Magento\Framework\Service\V1\Data\AbstractSe
      *
      * @param ObjectFactory $objectFactory
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param AttributeBuilder $attributeBuilder
+     * @param AttributeBuilder $itemObjectBuilder
      */
     public function __construct(
         ObjectFactory $objectFactory,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        AttributeBuilder $attributeBuilder
+        AttributeBuilder $itemObjectBuilder
     ) {
-        parent::__construct($objectFactory, $searchCriteriaBuilder, $attributeBuilder);
+        parent::__construct($objectFactory, $searchCriteriaBuilder, $itemObjectBuilder);
     }
 
     /**

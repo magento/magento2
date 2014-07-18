@@ -41,6 +41,10 @@
             <selector>[name='request_path']</selector>
             <input>text</input>
         </request_path>
+        <target_path>
+            <selector>[name='target_path']</selector>
+            <input>text</input>
+        </target_path>
         <description>
             <selector>[name='description']</selector>
             <input>text</input>

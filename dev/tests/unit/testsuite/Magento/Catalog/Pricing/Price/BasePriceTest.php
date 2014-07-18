@@ -89,15 +89,24 @@ class BasePriceTest extends \PHPUnit_Framework_TestCase
             'group_price' => $this->groupPriceMock,
             'special_price' => $this->specialPriceMock
         ];
-        $this->basePrice = new BasePrice($this->saleableItemMock, $qty, $this->calculatorMock);
+
+        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->basePrice = $helper->getObject('\Magento\Catalog\Pricing\Price\BasePrice',
+            array(
+                'saleableItem' => $this->saleableItemMock,
+                'quantity' => $qty,
+                'calculator' => $this->calculatorMock
+            )
+        );
     }
 
     /**
      * test method getValue
+     *
+     * @dataProvider getValueDataProvider
      */
-    public function testGetValue()
+    public function testGetValue($specialPriceValue, $expectedResult)
     {
-        $specialPriceValue = 77;
         $this->priceInfoMock->expects($this->once())
             ->method('getPrices')
             ->will($this->returnValue($this->prices));
@@ -107,9 +116,14 @@ class BasePriceTest extends \PHPUnit_Framework_TestCase
         $this->groupPriceMock->expects($this->exactly(2))
             ->method('getValue')
             ->will($this->returnValue(99));
-        $this->specialPriceMock->expects($this->exactly(2))
+        $this->specialPriceMock->expects($this->any())
             ->method('getValue')
             ->will($this->returnValue($specialPriceValue));
-        $this->assertSame($specialPriceValue, $this->basePrice->getValue());
+        $this->assertSame($expectedResult, $this->basePrice->getValue());
+    }
+
+    public function getValueDataProvider()
+    {
+        return array(array(77, 77), array(0, 0), array(false, 99));
     }
 }

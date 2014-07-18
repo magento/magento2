@@ -28,7 +28,6 @@
     <preference for="Magento\CatalogInventory\Service\V1\StockItemServiceInterface" type="Magento\CatalogInventory\Service\V1\StockItemService" />
     <type name="Magento\CatalogInventory\Model\Observer">
         <arguments>
-            <argument name="resourceIndexerStock" xsi:type="object">Magento\CatalogInventory\Model\Resource\Indexer\Stock\Proxy</argument>
             <argument name="resourceStock" xsi:type="object">Magento\CatalogInventory\Model\Resource\Stock\Proxy</argument>
             <argument name="indexer" xsi:type="object">Magento\Index\Model\Indexer\Proxy</argument>
             <argument name="stock" xsi:type="object">Magento\CatalogInventory\Model\Stock\Proxy</argument>
@@ -52,5 +51,8 @@
                 <item name="cataloginventory" xsi:type="string">Magento_CatalogInventory</item>
             </argument>
         </arguments>
+    </type>
+    <type name="Magento\Store\Model\Resource\Group">
+        <plugin name="storeGroupResourceAroundBeforeSave" type="\Magento\CatalogInventory\Model\Indexer\Stock\Plugin\StoreGroup"/>
     </type>
 </config>

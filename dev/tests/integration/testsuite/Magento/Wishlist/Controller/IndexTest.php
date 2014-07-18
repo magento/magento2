@@ -136,7 +136,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
     {
         $this->_objectManager->configure(
             [
-                'Magento\Wishlist\Controller\Index' => [
+                'Magento\Wishlist\Controller\Index\Send' => [
                     'arguments' => [
                         'transportBuilder' => [
                             'instance' => 'Magento\TestFramework\Mail\Template\TransportBuilderMock'

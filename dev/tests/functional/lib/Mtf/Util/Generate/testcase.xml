@@ -35,13 +35,13 @@
     </components>
     <steps>
       <step/>
-      <step>*Steps:*</step>
-      <step> Log in as default admin user.</step>
-      <step> Go to Stores &gt; Taxes &gt; Tax Zones and Rates.</step>
-      <step> Click 'Add New Tax Rate' button.</step>
-      <step> Fill in data according to dataSet</step>
-      <step> Save Tax Rate.</step>
-      <step> Perform all assertions.</step>
+      <step>Steps:</step>
+      <step>Log in as default admin user.</step>
+      <step>Go to Stores &gt; Taxes &gt; Tax Zones and Rates.</step>
+      <step>Click 'Add New Tax Rate' button.</step>
+      <step>Fill in data according to dataSet</step>
+      <step>Save Tax Rate.</step>
+      <step>Perform all assertions.</step>
     </steps>
   </testcase>
   <testcase>
@@ -65,13 +65,13 @@
       <component>Downloadable Product (CS)</component>
     </components>
     <steps>
-    <step> Log in to Backend.</step>
-    <step> Navigate to Products &gt; Catalog.</step>
-    <step> Start to create new Downloadable product.</step>
-    <step> Fill in data according to data set.</step>
-    <step> Fill Downloadable Information tab according to data set.</step>
-    <step> Save product.</step>
-    <step> Verify created product.</step>
+    <step>Log in to Backend.</step>
+    <step>Navigate to Products &gt; Catalog.</step>
+    <step>Start to create new Downloadable product.</step>
+    <step>Fill in data according to data set.</step>
+    <step>Fill Downloadable Information tab according to data set.</step>
+    <step>Save product.</step>
+    <step>Verify created product.</step>
     </steps>
   </testcase>
   <testcase>
@@ -85,7 +85,7 @@
     </components>
     <steps>
       <step/>
-      <step>*Preconditions:*</step>
+      <step>Preconditions:</step>
       <step> Two specific simple product is created(unique sku,name,short/full description, tax class)</step>
       <step/>
       <step>Steps</step>
@@ -95,5 +95,22 @@
       <step>Click "Search" button</step>
       <step>Perform all asserts</step>
     </steps>
+  </testcase>
+  <testcase>
+    <id>MTA-129</id>
+    <ticketId>MTA-129</ticketId>
+    <name>SearchEntityResultsTest</name>
+    <description>Test Creation for SearchEntity results</description>
+    <module>Search</module>
+    <components>
+      <component>Search Frontend (MX)</component>
+    </components>
+      <step>Preconditions:</step>
+      <step>1. All product types are created.</step>
+      <step/>
+      <step>Steps:</step>
+      <step>1. Navigate to frontend on index page.</step>
+      <step>2. Input test data into "search field" and press Enter key.</step>
+      <step>3. Perform all assertions.</step>
   </testcase>
 </testcases>

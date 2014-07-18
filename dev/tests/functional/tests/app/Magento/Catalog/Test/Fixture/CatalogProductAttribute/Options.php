@@ -33,9 +33,24 @@ use Mtf\Fixture\FixtureInterface;
 class Options implements FixtureInterface
 {
     /**
-     * @constructor
-     * @param array $params
-     * @param array $data
+     * Prepared dataSet data
+     *
+     * @var array
+     */
+    protected $data;
+
+    /**
+     * Data set configuration settings
+     *
+     * @var array
+     */
+    protected $params;
+
+    /**
+     * Constructor
+     *
+     * @param array $params [optional]
+     * @param array $data [optional]
      */
     public function __construct(array $params, array $data = [])
     {
@@ -60,7 +75,7 @@ class Options implements FixtureInterface
     /**
      * Return prepared data set
      *
-     * @param string|null $key
+     * @param string|null $key [optional]
      * @return mixed
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -97,9 +112,11 @@ class Options implements FixtureInterface
                 ]
             ],
         ];
+
         if (!isset($presets[$name])) {
             return null;
         }
+
         return $presets[$name];
     }
 }

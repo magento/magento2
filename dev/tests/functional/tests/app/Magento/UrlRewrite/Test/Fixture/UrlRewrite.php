@@ -80,6 +80,14 @@ class UrlRewrite extends InjectableFixture
         'input' => 'text',
     ];
 
+    protected $target_path = [
+        'attribute_code' => 'target_path',
+        'backend_type' => 'varchar',
+        'is_required' => '1',
+        'default_value' => 'target_path%isolation%',
+        'input' => 'text',
+    ];
+
     protected $description = [
         'attribute_code' => 'description',
         'backend_type' => 'varchar',
@@ -110,6 +118,11 @@ class UrlRewrite extends InjectableFixture
     public function getRequestPath()
     {
         return $this->getData('request_path');
+    }
+
+    public function getTargetPath()
+    {
+        return $this->getData('target_path');
     }
 
     public function getDescription()

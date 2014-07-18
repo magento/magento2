@@ -44,6 +44,8 @@ class Curl extends AbstractCurl implements AdminUserRoleInterface
      * @param FixtureInterface $fixture
      * @return array|mixed
      * @throws \Exception
+     *
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function persist(FixtureInterface $fixture = null)
     {
@@ -56,6 +58,14 @@ class Curl extends AbstractCurl implements AdminUserRoleInterface
         }
         unset($data['roles_resources']);
         $data['gws_is_all'] = (isset($data['gws_is_all'])) ? $data['gws_is_all'] : '1';
+        if ($fixture->hasData('in_role_user')) {
+            $adminUsers = $fixture->getDataFieldConfig('in_role_user')['source']->getAdminUsers();
+            $userIds = [];
+            foreach ($adminUsers as $adminUser) {
+                $userIds[] = $adminUser->getUserId() . "=true";
+            }
+            $data['in_role_user'] = implode('&', $userIds);
+        }
         $url = $_ENV['app_backend_url'] . 'admin/user_role/saverole/active_tab/info/';
         $curl = new BackendDecorator(new CurlTransport(), new Config);
         $curl->addOption(CURLOPT_HEADER, 1);

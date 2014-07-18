@@ -47,16 +47,22 @@ class Curl extends AbstractCurl implements RatingInterface
         'is_active' => [
             'Yes' => 1,
             'No' => 0,
-        ],
-        'stores' => [
-            'Main Website/Main Website Store/Default Store View' => 1
         ]
+    ];
+
+    /**
+     * Mapping stores value
+     *
+     * @var array
+     */
+    protected $mappingStores = [
+        'Main Website/Main Website Store/Default Store View' => 1
     ];
 
     /**
      * Post request for creating product Rating in backend
      *
-     * @param FixtureInterface|null $rating
+     * @param FixtureInterface|null $rating [optional]
      * @return array
      * @throws \Exception
      */
@@ -64,9 +70,10 @@ class Curl extends AbstractCurl implements RatingInterface
     {
         $url = $_ENV['app_backend_url'] . 'review/rating/save/';
         $curl = new BackendDecorator(new CurlTransport(), new Config());
-        $data = $this->replaceMappingData($rating->getData());
+        $data = $this->replaceMappingData($this->prepareData($rating->getData()));
 
         $data['stores'] = is_array($data['stores']) ? $data['stores'] : [$data['stores']];
+        $data += $this->getAdditionalData();
         $curl->write(CurlInterface::POST, $url, '1.0', [], $data);
         $response = $curl->read();
         $curl->close();
@@ -76,13 +83,36 @@ class Curl extends AbstractCurl implements RatingInterface
             );
         }
 
-        return ['id' => $this->getProductRatingId()];
+        $ratingId = $this->getProductRatingId();
+        return [
+            'rating_id' => $ratingId,
+            'options' => $this->getRatingOptions($ratingId)
+        ];
+    }
+
+    /**
+     * Prepare POST data for creating rating request
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function prepareData(array $data)
+    {
+        if (isset($data['stores'])) {
+            foreach ($data['stores'] as $key => $store) {
+                if (isset($this->mappingStores[$store])) {
+                    $data['stores'][$key] = $this->mappingStores[$store];
+                }
+            }
+        }
+
+        return $data;
     }
 
     /**
      * Get product Rating id
      *
-     * @return int|null
+     * @return mixed
      */
     protected function getProductRatingId()
     {
@@ -92,5 +122,44 @@ class Curl extends AbstractCurl implements RatingInterface
         $match = $extractor->getData();
 
         return empty($match[1]) ? null : $match[1];
+    }
+
+    /**
+     * Get rating options
+     *
+     * @param int $ratingId
+     * @return array
+     */
+    protected function getRatingOptions($ratingId)
+    {
+        $url = 'review/rating/edit/id/' . $ratingId;
+        $regex = '/<input[^>]+name="option_title\[(\d+)\]"[^>]+>/';
+        $extractor = new Extractor($url, $regex, true);
+        $matches = $extractor->getData();
+
+        if (empty($matches[1])) {
+            return [];
+        }
+        array_unshift($matches[1], null);
+        return array_filter($matches[1]);
+    }
+
+    /**
+     * Return additional data for curl request
+     *
+     * @return array
+     */
+    protected function getAdditionalData()
+    {
+        return [
+            'rating_codes' => [1 => ''],
+            'option_title' => [
+                'add_1' => 1,
+                'add_2' => 2,
+                'add_3' => 3,
+                'add_4' => 4,
+                'add_5' => 5,
+            ],
+        ];
     }
 }

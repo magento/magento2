@@ -26,6 +26,7 @@ namespace Magento\Review\Test\Constraint;
 
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
+use Magento\Review\Test\Fixture\ReviewInjectable;
 use Magento\Review\Test\Fixture\Rating;
 use Mtf\Constraint\AbstractConstraint;
 
@@ -42,26 +43,29 @@ class AssertProductRatingInProductPage extends AbstractConstraint
     protected $severeness = 'middle';
 
     /**
-     * Assert that product rating is displayed on frontend on product review
+     * Assert that product rating is displayed on product review(frontend)
      *
      * @param CatalogProductView $catalogProductView
      * @param CatalogProductSimple $product
-     * @param Rating $productRating
+     * @param ReviewInjectable|null $review [optional]
+     * @param Rating|null $productRating [optional]
      * @return void
      */
     public function processAssert(
         CatalogProductView $catalogProductView,
         CatalogProductSimple $product,
-        Rating $productRating
+        ReviewInjectable $review = null,
+        Rating $productRating = null
     ) {
         $catalogProductView->init($product);
         $catalogProductView->open();
         $catalogProductView->getReviewSummaryBlock()->getAddReviewLink()->click();
 
+        $rating = $productRating ? $productRating : $review->getDataFieldConfig('ratings')['source']->getRatings()[0];
         $reviewForm = $catalogProductView->getReviewFormBlock();
         \PHPUnit_Framework_Assert::assertTrue(
-            $reviewForm->isVisibleRating($productRating),
-            'Product rating "' . $productRating->getRatingCode() . '" is not displayed.'
+            $reviewForm->isVisibleRating($rating),
+            'Product rating "' . $rating->getRatingCode() . '" is not displayed.'
         );
     }
 

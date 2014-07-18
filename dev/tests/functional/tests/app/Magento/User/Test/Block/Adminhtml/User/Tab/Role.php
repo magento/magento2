@@ -43,7 +43,7 @@ class Role extends Tab
      */
     public function fillFormTab(array $fields, Element $element = null)
     {
-        $this->getRoleGrid()->searchAndOpen(['rolename' => $fields['rolename']]);
+        $this->getRoleGrid()->searchAndSelect(['rolename' => $fields['role_id']['value']]);
     }
 
     /**

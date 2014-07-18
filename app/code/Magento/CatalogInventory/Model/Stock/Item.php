@@ -218,9 +218,9 @@ class Item extends \Magento\Framework\Model\AbstractModel
     protected $_stockStatus;
 
     /**
-     * @var \Magento\Index\Model\Indexer
+     * @var \Magento\CatalogInventory\Model\Indexer\Stock\Processor
      */
-    protected $_indexer;
+    protected $_stockIndexerProcessor;
 
     /**
      * @var \Magento\Customer\Model\Session
@@ -246,7 +246,7 @@ class Item extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Index\Model\Indexer $indexer
+     * @param \Magento\CatalogInventory\Model\Indexer\Stock\Processor $stockIndexerProcessor
      * @param Status $stockStatus
      * @param \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
      * @param ItemRegistry $stockItemRegistry
@@ -265,7 +265,7 @@ class Item extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Index\Model\Indexer $indexer,
+        \Magento\CatalogInventory\Model\Indexer\Stock\Processor $stockIndexerProcessor,
         Status $stockStatus,
         \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService,
         \Magento\CatalogInventory\Model\Stock\ItemRegistry $stockItemRegistry,
@@ -283,7 +283,7 @@ class Item extends \Magento\Framework\Model\AbstractModel
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
 
         $this->_customerSession = $customerSession;
-        $this->_indexer = $indexer;
+        $this->_stockIndexerProcessor = $stockIndexerProcessor;
         $this->_stockStatus = $stockStatus;
         $this->stockItemService = $stockItemService;
         $this->stockItemRegistry = $stockItemRegistry;
@@ -971,9 +971,7 @@ class Item extends \Magento\Framework\Model\AbstractModel
         parent::_afterSave();
 
         if ($this->_processIndexEvents) {
-            $this->_indexer->processEntityAction($this, self::ENTITY, \Magento\Index\Model\Event::TYPE_SAVE);
-        } else {
-            $this->_indexer->logEvent($this, self::ENTITY, \Magento\Index\Model\Event::TYPE_SAVE);
+            $this->_stockIndexerProcessor->reindexRow($this->getProductId());
         }
         return $this;
     }
@@ -1077,5 +1075,16 @@ class Item extends \Magento\Framework\Model\AbstractModel
     protected function _hasDefaultNotificationMessage()
     {
         return false;
+    }
+
+    /**
+     * Process data and set in_stock availability
+     *
+     * @return $this
+     */
+    public function processIsInStock()
+    {
+        $this->setData('is_in_stock', $this->verifyStock() ? Status::STATUS_IN_STOCK : Status::STATUS_OUT_OF_STOCK);
+        return $this;
     }
 }

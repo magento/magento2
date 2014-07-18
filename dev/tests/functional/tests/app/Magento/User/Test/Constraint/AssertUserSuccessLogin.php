@@ -24,7 +24,7 @@
 
 namespace Magento\User\Test\Constraint;
 
-use Magento\User\Test\Fixture\AdminUserInjectable;
+use Magento\User\Test\Fixture\User;
 use Mtf\Constraint\AbstractConstraint;
 use Magento\Backend\Test\Page\Dashboard;
 use Magento\Backend\Test\Page\AdminAuthLogin;
@@ -44,19 +44,20 @@ class AssertUserSuccessLogin extends AbstractConstraint
     /**
      * Verify whether customer has logged in to the Backend
      *
-     * @param Dashboard $dashboard
-     * @param AdminUserInjectable $user
+     * @param User $user
      * @param AdminAuthLogin $adminAuth
-     * @param AdminUserInjectable $customAdmin
+     * @param Dashboard $dashboard
+     * @param User $customAdmin
+     * @internal param null|string $userToLoginInAssert
      * @return void
      */
     public function processAssert(
-        Dashboard $dashboard,
-        AdminUserInjectable $user,
+        User $user,
         AdminAuthLogin $adminAuth,
-        AdminUserInjectable $customAdmin = null
+        Dashboard $dashboard,
+        User $customAdmin = null
     ) {
-        $adminUser = ($user->hasData('password') || $user->hasData('username')) ? $user : $customAdmin;
+        $adminUser = $customAdmin === null ? $user : $customAdmin;
         if ($dashboard->getAdminPanelHeader()->isVisible()) {
             $dashboard->getAdminPanelHeader()->logOut();
         }

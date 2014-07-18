@@ -39,6 +39,6 @@ class Customer extends \Magento\Backend\Block\Widget\Grid\Container
         $this->_controller = 'adminhtml_shopcart_customer';
         $this->_headerText = __('Customers');
         parent::_construct();
-        $this->_removeButton('add');
+        $this->buttonList->remove('add');
     }
 }

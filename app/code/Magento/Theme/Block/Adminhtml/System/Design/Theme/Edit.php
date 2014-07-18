@@ -37,12 +37,12 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Backend\Block\Widget\Context $context,
         \Magento\Framework\Registry $registry,
         array $data = array()
     ) {
@@ -69,7 +69,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         $theme = $this->_getCurrentTheme();
         if ($theme) {
             if ($theme->isEditable()) {
-                $this->_addButton(
+                $this->buttonList->add(
                     'save_and_continue',
                     array(
                         'label' => __('Save and Continue Edit'),
@@ -83,8 +83,8 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
                     1
                 );
             } else {
-                $this->_removeButton('save');
-                $this->_removeButton('reset');
+                $this->buttonList->remove('save');
+                $this->buttonList->remove('reset');
             }
 
             if ($theme->isDeletable()) {
@@ -95,10 +95,10 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
                         $message,
                         $this->getUrl('adminhtml/*/delete', array('id' => $theme->getId()))
                     );
-                    $this->_updateButton('delete', 'onclick', $onClick);
+                    $this->buttonList->update('delete', 'onclick', $onClick);
                 }
             } else {
-                $this->_removeButton('delete');
+                $this->buttonList->remove('delete');
             }
         }
 

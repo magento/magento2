@@ -82,6 +82,7 @@ class CatalogProductVirtual extends InjectableFixture
             $dataSet,
             $persist
         );
+
         if (!isset($this->data['url_key']) && isset($this->data['name'])) {
             $this->data['url_key'] = trim(strtolower(preg_replace('#[^0-9a-z%]+#i', '-', $this->data['name'])), '-');
         }
@@ -96,11 +97,20 @@ class CatalogProductVirtual extends InjectableFixture
     ];
 
     protected $defaultDataSet = [
-        'name' => 'Test simple product %isolation%',
-        'sku' => 'test_simple_sku_%isolation%',
+        'name' => 'Test virtual product %isolation%',
+        'sku' => 'sku_test_virtual_product_%isolation%',
         'price' => ['value' => 100.00],
-        'weight' => 12.0000,
-        'qty' => 10
+        'quantity_and_stock_status' => [
+            'qty' => 10.0000,
+            'is_in_stock' => 'In Stock',
+        ],
+        'is_virtual' => 'Yes'
+    ];
+
+    protected $is_virtual = [
+        'attribute_code' => 'is_virtual',
+        'backend_type' => 'virtual',
+        'group' => 'product-details',
     ];
 
     protected $category_ids = [
@@ -554,12 +564,8 @@ class CatalogProductVirtual extends InjectableFixture
     protected $attribute_set_id = [
         'attribute_code' => 'attribute_set_id',
         'backend_type' => 'virtual',
-    ];
-
-    protected $qty = [
-        'attribute_code' => 'qty',
-        'input' => 'input',
         'group' => 'product-details',
+        'source' => 'Magento\Catalog\Test\Fixture\CatalogProductSimple\AttributeSetId',
     ];
 
     protected $custom_options = [
@@ -570,9 +576,20 @@ class CatalogProductVirtual extends InjectableFixture
         'source' => 'Magento\Catalog\Test\Fixture\CatalogProductSimple\CustomOptions',
     ];
 
+    protected $website_ids = [
+        'attribute_code' => 'website_ids',
+        'backend_type' => 'virtual',
+        'default_value' => 'Main Website',
+    ];
+
     public function getCategoryIds()
     {
         return $this->getData('category_ids');
+    }
+
+    public function getIsVirtual()
+    {
+        return $this->getData('is_virtual');
     }
 
     public function getColor()
@@ -845,13 +862,13 @@ class CatalogProductVirtual extends InjectableFixture
         return $this->getData('attribute_set_id');
     }
 
-    public function getQty()
-    {
-        return $this->getData('qty');
-    }
-
     public function getCustomOptions()
     {
         return $this->getData('custom_options');
+    }
+
+    public function getWebsiteIds()
+    {
+        return $this->getData('website_ids');
     }
 }

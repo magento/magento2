@@ -45,6 +45,15 @@ class FormTest extends \PHPUnit_Framework_TestCase
     protected $_formKeyMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $elementMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $allElementsMock;
+    /**
      * @var \Magento\Framework\Data\Form
      */
     protected $_form;
@@ -65,7 +74,8 @@ class FormTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_factoryCollectionMock->expects($this->any())->method('create')->will($this->returnValue(array()));
+        $this->allElementsMock =
+            $this->getMock('Magento\Framework\Data\Form\Element\Collection', [], [], '', false);
         $this->_formKeyMock = $this->getMock(
             'Magento\Framework\Data\Form\FormKey',
             array('getFormKey'),
@@ -73,17 +83,95 @@ class FormTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $methods = ['getId', 'setValue', 'setName', 'getName', '_wakeup'];
+        $this->elementMock =
+            $this->getMock('Magento\Framework\Data\Form\Element\AbstractElement', $methods, [], '', false);
 
         $this->_form = new Form($this->_factoryElementMock, $this->_factoryCollectionMock, $this->_formKeyMock);
     }
 
     public function testFormKeyUsing()
     {
+        $this->_factoryCollectionMock
+            ->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue(array()));
         $formKey = 'form-key';
         $this->_formKeyMock->expects($this->once())->method('getFormKey')->will($this->returnValue($formKey));
 
         $this->_form->setUseContainer(true);
         $this->_form->setMethod('post');
         $this->assertContains($formKey, $this->_form->toHtml());
+    }
+
+    public function testAddValue()
+    {
+        $this->_factoryCollectionMock
+            ->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($this->allElementsMock));
+        $this->_form = new Form($this->_factoryElementMock, $this->_factoryCollectionMock, $this->_formKeyMock);
+        $values = [
+            'element_id' => 'value_one'
+        ];
+        $this->elementMock->expects($this->once())->method('getId')->will($this->returnValue('element_id'));
+        $this->allElementsMock->expects($this->once())->method('add')->with($this->elementMock);
+        $this->elementMock->expects($this->once())->method('setValue')->with('value_one');
+        $this->_form->addElementToCollection($this->elementMock);
+        $this->_form->addValues($values);
+    }
+
+    /**
+     * @param int $number
+     * @param string $elementId
+     * @param string|null $value
+     *
+     * @dataProvider setValueDataProvider
+     */
+    public function testSetValue($number, $elementId, $value)
+    {
+        $this->_factoryCollectionMock
+            ->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue(array($this->elementMock)));
+        $this->_form = new Form($this->_factoryElementMock, $this->_factoryCollectionMock, $this->_formKeyMock);
+        $values = [
+            'element_two' => 'value_two'
+        ];
+        $this->elementMock->expects($this->exactly($number))->method('getId')->will($this->returnValue($elementId));
+        $this->elementMock->expects($this->once())->method('setValue')->with($value);
+        $this->_form->setValues($values);
+    }
+
+    public function setValueDataProvider()
+    {
+        return [
+            'value_exists' => [2, 'element_two', 'value_two'],
+            'value_not_exist' => [1, 'element_one', null]
+        ];
+    }
+
+    public function testAddFieldNameSuffix()
+    {
+        $this->_factoryCollectionMock
+            ->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue(array($this->elementMock)));
+        $this->_form = new Form($this->_factoryElementMock, $this->_factoryCollectionMock, $this->_formKeyMock);
+        $this->elementMock->expects($this->once())->method('getName')->will($this->returnValue('name'));
+        $this->elementMock->expects($this->once())->method('setName')->with('_suffix[name]');
+        $this->_form->addFieldNameSuffix('_suffix');
+    }
+
+    public function testAddEllement()
+    {
+        $this->_factoryCollectionMock
+            ->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($this->allElementsMock));
+        $this->_form = new Form($this->_factoryElementMock, $this->_factoryCollectionMock, $this->_formKeyMock);
+        $this->elementMock->expects($this->any())->method('getId')->will($this->returnValue('element_id'));
+        $this->allElementsMock->expects($this->exactly(2))->method('add')->with($this->elementMock, false);
+        $this->_form->addElement($this->elementMock);
     }
 }

@@ -35,7 +35,7 @@ Import/Export,Import/Export
 "Please fix errors and re-upload file or simply press ""Import"" button' ' to skip rows with errors","Please fix errors and re-upload file or simply press ""Import"" button' ' to skip rows with errors"
 "File is partially valid, but import is not possible","Bestand is gedeeltelijk geldig, maar het is niet mogelijk te importeren"
 "in rows:","in rows:"
-"The total size of the uploadable files can't be more that %1M","The total size of the uploadable files can't be more that %1M"
+"The total size of the uploadable files can't be more than %1M","The total size of the uploadable files can't be more than %1M"
 "System doesn't allow to get file upload settings","System doesn't allow to get file upload settings"
 "Please enter a correct entity model","Please enter a correct entity model"
 "Entity adapter object must be an instance of %1 or %2","Entity adapter object must be an instance of %1 or %2"

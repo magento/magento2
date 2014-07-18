@@ -38,12 +38,12 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Backend\Block\Widget\Context $context,
         \Magento\Framework\Registry $registry,
         array $data = array()
     ) {
@@ -61,15 +61,15 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
 
         parent::_construct();
 
-        $this->_removeButton('reset');
-        $this->_removeButton('delete');
+        $this->buttonList->remove('reset');
+        $this->buttonList->remove('delete');
         if (!$this->getShipment()) {
             return;
         }
 
         if ($this->_authorization->isAllowed('Magento_Sales::emails')) {
-            $this->_updateButton('save', 'label', __('Send Tracking Information'));
-            $this->_updateButton(
+            $this->buttonList->update('save', 'label', __('Send Tracking Information'));
+            $this->buttonList->update(
                 'save',
                 'onclick',
                 "deleteConfirm('" . __(
@@ -79,7 +79,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
         }
 
         if ($this->getShipment()->getId()) {
-            $this->_addButton(
+            $this->buttonList->add(
                 'print',
                 array(
                     'label' => __('Print'),
@@ -156,13 +156,13 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     {
         if ($flag) {
             if ($this->getShipment()->getBackUrl()) {
-                return $this->_updateButton(
+                return $this->buttonList->update(
                     'back',
                     'onclick',
                     'setLocation(\'' . $this->getShipment()->getBackUrl() . '\')'
                 );
             }
-            return $this->_updateButton(
+            return $this->buttonList->update(
                 'back',
                 'onclick',
                 'setLocation(\'' . $this->getUrl('sales/shipment/') . '\')'

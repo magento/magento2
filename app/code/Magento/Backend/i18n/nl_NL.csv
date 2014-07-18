@@ -272,7 +272,7 @@ Synchronizing...,Synchronizing...
 "We couldn't create a backup right now. Please try again later.","We couldn't create a backup right now. Please try again later."
 "Deleting a %1 will not delete the information associated with the %1 (e.g. categories, products, etc.), but the %1 will not be able to be restored. It is suggested that you create a database backup before deleting the %1.","Deleting a %1 will not delete the information associated with the %1 (e.g. categories, products, etc.), but the %1 will not be able to be restored. It is suggested that you create a database backup before deleting the %1."
 "You saved the custom variable.","You saved the custom variable."
-"You deleted the customer.","You deleted the customer."
+"You deleted the custom variable.","You deleted the custom variable."
 "URL Redirects","URL Redirects"
 "[New/Edit] URL Redirect","[New/Edit] URL Redirect"
 "The URL Rewrite has been saved.","The URL Rewrite has been saved."

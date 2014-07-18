@@ -147,7 +147,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSaveUrl()
     {
-        $expectedUrl = '*/system_config_save/index';
+        $expectedUrl = '*/system_config/save';
         $expectedParams = array('_current' => true);
 
         $this->_urlModelMock->expects(

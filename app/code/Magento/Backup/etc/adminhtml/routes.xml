@@ -26,7 +26,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/App/etc/routes.xsd">
     <router id="admin">
         <route id="backup" frontName="backup">
-            <module name="Magento_Backup_Adminhtml" before="Magento_Adminhtml" />
+            <module name="Magento_Backup" before="Magento_Adminhtml" />
         </route>
     </router>
 </config>

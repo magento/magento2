@@ -39,6 +39,6 @@ class Creditmemo extends \Magento\Backend\Block\Widget\Grid\Container
         $this->_blockGroup = 'Magento_Sales';
         $this->_headerText = __('Credit Memos');
         parent::_construct();
-        $this->_removeButton('add');
+        $this->buttonList->remove('add');
     }
 }

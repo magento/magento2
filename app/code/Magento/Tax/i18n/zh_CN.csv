@@ -14,7 +14,6 @@ Code,代码
 "Sort Order",排序顺序
 "Save and Continue Edit",保存并继续编辑
 "Are you sure you want to do this?",您是否确认要这样做？
-"This rule no longer exists.",该规则已不存在。
 "New Rule",新规则
 Priority,优先级
 "Edit Rule",修改规则
@@ -80,13 +79,11 @@ State,州
 "New Tax Rule","New Tax Rule"
 "The tax rule has been saved.",该税务规则已保存。
 "Something went wrong saving this tax rule.","Something went wrong saving this tax rule."
-"This rule no longer exists",该规则不存在。
+"This rule no longer exists.",该规则不存在。
 "The tax rule has been deleted.",该税务规则已被删除。
 "Something went wrong deleting this tax rule.","Something went wrong deleting this tax rule."
 "Something went wrong saving this tax class.","Something went wrong saving this tax class."
 "Something went wrong deleting this tax class.","Something went wrong deleting this tax class."
-"Invalid type of tax class specified.","Invalid type of tax class specified."
-"Invalid name of tax class specified.","Invalid name of tax class specified."
 "Shipping & Handling Tax",处理、运送及税金费用
 "Please fill all required fields with valid information.","Please fill all required fields with valid information."
 "Rate Percent should be a positive number.","Rate Percent should be a positive number."

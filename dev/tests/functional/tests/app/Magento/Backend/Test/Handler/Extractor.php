@@ -51,16 +51,25 @@ class Extractor
     protected $url;
 
     /**
+     * Flag is search all match
+     *
+     * @var bool
+     */
+    protected $isAll;
+
+    /**
      * Setting all Pagination params for Pagination object.
      * Required url for cURL request and regexp pattern for searching in cURL response.
      *
      * @param string $url
      * @param string $regExpPattern
+     * @param bool $isAll
      */
-    public function __construct($url, $regExpPattern)
+    public function __construct($url, $regExpPattern, $isAll = false)
     {
         $this->url = $url;
         $this->regExpPattern = $regExpPattern;
+        $this->isAll = $isAll;
     }
 
     /**
@@ -77,9 +86,14 @@ class Extractor
         $curl->write(CurlInterface::POST, $url, '1.0');
         $response = $curl->read();
         $curl->close();
-        preg_match($this->regExpPattern, $response, $matches);
+        if ($this->isAll) {
+            preg_match_all($this->regExpPattern, $response, $matches);
+        } else {
+            preg_match($this->regExpPattern, $response, $matches);
+        }
 
-        if (count($matches) == 0) {
+        $countMatches = $this->isAll ? count($matches[1]) : count($matches);
+        if ($countMatches == 0) {
             throw new \Exception('Matches array can\'t be empty.');
         }
         return $matches;

@@ -39,6 +39,6 @@ class Agreement extends \Magento\Backend\Block\Widget\Grid\Container
         $this->_blockGroup = 'Magento_Paypal';
         $this->_headerText = __('Billing Agreements');
         parent::_construct();
-        $this->_removeButton('add');
+        $this->buttonList->remove('add');
     }
 }

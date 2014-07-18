@@ -59,14 +59,14 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     protected $_reorderHelper;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Sales\Model\Config $salesConfig
      * @param \Magento\Sales\Helper\Reorder $reorderHelper
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Backend\Block\Widget\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Sales\Model\Config $salesConfig,
         \Magento\Sales\Helper\Reorder $reorderHelper,
@@ -91,9 +91,9 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
 
         parent::_construct();
 
-        $this->_removeButton('delete');
-        $this->_removeButton('reset');
-        $this->_removeButton('save');
+        $this->buttonList->remove('delete');
+        $this->buttonList->remove('reset');
+        $this->buttonList->remove('save');
         $this->setId('sales_order_view');
         $order = $this->getOrder();
 
@@ -106,7 +106,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
                 . $this->getEditMessage($order) . '\', url: \'' . $this->getEditUrl()
                 . '\'}).orderEditDialog(\'showDialog\');';
 
-            $this->_addButton(
+            $this->buttonList->add(
                 'order_edit',
                 array(
                     'label' => __('Edit'),
@@ -121,7 +121,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
 
         if ($this->_isAllowedAction('Magento_Sales::cancel') && $order->canCancel()) {
             $message = __('Are you sure you want to cancel this order?');
-            $this->_addButton(
+            $this->buttonList->add(
                 'order_cancel',
                 array(
                     'label' => __('Cancel'),
@@ -152,7 +152,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
             if ($order->getPayment()->getMethodInstance()->isGateway()) {
                 $onClick = "confirmSetLocation('{$message}', '{$this->getCreditmemoUrl()}')";
             }
-            $this->_addButton(
+            $this->buttonList->add(
                 'order_creditmemo',
                 array('label' => __('Credit Memo'), 'onclick' => $onClick, 'class' => 'credit-memo')
             );
@@ -171,7 +171,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
         }
 
         if ($this->_isAllowedAction('Magento_Sales::hold') && $order->canHold()) {
-            $this->_addButton(
+            $this->buttonList->add(
                 'order_hold',
                 array(
                     'label' => __('Hold'),
@@ -182,7 +182,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
         }
 
         if ($this->_isAllowedAction('Magento_Sales::unhold') && $order->canUnhold()) {
-            $this->_addButton(
+            $this->buttonList->add(
                 'order_unhold',
                 array(
                     'label' => __('Unhold'),
@@ -195,7 +195,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
         if ($this->_isAllowedAction('Magento_Sales::review_payment')) {
             if ($order->canReviewPayment()) {
                 $message = __('Are you sure you want to accept this payment?');
-                $this->_addButton(
+                $this->buttonList->add(
                     'accept_payment',
                     array(
                         'label' => __('Accept Payment'),
@@ -203,7 +203,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
                     )
                 );
                 $message = __('Are you sure you want to deny this payment?');
-                $this->_addButton(
+                $this->buttonList->add(
                     'deny_payment',
                     array(
                         'label' => __('Deny Payment'),
@@ -212,7 +212,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
                 );
             }
             if ($order->canFetchPaymentReviewUpdate()) {
-                $this->_addButton(
+                $this->buttonList->add(
                     'get_review_payment_update',
                     array(
                         'label' => __('Get Payment Update'),
@@ -224,7 +224,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
 
         if ($this->_isAllowedAction('Magento_Sales::invoice') && $order->canInvoice()) {
             $_label = $order->getForcedShipmentWithInvoice() ? __('Invoice and Ship') : __('Invoice');
-            $this->_addButton(
+            $this->buttonList->add(
                 'order_invoice',
                 array(
                     'label' => $_label,
@@ -238,7 +238,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
             'Magento_Sales::ship'
         ) && $order->canShip() && !$order->getForcedShipmentWithInvoice()
         ) {
-            $this->_addButton(
+            $this->buttonList->add(
                 'order_ship',
                 array(
                     'label' => __('Ship'),
@@ -254,7 +254,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
             $order->getStore()
         ) && $order->canReorderIgnoreSalable()
         ) {
-            $this->_addButton(
+            $this->buttonList->add(
                 'order_reorder',
                 array(
                     'label' => __('Reorder'),

@@ -81,7 +81,7 @@ class OnepageTest extends \Magento\TestFramework\TestCase\AbstractController
 
     public function testShippingMethodAction()
     {
-        $this->dispatch('checkout/onepage/shippingmethod');
+        $this->dispatch('checkout/onepage/shippingMethod');
         $this->assertContains('no quotes are available', $this->getResponse()->getBody());
     }
 

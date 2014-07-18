@@ -30,12 +30,12 @@ class NoRouteHandler implements \Magento\Framework\App\Router\NoRouteHandlerInte
     /**
      * @var \Magento\Backend\Helper\Data
      */
-    protected $_helper;
+    protected $helper;
 
     /**
      * @var \Magento\Framework\App\Route\ConfigInterface
      */
-    protected $_routeConfig;
+    protected $routeConfig;
 
     /**
      * @param \Magento\Backend\Helper\Data $helper
@@ -45,8 +45,8 @@ class NoRouteHandler implements \Magento\Framework\App\Router\NoRouteHandlerInte
         \Magento\Backend\Helper\Data $helper,
         \Magento\Framework\App\Route\ConfigInterface $routeConfig
     ) {
-        $this->_helper = $helper;
-        $this->_routeConfig = $routeConfig;
+        $this->helper = $helper;
+        $this->routeConfig = $routeConfig;
     }
 
     /**
@@ -60,17 +60,14 @@ class NoRouteHandler implements \Magento\Framework\App\Router\NoRouteHandlerInte
         $requestPathParams = explode('/', trim($request->getPathInfo(), '/'));
         $areaFrontName = array_shift($requestPathParams);
 
-        if ($areaFrontName == $this->_helper->getAreaFrontName()) {
+        if ($areaFrontName == $this->helper->getAreaFrontName()) {
 
-            $moduleName = $this->_routeConfig->getRouteFrontName('adminhtml');
-            $controllerName = 'noroute';
+            $moduleName = $this->routeConfig->getRouteFrontName('adminhtml');
+            $actionNamespace = 'noroute';
             $actionName = 'index';
-
-            $request->setModuleName($moduleName)->setControllerName($controllerName)->setActionName($actionName);
-
+            $request->setModuleName($moduleName)->setControllerName($actionNamespace)->setActionName($actionName);
             return true;
         }
-
         return false;
     }
 }

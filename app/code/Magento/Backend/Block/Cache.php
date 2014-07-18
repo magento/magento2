@@ -35,8 +35,8 @@ class Cache extends \Magento\Backend\Block\Widget\Grid\Container
         $this->_controller = 'cache';
         $this->_headerText = __('Cache Storage Management');
         parent::_construct();
-        $this->_removeButton('add');
-        $this->_addButton(
+        $this->buttonList->remove('add');
+        $this->buttonList->add(
             'flush_magento',
             array(
                 'label' => __('Flush Magento Cache'),
@@ -46,7 +46,7 @@ class Cache extends \Magento\Backend\Block\Widget\Grid\Container
         );
 
         $message = __('Cache storage may contain additional data. Are you sure that you want flush it?');
-        $this->_addButton(
+        $this->buttonList->add(
             'flush_system',
             array(
                 'label' => __('Flush Cache Storage'),

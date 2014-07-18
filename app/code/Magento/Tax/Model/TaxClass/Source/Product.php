@@ -21,10 +21,31 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
 namespace Magento\Tax\Model\TaxClass\Source;
 
+use Magento\Tax\Service\V1\Data\TaxClass;
+
+/**
+ * Product tax class source model.
+ */
 class Product extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
+    /**
+     * @var \Magento\Tax\Service\V1\taxClassServiceInterface
+     */
+    protected $_taxClassService;
+
+    /**
+     * @var \Magento\Framework\Service\V1\Data\SearchCriteriaBuilder
+     */
+    protected $_searchCriteriaBuilder;
+
+    /**
+     * @var \Magento\Framework\Service\V1\Data\FilterBuilder
+     */
+    protected $_filterBuilder;
+
     /**
      * Core data
      *
@@ -33,50 +54,62 @@ class Product extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     protected $_coreData;
 
     /**
-     * @var \Magento\Tax\Model\Resource\TaxClass\CollectionFactory
-     */
-    protected $_classesFactory;
-
-    /**
      * @var \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory
      */
     protected $_optionFactory;
 
     /**
+     * Initialize dependencies.
+     *
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Tax\Model\Resource\TaxClass\CollectionFactory $classesFactory
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $optionFactory
+     * @param \Magento\Tax\Service\V1\TaxClassServiceInterface $taxClassService
+     * @param \Magento\Framework\Service\V1\Data\SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param \Magento\Framework\Service\V1\Data\FilterBuilder $filterBuilder
      */
     public function __construct(
         \Magento\Core\Helper\Data $coreData,
         \Magento\Tax\Model\Resource\TaxClass\CollectionFactory $classesFactory,
-        \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $optionFactory
+        \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $optionFactory,
+        \Magento\Tax\Service\V1\TaxClassServiceInterface $taxClassService,
+        \Magento\Framework\Service\V1\Data\SearchCriteriaBuilder $searchCriteriaBuilder,
+        \Magento\Framework\Service\V1\Data\FilterBuilder $filterBuilder
     ) {
         $this->_coreData = $coreData;
         $this->_classesFactory = $classesFactory;
         $this->_optionFactory = $optionFactory;
+        $this->_taxClassService = $taxClassService;
+        $this->_filterBuilder = $filterBuilder;
+        $this->_searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
     /**
-     * Get all options
+     * Retrieve all product tax class options.
      *
+     * @param bool $withEmpty
      * @return array
      */
-    public function getAllOptions()
+    public function getAllOptions($withEmpty = false)
     {
-        if (is_null($this->_options)) {
-            /** @var $classCollection \Magento\Tax\Model\Resource\TaxClass\Collection */
-            $classCollection = $this->_classesFactory->create();
-            $classCollection->addFieldToFilter(
-                'class_type',
-                \Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_PRODUCT
-            )->load();
-            $this->_options = $classCollection->toOptionArray();
+        if (!$this->_options) {
+            $filter = $this->_filterBuilder
+                ->setField(TaxClass::KEY_TYPE)
+                ->setValue(\Magento\Tax\Service\V1\TaxClassServiceInterface::TYPE_PRODUCT)
+                ->create();
+            $searchCriteria = $this->_searchCriteriaBuilder->addFilter([$filter])->create();
+            $searchResults = $this->_taxClassService->searchTaxClass($searchCriteria);
+            foreach ($searchResults->getItems() as $taxClass) {
+                $this->_options[] = array(
+                    'value' => $taxClass->getClassId(),
+                    'label' => $taxClass->getClassName()
+                );
+            }
         }
-
-        $options = $this->_options;
-        array_unshift($options, array('value' => '0', 'label' => __('None')));
-        return $options;
+        if ($withEmpty) {
+            return array_merge(array(array('value' => '0', 'label' => __('None'))), $this->_options);
+        }
+        return $this->_options;
     }
 
     /**

@@ -23,10 +23,10 @@
  */
 namespace Magento\Review\Test\TestCase;
 
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Review\Test\Fixture\Rating;
 use Magento\Review\Test\Page\Adminhtml\RatingEdit;
 use Magento\Review\Test\Page\Adminhtml\RatingIndex;
+use Mtf\Fixture\FixtureFactory;
 use Mtf\TestCase\Injectable;
 
 /**
@@ -64,12 +64,14 @@ class DeleteProductRatingEntityTest extends Injectable
     /**
      * Prepare data
      *
-     * @param CatalogProductSimple $product
+     * @param FixtureFactory $fixtureFactory
      * @return array
      */
-    public function __prepare(CatalogProductSimple $product)
+    public function __prepare(FixtureFactory $fixtureFactory)
     {
+        $product = $fixtureFactory->createByCode('catalogProductSimple', ['dataSet' => 'default']);
         $product->persist();
+
         return ['product' => $product];
     }
 

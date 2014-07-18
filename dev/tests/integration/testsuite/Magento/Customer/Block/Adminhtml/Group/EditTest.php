@@ -60,8 +60,8 @@ class EditTest extends AbstractController
     public function setUp()
     {
         parent::setUp();
-        $this->layout = Bootstrap::getObjectManager()->create(
-            'Magento\Framework\View\Layout'
+        $this->layout = Bootstrap::getObjectManager()->get(
+            'Magento\Framework\View\LayoutInterface'
         );
         $this->customerGroupService = Bootstrap::getObjectManager()
             ->create('Magento\Customer\Service\V1\CustomerGroupService');
@@ -78,6 +78,7 @@ class EditTest extends AbstractController
 
     /**
      * Verify that the Delete button does not exist for the default group.
+     * @magentoAppIsolation enabled
      */
     public function testDeleteButtonNotExistInDefaultGroup()
     {

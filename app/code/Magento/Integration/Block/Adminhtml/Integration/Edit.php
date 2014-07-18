@@ -43,13 +43,13 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * Initialize dependencies.
      *
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Integration\Helper\Data $integrationHelper
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Backend\Block\Widget\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Integration\Helper\Data $integrationHelper,
         array $data = array()
@@ -69,14 +69,14 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         $this->_controller = 'adminhtml_integration';
         $this->_blockGroup = 'Magento_Integration';
         parent::_construct();
-        $this->_removeButton('reset');
-        $this->_removeButton('delete');
+        $this->buttonList->remove('reset');
+        $this->buttonList->remove('delete');
 
         if ($this->_integrationHelper->isConfigType(
             $this->_registry->registry(Integration::REGISTRY_KEY_CURRENT_INTEGRATION)
         )
         ) {
-            $this->_removeButton('save');
+            $this->buttonList->remove('save');
         }
 
         if ($this->_isNewIntegration()) {

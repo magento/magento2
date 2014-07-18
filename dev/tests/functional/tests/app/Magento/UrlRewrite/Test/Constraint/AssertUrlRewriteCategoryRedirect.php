@@ -58,7 +58,7 @@ class AssertUrlRewriteCategoryRedirect extends AbstractConstraint
         $browser->open($_ENV['app_frontend_url'] . $urlRewrite->getRequestPath());
         $url = $urlRewrite->getOptions() == 'No'
             ? $urlRewrite->getRequestPath()
-            : strtolower($category->getName()) . '.html';
+            : $category->getUrlKey() . '.html';
 
         \PHPUnit_Framework_Assert::assertEquals(
             $browser->getUrl(),

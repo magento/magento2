@@ -44,12 +44,14 @@
                 <is_virtual>
                     <input>checkbox</input>
                 </is_virtual>
-                <qty>
-                    <selector>#qty</selector>
-                </qty>
-                <quantity_and_stock_status>
-                    <selector>#quantity_and_stock_status</selector>
-                    <input>select</input>
+                <quantity_and_stock_status composite="1">
+                    <qty>
+                        <selector>#qty</selector>
+                    </qty>
+                    <is_in_stock>
+                        <selector>#quantity_and_stock_status</selector>
+                        <input>select</input>
+                    </is_in_stock>
                 </quantity_and_stock_status>
                 <description>
                     <selector>#description</selector>

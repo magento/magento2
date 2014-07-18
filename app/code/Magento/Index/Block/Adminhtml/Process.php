@@ -34,6 +34,6 @@ class Process extends \Magento\Backend\Block\Widget\Grid\Container
         $this->_controller = 'adminhtml_process';
         $this->_headerText = __('Index Management');
         parent::_construct();
-        $this->_removeButton('add');
+        $this->buttonList->remove('add');
     }
 }

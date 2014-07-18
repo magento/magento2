@@ -1,2 +1,2 @@
 "catalog/dataSet";"product/dataSet";"cmsPage/dataSet";"sitemap/dataSet";"constraint"
-"default_category";"default";"default";"default";"assertSitemapSuccessGenerateMessage, assertSitemapContent"
+"default_subcategory";"default";"default";"default";"assertSitemapSuccessGenerateMessage, assertSitemapContent"

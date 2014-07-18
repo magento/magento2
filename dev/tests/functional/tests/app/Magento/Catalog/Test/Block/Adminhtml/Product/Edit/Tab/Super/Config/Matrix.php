@@ -31,7 +31,6 @@ use Mtf\Client\Element\Locator;
 /**
  * Class Matrix
  * Product variations matrix block
- *
  */
 class Matrix extends Form
 {
@@ -39,18 +38,19 @@ class Matrix extends Form
      * Fill qty to current variations
      *
      * @param array $variations
+     * @return void
      */
     public function fillVariation(array $variations)
     {
         foreach ($variations as $variation) {
-            $variationRow = $this->getVariationRow($variation['configurable_attribute']);
-            foreach ($variation['value'] as $key => $field) {
+            $variationRow = $this->getVariationRow($variation['options_names']);
+            foreach ($variation as $key => $value) {
                 if (!empty($this->mapping[$key])) {
                     $this->_rootElement->find(
                         $variationRow . $this->mapping[$key]['selector'],
                         Locator::SELECTOR_XPATH,
                         isset($this->mapping[$key]['input']) ? $this->mapping[$key]['input'] : null
-                    )->setValue($field['value']);
+                    )->setValue($value);
                 }
             }
         }
@@ -60,13 +60,13 @@ class Matrix extends Form
      * Define row that clarifies which line in Current Variations grid will be used
      *
      * @param array $variationData
-     * @return Element
+     * @return string
      */
     private function getVariationRow(array $variationData)
     {
         $options = array();
         foreach ($variationData as $attributeData) {
-            $options[] = 'td[text()="' . $attributeData['attribute_option'] . '"]';
+            $options[] = 'td[text()="' . $attributeData . '"]';
         }
 
         return '//tr[' . implode(' and ', $options) . ']';

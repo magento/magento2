@@ -47,13 +47,13 @@ class Product extends \Magento\Backend\Block\Widget\Container
     protected $_productFactory;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Catalog\Model\Product\TypeFactory $typeFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Backend\Block\Widget\Context $context,
         \Magento\Catalog\Model\Product\TypeFactory $typeFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         array $data = array()
@@ -79,7 +79,7 @@ class Product extends \Magento\Backend\Block\Widget\Container
             'class_name' => 'Magento\Backend\Block\Widget\Button\SplitButton',
             'options' => $this->_getAddProductButtonOptions()
         );
-        $this->_addButton('add_new', $addButtonProps);
+        $this->buttonList->add('add_new', $addButtonProps);
 
         $this->setChild(
             'grid',

@@ -199,6 +199,7 @@
         <plugin name="storeViewResourceAroundSave" type="Magento\Catalog\Model\Indexer\Category\Flat\Plugin\StoreView"/>
         <plugin name="catalogProductFlatIndexerStore" type="Magento\Catalog\Model\Indexer\Product\Flat\Plugin\Store" />
         <plugin name="categoryStoreAroundSave" type="Magento\Catalog\Model\Indexer\Category\Product\Plugin\StoreView"/>
+        <plugin name="productAttributesStoreViewSave" type="Magento\Catalog\Model\Indexer\Product\Eav\Plugin\StoreView"/>
     </type>
     <type name="Magento\Store\Model\Resource\Group">
         <plugin name="storeGroupResourceAroundSave" type="Magento\Catalog\Model\Indexer\Category\Flat\Plugin\StoreGroup"/>
@@ -238,6 +239,9 @@
         <arguments>
             <argument name="indexer" xsi:type="object" shared="false">Magento\Indexer\Model\IndexerInterface</argument>
         </arguments>
+    </type>
+    <type name="Magento\Eav\Model\Entity\Attribute\Set">
+        <plugin name="invalidateEavIndexerOnAttributeSetSave" type="\Magento\Catalog\Model\Indexer\Product\Eav\Plugin\AttributeSet" />
     </type>
     <type name="Magento\CatalogRule\Model\Rule">
         <plugin name="reindexPriceOnRuleApply" type="\Magento\Catalog\Model\Indexer\Product\Price\Plugin\CatalogRule" />
@@ -464,5 +468,8 @@
         <arguments>
             <argument name="searchResultsBuilder" xsi:type="object" shared="false">Magento\Catalog\Service\V1\Data\Product\SearchResultsBuilder</argument>
         </arguments>
+    </type>
+    <type name="Magento\CatalogInventory\Model\Config\Backend\ShowOutOfStock">
+        <plugin name="showOutOfStockValueChanged" type="\Magento\Catalog\Model\Plugin\ShowOutOfStockConfig"/>
     </type>
 </config>

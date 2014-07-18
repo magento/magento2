@@ -43,10 +43,10 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
         $this->_controller = 'adminhtml';
         $this->_mode = 'add';
 
-        $this->_updateButton('save', 'label', __('Save Review'));
-        $this->_updateButton('save', 'id', 'save_button');
+        $this->buttonList->update('save', 'label', __('Save Review'));
+        $this->buttonList->update('save', 'id', 'save_button');
 
-        $this->_updateButton('reset', 'id', 'reset_button');
+        $this->buttonList->update('reset', 'id', 'reset_button');
 
         $this->_formScripts[] = '
             toggleParentVis("add_review_form");

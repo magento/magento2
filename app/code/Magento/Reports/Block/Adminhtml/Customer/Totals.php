@@ -44,6 +44,6 @@ class Totals extends \Magento\Backend\Block\Widget\Grid\Container
         $this->_controller = 'adminhtml_customer_totals';
         $this->_headerText = __('Customers by Orders Total');
         parent::_construct();
-        $this->_removeButton('add');
+        $this->buttonList->remove('add');
     }
 }

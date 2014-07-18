@@ -46,6 +46,6 @@ class Sold extends \Magento\Backend\Block\Widget\Grid\Container
         $this->_controller = 'adminhtml_product_sold';
         $this->_headerText = __('Products Ordered');
         parent::_construct();
-        $this->_removeButton('add');
+        $this->buttonList->remove('add');
     }
 }

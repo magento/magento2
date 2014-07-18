@@ -29,8 +29,8 @@ use Mtf\Client\Element;
 use Magento\Backend\Test\Block\Widget\Form;
 
 /**
+ * Class Attribute
  * Product attribute massaction edit page
- *
  */
 class Attribute extends Form
 {
@@ -46,13 +46,19 @@ class Attribute extends Form
      *
      * @var string
      */
-    protected $priceFieldEnablerSelector = '//*[@id="attribute-price-container"]/div[1]/div/label/span';
+    protected $priceFieldEnablerSelector = '//*[@id="attribute-price-container"]/div[1]/div/label//*[@type="checkbox"]';
 
     /**
      * Enable price field editing
+     *
+     * @return void
      */
     public function enablePriceEdit()
     {
-        $this->_rootElement->find($this->priceFieldEnablerSelector, Element\Locator::SELECTOR_XPATH)->click();
+        $this->_rootElement->find(
+            $this->priceFieldEnablerSelector,
+            Element\Locator::SELECTOR_XPATH,
+            'checkbox'
+        )->setValue('Yes');
     }
 }

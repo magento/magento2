@@ -31,7 +31,7 @@ use Mtf\Page\BackendPage;
  */
 class UserRoleIndex extends BackendPage
 {
-    const MCA = 'admin/user_role/index';
+    const MCA = 'admin/user_role';
 
     protected $_blocks = [
         'roleActions' => [

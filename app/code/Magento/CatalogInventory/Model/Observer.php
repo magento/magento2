@@ -75,13 +75,6 @@ class Observer
     protected $_stockStatusFactory;
 
     /**
-     * Construct
-     *
-     * @var \Magento\Index\Model\Indexer
-     */
-    protected $_indexer;
-
-    /**
      * @var Stock
      */
     protected $_stock;
@@ -97,9 +90,9 @@ class Observer
     protected $_resourceStock;
 
     /**
-     * @var \Magento\CatalogInventory\Model\Resource\Indexer\Stock
+     * @var \Magento\CatalogInventory\Model\Indexer\Stock\Processor
      */
-    protected $_resourceIndexerStock;
+    protected $_stockIndexerProcessor;
 
     /**
      * @var \Magento\Catalog\Model\ProductTypes\ConfigInterface
@@ -162,9 +155,8 @@ class Observer
 
     /**
      * @param \Magento\Catalog\Model\Indexer\Product\Price\Processor $priceIndexer
-     * @param Resource\Indexer\Stock $resourceIndexerStock
+     * @param \Magento\CatalogInventory\Model\Indexer\Stock\Processor $stockIndexerProcessor
      * @param Resource\Stock $resourceStock
-     * @param \Magento\Index\Model\Indexer $indexer
      * @param Stock $stock
      * @param Stock\Status $stockStatus
      * @param \Magento\CatalogInventory\Helper\Data $catalogInventoryData
@@ -176,9 +168,8 @@ class Observer
      */
     public function __construct(
         \Magento\Catalog\Model\Indexer\Product\Price\Processor $priceIndexer,
-        \Magento\CatalogInventory\Model\Resource\Indexer\Stock $resourceIndexerStock,
+        \Magento\CatalogInventory\Model\Indexer\Stock\Processor $stockIndexerProcessor,
         \Magento\CatalogInventory\Model\Resource\Stock $resourceStock,
-        \Magento\Index\Model\Indexer $indexer,
         Stock $stock,
         \Magento\CatalogInventory\Model\Stock\Status $stockStatus,
         \Magento\CatalogInventory\Helper\Data $catalogInventoryData,
@@ -189,9 +180,8 @@ class Observer
         \Magento\CatalogInventory\Model\Stock\ItemRegistry $stockItemRegistry
     ) {
         $this->_priceIndexer = $priceIndexer;
-        $this->_resourceIndexerStock = $resourceIndexerStock;
+        $this->_stockIndexerProcessor = $stockIndexerProcessor;
         $this->_resourceStock = $resourceStock;
-        $this->_indexer = $indexer;
         $this->_stock = $stock;
         $this->_stockStatus = $stockStatus;
         $this->_catalogInventoryData = $catalogInventoryData;
@@ -360,7 +350,11 @@ class Observer
         $quote = $observer->getEvent()->getQuote();
         $items = $this->_getProductsQty($quote->getAllItems());
         $this->_stock->revertProductsSale($items);
-
+        $productIds = array_keys($items);
+        if (!empty($productIds)) {
+            $this->_stockIndexerProcessor->reindexList($productIds);
+            $this->_priceIndexer->reindexList($productIds);
+        }
         // Clear flag, so if order placement retried again with success - it will be processed
         $quote->setInventoryProcessed(false);
     }
@@ -451,7 +445,7 @@ class Observer
         }
 
         if (count($productIds)) {
-            $this->_resourceIndexerStock->reindexProducts($productIds);
+            $this->_stockIndexerProcessor->reindexList($productIds);
         }
 
         // Reindex previously remembered items
@@ -481,30 +475,30 @@ class Observer
     {
         /* @var $creditmemo \Magento\Sales\Model\Order\Creditmemo */
         $creditmemo = $observer->getEvent()->getCreditmemo();
-        $items = array();
+        $itemsToUpdate = [];
         foreach ($creditmemo->getAllItems() as $item) {
-            /* @var $item \Magento\Sales\Model\Order\Creditmemo\Item */
-            $return = false;
-            if ($item->hasBackToStock()) {
-                if ($item->getBackToStock() && $item->getQty()) {
-                    $return = true;
-                }
-            } elseif ($this->_catalogInventoryData->isAutoReturnEnabled()) {
-                $return = true;
-            }
-            if ($return) {
-                $parentOrderId = $item->getOrderItem()->getParentItemId();
+            $qty = $item->getQty();
+            if (($item->getBackToStock() && $qty) || $this->_catalogInventoryData->isAutoReturnEnabled()) {
+                $productId = $item->getProductId();
+                $parentItemId = $item->getOrderItem()->getParentItemId();
                 /* @var $parentItem \Magento\Sales\Model\Order\Creditmemo\Item */
-                $parentItem = $parentOrderId ? $creditmemo->getItemByOrderId($parentOrderId) : false;
-                $qty = $parentItem ? $parentItem->getQty() * $item->getQty() : $item->getQty();
-                if (isset($items[$item->getProductId()])) {
-                    $items[$item->getProductId()]['qty'] += $qty;
+                $parentItem = $parentItemId ? $creditmemo->getItemByOrderId($parentItemId) : false;
+                $qty = $parentItem ? $parentItem->getQty() * $qty : $qty;
+                if (isset($itemsToUpdate[$productId]['qty'])) {
+                    $itemsToUpdate[$productId]['qty'] += $qty;
                 } else {
-                    $items[$item->getProductId()] = array('qty' => $qty, 'item' => null);
+                    $itemsToUpdate[$productId] = ['qty' => $qty, 'item' => null];
                 }
             }
         }
-        $this->_stock->revertProductsSale($items);
+
+        if (!empty($itemsToUpdate)) {
+            $this->_stock->revertProductsSale($itemsToUpdate);
+
+            $updatedItemIds = array_keys($itemsToUpdate);
+            $this->_stockIndexerProcessor->reindexList($updatedItemIds);
+            $this->_priceIndexer->reindexList($updatedItemIds);
+        }
     }
 
     /**
@@ -523,7 +517,7 @@ class Observer
         if ($item->getId() && $item->getProductId() && empty($children) && $qty) {
             $this->_stock->backItemQty($item->getProductId(), $qty);
         }
-
+        $this->_priceIndexer->reindexRow($item->getProductId());
         return $this;
     }
 
@@ -604,19 +598,6 @@ class Observer
         $this->_stockStatus->prepareCatalogProductIndexSelect($select, $entity, $website);
 
         return $this;
-    }
-
-    /**
-     * Reindex all events of product-massAction type
-     *
-     * @return void
-     */
-    public function reindexProductsMassAction()
-    {
-        $this->_indexer->indexEvents(
-            \Magento\Catalog\Model\Product::ENTITY,
-            \Magento\Index\Model\Event::TYPE_MASS_ACTION
-        );
     }
 
     /**

@@ -37,12 +37,12 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Backend\Block\Widget\Context $context,
         \Magento\Framework\Registry $registry,
         array $data = array()
     ) {
@@ -63,10 +63,10 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
 
         parent::_construct();
 
-        $this->_updateButton('save', 'label', __('Save Rule'));
-        $this->_updateButton('delete', 'label', __('Delete Rule'));
+        $this->buttonList->update('save', 'label', __('Save Rule'));
+        $this->buttonList->update('delete', 'label', __('Delete Rule'));
 
-        $this->_addButton(
+        $this->buttonList->add(
             'save_and_continue',
             array(
                 'label' => __('Save and Continue Edit'),
@@ -77,19 +77,5 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
             ),
             10
         );
-    }
-
-    /**
-     * Get Header text
-     *
-     * @return string
-     */
-    public function getHeaderText()
-    {
-        if ($this->_coreRegistry->registry('tax_rule')->getId()) {
-            return __("Edit Rule");
-        } else {
-            return __('New Rule');
-        }
     }
 }

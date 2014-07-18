@@ -28,6 +28,7 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
     /**
      * Test that Tax Rate applied only once
      *
+     * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Tax/_files/tax_classes.php
      */
     public function testGetRate()

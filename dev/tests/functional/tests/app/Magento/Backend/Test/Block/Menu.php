@@ -34,25 +34,6 @@ use Mtf\Client\Element\Locator;
 class Menu extends Block
 {
     /**
-     * Top Elements of menu
-     *
-     * @var string
-     */
-    protected $navigationMenuItems = "/li";
-
-    /**
-     * Check menu items count
-     *
-     * @param int $number
-     * @return bool
-     */
-    public function assertNavigationMenuItemsCount($number)
-    {
-        $selector = $this->navigationMenuItems . '[' . ($number + 1) . ']';
-        return !$this->_rootElement->find($selector, Locator::SELECTOR_XPATH)->isVisible();
-    }
-
-    /**
      * Returns array of parent menu items present on dashboard menu
      *
      * @return array

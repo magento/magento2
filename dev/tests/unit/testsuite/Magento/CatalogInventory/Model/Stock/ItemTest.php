@@ -675,4 +675,22 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertSame(1, $this->item->getStockId());
     }
+
+    public function testProcessIsInStock()
+    {
+        $this->item->setData(
+            [
+                'qty' => 100,
+                'is_in_stock' => \Magento\CatalogInventory\Model\Stock\Status::STATUS_IN_STOCK,
+                'manage_stock' => 1,
+                'use_config_manage_stock' => 0
+            ]
+        );
+        $this->item->setData('qty', 0);
+        $this->item->processIsInStock();
+        $this->assertEquals(
+            \Magento\CatalogInventory\Model\Stock\Status::STATUS_OUT_OF_STOCK,
+            $this->item->getIsInStock()
+        );
+    }
 }

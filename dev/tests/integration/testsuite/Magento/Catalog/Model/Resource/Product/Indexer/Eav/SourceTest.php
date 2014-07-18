@@ -38,6 +38,11 @@ class SourceTest extends \PHPUnit_Framework_TestCase
     protected $productResource;
 
     /**
+     * @var \Magento\Catalog\Model\Indexer\Product\Eav\Processor
+     */
+    protected $_eavIndexerProcessor;
+
+    /**
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
@@ -47,9 +52,12 @@ class SourceTest extends \PHPUnit_Framework_TestCase
             'Magento\Catalog\Model\Resource\Product\Indexer\Eav\Source'
         );
 
-        /** @var \Magento\Catalog\Model\Resource\Product $productResource */
         $this->productResource = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Catalog\Model\Resource\Product'
+        );
+
+        $this->_eavIndexerProcessor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Catalog\Model\Indexer\Product\Eav\Processor'
         );
     }
 
@@ -62,6 +70,8 @@ class SourceTest extends \PHPUnit_Framework_TestCase
         $attr = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Eav\Model\Config')
            ->getAttribute('catalog_product', 'test_configurable');
         $attr->setIsFilterable(1)->save();
+
+        $this->_eavIndexerProcessor->reindexAll();
 
         /** @var \Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection $options **/
         $options = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(

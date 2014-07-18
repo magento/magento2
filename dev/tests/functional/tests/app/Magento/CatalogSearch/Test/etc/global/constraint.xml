@@ -38,4 +38,11 @@
             <productSearch class="Magento\Catalog\Test\Fixture\CatalogProductSimple" />
         </require>
     </assertAdvancedSearchProductsResult>
+    <assertCatalogSearchResult module="Magento_CatalogSearch">
+        <severeness>high</severeness>
+        <require>
+            <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
+            <catalogSearch class="Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery" />
+        </require>
+    </assertCatalogSearchResult>
 </constraint>

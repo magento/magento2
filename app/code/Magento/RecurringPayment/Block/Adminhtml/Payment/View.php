@@ -37,12 +37,12 @@ class View extends \Magento\Backend\Block\Widget\Container
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Backend\Block\Widget\Context $context,
         \Magento\Framework\Registry $registry,
         array $data = array()
     ) {
@@ -57,7 +57,7 @@ class View extends \Magento\Backend\Block\Widget\Container
      */
     protected function _prepareLayout()
     {
-        $this->_addButton(
+        $this->buttonList->add(
             'back',
             array('label' => __('Back'), 'onclick' => "setLocation('{$this->getUrl('*/*/')}')", 'class' => 'back')
         );
@@ -68,7 +68,7 @@ class View extends \Magento\Backend\Block\Widget\Container
         // cancel
         if ($payment->canCancel()) {
             $url = $this->getUrl('*/*/updateState', array('payment' => $payment->getId(), 'action' => 'cancel'));
-            $this->_addButton(
+            $this->buttonList->add(
                 'cancel',
                 array(
                     'label' => __('Cancel'),
@@ -81,7 +81,7 @@ class View extends \Magento\Backend\Block\Widget\Container
         // suspend
         if ($payment->canSuspend()) {
             $url = $this->getUrl('*/*/updateState', array('payment' => $payment->getId(), 'action' => 'suspend'));
-            $this->_addButton(
+            $this->buttonList->add(
                 'suspend',
                 array(
                     'label' => __('Suspend'),
@@ -94,7 +94,7 @@ class View extends \Magento\Backend\Block\Widget\Container
         // activate
         if ($payment->canActivate()) {
             $url = $this->getUrl('*/*/updateState', array('payment' => $payment->getId(), 'action' => 'activate'));
-            $this->_addButton(
+            $this->buttonList->add(
                 'activate',
                 array(
                     'label' => __('Activate'),
@@ -107,7 +107,7 @@ class View extends \Magento\Backend\Block\Widget\Container
         // get update
         if ($payment->canFetchUpdate()) {
             $url = $this->getUrl('*/*/updatePayment', array('payment' => $payment->getId()));
-            $this->_addButton(
+            $this->buttonList->add(
                 'update',
                 array(
                     'label' => __('Get Update'),

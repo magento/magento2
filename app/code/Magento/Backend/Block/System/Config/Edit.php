@@ -121,6 +121,6 @@ class Edit extends \Magento\Backend\Block\Widget
      */
     public function getSaveUrl()
     {
-        return $this->getUrl('*/system_config_save/index', array('_current' => true));
+        return $this->getUrl('*/system_config/save', array('_current' => true));
     }
 }

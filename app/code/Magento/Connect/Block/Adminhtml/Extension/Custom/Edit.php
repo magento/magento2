@@ -46,10 +46,10 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
 
         parent::_construct();
 
-        $this->_removeButton('back');
-        $this->_updateButton('reset', 'onclick', "resetPackage()");
+        $this->buttonList->remove('back');
+        $this->buttonList->update('reset', 'onclick', "resetPackage()");
 
-        $this->_addButton(
+        $this->buttonList->add(
             'create',
             array(
                 'label' => __('Save Data and Create Package'),
@@ -60,7 +60,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
                 )
             )
         );
-        $this->_addButton(
+        $this->buttonList->add(
             'save_as',
             array(
                 'label' => __('Save As...'),

@@ -118,8 +118,10 @@ abstract class Conditions extends Curl
      */
     protected function prepareCondition($conditions)
     {
-        $conditions = $this->decodeValue("{Conditions combination:[{$conditions}]}");
-        return $this->convertMultipleCondition($conditions);
+        $decodeConditions = empty($conditions)
+            ? $this->decodeValue("[Conditions combination]")
+            : $this->decodeValue("{Conditions combination:[{$conditions}]}");
+        return $this->convertMultipleCondition($decodeConditions);
     }
 
     /**

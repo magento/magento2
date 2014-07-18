@@ -47,11 +47,23 @@ class Selection extends Block
      */
     protected function _init()
     {
-        $this->mapping = array(
-            'selection_price_value' => "[name$='[selection_price_value]']",
-            'selection_price_type' => "[name$='[selection_price_type]']",
-            'selection_qty' => "[name$='[selection_qty]']"
-        );
+        $this->mapping = [
+            'selection_price_value' => [
+                'selector' => "[name$='[selection_price_value]']",
+                'type' => 'input',
+
+            ],
+            'selection_price_type' => [
+                'selector' => "[name$='[selection_price_type]']",
+                'type' => 'select',
+
+            ],
+            'selection_qty' => [
+                'selector' => "[name$='[selection_qty]']",
+                'type' => 'input',
+
+            ],
+        ];
     }
 
     /**
@@ -61,11 +73,13 @@ class Selection extends Block
      */
     public function fillProductRow(array $fields)
     {
-        foreach ($fields as $key => $field) {
+        foreach ($fields as $key => $value) {
             if (isset($this->mapping[$key])) {
-                $typifiedElement = isset($field['input']) ? $field['input'] : null;
-                $this->_rootElement->find($this->mapping[$key], Locator::SELECTOR_CSS, $typifiedElement)
-                    ->setValue($field['value']);
+                $this->_rootElement->find(
+                    $this->mapping[$key]['selector'],
+                    Locator::SELECTOR_CSS,
+                    $this->mapping[$key]['type']
+                )->setValue($value);
             }
         }
     }

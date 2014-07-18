@@ -51,6 +51,8 @@ class Weee extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
     }
 
     /**
+     * Collect Weee amounts for the credit memo
+     *
      * @param Creditmemo $creditmemo
      * @return $this
      */
@@ -102,9 +104,6 @@ class Weee extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
         if ($this->_weeeData->includeInSubtotal($store)) {
             $creditmemo->setSubtotal($creditmemo->getSubtotal() + $totalTax);
             $creditmemo->setBaseSubtotal($creditmemo->getBaseSubtotal() + $baseTotalTax);
-        } else {
-            $creditmemo->setTaxAmount($creditmemo->getTaxAmount() + $totalTax);
-            $creditmemo->setBaseTaxAmount($creditmemo->getBaseTaxAmount() + $baseTotalTax);
         }
 
         $creditmemo->setSubtotalInclTax($creditmemo->getSubtotalInclTax() + $weeeTaxAmount);

@@ -24,8 +24,8 @@
 
 namespace Magento\ConfigurableProduct\Test\Constraint;
 
-use Mtf\Constraint\AbstractConstraint;
 use Magento\Cms\Test\Page\CmsIndex;
+use Mtf\Constraint\AbstractConstraint;
 use Magento\Catalog\Test\Fixture\CatalogCategory;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 use Magento\ConfigurableProduct\Test\Fixture\CatalogProductConfigurable;

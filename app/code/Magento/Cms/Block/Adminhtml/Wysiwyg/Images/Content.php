@@ -36,12 +36,12 @@ class Content extends \Magento\Backend\Block\Widget\Container
     protected $_jsonEncoder;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Backend\Block\Widget\Context $context,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         array $data = array()
     ) {
@@ -58,23 +58,24 @@ class Content extends \Magento\Backend\Block\Widget\Container
     {
         parent::_construct();
         $this->_headerText = __('Media Storage');
-        $this->_removeButton('back')->_removeButton('edit');
-        $this->_addButton(
+        $this->buttonList->remove('back');
+        $this->buttonList->remove('edit');
+        $this->buttonList->add(
             'new_folder',
             array('class' => 'save', 'label' => __('Create Folder...'), 'type' => 'button')
         );
 
-        $this->_addButton(
+        $this->buttonList->add(
             'delete_folder',
             array('class' => 'delete no-display', 'label' => __('Delete Folder'), 'type' => 'button')
         );
 
-        $this->_addButton(
+        $this->buttonList->add(
             'delete_files',
             array('class' => 'delete no-display', 'label' => __('Delete File'), 'type' => 'button')
         );
 
-        $this->_addButton(
+        $this->buttonList->add(
             'insert_files',
             array('class' => 'save no-display primary', 'label' => __('Insert File'), 'type' => 'button')
         );

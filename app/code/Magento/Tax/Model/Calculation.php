@@ -226,18 +226,6 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Specify customer object which can be used for rate calculation
-     *
-     * @param CustomerDataObject $customerData
-     * @return $this
-     */
-    public function setCustomerData(CustomerDataObject $customerData)
-    {
-        $this->_customer = $customerData;
-        return $this;
-    }
-
-    /**
      * Fetch default customer tax class
      *
      * @param null|Store|string|int $store
@@ -251,26 +239,6 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
             $this->_defaultCustomerTaxClass = $defaultCustomerGroup->getTaxClassId();
         }
         return $this->_defaultCustomerTaxClass;
-    }
-
-    /**
-     * Retrieve customer data object
-     *
-     * @return CustomerDataObject
-     */
-    public function getCustomerData()
-    {
-        if ($this->_customer === null) {
-            if ($this->_customerSession->isLoggedIn()) {
-                $this->_customer = $this->_customerSession->getCustomerDataObject();
-            } elseif ($this->_customerSession->getCustomerId()) {
-                $this->_customer = $this->customerAccountService->getCustomer($this->_customerSession->getCustomerId());
-            } else {
-                $this->_customer = $this->customerBuilder->create();
-            }
-        }
-
-        return $this->_customer;
     }
 
     /**
@@ -457,13 +425,14 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      * Return the default rate request. It can be either based on store address or customer address
      *
      * @param null|int|string|Store $store
+     * @param int $customerId
      * @return \Magento\Framework\Object
      */
-    public function getDefaultRateRequest($store = null)
+    public function getDefaultRateRequest($store = null, $customerId = null)
     {
         if ($this->_isCrossBorderTradeEnabled($store)) {
             //If cross border trade is enabled, we will use customer tax rate as store tax rate
-            return $this->getRateRequest(null, null, null, $store);
+            return $this->getRateRequest(null, null, null, $store, $customerId);
         } else {
             return $this->getRateOriginRequest($store);
         }
@@ -490,23 +459,24 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
      *  customer_class_id (->getCustomerClassId())
      *  store (->getStore())
      *
-     * @param   null|bool|\Magento\Framework\Object|\Magento\Customer\Service\V1\Data\Address $shippingAddress
-     * @param   null|bool|\Magento\Framework\Object|\Magento\Customer\Service\V1\Data\Address $billingAddress
-     * @param   null|int $customerTaxClass
-     * @param   null|int|\Magento\Store\Model\Store $store
+     * @param null|bool|\Magento\Framework\Object|\Magento\Customer\Service\V1\Data\Address $shippingAddress
+     * @param null|bool|\Magento\Framework\Object|\Magento\Customer\Service\V1\Data\Address $billingAddress
+     * @param null|int $customerTaxClass
+     * @param null|int|\Magento\Store\Model\Store $store
+     * @param int $customerId
      * @return  \Magento\Framework\Object
      */
     public function getRateRequest(
         $shippingAddress = null,
         $billingAddress = null,
         $customerTaxClass = null,
-        $store = null
+        $store = null,
+        $customerId = null
     ) {
         if ($shippingAddress === false && $billingAddress === false && $customerTaxClass === false) {
             return $this->getRateOriginRequest($store);
         }
         $address = new \Magento\Framework\Object();
-        $customerData = $this->getCustomerData();
         $basedOn = $this->_scopeConfig->getValue(
             \Magento\Tax\Model\Config::CONFIG_XML_PATH_BASED_ON,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
@@ -518,19 +488,19 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
             $basedOn = 'default';
         } else {
 
-            if (($billingAddress === false || is_null($billingAddress) || !$billingAddress->getCountryId())
+            if ((is_null($billingAddress) || !$billingAddress->getCountryId())
                 && $basedOn == 'billing'
-                || ($shippingAddress === false || is_null($shippingAddress) || !$shippingAddress->getCountryId())
+                || (is_null($shippingAddress) || !$shippingAddress->getCountryId())
                 && $basedOn == 'shipping'
             ) {
-                if ($customerData->getId()) {
+                if ($customerId) {
                     try {
-                        $defaultBilling = $this->_addressService->getDefaultBillingAddress($customerData->getId());
+                        $defaultBilling = $this->_addressService->getDefaultBillingAddress($customerId);
                     } catch (NoSuchEntityException $e) {
                     }
 
                     try {
-                        $defaultShipping = $this->_addressService->getDefaultShippingAddress($customerData->getId());
+                        $defaultShipping = $this->_addressService->getDefaultShippingAddress($customerId);
                     } catch (NoSuchEntityException $e) {
                     }
 
@@ -582,10 +552,13 @@ class Calculation extends \Magento\Framework\Model\AbstractModel
                 break;
         }
 
-        if (is_null($customerTaxClass) && $customerData->getId()) {
+        if (is_null($customerTaxClass) && $customerId) {
+            $customerData = $this->customerAccountService->getCustomer($customerId);
             $customerTaxClass = $this->_groupService->getGroup($customerData->getGroupId())->getTaxClassId();
-        } elseif ($customerTaxClass === false && !$customerData->getId()) {
-            $customerTaxClass = $this->_groupService->getGroup(GroupServiceInterface::NOT_LOGGED_IN_ID)->getTaxClassId();
+        } elseif ($customerTaxClass === false && !$customerId) {
+            $customerTaxClass = $this->_groupService
+                ->getGroup(GroupServiceInterface::NOT_LOGGED_IN_ID)
+                ->getTaxClassId();
         }
 
         $request = new \Magento\Framework\Object();

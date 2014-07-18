@@ -30,6 +30,8 @@ use Magento\Tax\Service\V1\Data\TaxClassBuilder;
 
 /**
  * Test for \Magento\Tax\Service\V1\TaxClassService
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TaxClassServiceTest extends \PHPUnit_Framework_TestCase
 {
@@ -39,14 +41,14 @@ class TaxClassServiceTest extends \PHPUnit_Framework_TestCase
     private $taxClassCollectionFactory;
 
     /**
-     * @var \Magento\Tax\Service\V1\Data\SearchResultsBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Tax\Service\V1\Data\TaxClassSearchResultsBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
     private $searchResultBuilder;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Tax\Model\ClassModelFactory
      */
-    private $taxClassModelFactoryMock;
+    private $classModelRegistryMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Tax\Model\ClassModel
@@ -77,9 +79,9 @@ class TaxClassServiceTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
 
-        $this->taxClassModelFactoryMock = $this->getMockBuilder('Magento\Tax\Model\ClassModelFactory')
+        $this->classModelRegistryMock = $this->getMockBuilder('Magento\Tax\Model\ClassModelRegistry')
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->setMethods(['retrieve', 'registerTaxClass'])
             ->getMock();
 
         $this->taxClassModelMock = $this->getMockBuilder('Magento\Tax\Model\ClassModel')
@@ -87,8 +89,8 @@ class TaxClassServiceTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['load', 'getId', 'delete', 'save', 'getClassType', '__wakeup'])
             ->getMock();
 
-        $this->taxClassModelFactoryMock->expects($this->any())
-            ->method('create')
+        $this->classModelRegistryMock->expects($this->any())
+            ->method('retrieve')
             ->will($this->returnValue($this->taxClassModelMock));
 
         $this->taxClassBuilder = $this->objectManager->getObject('Magento\Tax\Service\V1\Data\TaxClassBuilder');
@@ -98,10 +100,10 @@ class TaxClassServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateTaxClass()
     {
-        $taxClassId = 1;;
+        $taxClassId = 1;
 
         $taxClassSample = $this->taxClassBuilder
-            ->setClassType(TaxClass::TYPE_PRODUCT)
+            ->setClassType(TaxClassServiceInterface::TYPE_PRODUCT)
             ->setClassName('Wholesale product')
             ->create();
 
@@ -130,7 +132,7 @@ class TaxClassServiceTest extends \PHPUnit_Framework_TestCase
     public function testCreateTaxClassException()
     {
         $taxClassSample = $this->taxClassBuilder
-            ->setClassType(TaxClass::TYPE_PRODUCT)
+            ->setClassType(TaxClassServiceInterface::TYPE_PRODUCT)
             ->setClassName('Wholesale product')
             ->create();
 
@@ -181,74 +183,19 @@ class TaxClassServiceTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testGetTaxClass()
-    {
-        $taxClassId = 1;
-
-        $taxClassDataObjectMock = $this->getMockBuilder('Magento\Tax\Service\V1\Data\TaxClass')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->taxClassModelMock->expects($this->once())
-            ->method('load')
-            ->with($taxClassId)
-            ->will($this->returnValue($this->taxClassModelMock));
-
-        $this->taxClassModelMock->expects($this->once())
-            ->method('getId')
-            ->will($this->returnValue($taxClassId));
-
-        $this->converterMock->expects($this->once())
-            ->method('createTaxClassData')
-            ->with($this->taxClassModelMock)
-            ->will($this->returnValue($taxClassDataObjectMock));
-
-        $this->assertEquals($taxClassDataObjectMock, $this->taxClassService->getTaxClass($taxClassId));
-    }
-
-    /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with class_id = -9999
-     */
-    public function testGetTaxClassWithNoSuchEntityException()
-    {
-        $taxClassId = -9999;
-
-        $this->taxClassModelMock->expects($this->once())
-            ->method('load')
-            ->with($taxClassId)
-            ->will($this->returnValue($this->taxClassModelMock));
-
-        $this->taxClassModelMock->expects($this->once())
-            ->method('getId')
-            ->will($this->returnValue(null));
-
-        $this->taxClassService->getTaxClass($taxClassId);
-    }
-
     public function testUpdateTaxClassSuccess()
     {
         $taxClassId = 1;
 
         $taxClassSample = $this->taxClassBuilder
-            ->setClassType(TaxClass::TYPE_PRODUCT)
+            ->setClassType(TaxClassServiceInterface::TYPE_PRODUCT)
             ->setClassName('Wholesale product')
             ->create();
 
         $this->taxClassModelMock
-            ->expects($this->once())
-            ->method('getId')
-            ->will($this->returnValue($taxClassId));
-
-        $this->taxClassModelMock->expects($this->once())
-            ->method('load')
-            ->with($taxClassId)
-            ->will($this->returnValue($this->taxClassModelMock));
-
-        $this->taxClassModelMock
             ->expects($this->exactly(2))
             ->method('getClassType')
-            ->will($this->returnValue(TaxClass::TYPE_PRODUCT));
+            ->will($this->returnValue(TaxClassServiceInterface::TYPE_PRODUCT));
 
         $this->taxClassModelMock
             ->expects($this->once())
@@ -272,7 +219,7 @@ class TaxClassServiceTest extends \PHPUnit_Framework_TestCase
         $taxClassId = 1;
 
         $taxClassSample = $this->taxClassBuilder
-            ->setClassType(TaxClass::TYPE_PRODUCT)
+            ->setClassType(TaxClassServiceInterface::TYPE_PRODUCT)
             ->create();
 
         $this->taxClassService->updateTaxClass($taxClassId, $taxClassSample);
@@ -334,34 +281,9 @@ class TaxClassServiceTest extends \PHPUnit_Framework_TestCase
         $taxClassId = null;
 
         $taxClassSample = $this->taxClassBuilder
-            ->setClassType(TaxClass::TYPE_PRODUCT)
+            ->setClassType(TaxClassServiceInterface::TYPE_PRODUCT)
             ->setClassName('Wholesale product')
             ->create();
-
-        $this->taxClassService->updateTaxClass($taxClassId, $taxClassSample);
-    }
-
-    /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     */
-    public function testUpdateTaxClassNotExistingEntity()
-    {
-        $taxClassId = 1;
-
-        $taxClassSample = $this->taxClassBuilder
-            ->setClassType(TaxClass::TYPE_PRODUCT)
-            ->setClassName('Wholesale product')
-            ->create();
-
-        $this->taxClassModelMock
-            ->expects($this->once())
-            ->method('getId')
-            ->will($this->returnValue(null));
-
-        $this->taxClassModelMock->expects($this->once())
-            ->method('load')
-            ->with($taxClassId)
-            ->will($this->returnValue($this->taxClassModelMock));
 
         $this->taxClassService->updateTaxClass($taxClassId, $taxClassSample);
     }
@@ -375,24 +297,14 @@ class TaxClassServiceTest extends \PHPUnit_Framework_TestCase
         $taxClassId = 1;
 
         $taxClassSample = $this->taxClassBuilder
-            ->setClassType(TaxClass::TYPE_PRODUCT)
+            ->setClassType(TaxClassServiceInterface::TYPE_PRODUCT)
             ->setClassName('Wholesale product')
             ->create();
 
         $this->taxClassModelMock
             ->expects($this->once())
-            ->method('getId')
-            ->will($this->returnValue($taxClassId));
-
-        $this->taxClassModelMock->expects($this->once())
-            ->method('load')
-            ->with($taxClassId)
-            ->will($this->returnValue($this->taxClassModelMock));
-
-        $this->taxClassModelMock
-            ->expects($this->once())
             ->method('getClassType')
-            ->will($this->returnValue(TaxClass::TYPE_PRODUCT));
+            ->will($this->returnValue(TaxClassServiceInterface::TYPE_PRODUCT));
 
         $convertedTaxClassModelMock = $this->getMockBuilder('Magento\Tax\Model\ClassModel')
             ->disableOriginalConstructor()
@@ -402,7 +314,7 @@ class TaxClassServiceTest extends \PHPUnit_Framework_TestCase
         $convertedTaxClassModelMock
             ->expects($this->once())
             ->method('getClassType')
-            ->will($this->returnValue(TaxClass::TYPE_CUSTOMER));
+            ->will($this->returnValue(TaxClassServiceInterface::TYPE_CUSTOMER));
 
         $this->converterMock
             ->expects($this->once())
@@ -418,24 +330,14 @@ class TaxClassServiceTest extends \PHPUnit_Framework_TestCase
         $taxClassId = 1;
 
         $taxClassSample = $this->taxClassBuilder
-            ->setClassType(TaxClass::TYPE_PRODUCT)
+            ->setClassType(TaxClassServiceInterface::TYPE_PRODUCT)
             ->setClassName('Wholesale product')
             ->create();
 
         $this->taxClassModelMock
-            ->expects($this->once())
-            ->method('getId')
-            ->will($this->returnValue($taxClassId));
-
-        $this->taxClassModelMock->expects($this->once())
-            ->method('load')
-            ->with($taxClassId)
-            ->will($this->returnValue($this->taxClassModelMock));
-
-        $this->taxClassModelMock
             ->expects($this->exactly(2))
             ->method('getClassType')
-            ->will($this->returnValue(TaxClass::TYPE_PRODUCT));
+            ->will($this->returnValue(TaxClassServiceInterface::TYPE_PRODUCT));
 
         $this->converterMock
             ->expects($this->once())
@@ -456,15 +358,6 @@ class TaxClassServiceTest extends \PHPUnit_Framework_TestCase
         $taxClassId = 1;
 
         $this->taxClassModelMock->expects($this->once())
-            ->method('load')
-            ->with($taxClassId)
-            ->will($this->returnValue($this->taxClassModelMock));
-
-        $this->taxClassModelMock->expects($this->once())
-            ->method('getId')
-            ->will($this->returnValue($taxClassId));
-
-        $this->taxClassModelMock->expects($this->once())
             ->method('delete')
             ->will($this->throwException(new \Exception()));
 
@@ -476,37 +369,9 @@ class TaxClassServiceTest extends \PHPUnit_Framework_TestCase
         $taxClassId = 1;
 
         $this->taxClassModelMock->expects($this->once())
-            ->method('load')
-            ->with($taxClassId)
-            ->will($this->returnValue($this->taxClassModelMock));
-
-        $this->taxClassModelMock->expects($this->once())
-            ->method('getId')
-            ->will($this->returnValue($taxClassId));
-
-        $this->taxClassModelMock->expects($this->once())
             ->method('delete');
 
         $this->assertTrue($this->taxClassService->deleteTaxClass($taxClassId));
-    }
-
-    /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     */
-    public function testDeleteNonExistentModel()
-    {
-        $taxClassId = 1;
-
-        $this->taxClassModelMock->expects($this->once())
-            ->method('load')
-            ->with($taxClassId)
-            ->will($this->returnValue($this->taxClassModelMock));
-
-        $this->taxClassModelMock->expects($this->once())
-            ->method('getId')
-            ->will($this->returnValue(null));
-
-        $this->taxClassService->deleteTaxClass($taxClassId);
     }
 
     public function testSearch()
@@ -565,8 +430,9 @@ class TaxClassServiceTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->searchResultBuilder = $this
-            ->getMockBuilder('Magento\Tax\Service\V1\Data\SearchResultsBuilder')
+            ->getMockBuilder('Magento\Tax\Service\V1\Data\TaxClassSearchResultsBuilder')
             ->disableOriginalConstructor()
+            ->setMethods(['setSearchCriteria', 'setItems', 'setTotalCount', 'create'])
             ->getMock();
 
         $this->converterMock = $this->getMockBuilder('Magento\Tax\Model\Converter')
@@ -577,7 +443,7 @@ class TaxClassServiceTest extends \PHPUnit_Framework_TestCase
             'Magento\Tax\Service\V1\TaxClassService',
             [
                 'taxClassCollectionFactory' => $this->taxClassCollectionFactory,
-                'taxClassModelFactory' => $this->taxClassModelFactoryMock,
+                'classModelRegistry' => $this->classModelRegistryMock,
                 'searchResultsBuilder' => $this->searchResultBuilder,
                 'converter' => $this->converterMock
             ]

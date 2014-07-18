@@ -55,6 +55,26 @@ class QuoteDetailsBuilder extends \Magento\Framework\Service\Data\AbstractObject
     }
 
     /**
+     * Convenience method to return item builder
+     *
+     * @return QuoteDetails\ItemBuilder
+     */
+    public function getItemBuilder()
+    {
+        return $this->itemBuilder;
+    }
+
+    /**
+     * Convenience method to return address builder
+     *
+     * @return \Magento\Customer\Service\V1\Data\AddressBuilder
+     */
+    public function getAddressBuilder()
+    {
+        return $this->addressBuilder;
+    }
+
+    /**
      * Set customer billing address
      *
      * @param \Magento\Customer\Service\V1\Data\Address $address
@@ -85,6 +105,17 @@ class QuoteDetailsBuilder extends \Magento\Framework\Service\Data\AbstractObject
     public function setCustomerTaxClassId($taxClassId)
     {
         return $this->_set(QuoteDetails::KEY_CUSTOMER_TAX_CLASS_ID, $taxClassId);
+    }
+
+    /**
+     * Set customer id
+     *
+     * @param int $customerId
+     * @return $this
+     */
+    public function setCustomerId($customerId)
+    {
+        return $this->_set(QuoteDetails::KEY_CUSTOMER_ID, $customerId);
     }
 
     /**

@@ -126,7 +126,6 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected['items'][0]['price_incl_tax'], $item->getPriceInclTax());
         $this->assertEquals($expected['items'][0]['row_total'], $item->getRowTotal());
         $this->assertEquals($expected['items'][0]['row_total_incl_tax'], $item->getRowTotalInclTax());
-        $this->assertEquals($expected['items'][0]['taxable_amount'], $item->getTaxableAmount());
         $this->assertEquals($expected['items'][0]['tax_percent'], $item->getTaxPercent());
     }
 

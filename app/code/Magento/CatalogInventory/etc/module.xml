@@ -34,7 +34,7 @@
             <module name="Magento_Core"/>
             <module name="Magento_Customer"/>
             <module name="Magento_Backend"/>
-            <module name="Magento_Index"/>
+            <module name="Magento_Indexer"/>
             <module name="Magento_Sales"/>
             <module name="Magento_Eav"/>
         </depends>

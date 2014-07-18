@@ -43,7 +43,14 @@ class Tree extends Block
      *
      * @var string
      */
-    protected $addSubcategory = 'add_subcategory_button';
+    protected $addSubcategory = '#add_subcategory_button';
+
+    /**
+     * 'Add Root Category' button
+     *
+     * @var string
+     */
+    protected $addRootCategory = '#add_root_category_button';
 
     /**
      * 'Expand All' link
@@ -73,8 +80,9 @@ class Tree extends Block
      */
     protected function getTemplateBlock()
     {
-        return Factory::getBlockFactory()->getMagentoBackendTemplate(
-            $this->_rootElement->find($this->templateBlock, Locator::SELECTOR_XPATH)
+        return $this->blockFactory->create(
+            'Magento\Backend\Test\Block\Template',
+            ['element' => $this->_rootElement->find($this->templateBlock, Locator::SELECTOR_XPATH)]
         );
     }
 
@@ -85,7 +93,18 @@ class Tree extends Block
      */
     public function addSubcategory()
     {
-        $this->_rootElement->find($this->addSubcategory, Locator::SELECTOR_ID)->click();
+        $this->_rootElement->find($this->addSubcategory, Locator::SELECTOR_CSS)->click();
+        $this->getTemplateBlock()->waitLoader();
+    }
+
+    /**
+     * Press 'Add Root Category' button
+     *
+     * @return void
+     */
+    public function addRootCategory()
+    {
+        $this->_rootElement->find($this->addRootCategory, Locator::SELECTOR_CSS)->click();
         $this->getTemplateBlock()->waitLoader();
     }
 
@@ -93,12 +112,16 @@ class Tree extends Block
      * Select Default category
      *
      * @param FixtureInterface $category
+     * @param bool $fullPath
      * @return void
      */
-    public function selectCategory(FixtureInterface $category)
+    public function selectCategory(FixtureInterface $category, $fullPath = true)
     {
         if ($category instanceof InjectableFixture) {
             $parentPath = $this->prepareFullCategoryPath($category);
+            if (!$fullPath) {
+                array_pop($parentPath);
+            }
             $path = implode('/', $parentPath);
         } else {
             $path = $category->getCategoryPath();
@@ -118,10 +141,10 @@ class Tree extends Block
     protected function prepareFullCategoryPath(CatalogCategory $category)
     {
         $path = [];
-        if ($category->getDataFieldConfig('parent_id')['source']->getParentCategory() != null) {
-            $path = $this->prepareFullCategoryPath(
-                $category->getDataFieldConfig('parent_id')['source']->getParentCategory()
-            );
+        $parentCategory = $category->getDataFieldConfig('parent_id')['source']->getParentCategory();
+
+        if ($parentCategory != null) {
+            $path = $this->prepareFullCategoryPath($parentCategory);
         }
         return array_filter(array_merge($path, [$category->getPath(), $category->getName()]));
     }
@@ -150,10 +173,10 @@ class Tree extends Block
     /**
      * Check category in category tree
      *
-     * @param $category
+     * @param CatalogCategory $category
      * @return bool
      */
-    public function isCategoryVisible($category)
+    public function isCategoryVisible(CatalogCategory $category)
     {
         $categoryPath = $this->prepareFullCategoryPath($category);
         $structure = $this->_rootElement->find($this->treeElement, Locator::SELECTOR_CSS, 'tree')->getStructure();

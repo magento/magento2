@@ -33,29 +33,6 @@ use Magento\Backend\App\AbstractAction;
 class System extends AbstractAction
 {
     /**
-     * @return void
-     */
-    public function indexAction()
-    {
-        $this->_view->loadLayout();
-        $this->_setActiveMenu('Magento_Adminhtml::system');
-        $this->_addBreadcrumb(__('System'), __('System'));
-        $this->_view->renderLayout();
-    }
-
-    /**
-     * @return void
-     */
-    public function setStoreAction()
-    {
-        $storeId = (int)$this->getRequest()->getParam('store');
-        if ($storeId) {
-            $this->_session->setStoreId($storeId);
-        }
-        $this->getResponse()->setRedirect($this->_redirect->getRedirectUrl($this->getUrl('*')));
-    }
-
-    /**
      * @return bool
      */
     protected function _isAllowed()

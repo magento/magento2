@@ -36,7 +36,7 @@
             <argument name="instanceName" xsi:type="string">Magento\Paypal\Model\Payflowadvanced</argument>
         </arguments>
     </virtualType>
-    <type name="Magento\Paypal\Controller\Payflowadvanced">
+    <type name="Magento\Paypal\Controller\Payflowadvanced\SilentPost">
         <arguments>
             <argument name="payflowModelFactory" xsi:type="object">Magento\Paypal\Model\PayflowadvancedFactory</argument>
         </arguments>

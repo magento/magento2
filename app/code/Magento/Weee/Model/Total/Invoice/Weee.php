@@ -48,10 +48,10 @@ class Weee extends \Magento\Sales\Model\Order\Invoice\Total\AbstractTotal
     }
 
     /**
-     * Weee tax collector
+     * Collect Weee amounts for the invoice
      *
      * @param \Magento\Sales\Model\Order\Invoice $invoice
-     * @return \Magento\Weee\Model\Total\Invoice\Weee
+     * @return $this
      */
     public function collect(\Magento\Sales\Model\Order\Invoice $invoice)
     {
@@ -100,16 +100,9 @@ class Weee extends \Magento\Sales\Model\Order\Invoice\Total\AbstractTotal
             $baseWeeeInclTax += $baseWeeeTaxAmountInclTax;
         }
 
-        /*
-         * Add FPT to totals
-         * Notice that we check restriction on allowed tax, because
-         * a) for last invoice we don't need to collect FPT - it is automatically collected by subtotal/tax collector,
-         * that adds whole remaining (not invoiced) subtotal/tax value, so fpt is automatically included into it
-         * b) FPT tax is included into order subtotal/tax value, so after multiple invoices with partial item quantities
-         * it can happen that other collector will take some FPT value from shared subtotal/tax order value
-         */
-        $order = $invoice->getOrder();
+        // Add FPT to subtotal and grand total
         if ($this->_weeeData->includeInSubtotal($store)) {
+            $order = $invoice->getOrder();
             $allowedSubtotal = $order->getSubtotal() - $order->getSubtotalInvoiced() - $invoice->getSubtotal();
             $allowedBaseSubtotal = $order->getBaseSubtotal() -
                 $order->getBaseSubtotalInvoiced() -
@@ -119,21 +112,22 @@ class Weee extends \Magento\Sales\Model\Order\Invoice\Total\AbstractTotal
 
             $invoice->setSubtotal($invoice->getSubtotal() + $totalTax);
             $invoice->setBaseSubtotal($invoice->getBaseSubtotal() + $baseTotalTax);
-        } else {
-            $allowedTax = $order->getTaxAmount() - $order->getTaxInvoiced() - $invoice->getTaxAmount();
-            $allowedBaseTax = $order->getBaseTaxAmount() - $order->getBaseTaxInvoiced() - $invoice->getBaseTaxAmount();
-            $totalTax = min($allowedTax, $totalTax);
-            $baseTotalTax = min($allowedBaseTax, $baseTotalTax);
-
-            $invoice->setTaxAmount($invoice->getTaxAmount() + $totalTax);
-            $invoice->setBaseTaxAmount($invoice->getBaseTaxAmount() + $baseTotalTax);
         }
 
-        if (!$invoice->isLast()) {
+        $useWeeeInclTax = true;
+        if ($this->_weeeData->isTaxIncluded($store) && $invoice->isLast()) {
+            $useWeeeInclTax = false;
+        }
+        if ($useWeeeInclTax) {
+            // need to add the Weee amounts including all their taxes
             $invoice->setSubtotalInclTax($invoice->getSubtotalInclTax() + $weeeInclTax);
             $invoice->setBaseSubtotalInclTax($invoice->getBaseSubtotalInclTax() + $baseWeeeInclTax);
+        } else {
+            // since the Subtotal Incl Tax line will already have the taxes on Weee, just add the non-taxable amounts
+            $invoice->setSubtotalInclTax($invoice->getSubtotalInclTax() + $totalTax);
+            $invoice->setBaseSubtotalInclTax($invoice->getBaseSubtotalInclTax() + $baseTotalTax);
         }
-        
+
         $invoice->setGrandTotal($invoice->getGrandTotal() + $totalTax);
         $invoice->setBaseGrandTotal($invoice->getBaseGrandTotal() + $baseTotalTax);
 

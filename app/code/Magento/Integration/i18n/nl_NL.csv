@@ -42,8 +42,6 @@ Reauthorize,Reauthorize
 "The integration '%1' has been deleted.","The integration '%1' has been deleted."
 "The integration '%1' has been re-authorized.","The integration '%1' has been re-authorized."
 "The integration '%1' has been activated.","The integration '%1' has been activated."
-"Integration '%1' re-authorization has been failed.","Integration '%1' re-authorization has been failed."
-"Integration '%1' activation has been failed.","Integration '%1' activation has been failed."
 "Integration '%1' has been sent for re-authorization.","Integration '%1' has been sent for re-authorization."
 "Integration '%1' has been sent for activation.","Integration '%1' has been sent for activation."
 "Invalid Callback URL","Invalid Callback URL"

@@ -183,7 +183,6 @@ Visitor,Besucher
 "Thank you for registering with %1.","Thank you for registering with %1."
 "If you are a registered VAT customer, please click <a href=""%1"">here</a> to enter you shipping address for proper VAT calculation","If you are a registered VAT customer, please click <a href=""%1"">here</a> to enter you shipping address for proper VAT calculation"
 "If you are a registered VAT customer, please click <a href=""%1"">here</a> to enter you billing address for proper VAT calculation","If you are a registered VAT customer, please click <a href=""%1"">here</a> to enter you billing address for proper VAT calculation"
-"Wrong customer account specified.","Falsches Benutzerkonto angegeben."
 "Bad request.","Fehlerhafter Aufruf."
 "This confirmation key is invalid or has expired.","This confirmation key is invalid or has expired."
 "There was an error confirming the account","There was an error confirming the account"

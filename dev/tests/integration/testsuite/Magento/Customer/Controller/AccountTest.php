@@ -96,7 +96,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->getRequest()->setParam('token', $token);
         $this->getRequest()->setParam('id', $customer->getId());
 
-        $this->dispatch('customer/account/createpassword');
+        $this->dispatch('customer/account/createPassword');
         $text = $this->getResponse()->getBody();
         $this->assertTrue((bool)preg_match('/' . $token . '/m', $text));
     }
@@ -117,7 +117,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->getRequest()->setParam('token', 'INVALIDTOKEN');
         $this->getRequest()->setParam('id', $customer->getId());
 
-        $this->dispatch('customer/account/createpassword');
+        $this->dispatch('customer/account/createPassword');
 
         // should be redirected to forgotpassword page
         $response = $this->getResponse();
@@ -259,7 +259,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
      */
-    public function testOpenActionCreatepasswordAction()
+    public function testOpenActionCreatePasswordAction()
     {
         /** @var \Magento\Customer\Model\Customer $customer */
         $customer = Bootstrap::getObjectManager()
@@ -272,7 +272,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->getRequest()->setParam('token', $token);
         $this->getRequest()->setParam('id', $customer->getId());
 
-        $this->dispatch('customer/account/createpassword');
+        $this->dispatch('customer/account/createPassword');
         $this->assertNotEmpty($this->getResponse()->getBody());
 
         $headers = $this->getResponse()->getHeaders();

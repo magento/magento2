@@ -29,8 +29,8 @@
         <require>
             <dashboard class="Magento\Backend\Test\Page\Dashboard" />
             <adminAuth class="Magento\Backend\Test\Page\AdminAuthLogin" />
-            <user class="Magento\User\Test\Fixture\AdminUserInjectable" />
-            <customAdmin class="Magento\User\Test\Fixture\AdminUserInjectable" />
+            <user class="Magento\User\Test\Fixture\User" />
+            <customAdmin class="Magento\User\Test\Fixture\User" />
         </require>
     </assertUserSuccessLogin>
     <assertUserSuccessLogOut module="Magento_User">
@@ -44,11 +44,15 @@
         <severeness>low</severeness>
         <require>
             <adminAuth class="Magento\Backend\Test\Page\AdminAuthLogin" />
-            <customAdmin class="Magento\User\Test\Fixture\AdminUserInjectable" />
+            <customAdmin class="Magento\User\Test\Fixture\User" />
         </require>
     </assertUserWrongCredentialsMessage>
     <assertUserRoleSalesRestrictedAccess module="Magento_User">
         <severeness>low</severeness>
+        <require>
+            <userIndex class="Magento\User\Test\Page\Adminhtml\UserIndex" />
+            <dashboard class="Magento\Backend\Test\Page\Dashboard" />
+        </require>
     </assertUserRoleSalesRestrictedAccess>
     <assertRoleSuccessSaveMessage module="Magento_User">
         <severeness>low</severeness>
@@ -66,8 +70,7 @@
         <severeness>low</severeness>
         <require>
             <userIndex class="Magento\User\Test\Page\Adminhtml\UserIndex" />
-            <user class="Magento\User\Test\Fixture\AdminUserInjectable" />
-            <customAdmin class="Magento\User\Test\Fixture\AdminUserInjectable" />
+            <user class="Magento\User\Test\Fixture\User" />
         </require>
     </assertUserInGrid>
     <assertUserSuccessSaveMessage module="Magento_User">
@@ -112,4 +115,17 @@
             <userIndex class="Magento\User\Test\Page\Adminhtml\UserIndex" />
         </require>
     </assertUserNotInGrid>
+    <assertUserDuplicateMessage module="Magento_User">
+        <severeness>low</severeness>
+        <require>
+            <userEdit class="Magento\User\Test\Page\Adminhtml\UserEdit" />
+        </require>
+    </assertUserDuplicateMessage>
+    <assertUserInvalidEmailMessage module="Magento_User">
+        <severeness>low</severeness>
+        <require>
+            <userEdit class="Magento\User\Test\Page\Adminhtml\UserEdit" />
+            <user class="Magento\User\Test\Fixture\User" />
+        </require>
+    </assertUserInvalidEmailMessage>
 </constraint>

@@ -82,7 +82,7 @@ class Data extends \Magento\Core\Helper\Data
     {
         $maxImageSize = $this->_fileSize->getMaxFileSizeInMb();
         if ($maxImageSize) {
-            $message = __('The total size of the uploadable files can\'t be more that %1M', $maxImageSize);
+            $message = __('The total size of the uploadable files can\'t be more than %1M', $maxImageSize);
         } else {
             $message = __('System doesn\'t allow to get file upload settings');
         }

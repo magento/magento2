@@ -475,11 +475,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $dateTime;
 
     /**
-     * @var \Magento\Index\Model\Indexer
-     */
-    protected $indexer;
-
-    /**
      * @var \Magento\Indexer\Model\Indexer
      */
     protected $newIndexer;
@@ -522,7 +517,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\Logger $logger
-     * @param \Magento\Index\Model\Indexer $indexer
      * @param \Magento\Indexer\Model\Indexer $newIndexer
      * @param array $data
      */
@@ -554,7 +548,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Logger $logger,
-        \Magento\Index\Model\Indexer $indexer,
         \Magento\Indexer\Model\Indexer $newIndexer,
         array $data = array()
     ) {
@@ -576,7 +569,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->_stockResItemFac = $stockResItemFac;
         $this->_localeDate = $localeDate;
         $this->dateTime = $dateTime;
-        $this->indexer = $indexer;
         $this->newIndexer = $newIndexer;
         $this->_logger = $logger;
         parent::__construct($coreData, $importExportData, $importData, $config, $resource, $resourceHelper, $string);
@@ -1793,6 +1785,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     $row
                 );
 
+                $row = $this->stockItemService->processIsInStock($row);
+
                 if ($this->stockItemService->isQty($this->_newSku[$rowData[self::COL_SKU]]['type_id'])) {
                     if ($this->stockItemService->verifyNotification($row['product_id'])) {
                         $row['low_stock_date'] = $this->_localeDate->date(
@@ -1817,10 +1811,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             }
 
             if ($productIdsToReindex) {
-                $this->indexer->getProcessByCode('cataloginventory_stock')->getIndexer()->reindexAll();
-                $this->indexer->getProcessByCode('catalog_product_attribute')->getIndexer()->reindexAll();
                 $this->newIndexer->load('catalog_product_category')->reindexList($productIdsToReindex);
-                $this->newIndexer->load('catalog_product_price')->reindexList($productIdsToReindex);
             }
         }
         return $this;

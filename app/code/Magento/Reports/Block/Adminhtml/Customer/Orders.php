@@ -46,6 +46,6 @@ class Orders extends \Magento\Backend\Block\Widget\Grid\Container
         $this->_controller = 'adminhtml_customer_orders';
         $this->_headerText = __('Customers by number of orders');
         parent::_construct();
-        $this->_removeButton('add');
+        $this->buttonList->remove('add');
     }
 }
