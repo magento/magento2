@@ -28,6 +28,7 @@ use Mtf\Block\Mapper;
 use Mtf\Client\Element;
 use Mtf\Client\Browser;
 use Mtf\Factory\Factory;
+use Mtf\Fixture\FixtureInterface;
 use Mtf\Util\XmlConverter;
 use Mtf\Block\BlockFactory;
 use Mtf\Client\Element\Locator;
@@ -53,6 +54,13 @@ class ProductForm extends ParentForm
      * @var string
      */
     protected $newAttributeFrame = '#create_new_attribute_container';
+
+    /**
+     * New variation set button selector
+     *
+     * @var string
+     */
+    protected $newVariationSet = '[data-ui-id="admin-product-edit-tab-super-config-grid-container-add-attribute"]';
 
     /**
      * Variations tab selector
@@ -126,14 +134,17 @@ class ProductForm extends ParentForm
     }
 
     /**
-     * Initialization categories before use in the form of
+     * Save product
      *
-     * @param CatalogCategory $category
-     * @return void
+     * @param FixtureInterface $fixture
+     * @return \Magento\Backend\Test\Block\Widget\Form|void
      */
-    public function setCategory(CatalogCategory $category)
+    public function save(FixtureInterface $fixture = null)
     {
-        $this->category = $category;
+        parent::save($fixture);
+        if ($this->getAffectedAttributeSetBlock()->isVisible()) {
+            $this->getAffectedAttributeSetBlock()->chooseAttributeSet($fixture);
+        }
     }
 
     /**

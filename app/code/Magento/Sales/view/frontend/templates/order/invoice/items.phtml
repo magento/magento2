@@ -23,17 +23,15 @@
  */
 ?>
 <?php $_order = $this->getOrder() ?>
-<div class="order toolbar">
-    <div class="actions">
-        <a href="<?php echo $this->getPrintAllInvoicesUrl($_order) ?>"
-           target="_blank"
-           class="action print">
-            <span><?php echo __('Print All Invoices') ?></span>
-        </a>
-    </div>
+<div class="actions-toolbar">
+    <a href="<?php echo $this->getPrintAllInvoicesUrl($_order) ?>"
+       target="_blank"
+       class="action print">
+        <span><?php echo __('Print All Invoices') ?></span>
+    </a>
 </div>
 <?php foreach ($_order->getInvoiceCollection() as $_invoice): ?>
-<div class="order title">
+<div class="order-title">
     <strong><?php echo __('Invoice #') ?><?php echo $_invoice->getIncrementId(); ?></strong>
     <a href="<?php echo $this->getPrintInvoiceUrl($_invoice) ?>"
        onclick="this.target='_blank'"
@@ -41,9 +39,8 @@
         <span><?php echo __('Print Invoice') ?></span>
     </a>
 </div>
-<div class="order subtitle caption"><strong><?php echo __('Items Invoiced') ?></strong></div>
-<div class="wrapper table order items invoice">
-    <table class="data table order items invoice" id="my-invoice-table-<?php echo $_invoice->getId(); ?>">
+<div class="table-wrapper table-order-items invoice">
+    <table class="data table table-order-items invoice" id="my-invoice-table-<?php echo $_invoice->getId(); ?>">
         <caption class="table caption"><?php echo __('Items Invoiced') ?></caption>
         <thead>
             <tr>

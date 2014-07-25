@@ -29,43 +29,49 @@
 ?>
 <?php $_items = $this->getItems(); ?>
 <?php if(count($_items)): ?>
-    <div class="downloadable products toolbar">
-        <?php echo $this->getChildHtml('pager'); ?>
-    </div>
-    <div class="wrapper table downloadable products">
-        <table id="my-downloadable-products-table" class="data table downloadable products">
+    <?php if ($this->getChildHtml('pager')): ?>
+        <div class="toolbar downloadable-products-toolbar top">
+            <?php echo $this->getChildHtml('pager'); ?>
+        </div>
+    <?php endif; ?>
+    <div class="table-wrapper downloadable-products">
+        <table id="my-downloadable-products-table" class="data table table-downloadable-products">
             <caption class="table caption"><?php echo __('Downloadable Products') ?></caption>
             <thead>
                 <tr>
-                    <th class="col id"><?php echo __('Order #') ?></th>
-                    <th class="col date"><?php echo __('Date') ?></th>
-                    <th class="col title"><?php echo __('Title') ?></th>
-                    <th class="col status"><?php echo __('Status') ?></th>
-                    <th class="col remaining"><?php echo __('Remaining Downloads') ?></th>
+                    <th scope="col" class="col id"><?php echo __('Order #') ?></th>
+                    <th scope="col" class="col date"><?php echo __('Date') ?></th>
+                    <th scope="col" class="col title"><?php echo __('Title') ?></th>
+                    <th scope="col" class="col status"><?php echo __('Status') ?></th>
+                    <th scope="col" class="col remaining"><?php echo __('Remaining Downloads') ?></th>
                 </tr>
             </thead>
             <tbody>
             <?php foreach ($_items as $_item): ?>
                 <tr>
-                    <td class="col id">
-                        <a href="<?php echo $this->getOrderViewUrl($_item->getPurchased()->getOrderId()) ?>" title="<?php echo __('View Order') ?>">
+                    <td data-th="<?php echo $this->escapeHtml(__('Order #')) ?>" class="col id">
+                        <a href="<?php echo $this->getOrderViewUrl($_item->getPurchased()->getOrderId()) ?>" 
+                            title="<?php echo $this->escapeHtml(__('View Order')) ?>">
                             <?php echo $_item->getPurchased()->getOrderIncrementId() ?>
                         </a>
                     </td>
-                    <td class="col date"><?php echo $this->formatDate($_item->getPurchased()->getCreatedAt()) ?></td>
-                    <td class="col title">
-                        <?php echo $this->escapeHtml($_item->getPurchased()->getProductName()) ?> - <a href="<?php echo $this->getDownloadUrl($_item) ?>" title="<?php echo __('Start Download') ?>" <?php echo $this->getIsOpenInNewWindow()?'onclick="this.target=\'_blank\'"':''; ?>><?php echo $this->escapeHtml($_item->getLinkTitle()) ?></a>
+                    <td data-th="<?php echo $this->escapeHtml(__('Date')) ?>" class="col date"><?php echo $this->formatDate($_item->getPurchased()->getCreatedAt()) ?></td>
+                    <td data-th="<?php echo $this->escapeHtml(__('Title')) ?>" class="col title">
+                        <strong class="product-name"><?php echo $this->escapeHtml($_item->getPurchased()->getProductName()) ?></strong>
+                        <a href="<?php echo $this->getDownloadUrl($_item) ?>" title="<?php echo $this->escapeHtml(__('Start Download')) ?>" class="action download" <?php echo $this->getIsOpenInNewWindow()?'onclick="this.target=\'_blank\'"':''; ?>><?php echo $this->escapeHtml($_item->getLinkTitle()) ?></a>
                     </td>
-                    <td class="col status"><?php echo __(ucfirst($_item->getStatus())) ?></td>
-                    <td class="col remaining"><?php echo $this->getRemainingDownloads($_item) ?></td>
+                    <td data-th="<?php echo $this->escapeHtml(__('Status')) ?>" class="col status"><?php echo __(ucfirst($_item->getStatus())) ?></td>
+                    <td data-th="<?php echo $this->escapeHtml(__('Remaining Downloads')) ?>" class="col remaining"><?php echo $this->getRemainingDownloads($_item) ?></td>
                 </tr>
             <?php endforeach; ?>
             </tbody>
         </table>
     </div>
-    <div class="downloadable products toolbar">
-        <?php echo $this->getChildHtml('pager'); ?>
-    </div>
+    <?php if ($this->getChildHtml('pager')): ?>
+        <div class="toolbar downloadable-products-toolbar bottom">
+            <?php echo $this->getChildHtml('pager'); ?>
+        </div>
+    <?php endif; ?>
 <?php else: ?>
     <div class="message info empty"><span><?php echo __('You have not purchased any downloadable products yet.'); ?></span></div>
 <?php endif; ?>

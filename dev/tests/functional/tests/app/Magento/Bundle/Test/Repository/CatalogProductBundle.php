@@ -82,6 +82,7 @@ class CatalogProductBundle extends AbstractRepository
             'sku' => 'sku_bundle_dynamic_product_%isolation%',
             'sku_type' => 'Dynamic',
             'price_type' => 'Dynamic',
+            'price' => ['value' => '-', 'preset' => 'default_dynamic'],
             'quantity_and_stock_status' => [
                 'qty' => 666.0000,
                 'is_in_stock' => 'In Stock',
@@ -107,7 +108,7 @@ class CatalogProductBundle extends AbstractRepository
             'sku' => 'sku_bundle_fixed_product_%isolation%',
             'sku_type' => 'Fixed',
             'price_type' => 'Fixed',
-            'price' => ['value' => 750.00, 'preset' => '-'],
+            'price' => ['value' => 750.00, 'preset' => 'default_fixed'],
             'tax_class_id' => ['dataSet' => 'Taxable Goods'],
             'quantity_and_stock_status' => [
                 'qty' => 666.0000,

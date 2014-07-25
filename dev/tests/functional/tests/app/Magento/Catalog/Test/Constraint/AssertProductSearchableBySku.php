@@ -62,6 +62,8 @@ class AssertProductSearchableBySku extends AbstractConstraint
      * @param CmsIndex $cmsIndex
      * @param FixtureInterface $product
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function processAssert(
         CatalogsearchResult $catalogSearchResult,
@@ -69,17 +71,22 @@ class AssertProductSearchableBySku extends AbstractConstraint
         FixtureInterface $product
     ) {
         $cmsIndex->open();
-        $cmsIndex->getSearchBlock()->search($product->getSku());
+        $sku = ($product->hasData('sku') !== false) ? $product->getSku() : $product->getName();
+        $cmsIndex->getSearchBlock()->search($sku);
 
-        $isInStock = $product->getQuantityAndStockStatus();
-        if ($product->getVisibility() === 'Catalog'
-            || (isset($isInStock['is_in_stock']) && $isInStock['is_in_stock'] === 'Out of Stock')
-        ) {
-            $isVisible = !($catalogSearchResult->getListProductBlock()->isProductVisible($product->getName()));
-            $this->errorMessage = 'Product successfully found by SKU.';
-            $this->successfulMessage = 'The product has not been found by SKU.';
-        } else {
+        $quantityAndStockStatus = $product->getQuantityAndStockStatus();
+        $stockStatus = isset($quantityAndStockStatus['is_in_stock'])
+            ? $quantityAndStockStatus['is_in_stock']
+            : null;
+
+        $isVisible = $catalogSearchResult->getListProductBlock()->isProductVisible($product->getName());
+        while (!$isVisible && $catalogSearchResult->getToolbar()->nextPage()) {
             $isVisible = $catalogSearchResult->getListProductBlock()->isProductVisible($product->getName());
+        }
+
+        if ($product->getVisibility() === 'Catalog' || $stockStatus === 'Out of Stock') {
+            $isVisible = !$isVisible;
+            list($this->errorMessage, $this->successfulMessage) = [$this->successfulMessage, $this->errorMessage];
         }
 
         \PHPUnit_Framework_Assert::assertTrue(

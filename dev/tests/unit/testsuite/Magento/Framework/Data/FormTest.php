@@ -45,15 +45,6 @@ class FormTest extends \PHPUnit_Framework_TestCase
     protected $_formKeyMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $elementMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $allElementsMock;
-    /**
      * @var \Magento\Framework\Data\Form
      */
     protected $_form;
@@ -62,11 +53,12 @@ class FormTest extends \PHPUnit_Framework_TestCase
     {
         $this->_factoryElementMock = $this->getMock(
             'Magento\Framework\Data\Form\Element\Factory',
-            array('create'),
+            array(),
             array(),
             '',
             false
         );
+
         $this->_factoryCollectionMock = $this->getMock(
             'Magento\Framework\Data\Form\Element\CollectionFactory',
             array('create'),
@@ -74,8 +66,16 @@ class FormTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->allElementsMock =
-            $this->getMock('Magento\Framework\Data\Form\Element\Collection', [], [], '', false);
+
+        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $collectionModel = $objectManager->getObject
+            ('Magento\Framework\Data\Form\Element\Collection');
+
+        $this->_factoryCollectionMock
+            ->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($collectionModel));
+
         $this->_formKeyMock = $this->getMock(
             'Magento\Framework\Data\Form\FormKey',
             array('getFormKey'),
@@ -83,19 +83,12 @@ class FormTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $methods = ['getId', 'setValue', 'setName', 'getName', '_wakeup'];
-        $this->elementMock =
-            $this->getMock('Magento\Framework\Data\Form\Element\AbstractElement', $methods, [], '', false);
 
         $this->_form = new Form($this->_factoryElementMock, $this->_factoryCollectionMock, $this->_formKeyMock);
     }
 
     public function testFormKeyUsing()
     {
-        $this->_factoryCollectionMock
-            ->expects($this->any())
-            ->method('create')
-            ->will($this->returnValue(array()));
         $formKey = 'form-key';
         $this->_formKeyMock->expects($this->once())->method('getFormKey')->will($this->returnValue($formKey));
 
@@ -104,74 +97,86 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->assertContains($formKey, $this->_form->toHtml());
     }
 
-    public function testAddValue()
+    public function testSettersGetters()
     {
-        $this->_factoryCollectionMock
-            ->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue($this->allElementsMock));
-        $this->_form = new Form($this->_factoryElementMock, $this->_factoryCollectionMock, $this->_formKeyMock);
-        $values = [
-            'element_id' => 'value_one'
-        ];
-        $this->elementMock->expects($this->once())->method('getId')->will($this->returnValue('element_id'));
-        $this->allElementsMock->expects($this->once())->method('add')->with($this->elementMock);
-        $this->elementMock->expects($this->once())->method('setValue')->with('value_one');
-        $this->_form->addElementToCollection($this->elementMock);
-        $this->_form->addValues($values);
+        $setElementRenderer = $this->getMockBuilder
+            ('Magento\Backend\Block\Widget\Form\Renderer\Element')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        // note: this results in setting a static variable in the Form class
+        $this->_form->setElementRenderer($setElementRenderer);
+        $getElementRenderer = $this->_form->getElementRenderer();
+        $this->assertSame($setElementRenderer, $getElementRenderer);
+        // restore our Form to its earlier state
+        $this->_form->setElementRenderer(null);
+
+
+        $setFieldsetRenderer = $this->getMockBuilder
+            ('Magento\Backend\Block\Widget\Form\Renderer\Fieldset')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->_form->setFieldsetRenderer($setFieldsetRenderer);
+        $getFieldsetRenderer = $this->_form->getFieldsetRenderer();
+        $this->assertSame($setFieldsetRenderer, $getFieldsetRenderer);
+
+
+        $setFieldsetElementRenderer = $this->getMockBuilder
+            ('Magento\Backend\Block\Widget\Form\Renderer\Fieldset')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->_form->setFieldsetElementRenderer($setFieldsetElementRenderer);
+        $getFieldsetElementRenderer = $this->_form->getFieldsetElementRenderer();
+        $this->assertSame($setFieldsetElementRenderer, $getFieldsetElementRenderer);
+
+        $this->assertSame($this->_form->getHtmlAttributes(), ['id', 'name', 'method',
+            'action', 'enctype', 'class', 'onsubmit', 'target']);
+
+        $this->_form->setFieldContainerIdPrefix('abc');
+        $this->assertSame($this->_form->getFieldContainerIdPrefix(), 'abc');
+
+        $result = $this->_form->addSuffixToName('123', 'abc');
+        $this->assertSame($result, 'abc[123]');
     }
 
     /**
-     * @param int $number
-     * @param string $elementId
-     * @param string|null $value
-     *
-     * @dataProvider setValueDataProvider
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Element with id "1" already exists
      */
-    public function testSetValue($number, $elementId, $value)
+    public function testElementExistsException()
     {
-        $this->_factoryCollectionMock
-            ->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue(array($this->elementMock)));
-        $this->_form = new Form($this->_factoryElementMock, $this->_factoryCollectionMock, $this->_formKeyMock);
-        $values = [
-            'element_two' => 'value_two'
-        ];
-        $this->elementMock->expects($this->exactly($number))->method('getId')->will($this->returnValue($elementId));
-        $this->elementMock->expects($this->once())->method('setValue')->with($value);
-        $this->_form->setValues($values);
+        $buttonElement = $this->getMockBuilder
+            ('Magento\Framework\Data\Form\Element\Button')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $buttonElement->expects($this->any())->method('getId')->will($this->returnValue('1'));
+
+        $this->_form->addElement($buttonElement);
+        $this->_form->addElementToCollection($buttonElement);
+
+        $this->_form->checkElementId($buttonElement->getId());
     }
 
-    public function setValueDataProvider()
+    public function testElementOperations()
     {
-        return [
-            'value_exists' => [2, 'element_two', 'value_two'],
-            'value_not_exist' => [1, 'element_one', null]
-        ];
-    }
+        $buttonElement = $this->getMockBuilder
+            ('Magento\Framework\Data\Form\Element\Button')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $buttonElement->expects($this->any())->method('getId')->will($this->returnValue('1'));
+        $buttonElement->expects($this->any())->method('getName')->will($this->returnValue('Hero'));
 
-    public function testAddFieldNameSuffix()
-    {
-        $this->_factoryCollectionMock
-            ->expects($this->once())
-            ->method('create')
-            ->will($this->returnValue(array($this->elementMock)));
-        $this->_form = new Form($this->_factoryElementMock, $this->_factoryCollectionMock, $this->_formKeyMock);
-        $this->elementMock->expects($this->once())->method('getName')->will($this->returnValue('name'));
-        $this->elementMock->expects($this->once())->method('setName')->with('_suffix[name]');
-        $this->_form->addFieldNameSuffix('_suffix');
-    }
+        $this->_form->addElement($buttonElement);
+        $this->_form->addElementToCollection($buttonElement);
 
-    public function testAddEllement()
-    {
-        $this->_factoryCollectionMock
-            ->expects($this->any())
-            ->method('create')
-            ->will($this->returnValue($this->allElementsMock));
-        $this->_form = new Form($this->_factoryElementMock, $this->_factoryCollectionMock, $this->_formKeyMock);
-        $this->elementMock->expects($this->any())->method('getId')->will($this->returnValue('element_id'));
-        $this->allElementsMock->expects($this->exactly(2))->method('add')->with($this->elementMock, false);
-        $this->_form->addElement($this->elementMock);
+        $this->_form->addValues(['1', '2', '3']);
+        $this->_form->setValues(['4', '5', '6']);
+
+        $this->_form->addFieldNameSuffix('abc123');
+
+        $this->_form->removeField($buttonElement->getId());
+        $this->assertSame($this->_form->checkElementId($buttonElement->getId()), true);
     }
 }

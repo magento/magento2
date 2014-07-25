@@ -47,16 +47,16 @@
             <?php $_prevOptionId = $attributes['option_id'] ?>
         <?php endif; ?>
     <?php endif; ?>
-    <tr<?php echo (++$_index==$_count && !$_showlastRow)?' class="border"':'' ?> id="order-item-row-<?php echo $_item->getId() ?>">
+    <tr id="order-item-row-<?php echo $_item->getId() ?>" class="<?php if ($_item->getParentItem()): ?>item-options<?php else: ?>item-parent<?php endif; ?>">
         <?php if (!$_item->getParentItem()): ?>
-            <td class="col name">
-                <strong class="product name"><?php echo $this->escapeHtml($_item->getName()) ?></strong>
+            <td class="col name" data-th="<?php echo $this->escapeHtml(__('Product Name')); ?>">
+                <strong class="product name product-item-name"><?php echo $this->escapeHtml($_item->getName()) ?></strong>
             </td>
         <?php else: ?>
             <td class="col value"><?php echo $this->getValueHtml($_item) ?></td>
         <?php endif; ?>
-        <td class="col sku"><?php echo $this->escapeHtml($_item->getSku()) ?></td>
-        <td class="col price">
+        <td class="col sku" data-th="<?php echo $this->escapeHtml(__('SKU')); ?>"><?php echo $this->escapeHtml($_item->getSku()) ?></td>
+        <td class="col qty" data-th="<?php echo $this->escapeHtml(__('Qty Shipped')); ?>">
             <?php if (($this->isShipmentSeparately() && $_item->getParentItem()) || (!$this->isShipmentSeparately() && !$_item->getParentItem())): ?>
                 <?php if (isset($shipItems[$_item->getId()])): ?>
                     <?php echo $shipItems[$_item->getId()]->getQty()*1 ?>

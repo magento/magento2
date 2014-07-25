@@ -207,7 +207,7 @@ switch($type = $this->getType()) {
                 <?php if($type == 'related' || $type == 'upsell'): ?>
                     <?php echo ($iterator++==1) ? '<li class="item product product-item" style="display: none;">' : '</li><li class="item product product-item" style="display: none;">' ?>
                 <?php else: ?>
-                    <?php echo ($iterator++==1) ? '<li class="item product product-item">' : '</li><li class="item product">' ?>
+                    <?php echo ($iterator++==1) ? '<li class="item product product-item">' : '</li><li class="item product product-item">' ?>
                 <?php endif; ?>
                 <div class="product-item-info <?php echo $available; ?>">
                     <?php echo '<!-- ' . $image . '-->' ?>

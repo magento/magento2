@@ -38,7 +38,7 @@ class TableTest extends \PHPUnit_Framework_TestCase
         $this->_model = $objectManager->getObject('Magento\Eav\Model\Entity\Attribute\Source\Table');
     }
 
-    public function testGetFlatColums()
+    public function testGetFlatColumns()
     {
         $abstractFrontendMock = $this->getMock(
             'Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend',
@@ -68,19 +68,19 @@ class TableTest extends \PHPUnit_Framework_TestCase
 
         $this->_model->setAttribute($abstractAttributeMock);
 
-        $flatColums = $this->_model->getFlatColums();
+        $flatColumns = $this->_model->getFlatColumns();
 
-        $this->assertTrue(is_array($flatColums), 'FlatColums must be an array value');
-        $this->assertTrue(!empty($flatColums), 'FlatColums must be not empty');
+        $this->assertTrue(is_array($flatColumns), 'FlatColumns must be an array value');
+        $this->assertTrue(!empty($flatColumns), 'FlatColumns must be not empty');
 
-        foreach ($flatColums as $result) {
-            $this->assertArrayHasKey('unsigned', $result, 'FlatColums must have "unsigned" column');
-            $this->assertArrayHasKey('default', $result, 'FlatColums must have "default" column');
-            $this->assertArrayHasKey('extra', $result, 'FlatColums must have "extra" column');
-            $this->assertArrayHasKey('type', $result, 'FlatColums must have "type" column');
-            $this->assertArrayHasKey('nullable', $result, 'FlatColums must have "nullable" column');
-            $this->assertArrayHasKey('comment', $result, 'FlatColums must have "comment" column');
-            $this->assertArrayHasKey('length', $result, 'FlatColums must have "length" column');
+        foreach ($flatColumns as $result) {
+            $this->assertArrayHasKey('unsigned', $result, 'FlatColumns must have "unsigned" column');
+            $this->assertArrayHasKey('default', $result, 'FlatColumns must have "default" column');
+            $this->assertArrayHasKey('extra', $result, 'FlatColumns must have "extra" column');
+            $this->assertArrayHasKey('type', $result, 'FlatColumns must have "type" column');
+            $this->assertArrayHasKey('nullable', $result, 'FlatColumns must have "nullable" column');
+            $this->assertArrayHasKey('comment', $result, 'FlatColumns must have "comment" column');
+            $this->assertArrayHasKey('length', $result, 'FlatColumns must have "length" column');
         }
     }
 }

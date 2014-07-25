@@ -429,7 +429,7 @@
             <backend_type>virtual</backend_type>
             <is_required>1</is_required>
             <group>bundle</group>
-            <source>Magento\Bundle\Test\Fixture\CatalogProductBundle\BundleSelections</source>
+            <fixture>Magento\Bundle\Test\Fixture\Bundle\BundleSelections</fixture>
         </bundle_selections>
         <custom_options>
             <attribute_code>custom_options</attribute_code>

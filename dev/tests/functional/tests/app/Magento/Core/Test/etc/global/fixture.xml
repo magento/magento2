@@ -32,4 +32,16 @@
         </entities>
         <collection>Magento\Core\Model\Resource\Variable\Collection</collection>
     </systemVariable>
+    <configData module="Magento_Core">
+        <module>Magento_Core</module>
+        <type>flat</type>
+        <entity_type>core_config_data</entity_type>
+        <collection>Magento\Core\Model\Resource\Config\Data\Collection</collection>
+        <fields>
+            <section>
+                <attribute_code>section</attribute_code>
+                <backend_type>virtual</backend_type>
+            </section>
+        </fields>
+    </configData>
 </fixture>

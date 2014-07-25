@@ -60,9 +60,10 @@ class BundleFixedTest extends Functional
         $createProductPage = Factory::getPageFactory()->getCatalogProductNew();
         //Steps
         $manageProductsGrid->open();
-        $manageProductsGrid->getProductBlock()->addProduct('bundle');
+        $manageProductsGrid->getGridPageActionBlock()->addProduct('bundle');
         $productForm = $createProductPage->getForm();
-        $productForm->fillProduct($bundle);
+        $category = $bundle->getCategories()['category'];
+        $productForm->fill($bundle, null, $category);
         $createProductPage->getFormAction()->save();
         //Verification
         $createProductPage->getMessagesBlock()->assertSuccessMessage();

@@ -38,6 +38,7 @@
             <default_value></default_value>
             <input>text</input>
             <fixture>Magento\Catalog\Test\Fixture\CatalogProductSimple\CategoryIds</fixture>
+            <group>product-details</group>
         </category_ids>
         <color>
             <attribute_code>color</attribute_code>
@@ -442,6 +443,12 @@
             <group>customer-options</group>
             <fixture>Magento\Catalog\Test\Fixture\CatalogProductSimple\CustomOptions</fixture>
         </custom_options>
+        <website_ids>
+            <attribute_code>website_ids</attribute_code>
+            <backend_type>virtual</backend_type>
+            <default_value>Main Website</default_value>
+            <group>websites</group>
+        </website_ids>
     </fields>
     <data_set>
         <sku></sku>

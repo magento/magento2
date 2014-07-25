@@ -43,22 +43,22 @@ class Bundle extends Product
         if (isset($this->_data[$productType]['data']['fields']['price'])) {
             $required = array_merge_recursive(
                 $required,
-                array(
-                    'data' => array(
-                        'fields' => array(
-                            'price' => array(
+                [
+                    'data' => [
+                        'fields' => [
+                            'price' => [
                                 'value' => 60,
                                 'group' => Fixture\Product::GROUP_PRODUCT_DETAILS
-                            )
-                        ),
-                        'checkout' => array(
-                            'prices' => array(
+                            ]
+                        ],
+                        'checkout' => [
+                            'prices' => [
                                 'price_from' => 70,
                                 'price_to' => 72
-                            )
-                        )
-                    )
-                )
+                            ]
+                        ]
+                    ]
+                ]
             );
         } else {
             $required['data']['checkout']['prices'] = $this->_data[$productType]['data']['checkout']['prices'];

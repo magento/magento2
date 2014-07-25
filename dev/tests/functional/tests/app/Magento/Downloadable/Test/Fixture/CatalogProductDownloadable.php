@@ -381,35 +381,12 @@ class CatalogProductDownloadable extends InjectableFixture
         'is_required' => '1',
         'default_value' => '',
         'input' => 'price',
-        'group' => 'product-details'
-    ];
-
-    protected $inventory_manage_stock = [
-        'attribute_code' => 'inventory_manage_stock',
-        'input' => 'select',
-        'group' => 'advanced-inventory',
+        'group' => 'product-details',
+        'source' => 'Magento\Catalog\Test\Fixture\CatalogProductSimple\Price',
     ];
 
     protected $stock_data = [
         'attribute_code' => 'stock_data',
-        'input' => 'text',
-        'group' => 'advanced-inventory',
-    ];
-
-    protected $stock_data_min_qty = [
-        'attribute_code' => 'stock_data',
-        'input' => 'text',
-        'group' => 'advanced-inventory',
-    ];
-
-    protected $stock_data_use_config_min_qty = [
-        'attribute_code' => 'stock_data_use_config_min_qty',
-        'input' => 'checkbox',
-        'group' => 'advanced-inventory'
-    ];
-
-    protected $inventory_qty = [
-        'attribute_code' => 'inventory_qty',
         'input' => 'text',
         'group' => 'advanced-inventory',
     ];
@@ -666,7 +643,9 @@ class CatalogProductDownloadable extends InjectableFixture
 
     protected $website_ids = [
         'attribute_code' => 'website_ids',
-        'backend_type' => 'virtual'
+        'backend_type' => 'virtual',
+        'default_value' => ['Main Website'],
+        'group' => 'websites',
     ];
 
     public function getCategoryIds()

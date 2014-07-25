@@ -383,12 +383,12 @@ class Config extends \Magento\Framework\Object
             $scope = 'stores';
             $store = $this->_storeManager->getStore($this->getStore());
             $scopeId = (int)$store->getId();
-            $scopeCode = $this->getStore();
+            $scopeCode = $store->getCode();
         } elseif ($this->getWebsite()) {
             $scope = 'websites';
             $website = $this->_storeManager->getWebsite($this->getWebsite());
             $scopeId = (int)$website->getId();
-            $scopeCode = $this->getWebsite();
+            $scopeCode = $website->getCode();
         } else {
             $scope = 'default';
             $scopeId = 0;

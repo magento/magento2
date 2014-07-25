@@ -39,21 +39,24 @@ $options->setAttributeFilter($attribute->getId());
 
 $attributeValues = array();
 $productIds = array();
+$attributeSetId = $installer->getAttributeSetId('catalog_product', 'Default');
+$productIds = array(10, 20);
 foreach ($options as $option) {
     /** @var $product \Magento\Catalog\Model\Product */
     $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+    $productId = array_shift($productIds);
     $product->setTypeId(
         \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
     )->setId(
-        $option->getId() * 10
+        $productId
     )->setAttributeSetId(
-        $installer->getAttributeSetId('catalog_product', 'Default')
+        $attributeSetId
     )->setWebsiteIds(
         array(1)
     )->setName(
         'Configurable Option' . $option->getId()
     )->setSku(
-        'simple_' . $option->getId()
+        'simple_' . $productId
     )->setPrice(
         10
     )->setTestConfigurable(
@@ -65,6 +68,7 @@ foreach ($options as $option) {
     )->setStockData(
         array('use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1)
     )->save();
+
     $attributeValues[] = array(
         'label' => 'test',
         'attribute_id' => $attribute->getId(),
@@ -82,7 +86,7 @@ $product->setTypeId(
 )->setId(
     1
 )->setAttributeSetId(
-    $installer->getAttributeSetId('catalog_product', 'Default')
+    $attributeSetId
 )->setWebsiteIds(
     array(1)
 )->setName(

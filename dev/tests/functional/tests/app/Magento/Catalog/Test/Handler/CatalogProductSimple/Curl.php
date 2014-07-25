@@ -91,11 +91,31 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
     ];
 
     /**
+     * Placeholder for price data sent Curl
+     *
+     * @var array
+     */
+    protected $priceData = [
+        'website' => [
+            'name' => 'website_id',
+            'data' => [
+                'All Websites [USD]' => 0
+            ]
+        ],
+        'customer_group' => [
+            'name' => 'cust_group',
+            'data' => [
+                'ALL GROUPS' => 32000,
+                'NOT LOGGED IN' => 0
+            ]
+        ]
+    ];
+
+    /**
      * Post request for creating simple product
      *
      * @param FixtureInterface|null $fixture [optional]
      * @return array
-     * @throws \Exception
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -105,32 +125,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
         $config = $fixture->getDataConfig();
         $prefix = isset($config['input_prefix']) ? $config['input_prefix'] : null;
         $data = $this->prepareData($fixture, $prefix);
-
         return ['id' => $this->createProduct($data, $config)];
-    }
-
-    /**
-     * Getting tax class id from tax rule page
-     *
-     * @param string $taxClassName
-     * @return int
-     * @throws \Exception
-     */
-    protected function getTaxClassId($taxClassName)
-    {
-        $url = $_ENV['app_backend_url'] . 'tax/rule/new/';
-        $curl = new BackendDecorator(new CurlTransport(), new Config);
-        $curl->addOption(CURLOPT_HEADER, 1);
-        $curl->write(CurlInterface::POST, $url, '1.0', array(), array());
-        $response = $curl->read();
-        $curl->close();
-
-        preg_match('~<option value="(\d+)".*>' . $taxClassName . '</option>~', $response, $matches);
-        if (!isset($matches[1]) || empty($matches[1])) {
-            throw new \Exception('Product tax class id ' . $taxClassName . ' undefined!');
-        }
-
-        return (int)$matches[1];
     }
 
     /**
@@ -140,28 +135,34 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
      * @param string|null $prefix [optional]
      * @return array
      *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function prepareData(FixtureInterface $fixture, $prefix = null)
     {
         $fields = $this->replaceMappingData($fixture->getData());
         // Getting Tax class id
         if ($fixture->hasData('tax_class_id')) {
-            $taxClassId = $fixture->getDataFieldConfig('tax_class_id')['source']->getTaxClass()->getId();
-            $fields['tax_class_id'] = ($taxClassId === null)
-                ? $this->getTaxClassId($fields['tax_class_id'])
-                : $taxClassId;
+            $fields['tax_class_id'] = $fixture->getDataFieldConfig('tax_class_id')['source']->getTaxClass()->getId();
         }
 
         if (!empty($fields['category_ids'])) {
             $categoryIds = [];
-            foreach ($fields['category_ids'] as $categoryData) {
-                $categoryIds[] = $categoryData['id'];
+            /** @var InjectableFixture $fixture */
+            foreach ($fixture->getDataFieldConfig('category_ids')['source']->getCategories() as $category) {
+                /** @var CatalogCategory $category */
+                $categoryIds[] = $category->getId();
             }
             $fields['category_ids'] = $categoryIds;
         }
-
+        
+        if (isset($fields['tier_price'])) {
+            $fields['tier_price'] = $this->preparePriceData($fields['tier_price']);
+        }
+        if (isset($fields['group_price'])) {
+            $fields['group_price'] = $this->preparePriceData($fields['group_price']);
+        }
+        
         if (!empty($fields['website_ids'])) {
             foreach ($fields['website_ids'] as &$value) {
                 $value = isset($this->mappingData['website_ids'][$value])
@@ -179,13 +180,11 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
             $fields['attribute_set_id'] = $attributeSetId;
         }
 
-        $fields = $this->prepareStockData($fields);
-
         return $prefix ? [$prefix => $fields] : $fields;
     }
 
     /**
-     * Preparation of stock data
+     * Preparation of tier price data
      *
      * @param array $fields
      * @return array
@@ -193,32 +192,16 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected function prepareStockData(array $fields)
+    protected function preparePriceData(array $fields)
     {
-        if (isset($fields['quantity_and_stock_status']) && !is_array($fields['quantity_and_stock_status'])) {
-            $fields['quantity_and_stock_status'] = [
-                'qty' => $fields['qty'],
-                'is_in_stock' => $fields['quantity_and_stock_status']
-            ];
+        foreach ($fields as &$field) {
+            foreach ($this->priceData as $key => $data) {
+                $field[$data['name']] = $this->priceData[$key]['data'][$field[$key]];
+                unset($field[$key]);
+            }
+            $field['delete'] = '';
         }
-
-        if (!isset($fields['stock_data']['is_in_stock'])) {
-            $fields['stock_data']['is_in_stock'] = isset($fields['quantity_and_stock_status']['is_in_stock'])
-                ? $fields['quantity_and_stock_status']['is_in_stock']
-                : (isset($fields['inventory_manage_stock']) ? $fields['inventory_manage_stock'] : null);
-        }
-        if (!isset($fields['stock_data']['qty'])) {
-            $fields['stock_data']['qty'] = isset($fields['quantity_and_stock_status']['qty'])
-                ? $fields['quantity_and_stock_status']['qty']
-                : null;
-        }
-
-        if (!isset($fields['stock_data']['manage_stock'])) {
-            $fields['stock_data']['manage_stock'] = (int)(!empty($fields['stock_data']['qty'])
-                || !empty($fields['stock_data']['is_in_stock']));
-        }
-
-        return $this->filter($fields);
+        return $fields;
     }
 
     /**

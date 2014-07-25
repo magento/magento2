@@ -110,7 +110,7 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      *
      * @var \Magento\Framework\Object
      */
-    protected $_renderingOutput = null;
+    protected $_renderingOutput;
 
     /**
      * Cache of generated elements' HTML
@@ -1490,14 +1490,14 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      * Get block singleton
      *
      * @param string $type
-     * @throws \Magento\Framework\Model\Exception
      * @return \Magento\Framework\App\Helper\AbstractHelper
+     * @throws \Magento\Framework\Model\Exception
      */
     public function getBlockSingleton($type)
     {
         if (!isset($this->_helpers[$type])) {
             if (!$type) {
-                throw new \Magento\Framework\Model\Exception(__('Invalid block type: %1', $type));
+                throw new \Magento\Framework\Model\Exception('Invalid block type');
             }
 
             $helper = $this->_blockFactory->createBlock($type);
@@ -1532,12 +1532,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
      */
     public function addAdjustableRenderer($namespace, $staticType, $dynamicType, $type, $template, $data = array())
     {
-        if (!isset($namespace)) {
-            $this->_renderers[$namespace] = array();
-        }
-        if (!isset($namespace)) {
-            $this->_renderers[$namespace][$staticType] = array();
-        }
         $this->_renderers[$namespace][$staticType][$dynamicType] = array(
             'type' => $type,
             'template' => $template,
@@ -1578,18 +1572,11 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
         if ($options = $this->getRendererOptions($namespace, $staticType, $dynamicType)) {
             $dictionary = array();
             /** @var $block \Magento\Framework\View\Element\Template */
-            $block = $this->createBlock(
-                $options['type'],
-                ''
-            )->setData(
-                $data
-            )->assign(
-                $dictionary
-            )->setTemplate(
-                $options['template']
-            )->assign(
-                $data
-            );
+            $block = $this->createBlock($options['type'], '')
+                ->setData($data)
+                ->assign($dictionary)
+                ->setTemplate($options['template'])
+                ->assign($data);
 
             echo $this->_renderBlock($block->getNameInLayout());
         }

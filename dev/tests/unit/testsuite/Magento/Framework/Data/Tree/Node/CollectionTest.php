@@ -31,43 +31,77 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     protected $collection;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $containerMock;
-
-    protected function setUp()
+    public function setUp()
     {
-        $this->containerMock = $this->getMock('Magento\Framework\Data\Tree\Node', [], [], '', false);
-        $this->collection = new \Magento\Framework\Data\Tree\Node\Collection($this->containerMock);
+        $tree = new \Magento\Framework\Data\Tree();
+        $node = new \Magento\Framework\Data\Tree\Node(['id' => 'root'], 'id', $tree);
+        $this->collection = new Collection($node);
     }
 
-    /**
-     * @param int $number
-     * @param \PHPUnit_Framework_MockObject_MockObject|null $returnValue
-     *
-     * @dataProvider testAddDataProvider
-     */
-    public function testAdd($number, $returnValue)
+    public function testAdd()
     {
-        $nodeMock = $this->getMock('Magento\Framework\Data\Tree\Node', [], [], '', false);
-        $nodeMock->expects($this->once())->method('setParent')->with($this->containerMock);
-        $this->containerMock
-            ->expects($this->exactly($number))
-            ->method('getTree')
-            ->will($this->returnValue($returnValue));
-        $nodeMock->expects($this->once())->method('getId')->will($this->returnValue('id_node'));
-        $this->assertEquals($nodeMock, $this->collection->add($nodeMock));
-        $this->assertEquals(['id_node' => $nodeMock], $this->collection->getNodes());
-        $this->assertEquals($nodeMock, $this->collection->searchById('id_node'));
-        $this->assertEquals(null, $this->collection->searchById('id_node_new'));
+        $tree = new \Magento\Framework\Data\Tree();
+        $this->assertSame($this->collection->count(), 0);
+        $node = new \Magento\Framework\Data\Tree\Node(['id' => 'node1'], 'id', $tree);
+        $this->collection->add($node);
+        $this->assertSame($this->collection->count(), 1);
     }
 
-    public function testAddDataProvider()
+    public function testOffsets()
     {
-        return [
-            'tree_exists' => [2, $this->getMock('Magento\Framework\Data\Tree', [], [], '', false)],
-            'tree_not_exist' => [1, null]
-        ];
+        $tree = new \Magento\Framework\Data\Tree();
+        $this->assertSame($this->collection->count(), 0);
+        $node = new \Magento\Framework\Data\Tree\Node(['id' => 'node1'], 'id', $tree);
+        $this->collection->add($node);
+        $this->assertSame($this->collection->offsetExists('node1'), true);
+        $this->collection->offsetSet('node1', 'Hello');
+        $this->assertSame($this->collection->offsetExists('node1'), true);
+        $this->assertSame($this->collection->offsetGet('node1'), 'Hello');
+        $this->collection->offsetUnset('node1');
+        $this->assertSame($this->collection->offsetExists('node1'), false);
+    }
+
+    public function testDelete()
+    {
+        $tree = new \Magento\Framework\Data\Tree();
+        $this->assertSame($this->collection->count(), 0);
+        $node = new \Magento\Framework\Data\Tree\Node(['id' => 'node1'], 'id', $tree);
+        $this->collection->add($node);
+        $this->assertSame($this->collection->count(), 1);
+        $this->collection->delete($node);
+        $this->assertSame($this->collection->count(), 0);
+    }
+
+    public function testLastNode()
+    {
+        $tree = new \Magento\Framework\Data\Tree();
+        $node1 = new \Magento\Framework\Data\Tree\Node(['id' => 'node1'], 'id', $tree);
+        $this->collection->add($node1);
+        $node2 = new \Magento\Framework\Data\Tree\Node(['id' => 'node2'], 'id', $tree);
+        $this->collection->add($node2);
+        $this->assertSame($this->collection->lastNode(), $node2);
+        $node3 = new \Magento\Framework\Data\Tree\Node(['id' => 'node3'], 'id', $tree);
+        $this->collection->add($node3);
+
+        $this->assertSame($this->collection->lastNode(), $node3);
+        $this->assertSame($this->collection->lastNode(), $node3);
+        $this->collection->delete($node3);
+        $this->assertSame($this->collection->lastNode(), $node2);
+        $this->assertSame($this->collection->lastNode(), $node2);
+    }
+
+    public function testSearchById()
+    {
+        $tree = new \Magento\Framework\Data\Tree();
+        $node1 = new \Magento\Framework\Data\Tree\Node(['id' => 'node1'], 'id', $tree);
+        $this->collection->add($node1);
+        $node2 = new \Magento\Framework\Data\Tree\Node(['id' => 'node2'], 'id', $tree);
+        $this->collection->add($node2);
+        $this->assertSame($this->collection->lastNode(), $node2);
+        $node3 = new \Magento\Framework\Data\Tree\Node(['id' => 'node3'], 'id', $tree);
+        $this->collection->add($node3);
+
+        $this->assertSame($this->collection->searchById('node2'), $node2);
     }
 }
+ 

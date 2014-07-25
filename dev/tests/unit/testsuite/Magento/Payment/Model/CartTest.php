@@ -294,11 +294,22 @@ class CartTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getSalesModelItems()
     {
+        $product = new \Magento\Framework\Object(['id' => '1']);
         return array(
-            new \Magento\Framework\Object(array('name' => 'name 1', 'qty' => 1, 'price' => 0.1)),
-            new \Magento\Framework\Object(array('name' => 'name 2', 'qty' => 2, 'price' => 1.2)),
             new \Magento\Framework\Object(
-                array('parent_item' => 'parent item 3', 'name' => 'name 3', 'qty' => 3, 'price' => 2.3)
+                ['name' => 'name 1', 'qty' => 1, 'price' => 0.1, 'original_item' => $product]
+            ),
+            new \Magento\Framework\Object(
+                ['name' => 'name 2', 'qty' => 2, 'price' => 1.2, 'original_item' => $product]
+            ),
+            new \Magento\Framework\Object(
+                [
+                    'parent_item' => 'parent item 3',
+                    'name' => 'name 3',
+                    'qty' => 3,
+                    'price' => 2.3,
+                    'original_item' => $product
+                ]
             )
         );
     }
@@ -317,7 +328,12 @@ class CartTest extends \PHPUnit_Framework_TestCase
                 continue;
             }
             $result[] = new \Magento\Framework\Object(
-                array('name' => $item->getName(), 'qty' => $item->getQty(), 'amount' => $item->getPrice())
+                array(
+                    'name' => $item->getName(),
+                    'qty' => $item->getQty(),
+                    'amount' => $item->getPrice(),
+                    'id' => $item->getOriginalItem()->getId()
+                )
             );
         }
         return $result;

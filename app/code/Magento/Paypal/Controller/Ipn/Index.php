@@ -22,8 +22,14 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
 namespace Magento\Paypal\Controller\Ipn;
 
+use \Magento\Paypal\UnavailableException;
+
+/**
+ * Unified IPN controller for all supported PayPal methods
+ */
 class Index extends \Magento\Framework\App\Action\Action
 {
     /**
@@ -65,8 +71,14 @@ class Index extends \Magento\Framework\App\Action\Action
         try {
             $data = $this->getRequest()->getPost();
             $this->_ipnFactory->create(array('data' => $data))->processIpnRequest();
+        } catch (UnavailableException $e) {
+            $this->_logger->logException($e);
+            $this->getResponse()->setHeader('HTTP/1.1', '503 Service Unavailable')->sendResponse();
+            /** @todo eliminate usage of exit statement */
+            exit;
         } catch (\Exception $e) {
             $this->_logger->logException($e);
+            $this->getResponse()->setHttpResponseCode(500);
         }
     }
 }

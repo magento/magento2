@@ -122,7 +122,7 @@ class UpdateDownloadableProductEntityTest extends Injectable
         $filter = ['sku' => $this->product->getSku()];
         $this->catalogProductIndex->open()->getProductGrid()->searchAndOpen($filter);
         $productBlockForm = $this->catalogProductEdit->getForm();
-        $productBlockForm->fillProduct($product, $category);
+        $productBlockForm->fill($product, null, $category);
         $this->catalogProductEdit->getFormAction()->save();
     }
 }

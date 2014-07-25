@@ -1,3 +1,110 @@
+2.0.0.0-dev88
+=============
+* Fixed bugs:
+  * Fixed an issue when PayPal Express Checkout Payflow Edition and PayPal Payments Advanced were available for multiple checkout
+  * Fixed an issue when the Bill me later button did not redirect to https when secure url was enabled for frontend
+  * Fixed an issue when the Billing agreement option was available in multishipping checkout, even if there were no signed agreements
+  * Fixed an issue when DoExpressCheckout request instead of DoCapture did not allow to do refund, when using PayPal Express Checkout Payflow Edition
+  * Fixed an issue when eWay was not present on checkout if Base Currency was set to AUD
+  * Fixed an issue with fatal error occurring when placing order via SagePay with 3D Secure enabled
+  * Fixed an issue when the FedEx shipping method had no option to specify unit for weight attribute
+  * Fixed an issue with inability to create credit memo for PalPal Express Checkout/Payments Pro/Payments Pro Hosted Solution (NVP family), if partial refund was initiated on the PayPal side
+  * Fixed an issue when a guest user could not return product to store, if product was paid using PayPal
+  * Fixed an issue when PayPal Payments Pro Hosted Solution Fraud protection did not work properly
+  * Fixed an issue when JavaScript took values from default config for payment methods and used them on the website scope
+  * Fixed an issue with incorrect address in request to shipping carrier (DHL International) in case the address contained diacritic letters
+  * Fixed an issue when it was possible to hack currency in PayPal Website Payments Standard
+  * Fixed an issue when no rows were added to the PayPal Settlement report grid while fetching it from custom server
+  * Fixed an issue when order had the Suspected Fraud status after creating partial invoice on the PayPal side
+  * Fixed an issue when PayPal Payflow Pro did not properly implement CUSTREF and INVNUM
+  * Fixed an issue with PayPal errors handling during IPN postback
+  * Fixed an issue when the Paypal Express Checkout button was not available on product page for several product types
+  * Fixed an issue with PayPal Payflow Pro and Payflow Link broken unit tests
+  * Fixed an issue when PayPal Payments Pro Hosted Solution had the City parameter duplicated in the State parameter for UK
+  * Fixed an issue with remove multiple HTTP 100/101 headers
+  * Fixed an issue when SagePay did not transfer shopping cart information
+  * Fixed an issue when transaction records were absent on Transaction tab for Ogone
+  * Fixed an issue when partial cancel with SagePay Direct was unavailable
+  * Fixed an issue when order did not place using PayPal Payments Pro Hosted Solution
+  * Fixed an issue when order did not place using Authorize.net Direct Post from backend
+  * Fixed an issue when sort order for payment methods did not work
+  * Fixed an issue with multiple schema of language.xml
+  * Fixed an issue with infinite loop in language inheritance
+  * Fixed an issue with residual "scopes" logic in i18n implementation
+  * Fixed an issue when search did not work for the CMS Blocks grid
+  * Fixed an issue when WSDL for one scope was cached and displayed for all scopes
+  * Fixed an issue with unit tests coverage build failure
+  * Fixed an issue when custom options were lost after product import
+  * Fixed an issue when product did not show in backend grid if store contained several store view
+  * Fixed an issue when the Recurring Profile section was not updated after changing product template
+  * Fixed an issue with incorrect discount calculation
+  * Fixed an issue when customer could not register during Checkout if Guest Checkout was disabled
+  * Fixed an issue when shopping cart price rule was not applied after updating items and qty in the shopping cart
+  * Fixed an issue when updated and created dates were not shown for Billing Agreement in the Billing Agreement Grid in the backend
+  * Fixed an issue with broken design on the multiple addresses order review page
+  * Fixed an issue when sort by did not work in frontend for Yes/No attributes when Flat catalog was disabled
+  * Fixed an issue when a new blank CMS page was displayed after saving the CMS page entity
+  * Fixed an issue when product attributes were absent on the Product page after switching to another product template
+  * Fixed a 404 error after saving mass update product attributes form
+  * Fixed an issue when it was impossible to perform search by all tax classes on the Advanced Search page
+  * Fixed an issue when attribute order for configurable product was not preserved after saving product
+  * Fixed an issue with no results for the Product Best Sellers report
+  * Fixed a fatal error when opening tax configuration page in the backend
+  * Fixed an error occurring when opening the Tax Zones and Rates page in the backend
+  * Fixed a 404 error occurring while searching products on the New Review page
+  * Fixed an error when performing search in the Tax rate grid
+* Payments implementation:
+  * Ported correct behaviour for Fraud Management in PayPal Payflow Pro from M1 to M2
+  * Implemented ability to use negative line items for PayPal Payflowpro
+* Language packs:
+  * Implemented ability to use multiple packages for the same language from one vendor
+* GitHub requests:
+  * [#587] (https://github.com/magento/magento2/issues/587) --  The "install/Magento/basic/*_*/layout/*.xml" pattern cannot be processed in "/mnt/fs01/test/mdt/htdocs/app/design/" path Warning!Invalid argument supplied for foreach()
+* Unit tests coverage:
+  * Magento\Catalog\Model\Product
+* Service layer implementation:
+  * Created ConfigurableProduct service
+  * Created CompositeProduct service
+  * Refactored TaxCalculationService
+  * Refactored Google Shopping to use tax service
+  * Exposed TaxRate and TaxRule search functions as WebAPI TaxCalculationService
+  * Refactored QuoteDetails and QuoteDetailsItem to use tax class name
+  * Refactored gift wrapping to use tax/weee services
+  * Performed more tax refactoring for service layer
+  * Improved unit test coverage
+* Indexer-less implementation of URL Rewrites functionality in new UrlRedirect module:
+  * Implemented URL Rewrites generators for all entities: CMS page, product, category
+  * Implemented URL Rewrites matching in the frontend
+* Added the following functional tests:
+  * Activate Integration
+  * Add Compared Products
+  * Create Bundle Product
+  * Clear All Compare Products
+  * Create CMS Block
+  * Create CMS Page
+  * Create Custom Variable
+  * Create Integration
+  * Create Grouped Product
+  * Create Search Term
+  * Delete Assigned to Template Product Attribute
+  * Delete CMS Block
+  * Delete CMS Page Rewrite
+  * Delete Compare Products
+  * Delete Custom URL Rewrite
+  * Delete Integration
+  * Delete Product Template
+  * Duplicate Product
+  * Edit Search Term
+  * Update Bundle Product
+  * Update CMS Block
+  * Update CMS Page URL Rewrite
+  * Update Custom Variable
+  * Update Custom URL Rewrite
+  * Update Customer on Frontend
+  * Update Integration
+  * Update Product Template
+  * Update Virtual Product
+
 2.0.0.0-dev87
 =============
 * Service layer updates:
@@ -12,6 +119,7 @@
   * [#584] (https://github.com/magento/magento2/issues/584) -- Merge and minify js - Exception
   * [#585] (https://github.com/magento/magento2/pull/585) -- Add forgotten return statement
   * [#592] (https://github.com/magento/magento2/issues/592) -- Module name pattern
+  * [#618] (https://github.com/magento/magento2/issues/618) -- Fix of unit tests failure on Travis CI
 * Tax calculation updates:
   * Separate and display Weee line item totals from Tax
 * Fixed bugs:
@@ -30,18 +138,16 @@
   * Fixed an issue when configurable product was out of stock in Google Shopping while being in stock in the Magento backend
   * Fixed an issue when swipe gesture in menu widget was not supported on mobile
   * Fixed an issue when it was impossible to enter alpha-numeric zip code on the stage of  estimating shipping and tax rates
-  * Fixed an issue when it was impossible to edit gift card account
   * Fixed an issue when custom price was not applied when editing an order
-  * Fixed an issue when  items were  not returned to stock after unsuccessful order was placed
+  * Fixed an issue when items were not returned to stock after unsuccessful order was placed
   * Fixed an issue when error message appeared "Cannot save the credit memo” while creating credit memo
   * Fixed an issue when Catalog price rule was not shown for the product if price was less than a discount
 * Indexer implementation:
   * Implemented a new Stock indexer
   * Implemented a new EAV indexer
-  * Fixed failed L1 plan on phpunit 4.1.0
-  * Minor updates for integration test framework
-  * Split action controllers classes into action classes
-  * Added public MTF repository to the packagist.org
+* Minor updates for integration test framework
+* Split action controllers classes into action classes
+* Added public MTF repository to the packagist.org
 * Added the following functional tests:
   * Create Admin User
   * Create Category

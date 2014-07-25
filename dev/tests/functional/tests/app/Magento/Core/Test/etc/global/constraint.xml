@@ -24,13 +24,31 @@
  */
 -->
 <constraint>
-    <assertSystemVariableSuccessDeleteMessage module="Magento_Core">
+    <assertCustomVariableSuccessDeleteMessage module="Magento_Core">
         <severeness>low</severeness>
-    </assertSystemVariableSuccessDeleteMessage>
-    <assertSystemVariableNotInGrid module="Magento_Core">
+    </assertCustomVariableSuccessDeleteMessage>
+    <assertCustomVariableNotInGrid module="Magento_Core">
         <severeness>low</severeness>
-    </assertSystemVariableNotInGrid>
-    <assertSystemVariableNotInCmsPageForm module="Magento_Core">
+    </assertCustomVariableNotInGrid>
+    <assertCustomVariableNotInCmsPageForm module="Magento_Core">
         <severeness>low</severeness>
-    </assertSystemVariableNotInCmsPageForm>
+    </assertCustomVariableNotInCmsPageForm>
+    <assertCustomVariableSuccessSaveMessage module="Magento_Core">
+        <severeness>low</severeness>
+    </assertCustomVariableSuccessSaveMessage>
+    <assertCustomVariableInGrid module="Magento_Core">
+        <severeness>low</severeness>
+    </assertCustomVariableInGrid>
+    <assertCustomVariableInPageStoreview module="Magento_Core">
+        <severeness>low</severeness>
+    </assertCustomVariableInPageStoreview>
+    <assertCustomVariableNotInCmsPageForm module="Magento_Core">
+        <severeness>low</severeness>
+    </assertCustomVariableNotInCmsPageForm>
+    <assertCustomVariableForm module="Magento_Core">
+        <severeness>low</severeness>
+    </assertCustomVariableForm>
+    <assertCustomVariableInPage module="Magento_Core">
+        <severeness>low</severeness>
+    </assertCustomVariableInPage>
 </constraint>

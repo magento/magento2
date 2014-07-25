@@ -1,7 +1,5 @@
 <?php
 /**
- * Store fixture
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -26,67 +24,119 @@
 
 namespace Magento\Store\Test\Fixture;
 
-use Mtf\Fixture\DataFixture;
-use Mtf\Factory\Factory;
+use Mtf\Fixture\InjectableFixture;
 
-class Store extends DataFixture
+/**
+ * Class Store
+ * Store View fixture
+ */
+class Store extends InjectableFixture
 {
     /**
-     * @param \Mtf\System\Config $configuration
-     * @param array $placeholders
+     * @var string
      */
-    public function __construct(\Mtf\System\Config $configuration, array $placeholders = array())
-    {
-        parent::__construct($configuration, $placeholders);
-        $this->_placeholders = $placeholders;
-    }
+    protected $repositoryClass = 'Magento\Store\Test\Repository\Store';
 
     /**
-     * Initialize fixture data
+     * @var string
      */
-    protected function _initData()
-    {
-        $this->_data = array(
-            'fields' => array(
-                'group' => array(
-                    'value' => 'Main Website Store',
-                    'input' => 'select'
-                ),
-                'name' => array(
-                    'value' => 'DE%isolation%'
-                ),
-                'code' => array(
-                    'value' => 'de%isolation%'
-                ),
-                'is_active' => array(
-                    'value' => 'Enabled',
-                    'input' => 'select',
-                ),
-            )
-        );
+    protected $handlerInterface = 'Magento\Store\Test\Handler\Store\StoreInterface';
 
-        $this->_repository = Factory::getRepositoryFactory()
-            ->getMagentoStoreCustomStore($this->_dataConfig, $this->_data);
+    protected $defaultDataSet = [
+        'group_id' => 'Main Website Store',
+        'name' => 'Custom_Store_%isolation%',
+        'code' => 'code_%isolation%',
+        'is_active' => 'Enabled',
+    ];
+
+    protected $store_id = [
+        'attribute_code' => 'store_id',
+        'backend_type' => 'smallint',
+        'is_required' => '1',
+        'default_value' => '',
+        'input' => '',
+    ];
+
+    protected $code = [
+        'attribute_code' => 'code',
+        'backend_type' => 'varchar',
+        'is_required' => '',
+        'default_value' => '',
+        'input' => 'text',
+    ];
+
+    protected $website_id = [
+        'attribute_code' => 'website_id',
+        'backend_type' => 'smallint',
+        'is_required' => '',
+        'default_value' => '0',
+        'input' => '',
+    ];
+
+    protected $group_id = [
+        'attribute_code' => 'group_id',
+        'backend_type' => 'smallint',
+        'is_required' => '',
+        'default_value' => '0',
+        'input' => 'select',
+    ];
+
+    protected $name = [
+        'attribute_code' => 'name',
+        'backend_type' => 'varchar',
+        'is_required' => '',
+        'default_value' => '',
+        'input' => 'text',
+    ];
+
+    protected $sort_order = [
+        'attribute_code' => 'sort_order',
+        'backend_type' => 'smallint',
+        'is_required' => '',
+        'default_value' => '0',
+        'input' => 'text',
+    ];
+
+    protected $is_active = [
+        'attribute_code' => 'is_active',
+        'backend_type' => 'smallint',
+        'is_required' => '',
+        'default_value' => '0',
+        'input' => 'select',
+    ];
+
+    public function getStoreId()
+    {
+        return $this->getData('store_id');
     }
 
-
-    /**
-     * Create Store
-     *
-     * @return Store
-     */
-    public function persist()
+    public function getCode()
     {
-        return Factory::getApp()->magentoStoreCreateStore($this);
+        return $this->getData('code');
     }
 
-    /**
-     * Get name
-     *
-     * @return string
-     */
+    public function getWebsiteId()
+    {
+        return $this->getData('website_id');
+    }
+
+    public function getGroupId()
+    {
+        return $this->getData('group_id');
+    }
+
     public function getName()
     {
-        return $this->getData('fields/name/value');
+        return $this->getData('name');
+    }
+
+    public function getSortOrder()
+    {
+        return $this->getData('sort_order');
+    }
+
+    public function getIsActive()
+    {
+        return $this->getData('is_active');
     }
 }

@@ -24,7 +24,7 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Config;
 
-class Index extends \Magento\Backend\Controller\Adminhtml\System\AbstractConfig
+class Index extends AbstractScopeConfig
 {
     /**
      * Index action

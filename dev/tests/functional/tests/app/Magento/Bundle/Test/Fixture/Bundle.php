@@ -114,18 +114,16 @@ class Bundle extends Product
      */
     public function getSelectionData()
     {
-        $typeMapping = [
-            'Drop-down' => 'select'
-        ];
         $options = $this->getData('checkout/selection');
         $selectionData = [];
         foreach ($options as $option => $selection) {
             $fieldPrefix = 'fields/bundle_selections/value/bundle_options/';
-            $selectionItem['type'] = $typeMapping[$this->getData($fieldPrefix . $option . '/type')];
-            $selectionItem['qty'] = $this->getData(
+            $selectionItem['type'] = $this->getData($fieldPrefix . $option . '/type');
+            $selectionItem['title'] = $this->getData($fieldPrefix . $option . '/title');
+            $selectionItem['value']['qty'] = $this->getData(
                 $fieldPrefix . $option . '/assigned_products/' . $selection . '/data/selection_qty'
             );
-            $selectionItem['value'] = $this->getData(
+            $selectionItem['value']['name'] = $this->getData(
                 $fieldPrefix . $option . '/assigned_products/' . $selection . '/search_data/name'
             );
             $selectionData[] = $selectionItem;

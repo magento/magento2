@@ -84,4 +84,9 @@
         <area>adminhtml</area>
         <class>Magento\Catalog\Test\Page\Adminhtml\CatalogProductSetAdd</class>
     </catalogProductSetAdd>
+    <catalogProductCompare>
+        <mca>catalog/product_compare/index</mca>
+        <area>product</area>
+        <class>Magento\Catalog\Test\Page\Product\CatalogProductCompare</class>
+    </catalogProductCompare>
 </page>

@@ -32,27 +32,19 @@
           data-mage-init='{"validation":{}}'
           class="form cart">
     <?php echo $this->getBlockHtml('formkey'); ?>
-    <div class="cart table wrapper<?php echo $mergedCells == 2 ? ' detailed' : ''; ?>">
+    <div class="cart table-wrapper<?php echo $mergedCells == 2 ? ' detailed' : ''; ?>">
         <table id="shopping-cart-table"
                class="cart items data"
                data-mage-init='{"shoppingCart":{"emptyCartButton": "action.clear",
-                                                "updateCartActionContainer": "#update_cart_action_container"}}'>
+               "updateCartActionContainer": "#update_cart_action_container"}}'>
             <caption><?php echo __('Shopping Cart Items') ?></caption>
             <thead>
                 <tr>
-                    <th class="col item" rowspan="<?php echo $mergedCells; ?>"><span><?php echo __('Item') ?></span></th>
-                    <th class="col price" colspan="<?php echo $mergedCells; ?>"><span><?php echo __('Unit Price') ?></span></th>
-                    <th class="col qty" rowspan="<?php echo $mergedCells; ?>"><span><?php echo __('Qty') ?></span></th>
-                    <th class="col subtotal" colspan="<?php echo $mergedCells; ?>"><span><?php echo __('Subtotal') ?></span></th>
+                    <th class="col item"><span><?php echo __('Item') ?></span></th>
+                    <th class="col price"><span><?php echo __('Price') ?></span></th>
+                    <th class="col qty"><span><?php echo __('Qty') ?></span></th>
+                    <th class="col subtotal"><span><?php echo __('Subtotal') ?></span></th>
                 </tr>
-                <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices()): ?>
-                <tr>
-                    <th class="col price excl tax"><?php echo $this->helper('Magento\Tax\Helper\Data')->getIncExcTaxLabel(false) ?></th>
-                    <th class="col price incl tax"><?php echo $this->helper('Magento\Tax\Helper\Data')->getIncExcTaxLabel(true) ?></th>
-                    <th class="col subtotal excl tax"><?php echo $this->helper('Magento\Tax\Helper\Data')->getIncExcTaxLabel(false) ?></th>
-                    <th class="col subtotal incl tax"><?php echo $this->helper('Magento\Tax\Helper\Data')->getIncExcTaxLabel(true) ?></th>
-                </tr>
-                <?php endif; ?>
             </thead>
             <?php foreach($this->getItems() as $_item): ?>
                 <?php echo $this->getItemHtml($_item) ?>
@@ -77,10 +69,3 @@
     </div>
 </form>
 <?php echo $this->getChildHtml('shopping.cart.table.after'); ?>
-<script type="text/javascript">
-    (function($) {
-        $('.cart-summary').mage('sticky', {
-            container: '.cart-container'
-        });
-    })(jQuery)
-</script>

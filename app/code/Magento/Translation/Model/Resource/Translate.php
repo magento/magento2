@@ -90,16 +90,11 @@ class Translate extends \Magento\Framework\Model\Resource\Db\AbstractDb implemen
             return array();
         }
 
-        $select = $adapter->select()->from(
-            $this->getMainTable(),
-            array('string', 'translate')
-        )->where(
-            'store_id IN (0 , :store_id)'
-        )->where(
-            'locale = :locale'
-        )->order(
-            'store_id'
-        );
+        $select = $adapter->select()
+            ->from($this->getMainTable(), array('string', 'translate'))
+            ->where('store_id IN (0 , :store_id)')
+            ->where('locale = :locale')
+            ->order('store_id');
 
         $bind = array(':locale' => (string)$locale, ':store_id' => $storeId);
 
@@ -133,15 +128,10 @@ class Translate extends \Magento\Framework\Model\Resource\Db\AbstractDb implemen
         }
 
         $bind = array(':store_id' => $storeId);
-        $select = $adapter->select()->from(
-            $this->getMainTable(),
-            array('string', 'translate')
-        )->where(
-            'string IN (?)',
-            $strings
-        )->where(
-            'store_id = :store_id'
-        );
+        $select = $adapter->select()
+            ->from($this->getMainTable(), array('string', 'translate'))
+            ->where('string IN (?)', $strings)
+            ->where('store_id = :store_id');
 
         return $adapter->fetchPairs($select, $bind);
     }

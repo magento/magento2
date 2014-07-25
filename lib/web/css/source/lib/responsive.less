@@ -23,10 +23,14 @@
 //  */
 
 // Small screens only
-.responsive-smaller(@break-point-0) {};
+.responsive-smaller(@break-point-0) {}
 
 @media all and (max-width: @break-point-0) {
     .responsive-smaller(@break-point-0);
+}
+
+@media all and (max-width: @break-point-1) {
+    .responsive-smaller(@break-point-1);
 }
 
 @media all and (min-width: @break-point-0) {

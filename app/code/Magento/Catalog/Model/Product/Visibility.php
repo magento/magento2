@@ -30,6 +30,8 @@
  */
 namespace Magento\Catalog\Model\Product;
 
+use Magento\Framework\DB\Ddl\Table;
+
 class Visibility extends \Magento\Framework\Object
 {
     const VISIBILITY_NOT_VISIBLE = 1;
@@ -167,16 +169,20 @@ class Visibility extends \Magento\Framework\Object
      *
      * @return array
      */
-    public function getFlatColums()
+    public function getFlatColumns()
     {
         $attributeCode = $this->getAttribute()->getAttributeCode();
-        $column = array('unsigned' => true, 'default' => null, 'extra' => null);
 
-        $column['type'] = \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT;
-        $column['nullable'] = true;
-        $column['comment'] = 'Catalog Product Visibility ' . $attributeCode . ' column';
-
-        return array($attributeCode => $column);
+        return [
+            $attributeCode => [
+                'unsigned' => true,
+                'default' => null,
+                'extra' => null,
+                'type' => Table::TYPE_SMALLINT,
+                'nullable' => true,
+                'comment' => 'Catalog Product Visibility ' . $attributeCode . ' column',
+            ],
+        ];
     }
 
     /**

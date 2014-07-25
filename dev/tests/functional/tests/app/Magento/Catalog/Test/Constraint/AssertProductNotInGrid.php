@@ -30,6 +30,7 @@ use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 
 /**
  * Class AssertProductNotInGrid
+ * Assert that Product absence on grid
  */
 class AssertProductNotInGrid extends AbstractConstraint
 {
@@ -41,7 +42,7 @@ class AssertProductNotInGrid extends AbstractConstraint
     protected $severeness = 'low';
 
     /**
-     * Assert that product cannot be found by name and sku.
+     * Assert that product cannot be found by name and sku
      *
      * @param FixtureInterface|FixtureInterface[] $product
      * @param CatalogProductIndex $productGrid
@@ -61,7 +62,7 @@ class AssertProductNotInGrid extends AbstractConstraint
     }
 
     /**
-     * Returns a string representation of the object.
+     * Returns a string representation of the object
      *
      * @return string
      */

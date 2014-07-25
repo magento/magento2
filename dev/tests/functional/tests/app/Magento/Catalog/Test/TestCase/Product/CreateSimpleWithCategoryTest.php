@@ -59,7 +59,7 @@ class CreateSimpleWithCategoryTest extends Functional
         //Page & Blocks
         $productListPage = Factory::getPageFactory()->getCatalogProductIndex();
         $createProductPage = Factory::getPageFactory()->getCatalogProductNew();
-        $addProductBlock = $productListPage->getProductBlock();
+        $addProductBlock = $productListPage->getGridPageActionBlock();
         $productForm = $createProductPage->getProductForm();
 
         //Steps

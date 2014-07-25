@@ -34,6 +34,11 @@
                 });
             }
         }
+        if($('.cart-summary').length){
+            $('.cart-summary').mage('sticky', {
+                container: '.cart-container'
+            });
+        }
     });
 
 })(window.jQuery);

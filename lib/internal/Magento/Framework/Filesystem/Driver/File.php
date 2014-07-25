@@ -239,17 +239,7 @@ class File implements DriverInterface
         clearstatcache();
         $globPattern = rtrim($path, '/') . '/' . ltrim($pattern, '/');
         $result = @glob($globPattern, GLOB_BRACE);
-        if ($result === false) {
-            throw new FilesystemException(
-                sprintf(
-                    'The "%s" pattern cannot be processed in "%s" path %s',
-                    $pattern,
-                    $path,
-                    $this->getWarningMessage()
-                )
-            );
-        }
-        return $result;
+        return is_array($result) ? $result : [];
     }
 
     /**

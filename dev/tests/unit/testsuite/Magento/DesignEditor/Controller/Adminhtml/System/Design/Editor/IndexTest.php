@@ -32,16 +32,16 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\DesignEditor\Controller\Adminhtml\System\Design\Editor
      */
-    protected $_model;
+    protected $model;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_objectManagerMock;
+    protected $objectManagerMock;
 
     protected function setUp()
     {
-        $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManager');
+        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManager');
 
         $request = $this->getMock('Magento\Framework\App\Request\Http', array(), array(), '', false);
         $request->expects($this->any())->method('setActionName')->will($this->returnSelf());
@@ -100,7 +100,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             'Magento\DesignEditor\Controller\Adminhtml\System\Design\Editor',
             array(
                 'request' => $request,
-                'objectManager' => $this->_objectManagerMock,
+                'objectManager' => $this->objectManagerMock,
                 'layout' => $layoutMock,
                 'invokeArgs' => array(
                     'helper' => $this->getMock('Magento\Backend\Helper\Data', array(), array(), '', false),
@@ -109,7 +109,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $this->_model = $objectManagerHelper->getObject(
+        $this->model = $objectManagerHelper->getObject(
             'Magento\DesignEditor\Controller\Adminhtml\System\Design\Editor\Index',
             $constructArguments
         );
@@ -121,7 +121,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
      * @param int $countCustomization
      * @return \Magento\Core\Model\Resource\Theme\CollectionFactory
      */
-    protected function _getThemeCollectionFactory($countCustomization)
+    protected function getThemeCollectionFactory($countCustomization)
     {
         $themeCollectionMock = $this->getMockBuilder(
             'Magento\Core\Model\Resource\Theme\Collection'
@@ -155,19 +155,18 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\DesignEditor\Controller\Adminhtml\System\Design\Editor::indexAction
      * @dataProvider indexActionDataProvider
      */
     public function testIndexAction($countCustomization)
     {
-        $this->_objectManagerMock->expects(
+        $this->objectManagerMock->expects(
             $this->any()
         )->method(
             'get'
         )->will(
-            $this->returnValueMap($this->_getObjectManagerMap($countCustomization, 'index'))
+            $this->returnValueMap($this->getObjectManagerMap($countCustomization, 'index'))
         );
-        $this->assertNull($this->_model->execute());
+        $this->assertNull($this->model->execute());
     }
 
     /**
@@ -182,7 +181,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
      * @param int $countCustomization
      * @return array
      */
-    protected function _getObjectManagerMap($countCustomization)
+    protected function getObjectManagerMap($countCustomization)
     {
         $translate = $this->getMock('Magento\Framework\TranslateInterface', array(), array(), '', false);
         $translate->expects($this->any())->method('translate')->will($this->returnSelf());
@@ -221,7 +220,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         return array(
             array(
                 'Magento\Core\Model\Resource\Theme\CollectionFactory',
-                $this->_getThemeCollectionFactory($countCustomization)
+                $this->getThemeCollectionFactory($countCustomization)
             ),
             array('Magento\Framework\TranslateInterface', $translate),
             array('Magento\Framework\App\Config\ScopeConfigInterface', $configMock),

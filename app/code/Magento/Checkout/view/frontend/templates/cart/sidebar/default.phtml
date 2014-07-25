@@ -27,14 +27,14 @@
 <?php $_item = $this->getItem() ?>
 <?php $canApplyMsrp = $this->helper('Magento\Catalog\Helper\Data')->canApplyMsrp($_item->getProduct(), \Magento\Catalog\Model\Product\Attribute\Source\Msrp\Type::TYPE_BEFORE_ORDER_CONFIRM); ?>
 <?php $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image')?>
-<li class="item product">
+<li class="item product product-item">
 <div class="product">
     <?php if ($this->hasProductUrl()): ?>
-        <a href="<?php echo $this->getProductUrl()?>" title="<?php echo $this->escapeHtml($this->getProductName()) ?>" class="product photo">
+        <a href="<?php echo $this->getProductUrl()?>" title="<?php echo $this->escapeHtml($this->getProductName()) ?>" class="product photo product-item-photo">
             <?php echo $imageBlock->init($this->getProductForThumbnail(), 'mini_cart_product_thumbnail')->toHtml() ?>
         </a>
     <?php else: ?>
-        <span class="product photo">
+        <span class="product photo product-item-photo">
             <?php echo $imageBlock->init($this->getProductForThumbnail(), 'mini_cart_product_thumbnail')->toHtml() ?>
         </span>
     <?php endif; ?>

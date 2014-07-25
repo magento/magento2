@@ -41,23 +41,23 @@ class UrlRewriteProduct extends AbstractRepository
      */
     public function __construct(array $defaultConfig = array(), array $defaultData = array())
     {
-        $this->_data['default'] = array(
+        $this->_data['default'] = [
             'config' => $defaultConfig,
-            'data' => array(
+            'data' => [
                 'url_rewrite_type' => 'For product',
-                'fields' => array(
-                    'request_path' => array(
+                'fields' => [
+                    'request_path' => [
                         'value' => '%rewritten_product_request_path%',
-                    ),
-                    'store' => array(
-                        'value' => 'Default Store View'
-                    ),
-                ),
-            ),
-        );
+                    ],
+                    'store_id' => [
+                        'value' => 'Main Website/Main Website Store/Default Store View'
+                    ],
+                ],
+            ],
+        ];
         $this->_data['product_with_temporary_redirect'] = $this->_data['default'];
-        $this->_data['product_with_temporary_redirect']['data']['fields']['options'] = array(
+        $this->_data['product_with_temporary_redirect']['data']['fields']['options'] = [
             'value' => 'Temporary (302)',
-        );
+        ];
     }
 }

@@ -52,7 +52,6 @@ class View extends \Magento\Catalog\Block\Product\View
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Tax\Model\Calculation $taxCalculation
      * @param \Magento\Framework\Stdlib\String $string
      * @param \Magento\Catalog\Helper\Product $productHelper
      * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig
@@ -67,7 +66,6 @@ class View extends \Magento\Catalog\Block\Product\View
         \Magento\Core\Helper\Data $coreData,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Tax\Model\Calculation $taxCalculation,
         \Magento\Framework\Stdlib\String $string,
         \Magento\Catalog\Helper\Product $productHelper,
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig,
@@ -83,7 +81,6 @@ class View extends \Magento\Catalog\Block\Product\View
             $coreData,
             $jsonEncoder,
             $productFactory,
-            $taxCalculation,
             $string,
             $productHelper,
             $productTypeConfig,

@@ -41,22 +41,22 @@ class UrlRewriteCategory extends AbstractRepository
      */
     public function __construct(array $defaultConfig = array(), array $defaultData = array())
     {
-        $this->_data['default'] = array(
+        $this->_data['default'] = [
             'config' => $defaultConfig,
-            'data' => array(
-                'fields' => array(
-                    'request_path' => array(
+            'data' => [
+                'fields' => [
+                    'request_path' => [
                         'value' => '%rewritten_category_request_path%',
-                    ),
-                    'store' => array(
-                        'value' => 'Default Store View',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                    'store_id' => [
+                        'value' => 'Main Website/Main Website Store/Default Store View',
+                    ],
+                ],
+            ],
+        ];
         $this->_data['category_with_permanent_redirect'] = $this->_data['default'];
-        $this->_data['category_with_permanent_redirect']['data']['fields']['options'] = array(
+        $this->_data['category_with_permanent_redirect']['data']['fields']['options'] = [
             'value' => 'Permanent (301)',
-        );
+        ];
     }
 }

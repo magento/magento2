@@ -76,14 +76,14 @@ class ContentTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($attribute));
 
 
-        $gsData = $this->getMock(
+        $googleShoppingHelper = $this->getMock(
             '\Magento\GoogleShopping\Helper\Data',
             array('cleanAtomAttribute'),
             array(),
             '',
             false
         );
-        $gsData->expects($this->once())
+        $googleShoppingHelper->expects($this->once())
             ->method('cleanAtomAttribute')
             ->with($mapValue)
             ->will($this->returnValue($mapValue));
@@ -91,7 +91,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
         $model = (new \Magento\TestFramework\Helper\ObjectManager($this))
             ->getObject(
                 '\Magento\GoogleShopping\Model\Attribute\Content',
-                array('gsProduct' => $productHelper, 'gsData' => $gsData)
+                array('gsProduct' => $productHelper, 'googleShoppingHelper' => $googleShoppingHelper)
             );
 
         $service = $this->getMock('Zend_Gdata_App', array('newContent', 'setText'), array(), '', false);

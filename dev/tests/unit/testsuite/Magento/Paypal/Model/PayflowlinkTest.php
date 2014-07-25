@@ -47,14 +47,10 @@ class PayflowlinkTest extends \PHPUnit_Framework_TestCase
     {
         $this->store = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
         $storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
-        $storeManager->expects($this->any())
-            ->method('getStore')
-            ->will($this->returnValue($this->store));
+        $storeManager->expects($this->any())->method('getStore')->will($this->returnValue($this->store));
         $this->paypalConfig = $this->getMock('Magento\Paypal\Model\Config', [], [], '', false);
         $configFactory = $this->getMock('Magento\Paypal\Model\ConfigFactory', ['create']);
-        $configFactory->expects($this->any())
-            ->method('create')
-            ->will($this->returnValue($this->paypalConfig));
+        $configFactory->expects($this->any())->method('create')->will($this->returnValue($this->paypalConfig));
         $this->payflowRequest = $this->getMock('Magento\Paypal\Model\Payflow\Request', [], [], '', false);
         $this->payflowRequest->expects($this->any())
             ->method('__call')
@@ -65,10 +61,36 @@ class PayflowlinkTest extends \PHPUnit_Framework_TestCase
                 return null;
             }));
         $requestFactory = $this->getMock('Magento\Paypal\Model\Payflow\RequestFactory', ['create']);
-        $requestFactory->expects($this->any())
-            ->method('create')
-            ->will($this->returnValue($this->payflowRequest));
+        $requestFactory->expects($this->any())->method('create')->will($this->returnValue($this->payflowRequest));
         $this->infoInstance = $this->getMock('Magento\Sales\Model\Order\Payment', [], [], '', false);
+
+        $client = $this->getMock(
+            'Magento\Framework\HTTP\ZendClient',
+            [
+                'setUri',
+                'setConfig',
+                'setMethod',
+                'setParameterPost',
+                'setHeaders',
+                'setUrlEncodeBody',
+                'request',
+                'getBody'
+            ],
+            [],
+            '',
+            false
+        );
+        $client->expects($this->any())->method('create')->will($this->returnSelf());
+        $client->expects($this->any())->method('setUri')->will($this->returnSelf());
+        $client->expects($this->any())->method('setConfig')->will($this->returnSelf());
+        $client->expects($this->any())->method('setMethod')->will($this->returnSelf());
+        $client->expects($this->any())->method('setParameterPost')->will($this->returnSelf());
+        $client->expects($this->any())->method('setHeaders')->will($this->returnSelf());
+        $client->expects($this->any())->method('setUrlEncodeBody')->will($this->returnSelf());
+        $client->expects($this->any())->method('request')->will($this->returnSelf());
+        $client->expects($this->any())->method('getBody')->will($this->returnValue('RESULT name=value&name2=value2'));
+        $clientFactory = $this->getMock('Magento\Framework\HTTP\ZendClientFactory', ['create'], [], '', false);
+        $clientFactory->expects($this->any())->method('create')->will($this->returnValue($client));
 
         $helper = new ObjectManagerHelper($this);
         $this->model = $helper->getObject(
@@ -77,30 +99,22 @@ class PayflowlinkTest extends \PHPUnit_Framework_TestCase
                 'storeManager' => $storeManager,
                 'configFactory' => $configFactory,
                 'requestFactory' => $requestFactory,
+                'httpClientFactory' => $clientFactory
             ]
         );
         $this->model->setInfoInstance($this->infoInstance);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Model\Exception
-     */
     public function testInitialize()
     {
         $order = $this->getMock('Magento\Sales\Model\Order', [], [], '', false);
-        $this->infoInstance->expects($this->any())
-            ->method('getOrder')
-            ->will($this->returnValue($order));
-        $this->paypalConfig->expects($this->once())
-            ->method('getBuildNotationCode')
+        $this->infoInstance->expects($this->any())->method('getOrder')->will($this->returnValue($order));
+        $this->infoInstance->expects($this->any())->method('setAdditionalInformation')->will($this->returnSelf());
+        $this->paypalConfig->expects($this->once())->method('getBuildNotationCode')
             ->will($this->returnValue('build notation code'));
-        $this->payflowRequest->expects($this->once())
-            ->method('setData')
-            ->with('BNCODE', 'build notation code')
+        $this->payflowRequest->expects($this->once())->method('setData')->with('BNCODE', 'build notation code')
             ->will($this->returnSelf());
-        $this->model->initialize(
-            \Magento\Paypal\Model\Config::PAYMENT_ACTION_AUTH,
-            new \Magento\Framework\Object()
-        );
+        $stateObject = new \Magento\Framework\Object();
+        $this->model->initialize(\Magento\Paypal\Model\Config::PAYMENT_ACTION_AUTH, $stateObject);
     }
 }

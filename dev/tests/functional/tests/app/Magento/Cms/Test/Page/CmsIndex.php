@@ -76,6 +76,18 @@ class CmsIndex extends FrontendPage
             'locator' => '[data-block="minicart"]',
             'strategy' => 'css selector',
         ],
+        'compareProductsBlock' => [
+            'name' => 'compareProductsBlock',
+            'class' => 'Magento\Catalog\Test\Block\Product\Compare\Sidebar',
+            'locator' => '.sidebar.sidebar-additional',
+            'strategy' => 'css selector',
+        ],
+        'mainContentBlock' => [
+            'name' => 'mainContentBlock',
+            'class' => 'Magento\Cms\Test\Block\Page',
+            'locator' => '#maincontent',
+            'strategy' => 'css selector',
+        ],
     ];
 
     /**
@@ -132,5 +144,20 @@ class CmsIndex extends FrontendPage
     public function getCartSidebarBlock()
     {
         return $this->getBlockInstance('cartSidebarBlock');
+    }
+
+    /**
+     * @return \Magento\Catalog\Test\Block\Product\Compare\Sidebar
+     */
+    public function getCompareProductsBlock()
+    {
+        return $this->getBlockInstance('compareProductsBlock');
+    }
+    /**
+     * @return \Magento\Cms\Test\Block\Page
+     */
+    public function getMainContentBlock()
+    {
+        return $this->getBlockInstance('mainContentBlock');
     }
 }

@@ -158,10 +158,15 @@ class QuoteDetailsBuilderTest extends \PHPUnit_Framework_TestCase
             ]
         ];
 
+        $taxClassKeyId = [
+            'type' => 'id',
+            'value' => 1,
+        ];
+
         $data = [
             'data1' => [
                 QuoteDetails::KEY_BILLING_ADDRESS => $addressData,
-                QuoteDetails::KEY_CUSTOMER_TAX_CLASS_ID => 1,
+                QuoteDetails::KEY_CUSTOMER_TAX_CLASS_KEY => $taxClassKeyId,
                 QuoteDetails::KEY_CUSTOMER_ID => 1
             ],
             'data2' => [
@@ -171,8 +176,8 @@ class QuoteDetailsBuilderTest extends \PHPUnit_Framework_TestCase
             'dataMerged' => [
                 QuoteDetails::KEY_BILLING_ADDRESS => $addressData,
                 QuoteDetails::KEY_SHIPPING_ADDRESS => $addressData,
-                QuoteDetails::KEY_CUSTOMER_TAX_CLASS_ID => 1,
                 QuoteDetails::KEY_CUSTOMER_ID => 1,
+                QuoteDetails::KEY_CUSTOMER_TAX_CLASS_KEY => $taxClassKeyId,
                 QuoteDetails::KEY_ITEMS => $items
             ]
         ];

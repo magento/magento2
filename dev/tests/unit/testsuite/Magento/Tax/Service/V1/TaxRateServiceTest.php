@@ -268,6 +268,7 @@ class TaxRateServiceTest extends \PHPUnit_Framework_TestCase
         $taxRate = $this->taxRateBuilder
             ->setId(2)
             ->setCode('Rate-Code')
+            ->setCountryId('US')
             ->setPercentageRate(0.1)
             ->setRegionId('TX')
             ->create();

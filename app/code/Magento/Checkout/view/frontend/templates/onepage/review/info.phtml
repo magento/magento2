@@ -25,7 +25,7 @@
 /** @var $this \Magento\Checkout\Block\Onepage\Review\Info */
 ?>
 <?php echo $this->getChildHtml('items_before'); ?>
-<div id="checkout-review-table-wrapper" class="review table wrapper">
+<div id="checkout-review-table-wrapper" class="review table-wrapper">
     <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices()): $colspan = $rowspan = 2; else: $colspan = $rowspan = 1; endif; ?>
     <table class="data table order review items" id="checkout-review-table">
         <caption>Order Review</caption>

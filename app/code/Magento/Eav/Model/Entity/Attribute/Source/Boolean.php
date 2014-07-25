@@ -108,16 +108,21 @@ class Boolean extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      *
      * @return array
      */
-    public function getFlatColums()
+    public function getFlatColumns()
     {
         $attributeCode = $this->getAttribute()->getAttributeCode();
-        $column = array('unsigned' => false, 'default' => null, 'extra' => null);
-        $column['type'] = \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT;
-        $column['length'] = 1;
-        $column['nullable'] = true;
-        $column['comment'] = $attributeCode . ' column';
 
-        return array($attributeCode => $column);
+        return [
+            $attributeCode => [
+                'unsigned' => false,
+                'default' => null,
+                'extra' => null,
+                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                'length' => 1,
+                'nullable' => true,
+                'comment' => $attributeCode . ' column',
+            ],
+        ];
     }
 
     /**
@@ -162,5 +167,59 @@ class Boolean extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
         }
 
         return parent::getIndexOptionText($value);
+    }
+
+    /**
+     * Add Value Sort To Collection Select
+     *
+     * @param \Magento\Eav\Model\Entity\Collection\AbstractCollection $collection
+     * @param string $dir
+     *
+     * @return \Magento\Eav\Model\Entity\Attribute\Source\Boolean
+     */
+    public function addValueSortToCollection($collection, $dir = \Magento\Framework\DB\Select::SQL_ASC)
+    {
+        $attributeCode = $this->getAttribute()->getAttributeCode();
+        $attributeId = $this->getAttribute()->getId();
+        $attributeTable = $this->getAttribute()->getBackend()->getTable();
+
+        if ($this->getAttribute()->isScopeGlobal()) {
+            $tableName = $attributeCode . '_t';
+            $collection->getSelect()
+                ->joinLeft(
+                    array($tableName => $attributeTable),
+                    "e.entity_id={$tableName}.entity_id"
+                    . " AND {$tableName}.attribute_id='{$attributeId}'"
+                    . " AND {$tableName}.store_id='0'",
+                    array()
+                );
+            $valueExpr = $tableName . '.value';
+        } else {
+            $valueTable1 = $attributeCode . '_t1';
+            $valueTable2 = $attributeCode . '_t2';
+            $collection->getSelect()
+                ->joinLeft(
+                    array($valueTable1 => $attributeTable),
+                    "e.entity_id={$valueTable1}.entity_id"
+                    . " AND {$valueTable1}.attribute_id='{$attributeId}'"
+                    . " AND {$valueTable1}.store_id='0'",
+                    array()
+                )
+                ->joinLeft(
+                    array($valueTable2 => $attributeTable),
+                    "e.entity_id={$valueTable2}.entity_id"
+                    . " AND {$valueTable2}.attribute_id='{$attributeId}'"
+                    . " AND {$valueTable2}.store_id='{$collection->getStoreId()}'",
+                    array()
+                );
+            $valueExpr = $collection->getConnection()->getCheckSql(
+                $valueTable2 . '.value_id > 0',
+                $valueTable2 . '.value',
+                $valueTable1 . '.value'
+            );
+        }
+
+        $collection->getSelect()->order($valueExpr . ' ' . $dir);
+        return $this;
     }
 }

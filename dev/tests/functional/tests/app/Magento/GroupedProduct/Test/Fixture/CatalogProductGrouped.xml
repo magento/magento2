@@ -343,7 +343,13 @@
             <attribute_code>website_ids</attribute_code>
             <backend_type>virtual</backend_type>
             <default_value>Main Website</default_value>
+            <group>websites</group>
         </website_ids>
+        <price>
+            <attribute_code>price</attribute_code>
+            <backend_type>virtual</backend_type>
+            <source>'Magento\Catalog\Test\Fixture\CatalogProductSimple\Price</source>
+        </price>
     </fields>
     <data_set>
         <sku></sku>
@@ -360,5 +366,6 @@
         <input_prefix>product</input_prefix>
     </data_config>
     <repository_class>Magento\Catalog\Test\Repository\CatalogProductGrouped</repository_class>
-    <handler_interface>Magento\Catalog\Test\Handler\CatalogProductGrouped\CatalogProductGroupedInterface</handler_interface>
+    <handler_interface>Magento\Catalog\Test\Handler\CatalogProductGrouped\CatalogProductGroupedInterface
+    </handler_interface>
 </fixture>

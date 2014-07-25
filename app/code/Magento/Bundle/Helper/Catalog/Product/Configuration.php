@@ -28,7 +28,7 @@ use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
 use Magento\Framework\App\Helper\AbstractHelper;
 
 /**
- * Helper for fetching properties by product configurational item
+ * Helper for fetching properties by product configuration item
  */
 class Configuration extends AbstractHelper implements ConfigurationInterface
 {
@@ -37,7 +37,7 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
      *
      * @var \Magento\Core\Helper\Data
      */
-    protected $_coreData;
+    protected $coreData;
 
     /**
      * Catalog product configuration
@@ -47,9 +47,11 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
     protected $productConfiguration;
 
     /**
+     * Escaper
+     *
      * @var \Magento\Framework\Escaper
      */
-    protected $_escaper;
+    protected $escaper;
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
@@ -64,8 +66,8 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
         \Magento\Framework\Escaper $escaper
     ) {
         $this->productConfiguration = $productConfiguration;
-        $this->_coreData = $coreData;
-        $this->_escaper = $escaper;
+        $this->coreData = $coreData;
+        $this->escaper = $escaper;
         parent::__construct($context);
     }
 
@@ -74,10 +76,9 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
      *
      * @param \Magento\Catalog\Model\Product $product
      * @param int $selectionId
-     *
      * @return float
      */
-    public function getSelectionQty($product, $selectionId)
+    public function getSelectionQty(\Magento\Catalog\Model\Product $product, $selectionId)
     {
         $selectionQty = $product->getCustomOption('selection_qty_' . $selectionId);
         if ($selectionQty) {
@@ -91,19 +92,21 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
      *
      * @param ItemInterface $item
      * @param \Magento\Catalog\Model\Product $selectionProduct
-     *
      * @return float
      */
-    public function getSelectionFinalPrice(ItemInterface $item, $selectionProduct)
+    public function getSelectionFinalPrice(ItemInterface $item, \Magento\Catalog\Model\Product $selectionProduct)
     {
         $selectionProduct->unsetData('final_price');
-        /** @var \Magento\Bundle\Model\Product\Price $priceModel */
-        $priceModel = $item->getProduct()->getPriceModel();
-        return $priceModel->getSelectionFinalTotalPrice(
-            $item->getProduct(),
+
+        $product = $item->getProduct();
+        /** @var \Magento\Bundle\Model\Product\Price $price */
+        $price = $product->getPriceModel();
+
+        return $price->getSelectionFinalTotalPrice(
+            $product,
             $selectionProduct,
-            $item->getQty() * 1,
-            $this->getSelectionQty($item->getProduct(), $selectionProduct->getSelectionId()),
+            $item->getQty(),
+            $this->getSelectionQty($product, $selectionProduct->getSelectionId()),
             false,
             true
         );
@@ -151,11 +154,10 @@ class Configuration extends AbstractHelper implements ConfigurationInterface
                         foreach ($bundleSelections as $bundleSelection) {
                             $qty = $this->getSelectionQty($product, $bundleSelection->getSelectionId()) * 1;
                             if ($qty) {
-                                $option['value'][] = $qty . ' x ' . $this->_escaper->escapeHtml(
-                                    $bundleSelection->getName()
-                                ) . ' ' . $this->_coreData->currency(
-                                    $this->getSelectionFinalPrice($item, $bundleSelection)
-                                );
+                                $option['value'][] = $qty . ' x '
+                                    . $this->escaper->escapeHtml($bundleSelection->getName())
+                                    . ' '
+                                    . $this->coreData->currency($this->getSelectionFinalPrice($item, $bundleSelection));
                             }
                         }
 

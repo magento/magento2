@@ -93,16 +93,20 @@ class Price extends \Magento\Catalog\Model\Product\Attribute\Source\Msrp\Type
      *
      * @return array
      */
-    public function getFlatColums()
+    public function getFlatColumns()
     {
         $attributeType = $this->getAttribute()->getBackendType();
         $attributeCode = $this->getAttribute()->getAttributeCode();
-        $column = array('unsigned' => false, 'default' => null, 'extra' => null);
 
-        $column['type'] = $this->_eavResourceHelper->getDdlTypeByColumnType($attributeType);
-        $column['nullable'] = true;
-
-        return array($attributeCode => $column);
+        return [
+            $attributeCode => [
+                'unsigned' => false,
+                'default' => null,
+                'extra' => null,
+                'type' => $this->_eavResourceHelper->getDdlTypeByColumnType($attributeType),
+                'nullable' => true,
+            ],
+        ];
     }
 
     /**

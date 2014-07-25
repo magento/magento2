@@ -1,4 +1,3 @@
-Find/Feed/Block/Adminhtml
 Magento/Adminhtml
 Magento/Authorizenet/Model
 Magento/Backend
@@ -126,3 +125,4 @@ Magento/Usps/Model/Carrier
 Magento/Dhl/Model
 Magento/Shipping/Model
 Magento/Catalog/Service/V1/Category
+Magento/UrlRedirect/Model

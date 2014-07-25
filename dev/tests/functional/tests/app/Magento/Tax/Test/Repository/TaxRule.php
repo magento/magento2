@@ -47,6 +47,8 @@ class TaxRule extends AbstractRepository
                     1 => 'us_ny_rate_8_375',
                 ]
             ],
+            'priority' => '0',
+            'position' => '0',
         ];
 
         $this->_data['us_ca_ny_rule'] = [
@@ -80,6 +82,8 @@ class TaxRule extends AbstractRepository
                     0 => 'uk_full_tax_rate',
                 ],
             ],
+            'priority' => '0',
+            'position' => '0',
         ];
 
         $this->_data['tax_rule_default'] = [

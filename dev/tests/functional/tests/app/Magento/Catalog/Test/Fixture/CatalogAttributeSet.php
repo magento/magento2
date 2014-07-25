@@ -27,8 +27,8 @@ namespace Magento\Catalog\Test\Fixture;
 use Mtf\Fixture\InjectableFixture;
 
 /**
- * Class CatalogProductTemplate
- * Product Template fixture
+ * Class CatalogAttributeSet
+ * Catalog Attribute Set fixture
  */
 class CatalogAttributeSet extends InjectableFixture
 {
@@ -88,6 +88,17 @@ class CatalogAttributeSet extends InjectableFixture
         'source' => 'Magento\Catalog\Test\Fixture\CatalogAttributeSet\SkeletonSet',
     ];
 
+    protected $assigned_attributes = [
+        'attribute_code' => 'assigned_attributes',
+        'backend_type' => 'virtual',
+        'source' => 'Magento\Catalog\Test\Fixture\CatalogAttributeSet\AssignedAttributes',
+    ];
+
+    protected $group = [
+        'attribute_code' => 'group',
+        'backend_type' => 'virtual',
+    ];
+
     public function getAttributeSetId()
     {
         return $this->getData('attribute_set_id');
@@ -111,5 +122,15 @@ class CatalogAttributeSet extends InjectableFixture
     public function getSkeletonSet()
     {
         return $this->getData('skeleton_set');
+    }
+
+    public function getAssignedAttributes()
+    {
+        return $this->getData('assigned_attributes');
+    }
+
+    public function getGroup()
+    {
+        return $this->getData('group');
     }
 }

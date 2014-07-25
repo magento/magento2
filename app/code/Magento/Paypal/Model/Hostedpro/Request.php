@@ -208,11 +208,12 @@ class Request extends \Magento\Framework\Object
      */
     protected function _getShippingAddress(\Magento\Framework\Object $address)
     {
+        $region = $address->getRegionCode() ? $address->getRegionCode() : $address->getRegion();
         $request = array(
             'first_name' => $address->getFirstname(),
             'last_name' => $address->getLastname(),
             'city' => $address->getCity(),
-            'state' => $address->getRegionCode() ? $address->getRegionCode() : $address->getCity(),
+            'state' => $region ? $region : $address->getCity(),
             'zip' => $address->getPostcode(),
             'country' => $address->getCountry()
         );
@@ -234,11 +235,12 @@ class Request extends \Magento\Framework\Object
      */
     protected function _getBillingAddress(\Magento\Framework\Object $address)
     {
+        $region = $address->getRegionCode() ? $address->getRegionCode() : $address->getRegion();
         $request = array(
             'billing_first_name' => $address->getFirstname(),
             'billing_last_name' => $address->getLastname(),
             'billing_city' => $address->getCity(),
-            'billing_state' => $address->getRegionCode() ? $address->getRegionCode() : $address->getCity(),
+            'billing_state' => $region ? $region : $address->getCity(),
             'billing_zip' => $address->getPostcode(),
             'billing_country' => $address->getCountry()
         );

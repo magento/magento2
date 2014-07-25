@@ -28,21 +28,21 @@
 ?>
 
 <?php if( $this->getCollection() && $this->count()): ?>
-<div class="block reviews dashboard">
-    <div class="title">
+<div class="block block-reviews-dashboard">
+    <div class="block-title">
         <strong><?php echo __('My Recent Reviews') ?></strong>
-        <a class="action view" href="<?php echo $this->getAllReviewsUrl() ?>"><span><?php echo __('View All Reviews') ?></span></a>
+        <a class="action view" href="<?php echo $this->getAllReviewsUrl() ?>"><span><?php echo __('View All') ?></span></a>
     </div>
-    <div class="content">
+    <div class="block-content">
         <ol class="items">
         <?php foreach ($this->getCollection() as $_review): ?>
             <li class="item">
-                <strong class="product name"><a href="<?php echo $this->getReviewUrl($_review->getReviewId()) ?>"><?php echo $this->escapeHtml($_review->getName()) ?></a></strong>
+                <strong class="product-name"><a href="<?php echo $this->getReviewUrl($_review->getReviewId()) ?>"><?php echo $this->escapeHtml($_review->getName()) ?></a></strong>
                 <?php if($_review->getSum()): ?>
                 <?php $rating = $_review->getSum() / $_review->getCount() ?>
-                    <div class="rating summary">
+                    <div class="rating-summary">
                          <span class="label"><span><?php echo __('Rating') ?>:</span></span>
-                         <div class="rating result" title="<?php echo $rating; ?>%">
+                         <div class="rating-result" title="<?php echo $rating; ?>%">
                              <span style="width:<?php echo $rating; ?>%"><span><?php echo $rating; ?>%</span></span>
                          </div>
                      </div>

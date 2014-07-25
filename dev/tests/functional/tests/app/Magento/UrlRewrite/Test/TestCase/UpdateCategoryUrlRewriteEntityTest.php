@@ -104,7 +104,7 @@ class UpdateCategoryUrlRewriteEntityTest extends Injectable
      * @param UrlRewrite $urlRewrite
      * @return void
      */
-    public function testUpdateCategoryUrlRewrite(UrlRewrite $categoryRedirect, UrlRewrite $urlRewrite)
+    public function test(UrlRewrite $categoryRedirect, UrlRewrite $urlRewrite)
     {
         //Steps
         $this->urlRewriteIndex->open();

@@ -34,6 +34,8 @@ class Grid extends ParentGrid
 {
     /**
      * Initialize block elements
+     *
+     * @var array
      */
     protected $filters = [
         'name' => [
@@ -51,6 +53,20 @@ class Grid extends ParentGrid
         ],
         'price_to' => [
             'selector' => '#productGrid_product_filter_price_to'
+        ],
+        'qty_from' => [
+            'selector' => '#productGrid_product_filter_qty_from'
+        ],
+        'qty_to' => [
+            'selector' => '#productGrid_product_filter_qty_to'
+        ],
+        'visibility' => [
+            'selector' => '#productGrid_product_filter_visibility',
+            'input' => 'select'
+        ],
+        'status' => [
+            'selector' => '#productGrid_product_filter_status',
+            'input' => 'select'
         ]
     ];
 
@@ -60,7 +76,7 @@ class Grid extends ParentGrid
      * @param array $items
      * @return void
      */
-    public function updateAttributes(array $items = array())
+    public function updateAttributes(array $items = [])
     {
         $this->massaction('Update Attributes', $items);
     }

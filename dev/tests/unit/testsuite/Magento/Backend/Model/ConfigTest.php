@@ -242,6 +242,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         );
 
         $website = $this->getMock('Magento\Store\Model\Website', array(), array(), '', false);
+        $website->expects($this->any())->method('getCode')->will($this->returnValue('website_code'));
         $this->_storeManager->expects($this->any())->method('getWebsite')->will($this->returnValue($website));
         $this->_storeManager->expects($this->any())->method('getWebsites')->will($this->returnValue(array($website)));
         $this->_storeManager->expects($this->any())->method('isSingleStoreMode')->will($this->returnValue(true));
@@ -268,7 +269,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 'group_id' => null,
                 'scope' => 'websites',
                 'scope_id' => 0,
-                'scope_code' => 'website',
+                'scope_code' => 'website_code',
                 'field_config' => null,
                 'fieldset_data' => array('key' => null)
             )

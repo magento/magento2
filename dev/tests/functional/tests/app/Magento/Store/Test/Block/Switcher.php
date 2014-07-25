@@ -44,7 +44,19 @@ class Switcher extends Block
      */
     public function selectStoreView($name)
     {
-        $this->_rootElement->find($this->dropDownButton)->click();
-        $this->_rootElement->find($name, Locator::SELECTOR_LINK_TEXT)->click();
+        if ($this->_rootElement->find($this->dropDownButton)->isVisible() && ($this->getStoreView() !== $name)) {
+            $this->_rootElement->find($this->dropDownButton)->click();
+            $this->_rootElement->find($name, Locator::SELECTOR_LINK_TEXT)->click();
+        }
+    }
+
+    /**
+     * Get store view
+     *
+     * @return string
+     */
+    public function getStoreView()
+    {
+        return $this->_rootElement->find($this->dropDownButton)->getText();
     }
 }

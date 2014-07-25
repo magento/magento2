@@ -33,45 +33,48 @@ namespace Magento\Framework\View\Element\Html;
 class Link extends \Magento\Framework\View\Element\Template
 {
     /**
+     * @var array
+     */
+    protected $allowedAttributes = [
+        'href',
+        'title',
+        'charset',
+        'name',
+        'hreflang',
+        'rel',
+        'rev',
+        'accesskey',
+        'shape',
+        'coords',
+        'tabindex',
+        'onfocus',
+        'onblur', // %attrs
+        'id',
+        'class',
+        'style', // %coreattrs
+        'lang',
+        'dir', // %i18n
+        'onclick',
+        'ondblclick',
+        'onmousedown',
+        'onmouseup',
+        'onmouseover',
+        'onmousemove',
+        'onmouseout',
+        'onkeypress',
+        'onkeydown',
+        'onkeyup' // %events
+    ];
+
+    /**
      * Prepare link attributes as serialized and formatted string
      *
      * @return string
      */
     public function getLinkAttributes()
     {
-        $allow = array(
-            'href',
-            'title',
-            'charset',
-            'name',
-            'hreflang',
-            'rel',
-            'rev',
-            'accesskey',
-            'shape',
-            'coords',
-            'tabindex',
-            'onfocus',
-            'onblur', // %attrs
-            'id',
-            'class',
-            'style', // %coreattrs
-            'lang',
-            'dir', // %i18n
-            'onclick',
-            'ondblclick',
-            'onmousedown',
-            'onmouseup',
-            'onmouseover',
-            'onmousemove',
-            'onmouseout',
-            'onkeypress',
-            'onkeydown',
-            'onkeyup' // %events
-        );
-
         $attributes = array();
-        foreach ($allow as $attribute) {
+        foreach ($this->allowedAttributes as $attribute) {
             $value = $this->getDataUsingMethod($attribute);
             if (!is_null($value)) {
                 $attributes[$attribute] = $this->escapeHtml($value);

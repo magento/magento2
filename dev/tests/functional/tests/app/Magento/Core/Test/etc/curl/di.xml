@@ -25,4 +25,5 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
     <preference for="\Magento\Core\Test\Handler\SystemVariable\SystemVariableInterface" type="\Magento\Core\Test\Handler\SystemVariable\Curl" />
+    <preference for="\Magento\Core\Test\Handler\ConfigData\ConfigDataInterface" type="\Magento\Core\Test\Handler\ConfigData\Curl" />
 </config>

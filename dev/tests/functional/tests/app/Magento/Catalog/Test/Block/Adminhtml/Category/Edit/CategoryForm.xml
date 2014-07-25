@@ -66,6 +66,15 @@
             <default_sort_by>
                 <input>select</input>
             </default_sort_by>
+            <display_mode>
+                <input>select</input>
+            </display_mode>
+            <landing_page>
+                <input>select</input>
+            </landing_page>
+            <is_anchor>
+                <input>select</input>
+            </is_anchor>
         </fields>
     </display_setting>
     <custom_design>

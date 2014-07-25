@@ -216,5 +216,15 @@
         <type>flat</type>
         <entity_type>eav_attribute_set</entity_type>
         <collection>Magento\Catalog\Model\Resource\Product\Link\Product\Collection</collection>
+        <fields>
+            <skeleton_set>
+                <attribute_code>skeleton_set</attribute_code>
+                <backend_type>virtual</backend_type>
+            </skeleton_set>
+            <assigned_attributes>
+                <attribute_code>assigned_attributes</attribute_code>
+                <backend_type>virtual</backend_type>
+            </assigned_attributes>
+        </fields>
     </catalogAttributeSet>
 </fixture>

@@ -28,6 +28,7 @@ use Mtf\Factory\Factory;
 
 /**
  * Class BundleFixed
+ * Fixture for Bundle fixed
  */
 class BundleFixed extends Bundle
 {
@@ -38,101 +39,99 @@ class BundleFixed extends Bundle
      */
     protected function _initData()
     {
-        $this->_data['checkout'] = array(
-            'prices' => array(
+        $this->_data['checkout'] = [
+            'prices' => [
                 'price_from' => 110,
                 'price_to' => 120
-            ),
-            'selection' => array(
-                'bundle_item_0' => 'assigned_product_0'
-            )
-        );
+            ],
+            'selection' => [0]
+        ];
         parent::_initData();
         $this->_data['fields'] = array_merge_recursive(
             $this->_data['fields'],
-            array(
-                'sku_type' => array(
+            [
+                'sku_type' => [
                     'value' => 'Fixed',
                     'input_value' => '1',
                     'group' => static::GROUP_PRODUCT_DETAILS,
                     'input' => 'select'
-                ),
-                'price_type' => array(
+                ],
+                'price_type' => [
                     'value' => 'Fixed',
                     'input_value' => '1',
                     'group' => static::GROUP_PRODUCT_DETAILS,
                     'input' => 'select'
-                ),
-                'price' => array(
+                ],
+                'price' => [
                     'value' => 100,
                     'group' => static::GROUP_PRODUCT_DETAILS
-                ),
-                'tax_class_id' => array(
+                ],
+                'tax_class_id' => [
                     'value' => 'Taxable Goods',
                     'input_value' => '2',
                     'group' => static::GROUP_PRODUCT_DETAILS,
                     'input' => 'select'
-                ),
-                'weight_type' => array(
+                ],
+                'weight_type' => [
                     'value' => 'Fixed',
                     'input_value' => '1',
                     'group' => static::GROUP_PRODUCT_DETAILS,
                     'input' => 'select'
-                ),
-                'weight' => array(
+                ],
+                'weight' => [
                     'value' => '1',
                     'group' => static::GROUP_PRODUCT_DETAILS
-                ),
-                'product_website_1' => array(
+                ],
+                'product_website_1' => [
                     'value' => 'Yes',
-                    'input_value' => array(1),
+                    'input_value' => [1],
                     'group' => static::GROUP_PRODUCT_WEBSITE,
                     'input' => 'checkbox',
                     'input_name' => 'website_ids'
-                ),
-                'shipment_type' => array(
+                ],
+                'shipment_type' => [
                     'value' => 'Separately',
                     'input_value' => '1',
                     'group' => static::GROUP_PRODUCT_DETAILS,
                     'input' => 'select'
-                ),
-                'bundle_selections' => array(
-                    'value' => array(
-                        'bundle_options' => array(
-                            'bundle_item_0' => array(
+                ],
+                'bundle_selections' => [
+                    'value' => [
+                        'bundle_options' => [
+                            [
                                 'title' => 'Drop-down Option',
                                 'type' => 'Drop-down',
                                 'required' => 'Yes',
-                                'assigned_products' => array(
-                                    'assigned_product_0' => array(
-                                        'search_data' => array(
+                                'assigned_products' => [
+                                    [
+                                        'search_data' => [
                                             'name' => '%item1_simple1::getName%',
-                                        ),
-                                        'data' => array(
+                                        ],
+                                        'data' => [
                                             'selection_price_value' => 10,
                                             'selection_price_type' => 'Fixed',
                                             'selection_qty' => 1,
                                             'product_id' => '%item1_simple1::getProductId%'
-                                        )
-                                    ),
-                                    'assigned_product_1' => array(
-                                        'search_data' => array(
+                                        ]
+                                    ],
+                                    [
+                                        'search_data' => [
                                             'name' => '%item1_virtual2::getName%',
-                                        ),
-                                        'data' => array(
+                                        ],
+                                        'data' => [
                                             'selection_price_value' => 20,
                                             'selection_price_type' => 'Percent',
                                             'selection_qty' => 1,
                                             'product_id' => '%item1_virtual2::getProductId%'
-                                        )
-                                    )
-                                )
-                            )
-                        )
-                    ),
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ],
                     'group' => static::GROUP
-                )
-            )
+                ]
+            ]
         );
         $this->_repository = Factory::getRepositoryFactory()
             ->getMagentoBundleBundle($this->_dataConfig, $this->_data);

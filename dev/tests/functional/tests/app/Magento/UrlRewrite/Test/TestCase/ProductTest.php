@@ -37,6 +37,7 @@ class ProductTest extends Functional
     /**
      * Adding temporary redirect for product
      *
+     * @return void
      * @ZephyrId MAGETWO-12409
      */
     public function testUrlRewriteCreation()
@@ -80,6 +81,7 @@ class ProductTest extends Functional
      * @param string $requestUrl
      * @param string $targetUrl
      * @param string $message
+     * @return void
      */
     protected function assertUrlRedirect($requestUrl, $targetUrl, $message = '')
     {

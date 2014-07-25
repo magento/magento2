@@ -39,7 +39,11 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $productFactoryMock = $this->getMock(
-            'Magento\Catalog\Model\ProductFactory', array('create'), array(), '', false
+            'Magento\Catalog\Model\ProductFactory',
+            array('create'),
+            array(),
+            '',
+            false
         );
         $this->productMock = $this->getMock('Magento\Catalog\Model\Product', array(), array(), '', false);
         $productFactoryMock->expects($this->once())->method('create')->will($this->returnValue($this->productMock));

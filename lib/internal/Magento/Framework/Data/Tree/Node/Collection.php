@@ -165,7 +165,14 @@ class Collection implements \ArrayAccess, \IteratorAggregate
      */
     public function lastNode()
     {
-        return !empty($this->_nodes) ? $this->_nodes[count($this->_nodes) - 1] : null;
+        if (!empty($this->_nodes)) {
+            $result = end($this->_nodes);
+            reset($this->_nodes);
+        } else {
+            $result = null;
+        }
+
+        return $result;
     }
 
     /**

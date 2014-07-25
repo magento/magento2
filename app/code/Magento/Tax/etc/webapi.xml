@@ -49,6 +49,12 @@
             <resource ref="Magento_Tax::manage_tax"/>
         </resources>
     </route>
+    <route url="/V1/taxRate/search" method="PUT">
+        <service class="Magento\Tax\Service\V1\TaxRateServiceInterface" method="searchTaxRates"/>
+        <resources>
+            <resource ref="Magento_Tax::manage_tax"/>
+        </resources>
+    </route>
     <route url="/V1/taxRules" method="POST">
         <service class="Magento\Tax\Service\V1\TaxRuleServiceInterface" method="createTaxRule"/>
         <resources>

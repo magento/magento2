@@ -28,20 +28,13 @@
         <type>eav</type>
         <entity_type>catalog_product</entity_type>
         <product_type>grouped</product_type>
-        <collection>Magento\GroupedProduct\Model\Resource\Product\Collection</collection>
+        <collection>Magento\GroupedProduct\Model\Resource\Product\Type\Grouped\AssociatedProductsCollection</collection>
         <identifier>sku</identifier>
         <fields>
             <id>
                 <attribute_code>id</attribute_code>
                 <backend_type>virtual</backend_type>
             </id>
-            <grouped_products>
-                <attribute_code>grouped_selections</attribute_code>
-                <backend_type>virtual</backend_type>
-                <is_required>1</is_required>
-                <group>grouped</group>
-                <fixture>Magento\GroupedProduct\Test\Fixture\Grouped\Selections</fixture>
-            </grouped_products>
         </fields>
         <data_set>
             <sku />

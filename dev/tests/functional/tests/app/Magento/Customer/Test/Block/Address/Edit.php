@@ -32,7 +32,6 @@ use Magento\Customer\Test\Fixture\Address;
 /**
  * Class Edit
  * Customer address edit block
- *
  */
 class Edit extends Form
 {
@@ -58,7 +57,7 @@ class Edit extends Form
     public function editCustomerAddress(Address $fixture)
     {
         $this->fill($fixture);
-        $this->_rootElement->find($this->saveAddress, Locator::SELECTOR_CSS)->click();
+        $this->saveAddress();
     }
 
     /**
@@ -69,6 +68,16 @@ class Edit extends Form
     public function saveVatID($vat)
     {
         $this->_rootElement->find($this->vatFieldId, Locator::SELECTOR_ID)->setValue($vat);
-        $this->_rootElement->find($this->saveAddress, Locator::SELECTOR_CSS)->click();
+        $this->saveAddress();
+    }
+
+    /**
+     * Click on save address button
+     *
+     * @return void
+     */
+    public function saveAddress()
+    {
+        $this->_rootElement->find($this->saveAddress)->click();
     }
 }

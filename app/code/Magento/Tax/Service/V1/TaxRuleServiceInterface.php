@@ -76,4 +76,13 @@ interface TaxRuleServiceInterface
      * @throws \Magento\Framework\Exception\InputException If there is a problem with the input
      */
     public function searchTaxRules(\Magento\Framework\Service\V1\Data\SearchCriteria $searchCriteria);
+
+    /**
+     * Get rates by customerTaxClassId and productTaxClassId
+     *
+     * @param int $customerTaxClassId
+     * @param int $productTaxClassId
+     * @return \Magento\Tax\Service\V1\Data\TaxRate[]
+     */
+    public function getRatesByCustomerAndProductTaxClassId($customerTaxClassId, $productTaxClassId);
 }

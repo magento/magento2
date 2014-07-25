@@ -30,11 +30,25 @@ use Mtf\Client\Element;
 use Mtf\Client\Element\Locator;
 
 /**
+ * Class Links
  * Page Top Links block
- *
  */
 class Links extends Block
 {
+    /**
+     * Selector for qty products on compare
+     *
+     * @var string
+     */
+    protected $qtyCompareProducts = '.compare .counter.qty';
+
+    /**
+     * Link selector
+     *
+     * @var string
+     */
+    protected $link = '//a[contains(text(), "%s")]';
+
     /**
      * Open Link by title
      *
@@ -43,9 +57,10 @@ class Links extends Block
      */
     public function openLink($linkTitle)
     {
-        $this->_rootElement
-            ->find('//a[contains(text(), "' . $linkTitle . '")]', Locator::SELECTOR_XPATH)
-            ->click();
+        $link = $this->_rootElement->find(sprintf($this->link, $linkTitle), Locator::SELECTOR_XPATH);
+        if ($link->isVisible()) {
+            $link->click();
+        }
     }
 
     /**
@@ -56,8 +71,33 @@ class Links extends Block
      */
     public function isLinkVisible($linkTitle)
     {
-        return $this->_rootElement
-            ->find('//a[contains(text(), "' . $linkTitle . '")]', Locator::SELECTOR_XPATH)
-            ->isVisible();
+        return $this->_rootElement->find(sprintf($this->link, $linkTitle), Locator::SELECTOR_XPATH)->isVisible();
+    }
+
+    /**
+     * Get the number of products added to compare list
+     *
+     * @return string|bool
+     */
+    public function getQtyInCompareList()
+    {
+        $compareProductLink = $this->_rootElement->find($this->qtyCompareProducts);
+        if ($compareProductLink->isVisible()) {
+            preg_match_all('/^\d+/', $compareProductLink->getText(), $matches);
+            return $matches[0][0];
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Get url from link
+     *
+     * @param string $linkTitle
+     * @return string
+     */
+    public function getLinkUrl($linkTitle)
+    {
+        return trim($this->_rootElement->find(sprintf($this->link, $linkTitle), Locator::SELECTOR_XPATH)->getUrl());
     }
 }

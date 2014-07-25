@@ -168,7 +168,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
      * Verify that correct fields of address has been set
      *
      * @param \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Quote\Address $address
-     * @param $itemData
+     * @param $addressData
      */
     public function verifyAddress(\Magento\Sales\Model\Quote\Address $address, $addressData)
     {
@@ -223,7 +223,13 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
     public function collectDataProvider()
     {
         $data = [];
-        $data['price_incl_tax_weee_taxable_unit'] = [
+
+        // 1. This collector does not compute tax.  Instead it sets up various fields for the tax calculation
+        // 2. When the Weee is not taxable, this collector will change the address data as follows:
+        // 2a. If Weee is included in the subtotal, the 'subtotal' fields are populated
+        // 2b. Otherwise the 'weee_amount' fields are populated
+
+        $data['price_incl_tax_weee_taxable_unit_included_in_subtotal'] = [
             'tax_config' => [
                 'priceIncludesTax' => true,
                 'getCalculationAgorithm' => Calculation::CALC_UNIT_BASE,
@@ -247,27 +253,19 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                 'customer_tax_rate' => 8.25,
             ],
             'item' => [
-                'weee_tax_applied_amount' => 9.24,
-                'base_weee_tax_applied_amount' => 9.24,
-                'weee_tax_applied_row_amount' => 18.48,
-                'base_weee_tax_applied_row_amnt' => 18.48,
+                'weee_tax_applied_amount' => 10,
+                'base_weee_tax_applied_amount' => 10,
+                'weee_tax_applied_row_amount' => 20,
+                'base_weee_tax_applied_row_amnt' => 20,
                 'weee_tax_applied_amount_incl_tax' => 10,
                 'base_weee_tax_applied_amount_incl_tax' => 10,
                 'weee_tax_applied_row_amount_incl_tax' => 20,
                 'base_weee_tax_applied_row_amnt_incl_tax' => 20,
-                'extra_taxable_amount' => 10,
-                'base_extra_taxable_amount' => 10,
-                'extra_row_taxable_amount' => 20,
-                'base_extra_row_taxable_amount' => 20,
             ],
             'item_qty' => 2,
             'address_data' => [
                 'subtotal_incl_tax' => 20,
                 'base_subtotal_incl_tax' => 20,
-                'weee' => 18.48,
-                'base_weee' => 18.48,
-                'extra_tax_amount' => 0,
-                'base_extra_tax_amount' => 0,
             ]
         ];
 
@@ -295,18 +293,350 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                 'customer_tax_rate' => 8.25,
             ],
             'item' => [
-                'weee_tax_applied_amount' => 9.24,
-                'base_weee_tax_applied_amount' => 9.24,
-                'weee_tax_applied_row_amount' => 18.48,
-                'base_weee_tax_applied_row_amnt' => 18.48,
+                'weee_tax_applied_amount' => 10,
+                'base_weee_tax_applied_amount' => 10,
+                'weee_tax_applied_row_amount' => 20,
+                'base_weee_tax_applied_row_amnt' => 20,
                 'weee_tax_applied_amount_incl_tax' => 10,
                 'base_weee_tax_applied_amount_incl_tax' => 10,
                 'weee_tax_applied_row_amount_incl_tax' => 20,
                 'base_weee_tax_applied_row_amnt_incl_tax' => 20,
-                'extra_taxable_amount' => 10,
-                'base_extra_taxable_amount' => 10,
-                'extra_row_taxable_amount' => 20,
-                'base_extra_row_taxable_amount' => 20,
+            ],
+            'item_qty' => 2,
+            'address_data' => [
+                'subtotal_incl_tax' => 20,
+                'base_subtotal_incl_tax' => 20,
+            ]
+        ];
+
+        $data['price_excl_tax_weee_taxable_unit_included_in_subtotal'] = [
+            'tax_config' => [
+                'priceIncludesTax' => false,
+                'getCalculationAgorithm' => Calculation::CALC_UNIT_BASE,
+            ],
+            'weee_config' => [
+                'isEnabled' => true,
+                'includeInSubtotal' => true,
+                'isTaxable' => true,
+                'getApplied' => [],
+                'getProductWeeeAttributes' => [
+                    new \Magento\Framework\Object(
+                        [
+                            'name' => 'Recycling Fee',
+                            'amount' => 10,
+                        ]
+                    ),
+                ],
+            ],
+            'tax_rates' => [
+                'store_tax_rate' => 8.25,
+                'customer_tax_rate' => 8.25,
+            ],
+            'item' => [
+                'weee_tax_applied_amount' => 10,
+                'base_weee_tax_applied_amount' => 10,
+                'weee_tax_applied_row_amount' => 20,
+                'base_weee_tax_applied_row_amnt' => 20,
+                'weee_tax_applied_amount_incl_tax' => 10,
+                'base_weee_tax_applied_amount_incl_tax' => 10,
+                'weee_tax_applied_row_amount_incl_tax' => 20,
+                'base_weee_tax_applied_row_amnt_incl_tax' => 20,
+            ],
+            'item_qty' => 2,
+            'address_data' => [
+                'subtotal_incl_tax' => 20,
+                'base_subtotal_incl_tax' => 20,
+            ]
+        ];
+
+        $data['price_incl_tax_weee_non_taxable_unit_included_in_subtotal'] = [
+            'tax_config' => [
+                'priceIncludesTax' => true,
+                'getCalculationAgorithm' => Calculation::CALC_UNIT_BASE,
+            ],
+            'weee_config' => [
+                'isEnabled' => true,
+                'includeInSubtotal' => true,
+                'isTaxable' => false,
+                'getApplied' => [],
+                'getProductWeeeAttributes' => [
+                    new \Magento\Framework\Object(
+                        [
+                            'name' => 'Recycling Fee',
+                            'amount' => 10,
+                        ]
+                    ),
+                ],
+            ],
+            'tax_rates' => [
+                'store_tax_rate' => 8.25,
+                'customer_tax_rate' => 8.25,
+            ],
+            'item' => [
+                'weee_tax_applied_amount' => 10,
+                'base_weee_tax_applied_amount' => 10,
+                'weee_tax_applied_row_amount' => 20,
+                'base_weee_tax_applied_row_amnt' => 20,
+                'weee_tax_applied_amount_incl_tax' => 10,
+                'base_weee_tax_applied_amount_incl_tax' => 10,
+                'weee_tax_applied_row_amount_incl_tax' => 20,
+                'base_weee_tax_applied_row_amnt_incl_tax' => 20,
+            ],
+            'item_qty' => 2,
+            'address_data' => [
+                'subtotal_incl_tax' => 20,
+                'base_subtotal_incl_tax' => 20,
+                'subtotal' => 20,
+                'base_subtotal' => 20,
+                'weee_amount' => 0,
+                'base_weee_amount' => 0,
+            ]
+        ];
+
+        $data['price_excl_tax_weee_non_taxable_unit_included_in_subtotal'] = [
+            'tax_config' => [
+                'priceIncludesTax' => false,
+                'getCalculationAgorithm' => Calculation::CALC_UNIT_BASE,
+            ],
+            'weee_config' => [
+                'isEnabled' => true,
+                'includeInSubtotal' => true,
+                'isTaxable' => false,
+                'getApplied' => [],
+                'getProductWeeeAttributes' => [
+                    new \Magento\Framework\Object(
+                        [
+                            'name' => 'Recycling Fee',
+                            'amount' => 10,
+                        ]
+                    ),
+                ],
+            ],
+            'tax_rates' => [
+                'store_tax_rate' => 8.25,
+                'customer_tax_rate' => 8.25,
+            ],
+            'item' => [
+                'weee_tax_applied_amount' => 10,
+                'base_weee_tax_applied_amount' => 10,
+                'weee_tax_applied_row_amount' => 20,
+                'base_weee_tax_applied_row_amnt' => 20,
+                'weee_tax_applied_amount_incl_tax' => 10,
+                'base_weee_tax_applied_amount_incl_tax' => 10,
+                'weee_tax_applied_row_amount_incl_tax' => 20,
+                'base_weee_tax_applied_row_amnt_incl_tax' => 20,
+            ],
+            'item_qty' => 2,
+            'address_data' => [
+                'subtotal_incl_tax' => 20,
+                'base_subtotal_incl_tax' => 20,
+                'subtotal' => 20,
+                'base_subtotal' => 20,
+                'weee_amount' => 0,
+                'base_weee_amount' => 0,
+            ]
+        ];
+
+        $data['price_incl_tax_weee_taxable_row_included_in_subtotal'] = [
+            'tax_config' => [
+                'priceIncludesTax' => true,
+                'getCalculationAgorithm' => Calculation::CALC_ROW_BASE,
+            ],
+            'weee_config' => [
+                'isEnabled' => true,
+                'includeInSubtotal' => true,
+                'isTaxable' => true,
+                'getApplied' => [],
+                'getProductWeeeAttributes' => [
+                    new \Magento\Framework\Object(
+                        [
+                            'name' => 'Recycling Fee',
+                            'amount' => 10,
+                        ]
+                    ),
+                ],
+            ],
+            'tax_rates' => [
+                'store_tax_rate' => 8.25,
+                'customer_tax_rate' => 8.25,
+            ],
+            'item' => [
+                'weee_tax_applied_amount' => 10,
+                'base_weee_tax_applied_amount' => 10,
+                'weee_tax_applied_row_amount' => 20,
+                'base_weee_tax_applied_row_amnt' => 20,
+                'weee_tax_applied_amount_incl_tax' => 10,
+                'base_weee_tax_applied_amount_incl_tax' => 10,
+                'weee_tax_applied_row_amount_incl_tax' => 20,
+                'base_weee_tax_applied_row_amnt_incl_tax' => 20,
+            ],
+            'item_qty' => 2,
+            'address_data' => [
+                'subtotal_incl_tax' => 20,
+                'base_subtotal_incl_tax' => 20,
+            ]
+        ];
+
+        $data['price_excl_tax_weee_taxable_row_included_in_subtotal'] = [
+            'tax_config' => [
+                'priceIncludesTax' => false,
+                'getCalculationAgorithm' => Calculation::CALC_ROW_BASE,
+            ],
+            'weee_config' => [
+                'isEnabled' => true,
+                'includeInSubtotal' => true,
+                'isTaxable' => true,
+                'getApplied' => [],
+                'getProductWeeeAttributes' => [
+                    new \Magento\Framework\Object(
+                        [
+                            'name' => 'Recycling Fee',
+                            'amount' => 10,
+                        ]
+                    ),
+                ],
+            ],
+            'tax_rates' => [
+                'store_tax_rate' => 8.25,
+                'customer_tax_rate' => 8.25,
+            ],
+            'item' => [
+                'weee_tax_applied_amount' => 10,
+                'base_weee_tax_applied_amount' => 10,
+                'weee_tax_applied_row_amount' => 20,
+                'base_weee_tax_applied_row_amnt' => 20,
+                'weee_tax_applied_amount_incl_tax' => 10,
+                'base_weee_tax_applied_amount_incl_tax' => 10,
+                'weee_tax_applied_row_amount_incl_tax' => 20,
+                'base_weee_tax_applied_row_amnt_incl_tax' => 20,
+            ],
+            'item_qty' => 2,
+            'address_data' => [
+                'subtotal_incl_tax' => 20,
+                'base_subtotal_incl_tax' => 20,
+            ]
+        ];
+
+        $data['price_incl_tax_weee_non_taxable_row_included_in_subtotal'] = [
+            'tax_config' => [
+                'priceIncludesTax' => true,
+                'getCalculationAgorithm' => Calculation::CALC_ROW_BASE,
+            ],
+            'weee_config' => [
+                'isEnabled' => true,
+                'includeInSubtotal' => true,
+                'isTaxable' => false,
+                'getApplied' => [],
+                'getProductWeeeAttributes' => [
+                    new \Magento\Framework\Object(
+                        [
+                            'name' => 'Recycling Fee',
+                            'amount' => 10,
+                        ]
+                    ),
+                ],
+            ],
+            'tax_rates' => [
+                'store_tax_rate' => 8.25,
+                'customer_tax_rate' => 8.25,
+            ],
+            'item' => [
+                'weee_tax_applied_amount' => 10,
+                'base_weee_tax_applied_amount' => 10,
+                'weee_tax_applied_row_amount' => 20,
+                'base_weee_tax_applied_row_amnt' => 20,
+                'weee_tax_applied_amount_incl_tax' => 10,
+                'base_weee_tax_applied_amount_incl_tax' => 10,
+                'weee_tax_applied_row_amount_incl_tax' => 20,
+                'base_weee_tax_applied_row_amnt_incl_tax' => 20,
+            ],
+            'item_qty' => 2,
+            'address_data' => [
+                'subtotal_incl_tax' => 20,
+                'base_subtotal_incl_tax' => 20,
+                'subtotal' => 20,
+                'base_subtotal' => 20,
+                'weee_amount' => 0,
+                'base_weee_amount' => 0,
+            ]
+        ];
+
+        $data['price_excl_tax_weee_non_taxable_row_included_in_subtotal'] = [
+            'tax_config' => [
+                'priceIncludesTax' => false,
+                'getCalculationAgorithm' => Calculation::CALC_ROW_BASE,
+            ],
+            'weee_config' => [
+                'isEnabled' => true,
+                'includeInSubtotal' => true,
+                'isTaxable' => false,
+                'getApplied' => [],
+                'getProductWeeeAttributes' => [
+                    new \Magento\Framework\Object(
+                        [
+                            'name' => 'Recycling Fee',
+                            'amount' => 10,
+                        ]
+                    ),
+                ],
+            ],
+            'tax_rates' => [
+                'store_tax_rate' => 8.25,
+                'customer_tax_rate' => 8.25,
+            ],
+            'item' => [
+                'weee_tax_applied_amount' => 10,
+                'base_weee_tax_applied_amount' => 10,
+                'weee_tax_applied_row_amount' => 20,
+                'base_weee_tax_applied_row_amnt' => 20,
+                'weee_tax_applied_amount_incl_tax' => 10,
+                'base_weee_tax_applied_amount_incl_tax' => 10,
+                'weee_tax_applied_row_amount_incl_tax' => 20,
+                'base_weee_tax_applied_row_amnt_incl_tax' => 20,
+            ],
+            'item_qty' => 2,
+            'address_data' => [
+                'subtotal_incl_tax' => 20,
+                'base_subtotal_incl_tax' => 20,
+                'subtotal' => 20,
+                'base_subtotal' => 20,
+                'weee_amount' => 0,
+                'base_weee_amount' => 0,
+            ]
+        ];
+
+        $data['price_excl_tax_weee_non_taxable_row_not_included_in_subtotal'] = [
+            'tax_config' => [
+                'priceIncludesTax' => false,
+                'getCalculationAgorithm' => Calculation::CALC_ROW_BASE,
+            ],
+            'weee_config' => [
+                'isEnabled' => true,
+                'includeInSubtotal' => false,
+                'isTaxable' => false,
+                'getApplied' => [],
+                'getProductWeeeAttributes' => [
+                    new \Magento\Framework\Object(
+                        [
+                            'name' => 'Recycling Fee',
+                            'amount' => 10,
+                        ]
+                    ),
+                ],
+            ],
+            'tax_rates' => [
+                'store_tax_rate' => 8.25,
+                'customer_tax_rate' => 8.25,
+            ],
+            'item' => [
+                'weee_tax_applied_amount' => 10,
+                'base_weee_tax_applied_amount' => 10,
+                'weee_tax_applied_row_amount' => 20,
+                'base_weee_tax_applied_row_amnt' => 20,
+                'weee_tax_applied_amount_incl_tax' => 10,
+                'base_weee_tax_applied_amount_incl_tax' => 10,
+                'weee_tax_applied_row_amount_incl_tax' => 20,
+                'base_weee_tax_applied_row_amnt_incl_tax' => 20,
             ],
             'item_qty' => 2,
             'address_data' => [
@@ -314,337 +644,11 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
                 'base_subtotal_incl_tax' => 20,
                 'subtotal' => 0,
                 'base_subtotal' => 0,
-                'weee_amount' => 18.48,
-                'base_weee_amount' => 18.48,
+                'weee_amount' => 20,
+                'base_weee_amount' => 20,
             ]
         ];
 
-        $data['price_excl_tax_weee_taxable_unit'] = [
-            'tax_config' => [
-                'priceIncludesTax' => false,
-                'getCalculationAgorithm' => Calculation::CALC_UNIT_BASE,
-            ],
-            'weee_config' => [
-                'isEnabled' => true,
-                'includeInSubtotal' => true,
-                'isTaxable' => true,
-                'getApplied' => [],
-                'getProductWeeeAttributes' => [
-                    new \Magento\Framework\Object(
-                        [
-                            'name' => 'Recycling Fee',
-                            'amount' => 10,
-                        ]
-                    ),
-                ],
-            ],
-            'tax_rates' => [
-                'store_tax_rate' => 8.25,
-                'customer_tax_rate' => 8.25,
-            ],
-            'item' => [
-                'weee_tax_applied_amount' => 10,
-                'base_weee_tax_applied_amount' => 10,
-                'weee_tax_applied_row_amount' => 20,
-                'base_weee_tax_applied_row_amnt' => 20,
-                'weee_tax_applied_amount_incl_tax' => 10.83,
-                'base_weee_tax_applied_amount_incl_tax' => 10.83,
-                'weee_tax_applied_row_amount_incl_tax' => 21.66,
-                'base_weee_tax_applied_row_amnt_incl_tax' => 21.66,
-                'extra_taxable_amount' => 10,
-                'base_extra_taxable_amount' => 10,
-                'extra_row_taxable_amount' => 20,
-                'base_extra_row_taxable_amount' => 20,
-            ],
-            'item_qty' => 2,
-        ];
-
-        $data['price_incl_tax_weee_taxable_unit'] = [
-            'tax_config' => [
-                'priceIncludesTax' => true,
-                'getCalculationAgorithm' => Calculation::CALC_UNIT_BASE,
-            ],
-            'weee_config' => [
-                'isEnabled' => true,
-                'includeInSubtotal' => true,
-                'isTaxable' => true,
-                'getApplied' => [],
-                'getProductWeeeAttributes' => [
-                    new \Magento\Framework\Object(
-                        [
-                            'name' => 'Recycling Fee',
-                            'amount' => 10,
-                        ]
-                    ),
-                ],
-            ],
-            'tax_rates' => [
-                'store_tax_rate' => 8.25,
-                'customer_tax_rate' => 8.25,
-            ],
-            'item' => [
-                'weee_tax_applied_amount' => 9.24,
-                'base_weee_tax_applied_amount' => 9.24,
-                'weee_tax_applied_row_amount' => 18.48,
-                'base_weee_tax_applied_row_amnt' => 18.48,
-                'weee_tax_applied_amount_incl_tax' => 10,
-                'base_weee_tax_applied_amount_incl_tax' => 10,
-                'weee_tax_applied_row_amount_incl_tax' => 20,
-                'base_weee_tax_applied_row_amnt_incl_tax' => 20,
-                'extra_taxable_amount' => 10,
-                'base_extra_taxable_amount' => 10,
-                'extra_row_taxable_amount' => 20,
-                'base_extra_row_taxable_amount' => 20,
-            ],
-            'item_qty' => 2,
-            'address_data' => [
-                'subtotal_incl_tax' => 20,
-                'base_subtotal_incl_tax' => 20,
-                'extra_subtotal_amount' => 18.48,
-                'base_extra_subtotal_amount' => 18.48,
-                'extra_tax_amount' => 1.52,
-                'base_extra_tax_amount' => 1.52,
-            ]
-        ];
-
-        $data['price_incl_tax_weee_non_taxable_unit'] = [
-            'tax_config' => [
-                'priceIncludesTax' => true,
-                'getCalculationAgorithm' => Calculation::CALC_UNIT_BASE,
-            ],
-            'weee_config' => [
-                'isEnabled' => true,
-                'includeInSubtotal' => true,
-                'isTaxable' => false,
-                'getApplied' => [],
-                'getProductWeeeAttributes' => [
-                    new \Magento\Framework\Object(
-                        [
-                            'name' => 'Recycling Fee',
-                            'amount' => 10,
-                        ]
-                    ),
-                ],
-            ],
-            'tax_rates' => [
-                'store_tax_rate' => 8.25,
-                'customer_tax_rate' => 8.25,
-            ],
-            'item' => [
-                'weee_tax_applied_amount' => 10,
-                'base_weee_tax_applied_amount' => 10,
-                'weee_tax_applied_row_amount' => 20,
-                'base_weee_tax_applied_row_amnt' => 20,
-                'weee_tax_applied_amount_incl_tax' => 10,
-                'base_weee_tax_applied_amount_incl_tax' => 10,
-                'weee_tax_applied_row_amount_incl_tax' => 20,
-                'base_weee_tax_applied_row_amnt_incl_tax' => 20,
-                'extra_taxable_amount' => 0,
-                'base_extra_taxable_amount' => 0,
-                'extra_row_taxable_amount' => 0,
-                'base_extra_row_taxable_amount' => 0,
-            ],
-            'item_qty' => 2,
-        ];
-
-        $data['price_excl_tax_weee_non_taxable_unit'] = [
-            'tax_config' => [
-                'priceIncludesTax' => false,
-                'getCalculationAgorithm' => Calculation::CALC_UNIT_BASE,
-            ],
-            'weee_config' => [
-                'isEnabled' => true,
-                'includeInSubtotal' => true,
-                'isTaxable' => false,
-                'getApplied' => [],
-                'getProductWeeeAttributes' => [
-                    new \Magento\Framework\Object(
-                        [
-                            'name' => 'Recycling Fee',
-                            'amount' => 10,
-                        ]
-                    ),
-                ],
-            ],
-            'tax_rates' => [
-                'store_tax_rate' => 8.25,
-                'customer_tax_rate' => 8.25,
-            ],
-            'item' => [
-                'weee_tax_applied_amount' => 10,
-                'base_weee_tax_applied_amount' => 10,
-                'weee_tax_applied_row_amount' => 20,
-                'base_weee_tax_applied_row_amnt' => 20,
-                'weee_tax_applied_amount_incl_tax' => 10,
-                'base_weee_tax_applied_amount_incl_tax' => 10,
-                'weee_tax_applied_row_amount_incl_tax' => 20,
-                'base_weee_tax_applied_row_amnt_incl_tax' => 20,
-                'extra_taxable_amount' => 0,
-                'base_extra_taxable_amount' => 0,
-                'extra_row_taxable_amount' => 0,
-                'base_extra_row_taxable_amount' => 0,
-            ],
-            'item_qty' => 2,
-        ];
-        $data['price_incl_tax_weee_taxable_row'] = [
-            'tax_config' => [
-                'priceIncludesTax' => true,
-                'getCalculationAgorithm' => Calculation::CALC_ROW_BASE,
-            ],
-            'weee_config' => [
-                'isEnabled' => true,
-                'includeInSubtotal' => true,
-                'isTaxable' => true,
-                'getApplied' => [],
-                'getProductWeeeAttributes' => [
-                    new \Magento\Framework\Object(
-                        [
-                            'name' => 'Recycling Fee',
-                            'amount' => 10,
-                        ]
-                    ),
-                ],
-            ],
-            'tax_rates' => [
-                'store_tax_rate' => 8.25,
-                'customer_tax_rate' => 8.25,
-            ],
-            'item' => [
-                'weee_tax_applied_amount' => 9.24,
-                'base_weee_tax_applied_amount' => 9.24,
-                'weee_tax_applied_row_amount' => 18.48,
-                'base_weee_tax_applied_row_amnt' => 18.48,
-                'weee_tax_applied_amount_incl_tax' => 10,
-                'base_weee_tax_applied_amount_incl_tax' => 10,
-                'weee_tax_applied_row_amount_incl_tax' => 20,
-                'base_weee_tax_applied_row_amnt_incl_tax' => 20,
-                'extra_taxable_amount' => 10,
-                'base_extra_taxable_amount' => 10,
-                'extra_row_taxable_amount' => 20,
-                'base_extra_row_taxable_amount' => 20,
-            ],
-            'item_qty' => 2,
-        ];
-
-        $data['price_excl_tax_weee_taxable_row'] = [
-            'tax_config' => [
-                'priceIncludesTax' => false,
-                'getCalculationAgorithm' => Calculation::CALC_ROW_BASE,
-            ],
-            'weee_config' => [
-                'isEnabled' => true,
-                'includeInSubtotal' => true,
-                'isTaxable' => true,
-                'getApplied' => [],
-                'getProductWeeeAttributes' => [
-                    new \Magento\Framework\Object(
-                        [
-                            'name' => 'Recycling Fee',
-                            'amount' => 10,
-                        ]
-                    ),
-                ],
-            ],
-            'tax_rates' => [
-                'store_tax_rate' => 8.25,
-                'customer_tax_rate' => 8.25,
-            ],
-            'item' => [
-                'weee_tax_applied_amount' => 10,
-                'base_weee_tax_applied_amount' => 10,
-                'weee_tax_applied_row_amount' => 20,
-                'base_weee_tax_applied_row_amnt' => 20,
-                'weee_tax_applied_amount_incl_tax' => 10.83,
-                'base_weee_tax_applied_amount_incl_tax' => 10.83,
-                'weee_tax_applied_row_amount_incl_tax' => 21.65,
-                'base_weee_tax_applied_row_amnt_incl_tax' => 21.65,
-                'extra_taxable_amount' => 10,
-                'base_extra_taxable_amount' => 10,
-                'extra_row_taxable_amount' => 20,
-                'base_extra_row_taxable_amount' => 20,
-            ],
-            'item_qty' => 2,
-        ];
-
-        $data['price_incl_tax_weee_non_taxable_row'] = [
-            'tax_config' => [
-                'priceIncludesTax' => true,
-                'getCalculationAgorithm' => Calculation::CALC_ROW_BASE,
-            ],
-            'weee_config' => [
-                'isEnabled' => true,
-                'includeInSubtotal' => true,
-                'isTaxable' => false,
-                'getApplied' => [],
-                'getProductWeeeAttributes' => [
-                    new \Magento\Framework\Object(
-                        [
-                            'name' => 'Recycling Fee',
-                            'amount' => 10,
-                        ]
-                    ),
-                ],
-            ],
-            'tax_rates' => [
-                'store_tax_rate' => 8.25,
-                'customer_tax_rate' => 8.25,
-            ],
-            'item' => [
-                'weee_tax_applied_amount' => 10,
-                'base_weee_tax_applied_amount' => 10,
-                'weee_tax_applied_row_amount' => 20,
-                'base_weee_tax_applied_row_amnt' => 20,
-                'weee_tax_applied_amount_incl_tax' => 10,
-                'base_weee_tax_applied_amount_incl_tax' => 10,
-                'weee_tax_applied_row_amount_incl_tax' => 20,
-                'base_weee_tax_applied_row_amnt_incl_tax' => 20,
-                'extra_taxable_amount' => 0,
-                'base_extra_taxable_amount' => 0,
-                'extra_row_taxable_amount' => 0,
-                'base_extra_row_taxable_amount' => 0,
-            ],
-            'item_qty' => 2,
-        ];
-
-        $data['price_excl_tax_weee_non_taxable_row'] = [
-            'tax_config' => [
-                'priceIncludesTax' => false,
-                'getCalculationAgorithm' => Calculation::CALC_ROW_BASE,
-            ],
-            'weee_config' => [
-                'isEnabled' => true,
-                'includeInSubtotal' => true,
-                'isTaxable' => false,
-                'getApplied' => [],
-                'getProductWeeeAttributes' => [
-                    new \Magento\Framework\Object(
-                        [
-                            'name' => 'Recycling Fee',
-                            'amount' => 10,
-                        ]
-                    ),
-                ],
-            ],
-            'tax_rates' => [
-                'store_tax_rate' => 8.25,
-                'customer_tax_rate' => 8.25,
-            ],
-            'item' => [
-                'weee_tax_applied_amount' => 10,
-                'base_weee_tax_applied_amount' => 10,
-                'weee_tax_applied_row_amount' => 20,
-                'base_weee_tax_applied_row_amnt' => 20,
-                'weee_tax_applied_amount_incl_tax' => 10,
-                'base_weee_tax_applied_amount_incl_tax' => 10,
-                'weee_tax_applied_row_amount_incl_tax' => 20,
-                'base_weee_tax_applied_row_amnt_incl_tax' => 20,
-                'extra_taxable_amount' => 0,
-                'base_extra_taxable_amount' => 0,
-                'extra_row_taxable_amount' => 0,
-                'base_extra_row_taxable_amount' => 0,
-            ],
-            'item_qty' => 2,
-        ];
         return $data;
     }
 }

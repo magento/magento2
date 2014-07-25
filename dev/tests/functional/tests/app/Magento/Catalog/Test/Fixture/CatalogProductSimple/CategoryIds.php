@@ -42,13 +42,14 @@ class CategoryIds implements FixtureInterface
     protected $data;
 
     /**
-     * New categories
+     * Fixtures of category
      *
      * @var array
      */
-    protected $category;
+    protected $categories;
 
     /**
+     * @constructor
      * @param FixtureFactory $fixtureFactory
      * @param array $params
      * @param array $data
@@ -66,24 +67,20 @@ class CategoryIds implements FixtureInterface
         ) {
             /** @var CatalogCategory $category */
             $category = $data['category'];
-            $this->data[] = [
-                'id' => $category->getId(),
-                'name' => $category->getName(),
-            ];
-            $this->category[] = $category;
-        } elseif (isset($data['presets']) && $data['presets'] !== '-') {
-
+            if (!$category->hasData('id')) {
+                $category->persist();
+            }
+            $this->data[] = $category->getName();
+            $this->categories[] = $category;
+        } elseif (isset($data['presets'])) {
             $presets = explode(',', $data['presets']);
             foreach ($presets as $preset) {
                 $category = $fixtureFactory->createByCode('catalogCategory', ['dataSet' => $preset]);
                 $category->persist();
 
                 /** @var CatalogCategory $category */
-                $this->data[] = [
-                    'id' => $category->getId(),
-                    'name' => $category->getName(),
-                ];
-                $this->category[] = $category;
+                $this->data[] = $category->getName();
+                $this->categories[] = $category;
             }
         }
     }
@@ -101,8 +98,8 @@ class CategoryIds implements FixtureInterface
     /**
      * Return prepared data set
      *
-     * @param $key [optional]
-     * @return mixed
+     * @param string|null $key
+     * @return array
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -126,8 +123,23 @@ class CategoryIds implements FixtureInterface
      *
      * @return array
      */
-    public function getCategory()
+    public function getCategories()
     {
-        return $this->category;
+        return $this->categories;
+    }
+
+    /**
+     * Get id of categories
+     *
+     * @return array
+     */
+    public function getIds()
+    {
+        $ids = [];
+        foreach ($this->categories as $category) {
+            $ids[] = $category->getId();
+        }
+
+        return $ids;
     }
 }

@@ -771,6 +771,13 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     protected $_curlFactory;
 
     /**
+     * API call HTTP headers
+     *
+     * @var array
+     */
+    protected $_headers = array();
+
+    /**
      * @param \Magento\Customer\Helper\Address $customerAddress
      * @param \Magento\Framework\Logger $logger
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
@@ -1157,23 +1164,29 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
     }
 
     /**
-     * Retrieve headers for request.
-     *
-     * @return array
-     */
-    protected function _getHeaderListForRequest()
-    {
-        return array();
-    }
-
-    /**
      * Additional response processing.
+     * Hack to cut off length from API type response params.
      *
-     * @param  array $response
+     * @param array $response
      * @return array
      */
     protected function _postProcessResponse($response)
     {
+        foreach ($response as $key => $value) {
+            $pos = strpos($key, '[');
+
+            if ($pos === false) {
+                continue;
+            }
+
+            unset($response[$key]);
+
+            if ($pos !== 0) {
+                $modifiedKey = substr($key, 0, $pos);
+                $response[$modifiedKey] = $value;
+            }
+        }
+
         return $response;
     }
 
@@ -1212,7 +1225,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
                 \Zend_Http_Client::POST,
                 $this->getApiEndpoint(),
                 '1.1',
-                $this->_getHeaderListForRequest(),
+                $this->_headers,
                 $this->_buildQuery($request)
             );
             $response = $http->read();
@@ -1364,7 +1377,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
             $errorMessage = $this->_formatErrorMessage(
                 $errorCode,
                 $response["L_SHORTMESSAGE{$i}"],
-                $response["L_LONGMESSAGE{$i}"]
+                isset($response["L_LONGMESSAGE{$i}"]) ? $response["L_LONGMESSAGE{$i}"] : null
             );
             $errors[] = array (
                 'code' => $errorCode,

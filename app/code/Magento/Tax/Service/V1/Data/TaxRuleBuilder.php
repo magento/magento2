@@ -133,11 +133,11 @@ class TaxRuleBuilder extends AbstractObjectBuilder
     /**
      * Set calculate subtotal.
      *
-     * @param int $calculateSubtotal
+     * @param bool $calculateSubtotal
      * @return $this
      */
     public function setCalculateSubtotal($calculateSubtotal)
     {
-        return $this->_set(TaxRule::CALCULATE_SUBTOTAL, (int)$calculateSubtotal);
+        return $this->_set(TaxRule::CALCULATE_SUBTOTAL, (bool)$calculateSubtotal);
     }
 }

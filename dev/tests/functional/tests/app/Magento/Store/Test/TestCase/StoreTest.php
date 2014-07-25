@@ -44,22 +44,23 @@ class StoreTest extends Functional
      */
     public function testCreateNewLocalizedStoreView()
     {
-        $storeFixture = Factory::getFixtureFactory()->getMagentoStoreStore();
+        $objectManager = Factory::getObjectManager();
+        $storeFixture = $objectManager->create('\Magento\Store\Test\Fixture\Store', ['dataSet' => 'german']);
 
         $storeListPage = Factory::getPageFactory()->getAdminSystemStore();
         $storeListPage->open();
-        $storeListPage->getPageActionsBlock()->addStoreView();
+        $storeListPage->getGridPageActions()->addStoreView();
 
         $newStorePage = Factory::getPageFactory()->getAdminSystemStoreNewStore();
-        $newStorePage->getFormBlock()->fill($storeFixture);
-        $newStorePage->getPageActionsBlock()->clickSave();
+        $newStorePage->getStoreForm()->fill($storeFixture);
+        $newStorePage->getFormPageActions()->save();
         $storeListPage->getMessagesBlock()->assertSuccessMessage();
         $this->assertContains(
             'The store view has been saved',
             $storeListPage->getMessagesBlock()->getSuccessMessages()
         );
         $this->assertTrue(
-            $storeListPage->getGridBlock()->isStoreExists($storeFixture->getName())
+            $storeListPage->getStoreGrid()->isStoreExists($storeFixture->getName())
         );
 
         $cachePage = Factory::getPageFactory()->getAdminCache();

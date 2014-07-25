@@ -30,7 +30,7 @@ $_gridPopupBlock->setRowClickCallback('function(){}');
 /** @var $_helper \Magento\Core\Helper\Data */
 $_helper = $this->helper('Magento\Core\Helper\Data');
 ?>
-<div id="grouped-product-container" data-mage-init='{"groupedProduct":{"gridPopup":"window.<?php echo $_gridPopupBlock->getJsObjectName() ?>"}}'>
+<div id="grouped-product-container" data-mage-init='{"groupedProduct":{"gridPopup":"[data-grid-id=<?php echo $_gridPopupBlock->getId() ?>]"}}'>
     <div class="no-products-message">
         <?php echo __('There are no grouped products.')?>
     </div>

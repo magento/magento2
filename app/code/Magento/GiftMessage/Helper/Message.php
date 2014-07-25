@@ -135,7 +135,7 @@ class Message extends \Magento\Core\Helper\Data
             ->setId('giftmessage_form_' . $this->_nextId++)
             ->setDontDisplayContainer($dontDisplayContainer)
             ->setEntity($entity)
-            ->setType($type)->toHtml();
+            ->setCheckoutType($type)->toHtml();
     }
 
     /**

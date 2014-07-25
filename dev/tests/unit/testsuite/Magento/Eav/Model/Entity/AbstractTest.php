@@ -31,13 +31,18 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
      */
     protected $_model;
 
+    /** @var  \Magento\Eav\Model\Config */
+    protected $eavConfig;
+
     protected function setUp()
     {
+
+        $this->eavConfig = $this->getMock('Magento\Eav\Model\Config', array(), array(), '', false);
         $this->_model = $this->getMockForAbstractClass(
             'Magento\Eav\Model\Entity\AbstractEntity',
             array(
                 $this->getMock('Magento\Framework\App\Resource', array(), array(), '', false),
-                $this->getMock('Magento\Eav\Model\Config', array(), array(), '', false),
+                $this->eavConfig,
                 $this->getMock('Magento\Eav\Model\Entity\Attribute\Set', array(), array(), '', false),
                 $this->getMock('\Magento\Framework\Locale\FormatInterface'),
                 $this->getMock('Magento\Eav\Model\Resource\Helper', array(), array(), '', false),
@@ -282,31 +287,37 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $backendModel->setAttribute($attribute);
 
         $attribute->expects($this->any())->method('getBackend')->will($this->returnValue($backendModel));
+        $attribute->setId(222);
 
         $attributes[$attributeCode] = $attribute;
 
+        $eavConfig = $this->getMockBuilder('Magento\Eav\Model\Config')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $data = array(
             $this->getMock('Magento\Framework\App\Resource', array(), array(), '', false),
-            $this->getMock('Magento\Eav\Model\Config', array(), array(), '', false),
+            $eavConfig,
             $this->getMock('Magento\Eav\Model\Entity\Attribute\Set', array(), array(), '', false),
             $this->getMock('Magento\Framework\Locale\FormatInterface'),
             $this->getMock('Magento\Eav\Model\Resource\Helper', array(), array(), '', false),
             $this->getMock('Magento\Framework\Validator\UniversalFactory', array(), array(), '', false),
             array('type' => $entityType, 'entityTable' => 'entityTable', 'attributesByCode' => $attributes)
         );
-        /** @var $model \PHPUnit_Framework_MockObject_MockObject */
-        $model = $this->getMockForAbstractClass(
-            'Magento\Eav\Model\Entity\AbstractEntity',
-            $data,
-            '',
-            true,
-            true,
-            true,
-            array('_getValue')
-        );
+        /** @var $model \Magento\Framework\Model\AbstractModel|\PHPUnit_Framework_MockObject_MockObject */
+        $model = $this->getMockBuilder('Magento\Eav\Model\Entity\AbstractEntity')
+            ->setConstructorArgs($data)
+            ->setMethods(['_getValue'])
+            ->getMock();
 
-        $configMock = $this->getMock('Magento\Eav\Model\Config', array(), array(), '', false);
-        $model->expects($this->any())->method('_getValue')->will($this->returnValue($configMock));
+        $model->expects($this->any())->method('_getValue')->will($this->returnValue($eavConfig));
+        $eavConfig->expects($this->any())->method('getAttribute')->will(
+            $this->returnCallback(
+                function ($entityType, $attributeCode) use ($attributes) {
+                    return $entityType && isset($attributes[$attributeCode]) ? $attributes[$attributeCode] : null;
+                }
+            )
+        );
 
         $model->setConnection($this->_getAdapterMock());
         $model->isPartialSave(true);

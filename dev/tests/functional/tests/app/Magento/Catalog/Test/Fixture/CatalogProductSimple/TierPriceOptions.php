@@ -32,7 +32,6 @@ use Mtf\Fixture\FixtureInterface;
  * Data keys:
  *  - preset (Price options preset name)
  *  - products (comma separated sku identifiers)
- *
  */
 class TierPriceOptions implements FixtureInterface
 {
@@ -89,13 +88,13 @@ class TierPriceOptions implements FixtureInterface
     {
         $presets = [
             'default' => [
-                0 => [
-                    'price' => 150,
+                [
+                    'price' => 15,
                     'website' => 'All Websites [USD]',
                     'price_qty' => 3,
                     'customer_group' => 'ALL GROUPS'
                 ],
-                1 => [
+                [
                     'price' => 24,
                     'website' => 'All Websites [USD]',
                     'price_qty' => 15,
@@ -103,13 +102,13 @@ class TierPriceOptions implements FixtureInterface
                 ]
             ],
             'MAGETWO-23002' => [
-                0 => [
+                [
                     'price' => 90,
                     'website' => 'All Websites [USD]',
                     'price_qty' => 2,
                     'customer_group' => 'ALL GROUPS'
                 ]
-            ]
+            ],
         ];
 
         if (!isset($presets[$name])) {

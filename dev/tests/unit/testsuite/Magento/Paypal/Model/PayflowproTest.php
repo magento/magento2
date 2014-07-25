@@ -53,10 +53,41 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $client = $this->getMock(
+            'Magento\Framework\HTTP\ZendClient',
+            [
+                'setUri',
+                'setConfig',
+                'setMethod',
+                'setParameterPost',
+                'setHeaders',
+                'setUrlEncodeBody',
+                'request',
+                'getBody'
+            ],
+            [],
+            '',
+            false
+        );
+        $client->expects($this->any())->method('create')->will($this->returnSelf());
+        $client->expects($this->any())->method('setUri')->will($this->returnSelf());
+        $client->expects($this->any())->method('setConfig')->will($this->returnSelf());
+        $client->expects($this->any())->method('setMethod')->will($this->returnSelf());
+        $client->expects($this->any())->method('setParameterPost')->will($this->returnSelf());
+        $client->expects($this->any())->method('setHeaders')->will($this->returnSelf());
+        $client->expects($this->any())->method('setUrlEncodeBody')->will($this->returnSelf());
+        $client->expects($this->any())->method('request')->will($this->returnSelf());
+        $client->expects($this->any())->method('getBody')->will($this->returnValue('RESULT name=value&name2=value2'));
+        $clientFactory = $this->getMock('Magento\Framework\HTTP\ZendClientFactory', ['create'], [], '', false);
+        $clientFactory->expects($this->any())->method('create')->will($this->returnValue($client));
+
         $this->_helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_model = $this->_helper->getObject(
             'Magento\Paypal\Model\Payflowpro',
-            ['configFactory' => $this->_configFactory]
+            [
+                'configFactory' => $this->_configFactory,
+                'httpClientFactory' => $clientFactory
+            ]
         );
     }
 
@@ -98,17 +129,15 @@ class PayflowproTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * test for _buildBasicRequest (BDCODE) and catch exception of response
+     * test for _buildBasicRequest (BDCODE)
      */
-    public function testFetchTransactionInfoForBNException()
+    public function testFetchTransactionInfoForBN()
     {
         $this->_configFactory->expects($this->once())->method('create')->will($this->returnSelf());
         $this->_configFactory->expects($this->once())->method('getBuildNotationCode')
             ->will($this->returnValue('BNCODE'));
-        $payment = $this->getMock('Magento\Payment\Model\Info', [], [], '', false);
-        $this->setExpectedException(
-            'Magento\Framework\Model\Exception', 'User authentication failed'
-        );
+        $payment = $this->getMock('Magento\Payment\Model\Info', ['setTransactionId', '__wakeup'], [], '', false);
+        $payment->expects($this->once())->method('setTransactionId')->will($this->returnSelf());
         $this->_model->fetchTransactionInfo($payment, 'AD49G8N825');
     }
 }

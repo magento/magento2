@@ -56,7 +56,7 @@ class MessageTest extends \PHPUnit_Framework_TestCase
         $entityMock = $this->getMock('\Magento\Framework\Object', array(), array(), '', false);
         $inlineMock = $this->getMock(
             'Magento\GiftMessage\Block\Message\Inline',
-            array('setId', 'setDontDisplayContainer', 'setEntity', 'setType', 'toHtml'),
+            array('setId', 'setDontDisplayContainer', 'setEntity', 'setCheckoutType', 'toHtml'),
             array(),
             '',
             false
@@ -68,7 +68,7 @@ class MessageTest extends \PHPUnit_Framework_TestCase
         $inlineMock->expects($this->once())->method('setId')->will($this->returnSelf());
         $inlineMock->expects($this->once())->method('setDontDisplayContainer')->will($this->returnSelf());
         $inlineMock->expects($this->once())->method('setEntity')->with($entityMock)->will($this->returnSelf());
-        $inlineMock->expects($this->once())->method('setType')->will($this->returnSelf());
+        $inlineMock->expects($this->once())->method('setCheckoutType')->will($this->returnSelf());
         $inlineMock->expects($this->once())->method('toHtml')->will($this->returnValue($expectedHtml));
 
         $this->assertEquals($expectedHtml, $this->helper->getInline('onepage_checkout', $entityMock));

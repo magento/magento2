@@ -46,7 +46,7 @@ $numColumns = sizeof($this->getColumns());
         </div>
     <?php endif ?>
 
-    <div id="<?php echo $this->getId() ?>">
+    <div id="<?php echo $this->getId() ?>" data-grid-id="<?php echo $this->getId() ?>">
         <?php else: ?>
             <?php echo $this->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
         <?php endif; ?>

@@ -183,17 +183,20 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests adding of custom options with different behaviours
+     * Tests adding of custom options with existing and new product
      *
      * @param $behavior
      *
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @dataProvider getBehaviorDataProvider
+     * @param string $behavior
+     * @param string $importFile
+     * @param string $sku
      */
-    public function testSaveCustomOptionsDuplicate($behavior)
+    public function testSaveCustomOptions($behavior, $importFile, $sku)
     {
         // import data from CSV file
-        $pathToFile = __DIR__ . '/_files/product_with_custom_options.csv';
+        $pathToFile = __DIR__ . '/_files/' . $importFile;
 
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Framework\App\Filesystem');
@@ -203,10 +206,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->_model->setSource($source)->setParameters(array('behavior' => $behavior))->isDataValid();
         $this->_model->importData();
 
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+        $productModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Catalog\Model\Product'
         );
-        $product->load(1);
+        $product = $productModel->loadByAttribute('sku', $sku);
         // product from fixture
         $options = $product->getProductOptionsCollection();
 
@@ -462,8 +465,26 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     public function getBehaviorDataProvider()
     {
         return array(
-            'Append behavior' => array('$behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND),
-            'Replace behavior' => array('$behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE)
+            'Append behavior with existing product' => array(
+                '$behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
+                '$importFile' => 'product_with_custom_options.csv',
+                '$sku' => 'simple'
+            ),
+            'Append behavior with new product' => array(
+                '$behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
+                '$importFile' => 'product_with_custom_options_new.csv',
+                '$sku' => 'simple_new'
+            ),
+            'Replace behavior with existing product' => array(
+                '$behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE,
+                '$importFile' => 'product_with_custom_options.csv',
+                '$sku' => 'simple'
+            ),
+            'Replace behavior with new product' => array(
+                '$behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE,
+                '$importFile' => 'product_with_custom_options_new.csv',
+                '$sku' => 'simple_new'
+            )
         );
     }
 

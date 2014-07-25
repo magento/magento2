@@ -80,6 +80,10 @@
                     <label>Dropoff</label>
                     <source_model>Magento\Fedex\Model\Source\Dropoff</source_model>
                 </field>
+                <field id="unit_of_measure" translate="label" type="select" sortOrder="135" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Weight Unit</label>
+                    <source_model>Magento\Fedex\Model\Source\Unitofmeasure</source_model>
+                </field>
                 <field id="max_package_weight" translate="label" type="text" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Maximum Package Weight (Please consult your shipping carrier for maximum supported shipping weight)</label>
                     <validate>validate-number validate-zero-or-greater</validate>

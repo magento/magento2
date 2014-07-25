@@ -27,6 +27,7 @@ namespace Magento\Tax\Service\V1;
 use Magento\Framework\Exception\InputException;
 use Magento\Tax\Model\ClassModel as TaxClassModel;
 use Magento\Tax\Service\V1\Data\TaxClassBuilder;
+use Magento\Tax\Service\V1\Data\TaxClassKey;
 use Magento\TestFramework\Helper\Bootstrap;
 
 class TaxClassServiceTest extends \PHPUnit_Framework_TestCase
@@ -253,5 +254,45 @@ class TaxClassServiceTest extends \PHPUnit_Framework_TestCase
             ->create();
 
         $this->taxClassService->updateTaxClass($taxClassId, $taxClassDataObject);
+    }
+
+    /**
+     * @magentoDbIsolation enabled
+     */
+    public function testGetTaxClassId()
+    {
+        $taxClassName = 'Get Me';
+        $taxClassDataObject = $this->taxClassBuilder
+            ->setClassName($taxClassName)
+            ->setClassType(TaxClassServiceInterface::TYPE_CUSTOMER)
+            ->create();
+        $taxClassId = $this->taxClassService->createTaxClass($taxClassDataObject);
+        /** @var \Magento\Tax\Service\V1\Data\TaxClassKeyBuilder $taxClassKeyBuilder */
+        $taxClassKeyBuilder = $this->objectManager->create('Magento\Tax\Service\V1\Data\TaxClassKeyBuilder');
+        $taxClassKeyTypeId = $taxClassKeyBuilder->populateWithArray(
+            [
+                TaxClassKey::KEY_TYPE => TaxClassKey::TYPE_ID,
+                TaxClassKey::KEY_VALUE => $taxClassId,
+            ]
+        )->create();
+        $this->assertEquals(
+            $taxClassId,
+            $this->taxClassService->getTaxClassId($taxClassKeyTypeId, TaxClassServiceInterface::TYPE_CUSTOMER)
+        );
+        $taxClassKeyTypeName = $taxClassKeyBuilder->populateWithArray(
+            [
+                TaxClassKey::KEY_TYPE => TaxClassKey::TYPE_NAME,
+                TaxClassKey::KEY_VALUE => $taxClassName,
+            ]
+        )->create();
+        $this->assertEquals(
+            $taxClassId,
+            $this->taxClassService->getTaxClassId($taxClassKeyTypeId, TaxClassServiceInterface::TYPE_CUSTOMER)
+        );
+        $this->assertNull($this->taxClassService->getTaxClassId(null));
+        $this->assertEquals(
+            null,
+            $this->taxClassService->getTaxClassId($taxClassKeyTypeName, TaxClassServiceInterface::TYPE_PRODUCT)
+        );
     }
 }

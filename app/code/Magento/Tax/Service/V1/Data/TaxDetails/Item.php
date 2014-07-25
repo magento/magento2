@@ -52,6 +52,8 @@ class Item extends \Magento\Framework\Service\Data\AbstractObject
     const KEY_DISCOUNT_TAX_COMPENSATION_AMOUNT = 'discount_tax_compensation_amount';
 
     const KEY_APPLIED_TAXES = 'applied_taxes';
+
+    const KEY_ASSOCIATED_ITEM_CODE = 'associated_item_code';
     /**#@-*/
 
     /**
@@ -172,5 +174,15 @@ class Item extends \Magento\Framework\Service\Data\AbstractObject
     public function getAppliedTaxes()
     {
         return $this->_get(self::KEY_APPLIED_TAXES);
+    }
+
+    /**
+     * Return associated item code if this item is associated with another item, null otherwise
+     *
+     * @return mixed|null
+     */
+    public function getAssociatedItemCode()
+    {
+        return $this->_get(self::KEY_ASSOCIATED_ITEM_CODE);
     }
 }

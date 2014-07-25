@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page mca="catalog/product_configurable/new">
+<page mca="configurable/catalog/product/new">
     <block>
         <name>form</name>
         <class>Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\ProductForm</class>

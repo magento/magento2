@@ -32,16 +32,14 @@ class PackageTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $file
      * @param string $expectedVendor
-     * @param string $expectedCode
+     * @param string $expectedPackage
      * @dataProvider declaredConsistentlyDataProvider
      */
-    public function testDeclaredConsistently($file, $expectedVendor, $expectedCode)
+    public function testDeclaredConsistently($file, $expectedVendor, $expectedPackage)
     {
-        $dom = new \DOMDocument();
-        $dom->load($file);
-        $root = $dom->documentElement;
-        \Magento\Framework\App\Language\Dictionary::assertVendor($expectedVendor, $root);
-        \Magento\Framework\App\Language\Dictionary::assertCode($expectedCode, $root);
+        $languageConfig = new \Magento\Framework\App\Language\Config(file_get_contents($file));
+        $this->assertEquals($expectedVendor, $languageConfig->getVendor());
+        $this->assertEquals($expectedPackage, $languageConfig->getPackage());
     }
 
     /**

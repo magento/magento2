@@ -47,6 +47,12 @@ class CatalogProductSetEdit extends BackendPage
             'locator' => '.attribute-set',
             'strategy' => 'css selector',
         ],
+        'attributeSetEditForm' => [
+            'name' => 'attributeSetEditForm',
+            'class' => 'Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Set\Main\EditForm',
+            'locator' => '#set_name',
+            'strategy' => 'css selector',
+        ],
     ];
 
     /**
@@ -63,5 +69,12 @@ class CatalogProductSetEdit extends BackendPage
     public function getAttributeSetEditBlock()
     {
         return $this->getBlockInstance('attributeSetEditBlock');
+    }
+    /**
+     * @return \Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Set\Main\EditForm
+     */
+    public function getAttributeSetEditForm()
+    {
+        return $this->getBlockInstance('attributeSetEditForm');
     }
 }

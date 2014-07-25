@@ -96,13 +96,13 @@ class TranslationFiles extends \PHPUnit_Framework_TestCase
      */
     protected function printMessage($failures, $message = '')
     {
-        $message .= "\n";
+        $message .= PHP_EOL;
         foreach ($failures as $locale => $localeErrors) {
-            $message .= $locale . "\n";
+            $message .= $locale . PHP_EOL;
             foreach ($localeErrors as $typeError => $error) {
-                $message .= "\t" . $typeError . "\n";
+                $message .= PHP_EOL . "##########" . PHP_EOL . ucfirst($typeError) . ':' . PHP_EOL;
                 foreach ($error as $phrase) {
-                    $message .= "\t\t" . $phrase . "\n";
+                    $message .= '"' . $phrase . '","' . $phrase . '"' . PHP_EOL;
                 }
             }
         }

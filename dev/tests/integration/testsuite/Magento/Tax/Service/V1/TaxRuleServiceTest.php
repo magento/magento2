@@ -92,10 +92,18 @@ class TaxRuleServiceTest extends \PHPUnit_Framework_TestCase
      */
     private $taxRules;
 
+    /**
+     * TaxRateService
+     *
+     * @var \Magento\Tax\Service\V1\TaxRateServiceInterface
+     */
+    private $taxRateService;
+
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->taxRuleService = $this->objectManager->get('Magento\Tax\Service\V1\TaxRuleServiceInterface');
+        $this->taxRateService = $this->objectManager->get('Magento\Tax\Service\V1\TaxRateServiceInterface');
         $this->taxRuleBuilder = $this->objectManager->create('Magento\Tax\Service\V1\Data\TaxRuleBuilder');
         $this->taxRuleFixtureFactory = new TaxRuleFixtureFactory();
     }
@@ -339,6 +347,27 @@ class TaxRuleServiceTest extends \PHPUnit_Framework_TestCase
         $this->tearDownDefaultRules();
     }
 
+    /**
+     *
+     * @magentoDbIsolation enabled
+     */
+    public function testGetRatesByCustomerAndProductTaxClassId()
+    {
+        $this->setUpDefaultRules();
+        $taxRateIds = $this->taxRuleService->getTaxRule(current($this->taxRules))->getTaxRateIds();
+        $expectedRates = [];
+        foreach ($taxRateIds as $rateId) {
+            $expectedRates[] = $this->taxRateService->getTaxRate($rateId);
+        }
+        $rates = $this->taxRuleService->getRatesByCustomerAndProductTaxClassId(
+            $this->taxClasses['DefaultCustomerClass'],
+            $this->taxClasses['DefaultProductClass']
+        );
+
+        $this->assertCount(2, $rates);
+        $this->assertEquals($expectedRates, $rates);
+    }
+
     public function searchTaxRulesDataProvider()
     {
         $filterBuilder = Bootstrap::getObjectManager()->create('\Magento\Framework\Service\V1\Data\FilterBuilder');
@@ -349,9 +378,9 @@ class TaxRuleServiceTest extends \PHPUnit_Framework_TestCase
                 null,
                 ['Default Rule']
             ],
-            'sort_order eq 0 AND priority eq 0' => [
+            'customer_tax_class_ids eq 3 AND priority eq 0' => [
                 [
-                    $filterBuilder->setField(TaxRule::SORT_ORDER)->setValue('0')->create(),
+                    $filterBuilder->setField(TaxRule::CUSTOMER_TAX_CLASS_IDS)->setValue(3)->create(),
                     $filterBuilder->setField(TaxRule::PRIORITY)->setValue('0')->create(),
                 ],
                 [],

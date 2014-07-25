@@ -26,9 +26,14 @@ namespace Magento\Tax\Service\V1;
 use Magento\Framework\Exception\ErrorMessage;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Model\Resource\Iterator;
+use Magento\Tax\Service\V1\Data\TaxRule;
 use Magento\TestFramework\Helper\ObjectManager;
 
+/**
+ * Class TaxRuleServiceTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class TaxRuleServiceTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -55,6 +60,22 @@ class TaxRuleServiceTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Tax\Model\Calculation\RuleFactory
      */
     private $taxRuleModelFactoryMock;
+
+    /**
+     * @var \Magento\Framework\Service\V1\Data\FilterBuilder | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $filterBuilderMock;
+
+    /**
+     * @var \Magento\Framework\Service\V1\Data\SearchCriteriaBuilder | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $searchCriteriaBuilderMock;
+
+
+    /**
+     * @var \Magento\Tax\Service\V1\TaxRateServiceInterface | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $taxRateServiceMock;
 
     /**
      * @var ObjectManager
@@ -84,15 +105,19 @@ class TaxRuleServiceTest extends \PHPUnit_Framework_TestCase
         $taxRuleResultsBuilder = $this->objectManager->getObject(
             'Magento\Tax\Service\V1\Data\TaxRuleSearchResultsBuilder'
         );
-        $this->taxRuleService = $this->objectManager->getObject(
-            'Magento\Tax\Service\V1\TaxRuleService',
-            [
-                'taxRuleRegistry'     => $this->ruleRegistryMock,
-                'converter'           => $this->converterMock,
-                'taxRuleModelFactory' => $this->taxRuleModelFactoryMock,
-                'taxRuleSearchResultsBuilder' => $taxRuleResultsBuilder
-            ]
-        );
+        $this->filterBuilderMock = $this->getMockBuilder('\Magento\Framework\Service\V1\Data\FilterBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->searchCriteriaBuilderMock = $this->getMockBuilder(
+            '\Magento\Framework\Service\V1\Data\SearchCriteriaBuilder'
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->taxRateServiceMock = $this->getMockBuilder('\Magento\Tax\Service\V1\TaxRateServiceInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->taxRuleService = $this->getTaxRuleService($taxRuleResultsBuilder);
     }
 
     public function testDeleteTaxRule()
@@ -290,6 +315,8 @@ class TaxRuleServiceTest extends \PHPUnit_Framework_TestCase
             'empty fields' => [
                 [],
                 [
+                    'sort_order is a required field.',
+                    'priority is a required field.',
                     'code is a required field.',
                     'customer_tax_class_ids is a required field.',
                     'product_tax_class_ids is a required field.',
@@ -388,7 +415,7 @@ class TaxRuleServiceTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         /** @var \Magento\Tax\Service\V1\Data\TaxRuleBuilder $taxRuleBuilder */
         $taxRuleBuilder = $this->objectManager->getObject('Magento\Tax\Service\V1\Data\TaxRuleBuilder');
-        /** @var \Magento\Tax\Service\V1\Data\TaxRule $taxRule */
+        /** @var TaxRule $taxRule */
         $taxRule = $taxRuleBuilder->create();
 
         $taxRuleModel = $this->getMockBuilder('Magento\Tax\Model\Calculation\Rule')
@@ -440,5 +467,151 @@ class TaxRuleServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expectedResults->getTotalCount(), $actualResults->getTotalCount());
         $this->assertEquals($expectedResults->getItems(), $actualResults->getItems());
         $this->assertSame($taxRule, $actualResults->getItems()[0]);
+    }
+
+    /**
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testGetRatesByCustomerAndProductTaxClassId()
+    {
+        $customerTaxClass = 0;
+        $productTaxClass = 0;
+
+        $filterOne = 'filter_one';
+        $filterTwo = 'filter_two';
+
+        /** @var \PHPUnit_Framework_MockObject_MockObject |
+         * \Magento\Tax\Model\Resource\Calculation\Rule\Collection $mockCollection */
+        $mockCollection = $this->getMockBuilder('\Magento\Tax\Model\Resource\Calculation\Rule\Collection')
+            ->disableOriginalConstructor()
+            ->setMethods(['__wakeup', 'getItems', 'getSize', 'addFieldToFilter', '_beforeLoad', 'getIterator'])
+            ->getMock();
+
+        $taxRuleModel = $this->getMockBuilder('Magento\Tax\Model\Calculation\Rule')
+            ->disableOriginalConstructor()->getMock();
+        $mockCollection->expects($this->once())
+            ->method('getIterator')
+            ->will($this->returnValue(new \ArrayIterator([$taxRuleModel])));
+        $mockCollection->expects($this->once())
+            ->method('getSize')
+            ->will($this->returnValue(1));
+
+        $this->ruleModelMock->expects($this->once())
+            ->method('getCollection')
+            ->will($this->returnValue($mockCollection));
+
+        $this->filterBuilderMock->expects($this->exactly(2))
+            ->method('setField')
+            ->with(
+                $this->logicalOr(
+                    $this->equalTo(TaxRule::CUSTOMER_TAX_CLASS_IDS),
+                    $this->equalTo(TaxRule::PRODUCT_TAX_CLASS_IDS)
+                )
+            )
+            ->will($this->returnSelf());
+
+        $this->filterBuilderMock->expects($this->exactly(2))
+            ->method('setValue')
+            ->with(
+                $this->logicalOr(
+                    $this->equalTo([$customerTaxClass]),
+                    $this->equalTo([$productTaxClass])
+                )
+            )
+            ->will($this->returnSelf());
+
+        $this->filterBuilderMock->expects($this->at(2))
+            ->method('create')
+            ->will($this->returnValue($filterOne));
+        $this->filterBuilderMock->expects($this->at(5))
+            ->method('create')
+            ->will($this->returnValue($filterTwo));
+
+        $this->searchCriteriaBuilderMock->expects($this->exactly(2))
+            ->method('addFilter')
+            ->with($this->logicalOr([$filterOne], [$filterTwo]))
+            ->will($this->returnSelf());
+
+        $searchCriteria = $this->getMockBuilder('\Magento\Framework\Service\V1\Data\SearchCriteria')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $mockFilters = $this->getMockBuilder('\Magento\Framework\Service\V1\Data\Filter')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $mockFilterGroups = $this->getMockBuilder('\Magento\Framework\Service\V1\Data\Search\FilterGroup')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $mockFilterGroups->expects($this->any())
+            ->method('getFilters')
+            ->will($this->returnValue([$mockFilters]));
+
+        $searchCriteria->expects($this->once())
+            ->method('getFilterGroups')
+            ->will($this->returnValue([$mockFilterGroups]));
+
+        $this->searchCriteriaBuilderMock->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($searchCriteria));
+
+        $searchResults = $this->getMockBuilder('\Magento\Tax\Service\V1\Data\TaxRuleSearchResults')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $taxRuleResultsBuilderMock= $this->getMockBuilder('Magento\Tax\Service\V1\Data\TaxRuleSearchResultsBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $mockTaxRule = $this->getMockBuilder('\Magento\Tax\Service\V1\Data\TaxRule')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $taxRules = [$mockTaxRule];
+
+        $searchResults->expects($this->once())
+            ->method('getItems')
+            ->will($this->returnValue($taxRules));
+
+        $mockTaxRule->expects($this->once())
+            ->method('getTaxRateIds')
+            ->will($this->returnValue([777]));
+
+        $this->taxRateServiceMock->expects($this->once())
+            ->method('getTaxRate')
+            ->with(777)
+            ->will($this->returnValue(888));
+
+        $taxRuleResultsBuilderMock->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($searchResults));
+
+        $taxRuleService = $this->getTaxRuleService($taxRuleResultsBuilderMock);
+        $this->assertSame(
+            [888],
+            $taxRuleService->getRatesByCustomerAndProductTaxClassId($customerTaxClass, $productTaxClass)
+        );
+    }
+
+    /**
+     * Get tax rule service
+     *
+     * @param $taxRuleResultsBuilder
+     * @return \Magento\Tax\Service\V1\TaxRuleService
+     */
+    private function getTaxRuleService($taxRuleResultsBuilder)
+    {
+        return $this->objectManager->getObject(
+            'Magento\Tax\Service\V1\TaxRuleService',
+            [
+                'taxRuleRegistry' => $this->ruleRegistryMock,
+                'converter' => $this->converterMock,
+                'taxRuleModelFactory' => $this->taxRuleModelFactoryMock,
+                'taxRuleSearchResultsBuilder' => $taxRuleResultsBuilder,
+                'filterBuilder' => $this->filterBuilderMock,
+                'taxRateService' => $this->taxRateServiceMock,
+                'searchCriteriaBuilder' => $this->searchCriteriaBuilderMock
+            ]
+        );
     }
 }

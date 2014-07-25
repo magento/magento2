@@ -33,7 +33,7 @@ class Item extends \Magento\GoogleShopping\Model\Service
     /**
      * @var \Magento\GoogleShopping\Helper\Data|null
      */
-    protected $_gsData = null;
+    protected $_googleShoppingHelper = null;
 
     /**
      * Date
@@ -48,7 +48,7 @@ class Item extends \Magento\GoogleShopping\Model\Service
      * @param \Magento\GoogleShopping\Model\Config $config
      * @param \Magento\Framework\Gdata\Gshopping\ContentFactory $contentFactory
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
-     * @param \Magento\GoogleShopping\Helper\Data $gsData
+     * @param \Magento\GoogleShopping\Helper\Data $googleShoppingHelper
      * @param array $data
      */
     public function __construct(
@@ -57,11 +57,11 @@ class Item extends \Magento\GoogleShopping\Model\Service
         \Magento\GoogleShopping\Model\Config $config,
         \Magento\Framework\Gdata\Gshopping\ContentFactory $contentFactory,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
-        \Magento\GoogleShopping\Helper\Data $gsData,
+        \Magento\GoogleShopping\Helper\Data $googleShoppingHelper,
         array $data = array()
     ) {
         $this->_date = $date;
-        $this->_gsData = $gsData;
+        $this->_googleShoppingHelper = $googleShoppingHelper;
         parent::__construct($logAdapterFactory, $coreRegistry, $config, $contentFactory, $data);
     }
 
@@ -179,7 +179,7 @@ class Item extends \Magento\GoogleShopping\Model\Service
         $service = $this->getService($storeId);
 
         $countryInfo = $this->getConfig()->getTargetCountryInfo($storeId);
-        $itemId = $this->_gsData->buildContentProductId($item->getProductId(), $item->getStoreId());
+        $itemId = $this->_googleShoppingHelper->buildContentProductId($item->getProductId(), $item->getStoreId());
 
         $query = $service->newItemQuery()->setId(
             $itemId

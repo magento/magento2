@@ -21,13 +21,14 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
+namespace Magento\Framework\Stdlib\DateTime;
+
 /**
  * Date conversion model
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @author Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Framework\Stdlib\DateTime;
-
 class DateTime
 {
     /**
@@ -38,14 +39,14 @@ class DateTime
     private $_offset = 0;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     * @var TimezoneInterface
      */
     protected $_localeDate;
 
     /**
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @param TimezoneInterface $localeDate
      */
-    public function __construct(\Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate)
+    public function __construct(TimezoneInterface $localeDate)
     {
         $this->_localeDate = $localeDate;
         $this->_offset = $this->calculateOffset($this->_localeDate->getConfigTimezone());
@@ -61,15 +62,15 @@ class DateTime
     {
         $result = true;
         $offset = 0;
-        if (!is_null($timezone)) {
-            $oldzone = @date_default_timezone_get();
+        if ($timezone !== null) {
+            $oldZone = @date_default_timezone_get();
             $result = date_default_timezone_set($timezone);
         }
         if ($result === true) {
             $offset = gmmktime(0, 0, 0, 1, 2, 1970) - mktime(0, 0, 0, 1, 2, 1970);
         }
-        if (!is_null($timezone)) {
-            date_default_timezone_set($oldzone);
+        if ($timezone !== null) {
+            date_default_timezone_set($oldZone);
         }
         return $offset;
     }
@@ -83,7 +84,7 @@ class DateTime
      */
     public function gmtDate($format = null, $input = null)
     {
-        if (is_null($format)) {
+        if ($format === null) {
             $format = 'Y-m-d H:i:s';
         }
         $date = $this->gmtTimestamp($input);
@@ -104,7 +105,7 @@ class DateTime
      */
     public function date($format = null, $input = null)
     {
-        if (is_null($format)) {
+        if ($format === null) {
             $format = 'Y-m-d H:i:s';
         }
         $result = date($format, $this->timestamp($input));
@@ -119,14 +120,12 @@ class DateTime
      */
     public function gmtTimestamp($input = null)
     {
-        if (is_null($input)) {
+        if ($input === null) {
             return gmdate('U');
+        } elseif (is_numeric($input)) {
+            $result = $input;
         } else {
-            if (is_numeric($input)) {
-                $result = $input;
-            } else {
-                $result = strtotime($input);
-            }
+            $result = strtotime($input);
         }
         if ($result === false) {
             // strtotime() unable to parse string (it's not a date or has incorrect format)
@@ -147,14 +146,12 @@ class DateTime
      */
     public function timestamp($input = null)
     {
-        if (is_null($input)) {
+        if ($input === null) {
             $result = $this->gmtTimestamp();
+        } elseif (is_numeric($input)) {
+            $result = $input;
         } else {
-            if (is_numeric($input)) {
-                $result = $input;
-            } else {
-                $result = strtotime($input);
-            }
+            $result = strtotime($input);
         }
         $date = $this->_localeDate->date($result);
         $timestamp = $date->get(\Zend_Date::TIMESTAMP) + $date->get(\Zend_Date::TIMEZONE_SECS);

@@ -1,0 +1,5 @@
+"customVariable/data/code";"customVariable/data/name";"customVariable/data/use_default_value";"customVariable/data/html_value";"customVariable/data/plain_value";"saveAction";"constraint"
+"variableCode%isolation%";"variableName%isolation%";"No";"<h1>variableName%isolation%</h1>";"";"save";"assertCustomVariableSuccessSaveMessage, assertCustomVariableInGrid, assertCustomVariableForm, assertCustomVariableInPage"
+"variableCode%isolation%";"variableName%isolation%";"No";"";"<p>variablePlainText%isolation%</p>";"saveAndContinue";"assertCustomVariableSuccessSaveMessage, assertCustomVariableInGrid, assertCustomVariableForm, assertCustomVariableInPage"
+"variableCode%isolation%";"variableName%isolation%";"No";"<h1>variableName%isolation%</h1>";"<p>variablePlainText%isolation%</p>";"saveAndContinue";"assertCustomVariableSuccessSaveMessage, assertCustomVariableInGrid, assertCustomVariableForm, assertCustomVariableInPage"
+"variableCode%isolation%";"variableName%isolation%";"No";"<h1>variableName%isolation%</h1>";"<p>variablePlainText%isolation%</p>";"save";"assertCustomVariableSuccessSaveMessage, assertCustomVariableInGrid, assertCustomVariableInPage"

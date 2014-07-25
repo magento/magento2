@@ -86,13 +86,6 @@ abstract class AbstractAgreement extends \Magento\Payment\Model\Method\AbstractM
     public function isAvailable($quote = null)
     {
         if (is_null($this->_isAvailable)) {
-            if (is_object($quote) && $quote->getCustomerId()) {
-                $availableBA = $this->_agreementFactory->create()->getAvailableCustomerBillingAgreements(
-                    $quote->getCustomerId()
-                );
-                $isAvailableBA = count($availableBA) > 0;
-                $this->_canUseCheckout = $this->_canUseInternal = $isAvailableBA;
-            }
             $this->_isAvailable = parent::isAvailable($quote) && $this->_isAvailable($quote);
             $this->_canUseCheckout = $this->_isAvailable && $this->_canUseCheckout;
             $this->_canUseInternal = $this->_isAvailable && $this->_canUseInternal;

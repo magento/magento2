@@ -62,7 +62,7 @@ class CreateGroupedTest extends Functional
         $productForm = $createProductPage->getProductForm();
         //Steps
         $manageProductsGrid->open();
-        $manageProductsGrid->getProductBlock()->addProduct('grouped');
+        $manageProductsGrid->getGridPageActionBlock()->addProduct('grouped');
         $productForm->fill($product);
         $createProductPage->getFormAction()->save();
         //Verifying

@@ -25,13 +25,13 @@
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\AdvancedPricingTab;
 
 use Mtf\Client\Element;
-use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Options;
+use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Options\AbstractOptions;
 
 /**
  * Class OptionField
  * Form "Group prices" on the tab "Extended price"
  */
-class OptionGroup extends Options
+class OptionGroup extends AbstractOptions
 {
     /**
      * 'Add Group Price' button selector

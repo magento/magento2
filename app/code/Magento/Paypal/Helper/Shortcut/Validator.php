@@ -118,7 +118,11 @@ class Validator implements ValidatorInterface
             $currentProduct = $this->_registry->registry('current_product');
             if (!is_null($currentProduct)) {
                 $productPrice = (double)$currentProduct->getFinalPrice();
-                if (empty($productPrice) && !$this->_productTypeConfig->isProductSet($currentProduct->getTypeId())) {
+                $typeInstance = $currentProduct->getTypeInstance();
+                if (empty($productPrice)
+                    && !$this->_productTypeConfig->isProductSet($currentProduct->getTypeId())
+                    && !$typeInstance->canConfigure($currentProduct)
+                ) {
                     return  false;
                 }
             }

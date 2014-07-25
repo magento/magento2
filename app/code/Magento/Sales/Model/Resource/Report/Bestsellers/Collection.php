@@ -133,7 +133,7 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
      *
      * @return $this
      */
-    protected function _initSelect()
+    protected function _applyAggregatedTable()
     {
         $select = $this->getSelect();
 

@@ -61,6 +61,15 @@
             <attribute_code>skeleton_set</attribute_code>
             <backend_type>virtual</backend_type>
         </skeleton_set>
+        <assigned_attributes>
+            <attribute_code>assigned_attributes</attribute_code>
+            <backend_type>virtual</backend_type>
+            <source>Magento\Catalog\Test\Fixture\CatalogAttributeSet\AssignedAttributes</source>
+        </assigned_attributes>
+        <group>
+            <attribute_code>group</attribute_code>
+            <backend_type>virtual</backend_type>
+        </group>
     </fields>
     <repository_class>Magento\Catalog\Test\Repository\CatalogAttributeSet</repository_class>
     <handler_interface>Magento\Catalog\Test\Handler\CatalogAttributeSet\CatalogAttributeSetInterface</handler_interface>

@@ -24,25 +24,25 @@
 
 namespace Magento\Bundle\Test\Block\Catalog\Product\View\Type\Option;
 
-use Mtf\Block\Form;
-use Mtf\Client\Element;
-use Mtf\Client\Element\Locator;
+use Magento\Bundle\Test\Block\Catalog\Product\View\Type\Option;
 
 /**
  * Class Radio
- * Bundle option radiobutton type
- *
+ * Bundle option radio button type
  */
-class Radio extends Form
+class Radio extends Option
 {
     /**
      * Set data in bundle option
      *
      * @param array $data
+     * @return void
      */
     public function fillOption(array $data)
     {
-        $this->_rootElement->find('//*[contains(text(), ' . $data['value'] . ')]', Locator::SELECTOR_XPATH)->click();
-        $this->_rootElement->find($this->mapping['qty']['selector'])->setValue($data['qty']);
+        $mapping = $this->dataMapping($data);
+        $mapping['name']['selector'] = str_replace('%product_name%', $data['name'], $mapping['name']['selector']);
+        $mapping['name']['value'] = 'Yes';
+        $this->_fill($mapping);
     }
 }

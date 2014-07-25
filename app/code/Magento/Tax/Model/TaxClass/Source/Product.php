@@ -24,6 +24,7 @@
 
 namespace Magento\Tax\Model\TaxClass\Source;
 
+use Magento\Framework\DB\Ddl\Table;
 use Magento\Tax\Service\V1\Data\TaxClass;
 
 /**
@@ -135,16 +136,20 @@ class Product extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      *
      * @return array
      */
-    public function getFlatColums()
+    public function getFlatColumns()
     {
         $attributeCode = $this->getAttribute()->getAttributeCode();
-        $column = array('unsigned' => true, 'default' => null, 'extra' => null);
 
-        $column['type'] = \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER;
-        $column['nullable'] = true;
-        $column['comment'] = $attributeCode . ' tax column';
-
-        return array($attributeCode => $column);
+        return [
+            $attributeCode => [
+                'unsigned' => true,
+                'default' => null,
+                'extra' => null,
+                'type' => Table::TYPE_INTEGER,
+                'nullable' => true,
+                'comment' => $attributeCode . ' tax column',
+            ],
+        ];
     }
 
     /**

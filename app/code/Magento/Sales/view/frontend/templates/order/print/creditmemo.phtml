@@ -71,7 +71,7 @@
             </div>
         </div>
         <?php endif; ?>
-        <div class="block order payment method">
+        <div class="block order payment-method">
             <div class="title">
                 <strong><?php echo __('Payment Method') ?></strong>
             </div>
@@ -79,10 +79,9 @@
                 <?php echo $this->getPaymentInfoHtml() ?>
             </div>
         </div>
-
     </div>
-    <div class="order details items">
-        <div class="order subtitle caption">
+    <div class="order-details-items">
+        <div class="order-title">
             <strong><?php echo __('Items Refunded') ?></strong>
         </div>
         <table class="data table order items" id="my-refund-table-<?php echo $_creditmemo->getId(); ?>">

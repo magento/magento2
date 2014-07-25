@@ -101,6 +101,7 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
         'PWD' => 'password',
         'BUTTONSOURCE' => 'build_notation_code',
         'TENDER' => 'tender',
+
         // commands
         'RETURNURL' => 'return_url',
         'CANCELURL' => 'cancel_url',
@@ -110,6 +111,7 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
         'CUSTIP' => 'ip_address',
         'NOTIFYURL' => 'notify_url',
         'NOTE' => 'note',
+
         // style settings
         'PAGESTYLE' => 'page_style',
         'HDRIMG' => 'hdrimg',
@@ -120,15 +122,18 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
 
         // transaction info
         //We need to store paypal trx id for correct IPN working
+        'PPREF' => 'paypal_transaction_id',
         'PAYMENTINFO_0_TRANSACTIONID' => 'paypal_transaction_id',
         'TRANSACTIONID' => 'paypal_transaction_id',
         'REFUNDTRANSACTIONID' => 'paypal_transaction_id',
+
         'PNREF' => 'transaction_id',
         'ORIGID' => 'authorization_id',
         'CAPTURECOMPLETE' => 'complete_type',
         'AMT' => 'amount',
         'AVSADDR' => 'address_verification',
         'AVSZIP' => 'postcode_verification',
+
         // payment/billing info
         'CURRENCY' => 'currency_code',
         'PAYMENTSTATUS' => 'payment_status',
@@ -136,9 +141,11 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
         'PAYERID' => 'payer_id',
         'PAYERSTATUS' => 'payer_status',
         'EMAIL' => 'email',
+
         // backwards compatibility
         'FIRSTNAME' => 'firstname',
         'LASTNAME' => 'lastname',
+
         // paypal direct credit card information
         'ACCT' => 'credit_card_number',
         'EXPDATE' => 'credit_card_expiration_date',
@@ -146,6 +153,7 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
         'CARDSTART' => 'maestro_solo_issue_date',
         'CARDISSUE' => 'maestro_solo_issue_number',
         'CVV2MATCH' => 'cvv2_check_result',
+
         // cardinal centinel
         'AUTHSTATUS3DS' => 'centinel_authstatus',
         'MPIVENDOR3DS' => 'centinel_mpivendor',
@@ -198,7 +206,7 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      */
     protected $_doDirectPaymentResponse = array(
         'PNREF',
-        'PAYMENTINFO_0_TRANSACTIONID',
+        'PPREF',
         'CORRELATIONID',
         'CVV2MATCH',
         'AVSADDR',
@@ -218,7 +226,7 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      *
      * @var string[]
      */
-    protected $_doCaptureResponse = array('PNREF', 'TRANSACTIONID');
+    protected $_doCaptureResponse = array('PNREF', 'PPREF');
 
     /**
      * DoVoid request map
@@ -246,7 +254,7 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      *
      * @var string[]
      */
-    protected $_refundTransactionResponse = array('PNREF', 'REFUNDTRANSACTIONID');
+    protected $_refundTransactionResponse = array('PNREF', 'PPREF');
 
     /**
      * SetExpressCheckout request map
@@ -306,7 +314,7 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      */
     protected $_doExpressCheckoutPaymentResponse = array(
         'PNREF',
-        'PAYMENTINFO_0_TRANSACTIONID',
+        'PPREF',
         'REPMSG',
         'AMT',
         'PENDINGREASON',
@@ -408,9 +416,9 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * @var array
      */
     protected $_lineItemExportItemsFormat = array(
-        'name' => 'L_PAYMENTREQUEST_%d_NAME%d',
-        'qty' => 'L_PAYMENTREQUEST_%d_QTY%d',
-        'amount' => 'L_PAYMENTREQUEST_%d_AMT%d'
+        'name' => 'L_NAME%d',
+        'qty' => 'L_QTY%d',
+        'amount' => 'L_COST%d'
     );
 
     /**
@@ -435,13 +443,18 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * @var array
      */
     protected $_requiredResponseParams = array(
-        self::DO_DIRECT_PAYMENT => array('RESULT', 'PNREF', 'PAYMENTINFO_0_TRANSACTIONID')
+        self::DO_DIRECT_PAYMENT => array('RESULT', 'PNREF', 'PPREF')
     );
 
     /**
      * @var \Magento\Framework\Math\Random
      */
     protected $mathRandom;
+
+    /**
+     * @var NvpFactory
+     */
+    protected $nvpFactory;
 
     /**
      * @param \Magento\Customer\Helper\Address $customerAddress
@@ -454,6 +467,7 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
      * @param \Magento\Framework\Model\ExceptionFactory $frameworkExceptionFactory
      * @param \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory
      * @param \Magento\Framework\Math\Random $mathRandom
+     * @param NvpFactory $nvpFactory
      * @param array $data
      */
     public function __construct(
@@ -467,6 +481,7 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
         \Magento\Framework\Model\ExceptionFactory $frameworkExceptionFactory,
         \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory,
         \Magento\Framework\Math\Random $mathRandom,
+        NvpFactory $nvpFactory,
         array $data = array()
     ) {
         parent::__construct(
@@ -482,6 +497,7 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
             $data
         );
         $this->mathRandom = $mathRandom;
+        $this->nvpFactory = $nvpFactory;
     }
 
     /**
@@ -732,17 +748,6 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
     }
 
     /**
-     * Retrieve headers for request.
-     * This is a hack to make Payflow work with negative values for items like discount has.
-     *
-     * @return string[]
-     */
-    protected function _getHeaderListForRequest()
-    {
-        return array('PAYPAL-NVP: Y');
-    }
-
-    /**
      * Additional response processing.
      * Hack to cut off length from API type response params.
      *
@@ -770,73 +775,55 @@ class PayflowNvp extends \Magento\Paypal\Model\Api\Nvp
     }
 
     /**
-     * Prepare line items request.
-     * Returns true if there were line items added.
+     * Checking negative line items
      *
-     * @param array &$request
+     * @param array $request
      * @param int $i
-     * @return bool|null
+     * @return null|true
      */
     protected function _exportLineItems(array &$request, $i = 0)
     {
-        return $this->_preparePaymentRequestLineItems($request, 0, $i);
+        $requestBefore = $request;
+        $result = parent::_exportLineItems($request, $i);
+        if ($this->getIsLineItemsEnabled() && $this->_cart->hasNegativeItemAmount()) {
+            $this->_lineItemTotalExportMap = array(
+                Cart::AMOUNT_TAX      => 'TAXAMT',
+                Cart::AMOUNT_SHIPPING => 'FREIGHTAMT',
+                'amount'              => 'PAYMENTREQUEST_0_ITEMAMT',
+            );
+            $this->_lineItemExportItemsFormat = array(
+                'name'   => 'L_PAYMENTREQUEST_0_NAME%d',
+                'qty'    => 'L_PAYMENTREQUEST_0_QTY%d',
+                'amount' => 'L_PAYMENTREQUEST_0_AMT%d',
+            );
+            $request = $requestBefore;
+            $result = parent::_exportLineItems($request, $i);
+            /** @var Nvp $paypalNvp */
+            $paypalNvp = $this->nvpFactory->create();
+            $this->_doCaptureResponse = $paypalNvp->_doCaptureResponse;
+            $this->_refundTransactionResponse = $paypalNvp->_refundTransactionResponse;
+            $this->_getTransactionDetailsResponse = $paypalNvp->_getTransactionDetailsResponse;
+            $this->_paymentInformationResponse = $paypalNvp->_paymentInformationResponse;
+            $this->_headers[] = 'PAYPAL-NVP: Y';
+            $this->_setSpecificForNegativeLineItems();
+        }
+        return $result;
     }
 
     /**
-     * NVP doesn't support passing discount total as a separate amount - add it as a line item.
-     * This is a hack for proper line items display for order at PP EC side using Payflow through API.
-     *
-     * @param array &$request
-     * @param int $requestNum
-     * @param int $itemNum
-     * @return bool|null
-     * @link https://cms.paypal.com/us/cgi-bin/?cmd=_render-content&content_ID=developer/e_howto_api_nvp_r_SetExpressCheckout
+     * Set specific data when negative line item case
+     * @return void
      */
-    protected function _preparePaymentRequestLineItems(array &$request, $requestNum = 0, $itemNum = 0)
+    protected function _setSpecificForNegativeLineItems()
     {
-        if (!$this->_cart) {
-            return;
+        /** @var Nvp $paypalNvp */
+        $paypalNvp = $this->nvpFactory->create();
+        $this->_setExpressCheckoutResponse = $paypalNvp->_setExpressCheckoutResponse;
+        $index = array_search('PPREF', $this->_doExpressCheckoutPaymentResponse);
+        if (false !== $index) {
+            unset($this->_doExpressCheckoutPaymentResponse[$index]);
         }
-
-        $this->_cart->setTransferDiscountAsItem();
-
-        // always add cart totals, even if line items are not requested
-        if ($this->_lineItemTotalExportMap) {
-            foreach ($this->_cart->getAmounts() as $key => $total) {
-                if (isset($this->_lineItemTotalExportMap[$key])) {
-                    // !empty($total)
-                    $privateKey = $this->_lineItemTotalExportMap[$key];
-                    $request[$privateKey] = $this->_filterAmount($total);
-                } elseif (isset($this->_lineItemsExportRequestTotalsFormat[$key])) {
-                    $privateKey = sprintf($this->_lineItemsExportRequestTotalsFormat[$key], $requestNum);
-                    $request[$privateKey] = $this->_filterAmount($total);
-                }
-            }
-        }
-
-        // add cart line items
-        $items = $this->_cart->getAllItems();
-        if (empty($items) || !$this->getIsLineItemsEnabled()) {
-            return;
-        }
-
-        $result = null;
-        foreach ($items as $item) {
-            foreach ($this->_lineItemExportItemsFormat as $publicKey => $privateFormat) {
-                $result = true;
-                $value = $item->getDataUsingMethod($publicKey);
-                if (isset($this->_lineItemExportItemsFilters[$publicKey])) {
-                    $callback = $this->_lineItemExportItemsFilters[$publicKey];
-                    $value = call_user_func(array($this, $callback), $value);
-                }
-                if (is_float($value)) {
-                    $value = $this->_filterAmount($value);
-                }
-                $request[sprintf($privateFormat, $requestNum, $itemNum)] = $value;
-            }
-            $itemNum++;
-        }
-
-        return $result;
+        $this->_doExpressCheckoutPaymentResponse[] = 'PAYMENTINFO_0_TRANSACTIONID';
+        $this->_requiredResponseParams[self::DO_EXPRESS_CHECKOUT_PAYMENT][] = 'PAYMENTINFO_0_TRANSACTIONID';
     }
 }

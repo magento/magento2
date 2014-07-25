@@ -379,4 +379,12 @@ class CartTest extends \PHPUnit_Framework_TestCase
         );
         return $totals;
     }
+
+    public function testHasNegativeItemAmount()
+    {
+        $this->_model->addCustomItem('item1', 1, 2.1);
+        $this->assertFalse($this->_model->hasNegativeItemAmount());
+        $this->_model->addCustomItem('item1', 1, -1.3);
+        $this->assertTrue($this->_model->hasNegativeItemAmount());
+    }
 }

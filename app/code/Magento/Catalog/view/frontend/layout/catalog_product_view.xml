@@ -164,6 +164,9 @@
     <referenceBlock name="product.info.addtocart">
         <block class="Magento\Catalog\Block\ShortcutButtons\InCatalog" name="addtocart.shortcut.buttons"/>
     </referenceBlock>
+    <referenceBlock name="product.info.addtocart.additional">
+        <block class="Magento\Catalog\Block\ShortcutButtons\InCatalog" name="addtocart.shortcut.buttons.additional"/>
+    </referenceBlock>
     <update handle="MAP_popup"/>
     <update handle="MAP_price_msrp_item"/>
 </layout>

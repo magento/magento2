@@ -149,19 +149,35 @@
         <name>
             <attribute_code>name</attribute_code>
             <backend_type>virtual</backend_type>
+            <group>general_information</group>
         </name>
         <is_active>
             <attribute_code>is_active</attribute_code>
             <backend_type>virtual</backend_type>
+            <group>general_information</group>
         </is_active>
         <url_key>
             <attribute_code>url_key</attribute_code>
             <backend_type>virtual</backend_type>
+            <group>general_information</group>
         </url_key>
         <include_in_menu>
             <attribute_code>include_in_menu</attribute_code>
             <backend_type>virtual</backend_type>
+            <group>general_information</group>
         </include_in_menu>
+        <landing_page>
+            <attribute_code>landing_page</attribute_code>
+            <backend_type>virtual</backend_type>
+            <input>select</input>
+            <group>display_setting</group>
+        </landing_page>
+        <display_mode>
+            <attribute_code>display_mode</attribute_code>
+            <backend_type>virtual</backend_type>
+            <input>select</input>
+            <group>display_setting</group>
+        </display_mode>
         <category_products>
             <attribute_code>category_products</attribute_code>
             <backend_type>virtual</backend_type>

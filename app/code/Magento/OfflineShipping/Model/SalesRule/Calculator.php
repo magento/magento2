@@ -47,7 +47,7 @@ class Calculator extends \Magento\SalesRule\Model\Validator
 
         foreach ($this->_getRules() as $rule) {
             /* @var $rule \Magento\SalesRule\Model\Rule */
-            if (!$this->_canProcessRule($rule, $address)) {
+            if (!$this->validatorUtility->canProcessRule($rule, $address)) {
                 continue;
             }
 

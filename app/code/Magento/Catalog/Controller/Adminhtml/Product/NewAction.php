@@ -44,7 +44,7 @@ class NewAction extends \Magento\Catalog\Controller\Adminhtml\Product
         Product\Builder $productBuilder,
         Initialization\StockDataFilter $stockFilter
     ) {
-        $this->stockFilter;
+        $this->stockFilter = $stockFilter;
         parent::__construct($context, $productBuilder);
     }
 

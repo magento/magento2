@@ -38,19 +38,36 @@ class QuoteDetailsBuilder extends \Magento\Framework\Service\Data\AbstractObject
     protected $itemBuilder;
 
     /**
+     * Address builder
+     *
+     * @var \Magento\Customer\Service\V1\Data\AddressBuilder
+     */
+    protected $addressBuilder;
+
+    /**
+     * TaxClassKey builder
+     *
+     * @var \Magento\Tax\Service\V1\Data\TaxClassKeyBuilder
+     */
+    protected $taxClassKeyBuilder;
+
+    /**
      * Initialize dependencies.
      *
      * @param \Magento\Framework\Service\Data\ObjectFactory $objectFactory
      * @param \Magento\Tax\Service\V1\Data\QuoteDetails\ItemBuilder $itemBuilder
+     * @param \Magento\Tax\Service\V1\Data\TaxClassKeyBuilder $taxClassKeyBuilder
      * @param \Magento\Customer\Service\V1\Data\AddressBuilder $addressBuilder
      */
     public function __construct(
         \Magento\Framework\Service\Data\ObjectFactory $objectFactory,
         \Magento\Tax\Service\V1\Data\QuoteDetails\ItemBuilder $itemBuilder,
+        \Magento\Tax\Service\V1\Data\TaxClassKeyBuilder $taxClassKeyBuilder,
         \Magento\Customer\Service\V1\Data\AddressBuilder $addressBuilder
     ) {
         parent::__construct($objectFactory);
         $this->itemBuilder = $itemBuilder;
+        $this->taxClassKeyBuilder = $taxClassKeyBuilder;
         $this->addressBuilder = $addressBuilder;
     }
 
@@ -72,6 +89,16 @@ class QuoteDetailsBuilder extends \Magento\Framework\Service\Data\AbstractObject
     public function getAddressBuilder()
     {
         return $this->addressBuilder;
+    }
+
+    /**
+     * Get tax class key builder
+     *
+     * @return TaxClassKeyBuilder
+     */
+    public function getTaxClassKeyBuilder()
+    {
+        return $this->taxClassKeyBuilder;
     }
 
     /**
@@ -97,14 +124,14 @@ class QuoteDetailsBuilder extends \Magento\Framework\Service\Data\AbstractObject
     }
 
     /**
-     * Set customer tax class id
+     * Set customer tax class key
      *
-     * @param int $taxClassId
+     * @param \Magento\Tax\Service\V1\Data\TaxClassKey $taxClassKey
      * @return $this
      */
-    public function setCustomerTaxClassId($taxClassId)
+    public function setCustomerTaxClassKey($taxClassKey)
     {
-        return $this->_set(QuoteDetails::KEY_CUSTOMER_TAX_CLASS_ID, $taxClassId);
+        return $this->_set(QuoteDetails::KEY_CUSTOMER_TAX_CLASS_KEY, $taxClassKey);
     }
 
     /**
@@ -150,6 +177,11 @@ class QuoteDetailsBuilder extends \Magento\Framework\Service\Data\AbstractObject
                 $items[] = $this->itemBuilder->populateWithArray($itemArray)->create();
             }
             $data[QuoteDetails::KEY_ITEMS] = $items;
+        }
+        if (array_key_exists(QuoteDetails::KEY_CUSTOMER_TAX_CLASS_KEY, $data)) {
+            $data[QuoteDetails::KEY_CUSTOMER_TAX_CLASS_KEY] = $this->taxClassKeyBuilder->populateWithArray(
+                $data[QuoteDetails::KEY_CUSTOMER_TAX_CLASS_KEY]
+            )->create();
         }
         return parent::_setDataValues($data);
     }

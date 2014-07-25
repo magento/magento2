@@ -37,14 +37,15 @@ class Collection extends \Magento\Cms\Model\Resource\Block\Collection
     }
 
     /**
-     * @param string $field
-     * @param null $condition
+     * @param string|array $field
+     * @param string|int|array|null $condition
      * @return \Magento\Cms\Model\Resource\Block\Grid\Collection
      */
     public function addFieldToFilter($field, $condition = null)
     {
         if ($field == 'store_id') {
-            return $this->addStoreFilter($field);
+            return $this->addStoreFilter($condition, false);
         }
+        return parent::addFieldToFilter($field, $condition);
     }
 }

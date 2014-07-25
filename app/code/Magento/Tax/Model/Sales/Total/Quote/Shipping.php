@@ -26,33 +26,43 @@ namespace Magento\Tax\Model\Sales\Total\Quote;
 use Magento\Sales\Model\Quote\Address;
 use Magento\Tax\Model\Calculation;
 
-class Shipping extends Tax
+class Shipping extends CommonTaxCollector
 {
     /**
-     * {@inheritdoc}
-     */
-    protected function includeShipping()
-    {
-        return true;
-    }
-    /**
-     * Override the behavior in Tax collector to not process extra subtotal amount to avoid double counting
+     * Collect tax totals for shipping. The result can be used to calculate discount on shipping
      *
-     * @return bool
+     * @param   Address $address
+     * @return  $this
      */
-    protected function processExtraSubtotalAmount()
+    public function collect(Address $address)
     {
-        return false;
-    }
+        parent::collect($address);
+        $items = $this->_getAddressItems($address);
+        if (!$items) {
+            return $this;
+        }
 
-    /**
-     * Override the behavior in Tax collector to return empty array
-     *
-     * @param Address $address
-     * @return array
-     */
-    public function fetch(Address $address)
-    {
-        return [];
+        //Add shipping
+        $shippingDataObject = $this->getShippingDataObject($address, false);
+        $baseShippingDataObject = $this->getShippingDataObject($address, true);
+        if ($shippingDataObject == null || $baseShippingDataObject == null) {
+            return $this;
+        }
+
+        $quoteDetails = $this->prepareQuoteDetails($address, [$shippingDataObject]);
+        $taxDetails = $this->taxCalculationService
+            ->calculateTax($quoteDetails, $address->getQuote()->getStore()->getStoreId());
+
+        $baseQuoteDetails = $this->prepareQuoteDetails($address, [$baseShippingDataObject]);
+        $baseTaxDetails = $this->taxCalculationService
+            ->calculateTax($baseQuoteDetails, $address->getQuote()->getStore()->getStoreId());
+
+        $this->processShippingTaxInfo(
+            $address,
+            $taxDetails->getItems()[self::ITEM_CODE_SHIPPING],
+            $baseTaxDetails->getItems()[self::ITEM_CODE_SHIPPING]
+        );
+
+        return $this;
     }
 }

@@ -52,9 +52,8 @@ class CreateDownloadable extends Curl
                     continue;
                 }
                 if (isset($values['input_name'])) {
-                    $key = $values['input_name'];
-                }
-                if ($prefix) {
+                    $data[$values['input_name']] = $value;
+                } elseif ($prefix) {
                     $data[$prefix][$key] = $value;
                 } else {
                     $data[$key] = $value;

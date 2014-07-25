@@ -60,13 +60,6 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
     protected $_type;
 
     /**
-     * Attributes array by attribute id
-     *
-     * @var array
-     */
-    protected $_attributesById = array();
-
-    /**
      * Attributes array by attribute name
      *
      * @var array
@@ -395,7 +388,6 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
     {
         if ($attributes === null) {
             $this->_attributesByCode = array();
-            $this->_attributesById = array();
             $this->_attributesByTable = array();
             return $this;
         }
@@ -414,7 +406,6 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
             }
 
             $attr = $this->getAttribute($attrCode);
-            unset($this->_attributesById[$attr->getId()]);
             unset($this->_attributesByTable[$attr->getBackend()->getTable()][$attrCode]);
             unset($this->_attributesByCode[$attrCode]);
         }
@@ -448,20 +439,12 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
         $config = $this->_getConfig();
         if (is_numeric($attribute)) {
             $attributeId = $attribute;
-
-            if (isset($this->_attributesById[$attributeId])) {
-                return $this->_attributesById[$attributeId];
-            }
             $attributeInstance = $config->getAttribute($this->getEntityType(), $attributeId);
             if ($attributeInstance) {
                 $attributeCode = $attributeInstance->getAttributeCode();
             }
         } elseif (is_string($attribute)) {
             $attributeCode = $attribute;
-
-            if (isset($this->_attributesByCode[$attributeCode])) {
-                return $this->_attributesByCode[$attributeCode];
-            }
             $attributeInstance = $config->getAttribute($this->getEntityType(), $attributeCode);
             if (!$attributeInstance->getAttributeCode() && in_array($attribute, $this->getDefaultAttributes())) {
                 $attributeInstance->setAttributeCode(
@@ -481,9 +464,6 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
         } elseif ($attribute instanceof AbstractAttribute) {
             $attributeInstance = $attribute;
             $attributeCode = $attributeInstance->getAttributeCode();
-            if (isset($this->_attributesByCode[$attributeCode])) {
-                return $this->_attributesByCode[$attributeCode];
-            }
         }
 
         if (empty($attributeInstance)
@@ -553,7 +533,6 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
         if ($attribute->isStatic()) {
             $this->_staticAttributes[$attributeCode] = $attribute;
         } else {
-            $this->_attributesById[$attribute->getId()] = $attribute;
             $this->_attributesByTable[$attribute->getBackendTable()][$attributeCode] = $attribute;
         }
 
@@ -796,16 +775,6 @@ abstract class AbstractEntity extends \Magento\Framework\Model\Resource\Abstract
     public function getAttributesByCode()
     {
         return $this->_attributesByCode;
-    }
-
-    /**
-     * Get attributes by id array
-     *
-     * @return array
-     */
-    public function getAttributesById()
-    {
-        return $this->_attributesById;
     }
 
     /**

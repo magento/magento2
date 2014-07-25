@@ -91,12 +91,12 @@ class SourceTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Catalog\Model\Product $product1 **/
         $product1 = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Catalog\Model\Product');
-        $product1 = $product1->load($optionIds[0] * 10);
+        $product1 = $product1->load(10);
         $product1->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED)->save();
 
         /** @var \Magento\Catalog\Model\Product $product2 **/
         $product2 = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Catalog\Model\Product');
-        $product2 = $product2->load($optionIds[1] * 10);
+        $product2 = $product2->load(20);
         $product2->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED)->save();
 
         $result = $adapter->fetchAll($select);

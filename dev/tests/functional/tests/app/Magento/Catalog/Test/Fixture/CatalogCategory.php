@@ -197,21 +197,39 @@ class CatalogCategory extends InjectableFixture
     protected $name = [
         'attribute_code' => 'name',
         'backend_type' => 'virtual',
+        'group' => 'general_information',
     ];
 
     protected $is_active = [
         'attribute_code' => 'is_active',
         'backend_type' => 'virtual',
+        'group' => 'general_information',
     ];
 
     protected $url_key = [
         'attribute_code' => 'url_key',
         'backend_type' => 'virtual',
+        'group' => 'general_information',
     ];
 
     protected $include_in_menu = [
         'attribute_code' => 'include_in_menu',
         'backend_type' => 'virtual',
+        'group' => 'general_information',
+    ];
+
+    protected $landing_page = [
+        'attribute_code' => 'landing_page',
+        'backend_type' => 'virtual',
+        'input' => 'select',
+        'group' => 'display_setting',
+    ];
+
+    protected $display_mode = [
+        'attribute_code' => 'display_mode',
+        'backend_type' => 'virtual',
+        'input' => 'select',
+        'group' => 'display_setting',
     ];
 
     protected $category_products = [
@@ -326,8 +344,23 @@ class CatalogCategory extends InjectableFixture
         return $this->getData('include_in_menu');
     }
 
+    public function getLandingPage()
+    {
+        return $this->getData('landing_page');
+    }
+
+    public function getDisplayMode()
+    {
+        return $this->getData('display_mode');
+    }
+
     public function getCategoryProducts()
     {
         return $this->getData('category_products');
+    }
+
+    public function getBlockId()
+    {
+        return $this->getData('block_id');
     }
 }

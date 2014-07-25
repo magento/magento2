@@ -61,8 +61,9 @@ class BundleDynamicTest extends Functional
         $productForm = $createProductPage->getForm();
         //Steps
         $manageProductsGrid->open();
-        $manageProductsGrid->getProductBlock()->addProduct('bundle');
-        $productForm->fillProduct($bundle);
+        $manageProductsGrid->getGridPageActionBlock()->addProduct('bundle');
+        $category = $bundle->getCategories()['category'];
+        $productForm->fill($bundle, null, $category);
         $createProductPage->getFormAction()->save();
         //Verification
         $createProductPage->getMessagesBlock()->assertSuccessMessage();
@@ -107,7 +108,10 @@ class BundleDynamicTest extends Functional
         $frontendHomePage->getTopmenu()->selectCategoryByName($product->getCategoryName());
         //Verification on category product list
         $productListBlock = $categoryPage->getListProductBlock();
-        $this->assertTrue($productListBlock->isProductVisible($product->getName()));
+        $this->assertTrue(
+            $productListBlock->isProductVisible($product->getName()),
+            'Product "' .  $product->getName() . '" is absent on category page'
+        );
         $productListBlock->openProductViewPage($product->getName());
         //Verification on product detail page
         $productViewBlock = $productPage->getViewBlock();

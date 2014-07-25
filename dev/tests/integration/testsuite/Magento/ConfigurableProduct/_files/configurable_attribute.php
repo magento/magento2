@@ -28,6 +28,7 @@ $installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create
     'Magento\Catalog\Model\Resource\Setup',
     array('resourceName' => 'catalog_setup')
 );
+
 /** @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
 $attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
     'Magento\Catalog\Model\Resource\Eav\Attribute'
@@ -62,5 +63,10 @@ $attribute->setData(
 );
 $attribute->save();
 
+
 /* Assign attribute to attribute set */
 $installer->addAttributeToGroup('catalog_product', 'Default', 'General', $attribute->getId());
+
+/** @var \Magento\Eav\Model\Config $eavConfig */
+$eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Eav\Model\Config');
+$eavConfig->clear();

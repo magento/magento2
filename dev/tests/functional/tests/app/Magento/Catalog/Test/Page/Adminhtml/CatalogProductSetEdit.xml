@@ -36,4 +36,10 @@
         <locator>#tree-div2</locator>
         <strategy>css selector</strategy>
     </block>
+    <block>
+        <name>attributeSetEditForm</name>
+        <class>Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Set\Main\EditForm</class>
+        <locator>#set_name</locator>
+        <strategy>css selector</strategy>
+    </block>
 </page>

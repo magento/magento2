@@ -74,7 +74,7 @@ class DataSourcePool
         if (!isset($this->dataSources[$name])) {
 
             if (!class_exists($class)) {
-                throw new \Exception(__('Invalid Data Source class name: ' . $class));
+                throw new \InvalidArgumentException(__('Invalid Data Source class name: ' . $class));
             }
 
             $data = $this->blockFactory->createBlock($class);

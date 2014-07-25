@@ -452,6 +452,7 @@
             <attribute_code>website_ids</attribute_code>
             <backend_type>virtual</backend_type>
             <default_value>Main Website</default_value>
+            <group>websites</group>
         </website_ids>
     </fields>
     <data_set>

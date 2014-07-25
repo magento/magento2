@@ -24,6 +24,7 @@
 namespace Magento\Ogone\Controller;
 
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Payment\Transaction as PaymentTransaction;
 
 /**
  * Ogone Api Controller
@@ -238,6 +239,8 @@ class Api extends \Magento\Framework\App\Action\Action
                     );
                 }
 
+                $order->getPayment()->addTransaction(PaymentTransaction::TYPE_CAPTURE);
+
                 if (!$order->getInvoiceCollection()->getSize()) {
                     $invoice = $order->prepareInvoice();
                     $invoice->register();
@@ -286,6 +289,8 @@ class Api extends \Magento\Framework\App\Action\Action
                     \Magento\Ogone\Model\Api::PROCESSED_OGONE_STATUS,
                     __('Processed by Ogone')
                 );
+
+                $order->getPayment()->addTransaction(PaymentTransaction::TYPE_AUTH);
             }
             $order->save();
             $this->_redirect('checkout/onepage/success');

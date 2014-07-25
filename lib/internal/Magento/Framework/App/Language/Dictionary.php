@@ -24,6 +24,8 @@
 
 namespace Magento\Framework\App\Language;
 
+use \Magento\Framework\App\Filesystem;
+
 /**
  * A service for reading language package dictionaries
  */
@@ -35,16 +37,25 @@ class Dictionary
     private $dir;
 
     /**
-     * @var array
+     * @var ConfigFactory
      */
-    private $packs = array();
+    private $configFactory;
 
     /**
-     * @param \Magento\Framework\App\Filesystem $filesystem
+     * @var array
      */
-    public function __construct(\Magento\Framework\App\Filesystem $filesystem)
-    {
-        $this->dir = $filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::LOCALE_DIR);
+    private $packList = array();
+
+    /**
+     * @param Filesystem $filesystem
+     * @param ConfigFactory $configFactory
+     */
+    public function __construct(
+        Filesystem $filesystem,
+        ConfigFactory $configFactory
+    ) {
+        $this->dir = $filesystem->getDirectoryRead(Filesystem::LOCALE_DIR);
+        $this->configFactory = $configFactory;
     }
 
     /**
@@ -58,125 +69,31 @@ class Dictionary
      */
     public function getDictionary($languageCode)
     {
+        $languages = [];
         $declarations = $this->dir->search('*/*/language.xml');
         foreach ($declarations as $file) {
-            list($vendor, $code) = explode('/', $file);
-            if ($languageCode == $code) {
-                $this->readPackDeclaration($vendor, $code);
+            $xmlSource = $this->dir->readFile($file);
+            $languageConfig = $this->configFactory->create(['source' => $xmlSource]);
+            $this->packList[$languageConfig->getVendor()][$languageConfig->getPackage()] = $languageConfig;
+            if ($languageConfig->getCode() === $languageCode) {
+                $languages[] = $languageConfig;
             }
         }
+
+        // Collect the inherited packages with meta-information of sorting
         $packs = [];
-        $this->collectInheritedPacks($languageCode, $packs);
+        foreach ($languages as $languageConfig) {
+            $this->collectInheritedPacks($languageConfig, $packs);
+        }
         uasort($packs, [$this, 'sortInherited']);
+
+        // Merge all packages of translation to one dictionary
         $result = [];
-        foreach ($packs as $info) {
-            $dictionary = $this->readPackCsv($info['vendor'], $info['code']);
+        foreach ($packs as $packInfo) {
+            /** @var Config $languageConfig */
+            $languageConfig = $packInfo['language'];
+            $dictionary = $this->readPackCsv($languageConfig->getVendor(), $languageConfig->getPackage());
             $result = array_merge($result, $dictionary);
-        }
-        return $result;
-    }
-
-    /**
-     * Read declaration of the specified language pack
-     *
-     * Will recursively load any parent packs
-     *
-     * @param string $vendor
-     * @param string $code
-     * @return void
-     */
-    private function readPackDeclaration($vendor, $code)
-    {
-        if (isset($this->packs[$code][$vendor])) {
-            return;
-        }
-        $file = "{$vendor}/{$code}/language.xml";
-        $dom = new \DOMDocument();
-        $xml = $this->dir->readFile($file);
-        $dom->loadXML($xml);
-        $root = $dom->documentElement;
-        $this->assertVendor($vendor, $root);
-        $this->assertCode($code, $root);
-        $this->packs[$code][$vendor] = [
-            'vendor' => $vendor,
-            'code' => $code,
-            'sort_order' => $this->getSortOrder($root),
-        ];
-        $use = $this->getUse($root);
-        if ($use) {
-            foreach ($use as $info) {
-                $this->packs[$code][$vendor]['use'][] = $info;
-                $this->readPackDeclaration($info['vendor'], $info['code']);
-            }
-        }
-    }
-
-    /**
-     * Assert that vendor code in the declaration matches the one discovered in file system
-     *
-     * @param string $expected
-     * @param \DOMElement $root
-     * @return void
-     * @throws \LogicException
-     */
-    public static function assertVendor($expected, \DOMElement $root)
-    {
-        foreach ($root->getElementsByTagName('vendor') as $node) {
-            if ($expected != $node->nodeValue) {
-                throw new \LogicException('Vendor name mismatch');
-            }
-            break;
-        }
-    }
-
-    /**
-     * Assert that language code in the declaration matches the one discovered in file system
-     *
-     * @param string $expected
-     * @param \DOMElement $root
-     * @return void
-     * @throws \LogicException
-     */
-    public static function assertCode($expected, \DOMElement $root)
-    {
-        foreach ($root->getElementsByTagName('code') as $node) {
-            if ($expected != $node->nodeValue) {
-                throw new \LogicException('Language code name mismatch');
-            }
-            break;
-        }
-    }
-
-    /**
-     * Read sort order from the declaration
-     *
-     * By default will be 0
-     *
-     * @param \DOMElement $root
-     * @return int
-     */
-    private function getSortOrder(\DOMElement $root)
-    {
-        foreach ($root->getElementsByTagName('sort_order') as $node) {
-            return (int)$node->nodeValue;
-        }
-        return 0;
-    }
-
-    /**
-     * Read information about reusing other packs from the declaration
-     *
-     * @param \DOMElement $root
-     * @return array
-     */
-    private function getUse(\DOMElement $root)
-    {
-        $result = [];
-        foreach ($root->getElementsByTagName('use') as $parent) {
-            $result[] = [
-                'vendor' => $parent->getAttribute('vendor'),
-                'code' => $parent->getAttribute('code'),
-            ];
         }
         return $result;
     }
@@ -186,21 +103,24 @@ class Dictionary
      *
      * Record level of recursion (level of inheritance) for further use in sorting
      *
-     * @param string $code
+     * @param Config $languageConfig
      * @param array $result
      * @param int $level
      * @return void
      */
-    private function collectInheritedPacks($code, array &$result, $level = 0)
+    private function collectInheritedPacks($languageConfig, &$result, $level = 0)
     {
-        if (isset($this->packs[$code])) {
-            foreach ($this->packs[$code] as $vendor => $info) {
-                $info['inheritance_level'] = $level;
-                $result["{$code}|{$vendor}"] = $info;
-                if (isset($info['use'])) {
-                    foreach ($info['use'] as $reuse) {
-                        $this->collectInheritedPacks($reuse['code'], $result, $level + 1);
-                    }
+        $packKey = implode('|', [$languageConfig->getVendor(), $languageConfig->getPackage()]);
+        if (!isset($result[$packKey])) {
+            $result[$packKey] = [
+                'inheritance_level' => $level,
+                'sort_order'        => $languageConfig->getSortOrder(),
+                'language'          => $languageConfig
+            ];
+            foreach ($languageConfig->getUses() as $reuse) {
+                if (isset($this->packList[$reuse['vendor']][$reuse['package']])) {
+                    $parentLanguageConfig = $this->packList[$reuse['vendor']][$reuse['package']];
+                    $this->collectInheritedPacks($parentLanguageConfig, $result, $level + 1);
                 }
             }
         }
@@ -211,23 +131,21 @@ class Dictionary
      *
      * First sort by inheritance level descending, then by sort order ascending
      *
-     * @param array $a
-     * @param array $b
+     * @param array $current
+     * @param array $next
      * @return int
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
-    private function sortInherited($a, $b)
+    private function sortInherited($current, $next)
     {
-        if ($a['inheritance_level'] > $b['inheritance_level']) {
+        if ($current['inheritance_level'] > $next['inheritance_level']) {
             return -1;
-        }
-        if ($a['inheritance_level'] < $b['inheritance_level']) {
+        } elseif ($current['inheritance_level'] < $next['inheritance_level']) {
             return 1;
         }
-        if ($a['sort_order'] > $b['sort_order']) {
+        if ($current['sort_order'] > $next['sort_order']) {
             return 1;
-        }
-        if ($a['sort_order'] < $b['sort_order']) {
+        } elseif ($current['sort_order'] < $next['sort_order']) {
             return -1;
         }
         return 0;
@@ -239,12 +157,12 @@ class Dictionary
      * The files are sorted alphabetically, then each of them is read, and results are recorded into key => value array
      *
      * @param string $vendor
-     * @param string $code
+     * @param string $package
      * @return array
      */
-    private function readPackCsv($vendor, $code)
+    private function readPackCsv($vendor, $package)
     {
-        $files = $this->dir->search("{$vendor}/{$code}/*.csv");
+        $files = $this->dir->search("{$vendor}/{$package}/*.csv");
         sort($files);
         $result = [];
         foreach ($files as $path) {

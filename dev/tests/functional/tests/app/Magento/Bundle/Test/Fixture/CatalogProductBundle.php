@@ -36,7 +36,7 @@ use Mtf\System\Event\EventManagerInterface;
  * Fixture for Bundle product
  *
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
- * @SuppressWarnings(PHPMD.TooManyFields) 
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class CatalogProductBundle extends InjectableFixture
 {
@@ -109,6 +109,7 @@ class CatalogProductBundle extends InjectableFixture
         'is_required' => '0',
         'default_value' => '',
         'input' => 'text',
+        'group' => 'product-details',
         'source' => 'Magento\Catalog\Test\Fixture\CatalogProductSimple\CategoryIds',
     ];
 
@@ -616,6 +617,13 @@ class CatalogProductBundle extends InjectableFixture
         'source' => 'Magento\Bundle\Test\Fixture\CatalogProductBundle\BundleSelections',
     ];
 
+    protected $checkout_data = [
+        'attribute_code' => 'checkout_data',
+        'backend_type' => 'virtual',
+        'is_required' => '1',
+        'source' => 'Magento\Bundle\Test\Fixture\CatalogProductBundle\CheckoutData',
+    ];
+
     protected $custom_options = [
         'attribute_code' => 'custom_options',
         'backend_type' => 'virtual',
@@ -633,15 +641,20 @@ class CatalogProductBundle extends InjectableFixture
     ];
 
     protected $stock_data = [
-        'attribute_code' => 'stock_data'
+        'attribute_code' => 'stock_data',
+        'group' => 'advanced-inventory'
     ];
 
     protected $category_id = [
-        'attribute_code' => 'category_id'
+        'attribute_code' => 'category_id',
+        'group' => 'product-details'
     ];
 
     protected $website_ids = [
-        'attribute_code' => 'website_ids'
+        'attribute_code' => 'website_ids',
+        'backend_type' => 'virtual',
+        'default_value' => ['Main Website'],
+        'group' => 'websites',
     ];
 
     public function getCategoryIds()

@@ -42,7 +42,7 @@ class UrlrewriteEdit extends BackendPage
         ],
         'formBlock' => [
             'name' => 'formBlock',
-            'class' => 'Magento\UrlRewrite\Test\Block\Adminhtml\Catalog\Edit\Form',
+            'class' => 'Magento\UrlRewrite\Test\Block\Adminhtml\Catalog\Edit\UrlRewriteForm',
             'locator' => '#edit_form',
             'strategy' => 'css selector',
         ],
@@ -87,7 +87,7 @@ class UrlrewriteEdit extends BackendPage
     }
 
     /**
-     * @return \Magento\UrlRewrite\Test\Block\Adminhtml\Catalog\Edit\Form
+     * @return \Magento\UrlRewrite\Test\Block\Adminhtml\Catalog\Edit\UrlRewriteForm
      */
     public function getFormBlock()
     {

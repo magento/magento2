@@ -22,43 +22,81 @@
 //  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 //  */
 
-.order.details {
-    ul.items {
-        &:extend(.reset-list all);
-        margin-bottom: @indent-base;
-        .label:after {
-            content: ": ";
-        }
-        strong {
-            font-weight: normal;
-        }
-    }
-    .order.status {
+.order-links {
+    border-bottom: @border-width-base solid @border-color-base;
+    margin-bottom: 10px;
+    .item {
         display: inline-block;
-        .heading(h2);
-        margin-top: 0;
+        margin-right: 20px;
     }
-    .order.date {
-        margin-bottom: @indent-base;
+}
+
+.order-actions-toolbar {
+    .action {
+        margin: 0 20px 0 0;
     }
-    .order.toolbar {
-        float: right;
-        .action {
-            margin-left: 15px;
-            &:first-child {
-                margin-left: 0;
+}
+
+.order-details-items {
+    border-bottom: @border-width-base solid @border-color-base;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    .order-title {
+        > strong {
+            .heading(h3);
+            display: inline-block;
+        }
+    }
+    .col {
+        &.price,
+        &.subtotal {
+            &:extend(.abstract-incl-excl-tax all);
+        }
+    }
+    .cart-tax-total {
+        &:extend(.abstract-tax-total all);
+    }
+    .items-qty {
+        &:extend(.reset-list all);
+        .item {
+            white-space: nowrap;
+        }
+        .title {
+            &:after {
+                content: ": ";
             }
         }
     }
-    .order.subtitle.caption,
-    .order.title  {
-        strong {
-            .heading(h3);
+    .table-order-items {
+        .table-bordered(
+            @_type: horizontal
+        );
+        .account & {
+            tfoot {
+                tr:first-child td {
+                    border-top: @table-border-width @table-border-style @table-border-color;
+                }
+            }
         }
-        .action {
-            margin-left: 15px;
+        .item.options {
+            dt {
+                margin: 0;
+            }
+            dd {
+                margin: 0 0 15px;
+            }
+            &.links {
+                dt {
+                    display: inline-block;
+                    &:after {
+                        content: ": ";
+                    }
+                }
+                dd {
+                    margin: 0;
+                }
+            }
         }
-        margin-bottom: @indent-base;
     }
 }
 
@@ -89,14 +127,93 @@
     }
 }
 
+.block-order-details {
+    &-comments {
+        margin: 0 0 40px;
+        .comment-date {
+            font-weight: @font-weight-semibold;
+        }
+        .comment-content {
+            line-height: 1.6;
+            margin: 0 0 20px;
+        }
+    }
+
+    &-view {
+        .box-content {
+            .payment-method {
+                .title {
+                    font-weight: @font-weight-base;
+                }
+                .content {
+                    margin: 0;
+                    > strong {
+                        font-weight: @font-weight-base;
+                        &:after {
+                            content: ': ';
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.order-tracking {
+    border-bottom: @border-width-base solid @border-color-base;
+    margin: 0;
+    padding: 20px 0;
+    .tracking-title {
+        display: inline-block;
+    }
+    .tracking-content {
+        display: inline-block;
+        margin: 0 0 0 5px;
+    }
+}
+
 //
 //    Desktop
 //--------------------------------------
 .responsive(@break) when (@break = @break-point-1) {
-    .order.details {
-        &:extend(.add-clearfix-desktop all);
-        .block {
-            &:extend(.blocks-2columns all);
+    .account {
+        .page-title {
+            .order-actions-toolbar {
+                margin: -20px 0 0;
+                text-align: right;
+                .action {
+                    margin: 0 0 0 20px;
+                }
+            }
+        }
+        .table-order-items {
+            .col {
+                &.subtotal {
+                    text-align: right;
+                }
+            }
+            .mark,
+            .amount {
+                text-align: right;
+            }
+        }
+    }
+}
+
+//
+//    Mobile
+//--------------------------------------
+.responsive-smaller(@break) when (@break = @break-point-0) {
+    .account {
+        .order-details-items {
+            .table-order-items {
+                tbody,
+                tfoot {
+                    > tr > td {
+                        border: none;
+                    }
+                }
+            }
         }
     }
 }

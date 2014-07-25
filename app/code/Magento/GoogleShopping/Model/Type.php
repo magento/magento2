@@ -48,7 +48,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
     /**
      * @var \Magento\GoogleShopping\Helper\Data
      */
-    protected $_gsData;
+    protected $_googleShoppingHelper;
 
     /**
      * Config
@@ -78,7 +78,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\GoogleShopping\Model\AttributeFactory $attributeFactory
      * @param \Magento\GoogleShopping\Model\Config $config
      * @param \Magento\GoogleShopping\Helper\Product $gsProduct
-     * @param \Magento\GoogleShopping\Helper\Data $gsData
+     * @param \Magento\GoogleShopping\Helper\Data $googleShoppingHelper
      * @param \Magento\GoogleShopping\Model\Resource\Type $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -90,7 +90,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
         \Magento\GoogleShopping\Model\AttributeFactory $attributeFactory,
         \Magento\GoogleShopping\Model\Config $config,
         \Magento\GoogleShopping\Helper\Product $gsProduct,
-        \Magento\GoogleShopping\Helper\Data $gsData,
+        \Magento\GoogleShopping\Helper\Data $googleShoppingHelper,
         \Magento\GoogleShopping\Model\Resource\Type $resource,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
@@ -99,7 +99,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
         $this->_attributeFactory = $attributeFactory;
         $this->_config = $config;
         $this->_gsProduct = $gsProduct;
-        $this->_gsData = $gsData;
+        $this->_googleShoppingHelper = $googleShoppingHelper;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -167,7 +167,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
                 }
 
                 if (!is_null($name)) {
-                    $name = $this->_gsData->normalizeName($name);
+                    $name = $this->_googleShoppingHelper->normalizeName($name);
                     if (isset($group[$name])) {
                         // if attribute is in the group
                         if (!isset($result[$group[$name]])) {
@@ -271,7 +271,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
 
         $contentAttributes = $entry->getContentAttributes();
         foreach ($contentAttributes as $contentAttribute) {
-            $name = $this->_gsData->normalizeName($contentAttribute->getName());
+            $name = $this->_googleShoppingHelper->normalizeName($contentAttribute->getName());
             if (!in_array($name, $ignoredAttributes) && !in_array($existAttributes, $existAttributes)) {
                 $entry->removeContentAttribute($name);
             }

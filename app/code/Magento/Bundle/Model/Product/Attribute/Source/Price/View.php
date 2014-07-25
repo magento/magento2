@@ -23,6 +23,9 @@
  */
 namespace Magento\Bundle\Model\Product\Attribute\Source\Price;
 
+use Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory;
+use Magento\Framework\DB\Ddl\Table;
+
 /**
  * Bundle Price View Attribute Renderer
  *
@@ -31,27 +34,16 @@ namespace Magento\Bundle\Model\Product\Attribute\Source\Price;
 class View extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
     /**
-     * Core data
-     *
-     * @var \Magento\Core\Helper\Data
+     * @var OptionFactory
      */
-    protected $_coreData = null;
+    protected $optionFactory;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory
+     * @param OptionFactory $optionFactory
      */
-    protected $_entityAttribute;
-
-    /**
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $entityAttribute
-     * @param \Magento\Core\Helper\Data $coreData
-     */
-    public function __construct(
-        \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $entityAttribute,
-        \Magento\Core\Helper\Data $coreData
-    ) {
-        $this->_coreData = $coreData;
-        $this->_entityAttribute = $entityAttribute;
+    public function __construct(OptionFactory $optionFactory)
+    {
+        $this->optionFactory = $optionFactory;
     }
 
     /**
@@ -61,11 +53,11 @@ class View extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      */
     public function getAllOptions()
     {
-        if (is_null($this->_options)) {
-            $this->_options = array(
-                array('label' => __('As Low as'), 'value' => 1),
-                array('label' => __('Price Range'), 'value' => 0)
-            );
+        if (null === $this->_options) {
+            $this->_options = [
+                ['label' => __('As Low as'), 'value' => 1],
+                ['label' => __('Price Range'), 'value' => 0],
+            ];
         }
         return $this->_options;
     }
@@ -78,8 +70,7 @@ class View extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      */
     public function getOptionText($value)
     {
-        $options = $this->getAllOptions();
-        foreach ($options as $option) {
+        foreach ($this->getAllOptions() as $option) {
             if ($option['value'] == $value) {
                 return $option['label'];
             }
@@ -92,16 +83,20 @@ class View extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      *
      * @return array
      */
-    public function getFlatColums()
+    public function getFlatColumns()
     {
         $attributeCode = $this->getAttribute()->getAttributeCode();
-        $column = array('unsigned' => false, 'default' => null, 'extra' => null);
 
-        $column['type'] = \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER;
-        $column['nullable'] = true;
-        $column['comment'] = 'Bundle Price View ' . $attributeCode . ' column';
-
-        return array($attributeCode => $column);
+        return [
+            $attributeCode => [
+                'unsigned' => false,
+                'default' => null,
+                'extra' => null,
+                'type' => Table::TYPE_INTEGER,
+                'nullable' => true,
+                'comment' => 'Bundle Price View ' . $attributeCode . ' column',
+            ],
+        ];
     }
 
     /**
@@ -112,6 +107,6 @@ class View extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      */
     public function getFlatUpdateSelect($store)
     {
-        return $this->_entityAttribute->create()->getFlatUpdateSelect($this->getAttribute(), $store, false);
+        return $this->optionFactory->create()->getFlatUpdateSelect($this->getAttribute(), $store, false);
     }
 }

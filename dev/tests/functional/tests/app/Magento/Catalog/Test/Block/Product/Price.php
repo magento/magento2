@@ -65,7 +65,7 @@ class Price extends Block
      *
      * @var string
      */
-    protected $priceMap = '.old.price .price';
+    protected $priceMap = '.old.price .price .price';
 
     /**
      * Actual Price
@@ -113,6 +113,7 @@ class Price extends Block
         //@TODO it have to rewrite when will be possibility to divide it to different blocks(by product type)
         $prices = explode("\n", trim($this->_rootElement->getText()));
         if (count($prices) === 1) {
+            $prices[0] = str_replace(',', '', $prices[0]);
             return ['price_regular_price' => trim($prices[0], $currency)];
         }
         return $this->formatPricesData($prices, $currency);
@@ -131,7 +132,7 @@ class Price extends Block
         foreach ($prices as $price) {
             list($name, $price) = explode($currency, $price);
             $name = str_replace(' ', '_', trim(preg_replace('#[^0-9a-z]+#i', ' ', strtolower($name)), ' '));
-            $formatted['price_' . $name] = $price;
+            $formatted['price_' . $name] = str_replace(',', '', $price);
         }
         return $formatted;
     }
@@ -259,20 +260,22 @@ class Price extends Block
     /**
      * Get price from
      *
-     * @return array|string
+     * @param string $currency
+     * @return string
      */
-    public function getPriceFrom()
+    public function getPriceFrom($currency = '$')
     {
-        return $this->_rootElement->find($this->priceFromSelector)->getText();
+        return trim($this->_rootElement->find($this->priceFromSelector)->getText(), $currency);
     }
 
     /**
      * Get price to
      *
-     * @return array|string
+     * @param string $currency
+     * @return string
      */
-    public function getPriceTo()
+    public function getPriceTo($currency = '$')
     {
-        return $this->_rootElement->find($this->priceToSelector)->getText();
+        return trim($this->_rootElement->find($this->priceToSelector)->getText(), $currency);
     }
 }

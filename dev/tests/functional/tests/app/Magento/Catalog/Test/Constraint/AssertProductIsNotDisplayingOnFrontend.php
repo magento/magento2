@@ -92,7 +92,7 @@ class AssertProductIsNotDisplayingOnFrontend extends AbstractConstraint
      * @param CatalogCategoryView $catalogCategoryView
      * @param CmsIndex $cmsIndex
      * @param FixtureInterface|FixtureInterface[] $product
-     * @param CatalogCategory $category
+     * @param CatalogCategory|null $category
      */
     public function processAssert(
         CatalogProductView $catalogProductView,
@@ -100,7 +100,7 @@ class AssertProductIsNotDisplayingOnFrontend extends AbstractConstraint
         CatalogCategoryView $catalogCategoryView,
         CmsIndex $cmsIndex,
         $product,
-        CatalogCategory $category
+        CatalogCategory $category = null
     ) {
         $this->catalogProductView = $catalogProductView;
         $this->catalogSearchResult = $catalogSearchResult;
@@ -112,8 +112,8 @@ class AssertProductIsNotDisplayingOnFrontend extends AbstractConstraint
         foreach ($products as $product) {
             $errors = array_merge($errors, $this->isNotDisplayingOnFrontendAssert($product));
         }
-        \PHPUnit_Framework_Assert::assertTrue(
-            empty($errors),
+        \PHPUnit_Framework_Assert::assertEmpty(
+            $errors,
             "In the process of checking product availability on the frontend, found the following errors:\n"
             . implode("\n", $errors)
         );
@@ -147,7 +147,7 @@ class AssertProductIsNotDisplayingOnFrontend extends AbstractConstraint
         }
 
         $categoryName = ($product->hasData('category_ids'))
-            ? $product->getCategoryIds()[0]['name']
+            ? $product->getCategoryIds()[0]
             : $this->category->getName();
         $this->cmsIndex->open();
         $this->cmsIndex->getTopmenu()->selectCategoryByName($categoryName);

@@ -31,37 +31,42 @@ use Magento\Sales\Model\Quote\Address;
 use Magento\Sales\Model\Quote\Item\AbstractItem;
 use Magento\Tax\Model\Calculation;
 
-class Subtotal extends Tax
+class Subtotal extends CommonTaxCollector
 {
     /**
-     * {@inheritdoc}
-     */
-    protected function includeShipping()
-    {
-        return false;
-    }
-
-
-    /**
-     * Override the behavior in Tax collector to not process extra subtotal amount to avoid double counting
+     * Calculate tax on product items. The result will be used to determine shipping
+     * and discount later.
      *
-     * @return bool
+     * @param   Address $address
+     * @return  $this
      */
-    protected function processExtraSubtotalAmount()
+    public function collect(Address $address)
     {
-        $result = false;
-        return $result;
-    }
+        parent::collect($address);
+        $items = $this->_getAddressItems($address);
+        if (!$items) {
+            return $this;
+        }
 
-    /**
-     * Override the behavior in Tax collector to return empty array
-     *
-     * @param Address $address
-     * @return array
-     */
-    public function fetch(Address $address)
-    {
-        $result = [];
-        return $result;
+        $priceIncludesTax = $this->_config->priceIncludesTax($this->_store);
+
+        //Setup taxable items
+        $itemDataObjects = $this->mapItems($address, $priceIncludesTax, false);
+        $quoteDetails = $this->prepareQuoteDetails($address, $itemDataObjects);
+        $taxDetails = $this->taxCalculationService
+            ->calculateTax($quoteDetails, $address->getQuote()->getStore()->getStoreId());
+
+        $itemDataObjects = $this->mapItems($address, $priceIncludesTax, true);
+        $baseQuoteDetails = $this->prepareQuoteDetails($address, $itemDataObjects);
+        $baseTaxDetails = $this->taxCalculationService
+            ->calculateTax($baseQuoteDetails, $address->getQuote()->getStore()->getStoreId());
+
+        $itemsByType = $this->organizeItemTaxDetailsByType($taxDetails, $baseTaxDetails);
+
+        if (isset($itemsByType[self::ITEM_TYPE_PRODUCT])) {
+            $this->processProductItems($address, $itemsByType[self::ITEM_TYPE_PRODUCT]);
+        }
+
+        return $this;
     }
 }

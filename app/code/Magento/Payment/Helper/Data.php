@@ -131,7 +131,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $res = array();
         $methods = $this->getPaymentMethods();
-        uasort($methods, array($this, '_sortMethods'));
+
         foreach ($methods as $code => $methodConfig) {
             $prefix = self::XML_PATH_PAYMENT_METHODS . '/' . $code . '/';
             if (!($model = $this->_scopeConfig->getValue(
@@ -142,10 +142,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             ) {
                 continue;
             }
+
             $methodInstance = $this->_methodFactory->create($model);
             if (!$methodInstance) {
                 continue;
             }
+
             $methodInstance->setStore($store);
             if (!$methodInstance->isAvailable($quote)) {
                 /* if the payment method cannot be used at this time */
@@ -156,22 +158,23 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $res[] = $methodInstance;
         }
 
+        uasort($res, array($this, '_sortMethods'));
+
         return $res;
     }
 
     /**
-     * @param $mixed $a
-     * @param $mixed $b
+     * Sort payments methods
+     *
+     * @param \Magento\Payment\Model\MethodInterface $a
+     * @param \Magento\Payment\Model\MethodInterface $b
      * @return int
      */
     protected function _sortMethods($a, $b)
     {
-        if (is_object($a)) {
-            return (int)$a->sort_order <
-                (int)$b->sort_order ? -1 : ((int)$a->sort_order >
-                (int)$b->sort_order ? 1 : 0);
-        }
-        return 0;
+        return (int)$a->getSortOrder() <
+            (int)$b->getSortOrder() ? -1 : ((int)$a->getSortOrder() >
+            (int)$b->getSortOrder() ? 1 : 0);
     }
 
     /**

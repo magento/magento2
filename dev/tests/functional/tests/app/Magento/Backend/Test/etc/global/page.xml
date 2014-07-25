@@ -24,9 +24,24 @@
  */
 -->
 <page>
-    <config>
+    <systemConfig>
         <mca>admin/system_config</mca>
         <area>adminhtml</area>
         <class>Magento\Backend\Test\Page\Adminhtml\SystemConfig</class>
-    </config>
+    </systemConfig>
+    <systemStoreIndex>
+        <mca>admin/system_store</mca>
+        <area>adminhtml</area>
+        <class>Magento\Backend\Test\Page\Adminhtml\StoreIndex</class>
+    </systemStoreIndex>
+    <systemStoreNew>
+        <mca>admin/system_store/newStore</mca>
+        <area>adminhtml</area>
+        <class>Magento\Backend\Test\Page\Adminhtml\StoreNew</class>
+    </systemStoreNew>
+    <systemStoreDelete>
+        <mca>admin/system_store/deleteStore</mca>
+        <area>adminhtml</area>
+        <class>Magento\Backend\Test\Page\Adminhtml\StoreDelete</class>
+    </systemStoreDelete>
 </page>

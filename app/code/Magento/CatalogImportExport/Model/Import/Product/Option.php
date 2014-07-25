@@ -1118,7 +1118,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected function _initProductsSku()
     {
-        if (!$this->_productsSkuToId) {
+        if (!$this->_productsSkuToId || !empty($this->_newOptionsNewData)) {
             $columns = array('entity_id', 'sku');
             foreach ($this->_productModel->getProductEntitiesInfo($columns) as $product) {
                 $this->_productsSkuToId[$product['sku']] = $product['entity_id'];

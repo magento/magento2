@@ -444,7 +444,8 @@ class ConfigurableAttributesData implements FixtureInterface
                         'name' => 'In configurable %isolation% %attribute_0-option_0_name% %attribute_1-option_1_name%',
                         'sku' => 'sku_configurable_%isolation%_%attribute_0-option_0_id%_%attribute_1-option_1_id%',
                         'qty' => 10,
-                        'weight' => 1
+                        'weight' => 1,
+                        'options_names' => []
                     ],
                     '%attribute_0-option_0%-%attribute_1-option_2%' => [
                         'configurable_attribute' => [
@@ -455,7 +456,8 @@ class ConfigurableAttributesData implements FixtureInterface
                         'name' => 'In configurable %isolation% %attribute_0-option_0_name% %attribute_1-option_2_name%',
                         'sku' => 'sku_configurable_%isolation%_%attribute_0-option_0_id%_%attribute_1-option_2_id%',
                         'qty' => 10,
-                        'weight' => 1
+                        'weight' => 1,
+                        'options_names' => []
                     ],
                     '%attribute_0-option_1%-%attribute_1-option_0%' => [
                         'configurable_attribute' => [
@@ -466,7 +468,8 @@ class ConfigurableAttributesData implements FixtureInterface
                         'name' => 'In configurable %isolation% %attribute_0-option_1_name% %attribute_1-option_0_name%',
                         'sku' => 'sku_configurable_%isolation%_%attribute_0-option_1_id%_%attribute_1-option_0_id%',
                         'qty' => 10,
-                        'weight' => 1
+                        'weight' => 1,
+                        'options_names' => []
                     ],
                     '%attribute_0-option_1%-%attribute_1-option_1%' => [
                         'configurable_attribute' => [
@@ -477,7 +480,8 @@ class ConfigurableAttributesData implements FixtureInterface
                         'name' => 'In configurable %isolation% %attribute_0-option_1_name% %attribute_1-option_1_name%',
                         'sku' => 'sku_configurable_%isolation%_%attribute_0-option_1_id%_%attribute_1-option_1_id%',
                         'qty' => 10,
-                        'weight' => 1
+                        'weight' => 1,
+                        'options_names' => []
                     ],
                     '%attribute_0-option_1%-%attribute_1-option_2%' => [
                         'configurable_attribute' => [
@@ -488,7 +492,8 @@ class ConfigurableAttributesData implements FixtureInterface
                         'name' => 'In configurable %isolation% %attribute_0-option_1_name% %attribute_1-option_2_name%',
                         'sku' => 'sku_configurable_%isolation%_%attribute_0-option_1_id%_%attribute_1-option_2_id%',
                         'qty' => 10,
-                        'weight' => 1
+                        'weight' => 1,
+                        'options_names' => []
                     ],
                     '%attribute_0-option_2%-%attribute_1-option_0%' => [
                         'configurable_attribute' => [
@@ -499,7 +504,8 @@ class ConfigurableAttributesData implements FixtureInterface
                         'name' => 'In configurable %isolation% %attribute_0-option_2_name% %attribute_1-option_0_name%',
                         'sku' => 'sku_configurable_%isolation%_%attribute_0-option_2_id%_%attribute_1-option_0_id%',
                         'qty' => 10,
-                        'weight' => 1
+                        'weight' => 1,
+                        'options_names' => []
                     ],
                     '%attribute_0-option_2%-%attribute_1-option_1%' => [
                         'configurable_attribute' => [
@@ -510,7 +516,8 @@ class ConfigurableAttributesData implements FixtureInterface
                         'name' => 'In configurable %isolation% %attribute_0-option_2_name% %attribute_1-option_1_name%',
                         'sku' => 'sku_configurable_%isolation%_%attribute_0-option_2_id%_%attribute_1-option_1_id%',
                         'qty' => 10,
-                        'weight' => 1
+                        'weight' => 1,
+                        'options_names' => []
                     ],
                     '%attribute_0-option_2%-%attribute_1-option_2%' => [
                         'configurable_attribute' => [
@@ -521,7 +528,8 @@ class ConfigurableAttributesData implements FixtureInterface
                         'name' => 'In configurable %isolation% %attribute_0-option_2_name% %attribute_1-option_2_name%',
                         'sku' => 'sku_configurable_%isolation%_%attribute_0-option_2_id%_%attribute_1-option_2_id%',
                         'qty' => 10,
-                        'weight' => 1
+                        'weight' => 1,
+                        'options_names' => []
                     ]
                 ]
             ],
@@ -557,7 +565,8 @@ class ConfigurableAttributesData implements FixtureInterface
                         'name' => 'In configurable %isolation% %attribute_0-option_0_name%',
                         'sku' => 'sku_configurable_%isolation%_%attribute_0-option_0_id%',
                         'qty' => 10,
-                        'weight' => 1
+                        'weight' => 1,
+                        'options_names' => []
                     ]
                 ]
             ]

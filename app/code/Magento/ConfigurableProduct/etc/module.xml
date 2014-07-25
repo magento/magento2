@@ -42,12 +42,12 @@
             <module name="Magento_Theme" />
             <module name="Magento_Backend" />
             <module name="Magento_Eav" />
-            <module name="Magento_Cms" />
             <module name="Magento_Customer" />
             <module name="Magento_CatalogRule" />
             <module name="Magento_Directory" />
             <module name="Magento_Weee" />
             <module name="Magento_RequireJs" />
+            <module name="Magento_Webapi"/>
         </depends>
     </module>
 </config>

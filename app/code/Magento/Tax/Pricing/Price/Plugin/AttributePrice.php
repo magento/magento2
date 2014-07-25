@@ -34,20 +34,20 @@ class AttributePrice
     protected $taxHelper;
 
     /**
-     * @var \Magento\Tax\Model\Calculation
+     * @var \Magento\Tax\Service\V1\TaxCalculationServiceInterface
      */
-    protected $calculation;
+    protected $taxCalculationService;
 
     /**
      * @param \Magento\Tax\Helper\Data $helper
-     * @param \Magento\Tax\Model\Calculation $calculation
+     * @param \Magento\Tax\Service\V1\TaxCalculationServiceInterface $taxCalculationService
      */
     public function __construct(
         \Magento\Tax\Helper\Data $helper,
-        \Magento\Tax\Model\Calculation $calculation
+        \Magento\Tax\Service\V1\TaxCalculationServiceInterface $taxCalculationService
     ) {
         $this->taxHelper = $helper;
-        $this->calculation = $calculation;
+        $this->taxCalculationService = $taxCalculationService;
     }
 
     /**
@@ -65,10 +65,16 @@ class AttributePrice
 
         $productClassId = $product->getTaxClassId();
 
-        $defaultValue = $this->applyRate($productClassId, false, false, false, $result['customerId']);
+        $defaultValue = $this->taxCalculationService->getDefaultCalculatedRate(
+            $productClassId,
+            $result['customerId']
+        );
         $result['defaultTax'] = $defaultValue + $result['defaultTax'];
 
-        $currentTax = $this->applyRate($productClassId, null, null, null, $result['customerId']);
+        $currentTax = $this->taxCalculationService->getCalculatedRate(
+            $productClassId,
+            $result['customerId']
+        );
         $result['currentTax'] = $currentTax + $result['currentTax'];
 
         $adjustment = $product->getPriceInfo()->getAdjustment(\Magento\Tax\Pricing\Adjustment::ADJUSTMENT_CODE);
@@ -77,33 +83,5 @@ class AttributePrice
         $result['showIncludeTax'] = $this->taxHelper->displayPriceIncludingTax();
         $result['showBothPrices'] = $this->taxHelper->displayBothPrices();
         return $result;
-    }
-
-    /**
-     * Apply Tax Rate
-     *
-     * @param int $classId
-     * @param null $shippingAddress
-     * @param null $billingAddress
-     * @param null $customerTaxClass
-     * @param int|null $customerId
-     * @return float
-     */
-    protected function applyRate(
-        $classId,
-        $shippingAddress = null,
-        $billingAddress = null,
-        $customerTaxClass = null,
-        $customerId = null
-    ) {
-        $rateRequest = $this->calculation->getRateRequest(
-            $shippingAddress,
-            $billingAddress,
-            $customerTaxClass,
-            null,
-            $customerId
-        );
-        $rateRequest->setProductClassId($classId);
-        return $this->calculation->getRate($rateRequest);
     }
 }

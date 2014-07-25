@@ -67,15 +67,22 @@
             <browser class="Mtf\Client\Browser"/>
         </require>
     </assertPageByUrlRewriteIsNotFound>
-    <assertUrlRewriteCmsPageRedirect module="Magento_UrlRewrite">
-        <severeness>low</severeness>
-        <require>
-            <cmsPage class="Magento\Cms\Test\Fixture\CmsPage"/>
-            <urlRewrite class="Magento\UrlRewrite\Test\Fixture\UrlRewrite"/>
-            <browser class="Mtf\Client\Browser"/>
-        </require>
-    </assertUrlRewriteCmsPageRedirect>
     <assertUrlRewriteCustomRedirect module="Magento_UrlRewrite">
         <severeness>low</severeness>
     </assertUrlRewriteCustomRedirect>
+    <assertUrlRewriteSuccessOutsideRedirect module="Magento_UrlRewrite">
+        <severeness>low</severeness>
+        <require>
+            <urlRewrite class="Magento\UrlRewrite\Test\Fixture\UrlRewrite"/>
+            <browser class="Mtf\Client\Browser"/>
+        </require>
+    </assertUrlRewriteSuccessOutsideRedirect>
+    <assertUrlRewriteCustomSearchRedirect module="Magento_UrlRewrite">
+        <severeness>low</severeness>
+        <require>
+            <urlRewrite class="Magento\UrlRewrite\Test\Fixture\UrlRewrite"/>
+            <browser class="Mtf\Client\Browser"/>
+            <categoryView class="Magento\Catalog\Test\Page\Category\CatalogCategoryView"/>
+        </require>
+    </assertUrlRewriteCustomSearchRedirect>
 </constraint>

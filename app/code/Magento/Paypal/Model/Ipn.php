@@ -229,7 +229,7 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
             switch ($paymentStatus) {
                 // paid
                 case Info::PAYMENTSTATUS_COMPLETED:
-                    $this->_registerPaymentCapture();
+                    $this->_registerPaymentCapture(true);
                     break;
                     // the holded payment was denied on paypal side
                 case Info::PAYMENTSTATUS_DENIED:
@@ -274,29 +274,38 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
     /**
      * Process completed payment (either full or partial)
      *
+     * @param bool $skipFraudDetection
      * @return void
      */
-    protected function _registerPaymentCapture()
+    protected function _registerPaymentCapture($skipFraudDetection = false)
     {
         if ($this->getRequestData('transaction_entity') == 'auth') {
             return;
         }
+        $parentTransactionId = $this->getRequestData('parent_txn_id');
         $this->_importPaymentInformation();
         $payment = $this->_order->getPayment();
         $payment->setTransactionId(
             $this->getRequestData('txn_id')
-        )->setCurrencyCode(
+        );
+        $payment->setCurrencyCode(
             $this->getRequestData('mc_currency')
-        )->setPreparedMessage(
+        );
+        $payment->setPreparedMessage(
             $this->_createIpnComment('')
-        )->setParentTransactionId(
-            $this->getRequestData('parent_txn_id')
-        )->setShouldCloseParentTransaction(
+        );
+        $payment->setParentTransactionId(
+            $parentTransactionId
+        );
+        $payment->setShouldCloseParentTransaction(
             'Completed' === $this->getRequestData('auth_status')
-        )->setIsTransactionClosed(
+        );
+        $payment->setIsTransactionClosed(
             0
-        )->registerCaptureNotification(
-            $this->getRequestData('mc_gross')
+        );
+        $payment->registerCaptureNotification(
+            $this->getRequestData('mc_gross'),
+            $skipFraudDetection && $parentTransactionId
         );
         $this->_order->save();
 
@@ -360,7 +369,9 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
             throw new Exception('The "order" authorizations are not implemented.');
         }
         // case when was placed using PayPal standard
-        if (\Magento\Sales\Model\Order::STATE_PENDING_PAYMENT == $this->_order->getState()) {
+        if (\Magento\Sales\Model\Order::STATE_PENDING_PAYMENT == $this->_order->getState()
+            && !$this->getRequestData('transaction_entity')
+        ) {
             $this->_registerPaymentCapture();
             return;
         }
@@ -399,6 +410,8 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements IpnInterface
                 $this->getRequestData('txn_id')
             )->setParentTransactionId(
                 $this->getRequestData('parent_txn_id')
+            )->setCurrencyCode(
+                $this->getRequestData('mc_currency')
             )->setIsTransactionClosed(
                 0
             )->registerAuthorizationNotification(

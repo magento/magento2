@@ -26,7 +26,7 @@
 <page mca="admin/system_variable/new" >
     <block>
         <name>formPageActions</name>
-        <class>Magento\Backend\Test\Block\FormPageActions</class>
+        <class>Magento\Core\Test\Block\Adminhtml\System\Variable\FormPageActions</class>
         <locator>.page-main-actions</locator>
         <strategy>css selector</strategy>
     </block>

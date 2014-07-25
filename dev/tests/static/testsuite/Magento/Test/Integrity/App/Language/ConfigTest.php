@@ -31,9 +31,9 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
         $expectedErrors = array(
             "Element 'code': [facet 'pattern'] The value 'e_GB' is not accepted by the pattern",
             "Element 'code': 'e_GB' is not a valid value of the atomic type 'codeType'",
-            "Element 'vendor': [facet 'pattern'] The value 'agento' is not accepted by the pattern",
-            "Element 'vendor': 'agento' is not a valid value of the atomic type",
-            "Element 'sort_odrer': This element is not expected. Expected is one of",
+            "Element 'vendor': [facet 'pattern'] The value 'Magento' is not accepted by the pattern",
+            "Element 'vendor': 'Magento' is not a valid value of the atomic type",
+            "Element 'sort_odrer': This element is not expected. Expected is",
         );
         parent::testSchemaUsingInvalidXml($expectedErrors);
     }

@@ -179,7 +179,7 @@ class Messages extends Template
      * @param MessageInterface $message
      * @return $this
      */
-    public function addMessage(\Magento\Framework\Message\AbstractMessage $message)
+    public function addMessage(MessageInterface $message)
     {
         $this->getMessageCollection()->addMessage($message);
         return $this;

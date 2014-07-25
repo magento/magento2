@@ -317,11 +317,12 @@ class TaxRateServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoDbIsolation enabled
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage country_id
+     * @expectedExceptionMessage postcode
      */
     public function testUpdateTaxRateMissingRequiredFields()
     {
         $taxRate = $this->taxRateBuilder
+            ->setCountryId('US')
             ->setRegionId(42)
             ->setPercentageRate(8.25)
             ->setCode('UpdateTaxRates')

@@ -33,20 +33,16 @@
 }
 
 //
-//    Primary button
-//--------------------------------------
-.action-primary {
-    .button-primary();
-    border-radius: @button-border-radius;
-}
-
-//
 //    Link as a button
 //--------------------------------------
 .action-link-button {
-  .button();
-  .link-as-button();
-  border-radius: @button-border-radius;
+    .button();
+    .link-as-button();
+    border-radius: @button-border-radius;
+    &:active,
+    &:focus {
+        box-shadow: none;
+    }
 }
 
 //
@@ -123,7 +119,7 @@
 //
 //    Input quantity
 //--------------------------------------
-.input-qty {
+.abstract-input-qty {
     .form-element-size(@_width: 47px);
     text-align: center;
 }
@@ -275,6 +271,12 @@
     .visually-hidden();
 }
 
+.responsive-smaller(@break) when (@break = @break-point-0) {
+    .visually-hidden-mobile {
+        .visually-hidden();
+    } 
+}
+
 //
 //    Clearfix
 //--------------------------------------
@@ -284,6 +286,12 @@
 
 .responsive(@break) when (@break = @break-point-1) {
     .add-clearfix-desktop {
+        .clearfix();
+    }
+}
+
+.responsive-smaller(@break) when (@break = @break-point-0) {
+    .add-clearfix-mobile {
         .clearfix();
     }
 }
@@ -392,4 +400,78 @@
 //--------------------------------------
 .abstract-box-tocart {
     margin: @indent-s-base 0;
+}
+
+//
+//    Vertical Table
+//--------------------------------------
+.responsive-smaller(@break) when (@break = @break-point-0) {
+    .table-vertical-mobile {
+        .table-responsive();
+        tbody > tr {
+            > td {
+                padding-left: 0;
+                padding-right: 0;
+            }
+            &:not(:last-child) {
+                td:last-child {
+                    padding-bottom: @indent-base;
+                }
+            }
+        }
+    }
+}
+
+//
+//    Excl/Incl tax
+//--------------------------------------
+.abstract-incl-excl-tax {
+    .tax {
+        display: block;
+        .font-size(18);
+        line-height: 1;
+        .price {
+            font-weight: @font-weight-bold;
+        }
+    }
+
+    .incl.tax + .excl.tax,
+    .weee {
+        display: block;
+        .font-size(18);
+        &:before {
+            content: attr(data-th) ": ";
+            .font-size(11);
+        }
+        .price {
+            .font-size(11);
+        }
+    }
+}
+
+//
+//    Cart tax total
+//--------------------------------------
+.abstract-tax-total {
+    cursor: pointer;
+    position: relative;
+    padding-right: 12px;
+    .icon-font(
+        @icon-down,
+        @_icon-font-size: 26px,
+        @_icon-font-line-height: 10px,
+        @_icon-font-margin: 3px 0 0 0,
+        @_icon-font-position: after
+    );
+    &:after {
+        position: absolute;
+        right: -7px;
+        top: 3px;
+    }
+    &-expanded {
+        .icon-font-symbol(
+            @_icon-font-content: @icon-up,
+            @_icon-font-position: after
+        );
+    }
 }

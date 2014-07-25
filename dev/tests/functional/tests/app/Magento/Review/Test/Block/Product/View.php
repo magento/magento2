@@ -39,28 +39,28 @@ class View extends Block
      *
      * @var string
      */
-    protected $itemSelector = '.reviews.items .item.review';
+    protected $itemSelector = '.review-items .review-item';
 
     /**
      * Nickname selector
      *
      * @var string
      */
-    protected $nicknameSelector = '.nickname';
+    protected $nicknameSelector = '.review-author .review-details-value';
 
     /**
      * Title selector
      *
      * @var string
      */
-    protected $titleSelector = '.title';
+    protected $titleSelector = '.review-title';
 
     /**
      * Detail selector
      *
      * @var string
      */
-    protected $detailSelector = '.content';
+    protected $detailSelector = '.review-content';
 
     /**
      * Selectors mapping

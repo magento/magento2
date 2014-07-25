@@ -87,14 +87,14 @@ class Agreement extends \Magento\Paypal\Model\Payment\Method\Billing\AbstractAgr
      *
      * @var bool
      */
-    protected $_canUseCheckout = false;
+    protected $_canUseCheckout = true;
 
     /**
      * Method instance setting
      *
      * @var bool
      */
-    protected $_canUseInternal = false;
+    protected $_canUseInternal = true;
 
     /**
      * Method instance setting

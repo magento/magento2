@@ -414,7 +414,10 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 'PackageDetail' => 'INDIVIDUAL_PACKAGES',
                 'RequestedPackageLineItems' => array(
                     '0' => array(
-                        'Weight' => array('Value' => (double)$r->getWeight(), 'Units' => 'LB'),
+                        'Weight' => [
+                            'Value' => (double)$r->getWeight(),
+                            'Units' => $this->getConfigData('unit_of_measure')
+                        ],
                         'GroupPackageCount' => 1
                     )
                 )
@@ -509,7 +512,12 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
         if (is_object($response)) {
             if ($response->HighestSeverity == 'FAILURE' || $response->HighestSeverity == 'ERROR') {
-                $errorTitle = (string)$response->Notifications->Message;
+                if (is_array($response->Notifications)) {
+                    $notification = array_pop($response->Notifications);
+                    $errorTitle = (string)$notification->Message;
+                } else {
+                    $errorTitle = (string)$response->Notifications->Message;
+                }
             } elseif (isset($response->RateReplyDetails)) {
                 $allowedMethods = explode(",", $this->getConfigData('allowed_methods'));
 
@@ -916,7 +924,11 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 'ADULT' => __('Adult'),
                 'DIRECT' => __('Direct'),
                 'INDIRECT' => __('Indirect')
-            )
+            ),
+            'unit_of_measure' => array(
+                'LB'   =>  __('Pounds'),
+                'KG'   =>  __('Kilograms'),
+            ),
         );
 
         if (!isset($codes[$type])) {

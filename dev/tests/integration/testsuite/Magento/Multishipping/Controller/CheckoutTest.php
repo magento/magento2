@@ -50,6 +50,7 @@ class CheckoutTest extends \Magento\TestFramework\TestCase\AbstractController
         )->setQuoteId(
             $quote->getId()
         );
+        $formKey = $this->_objectManager->get('Magento\Framework\Data\Form\FormKey');
         $logger = $this->getMock('Magento\Framework\Logger', array(), array(), '', false);
         /** @var $session \Magento\Customer\Model\Session */
         $session = Bootstrap::getObjectManager()->create('Magento\Customer\Model\Session', array($logger));
@@ -67,5 +68,6 @@ class CheckoutTest extends \Magento\TestFramework\TestCase\AbstractController
             $html
         );
         $this->assertContains('<span class="price">$10.00</span>', $html);
+        $this->assertContains('<input name="form_key" type="hidden" value="' . $formKey->getFormKey(), $html);
     }
 }

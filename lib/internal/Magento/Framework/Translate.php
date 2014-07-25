@@ -60,13 +60,6 @@ class Translate implements \Magento\Framework\TranslateInterface
     protected $_data = [];
 
     /**
-     * Translation data for data scope (per module)
-     *
-     * @var array
-     */
-    protected $_dataScope;
-
-    /**
      * @var \Magento\Framework\View\DesignInterface
      */
     protected $_viewDesign;
@@ -199,10 +192,10 @@ class Translate implements \Magento\Framework\TranslateInterface
         }
         $this->_data = [];
 
-        $this->_loadModuleTranslation($forceReload);
-        $this->_loadThemeTranslation($forceReload);
-        $this->_loadPackTranslation($forceReload);
-        $this->_loadDbTranslation($forceReload);
+        $this->_loadModuleTranslation();
+        $this->_loadThemeTranslation();
+        $this->_loadPackTranslation();
+        $this->_loadDbTranslation();
 
         if (!$forceReload) {
             $this->_saveCache();
@@ -260,14 +253,13 @@ class Translate implements \Magento\Framework\TranslateInterface
     /**
      * Load data from module translation files
      *
-     * @param bool $forceReload
      * @return $this
      */
-    protected function _loadModuleTranslation($forceReload = false)
+    protected function _loadModuleTranslation()
     {
         foreach ($this->_moduleList->getModules() as $module) {
             $moduleFilePath = $this->_getModuleTranslationFile($module['name'], $this->getLocale());
-            $this->_addData($this->_getFileData($moduleFilePath), false, $forceReload);
+            $this->_addData($this->_getFileData($moduleFilePath));
         }
         return $this;
     }
@@ -276,11 +268,9 @@ class Translate implements \Magento\Framework\TranslateInterface
      * Adding translation data
      *
      * @param array $data
-     * @param string|bool $scope
-     * @param boolean $forceReload
      * @return $this
      */
-    protected function _addData($data, $scope = false, $forceReload = false)
+    protected function _addData($data)
     {
         foreach ($data as $key => $value) {
             if ($key === $value) {
@@ -290,23 +280,7 @@ class Translate implements \Magento\Framework\TranslateInterface
             $key = str_replace('""', '"', $key);
             $value  = str_replace('""', '"', $value);
 
-            if ($scope && isset($this->_dataScope[$key]) && !$forceReload) {
-                /**
-                 * Checking previous value
-                 */
-                $scopeKey = $this->_dataScope[$key] . '::' . $key;
-                if (!isset($this->_data[$scopeKey])) {
-                    if (isset($this->_data[$key])) {
-                        $this->_data[$scopeKey] = $this->_data[$key];
-                        unset($this->_data[$key]);
-                    }
-                }
-                $scopeKey = $scope . '::' . $key;
-                $this->_data[$scopeKey] = $value;
-            } else {
-                $this->_data[$key] = $value;
-                $this->_dataScope[$key] = $scope;
-            }
+            $this->_data[$key] = $value;
         }
         return $this;
     }
@@ -314,10 +288,9 @@ class Translate implements \Magento\Framework\TranslateInterface
     /**
      * Load current theme translation
      *
-     * @param bool $forceReload
      * @return $this
      */
-    protected function _loadThemeTranslation($forceReload = false)
+    protected function _loadThemeTranslation()
     {
         if (!$this->_config['theme']) {
             return $this;
@@ -325,7 +298,7 @@ class Translate implements \Magento\Framework\TranslateInterface
 
         $file = $this->_getThemeTranslationFile($this->getLocale());
         if ($file) {
-            $this->_addData($this->_getFileData($file), 'theme' . $this->_config['theme'], $forceReload);
+            $this->_addData($this->_getFileData($file));
         }
         return $this;
     }
@@ -333,25 +306,23 @@ class Translate implements \Magento\Framework\TranslateInterface
     /**
      * Load translation dictionary from language packages
      *
-     * @param bool $forceReload
      * @return void
      */
-    protected function _loadPackTranslation($forceReload = false)
+    protected function _loadPackTranslation()
     {
         $data = $this->packDictionary->getDictionary($this->getLocale());
-        $this->_addData($data, 'language_pack', $forceReload);
+        $this->_addData($data);
     }
 
     /**
      * Loading current translation from DB
      *
-     * @param bool $forceReload
      * @return $this
      */
-    protected function _loadDbTranslation($forceReload = false)
+    protected function _loadDbTranslation()
     {
-        $arr = $this->_translateResource->getTranslationArray(null, $this->getLocale());
-        $this->_addData($arr, $this->getConfig('scope'), $forceReload);
+        $data = $this->_translateResource->getTranslationArray(null, $this->getLocale());
+        $this->_addData($data);
         return $this;
     }
 

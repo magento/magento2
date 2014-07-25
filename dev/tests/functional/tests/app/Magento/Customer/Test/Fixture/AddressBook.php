@@ -67,7 +67,7 @@ class AddressBook extends \Mtf\Fixture\DataFixture
         $this->_data = array('fields' => array('address_id' => array(
             'value' => $data['fields']['firstname']['value'] . ' '
                 . $data['fields']['lastname']['value'] . ', '
-                . $data['fields']['street_1']['value'] . ', '
+                . $data['fields']['street']['value'] . ', '
                 . $data['fields']['city']['value'] . ', '
                 . $data['fields']['region_id']['value'] . ' '
                 . $data['fields']['postcode']['value'] . ', '

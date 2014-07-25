@@ -27,23 +27,23 @@ namespace Magento\Bundle\Model;
  * Bundle Option Model
  *
  * @method int getParentId()
- * @method \Magento\Bundle\Model\Option setParentId(int $value)
- * @method int getRequired()
- * @method \Magento\Bundle\Model\Option setRequired(int $value)
  * @method int getPosition()
- * @method \Magento\Bundle\Model\Option setPosition(int $value)
+ * @method int getRequired()
+ * @method null|\Magento\Catalog\Model\Product[] getSelections()
  * @method string getType()
- * @method \Magento\Bundle\Model\Option setType(string $value)
- * @method \Magento\Catalog\Model\Product[] getSelections()
+ * @method Option setParentId(int $value)
+ * @method Option setPosition(int $value)
+ * @method Option setRequired(int $value)
+ * @method Option setType(string $value)
  */
 class Option extends \Magento\Framework\Model\AbstractModel
 {
     /**
      * Default selection object
      *
-     * @var Selection
+     * @var \Magento\Catalog\Model\Product|null
      */
-    protected $_defaultSelection = null;
+    protected $defaultSelection = null;
 
     /**
      * Initialize resource model
@@ -59,18 +59,14 @@ class Option extends \Magento\Framework\Model\AbstractModel
     /**
      * Add selection to option
      *
-     * @param Selection $selection
-     * @return $this|false
+     * @param \Magento\Catalog\Model\Product $selection
+     * @return void
      */
-    public function addSelection($selection)
+    public function addSelection(\Magento\Catalog\Model\Product $selection)
     {
-        if (!$selection) {
-            return false;
-        }
-        $selections = $this->getDataSetDefault('selections', array());
+        $selections = $this->getDataSetDefault('selections', []);
         $selections[] = $selection;
         $this->setSelections($selections);
-        return $this;
     }
 
     /**
@@ -80,35 +76,35 @@ class Option extends \Magento\Framework\Model\AbstractModel
      */
     public function isSaleable()
     {
-        $saleable = 0;
-        if ($this->getSelections()) {
-            foreach ($this->getSelections() as $selection) {
+        $saleable = false;
+        $selections = $this->getSelections();
+        if ($selections) {
+            foreach ($selections as $selection) {
                 if ($selection->isSaleable()) {
-                    $saleable++;
+                    $saleable = true;
+                    break;
                 }
             }
-            return (bool) $saleable;
-        } else {
-            return false;
         }
+        return $saleable;
     }
 
     /**
      * Retrieve default Selection object
      *
-     * @return Selection
+     * @return \Magento\Catalog\Model\Product|null
      */
     public function getDefaultSelection()
     {
-        if (!$this->_defaultSelection && $this->getSelections()) {
+        if (!$this->defaultSelection && $this->getSelections()) {
             foreach ($this->getSelections() as $selection) {
                 if ($selection->getIsDefault()) {
-                    $this->_defaultSelection = $selection;
+                    $this->defaultSelection = $selection;
                     break;
                 }
             }
         }
-        return $this->_defaultSelection;
+        return $this->defaultSelection;
     }
 
     /**
@@ -118,11 +114,7 @@ class Option extends \Magento\Framework\Model\AbstractModel
      */
     public function isMultiSelection()
     {
-        if ($this->getType() == 'checkbox' || $this->getType() == 'multi') {
-            return true;
-        } else {
-            return false;
-        }
+        return $this->getType() == 'checkbox' || $this->getType() == 'multi';
     }
 
     /**
@@ -141,15 +133,17 @@ class Option extends \Magento\Framework\Model\AbstractModel
      * Return selection by it's id
      *
      * @param int $selectionId
-     * @return Selection|false
+     * @return \Magento\Catalog\Model\Product|null
      */
     public function getSelectionById($selectionId)
     {
-        foreach ($this->getSelections() as $option) {
-            if ($option->getSelectionId() == $selectionId) {
-                return $option;
+        $foundSelection = null;
+        foreach ($this->getSelections() as $selection) {
+            if ($selection->getSelectionId() == $selectionId) {
+                $foundSelection = $selection;
+                break;
             }
         }
-        return false;
+        return $foundSelection;
     }
 }

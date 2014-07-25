@@ -37,8 +37,8 @@
         <strategy>css selector</strategy>
     </block>
     <block>
-        <name>productBlock</name>
-        <class>Magento\Catalog\Test\Block\Adminhtml\Product</class>
+        <name>gridPageActionBlock</name>
+        <class>Magento\Catalog\Test\Block\Adminhtml\Product\GridPageAction</class>
         <locator>#add_new_product</locator>
         <strategy>css selector</strategy>
     </block>

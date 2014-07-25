@@ -109,10 +109,10 @@ class CreateConfigurableEntityTest extends Injectable
     {
         // Steps
         $this->productPageGrid->open();
-        $this->productPageGrid->getProductBlock()->addProduct('configurable');
+        $this->productPageGrid->getGridPageActionBlock()->addProduct('configurable');
         // Fill form
         $productBlockForm = $this->newProductPage->getConfigurableProductForm();
-        $productBlockForm->fillProduct($configurable, $category);
+        $productBlockForm->fill($configurable, null, $category);
         $this->newProductPage->getFormAction()->saveProduct($this->newProductPage, $configurable);
     }
 }

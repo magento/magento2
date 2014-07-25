@@ -58,5 +58,22 @@ class CatalogProductVirtual extends AbstractRepository
             ],
             'price' => ['value' => 10.00, 'preset' => '-']
         ];
+
+        $this->_data['50_dollar_product'] = [
+            'name' => '50_dollar_product %isolation%',
+            'sku' => '50_dollar_product_%isolation%',
+            'tax_class_id' => ['dataSet' => 'Taxable Goods'],
+            'status' => 'Product online',
+            'website_ids' => ['Main Website'],
+            'is_virtual' => 'Yes',
+            'url_key' => 'virtual-product%isolation%',
+            'visibility' => 'Catalog, Search',
+            'attribute_set_id' => ['dataSet' => 'default'],
+            'quantity_and_stock_status' => [
+                'qty' => 111.0000,
+                'is_in_stock' => 'In Stock',
+            ],
+            'price' => ['value' => 50.00, 'preset' => '-']
+        ];
     }
 }

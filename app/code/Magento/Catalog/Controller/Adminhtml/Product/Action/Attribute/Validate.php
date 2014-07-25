@@ -33,10 +33,10 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attr
      */
     public function execute()
     {
-        $response = new \Magento\Framework\Object();
+        $response = $this->_objectManager->create('Magento\Framework\Object');
         $response->setError(false);
         $attributesData = $this->getRequest()->getParam('attributes', array());
-        $data = new \Magento\Framework\Object();
+        $data = $this->_objectManager->create('Magento\Catalog\Model\Product');
 
         try {
             if ($attributesData) {

@@ -24,7 +24,7 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\System\Config;
 
-class Edit extends \Magento\Backend\Controller\Adminhtml\System\AbstractConfig
+class Edit extends AbstractScopeConfig
 {
     /**
      * Edit configuration section

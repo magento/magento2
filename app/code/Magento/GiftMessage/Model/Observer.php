@@ -93,12 +93,14 @@ class Observer extends \Magento\Framework\Object
         $giftMessages = $observer->getEvent()->getRequest()->getParam('giftmessage');
         $quote = $observer->getEvent()->getQuote();
         /* @var $quote \Magento\Sales\Model\Quote */
-        if (is_array($giftMessages)) {
-            foreach ($giftMessages as $entityId => $message) {
-
+        if (!is_array($giftMessages)) {
+            return $this;
+        }
+        // types are 'quote', 'quote_item', etc
+        foreach ($giftMessages as $type => $giftMessageEntities) {
+            foreach ($giftMessageEntities as $entityId => $message) {
                 $giftMessage = $this->_messageFactory->create();
-
-                switch ($message['type']) {
+                switch ($type) {
                     case 'quote':
                         $entity = $quote;
                         break;

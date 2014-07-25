@@ -32,7 +32,8 @@ use Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew as ParentCatalogProduc
  */
 class CatalogProductNew extends ParentCatalogProductNew
 {
-    const MCA = 'catalog/product_configurable/new';
+    const MCA = 'configurable/catalog/product/new';
+
     /**
      * Custom constructor
      */
@@ -44,7 +45,6 @@ class CatalogProductNew extends ParentCatalogProductNew
             'locator' => '[id="page:main-container"]',
             'strategy' => 'css selector',
         ];
-        $this->_url = $_ENV['app_backend_url'] . static::MCA;
     }
 
     /**

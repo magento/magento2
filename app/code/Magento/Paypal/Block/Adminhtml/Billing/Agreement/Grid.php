@@ -194,7 +194,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
             'created_at',
             array(
                 'header' => __('Created'),
-                'index' => 'agreement_created_at',
+                'index' => 'created_at',
                 'type' => 'datetime',
                 'align' => 'center',
                 'default' => __('N/A'),
@@ -208,7 +208,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
             'updated_at',
             array(
                 'header' => __('Updated'),
-                'index' => 'agreement_updated_at',
+                'index' => 'updated_at',
                 'type' => 'datetime',
                 'align' => 'center',
                 'default' => __('N/A'),

@@ -109,7 +109,7 @@ class AdvancedPricingTab extends Tab
                 }
             } elseif (!empty($field['value'])) {
                 $data = $this->dataMapping([$fieldName => $field]);
-                $formData[$fieldName] = $this->_getData($data, $this->_rootElement);
+                $formData += $this->_getData($data, $this->_rootElement);
             }
         }
 

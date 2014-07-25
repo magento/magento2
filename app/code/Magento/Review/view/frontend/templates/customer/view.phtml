@@ -24,49 +24,50 @@
 ?>
 <?php if($this->getProductData()->getId()): ?>
 <?php $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image'); ?>
-<div class="customer review view">
-    <h2 class="product name"><?php echo $this->escapeHtml($this->getProductData()->getName()) ?></h2>
-    <div class="product details">
-        <a class="product photo" href="<?php echo $this->getProductData()->getProductUrl() ?>">
-            <?php /* customer_account_product_review_page */ ?>
-            <?php echo $imageBlock->init($this->getProductData(), 'customer_account_product_review_page')->toHtml() ?>
-        </a>
-        <?php if( $this->getRating() && $this->getRating()->getSize()): ?>
-        <p><?php echo __('Average Customer Rating:') ?></p>
-        <?php echo $this->getReviewsSummaryHtml($this->getProductData()) ?>
-        <?php endif; ?>
-    </div>
-    <div class="review details">
-
-        <?php if( $this->getRating() && $this->getRating()->getSize()): ?>
-        <div class="ratings summary items">
-            <strong><?php echo ($this->isReviewOwner()) ? __('Your Rating:') : __('Rating:'); ?></strong>
-
-            <?php foreach ($this->getRating() as $_rating): ?>
-            <?php if($_rating->getPercent()): ?>
-                <?php $rating = ceil($_rating->getPercent()) ?>
-                <div class="rating summary item">
-                    <span class="label"><span><?php echo $this->escapeHtml($_rating->getRatingCode()) ?>:</span></span>
-                    <div class="rating result" title="<?php echo $rating; ?>%">
-                        <span style="width:<?php echo $rating; ?>%">
-                            <span><?php echo $rating; ?>%</span>
-                        </span>
-                    </div>
-                </div>
-            <?php endif; ?>
-            <?php endforeach; ?>
+<div class="customer-review view">
+    <div class="product-details">
+        <div class="product-media">
+            <a class="product-photo" href="<?php echo $this->getProductData()->getProductUrl() ?>">
+                <?php /* customer_account_product_review_page */ ?>
+                <?php echo $imageBlock->init($this->getProductData(), 'customer_account_product_review_page')->toHtml() ?>
+            </a>
         </div>
+        <div class="product-info">
+            <h2 class="product-name"><?php echo $this->escapeHtml($this->getProductData()->getName()) ?></h2>
+            <?php if( $this->getRating() && $this->getRating()->getSize()): ?>
+                <span class="rating-average-label"><?php echo __('Average Customer Rating:') ?></span>
+                <?php echo $this->getReviewsSummaryHtml($this->getProductData()) ?>
+            <?php endif; ?>
+        </div>
+    </div>
+
+    <div class="review-details">
+        <?php if( $this->getRating() && $this->getRating()->getSize()): ?>
+            <div class="title">
+                <strong><?php echo ($this->isReviewOwner()) ? __('Your Review') : __('Review'); ?></strong>
+            </div>
+            <div class="customer-review-rating">
+                <?php foreach ($this->getRating() as $_rating): ?>
+                <?php if($_rating->getPercent()): ?>
+                    <?php $rating = ceil($_rating->getPercent()) ?>
+                    <div class="rating-summary item">
+                        <span class="rating-label"><span><?php echo $this->escapeHtml($_rating->getRatingCode()) ?></span></span>
+                        <div class="rating-result" title="<?php echo $rating; ?>%">
+                            <span style="width:<?php echo $rating; ?>%">
+                                <span><?php echo $rating; ?>%</span>
+                            </span>
+                        </div>
+                    </div>
+                <?php endif; ?>
+                <?php endforeach; ?>
+            </div>
         <?php endif; ?>
 
-        <div class="review title"><?php echo $this->escapeHtml($this->getReviewData()->getTitle()) ?></div>
-        <p class="review date">
-            <?php if ($this->isReviewOwner()): ?>
-                <?php echo __('Your Review (submitted on %1):', '<time class="date">' . $this->dateFormat($this->getReviewData()->getCreatedAt()) . '</time>') ?>
-            <?php else :?>
-                <?php echo __('Review (submitted on %1):', '<time class="date">' . $this->dateFormat($this->getReviewData()->getCreatedAt()) . '</time>') ?>
-            <?php endif;?>
-        </p>
-        <div class="review content"><?php echo nl2br($this->escapeHtml($this->getReviewData()->getDetail())) ?></div>
+        <div class="review-title"><?php echo $this->escapeHtml($this->getReviewData()->getTitle()) ?></div>
+        <div class="review-content"><?php echo nl2br($this->escapeHtml($this->getReviewData()->getDetail())) ?></div>
+        <div class="review-date">
+            <?php echo __('Submitted on %1', '<time class="date">' . $this->dateFormat($this->getReviewData()->getCreatedAt()) . '</time>') ?>
+        </div>
     </div>
 </div>
 <div class="actions-toolbar">

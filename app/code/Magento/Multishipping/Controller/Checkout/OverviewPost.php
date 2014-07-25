@@ -24,10 +24,36 @@
  */
 namespace Magento\Multishipping\Controller\Checkout;
 
+use Magento\Checkout\Controller\Action;
+use Magento\Customer\Service\V1\CustomerAccountServiceInterface as CustomerAccountService;
+use Magento\Customer\Service\V1\CustomerMetadataServiceInterface as CustomerMetadataService;
 use \Magento\Multishipping\Model\Checkout\Type\Multishipping\State;
 
 class OverviewPost extends \Magento\Multishipping\Controller\Checkout
 {
+    /**
+     * @var \Magento\Core\App\Action\FormKeyValidator
+     */
+    protected $formKeyValidator;
+
+    /**
+     * @param \Magento\Framework\App\Action\Context $context
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param CustomerAccountService $customerAccountService
+     * @param CustomerMetadataService $customerMetadataService
+     * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
+     */
+    public function __construct(
+        \Magento\Framework\App\Action\Context $context,
+        \Magento\Customer\Model\Session $customerSession,
+        CustomerAccountService $customerAccountService,
+        CustomerMetadataService $customerMetadataService,
+        \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
+    ) {
+        $this->formKeyValidator = $formKeyValidator;
+        parent::__construct($context, $customerSession, $customerAccountService, $customerMetadataService);
+    }
+
     /**
      * Overview action
      *
@@ -35,6 +61,10 @@ class OverviewPost extends \Magento\Multishipping\Controller\Checkout
      */
     public function execute()
     {
+        if (!$this->formKeyValidator->validate($this->getRequest())) {
+            $this->_forward('backToAddresses');
+            return;
+        }
         if (!$this->_validateMinimumAmount()) {
             return;
         }

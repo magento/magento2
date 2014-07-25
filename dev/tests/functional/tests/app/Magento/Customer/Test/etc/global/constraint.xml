@@ -102,4 +102,23 @@
     <assertCustomerGroupForm module="Magento_Customer">
         <severeness>low</severeness>
     </assertCustomerGroupForm>
+    <assertCustomerInfoSuccessSavedMessage module="Magento_Customer">
+        <severeness>low</severeness>
+        <require>
+            <customerAccountIndex class="Magento\Customer\Test\Page\CustomerAccountIndex" />
+        </require>
+    </assertCustomerInfoSuccessSavedMessage>
+    <assertCustomerAddressSuccessSaveMessage module="Magento_Customer">
+        <severeness>low</severeness>
+        <require>
+            <customerAccountIndex class="Magento\Customer\Test\Page\CustomerAccountIndex" />
+        </require>
+    </assertCustomerAddressSuccessSaveMessage>
+    <assertCustomerDefaultAddresses module="Magento_Customer">
+        <severeness>low</severeness>
+        <require>
+            <customerAccountIndex class="Magento\Customer\Test\Page\CustomerAccountIndex" />
+            <address class="Magento\Customer\Test\Fixture\AddressInjectable" />
+        </require>
+    </assertCustomerDefaultAddresses>
 </constraint>

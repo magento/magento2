@@ -58,7 +58,7 @@ class AssertProductAttributeAbsenceInSearchOnProductForm extends AbstractConstra
         CatalogProductNew $newProductPage
     ) {
         $productGrid->open();
-        $productGrid->getProductBlock()->addProduct('simple');
+        $productGrid->getGridPageActionBlock()->addProduct('simple');
         \PHPUnit_Framework_Assert::assertFalse(
             $newProductPage->getForm()->checkAttributeInSearchAttributeForm($productAttribute),
             "Product attribute found in Attribute Search form."

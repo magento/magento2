@@ -686,14 +686,10 @@ class Checkout
             $billingAddress = $quote->getBillingAddress();
         }
         $exportedBillingAddress = $this->_api->getExportedBillingAddress();
-        $quote->setCustomerEmail($billingAddress->getEmail());
-        $quote->setCustomerPrefix($billingAddress->getPrefix());
-        $quote->setCustomerFirstname($billingAddress->getFirstname());
-        $quote->setCustomerMiddlename($billingAddress->getMiddlename());
-        $quote->setCustomerLastname($billingAddress->getLastname());
-        $quote->setCustomerSuffix($billingAddress->getSuffix());
-        $quote->setCustomerNote($exportedBillingAddress->getData('note'));
+
         $this->_setExportedAddressData($billingAddress, $exportedBillingAddress);
+        $billingAddress->setCustomerNote($exportedBillingAddress->getData('note'));
+        $quote->setBillingAddress($billingAddress);
 
         // import payment info
         $payment = $quote->getPayment();

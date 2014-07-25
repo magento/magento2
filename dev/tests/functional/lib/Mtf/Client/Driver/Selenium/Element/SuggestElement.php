@@ -62,6 +62,8 @@ class SuggestElement extends Element
      */
     public function setValue($value)
     {
+        $this->_eventManager->dispatchEvent(['set_value'], [__METHOD__, $this->getAbsoluteSelector()]);
+
         $this->find($this->suggest)->setValue($value);
         $this->waitResult();
         $this->find(sprintf($this->resultItem, $value), Locator::SELECTOR_XPATH)->click();
@@ -90,6 +92,8 @@ class SuggestElement extends Element
      */
     public function getValue()
     {
+        $this->_eventManager->dispatchEvent(['get_value'], [(string) $this->_locator]);
+        
         return $this->find($this->suggest)->getValue();
     }
 }

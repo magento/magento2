@@ -77,6 +77,40 @@ jQuery(function($) {
     var $form = $('[data-form=edit-product]');
     $form.data('typeSwitcher', new TypeSwitcher(<?php echo $this->getTypeSwitcherData();?>).bindAll());
 
+    var scriptTagManager = (function($) {
+        var hiddenPrefix = 'hidden',
+            scriptTypeRegExp = /((java|ecma)script)/gi,
+            hiddenScriptType = 'text/' + hiddenPrefix + 'javascript',
+            changeScriptsType = function(source, callback) {
+                var isString = (typeof source === 'string'),
+                    div = document.createElement('div'),
+                    scripts,
+                    scriptsLength;
+                div.innerHTML = isString ? source : $(source).clone().wrap('<p>').parent().html();
+                scripts = div.getElementsByTagName('script');
+                scriptsLength = scripts.length;
+                for (var i = 0; i < scriptsLength; i++) {
+                    scripts[i].type = callback(scripts[i].type);
+                }
+                return isString ? div.innerHTML : $(div.innerHTML);
+            },
+            disableScripts = function(source) {
+                enableScripts(source);
+                return changeScriptsType(source, function(type) {
+                    return type ? type.replace(scriptTypeRegExp, hiddenPrefix + '$1') : hiddenScriptType;
+                });
+            },
+            enableScripts = function(source) {
+                return changeScriptsType(source, function(type) {
+                    return type.replace(hiddenPrefix, '');
+                });
+            };
+        return {
+            'disableScripts' : disableScripts,
+            'enableScripts' : enableScripts
+        }
+    })($);
+
     $('#meta_description').on('change keyup paste', function () {
         var maxLength = $(this).data('maxLength') || 255;
         if ($(this).val().length >= maxLength) {
@@ -225,6 +259,8 @@ jQuery(function($) {
             context: $('body'),
             showLoader: true
         }).done(function(data) {
+            //Hide all js scripts to prevent removing them during jQuery object creation
+            data = scriptTagManager.disableScripts(data);
             var removedElementClass = 'removed';
 
             var $page = $('body');
@@ -281,6 +317,25 @@ jQuery(function($) {
                         $tabs = $tabContainer.find('li:not(.' + removedElementClass + ')  .tab-item-link.user-defined:not(.ajax)');
                     });
                 });
+            });
+
+            //add new fieldsets or reorder
+            $newPage.find('#product_info_tabs .fieldset.user-defined').each(function(index, newFieldset) {
+                var fieldsetContainer, newFieldsetContainer, sourceContainer, destinationContainer;
+                newFieldsetContainer = $(newFieldset).parents('[data-ui-id*=-tab-content-]').first();
+                if ($page.find('[data-ui-id=' + newFieldsetContainer.data('uiId') + ']').length === 0) {
+                    fieldsetContainer = newFieldsetContainer
+                        .clone()
+                        .removeClass(removedElementClass)
+                        .removeClass('ignore-validate');
+                    //Enable hidden js scripts in node. These scripts will be performed after inserting into page
+                    fieldsetContainer = scriptTagManager.enableScripts(fieldsetContainer);
+                } else {
+                    fieldsetContainer = $page.find('[data-ui-id=' + newFieldsetContainer.data('uiId') + ']').first();
+                }
+                sourceContainer = newFieldsetContainer.parents('[data-ui-id*=-tab-content-]').first();
+                destinationContainer = $page.find('[data-ui-id=' + sourceContainer.data('uiId') + ']').first();
+                fieldsetContainer.appendTo(destinationContainer);
             });
 
             var nameDataMapper = function() {

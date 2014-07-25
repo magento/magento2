@@ -58,21 +58,21 @@ class Cart extends Block
      *
      * @var string
      */
-    protected $itemSubTotalSelector = '//td[@class="col subtotal excl tax"]//span[@class="price"]';
+    protected $itemSubTotalSelector = '//td[@class="col subtotal"]//*[@class="excl tax"]//span[@class="price"]';
 
     /**
      * Cart item unit price xpath selector
      *
      * @var string
      */
-    protected $itemUnitPriceSelector = '//td[@class="col price excl tax"]//span[@class="price"]';
+    protected $itemUnitPriceSelector = '//td[@class="col price"]//*[@class="excl tax"]//span[@class="price"]';
 
     /**
      * Unit Price value
      *
      * @var string
      */
-    protected $cartProductPrice = '//tr[string(td/div/strong/a)="%s"]/td[@class="col price excl tax"]/span/span';
+    protected $cartProductPrice = '//tr[string(td/div/strong/a)="%s"]/td[@class="col price"]/*[@class="excl tax"]/span';
 
     /**
      * 'Update Shopping Cart' button
@@ -86,14 +86,21 @@ class Cart extends Block
      *
      * @var string
      */
-    protected $productQty = '//input[@type="number" and @title="Qty"]';
+    protected $productQty = './/input[@type="number" and @title="Qty"]';
 
     /**
      * Cart item selector
      *
      * @var string
      */
-    protected $cartItem = '//tr[normalize-space(td)="%s"]';
+    protected $cartItem = './/tr[td//*[contains(.,"%s")]]';
+
+    /**
+     * Get bundle options
+     *
+     * @var string
+     */
+    protected $bundleOptions = './/dl[contains(@class, "cart-item-options")]/dd[%d]/span[@class="price"][%d]';
 
     /**
      * Get sub-total for the specified item in the cart
@@ -268,7 +275,7 @@ class Cart extends Block
         if ($product instanceof ConfigurableProduct) {
             $productOptions = $product->getProductOptions();
             if (!empty($productOptions)) {
-                $productName = $productName . ' ' . key($productOptions) . ' ' . current($productOptions);
+                $productName = $productName . '")] and *[contains(.,"' . current($productOptions);
             }
         }
         return $productName;
@@ -332,5 +339,19 @@ class Cart extends Block
     {
         preg_match("/^\\D*\\s*([\\d,\\.]+)\\s*\\D*$/", $price, $matches);
         return (isset($matches[1])) ? $matches[1] : null;
+    }
+
+    /**
+     * Get item Bundle options
+     *
+     * @param int $index
+     * @param int $itemIndex
+     * @param string $currency
+     * @return string
+     */
+    public function getPriceBundleOptions($index, $itemIndex = 1, $currency = '$')
+    {
+        $formatPrice = sprintf($this->bundleOptions, $index, $itemIndex);
+        return trim($this->_rootElement->find($formatPrice, Locator::SELECTOR_XPATH)->getText(), $currency);
     }
 }

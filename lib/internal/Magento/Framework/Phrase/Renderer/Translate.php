@@ -53,17 +53,8 @@ class Translate implements \Magento\Framework\Phrase\RendererInterface
     {
         $text = end($source);
 
-        $code = $this->translator->getTheme() . '::' . $text;
-
         $data = $this->translator->getData();
 
-        if (array_key_exists($code, $data)) {
-            return $data[$code];
-        }
-        if (array_key_exists($text, $data)) {
-            return $data[$text];
-        }
-
-        return $text;
+        return array_key_exists($text, $data) ? $data[$text] : $text;
     }
 }

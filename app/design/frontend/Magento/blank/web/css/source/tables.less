@@ -22,7 +22,7 @@
 //  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 //  */
 
-.wrapper.table {
+.table-wrapper {
     .table-overflow();
     position: relative; // to hide unnecessary horizontal scrollbar in Safari
     > table {
@@ -35,7 +35,7 @@
 //    Desktop
 //--------------------------------------
 .responsive(@break) when (@break = @break-point-1) {
-    .wrapper.table {
+    .table-wrapper {
         overflow-y: visible;
         overflow-x: visible;
         > table {
@@ -45,7 +45,7 @@
                 > tr {
                     > th,
                     > td {
-                        white-space: normal;
+                        //white-space: normal;
                     }
                 }
             }

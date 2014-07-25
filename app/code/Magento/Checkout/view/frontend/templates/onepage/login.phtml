@@ -97,12 +97,10 @@
 
         <?php if( $this->isAllowedGuestCheckout() ): ?>
             <fieldset class="fieldset guest">
-                <?php if( $this->isAllowedGuestCheckout() ): ?>
                 <div class="field choice">
                     <input type="radio" name="checkout_method" data-role="checkout-method-guest" id="login:guest" value="guest"<?php if($this->getQuote()->getCheckoutMethod()==Magento\Checkout\Model\Type\Onepage::METHOD_GUEST): ?> checked="checked"<?php endif; ?> class="radio" />
                     <label class="label" for="login:guest"><span><?php echo __('Checkout as Guest') ?></span></label>
                 </div>
-                <?php endif; ?>
                 <?php if( $this->helper('Magento\Customer\Helper\Data')->isRegistrationAllowed() ): ?>
                 <div class="field choice">
                     <input type="radio" name="checkout_method" data-role="checkout-method-register" id="login:register" value="register"<?php if($this->getQuote()->getCheckoutMethod()==Magento\Checkout\Model\Type\Onepage::METHOD_REGISTER || !$this->isAllowedGuestCheckout()): ?> checked="checked"<?php endif ?> class="radio" />
@@ -110,21 +108,21 @@
                 </div>
                 <?php endif; ?>
             </fieldset>
-        <?php else: ?>
-            <input type="hidden" name="checkout_method" id="login:register" value="register" checked="checked" />
         <?php endif; ?>
-        <div class="actions-toolbar">
+        <div class="actions toolbar">
             <div class="primary">
                 <?php if ($this->isAllowedGuestCheckout()): ?>
                     <button data-role="opc-continue" id="onepage-guest-register-button" type="button" class="action continue primary" data-checkout='{"isGuestCheckoutAllowed":true}'><span><?php echo __('Continue') ?></span></button>
                 <?php elseif ($this->helper('Magento\Checkout\Helper\Data')->isCustomerMustBeLogged()): ?>
+                    <input type="hidden" name="checkout_method" id="login:register" value="register" checked="checked" />
                     <button data-role="opc-continue" id="onepage-guest-register-button" type="button" class="action register primary" data-checkout='{"isGuestCheckoutAllowed":false, "registrationUrl":"<?php echo $this->helper('Magento\Customer\Helper\Data')->getRegisterUrl();?>"}'><span><?php echo __('Register') ?></span></button>
                 <?php else: ?>
-                    <input type="hidden" name="checkout_method" id="login:register" value="register" checked="checked" />
+                    <input type="hidden" name="checkout_method" data-role="checkout-method-register" id="login:register" value="register" checked="checked" />
                     <button data-role="opc-continue" id="onepage-guest-register-button" type="button" class="action register primary" data-checkout='{"isGuestCheckoutAllowed":true}'><span><?php echo __('Register') ?></span></button>
                 <?php endif; ?>
             </div>
         </div>
+
     </div>
 </div>
 <?php endif; ?>

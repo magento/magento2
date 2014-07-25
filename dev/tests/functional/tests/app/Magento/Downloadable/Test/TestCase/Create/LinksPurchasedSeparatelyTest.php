@@ -58,12 +58,13 @@ class LinksPurchasedSeparatelyTest extends Functional
     {
         $createProductPage = Factory::getPageFactory()->getCatalogProductIndex();
         $createProductPage->open();
-        $createProductPage->getProductBlock()->addProduct('downloadable');
+        $createProductPage->getGridPageActionBlock()->addProduct('downloadable');
 
         $createProductPageNew = Factory::getPageFactory()->getCatalogProductNew();
         $productBlockForm = $createProductPageNew->getForm();
 
-        $productBlockForm->fillProduct($this->product);
+        $category = $this->product->getCategories()['category'];
+        $productBlockForm->fill($this->product, null, $category);
         $createProductPageNew->getFormAction()->save();
 
         $createProductPageNew->getMessagesBlock()->assertSuccessMessage();

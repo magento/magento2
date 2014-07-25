@@ -89,7 +89,7 @@ class CreateBundle extends Curl
      */
     protected function _prepareData(array $params, $prefix = null)
     {
-        $data = array();
+        $data = [];
         foreach ($params as $key => $values) {
             if ($key == 'bundle_selections') {
                 $data = array_merge($data, $this->_getBundleData($values['value']));
@@ -171,7 +171,7 @@ class CreateBundle extends Curl
      */
     protected function _getUrl(array $config)
     {
-        $requestParams = isset($config['create_url_params']) ? $config['create_url_params'] : array();
+        $requestParams = isset($config['create_url_params']) ? $config['create_url_params'] : [];
         $params = '';
         foreach ($requestParams as $key => $value) {
             $params .= $key . '/' . $value . '/';
@@ -187,9 +187,9 @@ class CreateBundle extends Curl
      */
     protected function _getSelections(array $products)
     {
-        $data = array();
+        $data = [];
         foreach ($products as $product) {
-            $product = isset($product['data']) ? $product['data'] : array();
+            $product = isset($product['data']) ? $product['data'] : [];
             $data[] = $this->_prepareData($product) + ['delete' => ''];
         }
         return $data;
@@ -214,7 +214,7 @@ class CreateBundle extends Curl
         $url = $this->_getUrl($config);
         $curl = new BackendDecorator(new CurlTransport(), new Config);
         $curl->addOption(CURLOPT_HEADER, 1);
-        $curl->write(CurlInterface::POST, $url, '1.0', array(), $data);
+        $curl->write(CurlInterface::POST, $url, '1.0', [], $data);
         $response = $curl->read();
         $curl->close();
 
