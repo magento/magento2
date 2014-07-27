@@ -23,7 +23,7 @@
  */
 ?>
 <?php $_order = $this->getOrder() ?>
-<div class="page title">
+<div class="page-title">
     <h1 class="title"><?php echo __('Order #%1', $_order->getRealOrderId()) ?></h1>
 </div>
 <p class="order date"><?php echo __('Order Date: %1', $this->formatDate($_order->getCreatedAtStoreDate(), 'long')) ?></p>
@@ -70,7 +70,7 @@
         </div>
     </div>
     <?php endif; ?>
-    <div class="block order payment method">
+    <div class="block order payment-method">
         <div class="title">
             <strong><?php echo __('Payment Method') ?></strong>
         </div>
@@ -79,8 +79,8 @@
         </div>
     </div>
 </div>
-<div class="order details items">
-    <div class="order subtitle caption">
+<div class="order-details-items">
+    <div class="order-title">
         <strong><?php echo __('Items Invoiced') ?></strong>
     </div>
     <table class="data table order items" id="my-invoice-table-<?php echo $_invoice->getId(); ?>">

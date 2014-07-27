@@ -55,6 +55,11 @@ class NavigationModeTest extends \PHPUnit_Framework_TestCase
     protected $_routeParamsMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_scopeResolverMock;
+
+    /**
      * @var array
      */
     protected $_testData = array('themeId' => 1, 'mode' => 'test');
@@ -90,12 +95,21 @@ class NavigationModeTest extends \PHPUnit_Framework_TestCase
             )
         );
 
+        $this->_scopeResolverMock =  $this->getMock(
+            'Magento\Framework\Url\ScopeResolverInterface',
+            array(),
+            array(),
+            '',
+            false
+        );
+
         $this->_model = $objectManagerHelper->getObject(
             'Magento\DesignEditor\Model\Url\NavigationMode',
             array(
                 'helper' => $this->_designHelperMock,
                 'data' => $this->_testData,
-                'routeParamsResolver' => $this->_routeParamsMock
+                'routeParamsResolver' => $this->_routeParamsMock,
+                'scopeResolver' => $this->_scopeResolverMock
             )
         );
     }
@@ -145,6 +159,10 @@ class NavigationModeTest extends \PHPUnit_Framework_TestCase
             $this->_testData['themeId'] .
             '/' .
             self::ROUTE_PATH;
+
+        $this->_scopeResolverMock->expects(
+            $this->any()
+        )->method('getScope')->will($this->returnValue($store));
 
         $this->assertEquals($expectedUrl, $this->_model->getRouteUrl($sourceUrl));
         $this->assertEquals($expectedUrl, $this->_model->getRouteUrl($expectedUrl));

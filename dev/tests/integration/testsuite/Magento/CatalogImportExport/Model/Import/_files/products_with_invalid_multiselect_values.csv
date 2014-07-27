@@ -1,0 +1,5 @@
+sku,_store,_type,name,price,multiselect_attribute
+simple_ms_1,,simple,"With Multiselect 1",10,Option 1
+simple_ms_2,,simple,"With Multiselect 2",10,Option 5
+,,,,Option 2
+,,,,Option 3

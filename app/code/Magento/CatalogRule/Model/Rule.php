@@ -336,9 +336,29 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         $product = clone $args['product'];
         $product->setData($args['row']);
 
-        if ($this->getConditions()->validate($product)) {
-            $this->_productIds[] = $product->getId();
+        $websites = $this->_getWebsitesMap();
+        $results = array();
+
+        foreach ($websites as $websiteId => $defaultStoreId) {
+            $product->setStoreId($defaultStoreId);
+            $results[$websiteId] = $this->getConditions()->validate($product);
         }
+        $this->_productIds[$product->getId()] = $results;
+    }
+
+    /**
+     * Prepare website map
+     *
+     * @return array
+     */
+    protected function _getWebsitesMap()
+    {
+        $map = array();
+        $websites = $this->_storeManager->getWebsites(true);
+        foreach ($websites as $website) {
+            $map[$website->getId()] = $website->getDefaultStore()->getId();
+        }
+        return $map;
     }
 
     /**

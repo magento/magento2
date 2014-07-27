@@ -43,5 +43,9 @@
             <default_value>Retail Customer</default_value>
             <input>select</input>
         </tax_class_id>
+        <customer_group_id>
+            <attribute_code>customer_group_id</attribute_code>
+            <backend_type>virtual</backend_type>
+        </customer_group_id>
     </fields>
 </fixture>

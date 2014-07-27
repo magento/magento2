@@ -31,7 +31,7 @@ class PageTest extends \Magento\TestFramework\TestCase\AbstractController
 {
     public function testViewAction()
     {
-        $this->dispatch('/about-magento-demo-store');
-        $this->assertContains('About Magento Store', $this->getResponse()->getBody());
+        $this->dispatch('/enable-cookies/');
+        $this->assertContains('What are Cookies?', $this->getResponse()->getBody());
     }
 }

@@ -48,16 +48,6 @@ class Validator extends \Magento\Framework\Model\AbstractModel
     protected $_rules;
 
     /**
-     * @var array
-     */
-    protected $_roundingDeltas = array();
-
-    /**
-     * @var array
-     */
-    protected $_baseRoundingDeltas = array();
-
-    /**
      * Defines if method \Magento\SalesRule\Model\Validator::reset() wasn't called
      * Used for clearing applied rule ids in Quote and in Address
      *
@@ -92,41 +82,22 @@ class Validator extends \Magento\Framework\Model\AbstractModel
     protected $_collectionFactory;
 
     /**
-     * @var \Magento\SalesRule\Model\Resource\Coupon\UsageFactory
+     * @var \Magento\SalesRule\Model\Utility
      */
-    protected $_usageFactory;
+    protected $validatorUtility;
 
     /**
-     * @var \Magento\SalesRule\Model\CouponFactory
+     * @var \Magento\SalesRule\Model\RulesApplier
      */
-    protected $_couponFactory;
-
-    /**
-     * @var \Magento\SalesRule\Model\Rule\CustomerFactory
-     */
-    protected $_customerFactory;
-
-    /**
-     * @var \Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory
-     */
-    protected $calculatorFactory;
-
-    /**
-     * Defines if rule with stop further rules is already applied
-     *
-     * @var bool
-     */
-    protected $_stopFurtherRules = false;
+    protected $rulesApplier;
 
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\SalesRule\Model\Resource\Coupon\UsageFactory $usageFactory
-     * @param \Magento\SalesRule\Model\Resource\Rule\CollectionFactory $collectionFactory
+     * @param Resource\Rule\CollectionFactory $collectionFactory
      * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\SalesRule\Model\CouponFactory $couponFactory
-     * @param \Magento\SalesRule\Model\Rule\CustomerFactory $customerFactory
-     * @param \Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory $calculatorFactory
+     * @param Utility $utility
+     * @param RulesApplier $rulesApplier
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -134,22 +105,18 @@ class Validator extends \Magento\Framework\Model\AbstractModel
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\SalesRule\Model\Resource\Coupon\UsageFactory $usageFactory,
         \Magento\SalesRule\Model\Resource\Rule\CollectionFactory $collectionFactory,
         \Magento\Tax\Helper\Data $taxData,
-        \Magento\SalesRule\Model\CouponFactory $couponFactory,
-        \Magento\SalesRule\Model\Rule\CustomerFactory $customerFactory,
-        \Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory $calculatorFactory,
+        \Magento\SalesRule\Model\Utility $utility,
+        \Magento\SalesRule\Model\RulesApplier $rulesApplier,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        $this->_usageFactory = $usageFactory;
         $this->_collectionFactory = $collectionFactory;
         $this->_taxData = $taxData;
-        $this->_couponFactory = $couponFactory;
-        $this->_customerFactory = $customerFactory;
-        $this->calculatorFactory = $calculatorFactory;
+        $this->validatorUtility = $utility;
+        $this->rulesApplier = $rulesApplier;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -169,12 +136,14 @@ class Validator extends \Magento\Framework\Model\AbstractModel
 
         $key = $websiteId . '_' . $customerGroupId . '_' . $couponCode;
         if (!isset($this->_rules[$key])) {
-            $this->_rules[$key] = $this->_collectionFactory->create()->setValidationFilter(
-                $websiteId,
-                $customerGroupId,
-                $couponCode
-            )->addFieldToFilter('is_active', 1)
-            ->load();
+            $this->_rules[$key] = $this->_collectionFactory->create()
+                ->setValidationFilter(
+                    $websiteId,
+                    $customerGroupId,
+                    $couponCode
+                )
+                ->addFieldToFilter('is_active', 1)
+                ->load();
         }
         return $this;
     }
@@ -188,84 +157,6 @@ class Validator extends \Magento\Framework\Model\AbstractModel
     {
         $key = $this->getWebsiteId() . '_' . $this->getCustomerGroupId() . '_' . $this->getCouponCode();
         return $this->_rules[$key];
-    }
-
-    /**
-     * Check if rule can be applied for specific address/quote/customer
-     *
-     * @param \Magento\SalesRule\Model\Rule $rule
-     * @param Address $address
-     * @return bool
-     */
-    protected function _canProcessRule($rule, $address)
-    {
-        if ($rule->hasIsValidForAddress($address) && !$address->isObjectNew()) {
-            return $rule->getIsValidForAddress($address);
-        }
-
-        /**
-         * check per coupon usage limit
-         */
-        if ($rule->getCouponType() != \Magento\SalesRule\Model\Rule::COUPON_TYPE_NO_COUPON) {
-            $couponCode = $address->getQuote()->getCouponCode();
-            if (strlen($couponCode)) {
-                /** @var \Magento\SalesRule\Model\Coupon $coupon */
-                $coupon = $this->_couponFactory->create();
-                $coupon->load($couponCode, 'code');
-                if ($coupon->getId()) {
-                    // check entire usage limit
-                    if ($coupon->getUsageLimit() && $coupon->getTimesUsed() >= $coupon->getUsageLimit()) {
-                        $rule->setIsValidForAddress($address, false);
-                        return false;
-                    }
-                    // check per customer usage limit
-                    $customerId = $address->getQuote()->getCustomerId();
-                    if ($customerId && $coupon->getUsagePerCustomer()) {
-                        $couponUsage = new \Magento\Framework\Object();
-                        $this->_usageFactory->create()->loadByCustomerCoupon(
-                            $couponUsage,
-                            $customerId,
-                            $coupon->getId()
-                        );
-                        if ($couponUsage->getCouponId() &&
-                            $couponUsage->getTimesUsed() >= $coupon->getUsagePerCustomer()
-                        ) {
-                            $rule->setIsValidForAddress($address, false);
-                            return false;
-                        }
-                    }
-                }
-            }
-        }
-
-        /**
-         * check per rule usage limit
-         */
-        $ruleId = $rule->getId();
-        if ($ruleId && $rule->getUsesPerCustomer()) {
-            $customerId = $address->getQuote()->getCustomerId();
-            $ruleCustomer = $this->_customerFactory->create();
-            $ruleCustomer->loadByCustomerRule($customerId, $ruleId);
-            if ($ruleCustomer->getId()) {
-                if ($ruleCustomer->getTimesUsed() >= $rule->getUsesPerCustomer()) {
-                    $rule->setIsValidForAddress($address, false);
-                    return false;
-                }
-            }
-        }
-        $rule->afterLoad();
-        /**
-         * quote does not meet rule's conditions
-         */
-        if (!$rule->validate($address)) {
-            $rule->setIsValidForAddress($address, false);
-            return false;
-        }
-        /**
-         * passed all validations, remember to be valid
-         */
-        $rule->setIsValidForAddress($address, true);
-        return true;
     }
 
     /**
@@ -290,7 +181,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
     {
         $address = $item->getAddress();
         foreach ($this->_getRules() as $rule) {
-            if (!$this->_canProcessRule($rule, $address) || !$rule->getActions()->validate($item)) {
+            if (!$this->validatorUtility->canProcessRule($rule, $address) || !$rule->getActions()->validate($item)) {
                 return false;
             }
         }
@@ -332,8 +223,13 @@ class Validator extends \Magento\Framework\Model\AbstractModel
             return $this;
         }
 
-        $appliedRuleIds = $this->applyRules($item);
-        $this->setAppliedRuleIds($item, $appliedRuleIds);
+        $appliedRuleIds = $this->rulesApplier->applyRules(
+            $item,
+            $this->_getRules(),
+            $this->_skipActionsValidation,
+            $this->getCouponCode()
+        );
+        $this->rulesApplier->setAppliedRuleIds($item, $appliedRuleIds);
 
         return $this;
     }
@@ -367,11 +263,11 @@ class Validator extends \Magento\Framework\Model\AbstractModel
             switch ($rule->getSimpleAction()) {
                 case \Magento\SalesRule\Model\Rule::TO_PERCENT_ACTION:
                     $rulePercent = max(0, 100 - $rule->getDiscountAmount());
-                    // break is intentionally omitted
+                // break is intentionally omitted
                 case \Magento\SalesRule\Model\Rule::BY_PERCENT_ACTION:
                     $discountAmount = ($shippingAmount - $address->getShippingDiscountAmount()) * $rulePercent / 100;
                     $baseDiscountAmount = ($baseShippingAmount -
-                        $address->getBaseShippingDiscountAmount()) * $rulePercent / 100;
+                            $address->getBaseShippingDiscountAmount()) * $rulePercent / 100;
                     $discountPercent = min(100, $address->getShippingDiscountPercent() + $rulePercent);
                     $address->setShippingDiscountPercent($discountPercent);
                     break;
@@ -413,40 +309,17 @@ class Validator extends \Magento\Framework\Model\AbstractModel
             $address->setBaseShippingDiscountAmount($baseDiscountAmount);
             $appliedRuleIds[$rule->getRuleId()] = $rule->getRuleId();
 
-            $this->_maintainAddressCouponCode($address, $rule);
-            $this->_addDiscountDescription($address, $rule);
+            $this->rulesApplier->maintainAddressCouponCode($address, $rule, $this->getCouponCode());
+            $this->rulesApplier->addDiscountDescription($address, $rule);
             if ($rule->getStopRulesProcessing()) {
                 break;
             }
         }
 
-        $address->setAppliedRuleIds($this->mergeIds($address->getAppliedRuleIds(), $appliedRuleIds));
-        $quote->setAppliedRuleIds($this->mergeIds($quote->getAppliedRuleIds(), $appliedRuleIds));
+        $address->setAppliedRuleIds($this->validatorUtility->mergeIds($address->getAppliedRuleIds(), $appliedRuleIds));
+        $quote->setAppliedRuleIds($this->validatorUtility->mergeIds($quote->getAppliedRuleIds(), $appliedRuleIds));
 
         return $this;
-    }
-
-    /**
-     * Merge two sets of ids
-     *
-     * @param array|string $a1
-     * @param array|string $a2
-     * @param bool $asString
-     * @return array
-     */
-    public function mergeIds($a1, $a2, $asString = true)
-    {
-        if (!is_array($a1)) {
-            $a1 = empty($a1) ? array() : explode(',', $a1);
-        }
-        if (!is_array($a2)) {
-            $a2 = empty($a2) ? array() : explode(',', $a2);
-        }
-        $a = array_unique(array_merge($a1, $a2));
-        if ($asString) {
-            $a = implode(',', $a);
-        }
-        return $a;
     }
 
     /**
@@ -465,12 +338,9 @@ class Validator extends \Magento\Framework\Model\AbstractModel
         }
 
         foreach ($this->_getRules() as $rule) {
-            if (\Magento\SalesRule\Model\Rule::CART_FIXED_ACTION == $rule->getSimpleAction() && $this->_canProcessRule(
-                $rule,
-                $address
-            )
+            if (\Magento\SalesRule\Model\Rule::CART_FIXED_ACTION == $rule->getSimpleAction()
+                && $this->validatorUtility->canProcessRule($rule, $address)
             ) {
-
                 $ruleTotalItemsPrice = 0;
                 $ruleTotalBaseItemsPrice = 0;
                 $validItemsCount = 0;
@@ -483,7 +353,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
                     if (!$rule->getActions()->validate($item)) {
                         continue;
                     }
-                    $qty = $this->_getItemQty($item, $rule);
+                    $qty = $this->validatorUtility->getItemQty($item, $rule);
                     $ruleTotalItemsPrice += $this->getItemPrice($item) * $qty;
                     $ruleTotalBaseItemsPrice += $this->getItemBasePrice($item) * $qty;
                     $validItemsCount++;
@@ -496,54 +366,6 @@ class Validator extends \Magento\Framework\Model\AbstractModel
                 );
             }
         }
-
-        $this->_stopFurtherRules = false;
-        return $this;
-    }
-
-    /**
-     * Set coupon code to address if $rule contains validated coupon
-     *
-     * @param Address $address
-     * @param \Magento\SalesRule\Model\Rule $rule
-     * @return $this
-     */
-    protected function _maintainAddressCouponCode($address, $rule)
-    {
-        /*
-        Rule is a part of rules collection, which includes only rules with 'No Coupon' type or with validated coupon.
-        As a result, if rule uses coupon code(s) ('Specific' or 'Auto' Coupon Type), it always contains validated coupon
-        */
-        if ($rule->getCouponType() != \Magento\SalesRule\Model\Rule::COUPON_TYPE_NO_COUPON) {
-            $address->setCouponCode($this->getCouponCode());
-        }
-
-        return $this;
-    }
-
-    /**
-     * Add rule discount description label to address object
-     *
-     * @param Address $address
-     * @param \Magento\SalesRule\Model\Rule $rule
-     * @return $this
-     */
-    protected function _addDiscountDescription($address, $rule)
-    {
-        $description = $address->getDiscountDescriptionArray();
-        $ruleLabel = $rule->getStoreLabel($address->getQuote()->getStore());
-        $label = '';
-        if ($ruleLabel) {
-            $label = $ruleLabel;
-        } else if (strlen($address->getCouponCode())) {
-            $label = $address->getCouponCode();
-        }
-
-        if (strlen($label)) {
-            $description[$rule->getId()] = $label;
-        }
-
-        $address->setDiscountDescriptionArray($description);
 
         return $this;
     }
@@ -593,20 +415,6 @@ class Validator extends \Magento\Framework\Model\AbstractModel
     public function getItemBaseOriginalPrice($item)
     {
         return $this->_taxData->getPrice($item, $item->getBaseOriginalPrice(), true);
-    }
-
-    /**
-     * Return discount item qty
-     *
-     * @param AbstractItem $item
-     * @param \Magento\SalesRule\Model\Rule $rule
-     * @return int
-     */
-    protected function _getItemQty($item, $rule)
-    {
-        $qty = $item->getTotalQty();
-        $discountQty = $rule->getDiscountQty();
-        return $discountQty ? min($qty, $discountQty) : $qty;
     }
 
     /**
@@ -661,115 +469,6 @@ class Validator extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * @param \Magento\Sales\Model\Quote\Item\AbstractItem $item
-     * @param int[] $appliedRuleIds
-     * @return $this
-     */
-    protected function setAppliedRuleIds(\Magento\Sales\Model\Quote\Item\AbstractItem $item, array $appliedRuleIds)
-    {
-        $address = $item->getAddress();
-        $quote = $item->getQuote();
-
-        $item->setAppliedRuleIds(join(',', $appliedRuleIds));
-        $address->setAppliedRuleIds($this->mergeIds($address->getAppliedRuleIds(), $appliedRuleIds));
-        $quote->setAppliedRuleIds($this->mergeIds($quote->getAppliedRuleIds(), $appliedRuleIds));
-
-        return $this;
-    }
-
-    /**
-     * Fire event to allow overwriting of discount amounts
-     *
-     * @param \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData
-     * @param \Magento\Sales\Model\Quote\Item\AbstractItem $item
-     * @param \Magento\SalesRule\Model\Rule $rule
-     * @param float $qty
-     * @return $this
-     */
-    protected function eventFix(
-        \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData,
-        \Magento\Sales\Model\Quote\Item\AbstractItem $item,
-        \Magento\SalesRule\Model\Rule $rule,
-        $qty
-    ) {
-        $quote = $item->getQuote();
-        $address = $item->getAddress();
-
-        $this->_eventManager->dispatch(
-            'salesrule_validator_process',
-            array(
-                'rule' => $rule,
-                'item' => $item,
-                'address' => $address,
-                'quote' => $quote,
-                'qty' => $qty,
-                'result' => $discountData
-            )
-        );
-
-        return $this;
-    }
-
-    /**
-     * Process "delta" rounding
-     *
-     * @param \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData
-     * @param \Magento\Sales\Model\Quote\Item\AbstractItem $item
-     * @return $this
-     */
-    protected function deltaRoundingFix(
-        \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData,
-        \Magento\Sales\Model\Quote\Item\AbstractItem $item
-    ) {
-        $store = $item->getQuote()->getStore();
-        $discountAmount = $discountData->getAmount();
-        $baseDiscountAmount = $discountData->getBaseAmount();
-
-        //TODO Seems \Magento\Sales\Model\Quote\Item\AbstractItem::getDiscountPercent() returns float value
-        //that can not be used as array index
-        $percentKey = $item->getDiscountPercent();
-        if ($percentKey) {
-            $delta = isset($this->_roundingDeltas[$percentKey]) ? $this->_roundingDeltas[$percentKey] : 0;
-            $baseDelta = isset($this->_baseRoundingDeltas[$percentKey]) ? $this->_baseRoundingDeltas[$percentKey] : 0;
-
-            $discountAmount += $delta;
-            $baseDiscountAmount += $baseDelta;
-
-            $this->_roundingDeltas[$percentKey] = $discountAmount - $store->roundPrice($discountAmount);
-            $this->_baseRoundingDeltas[$percentKey] = $baseDiscountAmount - $store->roundPrice($baseDiscountAmount);
-        }
-
-        $discountData->setAmount($store->roundPrice($discountAmount));
-        $discountData->setBaseAmount($store->roundPrice($baseDiscountAmount));
-
-        return $this;
-    }
-
-    /**
-     * @param Rule\Action\Discount\Data $discountData
-     * @param \Magento\Sales\Model\Quote\Item\AbstractItem $item
-     * @param float $qty
-     * @return void
-     */
-    protected function minFix(
-        \Magento\SalesRule\Model\Rule\Action\Discount\Data $discountData,
-        \Magento\Sales\Model\Quote\Item\AbstractItem $item,
-        $qty
-    ) {
-        $itemPrice = $this->getItemPrice($item);
-        $baseItemPrice = $this->getItemBasePrice($item);
-
-        $itemDiscountAmount = $item->getDiscountAmount();
-        $itemBaseDiscountAmount = $item->getBaseDiscountAmount();
-
-        $discountAmount = min($itemDiscountAmount + $discountData->getAmount(), $itemPrice * $qty);
-        $baseDiscountAmount = min($itemBaseDiscountAmount + $discountData->getBaseAmount(), $baseItemPrice * $qty);
-
-        $discountData->setAmount($discountAmount);
-        $discountData->setBaseAmount($baseDiscountAmount);
-    }
-
-    /**
      * @param int $key
      * @return array
      * @throws \Magento\Framework\Model\Exception
@@ -790,99 +489,6 @@ class Validator extends \Magento\Framework\Model\AbstractModel
     public function decrementRuleItemTotalsCount($key)
     {
         $this->_rulesItemTotals[$key]['items_count']--;
-
-        return $this;
-    }
-
-    /**
-     * @param \Magento\Sales\Model\Quote\Item\AbstractItem $item
-     * @return array
-     */
-    protected function applyRules($item)
-    {
-        $address = $item->getAddress();
-
-        $appliedRuleIds = array();
-        /* @var $rule \Magento\SalesRule\Model\Rule */
-        foreach ($this->_getRules() as $rule) {
-            if ($this->_stopFurtherRules) {
-                break;
-            }
-
-            if (!$this->_canProcessRule($rule, $address)) {
-                continue;
-            }
-
-            if (!$this->_skipActionsValidation && !$rule->getActions()->validate($item)) {
-                continue;
-            }
-
-            $this->applyRule($item, $rule, $address);
-            $appliedRuleIds[$rule->getRuleId()] = $rule->getRuleId();
-
-            if ($rule->getStopRulesProcessing()) {
-                $this->_stopFurtherRules = true;
-                break;
-            }
-        }
-
-        return $appliedRuleIds;
-    }
-
-    /**
-     * @param \Magento\Sales\Model\Quote\Item\AbstractItem $item
-     * @param \Magento\SalesRule\Model\Rule $rule
-     * @param \Magento\Sales\Model\Quote\Address $address
-     * @return $this
-     */
-    protected function applyRule($item, $rule, $address)
-    {
-        $discountData = $this->getDiscountData($item, $rule);
-        $this->setDiscountData($discountData, $item);
-
-        $this->_maintainAddressCouponCode($address, $rule);
-        $this->_addDiscountDescription($address, $rule);
-
-        return $this;
-    }
-
-    /**
-     * @param \Magento\Sales\Model\Quote\Item\AbstractItem $item
-     * @param \Magento\SalesRule\Model\Rule $rule
-     * @return Rule\Action\Discount\Data
-     */
-    protected function getDiscountData($item, $rule)
-    {
-        $qty = $this->_getItemQty($item, $rule);
-
-        $discountCalculator = $this->calculatorFactory->create($rule->getSimpleAction());
-        $qty = $discountCalculator->fixQuantity($qty, $rule);
-        $discountData = $discountCalculator->calculate($rule, $item, $qty);
-
-        $this->eventFix($discountData, $item, $rule, $qty);
-        $this->deltaRoundingFix($discountData, $item);
-
-        /**
-         * We can't use row total here because row total not include tax
-         * Discount can be applied on price included tax
-         */
-
-        $this->minFix($discountData, $item, $qty);
-
-        return $discountData;
-    }
-
-    /**
-     * @param Rule\Action\Discount\Data $discountData
-     * @param \Magento\Sales\Model\Quote\Item\AbstractItem $item
-     * @return $this
-     */
-    protected function setDiscountData($discountData, $item)
-    {
-        $item->setDiscountAmount($discountData->getAmount());
-        $item->setBaseDiscountAmount($discountData->getBaseAmount());
-        $item->setOriginalDiscountAmount($discountData->getOriginalAmount());
-        $item->setBaseOriginalDiscountAmount($discountData->getBaseOriginalAmount());
 
         return $this;
     }

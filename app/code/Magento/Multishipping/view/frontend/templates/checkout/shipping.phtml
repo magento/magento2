@@ -86,7 +86,7 @@
                     <span><?php echo __('Items') ?></span>
                     <a href="<?php echo $this->getItemsEditUrl($_address) ?>" class="action edit"><span><?php echo __('Edit Items') ?></span></a>
                 </strong>
-                <div class="wrapper table">
+                <div class="table-wrapper">
                     <table class="items data table" id="shipping-table-<?php echo $_address->getId() ?>">
                         <caption class="table caption"><?php echo __('Items') ?></caption>
                         <thead>
@@ -111,7 +111,7 @@
     </div>
     <?php endforeach; ?>
     <?php echo $this->getChildHtml('checkout_billing_items') ?>
-    <div class="actions toolbar">
+    <div class="actions-toolbar">
         <div class="primary">
             <button class="action primary continue" type="submit"><span><?php echo __('Continue to Billing Information') ?></span></button>
         </div>

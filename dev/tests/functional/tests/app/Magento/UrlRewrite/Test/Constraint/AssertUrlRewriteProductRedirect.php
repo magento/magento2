@@ -48,8 +48,8 @@ class AssertUrlRewriteProductRedirect extends AbstractConstraint
      *
      * @param UrlRewrite $urlRewrite
      * @param CatalogProductView $catalogProductView
-     * @param InjectableFixture $product
      * @param Browser $browser
+     * @param InjectableFixture $product
      * @return void
      */
     public function processAssert(

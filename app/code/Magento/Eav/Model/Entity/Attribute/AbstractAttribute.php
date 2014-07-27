@@ -643,7 +643,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractModel 
     {
         // If source model exists - get definition from it
         if ($this->usesSource() && $this->getBackendType() != self::TYPE_STATIC) {
-            return $this->getSource()->getFlatColums();
+            return $this->getSource()->getFlatColumns();
         }
         return $this->_getFlatColumnsDdlDefinition();
     }

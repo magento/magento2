@@ -44,6 +44,11 @@
             <default_value></default_value>
             <input>date</input>
         </created_at>
+        <id>
+            <attribute_code>id</attribute_code>
+            <backend_type>virtual</backend_type>
+            <group>null</group>
+        </id>
         <created_in>
             <attribute_code>created_in</attribute_code>
             <backend_type>varchar</backend_type>
@@ -183,6 +188,14 @@
             <input>text</input>
             <group>account_information</group>
         </taxvat>
+        <amount_delta>
+            <attribute_code>amount_delta</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required>0</is_required>
+            <default_value></default_value>
+            <input>text</input>
+            <group>store_credit</group>
+        </amount_delta>
         <website_id>
             <attribute_code>website_id</attribute_code>
             <backend_type>static</backend_type>

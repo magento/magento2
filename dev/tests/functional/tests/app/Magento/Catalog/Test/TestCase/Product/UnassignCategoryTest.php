@@ -89,6 +89,6 @@ class UnassignCategoryTest extends Functional
         $frontendHomePage->getTopmenu()->selectCategoryByName($product->getCategoryName());
         //Verification on category product list
         $productListBlock = $categoryPage->getListProductBlock();
-        $this->assertFalse($productListBlock->isProductVisible($product->getProductName()));
+        $this->assertFalse($productListBlock->isProductVisible($product->getName()));
     }
 }

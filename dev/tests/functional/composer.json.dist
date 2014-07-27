@@ -1,10 +1,4 @@
 {
-    "repositories": [
-        {
-            "type": "git",
-            "url": "git://github.com/magento/mtf.git"
-        }
-    ],
     "require": {
         "magento/mtf": "dev-master",
         "php": ">=5.4.0",

@@ -101,7 +101,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Eav\Exception
+     * @expectedException \Magento\Framework\Exception\InputException
      */
     public function testCreateWithEmptyName()
     {

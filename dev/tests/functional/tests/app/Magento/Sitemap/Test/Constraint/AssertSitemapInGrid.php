@@ -30,7 +30,6 @@ use Magento\Sitemap\Test\Page\Adminhtml\SitemapIndex;
 
 /**
  * Class AssertSitemapInGrid
- *
  */
 class AssertSitemapInGrid extends AbstractConstraint
 {
@@ -45,20 +44,20 @@ class AssertSitemapInGrid extends AbstractConstraint
      * Assert that sitemap availability in sitemap grid
      *
      * @param Sitemap $sitemap
-     * @param SitemapIndex $sitemapPageGrid
+     * @param SitemapIndex $sitemapIndex
      * @return void
      */
-    public function processAssert(Sitemap $sitemap, SitemapIndex $sitemapPageGrid)
+    public function processAssert(Sitemap $sitemap, SitemapIndex $sitemapIndex)
     {
-        $sitemapPageGrid->open();
+        $sitemapIndex->open()->getSitemapGrid()->sortGridByField('sitemap_id');
         $filter = [
             'sitemap_filename' => $sitemap->getSitemapFilename(),
-            'sitemap_path' => $sitemap->getSitemapPath()
+            'sitemap_path' => $sitemap->getSitemapPath(),
         ];
         \PHPUnit_Framework_Assert::assertTrue(
-            $sitemapPageGrid->getSitemapGrid()->isRowVisible($filter),
+            $sitemapIndex->getSitemapGrid()->isRowVisible($filter),
             'Sitemap with filename \'' . $sitemap->getSitemapFilename() . '\' and path \''
-            . $sitemap->getSitemapPath() . '\'is absent in Sitemap grid.'
+            . $sitemap->getSitemapPath() . '\' is absent in Sitemap grid. \''
         );
     }
 

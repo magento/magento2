@@ -28,7 +28,6 @@ use Mtf\Repository\AbstractRepository;
 
 /**
  * Review Repository
- *
  */
 class Review extends AbstractRepository
 {

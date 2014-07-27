@@ -28,7 +28,7 @@ use Mtf\Factory\Factory;
 
 /**
  * Class BundleDynamic
- *
+ * Fixture for Bundle dynamic
  */
 class BundleDynamic extends Bundle
 {
@@ -37,97 +37,81 @@ class BundleDynamic extends Bundle
      */
     protected function _initData()
     {
-        $this->_data['checkout'] = array(
-            'prices' => array(
+        $this->_data['checkout'] = [
+            'prices' => [
                 'price_from' => 10,
                 'price_to' => 15
-            ),
-            'selection' => array(
-                'bundle_item_0' => 'assigned_product_0'
-            )
-        );
+            ],
+            'selection' => [0]
+        ];
         parent::_initData();
         $this->_data['fields'] = array_merge_recursive(
             $this->_data['fields'],
-            array(
-                'sku_type' => array(
+            [
+                'sku_type' => [
                     'value' => 'Dynamic',
                     'input_value' => '0',
                     'group' => static::GROUP_PRODUCT_DETAILS,
                     'input' => 'select'
-                ),
-                'price_type' => array(
+                ],
+                'price_type' => [
                     'value' => 'Dynamic',
                     'input_value' => '0',
                     'group' => static::GROUP_PRODUCT_DETAILS,
                     'input' => 'select'
-                ),
-                'weight_type' => array(
+                ],
+                'weight_type' => [
                     'value' => 'Dynamic',
                     'input_value' => '0',
                     'group' => static::GROUP_PRODUCT_DETAILS,
                     'input' => 'select'
-                ),
-                'product_website_1' => array(
+                ],
+                'product_website_1' => [
                     'value' => 'Yes',
-                    'input_value' => array(1),
+                    'input_value' => [1],
                     'group' => static::GROUP_PRODUCT_WEBSITE,
                     'input' => 'checkbox',
                     'input_name' => 'website_ids'
-                ),
-                'shipment_type' => array(
+                ],
+                'shipment_type' => [
                     'value' => 'Separately',
                     'input_value' => '1',
                     'group' => static::GROUP_PRODUCT_DETAILS,
                     'input' => 'select'
-                ),
-                'bundle_selections' => array(
-                    'value' => array(
-                        'bundle_item_0' => array(
-                            'title' => array(
-                                'value' => 'Drop-down Option'
-                            ),
-                            'type' => array(
-                                'value' => 'Drop-down',
-                                'input_value' => 'select'
-                            ),
-                            'required' => array(
-                                'value' => 'Yes',
-                                'input_value' => '1'
-                            ),
-                            'assigned_products' => array(
-                                'assigned_product_0' => array(
-                                    'search_data' => array(
-                                        'name' => '%item1_simple1::getProductName%',
-                                    ),
-                                    'data' => array(
-                                        'selection_qty' => array(
-                                            'value' => 1
-                                        ),
-                                        'product_id' => array(
-                                            'value' => '%item1_simple1::getProductId%'
-                                        )
-                                    )
-                                ),
-                                'assigned_product_1' => array(
-                                    'search_data' => array(
-                                        'name' => '%item1_virtual2::getProductName%',
-                                    ),
-                                    'data' => array(
-                                        'selection_qty' => array(
-                                            'value' => 1
-                                        ),
-                                        'product_id' => array(
-                                            'value' => '%item1_virtual2::getProductId%'
-                                        )
-                                    )
-                                )
-                            )
-                        )
-                    ),
+                ],
+                'bundle_selections' => [
+                    'value' => [
+                        'bundle_options' => [
+                            [
+                                'title' => 'Drop-down Option',
+                                'type' => 'Drop-down',
+                                'required' => 'Yes',
+                                'assigned_products' => [
+                                    [
+                                        'search_data' => [
+                                            'name' => '%item1_simple1::getName%',
+                                        ],
+                                        'data' => [
+                                            'selection_qty' => 1,
+                                            'product_id' => '%item1_simple1::getProductId%'
+                                        ]
+                                    ],
+                                    [
+                                        'search_data' => [
+                                            'name' => '%item1_virtual2::getName%',
+                                        ],
+                                        'data' => [
+                                            'selection_qty' => 1,
+                                            'product_id' => '%item1_virtual2::getProductId%'
+                                        ]
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ],
                     'group' => static::GROUP
-                )
-            )
+                ]
+            ]
         );
         $this->_repository = Factory::getRepositoryFactory()
             ->getMagentoBundleBundle($this->_dataConfig, $this->_data);

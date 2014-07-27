@@ -24,19 +24,20 @@
 
 namespace Magento\Bundle\Test\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle;
 
-use Mtf\Block\Block;
+use Mtf\Block\Form;
 use Mtf\Client\Element;
-use Mtf\Factory\Factory;
 use Mtf\Client\Element\Locator;
+use Magento\Bundle\Test\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Selection;
+use Magento\Bundle\Test\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Search\Grid;
 
 /**
  * Class Option
- * Bundle product options block
+ * Bundle option block on backend
  */
-class Option extends Block
+class Option extends Form
 {
     /**
-     * Grid to assign products to bundle option
+     * Selector block Grid
      *
      * @var string
      */
@@ -47,21 +48,14 @@ class Option extends Block
      *
      * @var string
      */
-    protected $selectionBlock = '#bundle_selection_row';
+    protected $selectionBlock = './/tr[contains(@id, "bundle_selection_row_")][not(@style="display: none;")][%d]';
 
     /**
-     * 'Add Products to Option' button
+     * Selector for 'Add Products to Option' button
      *
      * @var string
      */
     protected $addProducts = '[data-ui-id$=add-selection-button]';
-
-    /**
-     * Bundle option toggle
-     *
-     * @var string
-     */
-    protected $optionToggle = '[data-target$=content]';
 
     /**
      * Bundle option title
@@ -71,105 +65,79 @@ class Option extends Block
     protected $title = '[name$="[title]"]';
 
     /**
-     * Bundle option type
+     * Remove selection button selector
      *
      * @var string
      */
-    protected $type = '[name$="[type]"]';
-
-    /**
-     * Determine whether bundle options is require to fill
-     *
-     * @var string
-     */
-    protected $required = '#field-option-req';
+    protected $removeSelection = 'button.delete';
 
     /**
      * Get grid for assigning products for bundle option
      *
-     * @return \Magento\Bundle\Test\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Search\Grid
+     * @return Grid
      */
     protected function getSearchGridBlock()
     {
-        return Factory::getBlockFactory()->getMagentoBundleAdminhtmlCatalogProductEditTabBundleOptionSearchGrid(
-            $this->_rootElement->find($this->searchGridBlock, Locator::SELECTOR_XPATH)
+        return $this->blockFactory->create(
+            'Magento\Bundle\Test\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Search\Grid',
+            ['element' => $this->_rootElement->find($this->searchGridBlock, Locator::SELECTOR_XPATH)]
         );
     }
 
     /**
      * Get product row assigned to bundle option
      *
-     * @param int $rowNumber
-     * @param Element $context
-     * @return \Magento\Bundle\Test\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Selection
+     * @param int $rowIndex
+     * @return Selection
      */
-    protected function getSelectionBlock($rowNumber, Element $context = null)
+    protected function getSelectionBlock($rowIndex)
     {
-        $element = $context !== null ? $context : $this->_rootElement;
-        return Factory::getBlockFactory()->getMagentoBundleAdminhtmlCatalogProductEditTabBundleOptionSelection(
-            $element->find($this->selectionBlock . '_' . $rowNumber)
+        return $this->blockFactory->create(
+            'Magento\Bundle\Test\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Selection',
+            ['element' => $this->_rootElement->find(sprintf($this->selectionBlock, $rowIndex), Locator::SELECTOR_XPATH)]
         );
-    }
-
-    /**
-     * Expand block
-     *
-     * @return void
-     */
-    public function expand()
-    {
-        if (!$this->_rootElement->find($this->title)->isVisible()) {
-            $this->_rootElement->find($this->optionToggle)->click();
-        }
     }
 
     /**
      * Fill bundle option
      *
      * @param array $fields
-     * @param Element $context
      * @return void
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function fillBundleOption(array $fields, Element $context)
+    public function fillBundleOption(array $fields)
     {
-        $rowNumber = 0;
-        $this->fillOptionData($fields);
-        foreach ($fields['assigned_products'] as $field) {
-            if (is_array($field)) {
-                $this->_rootElement->find($this->addProducts)->click();
-                $searchBlock = $this->getSearchGridBlock();
-                $searchBlock->searchAndSelect($field['search_data']);
-                $searchBlock->addProducts();
-                $this->getSelectionBlock($rowNumber)->fillProductRow($field['data']);
-                $rowNumber++;
+        $mapping = $this->dataMapping($fields);
+        $this->_fill($mapping);
+        $selections = $this->_rootElement->find($this->removeSelection)->getElements();
+        if (count($selections)) {
+            foreach ($selections as $itemSelection) {
+                $itemSelection->click();
             }
+        }
+        foreach ($fields['assigned_products'] as $key => $field) {
+            $this->_rootElement->find($this->addProducts)->click();
+            $searchBlock = $this->getSearchGridBlock();
+            $searchBlock->searchAndSelect($field['search_data']);
+            $searchBlock->addProducts();
+            $this->getSelectionBlock(++$key)->fillProductRow($field['data']);
         }
     }
 
     /**
-     * Update bundle option (now only general data, skipping assignments)
+     * Get data bundle option
      *
      * @param array $fields
-     * @return void
+     * @return array
      */
-    public function updateBundleOption(array $fields)
+    public function getBundleOptionData(array $fields)
     {
-        $this->fillOptionData($fields);
-    }
-
-    /**
-     * Fill in general data to bundle option
-     *
-     * @param array $fields
-     * @return void
-     */
-    private function fillOptionData(array $fields)
-    {
-        $this->_rootElement->find($this->title)->setValue($fields['title']['value']);
-        $this->_rootElement->find($this->type, Locator::SELECTOR_CSS, 'select')->setValue($fields['type']['value']);
-        $this->_rootElement->find($this->required, Locator::SELECTOR_CSS, 'checkbox')
-            ->setValue($fields['required']['value']);
+        $mapping = $this->dataMapping($fields);
+        $newField = $this->_getData($mapping);
+        foreach ($fields['assigned_products'] as $key => $field) {
+            $newField['assigned_products'][$key] = $this->getSelectionBlock($key + 1)->getProductRow($field['data']);
+        }
+        return $newField;
     }
 }

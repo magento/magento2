@@ -87,10 +87,10 @@
     @_popup-actions-toolbar-primary-actions-links-margin-top: @popup-actions-toolbar-primary-actions-links-margin-top,
     @_popup-actions-toolbar-secondary-actions-links-margin-top: @popup-actions-toolbar-secondary-actions-links-margin-top,
 ) {
-    .add-width(@_popup-width);
-    .add-background(@_popup-background);
-    .add-padding(@_popup-padding);
-    .add-border(@_popup-border);
+    .css(background, @_popup-background);
+    .css(border, @_popup-border);
+    .css(padding, @_popup-padding);
+    .css(width, @_popup-width);
     ._popup-height(@_popup-height);
     ._popup-shadow(@_popup-shadow);
     ._popup-action-toolbar(
@@ -106,23 +106,24 @@
         @_popup-actions-toolbar-primary-actions-links-margin-top,
         @_popup-actions-toolbar-secondary-actions-links-margin-top
     );
-    .popup.header {
-        .add-margin(@_popup-header-margin);
+    .popup-header {
+        .css(margin, @_popup-header-margin);
         .title {
             ._popup-headings(
                 @_popup-title-headings,
                 @_popup-title-headings-level
             );
         }
+        .css(padding-right, @_popup-icon-font-size)
     }
-    .popup.content {
+    .popup-content {
         ._popup-height(@_popup-content-height);
-        .add-margin(@_popup-content-margin);
+        .css(margin, @_popup-content-margin);
     }
-    .popup.footer {
-        .add-margin(@_popup-footer-margin);
+    .popup-footer {
+        .css(margin, @_popup-footer-margin);
     }
-    .popup.actions {
+    .popup-actions {
         .action.close {
             position: @_popup-button-close-position;
             ._popup-button-close-icon(
@@ -142,32 +143,27 @@
             ._popup-button-close-reset(
                 @_popup-button-close-reset
             );
-            ._popup-position(
-                @_popup-button-close-position-top,
-                @_popup-button-close-position-bottom,
-                @_popup-button-close-position-left,
-                @_popup-button-close-position-right
-            );
+            .css(top, @_popup-button-close-position-top);
+            .css(right, @_popup-button-close-position-right);
+            .css(bottom, @_popup-button-close-position-bottom);
+            .css(left, @_popup-button-close-position-left);
         }
     }
-    display: none;
-    position: @_popup-position;
-    ._popup-position(
-        @_popup-position-top,
-        @_popup-position-bottom,
-        @_popup-position-left,
-        @_popup-position-right
-    );
-    ._popup-margins(
-        @_popup-margin-top,
-        @_popup-margin-bottom,
-        @_popup-margin-left,
-        @_popup-margin-right
-    );
-    z-index: @_popup-z-index;
-    opacity: 0;
-    ._popup-fade(@_popup-fade);
+    .css(top, @_popup-position-top);
+    .css(right, @_popup-position-right);
+    .css(bottom, @_popup-position-bottom);
+    .css(left, @_popup-position-left);
 
+    .css(margin-top, @_popup-margin-top);
+    .css(margin-right, @_popup-margin-right);
+    .css(margin-bottom, @_popup-margin-bottom);
+    .css(margin-left, @_popup-margin-left);
+
+    display: none;
+    opacity: 0;
+    .css(position, @_popup-position);
+    .css(z-index, @_popup-z-index);
+    ._popup-fade(@_popup-fade);
     &.active {
         opacity: 1;
     }
@@ -186,8 +182,8 @@
     right: 0;
     bottom: 0;
     left: 0;
-    z-index: @_overlay-z-index;
-    .add-background(@_overlay-background);
+    .css(background, @_overlay-background);
+    .css(z-index, @_overlay-z-index);
     opacity: 0;
     &.active {
         opacity: @_overlay-opacity;
@@ -212,8 +208,9 @@
 // Popup height
 ._popup-height(@_popup-height) when not (@_popup-height = auto) {
     overflow-y: auto;
-    max-height: @_popup-height;
+    .css(max-height, @_popup-height);
 }
+
 
 // Popup Headings
 ._popup-headings(
@@ -272,7 +269,7 @@
     @_popup-actions-toolbar-primary-actions-links-margin-top,
     @_popup-actions-toolbar-secondary-actions-links-margin-top
 ) when (@_popup-action-toolbar = true) {
-    .popup.footer {
+    .popup-footer {
         .actions.toolbar {
             .actions-toolbar(
                 @_actions-toolbar-actions-position: @_popup-actions-toolbar-actions-position,
@@ -288,77 +285,6 @@
             );
         }
     }
-}
-
-// Popup margins: top left bottom right
-._popup-margins(
-    @_popup-margin-top,
-    @_popup-margin-bottom,
-    @_popup-margin-left,
-    @_popup-margin-right
-) when not (@_popup-margin-top = '') {
-    margin-top: @_popup-margin-top;
-}
-._popup-margins(
-    @_popup-margin-top,
-    @_popup-margin-bottom,
-    @_popup-margin-left,
-    @_popup-margin-right
-) when not (@_popup-margin-bottom = '') {
-    margin-bottom: @_popup-margin-bottom;
-}
-._popup-margins(
-    @_popup-margin-top,
-    @_popup-margin-bottom,
-    @_popup-margin-left,
-    @_popup-margin-right
-) when not (@_popup-margin-left = '') {
-    margin-left: @_popup-margin-left;
-}
-._popup-margins(
-    @_popup-margin-top,
-    @_popup-margin-bottom,
-    @_popup-margin-left,
-    @_popup-margin-right
-) when not (@_popup-margin-right = '') {
-    margin-right: @_popup-margin-right;
-}
-
-// Popup position: top left bottom right
-._popup-position(
-    @_popup-position-top,
-    @_popup-position-bottom,
-    @_popup-position-left,
-    @_popup-position-right
-) when not (@_popup-position-top = '') {
-    top: @_popup-position-top;
-}
-
-._popup-position(
-    @_popup-position-top,
-    @_popup-position-bottom,
-    @_popup-position-left,
-    @_popup-position-right
-) when not (@_popup-position-bottom = '') {
-    bottom: @_popup-position-bottom;
-}
-
-._popup-position(
-    @_popup-position-top,
-    @_popup-position-bottom,
-    @_popup-position-left,
-    @_popup-position-right
-) when not (@_popup-position-left = '') {
-    left: @_popup-position-left;
-}
-
-._popup-position(
-    @_popup-position-top,
-    @_popup-position-bottom,
-    @_popup-position-left,
-    @_popup-position-right
-) when not (@_popup-position-right = '') {
-    right: @_popup-position-right;
 }
 
 // Popup close button use icon
@@ -396,40 +322,4 @@
     @_popup-button-close-reset
 ) when (@_popup-button-close-reset = true) {
     .button-reset();
-}
-// Popup working with dropdown dialog
-.ui-dialog.popup {
-  width: 420px;
-  .map.popup {
-    top: auto;
-    left: auto;
-    padding: 22px;
-  }
-  .action.close {
-    position: @popup-button-close-position;
-    ._popup-button-close-icon(
-      @popup-button-close-icon,
-      @popup-icon-font-content,
-      @popup-icon-font,
-      @popup-icon-font-size,
-      @popup-icon-font-line-height,
-      @popup-icon-font-color,
-      @popup-icon-font-color-hover,
-      @popup-icon-font-color-active,
-      @popup-icon-font-margin,
-      @popup-icon-font-vertical-align,
-      @popup-icon-font-position,
-      @popup-icon-font-text-hide
-    );
-    ._popup-button-close-reset(
-      @popup-button-close-reset
-    );
-    ._popup-position(
-      @popup-button-close-position-top,
-      @popup-button-close-position-bottom,
-      @popup-button-close-position-left,
-      @popup-button-close-position-right
-    );
-    z-index: 1001;
-  }
 }

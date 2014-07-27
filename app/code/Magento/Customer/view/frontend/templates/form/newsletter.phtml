@@ -23,7 +23,7 @@
  */
 ?>
 <?php echo $this->getChildHtml('form_before')?>
-    <form class="form newsletter manage" action="<?php echo $this->getAction() ?>" method="post" id="form-validate">
+    <form class="form form-newsletter-manage" action="<?php echo $this->getAction() ?>" method="post" id="form-validate">
         <fieldset class="fieldset">
             <?php echo $this->getBlockHtml('formkey')?>
             <legend class="legend"><span><?php echo __('Subscription option') ?></span></legend><br>
@@ -34,7 +34,7 @@
             <?php /* Extensions placeholder */ ?>
             <?php echo $this->getChildHtml('customer.form.newsletter.extra')?>
         </fieldset>
-        <div class="actions toolbar">
+        <div class="actions-toolbar">
             <div class="primary"><button type="submit" title="<?php echo __('Save') ?>" class="action save primary"><span><?php echo __('Save') ?></span></button></div>
             <div class="secondary"><a class="action back" href="<?php echo $this->escapeUrl($this->getBackUrl()) ?>"><span><?php echo __('Back') ?></span></a></div>
         </div>

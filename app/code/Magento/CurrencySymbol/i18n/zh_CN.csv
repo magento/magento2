@@ -1,19 +1,20 @@
-"All possible rates were fetched, please click on ""Save"" to apply",将自动获取所有可能的费率，请单击“保存”以应用
-"All rates were fetched, please click on ""Save"" to apply",所有费率已获取，请单击“保存”已应用
-"All valid rates have been saved.",所有有效的评级均已保存。
-"Currency Rates",汇率
-"Currency Symbols",货币符号
-"Import Service",导入服务
-"Manage Currency Rates",管理汇率
-"Old rate:",原本的比例：
-"Please correct the input data for %1 => %2 rate","请纠正%1 => %2汇率的输入数据"
-"Please specify a correct Import Service.",请指定正确的导入服务。
-"Save Currency Rates",保存汇率
-"Save Currency Symbols",保存货币符号
-Symbol,符号
+Reset,Reset
 System,系统
-"The custom currency symbols were applied.",定制的货币符号被应用。
-"Use Default",使用默认值
+Import,Import
+"Save Currency Rates","Save Currency Rates"
+"Manage Currency Rates",管理汇率
+"Import Service","Import Service"
+"Save Currency Symbols",保存货币符号
+"Currency Symbols","Currency Symbols"
 "Use Standard",使用标准
-"Use Website",使用网站
-"We can't initialize the import model.",不能初始化导入模型。
+"Currency Rates","Currency Rates"
+"Please specify a correct Import Service.","Please specify a correct Import Service."
+"We can't initialize the import model.","We can't initialize the import model."
+"All possible rates were fetched, please click on ""Save"" to apply","All possible rates were fetched, please click on ""Save"" to apply"
+"All rates were fetched, please click on ""Save"" to apply","All rates were fetched, please click on ""Save"" to apply"
+"Please correct the input data for %1 => %2 rate","Please correct the input data for %1 => %2 rate"
+"All valid rates have been saved.","All valid rates have been saved."
+"The custom currency symbols were applied.","The custom currency symbols were applied."
+Currency,Currency
+Symbol,Symbol
+"Old rate:","Old rate:"

@@ -46,6 +46,7 @@
                 <packaging>YOUR_PACKAGING</packaging>
                 <title>Federal Express</title>
                 <specificerrmsg>This shipping method is currently unavailable. If you would like to ship using this shipping method, please contact us.</specificerrmsg>
+                <unit_of_measure>LB</unit_of_measure>
                 <max_package_weight>150</max_package_weight>
                 <handling_type>F</handling_type>
                 <handling_action>O</handling_action>

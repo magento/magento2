@@ -21,6 +21,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
 namespace Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Super;
 
 use Mtf\Client\Element;
@@ -77,6 +78,41 @@ class Config extends Tab
     protected $attributeTab = './/*[@data-role="configurable-attribute"]//*[text()="%attributeTab%"]';
 
     /**
+     * XPath Selector attribute variations row content
+     *
+     * @var string
+     */
+    protected $activeButtonSelector = '//*[contains(@class,"fieldset-wrapper-title")]//*[@class="title"]';
+
+    /**
+     * XPath Selector attribute variations row
+     *
+     * @var string
+     */
+    protected $rowSelector = '//div[contains(@data-role,"configurable-attribute") and position()=%d]';
+
+    /**
+     * XPath Selector attribute options row
+     *
+     * @var string
+     */
+    protected $rowOptions = './/tbody/tr[contains(@data-role,"option-container") and position()=%d]';
+
+    /**
+     * XPath Selector attribute options row
+     *
+     * @var string
+     */
+    protected $rowMatrix = './/tbody/tr[contains(@data-role,"row") and position()=%d]';
+
+    /**
+     * CSS selector variations label
+     *
+     * @var string
+     */
+    protected $labelSelector = '.store-label';
+
+    /**
      * Get attribute block
      *
      * @param string $attributeName
@@ -127,13 +163,13 @@ class Config extends Tab
             return $this;
         }
         $attributes = $fields['configurable_attributes_data']['value'];
-        foreach ($attributes as $attribute) {
-            $this->selectAttribute($attribute['label']['value']);
+        foreach ($attributes['attributes_data'] as $attribute) {
+            $this->selectAttribute($attribute['title']);
         }
         $this->fillAttributeOptions($attributes);
         $this->generateVariations();
-        if (isset($fields['variations-matrix']['value'])) {
-            $this->fillVariationsMatrix($fields['variations-matrix']['value']);
+        if (!empty($attributes['matrix'])) {
+            $this->fillVariationsMatrix($attributes['matrix']);
         }
 
         return $this;
@@ -145,7 +181,7 @@ class Config extends Tab
      * @param array $fields
      * @return void
      */
-    public function fillVariationsMatrix($fields)
+    public function fillVariationsMatrix(array $fields)
     {
         $this->getMatrixBlock()->fillVariation($fields);
     }
@@ -158,8 +194,8 @@ class Config extends Tab
      */
     public function fillAttributeOptions(array $attributes)
     {
-        foreach ($attributes as $attribute) {
-            $this->getAttributeBlock($attribute['label']['value'])->fillAttributeOptions($attribute);
+        foreach ($attributes['attributes_data'] as $attribute) {
+            $this->getAttributeBlock($attribute['title'])->fillAttributeOptions($attribute);
         }
     }
 
@@ -188,9 +224,81 @@ class Config extends Tab
                 "//div[@class='mage-suggest-dropdown']//a[text()='$attributeName']",
                 Locator::SELECTOR_XPATH
             );
-            if ($attribute->isVisible()) {
-                $attribute->click();
+            $attribute->waitUntil(
+                function () use ($attribute) {
+                    return $attribute->isVisible() ? true : null;
+                }
+            );
+            $attribute->click();
+        }
+    }
+
+    /**
+     * Get data of tab
+     *
+     * @param array|null $fields [optional]
+     * @param Element|null $element [optional]
+     * @return array
+     */
+    public function getDataFormTab($fields = null, Element $element = null)
+    {
+        $dataResult = [];
+        if (isset($fields['configurable_attributes_data']['value']['attributes_data'])) {
+            $field['attributes_data']['value'] = $fields['configurable_attributes_data']['value']['attributes_data'];
+            $data = $this->dataMapping($field)['attributes_data'];
+            $variationsBlock = $this->_rootElement->find($data['selector']);
+
+            foreach ($data['value'] as $key => $value) {
+                ++$key;
+                $this->openVariation($key, $variationsBlock);
+                $row = $variationsBlock->find(sprintf($this->rowSelector, $key), Locator::SELECTOR_XPATH);
+                --$key;
+                $dataResult['attributes_data'][$key]['title'] = $row->find($this->labelSelector)->getValue();
+                $dataResult['attributes_data'][$key]['options'] = [];
+                foreach ($value['options'] as $optionKey => $option) {
+                    ++$optionKey;
+                    $optionsForm = $this->blockFactory->create(
+                        'Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Super\Options',
+                        ['element' => $row->find(sprintf($this->rowOptions, $optionKey), Locator::SELECTOR_XPATH)]
+                    );
+                    $dataResult['attributes_data'][$key]['options'][] = $optionsForm->getDataOptions($option);
+                }
             }
+        }
+        if (isset($fields['configurable_attributes_data']['value']['matrix'])) {
+            $field['matrix']['value'] = $fields['configurable_attributes_data']['value']['matrix'];
+            $data = $this->dataMapping($field)['matrix'];
+            $matrixBlock = $this->_rootElement->find($data['selector']);
+
+            $index = 1;
+            foreach ($data['value'] as $key => $value) {
+                $matrixCell = $this->blockFactory->create(
+                    'Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Super\Matrix',
+                    ['element' => $matrixBlock->find(sprintf($this->rowMatrix, $index), Locator::SELECTOR_XPATH)]
+                );
+                $dataResult['matrix'][$key] = $matrixCell->getDataOptions();
+                ++$index;
+            }
+        }
+
+        return ['configurable_attributes_data' => $dataResult];
+    }
+
+    /**
+     * Active variation tab
+     *
+     * @param int $row
+     * @param Element $variationsBlock
+     * @return void
+     */
+    protected function openVariation($row, Element $variationsBlock)
+    {
+        $element = $variationsBlock->find(
+            sprintf($this->rowSelector, $row) . $this->activeButtonSelector,
+            Locator::SELECTOR_XPATH
+        );
+        if ($element->isVisible()) {
+            $element->click();
         }
     }
 }

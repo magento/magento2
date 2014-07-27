@@ -53,12 +53,13 @@ class ReviewTest extends Functional
         //Pages & Blocks
         $homePage = Factory::getPageFactory()->getCmsIndexIndex();
         $productPage = Factory::getPageFactory()->getCatalogProductView();
-        $backendReviewPage = Factory::getPageFactory()->getReviewProduct();
+        $backendReviewIndex = Factory::getPageFactory()->getReviewProductIndex();
+        $backendReviewEdit = Factory::getPageFactory()->getReviewProductEdit();
         $reviewsSummaryBlock = $productPage->getReviewSummaryBlock();
         $reviewsBlock = $productPage->getCustomerReviewBlock();
         $reviewForm = $productPage->getReviewFormBlock();
-        $reviewGrid = $backendReviewPage->getGridBlock();
-        $reviewBackendForm = $backendReviewPage->getEditForm();
+        $reviewGrid = $backendReviewIndex->getReviewGrid();
+        $reviewBackendForm = $backendReviewEdit->getReviewForm();
 
         //Steps & verifying
         $homePage->open();
@@ -80,7 +81,7 @@ class ReviewTest extends Functional
         $this->verifyNoReviewOnPage($productPage->getReviewSummaryBlock());
 
         Factory::getApp()->magentoBackendLoginUser();
-        $backendReviewPage->open();
+        $backendReviewIndex->open();
         $reviewGrid->searchAndOpen(array('title' => $reviewFixture->getTitle()));
         $this->assertEquals('Guest', $reviewBackendForm->getPostedBy(), 'Review is not posted by Guest');
         $this->assertEquals('Pending', $reviewBackendForm->getStatus(), 'Review is not in Pending status');
@@ -89,10 +90,11 @@ class ReviewTest extends Functional
             'Review data is not corresponds to submitted one'
         );
 
-        $reviewBackendForm->approveReview();
+        $reviewBackendForm->setApproveReview();
+        $backendReviewEdit->getPageActions()->save();
         $this->assertContains(
             'You saved the review.',
-            $backendReviewPage->getMessagesBlock()->getSuccessMessages(),
+            $backendReviewIndex->getMessagesBlock()->getSuccessMessages(),
             'Review is not saved'
         );
 
@@ -112,7 +114,7 @@ class ReviewTest extends Functional
         $reviewsBlock = $productPage->getCustomerReviewBlock();
         $reviewsSummaryBlock->getViewReviewLink()->click();
         $this->assertContains(
-            sprintf('You\'re reviewing:%s', $productFixture->getProductName()),
+            sprintf('You\'re reviewing:%s', $productFixture->getName()),
             $reviewForm->getLegend()->getText()
         );
         $this->verifyReview($reviewsBlock, $reviewFixture);

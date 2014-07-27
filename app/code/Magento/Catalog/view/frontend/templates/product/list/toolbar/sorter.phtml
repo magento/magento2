@@ -1,0 +1,55 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Product list toolbar
+ *
+ * @var $this \Magento\Catalog\Block\Product\ProductList\Toolbar
+ */
+use \Magento\Catalog\Model\Product\ProductList\Toolbar;
+?>
+<div class="toolbar-sorter sorter">
+    <label class="sorter-label" for="sorter"><?php echo __('Sort By') ?></label>
+    <select id="sorter" data-role="sorter" class="sorter-options">
+        <?php foreach ($this->getAvailableOrders() as $_key => $_order): ?>
+            <option value="<?php echo $_key; ?>"
+                <?php if ($this->isOrderCurrent($_key)): ?>
+                    selected="selected"
+                <?php endif; ?>
+                >
+                <?php echo $this->escapeHtml(__($_order)) ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+    <?php if ($this->getCurrentDirection() == 'desc'): ?>
+        <a title="<?php echo __('Set Ascending Direction') ?>" href="#" class="action sorter-action sort-desc" data-role="direction-switcher" data-value="asc">
+            <span><?php echo __('Set Ascending Direction') ?></span>
+        </a>
+    <?php else: ?>
+        <a title="<?php echo __('Set Descending Direction') ?>" href="#" class="action sorter-action sort-asc" data-role="direction-switcher" data-value="desc">
+            <span><?php echo __('Set Descending Direction') ?></span>
+        </a>
+    <?php endif; ?>
+</div>

@@ -36,7 +36,7 @@
             <argument name="instanceName" xsi:type="string">Magento\Paypal\Model\Payflowadvanced</argument>
         </arguments>
     </virtualType>
-    <type name="Magento\Paypal\Controller\Payflowadvanced">
+    <type name="Magento\Paypal\Controller\Payflowadvanced\SilentPost">
         <arguments>
             <argument name="payflowModelFactory" xsi:type="object">Magento\Paypal\Model\PayflowadvancedFactory</argument>
         </arguments>
@@ -75,6 +75,9 @@
             <argument name="bmlMethodCode" xsi:type="const">Magento\Paypal\Model\Config::METHOD_WPP_BML</argument>
             <argument name="alias" xsi:type="string">product.info.addtocart.paypalbml</argument>
         </arguments>
+    </type>
+    <type name="Magento\Payment\Model\Checks\Composite">
+        <plugin name="paypal_specification" type="Magento\Paypal\Model\Method\Checks\SpecificationPlugin"/>
     </type>
     <virtualType name="Magento\Paypal\Block\Payflow\Bml\Shortcut" type="Magento\Paypal\Block\Bml\Shortcut">
         <arguments>

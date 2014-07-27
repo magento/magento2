@@ -24,50 +24,48 @@
 ?>
 <?php /** @var $this \Magento\Sales\Block\Order\Info */ ?>
 <?php $_order = $this->getOrder() ?>
-<div class="order details view">
-    <strong class="order status"><?php echo $_order->getStatusLabel() ?></strong>
-    <div class="order toolbar">
-        <?php echo $this->getChildHtml('buttons') ?>
-        <?php echo $this->getStatusHistoryRssUrl($_order) ?>
+<div class="block block-order-details-view">
+    <div class="block-title">
+        <strong><?php echo __('Order Information') ?></strong>
     </div>
+    <div class="block-content">
+    <?php if (!$_order->getIsVirtual()): ?>
+        <div class="box box-order-shipping-address">
+            <strong class="box-title"><span><?php echo __('Shipping Address') ?></span></strong>
+            <div class="box-content">
+                <address><?php echo $_order->getShippingAddress()->format('html') ?></address>
+            </div>
+        </div>
 
-    <div class="order info links"><?php echo $this->getChildHtml('links') ?></div>
+        <div class="box box-order-shipping-method">
+            <strong class="box-title">
+                <span><?php echo __('Shipping Method') ?></span>
+            </strong>
+            <div class="box-content">
+            <?php if ($_order->getShippingDescription()): ?>
+                <?php echo $this->escapeHtml($_order->getShippingDescription()) ?>
+            <?php else: ?>
+                <?php echo __('No shipping information available'); ?>
+            <?php endif; ?>
+            </div>
+        </div>
+    <?php endif; ?>
 
-    <p class="order date"><?php echo __('<span class="label">Order Date:</span> %1', '<date>' . $this->formatDate($_order->getCreatedAtStoreDate(), 'long') . '</date>' ) ?></p>
-<?php if (!$_order->getIsVirtual()): ?>
-    <div class="block order shipping address">
-        <div class="title"><strong><?php echo __('Shipping Address') ?></strong></div>
-        <div class="content">
-            <address><?php echo $_order->getShippingAddress()->format('html') ?></address>
+        <div class="box box-order-billing-address">
+            <strong class="box-title">
+                <span><?php echo __('Billing Address') ?></span>
+            </strong>
+            <div class="box-content">
+                <address><?php echo $_order->getBillingAddress()->format('html') ?></address>
+            </div>
         </div>
-    </div>
-
-    <div class="block order shipping method">
-        <div class="title"><strong><?php echo __('Shipping Method') ?></strong></div>
-        <div class="content">
-        <?php if ($_order->getShippingDescription()): ?>
-            <?php echo $this->escapeHtml($_order->getShippingDescription()) ?>
-        <?php else: ?>
-            <?php echo __('No shipping information available'); ?>
-        <?php endif; ?>
-        </div>
-    </div>
-
-<?php endif; ?>
-    <div class="block order billing address">
-        <div class="title">
-            <strong><?php echo __('Billing Address') ?></strong>
-        </div>
-        <div class="content">
-            <address><?php echo $_order->getBillingAddress()->format('html') ?></address>
-        </div>
-    </div>
-    <div class="block order billing method">
-        <div class="title">
-            <strong><?php echo __('Payment Method') ?></strong>
-        </div>
-        <div class="content">
-            <?php echo $this->getPaymentInfoHtml() ?>
+        <div class="box box-order-billing-method">
+            <strong class="box-title">
+                <span><?php echo __('Payment Method') ?></span>
+            </strong>
+            <div class="box-content">
+                <?php echo $this->getPaymentInfoHtml() ?>
+            </div>
         </div>
     </div>
 </div>

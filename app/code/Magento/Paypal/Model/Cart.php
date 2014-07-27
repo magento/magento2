@@ -197,4 +197,19 @@ class Cart extends \Magento\Payment\Model\Cart
         $this->addTax((double)$dataContainer->getBaseHiddenTaxAmount());
         $this->addTax((double)$dataContainer->getBaseShippingHiddenTaxAmnt());
     }
+
+    /**
+     * Check whether any item has negative amount
+     *
+     * @return bool
+     */
+    public function hasNegativeItemAmount()
+    {
+        foreach ($this->_customItems as $item) {
+            if ($item->getAmount() < 0) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

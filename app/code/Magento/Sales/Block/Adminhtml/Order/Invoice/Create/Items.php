@@ -40,24 +40,24 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
      *
      * @var \Magento\Sales\Helper\Data
      */
-    protected $_salesData = null;
+    protected $_salesData;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Catalog\Model\ProductFactory $productFactory
+     * @param \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Sales\Helper\Data $salesData
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Catalog\Model\ProductFactory $productFactory,
+        \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService,
         \Magento\Framework\Registry $registry,
         \Magento\Sales\Helper\Data $salesData,
         array $data = array()
     ) {
         $this->_salesData = $salesData;
-        parent::__construct($context, $productFactory, $registry, $data);
+        parent::__construct($context, $stockItemService, $registry, $data);
     }
 
     /**
@@ -74,14 +74,14 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
             array('class' => 'update-button', 'label' => __('Update Qty\'s'), 'onclick' => $onclick)
         );
         $this->_disableSubmitButton = true;
-        $_submitButtonClass = ' disabled';
+        $submitButtonClass = ' disabled';
         foreach ($this->getInvoice()->getAllItems() as $item) {
             /**
              * @see bug #14839
              */
             if ($item->getQty()/* || $this->getSource()->getData('base_grand_total')*/) {
                 $this->_disableSubmitButton = false;
-                $_submitButtonClass = '';
+                $submitButtonClass = '';
                 break;
             }
         }
@@ -95,7 +95,7 @@ class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
             'Magento\Backend\Block\Widget\Button',
             array(
                 'label' => $_submitLabel,
-                'class' => 'save submit-button primary' . $_submitButtonClass,
+                'class' => 'save submit-button primary' . $submitButtonClass,
                 'onclick' => 'disableElements(\'submit-button\');$(\'edit_form\').submit()',
                 'disabled' => $this->_disableSubmitButton
             )

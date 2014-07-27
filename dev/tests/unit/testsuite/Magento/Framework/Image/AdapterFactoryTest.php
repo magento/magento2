@@ -190,7 +190,7 @@ class AdapterFactoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $imageAdapterMock = $this->getMock($class, array('checkDependencies'), array(), '', false);
+        $imageAdapterMock = $this->getMock($class, array('checkDependencies'));
 
         $objectManagerMock->expects(
             $this->once()

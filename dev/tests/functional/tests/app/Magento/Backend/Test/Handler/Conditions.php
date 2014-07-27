@@ -118,15 +118,10 @@ abstract class Conditions extends Curl
      */
     protected function prepareCondition($conditions)
     {
-        $conditions = $this->decodeValue($conditions);
-        $defaultCondition = [
-            1 => [
-                'type' => 'Magento\SalesRule\Model\Rule\Condition\Combine',
-                'aggregator' => 'all',
-                'value' => '1'
-            ]
-        ];
-        return $defaultCondition + $this->convertMultipleCondition($conditions);
+        $decodeConditions = empty($conditions)
+            ? $this->decodeValue("[Conditions combination]")
+            : $this->decodeValue("{Conditions combination:[{$conditions}]}");
+        return $this->convertMultipleCondition($decodeConditions);
     }
 
     /**
@@ -140,7 +135,7 @@ abstract class Conditions extends Curl
     private function convertConditionsCombination($combination, $conditions, $nesting)
     {
         $combination = [$nesting => $this->convertSingleCondition($combination)];
-        $conditions = $this->convertMultipleCondition($conditions, $nesting);
+        $conditions = $this->convertMultipleCondition($conditions, $nesting, 1);
         return $combination + $conditions;
     }
 
@@ -152,15 +147,16 @@ abstract class Conditions extends Curl
      * @param int $count
      * @return array
      */
-    private function convertMultipleCondition(array $conditions, $nesting = 1, $count = 1)
+    private function convertMultipleCondition(array $conditions, $nesting = 1, $count = 0)
     {
         $result = [];
         foreach ($conditions as $key => $condition) {
+            $curNesting = $nesting . ($count ? ('--' . $count) : '');
+
             if (!is_numeric($key)) {
-                $nesting = $nesting . '--' . $count;
-                $result += $this->convertConditionsCombination($key, $condition, $nesting);
+                $result += $this->convertConditionsCombination($key, $condition, $curNesting);
             } elseif (is_string($condition)) {
-                $result[$nesting . '--' . $count] = $this->convertSingleCondition($condition);
+                $result[$curNesting] = $this->convertSingleCondition($condition);
             } else {
                 $result += $this->convertMultipleCondition($condition, $nesting, $count);
             }

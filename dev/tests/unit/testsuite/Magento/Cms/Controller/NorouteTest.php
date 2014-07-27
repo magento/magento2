@@ -88,7 +88,7 @@ class NorouteTest extends \PHPUnit_Framework_TestCase
             $this->returnValue('pageId')
         );
         $this->_controller = $helper->getObject(
-            'Magento\Cms\Controller\Noroute',
+            'Magento\Cms\Controller\Noroute\Index',
             array('response' => $responseMock, 'objectManager' => $objectManagerMock, 'request' => $this->_requestMock)
         );
     }
@@ -101,7 +101,7 @@ class NorouteTest extends \PHPUnit_Framework_TestCase
     {
         $this->_cmsHelperMock->expects($this->once())->method('renderPage')->will($this->returnValue($renderPage));
         $this->_requestMock->expects($this->any())->method('setActionName')->with('defaultNoRoute');
-        $this->_controller->indexAction();
+        $this->_controller->execute();
     }
 
     public function indexActionDataProvider()

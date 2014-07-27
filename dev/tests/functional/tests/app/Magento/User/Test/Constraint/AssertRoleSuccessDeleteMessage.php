@@ -32,7 +32,7 @@ use Magento\User\Test\Page\Adminhtml\UserRoleIndex;
  */
 class AssertRoleSuccessDeleteMessage extends AbstractConstraint
 {
-    const SUCCESS_MESSAGE = 'You deleted the role.';
+    const SUCCESS_DELETE_MESSAGE = 'You deleted the role.';
 
     /**
      * Constraint severeness
@@ -51,10 +51,10 @@ class AssertRoleSuccessDeleteMessage extends AbstractConstraint
     {
         $successMessage = $rolePage->getMessagesBlock()->getSuccessMessages();
         \PHPUnit_Framework_Assert::assertEquals(
-            self::SUCCESS_MESSAGE,
+            self::SUCCESS_DELETE_MESSAGE,
             $successMessage,
             'Wrong success message is displayed.'
-            . "\nExpected: " . self::SUCCESS_MESSAGE
+            . "\nExpected: " . self::SUCCESS_DELETE_MESSAGE
             . "\nActual: " . $successMessage
         );
     }

@@ -330,7 +330,8 @@ class Cart
             $this->_salesModelItems[] = $this->_createItemFromData(
                 $item->getName(),
                 $item->getQty(),
-                $item->getPrice()
+                $item->getPrice(),
+                $item->getOriginalItem()->getId()
             );
         }
 

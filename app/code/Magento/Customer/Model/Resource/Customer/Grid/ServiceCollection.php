@@ -24,8 +24,7 @@
 namespace Magento\Customer\Model\Resource\Customer\Grid;
 
 use Magento\Core\Model\EntityFactory;
-use Magento\Customer\Helper\View;
-use Magento\Customer\Model\Resource\AbstractServiceCollection;
+use Magento\Framework\Service\AbstractServiceCollection;
 use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
 use Magento\Customer\Service\V1\Data\CustomerDetails;
 use Magento\Framework\Service\V1\Data\FilterBuilder;
@@ -41,26 +40,20 @@ class ServiceCollection extends AbstractServiceCollection
      */
     protected $accountService;
 
-    /** @var View */
-    protected $viewHelper;
-
     /**
      * @param EntityFactory $entityFactory
      * @param FilterBuilder $filterBuilder
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param CustomerAccountServiceInterface $accountService
-     * @param View $viewHelper
      */
     public function __construct(
         EntityFactory $entityFactory,
         FilterBuilder $filterBuilder,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        CustomerAccountServiceInterface $accountService,
-        View $viewHelper
+        CustomerAccountServiceInterface $accountService
     ) {
         parent::__construct($entityFactory, $filterBuilder, $searchCriteriaBuilder);
         $this->accountService = $accountService;
-        $this->viewHelper = $viewHelper;
     }
 
     /**

@@ -180,7 +180,7 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      *
      * @return array
      */
-    public function getFlatColums()
+    public function getFlatColumns()
     {
         $columns = array();
         $attributeCode = $this->getAttribute()->getAttributeCode();

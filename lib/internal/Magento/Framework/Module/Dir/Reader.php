@@ -103,6 +103,29 @@ class Reader
     }
 
     /**
+     * Retrieve list of module action files
+     *
+     * @return array
+     */
+    public function getActionFiles()
+    {
+        $actions = array();
+        foreach (array_keys($this->modulesList->getModules()) as $moduleName) {
+            $actionDir = $this->getModuleDir('Controller', $moduleName);
+            if (!file_exists($actionDir)) {
+                continue;
+            }
+            $dirIterator = new \RecursiveDirectoryIterator($actionDir, \RecursiveDirectoryIterator::SKIP_DOTS);
+            $recursiveIterator = new \RecursiveIteratorIterator($dirIterator, \RecursiveIteratorIterator::LEAVES_ONLY);
+            /** @var \SplFileInfo $actionFile */
+            foreach ($recursiveIterator as $actionFile) {
+                $actions[] = $this->modulesDirectory->getRelativePath($actionFile->getPathname());
+            }
+        }
+        return $actions;
+    }
+
+    /**
      * Get module directory by directory type
      *
      * @param string $type

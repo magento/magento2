@@ -61,8 +61,8 @@ class Csv implements WriterInterface
     {
         $fields = array($phrase->getPhrase(), $phrase->getTranslation());
         $encloseQuote = $phrase->getQuote() == Phrase::QUOTE_DOUBLE ? Phrase::QUOTE_DOUBLE : Phrase::QUOTE_SINGLE;
-        $fields[0] = $this->_compileString($fields[0], $encloseQuote);
-        $fields[1] = $this->_compileString($fields[1], $encloseQuote);
+        $fields[0] = $this->compileString($fields[0], $encloseQuote);
+        $fields[1] = $this->compileString($fields[1], $encloseQuote);
         if (($contextType = $phrase->getContextType()) && ($contextValue = $phrase->getContextValueAsString())) {
             $fields[] = $contextType;
             $fields[] = $contextValue;
@@ -80,7 +80,7 @@ class Csv implements WriterInterface
      *
      * @SuppressWarnings(PHPMD.EvalExpression)
      */
-    protected function _compileString($string, $encloseQuote)
+    protected function compileString($string, $encloseQuote)
     {
         $evalString = 'return ' . $encloseQuote . $string . $encloseQuote . ';';
         $result = @eval($evalString);

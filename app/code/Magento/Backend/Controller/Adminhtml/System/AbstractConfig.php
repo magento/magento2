@@ -27,8 +27,6 @@
  */
 namespace Magento\Backend\Controller\Adminhtml\System;
 
-use Magento\Framework\App\Action\NotFoundException;
-
 abstract class AbstractConfig extends \Magento\Backend\App\AbstractAction
 {
     /**
@@ -37,15 +35,24 @@ abstract class AbstractConfig extends \Magento\Backend\App\AbstractAction
     protected $_configStructure;
 
     /**
+     * @var ConfigSectionChecker
+     */
+    protected $_sectionChecker;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Backend\Model\Config\Structure $configStructure
+     * @param ConfigSectionChecker $sectionChecker
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Backend\Model\Config\Structure $configStructure
+        \Magento\Backend\Model\Config\Structure $configStructure,
+        ConfigSectionChecker $sectionChecker
     ) {
         parent::__construct($context);
         $this->_configStructure = $configStructure;
+        $this->_sectionChecker = $sectionChecker;
+
     }
 
     /**
@@ -56,12 +63,8 @@ abstract class AbstractConfig extends \Magento\Backend\App\AbstractAction
      */
     public function dispatch(\Magento\Framework\App\RequestInterface $request)
     {
-        $section = null;
         if (!$request->getParam('section')) {
-            $section = $this->_configStructure->getFirstSection();
-            $request->setParam('section', $section->getId());
-        } else {
-            $this->_isSectionAllowed($request->getParam('section'));
+            $request->setParam('section', $this->_configStructure->getFirstSection()->getId());
         }
         return parent::dispatch($request);
     }
@@ -73,33 +76,9 @@ abstract class AbstractConfig extends \Magento\Backend\App\AbstractAction
      */
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed('Magento_Adminhtml::config');
-    }
-
-    /**
-     * Check if specified section allowed in ACL
-     *
-     * Will forward to deniedAction(), if not allowed.
-     *
-     * @param string $sectionId
-     * @throws \Exception
-     * @return bool
-     * @throws NotFoundException
-     */
-    protected function _isSectionAllowed($sectionId)
-    {
-        try {
-            if (false == $this->_configStructure->getElement($sectionId)->isAllowed()) {
-                throw new \Exception('');
-            }
-            return true;
-        } catch (\Zend_Acl_Exception $e) {
-            throw new NotFoundException();
-        } catch (\Exception $e) {
-            $this->deniedAction();
-            $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
-            return false;
-        }
+        $sectionId = $this->_request->getParam('section');
+        return $this->_authorization->isAllowed('Magento_Adminhtml::config')
+            || $this->_configStructure->getElement($sectionId)->isAllowed();
     }
 
     /**

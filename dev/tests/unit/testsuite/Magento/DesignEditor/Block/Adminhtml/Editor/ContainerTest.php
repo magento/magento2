@@ -76,26 +76,22 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
     {
         $buttonTitle = 'Back';
         $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', array(), array(), '', false);
+        $buttonList = $this->getMock('Magento\Backend\Block\Widget\Button\ButtonList', array(), array(), '', false);
         $arguments = $this->_getBlockArguments();
         $arguments['eventManager'] = $eventManager;
+        $arguments['buttonList'] = $buttonList;
+
 
         /** @var $block \Magento\DesignEditor\Block\Adminhtml\Editor\Container */
         $block = $this->_helper->getObject('Magento\DesignEditor\Block\Adminhtml\Editor\Container', $arguments);
 
         $layout = $this->getMock('Magento\Framework\View\Layout', array(), array(), '', false);
-        $block->setLayout($layout);
-
         $expectedButtonData = array(
-            'back_button' => array(
                 'label' => $buttonTitle,
                 'onclick' => 'setLocation(\'\')',
-                'class' => 'back',
-                'id' => 'back_button',
-                'region' => 'toolbar',
-                'sort_order' => 10
-            )
+                'class' => 'back'
         );
-
-        $this->assertAttributeContains($expectedButtonData, '_buttons', $block);
+        $buttonList->expects($this->once())->method('add')->with('back_button', $expectedButtonData, 0, 0, 'toolbar');
+        $block->setLayout($layout);
     }
 }

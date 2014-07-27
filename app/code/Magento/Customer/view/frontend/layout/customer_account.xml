@@ -30,7 +30,7 @@
             <argument name="class" xsi:type="string">account</argument>
         </action>
     </referenceBlock>
-    <referenceContainer name="left">
+    <referenceContainer name="sidebar.main">
         <block class="Magento\Framework\View\Element\Html\Links" name="customer_account_navigation" before="-" template="Magento_Customer::account/navigation.phtml">
             <block class="Magento\Framework\View\Element\Html\Link\Current" name="customer-account-navigation-account-link">
                 <arguments>
@@ -52,5 +52,4 @@
             </block>
         </block>
     </referenceContainer>
-    <move element="catalog.compare.sidebar" destination="left"/>
 </layout>

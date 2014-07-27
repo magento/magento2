@@ -79,7 +79,7 @@ class MenuTest extends \PHPUnit_Framework_TestCase
 
     public function testAddToItem()
     {
-        $subMenu = $this->getMock("Magento\Backend\Model\Menu", array(), array($this->_logger));
+        $subMenu = $this->getMock('Magento\Backend\Model\Menu', array(), array($this->_logger));
         $subMenu->expects($this->once())->method("add")->with($this->_items['item2']);
 
         $this->_items['item1']->expects($this->once())->method("getChildren")->will($this->returnValue($subMenu));
@@ -152,7 +152,11 @@ class MenuTest extends \PHPUnit_Framework_TestCase
         $this->_model->add($this->_items['item2']);
         $this->_model->add($this->_items['item3']);
 
-        $subMenu = $this->getMock("Magento\Backend\Model\Menu", array(), array(), '', false);
+        $subMenu = $this->getMock(
+            'Magento\Backend\Model\Menu',
+            [],
+            [$this->getMock('Magento\Framework\Logger', [], [], '', false)]
+        );
         $subMenu->expects($this->once())->method("add")->with($this->_items['item3']);
 
         $this->_items['item1']->expects($this->once())->method("getChildren")->will($this->returnValue($subMenu));
@@ -201,7 +205,11 @@ class MenuTest extends \PHPUnit_Framework_TestCase
 
     public function testRemoveRemovesMenuItemRecursively()
     {
-        $menuMock = $this->getMock('Magento\Backend\Model\Menu', array(), array(), '', false);
+        $menuMock = $this->getMock(
+            'Magento\Backend\Model\Menu',
+            [],
+            [$this->getMock('Magento\Framework\Logger', [], [], '', false)]
+        );
         $menuMock->expects($this->once())->method('remove')->with($this->equalTo('item2'));
 
         $this->_items['item1']->expects($this->any())->method('hasChildren')->will($this->returnValue(true));

@@ -40,7 +40,7 @@
                 <backend_type>virtual</backend_type>
                 <is_required>1</is_required>
                 <group>bundle</group>
-                <fixture>Magento\Bundle\Test\Fixture\Bundle\Selections</fixture>
+                <fixture>Magento\Bundle\Test\Fixture\Bundle\BundleSelections</fixture>
             </bundle_selections>
         </fields>
         <data_set>

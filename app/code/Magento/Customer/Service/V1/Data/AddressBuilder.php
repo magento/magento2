@@ -66,6 +66,16 @@ class AddressBuilder extends AbstractObjectBuilder
     }
 
     /**
+     * Convenience method to return region builder
+     *
+     * @return RegionBuilder
+     */
+    public function getRegionBuilder()
+    {
+        return $this->_regionBuilder;
+    }
+
+    /**
      * Set id
      *
      * @param int $id

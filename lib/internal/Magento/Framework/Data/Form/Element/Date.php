@@ -168,7 +168,7 @@ class Date extends AbstractElement
     public function getElementHtml()
     {
         $this->addClass('input-text');
-        $dateFormat = $this->getDateFormat();
+        $dateFormat = $this->getDateFormat() ?: $this->getFormat();
         $timeFormat = $this->getTimeFormat();
         if (empty($dateFormat)) {
             throw new \Exception(

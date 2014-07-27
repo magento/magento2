@@ -185,23 +185,4 @@ abstract class AbstractHelper
         $url = base64_decode(strtr($url, '-_,', '+/='));
         return $this->_urlBuilder->sessionUrlVar($url);
     }
-
-    /**
-     *   Translate array
-     *
-     * @param    array $arr
-     * @return   array
-     */
-    public function translateArray($arr = array())
-    {
-        foreach ($arr as $k => $v) {
-            if (is_array($v)) {
-                $v = self::translateArray($v);
-            } elseif ($k === 'label') {
-                $v = __($v);
-            }
-            $arr[$k] = $v;
-        }
-        return $arr;
-    }
 }

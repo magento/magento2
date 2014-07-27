@@ -40,6 +40,12 @@ class CatalogsearchResult extends FrontendPage
             'locator' => '.search.results',
             'strategy' => 'css selector',
         ],
+        'toolbar' => [
+            'name' => 'toolbar',
+            'class' => 'Magento\Catalog\Test\Block\Product\ProductList\Toolbar',
+            'locator' => '.toolbar.products',
+            'strategy' => 'css selector',
+        ],
     ];
 
     /**
@@ -48,5 +54,13 @@ class CatalogsearchResult extends FrontendPage
     public function getListProductBlock()
     {
         return $this->getBlockInstance('listProductBlock');
+    }
+
+    /**
+     * @return \Magento\Catalog\Test\Block\Product\ProductList\Toolbar
+     */
+    public function getToolbar()
+    {
+        return $this->getBlockInstance('toolbar');
     }
 }

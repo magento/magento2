@@ -25,7 +25,7 @@
  */
 namespace Magento\Webapi\Controller;
 
-use Magento\Webapi\ServiceAuthorizationException;
+use Magento\Framework\Exception\AuthorizationException;
 use Magento\Webapi\Exception as WebapiException;
 use Magento\Webapi\Model\PathProcessor;
 
@@ -175,7 +175,7 @@ class Soap implements \Magento\Framework\App\FrontControllerInterface
      * Parse the Authorization header and return the access token e.g. Authorization: Bearer <access-token>
      *
      * @return string Access token
-     * @throws ServiceAuthorizationException
+     * @throws AuthorizationException
      */
     protected function _getAccessToken()
     {
@@ -185,9 +185,9 @@ class Soap implements \Magento\Framework\App\FrontControllerInterface
             if (isset($token[1]) && is_string($token[1])) {
                 return $token[1];
             }
-            throw new ServiceAuthorizationException(__('Authentication header format is invalid.'));
+            throw new AuthorizationException('Authentication header format is invalid.');
         }
-        throw new ServiceAuthorizationException(__('Authentication header is absent.'));
+        throw new AuthorizationException('Authentication header is absent.');
     }
 
     /**

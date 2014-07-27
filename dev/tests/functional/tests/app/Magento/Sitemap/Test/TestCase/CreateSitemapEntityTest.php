@@ -76,6 +76,6 @@ class CreateSitemapEntityTest extends Injectable
         $this->sitemapIndex->open();
         $this->sitemapIndex->getGridPageActions()->addNew();
         $this->sitemapNew->getSitemapForm()->fill($sitemap);
-        $this->sitemapNew->getFormPageActions()->save();
+        $this->sitemapNew->getSitemapPageActions()->save();
     }
 }

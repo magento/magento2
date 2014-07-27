@@ -54,6 +54,7 @@ class PathProcessor
         $path = '/' . implode('/', $pathParts);
         return explode('/', ltrim($path, '/'), 2);
     }
+
     /**
      * Process path info
      *
@@ -69,10 +70,10 @@ class PathProcessor
         if (isset($stores[$storeCode])) {
             $this->storeManager->setCurrentStore($storeCode);
             $path = '/' . (isset($pathParts[1]) ? $pathParts[1] : '');
-            return $path;
         } else {
-            // store does not exist
-            throw NoSuchEntityException::singleField('storeCode', $storeCode);
+            $this->storeManager->setCurrentStore(\Magento\Store\Model\Store::DEFAULT_CODE);
+            $path = '/' . implode('/', $pathParts);
         }
+        return $path;
     }
 }

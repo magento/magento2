@@ -1,64 +1,16 @@
-"""Remember Me"" Default Value",“记住我”的默认值
-"(Not %1?)",（非%1？）
-"* Required Fields",*必要字段
-Address,地址
-"Address Information",地址信息
-"Already registered?",已注册？
-Back,返回
-"Check &quot;Remember Me&quot; to access your shopping cart on this computer when you are logged out","当退出登路时，""检查 &quot；记住我&quot；来存取您的购物车在这台电脑上"""
-"Checkout as Guest",作为访客结账
-"Checkout as a Guest or Register",以访客身份结账或注册
-City,城市
-"Clear Persistence on Log Out",注销时清空持久化
-Close,关闭
-Company,公司
-"Confirm Password",确认密码
-Continue,继续
-Country,国家
-"Create an Account",创建账户
-"Email Address",电子邮件地址
-"Enable ""Remember Me""",启用“记住我”
-"Enable Persistence",启用持久化
-"Fast and easy check out",方便快捷的结账
-Fax,传真
-"Forgot Your Password?",忘记您的密码？
-"Forgot your password?",忘记您的密码？
-"General Options",常规选项
-"Get easy access to your order history and status.",更容易存取订单历史和状态。
-"If you have an account with us, please log in.",如果您拥有账户，请登录。
-"Loading next step...",正在载入下一步...
-Login,登录
-"Login Information",登录信息
-"Login or Create an Account",登录或创建账户
-"New Customers",新顾客
-Password,密码
-"Persist Shopping Cart",持久化购物车
-"Persistence Lifetime (seconds)",持久化生命周期（秒）
-"Persistent Shopping Cart",持久化购物车
-"Personal Information",个人信息
-Phone,电话
-"Please log in below:",请在下面登录：
-"Please select a region, state or province.",请选择地区、州或省。
-"Please select region, state or province",请选择地区、州，或省
-Register,注册
-"Register and save time!",注册并节约时间！
-"Register to Create an Account",注册以创建账户
-"Registered Customers",已注册的顾客
-"Remember Me",记住我
-"Save in address book",保存到地址簿
-"Select a billing address from your address book or enter a new address.",从您的地址簿选择账单地址，或输入新地址。
-"Ship to different address",送货到不同地址
-"Ship to this address",送货到这个地址
-"Sign Up for Newsletter",订阅新闻邮件
-"Sign up with us to save time on your next checkout:",注册以放遍下次结账节省时间：
-State/Province,州/省
-"Street Address",街道地址
-"Street Address %1","街道地址 %1"
-Submit,提交
-"To check out, please log in using your email address.",为了结账，请使用您的邮件地址登录。
-"VAT Number","VAT 编号"
-"We cannot load the configuration from file %1.",无法从文件%1加载配置。
-"Welcome, %s!",欢迎，%s！
 "What's this?",这是什么？
-"Your shopping cart has been updated with new prices.",您的购物车已经更新了价格。
-"Zip/Postal Code",邮政编码
+"(Not %1?)","(Not %1?)"
+"Your shopping cart has been updated with new prices.","Your shopping cart has been updated with new prices."
+"Welcome, %1!","Welcome, %1!"
+"To check out, please log in using your email address.","To check out, please log in using your email address."
+"We cannot load the configuration from file %1.","We cannot load the configuration from file %1."
+"Remember Me",记住我
+"Check &quot;Remember Me&quot; to access your shopping cart on this computer when you are logged out","Check &quot;Remember Me&quot; to access your shopping cart on this computer when you are logged out"
+"General Options","General Options"
+"Persistent Shopping Cart","Persistent Shopping Cart"
+"Enable Persistence","Enable Persistence"
+"Persistence Lifetime (seconds)","Persistence Lifetime (seconds)"
+"Enable ""Remember Me""","Enable ""Remember Me"""
+"""Remember Me"" Default Value","""Remember Me"" Default Value"
+"Clear Persistence on Log Out","Clear Persistence on Log Out"
+"Persist Shopping Cart","Persist Shopping Cart"

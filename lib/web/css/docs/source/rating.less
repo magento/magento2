@@ -24,7 +24,7 @@
 
 //  # Ratings
 //
-//  Ratings styling mixins are based on using font icons as rate symbols. There are two types of ratings: rating which allows user to vote and rating which displays voting results summary. Depending on the rating type mixin <code>.rating-vote()</code> or <code>.rating-summary()</code> is used.
+//  Ratings styling mixins are based on using font icons as rate symbols. There are two types of ratings: rating which allows user to vote and rating which displays voting results summary. Depending on the rating type mixin <code>.mixin-rating-vote()</code> or <code>.mixin-rating-summary()</code> is used.
 //
 //  # Global rating variables
 //
@@ -91,7 +91,7 @@
 
 //  # Rating with vote
 //
-//  To implement rating with vote, use the <code>.rating-vote()</code> mixin.
+//  To implement rating with vote, use the <code>.mixin-rating-vote()</code> mixin.
 //  ``` html
 //  <div class="rating vote example-ratings-1">
 //      <input type="radio" name="rating-price" id="rating-price-1" value="1" />
@@ -118,7 +118,7 @@
 //  ```
 
 .example-ratings-1 {
-    .rating-vote();
+    .mixin-rating-vote();
 }
 
 //  # Rating with vote icons number customization
@@ -163,7 +163,7 @@
 //  ```
 
 .example-ratings-2 {
-    .rating-vote(
+    .mixin-rating-vote(
         @_icon-count: 8
     );
 }
@@ -202,7 +202,7 @@
 //  ```
 
 .example-ratings-3 {
-    .rating-vote(
+    .mixin-rating-vote(
         @_icon-color: #aff5e3,
         @_icon-color-active: #0a6767
     );
@@ -238,7 +238,7 @@
 //  ```
 
 .example-ratings-4 {
-    .rating-vote(
+    .mixin-rating-vote(
         @_icon-content: @icon-wishlist-full
     );
 }
@@ -279,7 +279,7 @@
 
 .exapmle-ratings-5 {
     .control.rating.vote {
-        .rating-vote();
+        .mixin-rating-vote();
     }
 }
 
@@ -289,14 +289,14 @@
 //  ``` html
 //  <div class="example-rating-summary-1">
 //      <span class="label"><span>Rating</span></span>
-//      <div class="rating result" title="60%">
+//      <div class="rating-result" title="60%">
 //          <span style="width:60%"><span>60</span></span>
 //      </div>
 //  </div>
 //  ```
 
 .example-rating-summary-1 {
-    .rating-summary();
+    .mixin-rating-summary();
 }
 
 //  # Rating summary icons number customization
@@ -309,14 +309,14 @@
 //  ``` html
 //  <div class="example-rating-summary-2">
 //      <span class="label"><span>Rating</span></span>
-//      <div class="rating result" title="40%">
+//      <div class="rating-result" title="40%">
 //          <span style="width:40%"><span>40</span></span>
 //      </div>
 //  </div>
 //  ```
 
 .example-rating-summary-2 {
-    .rating-summary(
+    .mixin-rating-summary(
         @_icon-count: 8
     );
 }
@@ -332,14 +332,14 @@
 //  ``` html
 //  <div class="example-rating-summary-3">
 //      <span class="label"><span>Rating</span></span>
-//      <div class="rating result" title="40%">
+//      <div class="rating-result" title="40%">
 //          <span style="width:40%"><span>40</span></span>
 //      </div>
 //  </div>
 //  ```
 
 .example-rating-summary-3 {
-    .rating-summary(
+    .mixin-rating-summary(
         @_icon-color: #aff5e3,
         @_icon-color-active: #0a6767
     );
@@ -355,14 +355,14 @@
 //  ``` html
 //  <div class="example-rating-summary-4">
 //      <span class="label"><span>Rating</span></span>
-//      <div class="rating result" title="40%">
+//      <div class="rating-result" title="40%">
 //          <span style="width:40%"><span>40</span></span>
 //      </div>
 //  </div>
 //  ```
 
 .example-rating-summary-4 {
-    .rating-summary(
+    .mixin-rating-summary(
         @_icon-content: @icon-wishlist-full
     );
 }
@@ -377,14 +377,14 @@
 //  ``` html
 //  <div class="example-rating-summary-5">
 //      <span class="label"><span>Rating</span></span>
-//      <div class="rating result" title="40%">
+//      <div class="rating-result" title="40%">
 //          <span style="width:40%"><span>40</span></span>
 //      </div>
 //  </div>
 //  ```
 
 .example-rating-summary-5 {
-    .rating-summary(
+    .mixin-rating-summary(
         @_label-hide: true
     );
 }
@@ -394,27 +394,27 @@
 //  ``` html
 //  <div class="example-rating-summary-6" tabindex="1">
 //      <strong>Your Rating:</strong>
-//      <div class="rating summary item">
+//      <div class="rating-summary item">
 //          <span class="label"><span>Value</span></span>
-//          <div class="rating result" title="100%" >
+//          <div class="rating-result" title="100%" >
 //              <span style="width:100%"><span>100%</span></span>
 //          </div>
 //      </div>
-//      <div class="rating summary item">
+//      <div class="rating-summary item">
 //          <span class="label"><span>Quality</span></span>
-//          <div class="rating result" title="100%">
+//          <div class="rating-result" title="100%">
 //              <span style="width:100%"><span>100%</span></span>
 //          </div>
 //      </div>
-//      <div class="rating summary item">
+//      <div class="rating-summary item">
 //          <span class="label"><span>rating +</span></span>
-//          <div class="rating result" title="20%">
+//          <div class="rating-result" title="20%">
 //              <span style="width:20%"><span>20%</span></span>
 //          </div>
 //      </div>
-//      <div class="rating summary item">
+//      <div class="rating-summary item">
 //          <span class="label"><span>Price</span></span>
-//          <div class="rating result" title="40%">
+//          <div class="rating-result" title="40%">
 //              <span style="width:40%"><span>40%</span></span>
 //          </div>
 //      </div>
@@ -422,25 +422,25 @@
 //  ```
 
 .example-rating-summary-6 {
-    .rating.summary {
-        .rating-summary();
+    .rating-summary {
+        .mixin-rating-summary();
     }
 }
 
 //  # Rating hide label mixin
 //
-//  The <code>.rating-summary-label-hide()</code> mixin is used to hide rating label in summary rating.
+//  The <code>.mixin-rating-summary-label-hide()</code> mixin is used to hide rating label in summary rating.
 //
 //  ``` html
 //  <div class="example-rating-summary-7">
 //      <span class="label"><span>Rating</span></span>
-//      <div class="rating result" title="40%">
+//      <div class="rating-result" title="40%">
 //          <span style="width:40%"><span>40</span></span>
 //      </div>
 //  </div>
 //  ```
 
 .example-rating-summary-7 {
-    .rating-summary();
-    .rating-summary-label-hide();
+    .mixin-rating-summary();
+    .mixin-rating-summary-label-hide();
 }

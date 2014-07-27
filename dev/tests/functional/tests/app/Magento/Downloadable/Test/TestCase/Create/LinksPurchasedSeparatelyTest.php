@@ -58,12 +58,13 @@ class LinksPurchasedSeparatelyTest extends Functional
     {
         $createProductPage = Factory::getPageFactory()->getCatalogProductIndex();
         $createProductPage->open();
-        $createProductPage->getProductBlock()->addProduct('downloadable');
+        $createProductPage->getGridPageActionBlock()->addProduct('downloadable');
 
         $createProductPageNew = Factory::getPageFactory()->getCatalogProductNew();
         $productBlockForm = $createProductPageNew->getForm();
 
-        $productBlockForm->fillProduct($this->product);
+        $category = $this->product->getCategories()['category'];
+        $productBlockForm->fill($this->product, null, $category);
         $createProductPageNew->getFormAction()->save();
 
         $createProductPageNew->getMessagesBlock()->assertSuccessMessage();
@@ -106,11 +107,11 @@ class LinksPurchasedSeparatelyTest extends Functional
         $frontendHomePage->getTopmenu()->selectCategoryByName($product->getCategoryName());
 
         $productListBlock = $categoryPage->getListProductBlock();
-        $this->assertTrue($productListBlock->isProductVisible($product->getProductName()));
-        $productListBlock->openProductViewPage($product->getProductName());
+        $this->assertTrue($productListBlock->isProductVisible($product->getName()));
+        $productListBlock->openProductViewPage($product->getName());
 
         $productViewBlock = $productPage->getDownloadableViewBlock();
-        $this->assertEquals($product->getProductName(), $productViewBlock->getProductName());
+        $this->assertEquals($product->getName(), $productViewBlock->getProductName());
         $this->assertEquals(
             sprintf('%1.2f', $product->getProductPrice()),
             $productViewBlock->getProductPrice()['price_regular_price']

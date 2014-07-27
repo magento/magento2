@@ -76,13 +76,13 @@ class Design
     /**
      * Initialize design
      *
-     * @param \Magento\Install\Controller\Action $subject
+     * @param \Magento\Framework\App\ActionInterface $subject
      * @param RequestInterface $request
      *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeDispatch(\Magento\Install\Controller\Action $subject, RequestInterface $request)
+    public function beforeDispatch(\Magento\Framework\App\ActionInterface $subject, RequestInterface $request)
     {
         $areaCode = $this->appState->getAreaCode();
         $area = $this->_areaList->getArea($areaCode);

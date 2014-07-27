@@ -174,10 +174,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetParentIdsByChild()
     {
-        $attributes = $this->_model->getConfigurableAttributesAsArray($this->_product);
-        $attribute = reset($attributes);
-        $optionValueId = $attribute['values'][0]['value_index'];
-        $result = $this->_model->getParentIdsByChild($optionValueId * 10);
+        $result = $this->_model->getParentIdsByChild(10);
         // fixture
         $this->assertEquals(array(1), $result);
     }
@@ -248,7 +245,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             $this->_product
         );
         $this->assertInstanceOf('Magento\Catalog\Model\Product', $product);
-        $this->assertEquals("simple_{$optionValueId}", $product->getSku());
+        $this->assertEquals("simple_10", $product->getSku());
     }
 
     /**
@@ -463,16 +460,15 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
      */
     public function testGenerateSimpleProductsWithPartialData($productsData)
     {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService */
+        $stockItemService = $objectManager->get('Magento\CatalogInventory\Service\V1\StockItemService');
         $this->_product->setNewVariationsAttributeSetId(4);
         $generatedProducts = $this->_model->generateSimpleProducts($this->_product, $productsData);
         foreach ($generatedProducts as $productId) {
-            /** @var $product \Magento\Catalog\Model\Product */
-            $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                'Magento\Catalog\Model\Product'
-            );
-            $product->load($productId);
-            $this->assertEquals('0', $product->getStockItem()->getData('manage_stock'));
-            $this->assertEquals('1', $product->getStockItem()->getData('is_in_stock'));
+            $stockItemData = $stockItemService->getStockItem($productId);
+            $this->assertEquals('0', $stockItemData->isManageStock());
+            $this->assertEquals('1', $stockItemData->getIsInStock());
         }
     }
 

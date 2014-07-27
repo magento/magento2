@@ -31,7 +31,7 @@ use Magento\Bundle\Pricing\Price\BundleSelectionFactory;
 use Magento\Framework\Pricing\Adjustment\Calculator as CalculatorBase;
 use Magento\Bundle\Model\Product\Price;
 use Magento\Bundle\Pricing\Price\BundleOptionPrice;
-use Magento\Tax\Model\Calculation as TaxCalculation;
+use Magento\Tax\Service\V1\TaxCalculationServiceInterface;
 use Magento\Store\Model\Store;
 use Magento\Tax\Helper\Data as TaxHelper;
 
@@ -271,7 +271,7 @@ class Calculator implements BundleCalculatorInterface
         $roundingMethod = $this->taxHelper->getCalculationAgorithm($store);
         /** @var \Magento\Framework\Pricing\Amount\AmountInterface $itemAmount */
         foreach ($amountList as $itemAmount) {
-            if ($roundingMethod != TaxCalculation::CALC_TOTAL_BASE) {
+            if ($roundingMethod != TaxCalculationServiceInterface::CALC_TOTAL_BASE) {
                 //We need to round the individual selection first
                 $fullAmount += $store->roundPrice($itemAmount->getValue());
                 foreach ($itemAmount->getAdjustmentAmounts() as $code => $adjustment) {

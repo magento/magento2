@@ -418,11 +418,11 @@ $catalogInstaller->addAttribute(
         'required' => true,
         'user_defined' => false,
         'default' => '',
-        'searchable' => true,
+        'searchable' => false,
         'filterable' => false,
         'comparable' => false,
         'visible_on_front' => false,
-        'visible_in_advanced_search' => true,
+        'visible_in_advanced_search' => false,
         'used_in_product_listing' => true,
         'unique' => false,
         'apply_to' => implode($this->getTaxableItems(), ',')

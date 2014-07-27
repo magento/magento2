@@ -102,7 +102,7 @@ class Item extends \Magento\Framework\Model\Resource\Db\AbstractDb
     {
         if ($columns === null) {
             $adapter = $this->_getReadAdapter();
-            $isManageStock = (int)$this->_scopeConfig->getValue(
+            $isManageStock = (int) $this->_scopeConfig->getValue(
                 \Magento\CatalogInventory\Model\Stock\Item::XML_PATH_MANAGE_STOCK,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );

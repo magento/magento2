@@ -36,6 +36,6 @@ class Inbox extends \Magento\Backend\Block\Widget\Grid\Container
         $this->_blockGroup = 'Magento_AdminNotification';
         $this->_headerText = __('Messages Inbox');
         parent::_construct();
-        $this->_removeButton('add');
+        $this->buttonList->remove('add');
     }
 }

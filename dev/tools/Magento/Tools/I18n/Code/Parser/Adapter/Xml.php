@@ -45,8 +45,8 @@ class Xml extends AbstractAdapter
             if ((string)$attributes['translate'] == 'true') {
                 $this->_addPhrase((string)$element);
             } else {
-                $nodesDelimiter = strpos($attributes, ' ') === false ? ',' : ' ';
-                foreach (explode($nodesDelimiter, $attributes) as $value) {
+                $nodesDelimiter = strpos($attributes['translate'], ' ') === false ? ',' : ' ';
+                foreach (explode($nodesDelimiter, $attributes['translate']) as $value) {
                     $phrase = (string)$element->{$value};
                     if ($phrase) {
                         $this->_addPhrase($phrase);

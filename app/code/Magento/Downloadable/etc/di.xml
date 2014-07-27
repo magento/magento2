@@ -75,4 +75,8 @@
             </argument>
         </arguments>
     </type>
+    <preference for="\Magento\Downloadable\Service\V1\DownloadableLink\ReadServiceInterface" type="\Magento\Downloadable\Service\V1\DownloadableLink\ReadService" />
+    <preference for="\Magento\Downloadable\Service\V1\DownloadableLink\WriteServiceInterface" type="\Magento\Downloadable\Service\V1\DownloadableLink\WriteService" />
+    <preference for="\Magento\Downloadable\Service\V1\Data\FileContentUploaderInterface" type="\Magento\Downloadable\Service\V1\Data\FileContentUploader" />
+    <preference for="\Magento\Downloadable\Service\V1\DownloadableSample\WriteServiceInterface" type="\Magento\Downloadable\Service\V1\DownloadableSample\WriteService" />
 </config>

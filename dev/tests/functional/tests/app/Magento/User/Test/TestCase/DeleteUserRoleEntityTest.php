@@ -26,7 +26,7 @@ namespace Magento\User\Test\TestCase;
 
 use Magento\Backend\Test\Page\AdminAuthLogin;
 use Magento\Backend\Test\Page\Dashboard;
-use Magento\User\Test\Fixture\AdminUserInjectable;
+use Magento\User\Test\Fixture\User;
 use Magento\User\Test\Fixture\AdminUserRole;
 use Magento\User\Test\Page\Adminhtml\UserRoleIndex;
 use Magento\User\Test\Page\Adminhtml\UserRoleEditRole;
@@ -73,25 +73,20 @@ class DeleteUserRoleEntityTest extends Injectable
 
     /**
      * Preconditions for test
+     *
      * @param FixtureFactory $fixtureFactory
      * @return array
      */
     public function __prepare(FixtureFactory $fixtureFactory)
     {
-        $role = $fixtureFactory->createByCode('adminUserRole', ['dataSet' => 'default']);
-        $role->persist();
-        $roleId = $role->getData('role_id');
         $adminUser = $fixtureFactory->createByCode(
-            'adminUserInjectable',
-            [
-                'dataSet' => 'custom_admin',
-                'data' => ['role_id' => $roleId]
-            ]
+            'user',
+            ['dataSet' => 'custom_admin_with_default_role']
         );
         $adminUser->persist();
 
         return [
-            'role' => $role,
+            'role' => $adminUser->getDataFieldConfig('role_id')['source']->getRole(),
             'adminUser' => $adminUser
         ];
     }
@@ -101,6 +96,7 @@ class DeleteUserRoleEntityTest extends Injectable
      * @param UserRoleEditRole $userRoleEditRole
      * @param AdminAuthLogin $adminAuthLogin
      * @param Dashboard $dashboard
+     * @return void
      */
     public function __inject(
         UserRoleIndex $userRoleIndex,
@@ -118,17 +114,17 @@ class DeleteUserRoleEntityTest extends Injectable
      * Runs Delete User Role Entity test.
      *
      * @param AdminUserRole $role
-     * @param AdminUserInjectable $adminUser
+     * @param User $adminUser
      * @param string $isDefaultUser
      * @return void
      */
     public function testDeleteAdminUserRole(
         AdminUserRole $role,
-        AdminUserInjectable $adminUser,
+        User $adminUser,
         $isDefaultUser
     ) {
         $filter = [
-            'role_name' => $role->getRoleName()
+            'rolename' => $role->getRoleName()
         ];
         //Steps
         if ($isDefaultUser == 0) {

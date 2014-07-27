@@ -23,411 +23,632 @@
  */
 namespace Magento\Weee\Model\Total\Quote;
 
-/**
- * @SuppressWarnings(PHPMD.TooManyFields)
- */
+use Magento\Tax\Model\Calculation;
+
 class WeeeTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * Setup tax helper with an array of methodName, returnValue
+     *
+     * @param array $taxConfig
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Tax\Helper\Data
      */
-    protected $_objectMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_weeeDataMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_configMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_storeMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_quoteItemMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_mageObjMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_productModelMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_contextMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_storeManagerInterfaceMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_weeeTaxMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_taxHelperMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_registryMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_scopeConfigInterfaceMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_quoteModelMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_addressMock;
-
-    /**
-     * @var \Magento\Weee\Model\Total\Quote\Weee
-     */
-    protected $_model;
-
-    protected function setUp()
+    protected function setupTaxHelper($taxConfig)
     {
-        $this->_initializeMockObjects();
-        $this->_prepareStaticMockExpects();
-        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_model = $objectManagerHelper->getObject(
-            '\Magento\Weee\Model\Total\Quote\Weee',
-            array(
-                'weeeData' => $this->_weeeDataMock,
-                'taxConfig' =>  $this->_configMock
-            )
-        );
+        $taxHelper = $this->getMock('Magento\Tax\Helper\Data', [], [], '', false);
+
+        foreach ($taxConfig as $method => $value) {
+            $taxHelper->expects($this->any())->method($method)->will($this->returnValue($value));
+        }
+
+        return $taxHelper;
     }
 
     /**
-     * Initialize mock objects
+     * Setup calculator to return tax rates
+     *
+     * @param array $taxRates
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Tax\Model\Calculation
      */
-    protected function _initializeMockObjects()
+    protected function setupTaxCalculation($taxRates)
     {
-        $quoteItemMethods = [
-            '__wakeup',
-            'getProduct',
-            'setWeeeTaxAppliedAmount',
-            'setBaseWeeeTaxAppliedAmount',
-            'setWeeeTaxAppliedRowAmount',
-            'setBaseWeeeTaxAppliedRowAmnt',
-            'getHasChildren',
-            'getChildren',
-            'isChildrenCalculated',
-            'getTotalQty',
-            'getQuote'
+        $storeTaxRate = $taxRates['store_tax_rate'];
+        $customerTaxRate = $taxRates['customer_tax_rate'];
+
+        $taxCalculation = $this->getMock('Magento\Tax\Model\Calculation', [], [], '', false);
+
+        $rateRequest = new \Magento\Framework\Object();
+        $defaultRateRequest = new \Magento\Framework\Object();
+
+        $taxCalculation->expects($this->any())->method('getRateRequest')->will($this->returnValue($rateRequest));
+        $taxCalculation
+            ->expects($this->any())
+            ->method('getRateOriginRequest')
+            ->will($this->returnValue($defaultRateRequest));
+
+        $taxCalculation
+            ->expects($this->any())
+            ->method('getRate')
+            ->will($this->onConsecutiveCalls($storeTaxRate, $customerTaxRate));
+
+        return $taxCalculation;
+    }
+
+    /**
+     * Setup weee helper with an array of methodName, returnValue
+     *
+     * @param array $weeeConfig
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Weee\Helper\Data
+     */
+    protected function setupWeeeHelper($weeeConfig)
+    {
+        $weeeHelper = $this->getMock('Magento\Weee\Helper\Data', [], [], '', false);
+
+        foreach ($weeeConfig as $method => $value) {
+            $weeeHelper->expects($this->any())->method($method)->will($this->returnValue($value));
+        }
+
+        return $weeeHelper;
+    }
+
+    /**
+     * Setup an item mock
+     *
+     * @param float $itemQty
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Quote\Item
+     */
+    protected function setupItemMock($itemQty)
+    {
+        $itemMock = $this->getMock(
+            'Magento\Sales\Model\Quote\Item',
+            [
+                'getProduct',
+                'getQuote',
+                'getAddress',
+                'getTotalQty',
+                '__wakeup',
+            ],
+            [],
+            '',
+            false
+        );
+
+        $productMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
+        $itemMock->expects($this->any())->method('getProduct')->will($this->returnValue($productMock));
+        $itemMock->expects($this->any())->method('getTotalQty')->will($this->returnValue($itemQty));
+
+        return $itemMock;
+    }
+
+    /**
+     * Setup address mock
+     *
+     * @param \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Quote\Item $itemMock
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function setupAddressMock($itemMock)
+    {
+        $addressMock = $this->getMock(
+            'Magento\Sales\Model\Quote\Address',
+            [
+                '__wakeup',
+                'getAllNonNominalItems',
+                'getQuote',
+            ],
+            [],
+            '',
+            false
+        );
+
+        $quoteMock = $this->getMock('Magento\Sales\Model\Quote', [], [], '', false);
+        $storeMock = $this->getMock('Magento\Store\Model\Store', ['__wakeup', 'convertPrice'], [], '', false);
+        $storeMock->expects($this->any())->method('convertPrice')->will($this->returnArgument(0));
+        $quoteMock->expects($this->any())->method('getStore')->will($this->returnValue($storeMock));
+
+        $addressMock->expects($this->any())->method('getAllNonNominalItems')->will($this->returnValue([$itemMock]));
+        $addressMock->expects($this->any())->method('getQuote')->will($this->returnValue($quoteMock));
+
+        return $addressMock;
+    }
+
+    /**
+     * Verify that correct fields of item has been set
+     *
+     * @param \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Quote\Item $item
+     * @param $itemData
+     */
+    public function verifyItem(\Magento\Sales\Model\Quote\Item $item, $itemData)
+    {
+        foreach ($itemData as $key => $value) {
+            $this->assertEquals($value, $item->getData($key), 'item ' . $key . ' is incorrect');
+        }
+    }
+
+    /**
+     * Verify that correct fields of address has been set
+     *
+     * @param \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Quote\Address $address
+     * @param $addressData
+     */
+    public function verifyAddress(\Magento\Sales\Model\Quote\Address $address, $addressData)
+    {
+        foreach ($addressData as $key => $value) {
+            $this->assertEquals($value, $address->getData($key), 'address ' . $key . ' is incorrect');
+        }
+    }
+
+    /**
+     * Test the collect function of the weee collector
+     *
+     * @param array $taxConfig
+     * @param array $weeeConfig
+     * @param array $taxRates
+     * @param array $itemData
+     * @param float $itemQty
+     * @param array $addressData
+     * @dataProvider collectDataProvider
+     */
+    public function testCollect($taxConfig, $weeeConfig, $taxRates, $itemData, $itemQty, $addressData = [])
+    {
+        $itemMock = $this->setupItemMock($itemQty);
+        $addressMock = $this->setupAddressMock($itemMock);
+
+        $taxHelper = $this->setupTaxHelper($taxConfig);
+        $weeeHelper = $this->setupWeeeHelper($weeeConfig);
+        $calculator = $this->setupTaxCalculation($taxRates);
+
+        $arguments = [
+            'taxData' => $taxHelper,
+            'calculation' => $calculator,
+            'weeeData' => $weeeHelper,
         ];
 
-        $this->_storeManagerInterfaceMock = $this->getMock(
-            'Magento\Store\Model\StoreManagerInterface', [], [], '', false
-        );
-        $this->_weeeTaxMock = $this->getMock(
-            '\Magento\Weee\Model\Tax', ['__wakeup', 'getProductWeeeAttributes'], [], '', false
-        );
-        $this->_taxHelperMock = $this->getMock('\Magento\Tax\Helper\Data', [], [], '', false);
-        $this->_registryMock = $this->getMock('\Magento\Framework\Registry', [], [], '', false);
-        $this->_scopeConfigInterfaceMock = $this->getMock(
-            '\Magento\Framework\App\Config\ScopeConfigInterface', ['isSetFlag', 'getValue'], [], '', false
-        );
-        $this->_weeeDataMock = $this->getMock('\Magento\Weee\Helper\Data', array(), array(), '', false);
-        $this->_configMock = $this->getMock('\Magento\Tax\Model\Config', ['priceIncludesTax'], [], '', false);
-        $this->_objectMock = $this->getMock('\Magento\Framework\Object', [], [], '', false);
-        $this->_storeMock = $this->getMock('\Magento\Store\Model\Store', ['__wakeup', 'convertPrice'], [], '', false);
-        $this->_quoteItemMock = $this->getMock('Magento\Sales\Model\Quote\Item', $quoteItemMethods, [], '', false);
-        $this->_productModelMock = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
-        $this->_quoteModelMock = $this->getMock('\Magento\Sales\Model\Quote',
-            ['__wakeup', 'getBillingAddress', 'getStore'], [], '', false);
-        $this->_addressMock = $this->getMock('\Magento\Sales\Model\Quote\Address', [
-            '__wakeup',
-            'unsSubtotalInclTax',
-            'unsBaseSubtotalInclTax',
-            'getAllItems',
-            'getQuote',
-            'getAllNonNominalItems',
-            'getPrice'
-        ], [], '', false);
+        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->weeeCollector = $helper->getObject('Magento\Weee\Model\Total\Quote\Weee', $arguments);
+
+        $this->weeeCollector->collect($addressMock);
+
+        $this->verifyItem($itemMock, $itemData);
+        $this->verifyAddress($addressMock, $addressData);
     }
 
     /**
-     * Prepare expects for mocked objects
-     */
-    protected function _prepareStaticMockExpects()
-    {
-        $this->_addressMock->expects($this->any())->method('getQuote')
-            ->will($this->returnValue($this->_quoteModelMock));
-        $this->_addressMock->expects($this->any())->method('getAllItems')
-            ->will($this->returnValue($this->_quoteModelMock));
-        $this->_quoteModelMock->expects($this->any())->method('getStore')
-            ->will($this->returnValue($this->_storeMock));
-        $this->_quoteModelMock->expects($this->any())->method('getBillingAddress')
-            ->will($this->returnValue($this->_addressMock));
-        $this->_quoteModelMock->expects($this->any())->method('getPrice')
-            ->will($this->returnValue(1));
-        $this->_quoteItemMock->expects($this->any())->method('getProduct')
-            ->will($this->returnValue($this->_productModelMock));
-        $this->_quoteItemMock->expects($this->any())->method('getTotalQty')
-            ->will($this->returnValue(1));
-        $this->_quoteItemMock->expects($this->any())->method('getQuote')
-            ->will($this->returnValue($this->_quoteModelMock));
-        $this->_scopeConfigInterfaceMock->expects($this->any())->method('isSetFlag')
-            ->will($this->returnValue(true));
-        $this->_weeeTaxMock->expects($this->any())->method('getProductWeeeAttributes')
-            ->will($this->returnValue(array($this->_objectMock)));
-        $this->_weeeDataMock->expects($this->any())->method('getProductWeeeAttributes')
-            ->will($this->returnValue(array($this->_objectMock)));
-        $this->_weeeDataMock->expects($this->any())->method('getApplied')
-            ->will($this->returnValue(array()));
-        $this->_storeMock->expects($this->any())->method('convertPrice')
-            ->will($this->returnValue(1));
-    }
-
-    /**
-     * Collect items and apply discount to weee
-     */
-    public function testCollectWithAddItemDiscountPrices()
-    {
-        $this->_addressMock->expects($this->any())->method('getAllNonNominalItems')
-            ->will($this->returnValue(array($this->_quoteItemMock)));
-        $this->_weeeDataMock->expects($this->any())->method('isDiscounted')
-            ->will($this->returnValue(true));
-        $this->_weeeDataMock->expects($this->any())->method('isTaxable')
-            ->will($this->returnValue(false));
-        $this->_weeeDataMock->expects($this->once())->method('addItemDiscountPrices');
-        $this->_weeeDataMock->expects($this->any())->method('isEnabled')
-            ->will($this->returnValue(true));
-        $this->_model->collect($this->_addressMock);
-    }
-
-    /**
-     * Collect items without applying discount to weee
-     */
-    public function testCollectWithoutAddItemDiscountPrices()
-    {
-        $this->_addressMock->expects($this->any())->method('getAllNonNominalItems')
-            ->will($this->returnValue(array($this->_quoteItemMock)));
-        $this->_weeeDataMock->expects($this->any())->method('isDiscounted')
-            ->will($this->returnValue(false));
-        $this->_weeeDataMock->expects($this->any())->method('isTaxable')
-            ->will($this->returnValue(false));
-        $this->_weeeDataMock->expects($this->never())->method('addItemDiscountPrices');
-        $this->_weeeDataMock->expects($this->any())->method('isEnabled')
-            ->will($this->returnValue(true));
-        $this->_model->collect($this->_addressMock);
-    }
-
-    /**
-     * Collect items without address item
-     */
-    public function testCollectWithoutAddressItem()
-    {
-        $this->_addressMock->expects($this->any())->method('getAllNonNominalItems')
-            ->will($this->returnValue(array()));
-        $this->_addressMock->expects($this->never())->method('setAppliedTaxesReset');
-        $this->_model->collect($this->_addressMock);
-    }
-
-    /**
-     * Collect items with child
-     */
-    public function testCollectWithChildItem()
-    {
-        $this->_addressMock->expects($this->any())->method('getAllNonNominalItems')
-            ->will($this->returnValue(array($this->_quoteItemMock)));
-        $this->_weeeDataMock->expects($this->any())->method('isDiscounted')
-            ->will($this->returnValue(false));
-        $this->_weeeDataMock->expects($this->any())->method('isTaxable')
-            ->will($this->returnValue(false));
-        $this->_weeeDataMock->expects($this->any())->method('isEnabled')
-            ->will($this->returnValue(true));
-        $this->_quoteItemMock->expects($this->once())->method('isChildrenCalculated')
-            ->will($this->returnValue(true));
-        $this->_model->collect($this->_addressMock);
-    }
-
-    /**
-     * Collect items with price that includes tax
+     * Data provider for testCollect
      *
-     * @param array
-     */
-    public function testCollectPriceIncludesTax()
-    {
-        $this->_addressMock->expects($this->any())->method('getAllNonNominalItems')
-            ->will($this->returnValue(array($this->_quoteItemMock)));
-        $this->_addressMock->expects($this->once())->method('getAllNonNominalItems');
-        $this->_addressMock->expects($this->once())->method('getAllNonNominalItems');
-        $this->_weeeDataMock->expects($this->any())->method('isDiscounted')
-            ->will($this->returnValue(true));
-        $this->_weeeDataMock->expects($this->once())->method('addItemDiscountPrices');
-        $this->_weeeDataMock->expects($this->any())->method('isTaxable')
-            ->will($this->returnValue(true));
-        $this->_weeeDataMock->expects($this->any())->method('isEnabled')
-            ->will($this->returnValue(true));
-        $this->_configMock->expects($this->once())->method('priceIncludesTax')
-            ->will($this->returnValue(false));
-        $this->_model->collect($this->_addressMock);
-    }
-
-    /**
-     * Collect items with price that does not include tax
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * Multiple datasets
      *
-     * @param array
+     * @return array
      */
-    public function testCollectPriceNotIncludesTax()
+    public function collectDataProvider()
     {
-        $this->_addressMock->expects($this->any())->method('getAllNonNominalItems')
-            ->will($this->returnValue(array($this->_quoteItemMock)));
-        $this->_weeeDataMock->expects($this->any())->method('isDiscounted')
-            ->will($this->returnValue(true));
-        $this->_weeeDataMock->expects($this->once())->method('addItemDiscountPrices');
-        $this->_weeeDataMock->expects($this->any())->method('isTaxable')
-            ->will($this->returnValue(true));
-        $this->_weeeDataMock->expects($this->any())->method('isEnabled')
-            ->will($this->returnValue(true));
-        $this->_configMock->expects($this->once())->method('priceIncludesTax')
-            ->will($this->returnValue(true));
-        $this->_model->collect($this->_addressMock);
-    }
+        $data = [];
 
-    /**
-     * Collect taxable items
-     */
-    public function testCollectTaxable()
-    {
-        $this->_addressMock->expects($this->any())->method('getAllNonNominalItems')
-            ->will($this->returnValue(array($this->_quoteItemMock)));
-        $this->_addressMock->expects($this->once())->method('unsSubtotalInclTax');
-        $this->_addressMock->expects($this->once())->method('unsBaseSubtotalInclTax');
-        $this->_weeeDataMock->expects($this->any())->method('isDiscounted')
-            ->will($this->returnValue(true));
-        $this->_weeeDataMock->expects($this->once())->method('addItemDiscountPrices');
-        $this->_weeeDataMock->expects($this->any())->method('isTaxable')
-            ->will($this->returnValue(true));
-        $this->_weeeDataMock->expects($this->any())->method('isEnabled')
-            ->will($this->returnValue(true));
-        $this->_configMock->expects($this->once())->method('priceIncludesTax')
-            ->will($this->returnValue(true));
-        $this->_model->collect($this->_addressMock);
-    }
+        // 1. This collector does not compute tax.  Instead it sets up various fields for the tax calculation
+        // 2. When the Weee is not taxable, this collector will change the address data as follows:
+        // 2a. If Weee is included in the subtotal, the 'subtotal' fields are populated
+        // 2b. Otherwise the 'weee_amount' fields are populated
 
-    /**
-     * Collect does not taxable items
-     */
-    public function testCollectDataStoreDisabled()
-    {
-        $this->_addressMock->expects($this->any())->method('getAllNonNominalItems')
-            ->will($this->returnValue(array($this->_quoteItemMock)));
-        $this->_addressMock->expects($this->never())->method('unsSubtotalInclTax');
-        $this->_addressMock->expects($this->never())->method('unsBaseSubtotalInclTax');
-        $this->_weeeDataMock->expects($this->any())->method('isDiscounted')
-            ->will($this->returnValue(true));
-        $this->_weeeDataMock->expects($this->any())->method('isTaxable')
-            ->will($this->returnValue(false));
-        $this->_weeeDataMock->expects($this->any())->method('includeInSubtotal')
-            ->will($this->returnValue(false));
-        $this->_weeeDataMock->expects($this->once(0))->method('isEnabled')
-            ->will($this->returnValue(false));
-        $this->_configMock->expects($this->never())->method('priceIncludesTax')
-            ->will($this->returnValue(true));
-        $this->_model->collect($this->_addressMock);
-    }
+        $data['price_incl_tax_weee_taxable_unit_included_in_subtotal'] = [
+            'tax_config' => [
+                'priceIncludesTax' => true,
+                'getCalculationAgorithm' => Calculation::CALC_UNIT_BASE,
+            ],
+            'weee_config' => [
+                'isEnabled' => true,
+                'includeInSubtotal' => true,
+                'isTaxable' => true,
+                'getApplied' => [],
+                'getProductWeeeAttributes' => [
+                    new \Magento\Framework\Object(
+                        [
+                            'name' => 'Recycling Fee',
+                            'amount' => 10,
+                        ]
+                    ),
+                ],
+            ],
+            'tax_rates' => [
+                'store_tax_rate' => 8.25,
+                'customer_tax_rate' => 8.25,
+            ],
+            'item' => [
+                'weee_tax_applied_amount' => 10,
+                'base_weee_tax_applied_amount' => 10,
+                'weee_tax_applied_row_amount' => 20,
+                'base_weee_tax_applied_row_amnt' => 20,
+                'weee_tax_applied_amount_incl_tax' => 10,
+                'base_weee_tax_applied_amount_incl_tax' => 10,
+                'weee_tax_applied_row_amount_incl_tax' => 20,
+                'base_weee_tax_applied_row_amnt_incl_tax' => 20,
+            ],
+            'item_qty' => 2,
+            'address_data' => [
+                'subtotal_incl_tax' => 20,
+                'base_subtotal_incl_tax' => 20,
+            ]
+        ];
 
-    /**
-     * Collect items and apply discount to weee
-     */
-    public function testCollectWithChildren()
-    {
-        $childQuoteItemMock = $this->getMock('Magento\Sales\Model\Quote\Item', [], [], '', false);
+        $data['price_incl_tax_weee_taxable_unit_not_included_in_subtotal'] = [
+            'tax_config' => [
+                'priceIncludesTax' => true,
+                'getCalculationAgorithm' => Calculation::CALC_UNIT_BASE,
+            ],
+            'weee_config' => [
+                'isEnabled' => true,
+                'includeInSubtotal' => false,
+                'isTaxable' => true,
+                'getApplied' => [],
+                'getProductWeeeAttributes' => [
+                    new \Magento\Framework\Object(
+                        [
+                            'name' => 'Recycling Fee',
+                            'amount' => 10,
+                        ]
+                    ),
+                ],
+            ],
+            'tax_rates' => [
+                'store_tax_rate' => 8.25,
+                'customer_tax_rate' => 8.25,
+            ],
+            'item' => [
+                'weee_tax_applied_amount' => 10,
+                'base_weee_tax_applied_amount' => 10,
+                'weee_tax_applied_row_amount' => 20,
+                'base_weee_tax_applied_row_amnt' => 20,
+                'weee_tax_applied_amount_incl_tax' => 10,
+                'base_weee_tax_applied_amount_incl_tax' => 10,
+                'weee_tax_applied_row_amount_incl_tax' => 20,
+                'base_weee_tax_applied_row_amnt_incl_tax' => 20,
+            ],
+            'item_qty' => 2,
+            'address_data' => [
+                'subtotal_incl_tax' => 20,
+                'base_subtotal_incl_tax' => 20,
+            ]
+        ];
 
-        $this->_addressMock->expects($this->any())->method('getAllNonNominalItems')
-            ->will($this->returnValue(array($this->_quoteItemMock)));
-        $this->_quoteItemMock->expects($this->any())->method('getHasChildren')
-            ->will($this->returnValue(true));
-        $this->_quoteItemMock->expects($this->any())->method('isChildrenCalculated')
-            ->will($this->returnValue(true));
-        $this->_quoteItemMock->expects($this->any())->method('getChildren')
-            ->will($this->returnValue(array($childQuoteItemMock)));
-        $this->_weeeDataMock->expects($this->any())->method('isDiscounted')
-            ->will($this->returnValue(true));
-        $this->_weeeDataMock->expects($this->any())->method('isTaxable')
-            ->will($this->returnValue(false));
-        $this->_weeeDataMock->expects($this->once())->method('addItemDiscountPrices');
-        $this->_weeeDataMock->expects($this->any())->method('isEnabled')
-            ->will($this->returnValue(true));
-        $this->_model->collect($this->_addressMock);
-    }
+        $data['price_excl_tax_weee_taxable_unit_included_in_subtotal'] = [
+            'tax_config' => [
+                'priceIncludesTax' => false,
+                'getCalculationAgorithm' => Calculation::CALC_UNIT_BASE,
+            ],
+            'weee_config' => [
+                'isEnabled' => true,
+                'includeInSubtotal' => true,
+                'isTaxable' => true,
+                'getApplied' => [],
+                'getProductWeeeAttributes' => [
+                    new \Magento\Framework\Object(
+                        [
+                            'name' => 'Recycling Fee',
+                            'amount' => 10,
+                        ]
+                    ),
+                ],
+            ],
+            'tax_rates' => [
+                'store_tax_rate' => 8.25,
+                'customer_tax_rate' => 8.25,
+            ],
+            'item' => [
+                'weee_tax_applied_amount' => 10,
+                'base_weee_tax_applied_amount' => 10,
+                'weee_tax_applied_row_amount' => 20,
+                'base_weee_tax_applied_row_amnt' => 20,
+                'weee_tax_applied_amount_incl_tax' => 10,
+                'base_weee_tax_applied_amount_incl_tax' => 10,
+                'weee_tax_applied_row_amount_incl_tax' => 20,
+                'base_weee_tax_applied_row_amnt_incl_tax' => 20,
+            ],
+            'item_qty' => 2,
+            'address_data' => [
+                'subtotal_incl_tax' => 20,
+                'base_subtotal_incl_tax' => 20,
+            ]
+        ];
 
-    public function testCollectWeeeIncludeInSubtotal()
-    {
-        $this->_addressMock->expects($this->any())->method('getAllNonNominalItems')
-            ->will($this->returnValue(array($this->_quoteItemMock)));
-        $this->_weeeDataMock->expects($this->any())->method('isDiscounted')
-            ->will($this->returnValue(true));
-        $this->_weeeDataMock->expects($this->any())->method('isTaxable')
-            ->will($this->returnValue(false));
-        $this->_weeeDataMock->expects($this->once())->method('addItemDiscountPrices');
-        $this->_weeeDataMock->expects($this->any())->method('isEnabled')
-            ->will($this->returnValue(true));
-        $this->_weeeDataMock->expects($this->any())->method('includeInSubtotal')
-            ->will($this->returnValue(true));
-        $this->_model->collect($this->_addressMock);
-    }
+        $data['price_incl_tax_weee_non_taxable_unit_included_in_subtotal'] = [
+            'tax_config' => [
+                'priceIncludesTax' => true,
+                'getCalculationAgorithm' => Calculation::CALC_UNIT_BASE,
+            ],
+            'weee_config' => [
+                'isEnabled' => true,
+                'includeInSubtotal' => true,
+                'isTaxable' => false,
+                'getApplied' => [],
+                'getProductWeeeAttributes' => [
+                    new \Magento\Framework\Object(
+                        [
+                            'name' => 'Recycling Fee',
+                            'amount' => 10,
+                        ]
+                    ),
+                ],
+            ],
+            'tax_rates' => [
+                'store_tax_rate' => 8.25,
+                'customer_tax_rate' => 8.25,
+            ],
+            'item' => [
+                'weee_tax_applied_amount' => 10,
+                'base_weee_tax_applied_amount' => 10,
+                'weee_tax_applied_row_amount' => 20,
+                'base_weee_tax_applied_row_amnt' => 20,
+                'weee_tax_applied_amount_incl_tax' => 10,
+                'base_weee_tax_applied_amount_incl_tax' => 10,
+                'weee_tax_applied_row_amount_incl_tax' => 20,
+                'base_weee_tax_applied_row_amnt_incl_tax' => 20,
+            ],
+            'item_qty' => 2,
+            'address_data' => [
+                'subtotal_incl_tax' => 20,
+                'base_subtotal_incl_tax' => 20,
+                'subtotal' => 20,
+                'base_subtotal' => 20,
+                'weee_amount' => 0,
+                'base_weee_amount' => 0,
+            ]
+        ];
 
-    /**
-     * Collect empty items
-     */
-    public function testCollectWithoutItems()
-    {
-        $this->_addressMock->expects($this->any())->method('getAllNonNominalItems')
-            ->will($this->returnValue(null));
-        $this->assertEquals($this->_model, $this->_model->collect($this->_addressMock));
-    }
+        $data['price_excl_tax_weee_non_taxable_unit_included_in_subtotal'] = [
+            'tax_config' => [
+                'priceIncludesTax' => false,
+                'getCalculationAgorithm' => Calculation::CALC_UNIT_BASE,
+            ],
+            'weee_config' => [
+                'isEnabled' => true,
+                'includeInSubtotal' => true,
+                'isTaxable' => false,
+                'getApplied' => [],
+                'getProductWeeeAttributes' => [
+                    new \Magento\Framework\Object(
+                        [
+                            'name' => 'Recycling Fee',
+                            'amount' => 10,
+                        ]
+                    ),
+                ],
+            ],
+            'tax_rates' => [
+                'store_tax_rate' => 8.25,
+                'customer_tax_rate' => 8.25,
+            ],
+            'item' => [
+                'weee_tax_applied_amount' => 10,
+                'base_weee_tax_applied_amount' => 10,
+                'weee_tax_applied_row_amount' => 20,
+                'base_weee_tax_applied_row_amnt' => 20,
+                'weee_tax_applied_amount_incl_tax' => 10,
+                'base_weee_tax_applied_amount_incl_tax' => 10,
+                'weee_tax_applied_row_amount_incl_tax' => 20,
+                'base_weee_tax_applied_row_amnt_incl_tax' => 20,
+            ],
+            'item_qty' => 2,
+            'address_data' => [
+                'subtotal_incl_tax' => 20,
+                'base_subtotal_incl_tax' => 20,
+                'subtotal' => 20,
+                'base_subtotal' => 20,
+                'weee_amount' => 0,
+                'base_weee_amount' => 0,
+            ]
+        ];
 
-    /**
-     * Fetch method test
-     */
-    public function testFetch()
-    {
-        $this->assertEquals($this->_model, $this->_model->fetch($this->_addressMock));
-    }
+        $data['price_incl_tax_weee_taxable_row_included_in_subtotal'] = [
+            'tax_config' => [
+                'priceIncludesTax' => true,
+                'getCalculationAgorithm' => Calculation::CALC_ROW_BASE,
+            ],
+            'weee_config' => [
+                'isEnabled' => true,
+                'includeInSubtotal' => true,
+                'isTaxable' => true,
+                'getApplied' => [],
+                'getProductWeeeAttributes' => [
+                    new \Magento\Framework\Object(
+                        [
+                            'name' => 'Recycling Fee',
+                            'amount' => 10,
+                        ]
+                    ),
+                ],
+            ],
+            'tax_rates' => [
+                'store_tax_rate' => 8.25,
+                'customer_tax_rate' => 8.25,
+            ],
+            'item' => [
+                'weee_tax_applied_amount' => 10,
+                'base_weee_tax_applied_amount' => 10,
+                'weee_tax_applied_row_amount' => 20,
+                'base_weee_tax_applied_row_amnt' => 20,
+                'weee_tax_applied_amount_incl_tax' => 10,
+                'base_weee_tax_applied_amount_incl_tax' => 10,
+                'weee_tax_applied_row_amount_incl_tax' => 20,
+                'base_weee_tax_applied_row_amnt_incl_tax' => 20,
+            ],
+            'item_qty' => 2,
+            'address_data' => [
+                'subtotal_incl_tax' => 20,
+                'base_subtotal_incl_tax' => 20,
+            ]
+        ];
 
-    /**
-     * Process configuration array
-     */
-    public function testProcessConfigArray()
-    {
-        $this->assertEquals(
-            $this->_configMock, $this->_model->processConfigArray($this->_configMock, $this->_storeMock)
-        );
-    }
+        $data['price_excl_tax_weee_taxable_row_included_in_subtotal'] = [
+            'tax_config' => [
+                'priceIncludesTax' => false,
+                'getCalculationAgorithm' => Calculation::CALC_ROW_BASE,
+            ],
+            'weee_config' => [
+                'isEnabled' => true,
+                'includeInSubtotal' => true,
+                'isTaxable' => true,
+                'getApplied' => [],
+                'getProductWeeeAttributes' => [
+                    new \Magento\Framework\Object(
+                        [
+                            'name' => 'Recycling Fee',
+                            'amount' => 10,
+                        ]
+                    ),
+                ],
+            ],
+            'tax_rates' => [
+                'store_tax_rate' => 8.25,
+                'customer_tax_rate' => 8.25,
+            ],
+            'item' => [
+                'weee_tax_applied_amount' => 10,
+                'base_weee_tax_applied_amount' => 10,
+                'weee_tax_applied_row_amount' => 20,
+                'base_weee_tax_applied_row_amnt' => 20,
+                'weee_tax_applied_amount_incl_tax' => 10,
+                'base_weee_tax_applied_amount_incl_tax' => 10,
+                'weee_tax_applied_row_amount_incl_tax' => 20,
+                'base_weee_tax_applied_row_amnt_incl_tax' => 20,
+            ],
+            'item_qty' => 2,
+            'address_data' => [
+                'subtotal_incl_tax' => 20,
+                'base_subtotal_incl_tax' => 20,
+            ]
+        ];
 
-    /**
-     * Get label
-     */
-    public function testGetLabel()
-    {
-        $this->assertEquals('', $this->_model->getLabel());
+        $data['price_incl_tax_weee_non_taxable_row_included_in_subtotal'] = [
+            'tax_config' => [
+                'priceIncludesTax' => true,
+                'getCalculationAgorithm' => Calculation::CALC_ROW_BASE,
+            ],
+            'weee_config' => [
+                'isEnabled' => true,
+                'includeInSubtotal' => true,
+                'isTaxable' => false,
+                'getApplied' => [],
+                'getProductWeeeAttributes' => [
+                    new \Magento\Framework\Object(
+                        [
+                            'name' => 'Recycling Fee',
+                            'amount' => 10,
+                        ]
+                    ),
+                ],
+            ],
+            'tax_rates' => [
+                'store_tax_rate' => 8.25,
+                'customer_tax_rate' => 8.25,
+            ],
+            'item' => [
+                'weee_tax_applied_amount' => 10,
+                'base_weee_tax_applied_amount' => 10,
+                'weee_tax_applied_row_amount' => 20,
+                'base_weee_tax_applied_row_amnt' => 20,
+                'weee_tax_applied_amount_incl_tax' => 10,
+                'base_weee_tax_applied_amount_incl_tax' => 10,
+                'weee_tax_applied_row_amount_incl_tax' => 20,
+                'base_weee_tax_applied_row_amnt_incl_tax' => 20,
+            ],
+            'item_qty' => 2,
+            'address_data' => [
+                'subtotal_incl_tax' => 20,
+                'base_subtotal_incl_tax' => 20,
+                'subtotal' => 20,
+                'base_subtotal' => 20,
+                'weee_amount' => 0,
+                'base_weee_amount' => 0,
+            ]
+        ];
+
+        $data['price_excl_tax_weee_non_taxable_row_included_in_subtotal'] = [
+            'tax_config' => [
+                'priceIncludesTax' => false,
+                'getCalculationAgorithm' => Calculation::CALC_ROW_BASE,
+            ],
+            'weee_config' => [
+                'isEnabled' => true,
+                'includeInSubtotal' => true,
+                'isTaxable' => false,
+                'getApplied' => [],
+                'getProductWeeeAttributes' => [
+                    new \Magento\Framework\Object(
+                        [
+                            'name' => 'Recycling Fee',
+                            'amount' => 10,
+                        ]
+                    ),
+                ],
+            ],
+            'tax_rates' => [
+                'store_tax_rate' => 8.25,
+                'customer_tax_rate' => 8.25,
+            ],
+            'item' => [
+                'weee_tax_applied_amount' => 10,
+                'base_weee_tax_applied_amount' => 10,
+                'weee_tax_applied_row_amount' => 20,
+                'base_weee_tax_applied_row_amnt' => 20,
+                'weee_tax_applied_amount_incl_tax' => 10,
+                'base_weee_tax_applied_amount_incl_tax' => 10,
+                'weee_tax_applied_row_amount_incl_tax' => 20,
+                'base_weee_tax_applied_row_amnt_incl_tax' => 20,
+            ],
+            'item_qty' => 2,
+            'address_data' => [
+                'subtotal_incl_tax' => 20,
+                'base_subtotal_incl_tax' => 20,
+                'subtotal' => 20,
+                'base_subtotal' => 20,
+                'weee_amount' => 0,
+                'base_weee_amount' => 0,
+            ]
+        ];
+
+        $data['price_excl_tax_weee_non_taxable_row_not_included_in_subtotal'] = [
+            'tax_config' => [
+                'priceIncludesTax' => false,
+                'getCalculationAgorithm' => Calculation::CALC_ROW_BASE,
+            ],
+            'weee_config' => [
+                'isEnabled' => true,
+                'includeInSubtotal' => false,
+                'isTaxable' => false,
+                'getApplied' => [],
+                'getProductWeeeAttributes' => [
+                    new \Magento\Framework\Object(
+                        [
+                            'name' => 'Recycling Fee',
+                            'amount' => 10,
+                        ]
+                    ),
+                ],
+            ],
+            'tax_rates' => [
+                'store_tax_rate' => 8.25,
+                'customer_tax_rate' => 8.25,
+            ],
+            'item' => [
+                'weee_tax_applied_amount' => 10,
+                'base_weee_tax_applied_amount' => 10,
+                'weee_tax_applied_row_amount' => 20,
+                'base_weee_tax_applied_row_amnt' => 20,
+                'weee_tax_applied_amount_incl_tax' => 10,
+                'base_weee_tax_applied_amount_incl_tax' => 10,
+                'weee_tax_applied_row_amount_incl_tax' => 20,
+                'base_weee_tax_applied_row_amnt_incl_tax' => 20,
+            ],
+            'item_qty' => 2,
+            'address_data' => [
+                'subtotal_incl_tax' => 20,
+                'base_subtotal_incl_tax' => 20,
+                'subtotal' => 0,
+                'base_subtotal' => 0,
+                'weee_amount' => 20,
+                'base_weee_amount' => 20,
+            ]
+        ];
+
+        return $data;
     }
 }

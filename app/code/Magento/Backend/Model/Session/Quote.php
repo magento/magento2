@@ -138,12 +138,6 @@ class Quote extends \Magento\Framework\Session\SessionManager
             if ($this->getStoreId() && $this->getQuoteId()) {
                 $this->_quote->setStoreId($this->getStoreId())->load($this->getQuoteId());
             } elseif ($this->getStoreId() && $this->hasCustomerId()) {
-                try {
-                    $customerData = $this->_customerService->getCustomer($this->getCustomerId());
-                    $this->_quote->assignCustomer($customerData);
-                } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-                    /** Customer does not exist */
-                }
                 $customerGroupId = $this->_scopeConfig->getValue(
                     self::XML_PATH_DEFAULT_CREATEACCOUNT_GROUP,
                     \Magento\Store\Model\ScopeInterface::SCOPE_STORE
@@ -154,6 +148,12 @@ class Quote extends \Magento\Framework\Session\SessionManager
                     ->setIsActive(false)
                     ->save();
                 $this->setQuoteId($this->_quote->getId());
+                try {
+                    $customerData = $this->_customerService->getCustomer($this->getCustomerId());
+                    $this->_quote->assignCustomer($customerData);
+                } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+                    /** Customer does not exist */
+                }
             }
             $this->_quote->setIgnoreOldQty(true);
             $this->_quote->setIsSuperMode(true);

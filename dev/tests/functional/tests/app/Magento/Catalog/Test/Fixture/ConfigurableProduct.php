@@ -243,40 +243,40 @@ class ConfigurableProduct extends Product
                 ),
                 'configurable_attributes_data' => array(
                     'value' => array(
+                        '0' => array(
+                            'label' => array(
+                                'value' => '%attribute_label_1%'
+                            ),
                             '0' => array(
-                                'label' => array(
-                                    'value' => '%attribute_label_1%'
+                                'option_label' => array(
+                                    'value' => '%attribute_1_option_label_1%'
                                 ),
-                                '0' => array(
-                                    'option_label' => array(
-                                        'value' => '%attribute_1_option_label_1%'
-                                    ),
-                                    'pricing_value' => array(
-                                        'value' => '1'
-                                    ),
-                                    'is_percent' => array(
-                                        'value' => 'No'
-                                    ),
-                                    'include' => array(
-                                        'value' => 'Yes'
-                                    ),
+                                'pricing_value' => array(
+                                    'value' => '1'
                                 ),
-                                '1' => array(
-                                    'option_label' => array(
-                                        'value' => '%attribute_1_option_label_2%'
-                                    ),
-                                    'pricing_value' => array(
-                                        'value' => '2'
-                                    ),
-                                    'is_percent' => array(
-                                        'value' => 'No'
-                                    ),
-                                    'include' => array(
-                                        'value' => 'Yes'
-                                    ),
-                                )
+                                'is_percent' => array(
+                                    'value' => 'No'
+                                ),
+                                'include' => array(
+                                    'value' => 'Yes'
+                                ),
+                            ),
+                            '1' => array(
+                                'option_label' => array(
+                                    'value' => '%attribute_1_option_label_2%'
+                                ),
+                                'pricing_value' => array(
+                                    'value' => '2'
+                                ),
+                                'is_percent' => array(
+                                    'value' => 'No'
+                                ),
+                                'include' => array(
+                                    'value' => 'Yes'
+                                ),
                             )
-                        ),
+                        )
+                    ),
                     'group' => static::GROUP
                 ),
                 'variations-matrix' => array(

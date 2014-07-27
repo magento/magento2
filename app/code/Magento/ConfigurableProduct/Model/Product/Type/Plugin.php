@@ -42,7 +42,7 @@ class Plugin
     }
 
     /**
-     * Remove grouped product from list of visible product types
+     * Remove configurable product type from list of visible product types
      *
      * @param \Magento\Catalog\Model\Product\Type $subject
      * @param array $result

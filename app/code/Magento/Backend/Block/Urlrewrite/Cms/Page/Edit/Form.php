@@ -21,19 +21,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+namespace Magento\Backend\Block\Urlrewrite\Cms\Page\Edit;
 
 /**
  * Edit form for CMS page URL rewrites
  *
  * @method \Magento\Cms\Model\Page getCmsPage()
  * @method \Magento\Backend\Block\Urlrewrite\Cms\Page\Edit\Form setCmsPage(\Magento\Cms\Model\Page $model)
- *
- * @author     Magento Core Team <core@magentocommerce.com>
- *
- */
-namespace Magento\Backend\Block\Urlrewrite\Cms\Page\Edit;
-
-/**
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -100,7 +94,7 @@ class Form extends \Magento\Backend\Block\Urlrewrite\Edit\Form
      */
     protected function _formPostInit($form)
     {
-        $cmsPage = $this->_getCmsPage();
+        $cmsPage = $this->getCmsPageInstance();
         $form->setAction(
             $this->_adminhtmlData->getUrl(
                 'adminhtml/*/save',
@@ -117,20 +111,20 @@ class Form extends \Magento\Backend\Block\Urlrewrite\Edit\Form
         $targetPath = $this->getForm()->getElement('target_path');
 
         $model = $this->_getModel();
-        /** @var $cmsPageUrlrewrite \Magento\Cms\Model\Page\Urlrewrite */
-        $cmsPageUrlrewrite = $this->_urlRewriteFactory->create();
+        /** @var $cmsPageUrlRewrite \Magento\Cms\Model\Page\Urlrewrite */
+        $cmsPageUrlRewrite = $this->_urlRewriteFactory->create();
         if (!$model->getId()) {
-            $idPath->setValue($cmsPageUrlrewrite->generateIdPath($cmsPage));
+            $idPath->setValue($cmsPageUrlRewrite->generateIdPath($cmsPage));
 
             $sessionData = $this->_getSessionData();
             if (!isset($sessionData['request_path'])) {
-                $requestPath->setValue($cmsPageUrlrewrite->generateRequestPath($cmsPage));
+                $requestPath->setValue($cmsPageUrlRewrite->generateRequestPath($cmsPage));
             }
-            $targetPath->setValue($cmsPageUrlrewrite->generateTargetPath($cmsPage));
+            $targetPath->setValue($cmsPageUrlRewrite->generateTargetPath($cmsPage));
             $disablePaths = true;
         } else {
-            $cmsPageUrlrewrite->load($this->_getModel()->getId(), 'url_rewrite_id');
-            $disablePaths = $cmsPageUrlrewrite->getId() > 0;
+            $cmsPageUrlRewrite->load($this->_getModel()->getId(), 'url_rewrite_id');
+            $disablePaths = $cmsPageUrlRewrite->getId() > 0;
         }
         if ($disablePaths) {
             $idPath->setData('disabled', true);
@@ -148,11 +142,11 @@ class Form extends \Magento\Backend\Block\Urlrewrite\Edit\Form
      */
     protected function _getEntityStores()
     {
-        $cmsPage = $this->_getCmsPage();
+        $cmsPage = $this->getCmsPageInstance();
         $entityStores = array();
 
         // showing websites that only associated to CMS page
-        if ($this->_getCmsPage()->getId()) {
+        if ($this->getCmsPageInstance()->getId()) {
             $entityStores = (array)$cmsPage->getResource()->lookupStoreIds($cmsPage->getId());
             $this->_requireStoresFilter = !in_array(0, $entityStores);
 
@@ -171,7 +165,7 @@ class Form extends \Magento\Backend\Block\Urlrewrite\Edit\Form
      *
      * @return \Magento\Cms\Model\Page
      */
-    protected function _getCmsPage()
+    protected function getCmsPageInstance()
     {
         if (!$this->hasData('cms_page')) {
             $this->setCmsPage($this->_pageFactory->create());

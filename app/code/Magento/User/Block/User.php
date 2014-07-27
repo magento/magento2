@@ -36,12 +36,12 @@ class User extends \Magento\Backend\Block\Widget\Grid\Container
     protected $_resourceModel;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\User\Model\Resource\User $resourceModel
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Backend\Block\Widget\Context $context,
         \Magento\User\Model\Resource\User $resourceModel,
         array $data = array()
     ) {

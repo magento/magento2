@@ -1,153 +1,137 @@
-"%1 Item",%1个条目（s）
-"%1 Item(s)","%1 个项目"
-"&copy; 2008 Magento Demo Store. All Rights Reserved.","&copy; 2008 Magento Demo Store. 保留所有权利。"
-"(Shift-)Click or drag to change value",（Shift-）点击或拖拽即可更改值
-"(ver. %1)","（版本. %1）"
-"- Click on any of the time parts to increase it","- 点击时间的任何部分即可更改"
-"- Hold mouse button on any of the above buttons for faster selection.","- 在任何按钮上按下鼠标按键即可选中。"
-"- Use the %1 buttons to select month","- 使用%1 按钮选择月份"
-"- Use the %1, %2 buttons to select year","- 使用%1，%2按钮选择年份"
-"- or Shift-click to decrease it","- 或Shift-点击以减小"
-"- or click and drag for faster selection.","- 或点击并拖拽以快速选中。"
+Remove,Remove
+Close,关闭
+"Delete File","Delete File"
 "-- Please Select --","-- 请选择 --"
+General,General
+"Save and Continue Edit","Save and Continue Edit"
+"About the calendar",关于日历
+"Go Today",转到今天
+Previous,上一个
+Next,下一个
+WK,WK
+Time,Time
+Hour,Hour
+Minute,Minute
+"per page",每页
+Page,Page
+label,label
+Empty,空
+"Close Window",关闭窗口
+"%1 Item","%1 Item"
+"%1 Item(s)","%1 Item(s)"
+Show,显示
+"Media Storage","Media Storage"
+"Delete Folder","Delete Folder"
+"Insert File","Insert File"
+"New Folder Name:","New Folder Name:"
+"Are you sure you want to delete this folder?","Are you sure you want to delete this folder?"
+"Are you sure you want to delete this file?","Are you sure you want to delete this file?"
+"Storage Root","Storage Root"
+"We cannot upload the file.","We cannot upload the file."
+"We cannot delete root directory %1.","We cannot delete root directory %1."
+Theme,Theme
+"Custom CSS","Custom CSS"
+"Select JS Files to Upload","Select JS Files to Upload"
+Header,Header
+"Are you sure you want to delete this theme?","Are you sure you want to delete this theme?"
+"Sorry, there was an unknown error.","Sorry, there was an unknown error."
+"We cannot upload the CSS file.","We cannot upload the CSS file."
+"We cannot upload the JS file.","We cannot upload the JS file."
+"Browse Files","Browse Files"
+"Create Folder","Create Folder"
+"Report All Bugs",报告所有Bug
+"(ver. %1)","(ver. %1)"
+"Welcome, %1!","Welcome, %1!"
+"Add New Theme","Add New Theme"
+Themes,Themes
+"Theme: %1","Theme: %1"
+"New Theme","New Theme"
+"Theme CSS","Theme CSS"
+"Theme CSS Assets","Theme CSS Assets"
+"Select CSS File to Upload","Select CSS File to Upload"
+"Upload CSS File","Upload CSS File"
+"Download CSS File","Download CSS File"
+Manage,Manage
+"Upload Images","Upload Images"
+"Images Assets","Images Assets"
+"Upload Fonts","Upload Fonts"
+"Fonts Assets","Fonts Assets"
+"Edit custom.css","Edit custom.css"
+"Allowed file types *.css.","Allowed file types *.css."
+"This file will replace the current custom.css file and can't be more than 2 MB.","This file will replace the current custom.css file and can't be more than 2 MB."
+"Max file size to upload %1M","Max file size to upload %1M"
+"Something is wrong with the file upload settings.","Something is wrong with the file upload settings."
+"CSS Editor","CSS Editor"
+"Theme Settings","Theme Settings"
+"Parent Theme","Parent Theme"
+"Theme Path","Theme Path"
+"Theme Version","Theme Version"
+"Example: 0.0.0.1 or 123.1.0.25-alpha1","Example: 0.0.0.1 or 123.1.0.25-alpha1"
+"Theme Title","Theme Title"
+"Theme Preview Image","Theme Preview Image"
+"Copy of %1","Copy of %1"
+"Max image size %1M","Max image size %1M"
+"Theme JavaScript","Theme JavaScript"
+"Upload JS Files","Upload JS Files"
+"JS Editor","JS Editor"
+"Allowed file types *.js.","Allowed file types *.js."
+"We cannot find theme ""%1"".","We cannot find theme ""%1""."
+"We cannot find the theme.","We cannot find the theme."
+"Theme isn't editable.","Theme isn't editable."
+"You saved the theme.","You saved the theme."
+"You deleted the theme.","You deleted the theme."
+"We cannot delete the theme.","We cannot delete the theme."
+"We cannot find a theme with id ""%1"".","We cannot find a theme with id ""%1""."
+"We cannot find file","We cannot find file"
+"File not found: ""%1"".","File not found: ""%1""."
+"The CSS file must be less than %1M.","The CSS file must be less than %1M."
+"The JS file must be less than %1M.","The JS file must be less than %1M."
+"Use only standard alphanumeric, dashes and underscores.","Use only standard alphanumeric, dashes and underscores."
+"We found a directory with the same name.","We found a directory with the same name."
+"We cannot find a directory with this name.","We cannot find a directory with this name."
+"We found no files.","We found no files."
+"Help Us to Keep Magento Healthy",帮助我们保证Magento的健康
+"Toggle Nav","Toggle Nav"
+"JavaScript seems to be disabled in your browser.","你的浏览器似乎禁用了 JavaScript。"
+"Enable JavaScript in your browser to get the best experience on our website!","Enable JavaScript in your browser to get the best experience on our website!"
+"Local Storage seems to be disabled in your browser.","Local Storage seems to be disabled in your browser."
+"Enable Local Storage in your browser to get the best experience on our website!","Enable Local Storage in your browser to get the best experience on our website!"
+"This is demo store. All orders will not be transferred.","This is demo store. All orders will not be transferred."
+"We use cookies to make your experience better.","We use cookies to make your experience better."
+"To comply with the new e-Privacy directive, we need to ask for your consent to set the cookies.","To comply with the new e-Privacy directive, we need to ask for your consent to set the cookies."
+"<a href=""%1"">Learn more</a>.","<a href=""%1"">Learn more</a>."
+"Allow Cookies","Allow Cookies"
+"Items %1 to %2 of %3 total","Items %1 to %2 of %3 total"
+"You're currently reading page","You're currently reading page"
+"We don't recognize this file extension.","We don't recognize this file extension."
+"We cannot detect a size.","We cannot detect a size."
+"Logo Image","Logo Image"
+"Logo Image Alt","Logo Image Alt"
+"HTML Head","HTML Head"
+"Favicon Icon","Favicon Icon"
+"Allowed file types: ICO, PNG, GIF, JPG, JPEG, APNG, SVG. Not all browsers support all these formats!","Allowed file types: ICO, PNG, GIF, JPG, JPEG, APNG, SVG. Not all browsers support all these formats!"
+"Default Title","Default Title"
+"Title Prefix","Title Prefix"
+"Title Suffix","Title Suffix"
+"Default Description",默认描述
+"Default Keywords","Default Keywords"
+"Miscellaneous Scripts","Miscellaneous Scripts"
+"This will be included before head closing tag in page HTML.","This will be included before head closing tag in page HTML."
+"Display Demo Store Notice","Display Demo Store Notice"
+"Search Engine Robots","Search Engine Robots"
+"Default Robots","Default Robots"
+"Edit custom instruction of robots.txt File","Edit custom instruction of robots.txt File"
+"Reset to Defaults","Reset to Defaults"
+"This action will delete your custom instructions and reset robots.txt file to system's default settings.","This action will delete your custom instructions and reset robots.txt file to system's default settings."
+"Welcome Text","Welcome Text"
+Footer,Footer
+Copyright,Copyright
+"Miscellaneous HTML","Miscellaneous HTML"
+"This will be displayed just before body closing tag.","This will be displayed just before body closing tag."
+"Default welcome msg!",默认欢迎信息！
+"&copy; 2014 Magento Demo Store. All Rights Reserved.","&copy; 2014 Magento Demo Store. All Rights Reserved."
 "1 column",1栏
 "2 columns with left bar",2栏带左边栏
 "2 columns with right bar",2栏带右边栏
 "3 columns",3栏
-"<a href=""%1"">Learn more</a>.","<a href=""%1"">学习更多</a>."
-"About the calendar",关于日历
-"Add New Theme",添加新的主题
-"All Empty Layout Pages",所有空的布局页面
-"All One-Column Layout Pages",所有一栏布局页面
-"All Pages",所有页面
-"All Pages (Print Version)",所有页面（打印版）
-"All Three-Column Layout Pages",所有三栏布局页面
-"All Two-Column Layout Pages (Left Column)",所有两栏布局页面（左栏）
-"All Two-Column Layout Pages (Right Column)",所有两栏布局页面（右栏）
-Allow,允许
-"Allow Cookies",允许Cookies
-"Allowed file types *.css.",允许的文件类型*.css。
-"Allowed file types *.js.",允许的文件类型*.js。
-"Allowed file types: ICO, PNG, GIF, JPG, JPEG, APNG, SVG. Not all browsers support all these formats!",允许的文件类型：ICO、PNG、GIF、JPG、JPEG、APNG，SVG。并非所有浏览器都支持所有这些格式！
-"Allowed file types:PNG, GIF, JPG, JPEG.","允许的文件类型：PNG， GIF， JPG， JPEG."
-"CSS Editor",CSS编辑器
-"Click <a href=""%1"">here</a> if nothing has happened","如果什么都没有发生，请点击 <a href=""%1"">这里</a>"
-Close,关闭
-"Close Window",关闭窗口
-"Copy of %1",%1副本
-Copyright,版权所有
-"DHTML Date/Time Selector","DHTML 日期/时间选择器"
-"Date selection:",选择日期：
-"Default Description",默认描述
-"Default Keywords",默认关键字
-"Default Robots",默认机器人
-"Default Title",默认标题
-"Default welcome msg!",默认欢迎信息！
-"Display %1 first","显示前 %1个"
-"Display Demo Store Notice",显示预览店铺通知
-"Distributed under GNU LGPL. See %1 for details.","在GNU LGPL下分发。详情请参考 %1。"
-"Download CSS File",下载CSS文件
-"Drag to move",拖拽以移动
-"Edit custom instruction of robots.txt File",编辑robots.txt文件的定制指令集
-"Edit custom.css",编辑custom.css
-Empty,空
-"Enable JavaScript in your browser to get the best experience on our website!",启用浏览器的JavaScript以便获得网站最好的体验!
-"Enable Local Storage in your browser to get the best experience on our website!",在你的浏览器允许本地存储来获得我们站点的最佳体验!
-"Example: 0.0.0.1 or 123.1.0.25-alpha1",例：0.0.0.1或123.1.0.25-alpha1
-"Favicon Icon",Favicon图标
-Footer,脚注
-"For latest version visit: %1",最新版访问：%1
-"Go Today",转到今天
-"HTML Head",HTML头
-"Help Us to Keep Magento Healthy",帮助我们保证Magento的健康
-Hour,时
-"Interface Language",界面语言
-"Items %1 to %2 of %3 total","项目 %1 到 %2 共 %3个"
-"JS Editor",JS编辑器
-"JavaScript seems to be disabled in your browser.","你的浏览器似乎禁用了 JavaScript。"
-"Left Column",左栏
-"Local Storage seems to be disabled in your browser.",你的浏览器的本地存储好像被禁止了.
-"Main Content Area",主内容区域
-"Max file size to upload %1M",上传文件的最大尺寸%1M
-"Max image size %1M",最大图片尺寸%1M
-Minute,分
-"Miscellaneous HTML",HTML杂项
-"Miscellaneous Scripts",杂项脚本
-"Navigation Bar",导航栏
-"New Theme",新主题
-Next,下一个
-"Next month (hold for menu)",下个月（按下可打开菜单）
-"Next year (hold for menu)",明年（按下可打开菜单）
-"Page Bottom",页面底部
-"Page Footer",页面脚注
-"Page Header",页面头部
-"Page Top",页面顶部
-Page:,页面：
-"Parent Theme",父新主题
-"Prev. month (hold for menu)",上个月（按下菜单）
-"Prev. year (hold for menu)",去年（按下可打开菜单）
-Previous,上一个
-Redirecting...,正在重定向...
-"Report All Bugs",报告所有Bug
-"Reset to Defaults",重置回默认
-"Right Column",右栏
-"Search Engine Robots",搜索引擎机器人
-"Select CSS File to Upload",选择要上传的CSS文件
-"Select Store",选择店铺
-"Select Store:",选择店铺：
-"Select date",选择日期
-Show,显示
-"Skip to content",跳过内容
-"Something is wrong with the file upload settings.",文件上传设置出错。
-"The CSS file must be less than %1M.",CSS文件尺寸必须小于%1M.
-"The JS file must be less than %1M.",JS文件尺寸必须小于%1M.
-Theme,主题
-"Theme CSS",主题CSS
-"Theme Java Script","主题 Java Script"
-"Theme Path",主题路径
-"Theme Preview Image",主题预览图
-"Theme Settings",主题设置
-"Theme Title",主题标题
-"Theme Version",主题版本
-"Theme isn't editable.",主题不可编辑。
-"Theme: %1","主题： %1"
-"This action will delete your custom instructions and reset robots.txt file to system's default settings.",该操作将删除您的的定制指令并重置robots.txt文件到系统默认设置。
-"This file will replace the current custom.css file and can't be more than 2 MB.",该文件将替换当前custom。css文件并且大小不能超过2MB。
-"This is a demo store. Any orders placed through this store will not be honored or fulfilled.",这是一个演示商店。任何在此商店下的订单将无法被兑现或履行。
-"This is demo store. All orders will not be transferred.",这是演示店铺。所有订单将不会被执行。
-"This is just a demo store. You can browse and place orders, but nothing will be processed.",这仅是演示店铺。您可以浏览商品和下订单，除此之外什么都不能做。
-"This store uses cookies to make shopping more enjoyable. Learn how cookies work in our <a href=""%1"">privacy policy</a>.","该店铺用cookie使购物更方便。在我们的<a href=""%1"">隐私策略</a>中学习怎样使用cookie。"
-"This website requires cookies provide all of its features.  For more information on what data is contained in the cookies, please see our <a href=""%1"">privacy policy page</a> To accept cookies from this site, please click accept below.","该网站需要 Cookie 才能提供完整功能。要了解 Cookie 中保存了哪些数据，请参考我们的<a href=""%1"">隐私策略页面</a>。要接受该站点的 Cookie，请点击下方的接受。"
-"This will be displayed just before body closing tag.",这将在正文结束标记前显示。
-"This will be included before head closing tag in page HTML.","这将在 HTML 页面头部结束标记前被包含。"
-"Time selection:",时间选择：
-Time:,时间：
-"Title Prefix",标题前缀
-"Title Suffix",标题后缀
-"To comply with the new e-Privacy directive, we need to ask for your consent to set the cookies.","为了遵从新的的e-Privacy指令， 我们需要你的同意来来设置cookie."
-"Upload CSS File",上传CSS文件
-"Upload Fonts",上传字体
-"Upload Images",上传图片
-"Upload JS Files",上传JS文件
-"Use only standard alphanumeric, dashes and underscores.",仅使用标准字母数字、下划线和中划线。
-WK,WK
-"We cannot delete the theme.",不能删除该主题。
-"We cannot detect a size.",不能检测尺寸。
-"We cannot find a directory with this name.",找不到同名目录。
-"We cannot find a theme with id ""%1"".","无法找到ID为""%1""的主题。"
-"We cannot find file",找不到文件
-"We cannot find file ""%1"".","无法找不到文件""%1""。"
-"We cannot find the theme.",找不到主题。
-"We cannot find theme ""%1"".","找不到主题""%1""。"
-"We found a directory with the same name.",发现同名目录。
-"We found no files.",找不到文件。
-"We use cookies to make your experience better.",我们使用cookies来使你的购物体验更佳.
-"Welcome Text",欢迎信息
-"Welcome, %1!",欢迎，%1！
-"You deleted the theme.",成功删除了该主题。
-"You must have JavaScript enabled in your browser to utilize the functionality of this website.",您必须在浏览器中启用JavaScript才能使用本网站的功能。
-"You saved the theme.",成功存储了该主题。
-"You're currently reading page",你正在阅读页面
-"Your Language",您的语言
-"Your Language:",您的语言：
-"per page",每页
+"Skip to content","Skip to content"

@@ -29,12 +29,23 @@ namespace Magento\Cms\Model\Wysiwyg;
 class Config extends \Magento\Framework\Object
 {
     /**
-     * Wysiwyg behaviour
+     * Wysiwyg status enabled
      */
     const WYSIWYG_ENABLED = 'enabled';
 
+    /**
+     * Wysiwyg status configuration path
+     */
+    const WYSIWYG_STATUS_CONFIG_PATH = 'cms/wysiwyg/enabled';
+
+    /**
+     * Wysiwyg status hidden
+     */
     const WYSIWYG_HIDDEN = 'hidden';
 
+    /**
+     * Wysiwyg status disabled
+     */
     const WYSIWYG_DISABLED = 'disabled';
 
     /**
@@ -63,13 +74,6 @@ class Config extends \Magento\Framework\Object
     protected $_widgetConfig;
 
     /**
-     * Cms data
-     *
-     * @var \Magento\Cms\Helper\Data
-     */
-    protected $_cmsData;
-
-    /**
      * Core event manager proxy
      *
      * @var \Magento\Framework\Event\ManagerInterface
@@ -96,7 +100,6 @@ class Config extends \Magento\Framework\Object
     /**
      * @param \Magento\Backend\Model\UrlInterface $backendUrl
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Cms\Helper\Data $cmsData
      * @param \Magento\Framework\AuthorizationInterface $authorization
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Core\Model\Variable\Config $variableConfig
@@ -108,7 +111,6 @@ class Config extends \Magento\Framework\Object
     public function __construct(
         \Magento\Backend\Model\UrlInterface $backendUrl,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Cms\Helper\Data $cmsData,
         \Magento\Framework\AuthorizationInterface $authorization,
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Core\Model\Variable\Config $variableConfig,
@@ -119,7 +121,6 @@ class Config extends \Magento\Framework\Object
     ) {
         $this->_backendUrl = $backendUrl;
         $this->_eventManager = $eventManager;
-        $this->_cmsData = $cmsData;
         $this->_scopeConfig = $scopeConfig;
         $this->_authorization = $authorization;
         $this->_assetRepo = $assetRepo;
@@ -142,7 +143,7 @@ class Config extends \Magento\Framework\Object
      * files_browser_*:         Files Browser (media, images) settings
      * encode_directives:       Encode template directives with JS or not
      *
-     * @param array|\Magento\Framework\Object $data \Magento\Framework\Object constructor params to override default config values
+     * @param array|\Magento\Framework\Object $data Object constructor params to override default config values
      * @return \Magento\Framework\Object
      */
     public function getConfig($data = array())
@@ -157,7 +158,6 @@ class Config extends \Magento\Framework\Object
                 'add_variables' => true,
                 'add_widgets' => true,
                 'no_display' => false,
-                'translator' => $this->_cmsData,
                 'encode_directives' => true,
                 'directives_url' => $this->_backendUrl->getUrl('cms/wysiwyg/directive'),
                 'popup_css' => $this->_assetRepo->getUrl(
@@ -218,7 +218,11 @@ class Config extends \Magento\Framework\Object
      */
     public function isEnabled()
     {
-        $wysiwygState = $this->_scopeConfig->getValue('cms/wysiwyg/enabled', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $this->getStoreId());
+        $wysiwygState = $this->_scopeConfig->getValue(
+            self::WYSIWYG_STATUS_CONFIG_PATH,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $this->getStoreId()
+        );
         return in_array($wysiwygState, array(self::WYSIWYG_ENABLED, self::WYSIWYG_HIDDEN));
     }
 
@@ -229,6 +233,10 @@ class Config extends \Magento\Framework\Object
      */
     public function isHidden()
     {
-        return $this->_scopeConfig->getValue('cms/wysiwyg/enabled', \Magento\Store\Model\ScopeInterface::SCOPE_STORE) == self::WYSIWYG_HIDDEN;
+        $status = $this->_scopeConfig->getValue(
+            self::WYSIWYG_STATUS_CONFIG_PATH,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        return $status == self::WYSIWYG_HIDDEN;
     }
 }

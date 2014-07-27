@@ -49,9 +49,9 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
     protected $_customCssFile;
 
     /**
-     * @var \Magento\Theme\Helper\Data
+     * @var \Magento\Framework\Encryption\UrlCoder
      */
-    protected $helper;
+    protected $urlCoder;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
@@ -59,7 +59,7 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Framework\ObjectManager $objectManager
      * @param \Magento\Theme\Model\Uploader\Service $uploaderService
-     * @param \Magento\Theme\Helper\Data $helper
+     * @param \Magento\Framework\Encryption\UrlCoder $urlCoder
      * @param array $data
      */
     public function __construct(
@@ -68,12 +68,12 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Framework\ObjectManager $objectManager,
         \Magento\Theme\Model\Uploader\Service $uploaderService,
-        \Magento\Theme\Helper\Data $helper,
+        \Magento\Framework\Encryption\UrlCoder $urlCoder,
         array $data = array()
     ) {
         parent::__construct($context, $registry, $formFactory, $objectManager, $data);
         $this->_uploaderService = $uploaderService;
-        $this->helper = $helper;
+        $this->urlCoder = $urlCoder;
     }
 
     /**
@@ -313,7 +313,7 @@ class Css extends \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Abstra
     {
         return $this->getUrl(
             'adminhtml/*/downloadCss',
-            array('theme_id' => $themeId, 'file' => $this->helper->urlEncode($fileId))
+            array('theme_id' => $themeId, 'file' => $this->urlCoder->encode($fileId))
         );
     }
 }

@@ -32,7 +32,7 @@ class Item extends \Magento\Framework\Service\Data\AbstractObject
 
     const KEY_TYPE = 'type';
 
-    const KEY_TAX_CLASS_ID = 'tax_class_id';
+    const KEY_TAX_CLASS_KEY = 'tax_class_key';
 
     const KEY_UNIT_PRICE = 'unit_price';
 
@@ -45,6 +45,8 @@ class Item extends \Magento\Framework\Service\Data\AbstractObject
     const KEY_DISCOUNT_AMOUNT = 'discount_amount';
 
     const KEY_PARENT_CODE = 'parent_code';
+
+    const KEY_ASSOCIATED_ITEM_CODE = 'association_code';
     /**#@-*/
 
     /**
@@ -68,13 +70,13 @@ class Item extends \Magento\Framework\Service\Data\AbstractObject
     }
 
     /**
-     * Get tax class id
+     * Get tax class key
      *
-     * @return int
+     * @return \Magento\Tax\Service\V1\Data\TaxClassKey
      */
-    public function getTaxClassId()
+    public function getTaxClassKey()
     {
-        return $this->_get(self::KEY_TAX_CLASS_ID);
+        return $this->_get(self::KEY_TAX_CLASS_KEY);
     }
 
     /**
@@ -135,5 +137,15 @@ class Item extends \Magento\Framework\Service\Data\AbstractObject
     public function getParentCode()
     {
         return $this->_get(self::KEY_PARENT_CODE);
+    }
+
+    /**
+     * Get associated item code if this item is associated with another item, null otherwise
+     *
+     * @return mixed|null
+     */
+    public function getAssociatedItemCode()
+    {
+        return $this->_get(self::KEY_ASSOCIATED_ITEM_CODE);
     }
 }

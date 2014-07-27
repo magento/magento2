@@ -32,7 +32,7 @@ class SearchResults extends \Magento\Framework\Service\V1\Data\SearchResults
     /**
      * Get items
      *
-     * @return \Magento\Catalog\Service\V1\Data\Eav\Attribute[]
+     * @return \Magento\Catalog\Service\V1\Data\Eav\AttributeMetadata[]
      */
     public function getItems()
     {

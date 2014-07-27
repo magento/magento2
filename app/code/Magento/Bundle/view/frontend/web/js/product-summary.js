@@ -36,7 +36,8 @@
                 optionBlock:        '[data-template="bundle-option"]'
             },
             optionSelector:         '[data-container="options"]',
-            summaryContainer:       '[data-container="product-summary"]'
+            summaryContainer:       '[data-container="product-summary"]',
+            bundleSummaryContainer: '.bundle-summary'
         },
         cache: {},
         /**
@@ -57,11 +58,15 @@
          */
         _renderSummaryBox: function(event, data) {
             this.cache.currentElement = data.config;
+            this.cache.currentElementCount = 0;
 
             // Clear Summary box
             this.element.html("");
 
             $.each(this.cache.currentElement.selected, $.proxy(this._renderOption, this));
+            this.element
+                .parents(this.options.bundleSummaryContainer)
+                .toggleClass('empty', !this.cache.currentElementCount); // Zero elements equal '.empty' container
         },
         _renderOption: function(key, row) {
             if (row !== undefined) {
@@ -74,6 +79,7 @@
                         .appendTo(this.element);
 
                     $.each(row, $.proxy(this._renderOptionRow, this));
+                    this.cache.currentElementCount += row.length;
 
                     //Reset Cache
                     this.cache.currentKey = null;

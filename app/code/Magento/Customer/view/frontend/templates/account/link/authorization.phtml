@@ -28,7 +28,7 @@ if ($this->isLoggedIn()) {
     $dataPostParam = sprintf(" data-post='%s'", $this->getPostParams());
 }
 ?>
-<li>
+<li class="authorization-link">
     <a <?php echo $this->getLinkAttributes(); ?><?php echo $dataPostParam; ?>>
         <?php echo $this->escapeHtml($this->getLabel()); ?>
     </a>

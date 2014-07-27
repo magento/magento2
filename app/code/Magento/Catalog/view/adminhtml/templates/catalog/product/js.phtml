@@ -21,6 +21,8 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
+
+/** @var \Magento\Catalog\Block\Adminhtml\Product\Edit\Js $this */
 ?>
 <script type="text/javascript">
 //<![CDATA[
@@ -39,7 +41,7 @@ function registerTaxRecalcs() {
 }
 
 var priceFormat = <?php echo $this->helper('Magento\Tax\Helper\Data')->getPriceFormat($this->getStore()); ?>;
-var taxRates = <?php echo $this->helper('Magento\Tax\Helper\Data')->getAllRatesByProductClass($this->getStore()); ?>;
+var taxRates = <?php echo $this->getAllRatesByProductClassJson(); ?>;
 
 function recalculateTax() {
     if (typeof dynamicTaxes == 'undefined') {

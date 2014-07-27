@@ -59,7 +59,7 @@ class AssertNoUpSellsProductsSection extends AbstractConstraint
         CatalogCategoryView $catalogCategoryView,
         CatalogProductView $catalogProductView
     ) {
-        $categoryName = $product1->getCategoryIds()[0]['name'];
+        $categoryName = $product1->getCategoryIds()[0];
         $cmsIndex->open();
         $cmsIndex->getTopmenu()->selectCategoryByName($categoryName);
         $catalogCategoryView->getListProductBlock()->openProductViewPage($product1->getName());

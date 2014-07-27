@@ -40,7 +40,7 @@ class CheckoutCart extends FrontendPage
         'cartBlock' => [
             'name' => 'cartBlock',
             'class' => 'Magento\Checkout\Test\Block\Cart',
-            'locator' => '//div[contains(@class, "cart container")]',
+            'locator' => '//div[contains(@class, "cart-container")]',
             'strategy' => 'xpath',
         ],
         'messagesBlock' => [

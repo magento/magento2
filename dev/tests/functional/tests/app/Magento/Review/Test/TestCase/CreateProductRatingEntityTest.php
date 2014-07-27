@@ -27,8 +27,8 @@ namespace Magento\Review\Test\TestCase;
 use Magento\Review\Test\Page\Adminhtml\RatingIndex;
 use Magento\Review\Test\Page\Adminhtml\RatingNew;
 use Magento\Review\Test\Page\Adminhtml\RatingEdit;
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Review\Test\Fixture\Rating;
+use Mtf\Fixture\FixtureFactory;
 use Mtf\TestCase\Injectable;
 
 /**
@@ -73,6 +73,20 @@ class CreateProductRatingEntityTest extends Injectable
     protected $ratingEdit;
 
     /**
+     * Prepare data
+     *
+     * @param FixtureFactory $fixtureFactory
+     * @return array
+     */
+    public function __prepare(FixtureFactory $fixtureFactory)
+    {
+        $product = $fixtureFactory->createByCode('catalogProductSimple', ['dataSet' => 'default']);
+        $product->persist();
+
+        return ['product' => $product];
+    }
+
+    /**
      * Injection data
      *
      * @param RatingIndex $ratingIndex
@@ -93,25 +107,19 @@ class CreateProductRatingEntityTest extends Injectable
     /**
      * Run create backend Product Rating test
      *
-     * @param CatalogProductSimple $product
      * @param Rating $productRating
      * @return void
      */
-    public function testCreateProductRatingEntityTest(
-        CatalogProductSimple $product,
-        Rating $productRating
-    ) {
-        // Preconditions
-        $product->persist();
+    public function testCreateProductRatingEntityTest(Rating $productRating)
+    {
+        // Prepare data for tear down
+        $this->productRating = $productRating;
 
         // Steps
         $this->ratingIndex->open();
         $this->ratingIndex->getGridPageActions()->addNew();
         $this->ratingNew->getRatingForm()->fill($productRating);
         $this->ratingNew->getPageActions()->save();
-
-        // Prepare data for tear down
-        $this->productRating = $productRating;
     }
 
     /**

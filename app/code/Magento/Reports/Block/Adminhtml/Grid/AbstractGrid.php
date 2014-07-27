@@ -315,6 +315,7 @@ class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
 
             if (count($totalsCollection->getItems()) < 1 || !$filterData->getData('from')) {
                 $this->setTotals(new \Magento\Framework\Object());
+                $this->setCountTotals(false);
             } else {
                 foreach ($totalsCollection->getItems() as $item) {
                     $this->setTotals($item);

@@ -260,6 +260,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements IdentityIn
     protected $_productPriceIndexerProcessor;
 
     /**
+     * @var Indexer\Product\Eav\Processor
+     */
+    protected $_productEavIndexerProcessor;
+
+    /**
      * @var \Magento\Framework\Pricing\PriceInfo\Base
      */
     protected $_priceInfo;
@@ -289,6 +294,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements IdentityIn
      * @param \Magento\Indexer\Model\IndexerInterface $categoryIndexer
      * @param Indexer\Product\Flat\Processor $productFlatIndexerProcessor
      * @param Indexer\Product\Price\Processor $productPriceIndexerProcessor
+     * @param  \Magento\Catalog\Model\Indexer\Product\Eav\Processor $productEavIndexerProcessor
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -318,6 +324,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements IdentityIn
         \Magento\Indexer\Model\IndexerInterface $categoryIndexer,
         \Magento\Catalog\Model\Indexer\Product\Flat\Processor $productFlatIndexerProcessor,
         \Magento\Catalog\Model\Indexer\Product\Price\Processor $productPriceIndexerProcessor,
+        \Magento\Catalog\Model\Indexer\Product\Eav\Processor $productEavIndexerProcessor,
         array $data = array()
     ) {
         $this->_itemOptionFactory = $itemOptionFactory;
@@ -339,6 +346,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements IdentityIn
         $this->categoryIndexer = $categoryIndexer;
         $this->_productFlatIndexerProcessor = $productFlatIndexerProcessor;
         $this->_productPriceIndexerProcessor = $productPriceIndexerProcessor;
+        $this->_productEavIndexerProcessor = $productEavIndexerProcessor;
         parent::__construct($context, $registry, $storeManager, $resource, $resourceCollection, $data);
     }
 
@@ -731,7 +739,12 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements IdentityIn
         $this->getLinkInstance()->saveProductRelations($this);
         $this->getTypeInstance()->save($this);
 
+        if ($this->getStockData()) {
+            $this->setForceReindexEavRequired(true);
+        }
+
         $this->_getResource()->addCommitCallback(array($this, 'priceReindexCallback'));
+        $this->_getResource()->addCommitCallback(array($this, 'eavReindexCallback'));
 
         /**
          * Product Options
@@ -780,6 +793,18 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements IdentityIn
     {
         if ($this->isObjectNew() || $this->_catalogProduct->isDataForPriceIndexerWasChanged($this)) {
             $this->_productPriceIndexerProcessor->reindexRow($this->getEntityId());
+        }
+    }
+
+    /**
+     * Reindex callback for EAV indexer
+     *
+     * @return void
+     */
+    public function eavReindexCallback()
+    {
+        if ($this->isObjectNew() || $this->hasDataChanges()) {
+            $this->_productEavIndexerProcessor->reindexRow($this->getEntityId());
         }
     }
 
@@ -1440,9 +1465,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements IdentityIn
      */
     public function getAttributeText($attributeCode)
     {
-        return $this->getResource()->getAttribute(
-            $attributeCode
-        )->getSource()->getOptionText(
+        return $this->getResource()->getAttribute($attributeCode)->getSource()->getOptionText(
             $this->getData($attributeCode)
         );
     }

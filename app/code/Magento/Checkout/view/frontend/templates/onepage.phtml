@@ -49,16 +49,16 @@ $config = array(
 $mageConfig = json_encode($config);
 ?>
 
-<div class="opc wrapper">
+<div class="opc-wrapper">
     <ol class="opc" id="checkoutSteps">
     <?php $i=0; foreach($this->getSteps() as $_stepId => $_stepInfo): ?>
     <?php if (!$this->getChildBlock($_stepId) || !$this->getChildBlock($_stepId)->isShow()): continue; endif; $i++ ?>
         <li id="opc-<?php echo $_stepId ?>" class="section<?php echo !empty($_stepInfo['allow'])?' allow':'' ?><?php echo !empty($_stepInfo['complete'])?' saved':'' ?>">
-            <div class="step title" data-role="title">
+            <div class="step-title" data-role="title">
                 <span class="number"><?php echo $i ?></span>
                 <h2><?php echo $_stepInfo['label'] ?></h2>
             </div>
-            <div id="checkout-step-<?php echo $_stepId ?>" class="step content" data-role="content" data-mage-init='<?php echo $mageConfig;?>'>
+            <div id="checkout-step-<?php echo $_stepId ?>" class="step-content" data-role="content" data-mage-init='<?php echo $mageConfig;?>'>
                 <?php echo $this->getChildHtml($_stepId) ?>
             </div>
         </li>

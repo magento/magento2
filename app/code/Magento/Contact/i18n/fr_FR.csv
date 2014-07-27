@@ -1,19 +1,16 @@
+Email,Email
+Name,Nom
+Submit,Soumettre
 "* Required Fields","* Champs obligatoires"
-"Comment","Commenter"
-"Contact Form","Formulaire de contact"
+Telephone,Telephone
+"Thanks for contacting us with your comments and questions. We'll respond to you very soon.","Thanks for contacting us with your comments and questions. We'll respond to you very soon."
+"We can't process your request right now. Sorry, that's all we know.","We can't process your request right now. Sorry, that's all we know."
 "Contact Information","Informations de contact"
+Comment,Commenter
+"Email Template","Email Template"
+Contacts,Contacts
 "Contact Us","Nous contacter"
-"Contact Us Form","Formulaire de contact"
-"Contacts","Contacts"
-"Contacts Section","Section de contacts"
-"Email","Email"
-"Email Options","Options d'email"
-"Email Sender","Expéditeur de l'email"
-"Email Template","Modèle d'email"
-"Enable Contact Us","Activer contatez-nous"
-"Name","Nom"
-"Send Emails To","Envoyer emails à"
-"Submit","Soumettre"
-"Phone","Téléphone"
-"Unable to submit your request. Please, try again later","Impossible de soumettre votre requête. Veuillez réessayer plus tard."
-"Your inquiry was submitted and will be responded to as soon as possible. Thank you for contacting us.","Votre requête a été envoyée et nous y répondrons aussi vite que possible. Merci de nous avoir contactés."
+"Enable Contact Us","Enable Contact Us"
+"Email Options","Email Options"
+"Send Emails To","Send Emails To"
+"Email Sender","Email Sender"

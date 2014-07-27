@@ -27,7 +27,7 @@
     <referenceBlock name="top.links">
         <block class="Magento\Catalog\Block\Product\Compare\Link" name="catalog.compare.link" before="-" template="Magento_Catalog::product/compare/link.phtml"/>
     </referenceBlock>
-    <referenceContainer name="right">
+    <referenceContainer name="sidebar.additional">
         <block class="Magento\Catalog\Block\Product\Compare\Sidebar" name="catalog.compare.sidebar" template="product/compare/sidebar.phtml"/>
     </referenceContainer>
     <referenceBlock name="head">

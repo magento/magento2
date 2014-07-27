@@ -24,7 +24,7 @@
 
 /** @var \Magento\Customer\Block\Form\Edit $this */
 ?>
-<form class="form edit account" action="<?php echo $this->getUrl('customer/account/editPost') ?>" method="post" id="form-validate" enctype="multipart/form-data" data-hasrequired="<?php echo __('* Required Fields') ?>" autocomplete="off">
+<form class="form form-edit-account" action="<?php echo $this->getUrl('customer/account/editPost') ?>" method="post" id="form-validate" enctype="multipart/form-data" data-hasrequired="<?php echo __('* Required Fields') ?>" autocomplete="off">
     <fieldset class="fieldset info">
         <?php echo $this->getBlockHtml('formkey')?>
         <legend class="legend"><span><?php echo __('Account Information') ?></span></legend><br>
@@ -74,7 +74,7 @@
             </div>
         </div>
     </fieldset>
-    <div class="actions toolbar">
+    <div class="actions-toolbar">
         <div class="primary">
             <button type="submit" class="action save primary" title="<?php echo __('Save') ?>"><span><?php echo __('Save') ?></span></button>
         </div>

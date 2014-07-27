@@ -22,6 +22,10 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Tax\Model;
+
+use Magento\Framework\Exception\CouldNotDeleteException;
+
 /**
  * Tax class model
  *
@@ -31,11 +35,7 @@
  * @method \Magento\Tax\Model\ClassModel setClassName(string $value)
  * @method string getClassType()
  * @method \Magento\Tax\Model\ClassModel setClassType(string $value)
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-namespace Magento\Tax\Model;
-
 class ClassModel extends \Magento\Framework\Model\AbstractModel
 {
     /**
@@ -85,33 +85,42 @@ class ClassModel extends \Magento\Framework\Model\AbstractModel
      * Check whether this class can be deleted
      *
      * @return bool
-     * @throws \Magento\Framework\Model\Exception
+     * @throws CouldNotDeleteException
      */
-    public function checkClassCanBeDeleted()
+    protected function checkClassCanBeDeleted()
     {
         if (!$this->getId()) {
-            throw new \Magento\Framework\Model\Exception(__('This class no longer exists.'));
+            throw new CouldNotDeleteException('This class no longer exists.');
         }
 
         $typeModel = $this->_classFactory->create($this);
 
         if ($typeModel->getAssignedToRules()->getSize() > 0) {
-            throw new \Magento\Framework\Model\Exception(
-                __(
-                    'You cannot delete this tax class because it is used in Tax Rules. You have to delete the rules it is used in first.'
-                )
+            throw new CouldNotDeleteException(
+                'You cannot delete this tax class because it is used in Tax Rules.' .
+                ' You have to delete the rules it is used in first.'
             );
         }
 
         if ($typeModel->isAssignedToObjects()) {
-            throw new \Magento\Framework\Model\Exception(
-                __(
-                    'You cannot delete this tax class because it is used in existing %1(s).',
-                    $typeModel->getObjectTypeName()
-                )
+            throw new CouldNotDeleteException(
+                'You cannot delete this tax class because it is used in existing %object(s).',
+                ['object' => $typeModel->getObjectTypeName()]
             );
         }
 
         return true;
+    }
+
+    /**
+     * Validate tax class can be deleted
+     *
+     * @return $this
+     * @throws \Magento\Framework\Model\Exception
+     */
+    protected function _beforeDelete()
+    {
+        $this->checkClassCanBeDeleted();
+        return parent::_beforeDelete();
     }
 }

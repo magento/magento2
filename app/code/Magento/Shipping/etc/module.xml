@@ -42,6 +42,7 @@
             <module name="Magento_Payment"/>
             <module name="Magento_Theme"/>
             <module name="Magento_Tax"/>
+            <module name="Magento_CatalogInventory"/>
         </depends>
     </module>
 </config>

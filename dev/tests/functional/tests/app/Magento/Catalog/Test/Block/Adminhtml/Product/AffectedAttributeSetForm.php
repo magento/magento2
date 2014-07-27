@@ -36,12 +36,18 @@ use Magento\Backend\Test\Block\Widget\Form as ParentForm;
 class AffectedAttributeSetForm extends ParentForm
 {
     /**
+     * 'Confirm' button container locator
+     *
+     * @var string
+     */
+    protected $confirmButtonContainer = '//parent::div[div[@id="affected-attribute-set-form"]]';
+
+    /**
      * 'Confirm' button locator
      *
      * @var string
      */
-    protected $confirmButton =
-        '//parent::div[div[@id="affected-attribute-set-form"]]//button[contains(@id,"confirm-button")]';
+    protected $confirmButton = '//button[contains(@id,"confirm-button")]';
 
     /**
      * Locator buttons new name attribute set
@@ -76,8 +82,16 @@ class AffectedAttributeSetForm extends ParentForm
      */
     public function confirm()
     {
-        if ($this->_rootElement->find($this->confirmButton, Locator::SELECTOR_XPATH)->isVisible()) {
-            $this->_rootElement->find($this->confirmButton, Locator::SELECTOR_XPATH)->click();
+        $isVisible = $this->_rootElement->find(
+            $this->confirmButtonContainer . $this->confirmButton,
+            Locator::SELECTOR_XPATH
+        )->isVisible();
+
+        if ($isVisible) {
+            $this->_rootElement->find(
+                $this->confirmButtonContainer . $this->confirmButton,
+                Locator::SELECTOR_XPATH
+            )->click();
         }
     }
 }

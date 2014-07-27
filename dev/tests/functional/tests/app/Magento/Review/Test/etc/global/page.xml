@@ -39,4 +39,14 @@
         <area>adminhtml</area>
         <class>Magento\Review\Test\Page\Adminhtml\RatingEdit</class>
     </ratingEdit>
+    <reviewIndex>
+        <mca>review/product/index</mca>
+        <area>adminhtml</area>
+        <class>Magento\Review\Test\Page\Adminhtml\ReviewIndex</class>
+    </reviewIndex>
+    <reviewEdit>
+        <mca>review/product/edit</mca>
+        <area>adminhtml</area>
+        <class>Magento\Review\Test\Page\Adminhtml\ReviewEdit</class>
+    </reviewEdit>
 </page>

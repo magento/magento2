@@ -61,6 +61,9 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Session\Generic */
     protected $_session;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Escaper */
+    protected $_escaper;
+
     /**
      * Set up all mocks and data for test
      */
@@ -78,6 +81,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $this->_typeListMock = $this->getMock('Magento\Framework\App\Cache\TypeList', array(), array(), '', false);
         $this->_formKey = $this->getMock('Magento\Framework\App\PageCache\FormKey', array(), array(), '', false);
         $this->_session = $this->getMock('Magento\Framework\Session\Generic', array('setData'), array(), '', false);
+        $this->_escaper = $this->getMock('\Magento\Framework\Escaper', array('escapeHtml'), array(), '', false);
 
         $this->_model = new \Magento\PageCache\Model\Observer(
             $this->_configMock,
@@ -85,7 +89,8 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
             $this->_helperMock,
             $this->_typeListMock,
             $this->_formKey,
-            $this->_session
+            $this->_session,
+            $this->_escaper
         );
         $this->_observerMock = $this->getMock(
             'Magento\Framework\Event\Observer',
@@ -313,18 +318,22 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     public function testRegisterFormKeyFromCookie()
     {
         //Data
-        $formKey = 'asdfaswqrwqe12';
+        $formKey = '<asdfaswqrwqe12>';
+        $escapedFormKey = 'asdfaswqrwqe12';
 
         //Verification
-        $this->_formKey->expects($this->once())->method('get')->will($this->returnValue($formKey));
-        $this->_session->expects(
-            $this->once()
-        )->method(
-            'setData'
-        )->with(
-            \Magento\Framework\Data\Form\FormKey::FORM_KEY,
-            $formKey
-        );
+        $this->_formKey->expects($this->once())
+            ->method('get')
+            ->will($this->returnValue($formKey));
+
+        $this->_escaper->expects($this->once())
+            ->method('escapeHtml')
+            ->with($formKey)
+            ->will($this->returnValue($escapedFormKey));
+
+        $this->_session->expects($this->once())
+            ->method('setData')
+            ->with(\Magento\Framework\Data\Form\FormKey::FORM_KEY, $escapedFormKey);
 
         $this->_model->registerFormKeyFromCookie($this->_observerMock);
     }

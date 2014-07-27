@@ -37,10 +37,10 @@
                 <div class="field">
                     <label for="coupon_code" class="label"><span><?php echo __('Enter your code') ?></span></label>
                     <div class="control">
-                        <input type="text" class="input-text" id="coupon_code" name="coupon_code" value="<?php echo $this->escapeHtml($this->getCouponCode()) ?>" />
+                        <input type="text" class="input-text" id="coupon_code" name="coupon_code" value="<?php echo $this->escapeHtml($this->getCouponCode()) ?>" placeholder="<?php echo $this->escapeHtml(__('Enter your code'));?>" />
                     </div>
                 </div>
-                <div class="actions toolbar">
+                <div class="actions-toolbar">
                     <?php if(!strlen($this->getCouponCode())): ?>
                     <div class="primary">
                         <button class="action apply primary" type="button" value="<?php echo __('Apply Coupon') ?>">

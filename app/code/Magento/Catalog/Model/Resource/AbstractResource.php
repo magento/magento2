@@ -323,29 +323,31 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
          * save required attributes in global scope every time if store id different from default
          */
         $storeId = (int) $this->_storeManager->getStore($object->getStoreId())->getId();
-        if ($attribute->getIsRequired() && $this->getDefaultStoreId() != $storeId) {
-            $table = $attribute->getBackend()->getTable();
+        if ($this->getDefaultStoreId() != $storeId) {
+            if ($attribute->getIsRequired() || $attribute->getIsRequiredInAdminStore()) {
+                $table = $attribute->getBackend()->getTable();
 
-            $select = $this->_getReadAdapter()->select()
-                ->from($table)
-                ->where('entity_type_id = ?', $attribute->getEntityTypeId())
-                ->where('attribute_id = ?', $attribute->getAttributeId())
-                ->where('store_id = ?', $this->getDefaultStoreId())
-                ->where('entity_id = ?', $object->getEntityId());
-            $row = $this->_getReadAdapter()->fetchOne($select);
+                $select = $this->_getReadAdapter()->select()
+                    ->from($table)
+                    ->where('entity_type_id = ?', $attribute->getEntityTypeId())
+                    ->where('attribute_id = ?', $attribute->getAttributeId())
+                    ->where('store_id = ?', $this->getDefaultStoreId())
+                    ->where('entity_id = ?', $object->getEntityId());
+                $row = $this->_getReadAdapter()->fetchOne($select);
 
-            if (!$row) {
-                $data = new \Magento\Framework\Object(
-                    array(
-                        'entity_type_id' => $attribute->getEntityTypeId(),
-                        'attribute_id' => $attribute->getAttributeId(),
-                        'store_id' => $this->getDefaultStoreId(),
-                        'entity_id' => $object->getEntityId(),
-                        'value' => $this->_prepareValueForSave($value, $attribute)
-                    )
-                );
-                $bind = $this->_prepareDataForTable($data, $table);
-                $this->_getWriteAdapter()->insertOnDuplicate($table, $bind, array('value'));
+                if (!$row) {
+                    $data = new \Magento\Framework\Object(
+                        array(
+                            'entity_type_id' => $attribute->getEntityTypeId(),
+                            'attribute_id' => $attribute->getAttributeId(),
+                            'store_id' => $this->getDefaultStoreId(),
+                            'entity_id' => $object->getEntityId(),
+                            'value' => $this->_prepareValueForSave($value, $attribute)
+                        )
+                    );
+                    $bind = $this->_prepareDataForTable($data, $table);
+                    $this->_getWriteAdapter()->insertOnDuplicate($table, $bind, array('value'));
+                }
             }
         }
 

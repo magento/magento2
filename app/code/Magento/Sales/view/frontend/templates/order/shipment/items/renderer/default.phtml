@@ -25,8 +25,8 @@
 <?php $_item = $this->getItem() ?>
 <?php $_order = $this->getItem()->getOrderItem()->getOrder() ?>
 <tr id="order-item-row-<?php echo $_item->getId() ?>">
-    <td class="col name">
-        <strong class="product name"><?php echo $this->escapeHtml($_item->getName()) ?></strong>
+    <td class="col name" data-th="<?php echo $this->escapeHtml(__('Product Name')); ?>">
+        <strong class="product name product-item-name"><?php echo $this->escapeHtml($_item->getName()) ?></strong>
         <?php if($_options = $this->getItemOptions()): ?>
         <dl class="item options">
         <?php foreach ($_options as $_option) : ?>
@@ -65,6 +65,6 @@
             </a>
         <?php endif; ?>
     </td>
-    <td class="col sku"><?php echo $this->prepareSku($this->getSku()) ?></td>
-    <td class="col qty"><?php echo $_item->getQty()*1 ?></td>
+    <td class="col sku" data-th="<?php echo $this->escapeHtml(__('SKU')); ?>"><?php echo $this->prepareSku($this->getSku()) ?></td>
+    <td class="col qty" data-th="<?php echo $this->escapeHtml(__('Qty Shipped')); ?>"><?php echo $_item->getQty()*1 ?></td>
 </tr>

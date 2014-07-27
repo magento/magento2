@@ -30,7 +30,7 @@ namespace Magento\Downloadable\Controller;
 class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
 {
     /**
-     * @magentoDataFixture Magento/Downloadable/_files/product.php
+     * @magentoDataFixture Magento/Downloadable/_files/product_downloadable.php
      */
     public function testViewAction()
     {

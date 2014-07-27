@@ -40,6 +40,8 @@ class Resource
 
     const DEFAULT_READ_RESOURCE = 'core_read';
 
+    const DEFAULT_WRITE_RESOURCE = 'core_write';
+
     /**
      * Instances of actual connections
      *

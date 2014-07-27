@@ -90,12 +90,10 @@ class UpdateCategoryEntityTest extends Injectable
      * @param CatalogCategory $initialCategory
      * @return void
      */
-    public function testUpdateCategory(CatalogCategory $category, CatalogCategory $initialCategory)
+    public function test(CatalogCategory $category, CatalogCategory $initialCategory)
     {
         $this->catalogCategoryIndex->open();
-        $this->catalogCategoryIndex->getTreeCategories()->selectCategory(
-            $initialCategory->getPath() . '/' . $initialCategory->getName()
-        );
+        $this->catalogCategoryIndex->getTreeCategories()->selectCategory($initialCategory);
         $this->catalogCategoryEdit->getEditForm()->fill($category);
         $this->catalogCategoryEdit->getFormPageActions()->save();
     }

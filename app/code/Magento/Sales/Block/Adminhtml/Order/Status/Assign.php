@@ -36,8 +36,8 @@ class Assign extends \Magento\Backend\Block\Widget\Form\Container
         $this->_mode = 'assign';
         $this->_blockGroup = 'Magento_Sales';
         parent::_construct();
-        $this->_updateButton('save', 'label', __('Save Status Assignment'));
-        $this->_removeButton('delete');
+        $this->buttonList->update('save', 'label', __('Save Status Assignment'));
+        $this->buttonList->remove('delete');
     }
 
     /**

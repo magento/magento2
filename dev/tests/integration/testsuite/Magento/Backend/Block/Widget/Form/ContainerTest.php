@@ -40,7 +40,7 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
         $block = $this->getMock(
             'Magento\Backend\Block\Widget\Form\Container',
             array('_prepareLayout'),
-            array($objectManager->create('Magento\Backend\Block\Template\Context'))
+            array($objectManager->create('Magento\Backend\Block\Widget\Context'))
         );
 
         $layout->addBlock($block, 'block');

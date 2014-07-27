@@ -43,6 +43,10 @@ class VoidTest extends \PHPUnit_Framework_TestCase
         $storeManager = $objectManager->get('Magento\Store\Model\StoreManagerInterface');
         $configFactory = $objectManager->get('Magento\Paypal\Model\ConfigFactory');
         $mathRandom = $objectManager->get('Magento\Framework\Math\Random');
+        $httpClientFactoryMock = $this->getMockBuilder('Magento\Framework\HTTP\ZendClientFactory')
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         /** @var $order \Magento\Sales\Model\Order */
         $order = $objectManager->create('Magento\Sales\Model\Order');
@@ -64,7 +68,8 @@ class VoidTest extends \PHPUnit_Framework_TestCase
                 $centinelService,
                 $storeManager,
                 $configFactory,
-                $mathRandom
+                $mathRandom,
+                $httpClientFactoryMock
             )
         );
 

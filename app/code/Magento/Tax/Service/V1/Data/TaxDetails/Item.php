@@ -41,6 +41,8 @@ class Item extends \Magento\Framework\Service\Data\AbstractObject
 
     const KEY_ROW_TOTAL = 'row_total';
 
+    const KEY_ROW_TOTAL_INCL_TAX = 'row_total_incl_tax';
+
     const KEY_ROW_TAX = 'row_tax';
 
     const KEY_TAXABLE_AMOUNT = 'taxable_amount';
@@ -50,6 +52,8 @@ class Item extends \Magento\Framework\Service\Data\AbstractObject
     const KEY_DISCOUNT_TAX_COMPENSATION_AMOUNT = 'discount_tax_compensation_amount';
 
     const KEY_APPLIED_TAXES = 'applied_taxes';
+
+    const KEY_ASSOCIATED_ITEM_CODE = 'associated_item_code';
     /**#@-*/
 
     /**
@@ -113,6 +117,16 @@ class Item extends \Magento\Framework\Service\Data\AbstractObject
     }
 
     /**
+     * Get row total including tax
+     *
+     * @return float
+     */
+    public function getRowTotalInclTax()
+    {
+        return $this->_get(self::KEY_ROW_TOTAL_INCL_TAX);
+    }
+
+    /**
      * Get row tax amount
      *
      * @return float
@@ -160,5 +174,15 @@ class Item extends \Magento\Framework\Service\Data\AbstractObject
     public function getAppliedTaxes()
     {
         return $this->_get(self::KEY_APPLIED_TAXES);
+    }
+
+    /**
+     * Return associated item code if this item is associated with another item, null otherwise
+     *
+     * @return mixed|null
+     */
+    public function getAssociatedItemCode()
+    {
+        return $this->_get(self::KEY_ASSOCIATED_ITEM_CODE);
     }
 }

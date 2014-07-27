@@ -24,8 +24,8 @@
 ?>
 <?php $_order = $this->getOrder() ?>
 <?php $_giftMessage; ?>
-<div class="wrapper table order items">
-    <table class="data table order items" id="my-orders-table" summary="<?php echo __('Items Ordered') ?>">
+<div class="table-wrapper order-items">
+    <table class="data table table-order-items" id="my-orders-table" summary="<?php echo __('Items Ordered') ?>">
         <caption class="table caption"><?php echo __('Items Ordered') ?></caption>
         <thead>
             <tr>
@@ -48,7 +48,7 @@
             <tbody>
                 <?php echo $this->getItemHtml($_item) ?>
                 <?php if ($this->helper('Magento\GiftMessage\Helper\Message')->getIsMessagesAvailable('order_item', $_item) && $_item->getGiftMessageId()): ?>
-                <tr id="order-item-gift-message-<?php echo $_item->getId() ?>" role="region" aria-expanded="false" tabindex="-1" style="display:none;">
+                <tr id="order-item-gift-message-<?php echo $_item->getId() ?>" role="region" aria-expanded="false" tabindex="-1" style="display: none;">
                     <?php $_giftMessage = $this->helper('Magento\GiftMessage\Helper\Message')->getGiftMessageForEntity($_item); ?>
                     <td class="col message" colspan="7">
                         <div class="gift message details">

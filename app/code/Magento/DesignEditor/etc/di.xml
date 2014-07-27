@@ -27,6 +27,7 @@
     <type name="Magento\DesignEditor\Controller\Varien\Router\Standard">
         <arguments>
             <argument name="routerId" xsi:type="string">vde</argument>
+            <argument name="session" xsi:type="object">Magento\Backend\Model\Auth\Session\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Theme\Model\CopyService">
@@ -55,6 +56,11 @@
     <type name="Magento\DesignEditor\Model\Url\NavigationMode">
         <arguments>
             <argument name="scopeType" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
+        </arguments>
+    </type>
+    <type name="Magento\DesignEditor\Model\State">
+        <arguments>
+            <argument name="backendSession" xsi:type="object">Magento\Backend\Model\Session\Proxy</argument>
         </arguments>
     </type>
 </config>

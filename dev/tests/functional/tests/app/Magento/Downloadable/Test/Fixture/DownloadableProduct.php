@@ -59,7 +59,26 @@ class DownloadableProduct extends Product
             'price' => [
                 'value' => '1',
                 'group' => static::GROUP_PRODUCT_DETAILS
-            ]
+            ],
+            'qty' => array(
+                'value' => 1000,
+                'group' => static::GROUP_PRODUCT_DETAILS,
+                'input_name' => 'product[quantity_and_stock_status][qty]'
+            ),
+            'quantity_and_stock_status' => array(
+                'value' => 'In Stock',
+                'input_value' => 1,
+                'group' => static::GROUP_PRODUCT_DETAILS,
+                'input_name' => 'product[quantity_and_stock_status][is_in_stock]'
+            ),
+            'product_website_1' => array(
+                'value' => 'Yes',
+                'input_value' => 1,
+                'group' => static::GROUP_PRODUCT_WEBSITE,
+                'input' => 'checkbox',
+                'input_name' => 'product[website_ids][]'
+            ),
+
         );
 
         $this->_data['fields'] = $data + $this->_data['fields'];

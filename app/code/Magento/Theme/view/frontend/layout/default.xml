@@ -31,7 +31,7 @@
         <container name="after_body_start" as="after_body_start" label="Page Top">
             <block class="Magento\Theme\Block\Html\Notices" name="global_notices" template="html/notices.phtml"/>
         </container>
-        <container name="header-container" label="Page Header Container" as="header_container" htmlTag="header" htmlClass="page header">
+        <container name="header-container" label="Page Header Container" as="header_container" htmlTag="header" htmlClass="page-header">
             <container name="header.panel" label="Page Header Panel" htmlTag="div" htmlClass="panel header">
                 <block class="Magento\Framework\View\Element\Template" name="skip_to_content" template="Magento_Theme::html/skip.phtml">
                     <arguments>
@@ -79,12 +79,12 @@
             <container name="content.aside" label="Main Content Aside"/>
             <container name="content.bottom" label="Main Content Bottom"/>
         </container>
-        <container name="left" as="left" label="Left Column"/>
-        <container name="right" as="right" label="Right Column"/>
+        <container name="sidebar.main" as="sidebar_main" label="Sidebar Main"/>
+        <container name="sidebar.additional" as="sidebar_additional" label="Sidebar Additional"/>
         <container name="page.bottom.container" as="page_bottom" label="Before Page Footer Container" htmlTag="div" htmlClass="page bottom">
             <container name="page.bottom" label="Before Page Footer" htmlTag="div" htmlClass="content"/>
         </container>
-        <container name="footer-container" as="footer" label="Page Footer Container" htmlTag="footer" htmlClass="page footer">
+        <container name="footer-container" as="footer" label="Page Footer Container" htmlTag="footer" htmlClass="page-footer">
             <container name="footer" as="footer" label="Page Footer" htmlTag="div" htmlClass="footer content">
                 <block class="Magento\Store\Block\Switcher" name="store_switcher" as="store_switcher" template="switch/stores.phtml"/>
                 <block class="Magento\Framework\View\Element\Html\Links" name="footer_links">

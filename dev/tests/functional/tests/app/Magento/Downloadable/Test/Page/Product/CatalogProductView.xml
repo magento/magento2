@@ -27,7 +27,7 @@
     <block>
         <name>downloadableViewBlock</name>
         <class>Magento\Downloadable\Test\Block\Catalog\Product\View</class>
-        <locator>.product.info.main</locator>
+        <locator>.product-info-main</locator>
         <strategy>css selector</strategy>
     </block>
 </page>

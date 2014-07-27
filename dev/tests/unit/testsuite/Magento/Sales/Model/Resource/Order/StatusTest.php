@@ -89,11 +89,9 @@ class StatusTest extends \PHPUnit_Framework_TestCase
             );
 
         $this->configMock = $this->getMock('\Magento\Eav\Model\Config', ['getConnectionName'], [], '', false);
-
-        $this->model = new \Magento\Sales\Model\Resource\Order\Status(
-            $this->resourceMock,
-            new \Magento\Framework\Stdlib\DateTime(),
-            $this->configMock
+        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->model = $objectManager->getObject('Magento\Sales\Model\Resource\Order\Status',
+            ['resource' => $this->resourceMock]
         );
     }
 

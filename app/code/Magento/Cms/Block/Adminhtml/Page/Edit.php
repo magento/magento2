@@ -38,12 +38,12 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Backend\Block\Widget\Context $context,
         \Magento\Framework\Registry $registry,
         array $data = array()
     ) {
@@ -65,8 +65,8 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         parent::_construct();
 
         if ($this->_isAllowedAction('Magento_Cms::save')) {
-            $this->_updateButton('save', 'label', __('Save Page'));
-            $this->_addButton(
+            $this->buttonList->update('save', 'label', __('Save Page'));
+            $this->buttonList->add(
                 'saveandcontinue',
                 array(
                     'label' => __('Save and Continue Edit'),
@@ -80,13 +80,13 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
                 -100
             );
         } else {
-            $this->_removeButton('save');
+            $this->buttonList->remove('save');
         }
 
         if ($this->_isAllowedAction('Magento_Cms::page_delete')) {
-            $this->_updateButton('delete', 'label', __('Delete Page'));
+            $this->buttonList->update('delete', 'label', __('Delete Page'));
         } else {
-            $this->_removeButton('delete');
+            $this->buttonList->remove('delete');
         }
     }
 

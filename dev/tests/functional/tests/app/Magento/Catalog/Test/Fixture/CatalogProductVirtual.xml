@@ -38,6 +38,7 @@
             <default_value></default_value>
             <input>text</input>
             <fixture>Magento\Catalog\Test\Fixture\CatalogProductSimple\CategoryIds</fixture>
+            <group>product-details</group>
         </category_ids>
         <color>
             <attribute_code>color</attribute_code>
@@ -420,6 +421,10 @@
             <attribute_code>id</attribute_code>
             <backend_type>virtual</backend_type>
         </id>
+        <is_virtual>
+            <attribute_code>is_virtual</attribute_code>
+            <backend_type>virtual</backend_type>
+        </is_virtual>
         <type_id>
             <attribute_code>type_id</attribute_code>
             <backend_type>virtual</backend_type>
@@ -427,12 +432,9 @@
         <attribute_set_id>
             <attribute_code>attribute_set_id</attribute_code>
             <backend_type>virtual</backend_type>
-        </attribute_set_id>
-        <qty>
-            <attribute_code>qty</attribute_code>
-            <input>input</input>
+            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\AttributeSetId</source>
             <group>product-details</group>
-        </qty>
+        </attribute_set_id>
         <custom_options>
             <attribute_code>custom_options</attribute_code>
             <backend_type>virtual</backend_type>
@@ -441,6 +443,12 @@
             <group>customer-options</group>
             <fixture>Magento\Catalog\Test\Fixture\CatalogProductSimple\CustomOptions</fixture>
         </custom_options>
+        <website_ids>
+            <attribute_code>website_ids</attribute_code>
+            <backend_type>virtual</backend_type>
+            <default_value>Main Website</default_value>
+            <group>websites</group>
+        </website_ids>
     </fields>
     <data_set>
         <sku></sku>

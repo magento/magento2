@@ -69,8 +69,10 @@ class Form extends ParentForm
     {
         // Prepare price data
         $data = $fixture->getData();
-        $data = array_merge($data, $data['price']);
-        unset($data['price']);
+        if (isset($data['price'])) {
+            $data = array_merge($data, $data['price']);
+            unset($data['price']);
+        }
 
         // Mapping
         $mapping = $this->dataMapping($data);

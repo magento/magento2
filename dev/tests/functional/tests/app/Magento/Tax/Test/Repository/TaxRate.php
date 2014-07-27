@@ -82,6 +82,7 @@ class TaxRate extends AbstractRepository
             'rate' => '8.375',
             'tax_country_id' => 'United States',
             'tax_region_id' => 'New York',
+            'tax_postcode' => '*',
         ];
 
         $this->_data['us_ny_rate_8_1'] = [
@@ -89,6 +90,7 @@ class TaxRate extends AbstractRepository
             'rate' => '8.1',
             'tax_country_id' => 'United States',
             'tax_region_id' => 'New York',
+            'tax_postcode' => '*',
         ];
 
         $this->_data['paypal_rate_8_25'] = [

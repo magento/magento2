@@ -29,7 +29,7 @@
         <span><?php echo __('Print This Page') ?></span>
     </a>
     <?php $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image'); ?>
-        <div class="table wrapper comparison">
+        <div class="table-wrapper comparison">
             <table class="data-table data table comparison" id="product-comparison"
                 data-mage-init='{"compareList":{
                     "windowPrintSelector":".action.print",
@@ -92,7 +92,7 @@
                                     <?php endif; ?>
                                 </div>
                                 <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllow()) : ?>
-                                    <div class="secondary addto links" data-role="add-to-links">
+                                    <div class="secondary-addto-links" data-role="add-to-links">
                                         <a href="#" data-post='<?php echo $this->getAddToWishlistParams($_item); ?>' class="action towishlist" data-action="add-to-wishlist">
                                             <span><?php echo __('Add to Wishlist') ?></span>
                                         </a>
@@ -111,7 +111,7 @@
                             <?php if($_i++==0): ?>
                                 <th scope="row" class="cell label">
                                     <span class="attribute label">
-                                        <?php echo $_attribute->getStoreLabel() ? $_attribute->getStoreLabel() : __($_attribute->getFrontendLabel()) ?>
+                                        <?php echo $this->escapeHtml($_attribute->getStoreLabel() ? $_attribute->getStoreLabel() : __($_attribute->getFrontendLabel())) ?>
                                     </span>
                                 </th>
                             <?php endif; ?>

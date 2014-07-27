@@ -118,13 +118,18 @@ class ReviewRenderer extends \Magento\Framework\View\Element\Template implements
     /**
      * Get review product list url
      *
+     * @param bool $useDirectLink allows to use direct link for product reviews page
      * @return string
      */
-    public function getReviewsUrl()
+    public function getReviewsUrl($useDirectLink = false)
     {
-        return $this->getUrl(
-            'review/product/list',
-            array('id' => $this->getProduct()->getId(), 'category' => $this->getProduct()->getCategoryId())
-        );
+        $product = $this->getProduct();
+        if ($useDirectLink) {
+            return $this->getUrl(
+                'review/product/list',
+                array('id' => $product->getId(), 'category' => $product->getCategoryId())
+            );
+        }
+        return $product->getUrlModel()->getUrl($product, array('_ignore_category' => true));
     }
 }

@@ -175,9 +175,9 @@
         <var name="cart_cross_sell_products:height">290</var>
 
         <var name="gift_messages_checkout_thumbnail:type">thumbnail</var>
-        <var name="gift_messages_checkout_thumbnail:width">75</var>
+        <var name="gift_messages_checkout_thumbnail:width">100</var>
         <var name="gift_messages_checkout_thumbnail:ratio">1</var>
-        <var name="gift_messages_checkout_thumbnail:height">75</var>
+        <var name="gift_messages_checkout_thumbnail:height">100</var>
 
         <var name="gift_messages_checkout_small_image:type">small_image</var>
         <var name="gift_messages_checkout_small_image:width">75</var>

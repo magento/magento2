@@ -356,4 +356,63 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Magento\Checkout\Model\Session', $session->clearStorage());
         $this->assertFalse($session->hasQuote());
     }
+
+    public function testResetCheckout()
+    {
+        /** @var $session \Magento\Checkout\Model\Session */
+        $session = $this->_helper->getObject('\Magento\Checkout\Model\Session', array(
+            'storage' => new \Magento\Framework\Session\Storage()
+        ));
+        $session->resetCheckout();
+        $this->assertEquals(\Magento\Checkout\Model\Session::CHECKOUT_STATE_BEGIN, $session->getCheckoutState());
+    }
+
+    public function testGetStepData()
+    {
+        $stepData = array(
+            'simple' => 'data',
+            'complex' => array(
+                'key' => 'value',
+            ),
+        );
+        /** @var $session \Magento\Checkout\Model\Session */
+        $session = $this->_helper->getObject('\Magento\Checkout\Model\Session', array(
+            'storage' => new \Magento\Framework\Session\Storage()
+        ));
+        $session->setSteps($stepData);
+        $this->assertEquals($stepData, $session->getStepData());
+        $this->assertFalse($session->getStepData('invalid_key'));
+        $this->assertEquals($stepData['complex'], $session->getStepData('complex'));
+        $this->assertFalse($session->getStepData('simple', 'invalid_sub_key'));
+        $this->assertEquals($stepData['complex']['key'], $session->getStepData('complex', 'key'));
+    }
+
+    public function testSetStepData()
+    {
+        $stepData = array(
+            'complex' => array(
+                'key' => 'value',
+            ),
+        );
+        /** @var $session \Magento\Checkout\Model\Session */
+        $session = $this->_helper->getObject('\Magento\Checkout\Model\Session', array(
+            'storage' => new \Magento\Framework\Session\Storage()
+        ));
+        $session->setSteps($stepData);
+
+        $session->setStepData('complex', 'key2', 'value2');
+        $session->setStepData('simple', array('key' => 'value'));
+        $session->setStepData('simple', 'key2', 'value2');
+        $expectedResult = array(
+            'complex' => array(
+                'key' => 'value',
+                'key2' => 'value2',
+            ),
+            'simple' => array(
+                'key' => 'value',
+                'key2' => 'value2',
+            ),
+        );
+        $this->assertEquals($expectedResult, $session->getSteps());
+    }
 }

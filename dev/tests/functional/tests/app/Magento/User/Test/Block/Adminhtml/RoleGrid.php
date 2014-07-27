@@ -43,15 +43,15 @@ class RoleGrid extends Grid
         'id' => [
             'selector' => '#roleGrid_filter_role_id'
         ],
-        'role_name' => [
+        'rolename' => [
             'selector' => '#roleGrid_filter_role_name'
         ]
     ];
 
     /**
-     * Locator value for link in action column
+     * Locator value for td with role name
      *
      * @var string
      */
-    protected $editLink = '[data-column="role_name"]';
+    protected $editLink = 'tbody [data-column="role_name"]';
 }

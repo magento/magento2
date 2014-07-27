@@ -41,7 +41,9 @@ class Details extends \Magento\Backend\Block\Widget\Form\Container
         parent::_construct();
         $this->_controller = '';
         $this->_headerText = __('View Transaction Details');
-        $this->_removeButton('reset')->_removeButton('delete')->_removeButton('save');
+        $this->buttonList->remove('reset');
+        $this->buttonList->remove('delete');
+        $this->buttonList->remove('save');
     }
 
     /**

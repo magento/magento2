@@ -34,4 +34,23 @@ class TypesTest extends \Magento\Backend\Utility\Controller
         $body = $this->getResponse()->getBody();
         $this->assertSelectCount('[data-role="row"]', 1, $body, 'Grid with row exists');
     }
+
+    public function testLoadAttributeSetsAction()
+    {
+        $this->dispatch('backend/admin/googleshopping_types/loadAttributeSets/');
+        $body = $this->getResponse()->getBody();
+
+        $this->assertTag(
+            array(
+                'tag'        => 'select',
+                'attributes' => array('name' => 'attribute_set_id'),
+                'descendant' => array(
+                    'tag'    => 'option',
+                    'attributes' => array('value' => 4),
+                    'content' => 'Default',
+                )
+            ),
+            $body
+        );
+    }
 }

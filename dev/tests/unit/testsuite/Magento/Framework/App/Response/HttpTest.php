@@ -159,4 +159,15 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($cacheControl, $this->_model->getHeader('Cache-Control')['value']);
         $this->assertEquals($expires, $this->_model->getHeader('Expires')['value']);
     }
+
+    /**
+     * Test setting body in JSON format
+     */
+    public function testRepresentJson()
+    {
+        $this->_model->setHeader('Content-Type', 'text/javascript');
+        $this->_model->representJson('json_string');
+        $this->assertEquals('application/json', $this->_model->getHeader('Content-Type')['value']);
+        $this->assertEquals('json_string', $this->_model->getBody('default'));
+    }
 }

@@ -27,10 +27,18 @@
     <assertDownloadableSamplesData module="Magento_Downloadable">
         <severeness>low</severeness>
     </assertDownloadableSamplesData>
-    <assertDownloadableLinks module="Magento_Downloadable">
+    <assertDownloadableLinksData module="Magento_Downloadable">
         <severeness>low</severeness>
-    </assertDownloadableLinks>
+    </assertDownloadableLinksData>
     <assertDownloadableProductForm module="Magento_Downloadable">
         <severeness>low</severeness>
     </assertDownloadableProductForm>
+    <assertDownloadableDuplicateForm module="Magento_Downloadable">
+        <severeness>high</severeness>
+        <require>
+            <productGrid class="Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex" />
+            <productPage class="Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit" />
+            <product class="Mtf\Fixture\FixtureInterface" />
+        </require>
+    </assertDownloadableDuplicateForm>
 </constraint>

@@ -54,16 +54,29 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         $productModelMock = $this->getMockBuilder('\Magento\Catalog\Model\Product')
             ->disableOriginalConstructor()
             ->getMock();
-        $attrCodes = ['sku', 'price', 'status', 'updatedAt', 'entity_id'];
-        $this->productBuilder->expects($this->once())
-            ->method('getCustomAttributesCodes')
-            ->will($this->returnValue($attrCodes));
+
+        $attrMock = $this->getMockBuilder('\Magento\Catalog\Model\Resource\Eav\Attribute')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $attrMock->expects($this->at(0))->method('getAttributeCode')->will($this->returnValue('sku'));
+        $attrMock->expects($this->at(1))->method('getAttributeCode')->will($this->returnValue('price'));
+        $attrMock->expects($this->at(2))->method('getAttributeCode')->will($this->returnValue('status'));
+        $attrMock->expects($this->at(3))->method('getAttributeCode')->will($this->returnValue('updatedAt'));
+        $attrMock->expects($this->at(4))->method('getAttributeCode')->will($this->returnValue('entity_id'));
+        $attrMock->expects($this->at(5))->method('getAttributeCode')->will($this->returnValue('store_id'));
+
+        $attrList = [$attrMock, $attrMock, $attrMock, $attrMock, $attrMock, $attrMock];
+
+        $productModelMock->expects($this->once())
+            ->method('getAttributes')
+            ->will($this->returnValue($attrList));
 
         $attributes = [
             ProductDataObject::SKU => ProductDataObject::SKU . 'value',
             ProductDataObject::PRICE => ProductDataObject::PRICE . 'value',
             ProductDataObject::STATUS => ProductDataObject::STATUS . 'dataValue',
-            ProductDataObject::ID => 'entity_id' . 'value'
+            ProductDataObject::STORE_ID => ProductDataObject::STORE_ID . 'value'
         ];
         $this->productBuilder->expects($this->once())
             ->method('populateWithArray')
@@ -85,9 +98,13 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                 return null;
             }
         );
-        $productModelMock->expects($this->exactly(count($attrCodes)))
+        $productModelMock->expects($this->exactly(count($attrList)))
             ->method('getDataUsingMethod')
             ->will($dataUsingMethodCallback);
+
+        $productModelMock->expects($this->once())
+            ->method('getStoreId')
+            ->will($this->returnValue(ProductDataObject::STORE_ID . 'value'));
 
         $dataCallback = $this->returnCallback(
             function ($attrCode) {
@@ -97,16 +114,16 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
                 return null;
             }
         );
-        $productModelMock->expects($this->exactly(2))
+        $productModelMock->expects($this->exactly(3))
             ->method('getData')
             ->will($dataCallback);
 
         $this->converter = new Converter($this->productBuilder);
         $productData = $this->converter->createProductDataFromModel($productModelMock);
         $this->assertEquals(ProductDataObject::SKU . 'value', $productData->getSku());
-        $this->assertEquals('entity_id' . 'value', $productData->getId());
         $this->assertEquals(ProductDataObject::PRICE . 'value', $productData->getPrice());
         $this->assertEquals(ProductDataObject::STATUS . 'dataValue', $productData->getStatus());
+        $this->assertEquals(ProductDataObject::STORE_ID . 'value', $productData->getStoreId());
         $this->assertEquals(null, $productData->getUpdatedAt());
     }
 }

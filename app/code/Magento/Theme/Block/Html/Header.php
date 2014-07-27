@@ -168,6 +168,8 @@ class Header extends \Magento\Framework\View\Element\Template
 
         if (!is_null($storeLogoPath) && $this->_isFile($path)) {
             $url = $logoUrl;
+        } elseif ($this->getLogoFile()) {
+            $url = $this->getViewFileUrl($this->getLogoFile());
         } else {
             $url = $this->getViewFileUrl('images/logo.gif');
         }

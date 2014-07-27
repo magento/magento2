@@ -339,4 +339,9 @@ return array(
     ['_inventoryModel', 'Magento\AdvancedCheckout\Model\Resource\Sku\Errors\Grid\Collection'],
     ['_productInstance', 'Magento\CatalogInventory\Model\Stock\Item'],
     ['_regionBuilder', 'Magento\Customer\Model\Address\Converter'],
+    ['_scopeConfig', 'Magento\CatalogInventory\Helper\Minsaleqty', 'scopeConfig'],
+    ['_stopFurtherRules', 'Magento\SalesRule\Model\Validator'],
+    ['_usageFactory', 'Magento\SalesRule\Model\Validator', 'Magento\SalesRule\Model\Validator\Utility'],
+    ['_couponFactory', 'Magento\SalesRule\Model\Validator', 'Magento\SalesRule\Model\Validator\Utility'],
+    ['_customerFactory', 'Magento\SalesRule\Model\Validator', 'Magento\SalesRule\Model\Validator\Utility'],
 );

@@ -38,12 +38,12 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
     protected $_sessionQuote;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Backend\Model\Session\Quote $sessionQuote
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Backend\Block\Widget\Context $context,
         \Magento\Backend\Model\Session\Quote $sessionQuote,
         array $data = array()
     ) {
@@ -70,32 +70,32 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
         $storeId = $this->_sessionQuote->getStoreId();
 
 
-        $this->_updateButton('save', 'label', __('Submit Order'));
-        $this->_updateButton('save', 'onclick', 'order.submit()');
-        $this->_updateButton('save', 'class', 'primary');
+        $this->buttonList->update('save', 'label', __('Submit Order'));
+        $this->buttonList->update('save', 'onclick', 'order.submit()');
+        $this->buttonList->update('save', 'class', 'primary');
         // Temporary solution, unset button widget. Will have to wait till jQuery migration is complete
-        $this->_updateButton('save', 'data_attribute', array());
+        $this->buttonList->update('save', 'data_attribute', array());
 
-        $this->_updateButton('save', 'id', 'submit_order_top_button');
+        $this->buttonList->update('save', 'id', 'submit_order_top_button');
         if (is_null($customerId) || !$storeId) {
-            $this->_updateButton('save', 'style', 'display:none');
+            $this->buttonList->update('save', 'style', 'display:none');
         }
 
-        $this->_updateButton('back', 'id', 'back_order_top_button');
-        $this->_updateButton('back', 'onclick', 'setLocation(\'' . $this->getBackUrl() . '\')');
+        $this->buttonList->update('back', 'id', 'back_order_top_button');
+        $this->buttonList->update('back', 'onclick', 'setLocation(\'' . $this->getBackUrl() . '\')');
 
-        $this->_updateButton('reset', 'id', 'reset_order_top_button');
+        $this->buttonList->update('reset', 'id', 'reset_order_top_button');
 
         if (is_null($customerId)) {
-            $this->_updateButton('reset', 'style', 'display:none');
+            $this->buttonList->update('reset', 'style', 'display:none');
         } else {
-            $this->_updateButton('back', 'style', 'display:none');
+            $this->buttonList->update('back', 'style', 'display:none');
         }
 
         $confirm = __('Are you sure you want to cancel this order?');
-        $this->_updateButton('reset', 'label', __('Cancel'));
-        $this->_updateButton('reset', 'class', 'cancel');
-        $this->_updateButton(
+        $this->buttonList->update('reset', 'label', __('Cancel'));
+        $this->buttonList->update('reset', 'class', 'cancel');
+        $this->buttonList->update(
             'reset',
             'onclick',
             'deleteConfirm(\'' . $confirm . '\', \'' . $this->getCancelUrl() . '\')'

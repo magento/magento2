@@ -52,18 +52,19 @@ class AssertProductSaveMessage extends AbstractConstraint
      */
     public function processAssert(CatalogProductEdit $productPage)
     {
-        $actualMessage = $productPage->getMessagesBlock()->getSuccessMessages();
-        \PHPUnit_Framework_Assert::assertEquals(
+        $actualMessages = $productPage->getMessagesBlock()->getSuccessMessages();
+        $actualMessages = is_array($actualMessages) ? $actualMessages : [$actualMessages];
+        \PHPUnit_Framework_Assert::assertContains(
             self::SUCCESS_MESSAGE,
-            $actualMessage,
+            $actualMessages,
             'Wrong success message is displayed.'
             . "\nExpected: " . self::SUCCESS_MESSAGE
-            . "\nActual: " . $actualMessage
+            . "\nActual:\n" . implode("\n - ", $actualMessages)
         );
     }
 
     /**
-     * Returns a string representation of the object.
+     * Returns a string representation of the object
      *
      * @return string
      */

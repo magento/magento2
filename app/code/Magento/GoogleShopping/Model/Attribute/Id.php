@@ -40,7 +40,7 @@ class Id extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
      */
     public function convertAttribute($product, $entry)
     {
-        $value = $this->_gsData->buildContentProductId($product->getId(), $product->getStoreId());
+        $value = $this->_googleShoppingHelper->buildContentProductId($product->getId(), $product->getStoreId());
         return $this->_setAttribute($entry, 'id', self::ATTRIBUTE_TYPE_TEXT, $value);
     }
 }

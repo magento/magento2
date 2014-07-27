@@ -28,30 +28,21 @@
 
 /** @var $product \Magento\Catalog\Model\Product */
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
-$product->setTypeId(
-    'virtual'
-)->setId(
-    1
-)->setAttributeSetId(
-    4
-)->setName(
-    'Simple Product'
-)->setSku(
-    'simple'
-)->setPrice(
-    10
-)->setStockData(
-    array(
+$product->setTypeId('virtual')
+    ->setId(1)
+    ->setAttributeSetId(4)
+    ->setName('Simple Product')
+    ->setSku('simple')
+    ->setPrice(10)
+    ->setStockData(array(
         'use_config_manage_stock' => 1,
         'qty'                     => 100,
         'is_qty_decimal'          => 0,
         'is_in_stock'             => 1
-    )
-)->setVisibility(
-    \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH
-)->setStatus(
-    \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
-)->save();
+    ))
+    ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
+    ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
+    ->save();
 $product->load(1);
 
 $addressData = include __DIR__ . '/address_data.php';

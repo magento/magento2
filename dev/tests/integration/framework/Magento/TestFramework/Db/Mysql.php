@@ -74,7 +74,7 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
      */
     protected function getSetupDbDumpFilename()
     {
-        return $this->_varPath . '/setup_dump.sql';
+        return $this->_varPath . '/setup_dump_' . $this->_schema . '.sql';
     }
 
     /**

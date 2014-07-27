@@ -72,6 +72,9 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      * Compose and get order full history.
      * Consists of the status history comments as well as of invoices, shipments and creditmemos creations
      *
+     * @TODO This method requires refactoring. Need to create separate model for comment history handling
+     * and avoid generating it dynamically
+     *
      * @return array
      */
     public function getFullHistory()
@@ -147,7 +150,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
             );
         }
 
-        usort($history, array(__CLASS__, "_sortHistoryByTimestamp"));
+        usort($history, array(__CLASS__, 'sortHistoryByTimestamp'));
         return $history;
     }
 
@@ -303,7 +306,7 @@ class History extends \Magento\Backend\Block\Template implements \Magento\Backen
      * @param mixed $b
      * @return int
      */
-    private static function _sortHistoryByTimestamp($a, $b)
+    public static function sortHistoryByTimestamp($a, $b)
     {
         $createdAtA = $a['created_at'];
         $createdAtB = $b['created_at'];

@@ -94,9 +94,9 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
         $this->_model->setType('Magento\Catalog\Block\Product\Widget\NewWidget');
         $containers = $this->_model->getWidgetSupportedContainers();
         $this->assertInternalType('array', $containers);
-        $this->assertContains('left', $containers);
+        $this->assertContains('sidebar.main', $containers);
         $this->assertContains('content', $containers);
-        $this->assertContains('right', $containers);
+        $this->assertContains('sidebar.additional', $containers);
         return $this->_model;
     }
 

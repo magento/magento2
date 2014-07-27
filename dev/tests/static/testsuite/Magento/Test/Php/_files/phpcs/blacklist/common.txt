@@ -26,8 +26,6 @@ app/code/Zend
 dev/tools/Magento/Tools/I18n/Zend
 # Not magento code
 dev/tools/layout
-# Not magento code
-dev/tools/xml
 # PSR-1 not applied to
 dev/tests/js
 # Example files that are expected to fail code sniffer

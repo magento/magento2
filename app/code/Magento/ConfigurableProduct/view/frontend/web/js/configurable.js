@@ -210,7 +210,12 @@ define(['jquery', 'jquery-ui', 'jquery.parsequery'], function($){
         _changeProductImage: function () {
             var images = this.options.spConfig.images,
                 imagesArray = null,
-                galleryElement = $(this.options.mediaGallerySelector);
+                galleryElement = $(this.options.mediaGallerySelector),
+                baseImage = {
+                    small: this.options.spConfig.baseImage,
+                    medium: this.options.spConfig.baseImage,
+                    large: this.options.spConfig.baseImage
+                };
             $.each(this.options.settings, function (k, v) {
                 var selectValue = parseInt(v.value, 10),
                     attributeId = v.id.replace(/[a-z]*/, '');
@@ -230,21 +235,18 @@ define(['jquery', 'jquery-ui', 'jquery.parsequery'], function($){
             });
 
             var result = [];
-            $.each(imagesArray || {}, function (k, v) {
+            $.each(imagesArray || baseImage, function (k, v) {
                 result.push({
                     small: v,
                     medium: v,
                     large: v
                 });
             });
-
-            if (galleryElement.length) {
-                if (result.length === 1) {
-                    this.initialGalleryImages = this.initialGalleryImages || galleryElement.gallery('option', 'images');
-                    galleryElement.gallery('option', 'images', result);
-                } else {
-                    galleryElement.gallery('option', 'images', this.initialGalleryImages);
-                }
+            if (result.length !== 1) {
+                result = [baseImage];
+            }
+            if (galleryElement.length && typeof galleryElement.gallery != 'undefined') {
+                galleryElement.gallery('option', 'images', result);
             }
         },
 

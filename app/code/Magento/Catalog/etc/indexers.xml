@@ -24,6 +24,5 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Index/etc/indexers.xsd">
-    <indexer name="catalog_product_attribute" instance="Magento\Catalog\Model\Product\Indexer\Eav" />
     <indexer name="catalog_url" instance="Magento\Catalog\Model\Indexer\Url" />
 </config>

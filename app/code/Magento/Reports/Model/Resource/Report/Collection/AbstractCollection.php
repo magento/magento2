@@ -130,6 +130,16 @@ class AbstractCollection extends \Magento\Framework\Model\Resource\Db\Collection
     }
 
     /**
+     * Apply needed aggregated table
+     *
+     * @return $this
+     */
+    protected function _applyAggregatedTable()
+    {
+        return $this;
+    }
+
+    /**
      * Apply date range filter
      *
      * @return $this
@@ -257,6 +267,7 @@ class AbstractCollection extends \Magento\Framework\Model\Resource\Db\Collection
     {
         parent::_beforeLoad();
 
+        $this->_applyAggregatedTable();
         $this->_applyDateRangeFilter();
         $this->_applyStoresFilter();
         $this->_applyCustomFilter();

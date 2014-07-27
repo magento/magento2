@@ -25,7 +25,7 @@
 namespace Magento\User\Test\Constraint;
 
 use Mtf\Constraint\AbstractConstraint;
-use Magento\User\Test\Fixture\AdminUserInjectable;
+use Magento\User\Test\Fixture\User;
 use Magento\User\Test\Page\Adminhtml\UserIndex;
 
 /**
@@ -44,12 +44,12 @@ class AssertUserNotInGrid extends AbstractConstraint
      * Asserts that User is not present in User Grid.
      *
      * @param UserIndex $userIndex
-     * @param AdminUserInjectable $adminUser
+     * @param User $adminUser
      * @return void
      */
     public function processAssert(
         UserIndex $userIndex,
-        AdminUserInjectable $adminUser
+        User $adminUser
     ) {
         $filter = ['username' => $adminUser->getUsername()];
         $userIndex->open();

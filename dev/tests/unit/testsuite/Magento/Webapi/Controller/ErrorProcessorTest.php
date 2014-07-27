@@ -267,7 +267,7 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
             'Exception' => array(
                 new \Exception('Non service exception', 5678),
                 WebapiException::HTTP_INTERNAL_ERROR,
-                'Non service exception',
+                'Internal Error. Details are available in Magento log file. Report ID:',
                 []
             )
         );

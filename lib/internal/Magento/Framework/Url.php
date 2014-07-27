@@ -402,6 +402,11 @@ class Url extends \Magento\Framework\Object implements \Magento\Framework\UrlInt
      */
     public function getBaseUrl($params = array())
     {
+        /**
+         *  Original Scope
+         */
+        $origScope = $this->_getScope();
+
         if (isset($params['_scope'])) {
             $this->setScope($params['_scope']);
         }
@@ -425,6 +430,8 @@ class Url extends \Magento\Framework\Object implements \Magento\Framework\UrlInt
         }
 
         $result = $this->_getScope()->getBaseUrl($this->_getType(), $this->_isSecure());
+        // setting back the original scope
+        $this->setScope($origScope);
         $this->_routeParamsResolver->setType(self::DEFAULT_URL_TYPE);
         return $result;
     }
@@ -692,7 +699,7 @@ class Url extends \Magento\Framework\Object implements \Magento\Framework\UrlInt
             $this->_setRouteParams($routeParams, false);
         }
 
-        return $this->getBaseUrl() . $this->_getRoutePath($routeParams);
+        return $this->getBaseUrl($routeParams) . $this->_getRoutePath($routeParams);
     }
 
     /**

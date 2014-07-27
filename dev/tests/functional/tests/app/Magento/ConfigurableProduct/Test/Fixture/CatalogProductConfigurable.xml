@@ -38,6 +38,14 @@
             <default_value></default_value>
             <input>text</input>
         </category_ids>
+        <configurable_attributes_data>
+            <attribute_code>configurable_attributes_data</attribute_code>
+            <backend_type>virtual</backend_type>
+            <is_required>0</is_required>
+            <input>variations</input>
+            <group>variations</group>
+            <source>Magento\ConfigurableProduct\Test\Fixture\CatalogProductConfigurable\ConfigurableAttributesData</source>
+        </configurable_attributes_data>
         <color>
             <attribute_code>color</attribute_code>
             <backend_type>int</backend_type>
@@ -122,7 +130,7 @@
             <default_value></default_value>
             <input>text</input>
             <group>advanced-pricing</group>
-            <fixture>Magento\Catalog\Test\Fixture\CatalogProductSimple\GroupPriceOptions</fixture>
+            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\GroupPriceOptions</source>
         </group_price>
         <has_options>
             <attribute_code>has_options</attribute_code>
@@ -265,7 +273,7 @@
             <default_value></default_value>
             <input>price</input>
             <group>product_info_tabs_product-details</group>
-            <fixture>Magento\Catalog\Test\Fixture\CatalogProductSimple\Price</fixture>
+            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\Price</source>
         </price>
         <quantity_and_stock_status>
             <attribute_code>quantity_and_stock_status</attribute_code>
@@ -344,8 +352,9 @@
             <attribute_code>status</attribute_code>
             <backend_type>int</backend_type>
             <is_required>0</is_required>
-            <default_value>1</default_value>
-            <input>select</input>
+            <default_value>Product online</default_value>
+            <input>checkbox</input>
+            <group>product-details</group>
         </status>
         <tax_class_id>
             <attribute_code>tax_class_id</attribute_code>
@@ -423,39 +432,28 @@
         </type_id>
         <attribute_set_id>
             <attribute_code>attribute_set_id</attribute_code>
+            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\AttributeSetId</source>
             <backend_type>virtual</backend_type>
+            <group>product-details</group>
         </attribute_set_id>
         <attribute_set_name>
             <attribute_code>attribute_set_name</attribute_code>
             <backend_type>virtual</backend_type>
             <group>product-details</group>
         </attribute_set_name>
-        <qty>
-            <attribute_code>qty</attribute_code>
-            <input>input</input>
-            <group>product_info_tabs_product-details</group>
-        </qty>
         <custom_options>
             <attribute_code>custom_options</attribute_code>
             <backend_type>virtual</backend_type>
             <group>product_info_tabs_customer_options</group>
             <is_required>0</is_required>
-            <fixture>Magento\Catalog\Test\Fixture\CatalogProductSimple\CustomOptions</fixture>
+            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\CustomOptions</source>
         </custom_options>
-        <configurable_options>
-            <attribute_code>configurable_options</attribute_code>
+        <website_ids>
+            <attribute_code>website_ids</attribute_code>
             <backend_type>virtual</backend_type>
-            <group>product-details</group>
-            <is_required>0</is_required>
-            <fixture>Magento\ConfigurableProducts\Test\Fixture\CatalogProductConfigurable\ConfigurableOptions</fixture>
-        </configurable_options>
-        <attribute_options>
-            <attribute_code>configurable_options</attribute_code>
-            <backend_type>virtual</backend_type>
-            <group>product-details</group>
-            <is_required>0</is_required>
-            <fixture>Magento\ConfigurableProducts\Test\Fixture\CatalogProductConfigurable\AttributeOptions</fixture>
-        </attribute_options>
+            <default_value>Main Website</default_value>
+            <group>websites</group>
+        </website_ids>
     </fields>
     <data_set>
         <sku></sku>

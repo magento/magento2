@@ -552,14 +552,23 @@ class Db extends \Magento\Framework\Data\Collection
             return $this;
         }
 
+        return $this->loadWithFilter($printQuery, $logQuery);
+    }
+
+    /**
+     * Load data with filter in place
+     *
+     * @param   bool $printQuery
+     * @param   bool $logQuery
+     * @return  $this
+     */
+    public function loadWithFilter($printQuery = false, $logQuery = false)
+    {
         $this->_beforeLoad();
-
         $this->_renderFilters()->_renderOrders()->_renderLimit();
-
         $this->printLogQuery($printQuery, $logQuery);
         $data = $this->getData();
         $this->resetData();
-
         if (is_array($data)) {
             foreach ($data as $row) {
                 $item = $this->getNewEmptyItem();
@@ -570,7 +579,6 @@ class Db extends \Magento\Framework\Data\Collection
                 $this->addItem($item);
             }
         }
-
         $this->_setIsLoaded();
         $this->_afterLoad();
         return $this;

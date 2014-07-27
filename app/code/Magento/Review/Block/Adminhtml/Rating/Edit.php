@@ -48,13 +48,13 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     protected $_blockGroup = 'Magento_Review';
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Review\Model\RatingFactory $ratingFactory
      * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Backend\Block\Widget\Context $context,
         \Magento\Review\Model\RatingFactory $ratingFactory,
         \Magento\Framework\Registry $registry,
         array $data = array()
@@ -74,8 +74,8 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         $this->_controller = 'adminhtml_rating';
         $this->_blockGroup = 'Magento_Review';
 
-        $this->_updateButton('save', 'label', __('Save Rating'));
-        $this->_updateButton('delete', 'label', __('Delete Rating'));
+        $this->buttonList->update('save', 'label', __('Save Rating'));
+        $this->buttonList->update('delete', 'label', __('Delete Rating'));
 
         if ($this->getRequest()->getParam($this->_objectId)) {
             $ratingData = $this->_ratingFactory->create()->load($this->getRequest()->getParam($this->_objectId));

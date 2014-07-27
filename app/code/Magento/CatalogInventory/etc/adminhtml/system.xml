@@ -43,6 +43,7 @@
                     <label>Display Out of Stock Products</label>
                     <comment>Products will still be shown by direct product URLs.</comment>
                     <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                    <backend_model>Magento\CatalogInventory\Model\Config\Backend\ShowOutOfStock</backend_model>
                 </field>
                 <field id="stock_threshold_qty" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Only X left Threshold</label>
@@ -62,10 +63,13 @@
                     <label>Manage Stock</label>
                     <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
                     <backend_model>Magento\CatalogInventory\Model\Config\Backend\Managestock</backend_model>
+                    <comment>Changing can take some time due to processing whole catalog.</comment>
                 </field>
                 <field id="backorders" translate="label" type="select" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Backorders</label>
                     <source_model>Magento\CatalogInventory\Model\Source\Backorders</source_model>
+                    <backend_model>Magento\CatalogInventory\Model\Config\Backend\Backorders</backend_model>
+                    <comment>Changing can take some time due to processing whole catalog.</comment>
                 </field>
                 <field id="max_sale_qty" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Maximum Qty Allowed in Shopping Cart</label>

@@ -31,13 +31,13 @@
 ?>
 <?php $_filters = $this->getActiveFilters() ?>
 <?php if(!empty($_filters)): ?>
-<div class="filtered">
-    <strong class="subtitle"><?php echo __('Currently Shopping by:') ?></strong>
+<div class="filter-current" data-count="<?php echo count($_filters); ?>">
+    <strong class="block-subtitle filter-current-subtitle"><?php echo __('Currently Shopping by') ?></strong>
     <ol class="items">
         <?php foreach ($_filters as $_filter): ?>
             <li class="item">
-                <span class="label"><?php echo __($_filter->getName()) ?>:</span>
-                <span class="value"><?php echo $this->stripTags($_filter->getLabel()) ?></span>
+                <span class="filter-label"><?php echo $this->escapeHtml(__($_filter->getName())); ?></span>
+                <span class="filter-value"><?php echo $this->stripTags($_filter->getLabel()) ?></span>
                 <?php
                 $clearLinkUrl = $_filter->getClearLinkUrl();
                 if ($clearLinkUrl):

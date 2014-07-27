@@ -1,0 +1,2 @@
+"catalog/dataSet";"product/dataSet";"cmsPage/dataSet";"sitemap/data/sitemap_filename";"sitemap/data/sitemap_path";"constraint"
+"default_subcategory";"default";"default";"sitemap.xml";"/";"assertSitemapSuccessSaveAndGenerateMessages, assertSitemapContent, assertSitemapInGrid"

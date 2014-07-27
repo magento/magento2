@@ -24,29 +24,37 @@
 
 /** @var \Magento\Customer\Block\Account\Dashboard\Address $this */
 ?>
-<div class="block dashboard addresses">
-    <div class="title">
+<div class="block block-dashboard-addresses">
+    <div class="block-title">
         <strong><?php echo __('Address Book') ?></strong>
         <a class="action edit" href="<?php echo $this->getAddressBookUrl() ?>"><span><?php echo __('Manage Addresses') ?></span></a>
     </div>
-    <div class="content">
-        <div class="box address billing">
-            <strong class="subtitle">
+    <div class="block-content">
+        <div class="box box-address-billing">
+            <strong class="box-title">
                 <span><?php echo __('Default Billing Address') ?></span>
+            </strong>
+            <div class="box-content">
+                <address>
+                    <?php echo $this->getPrimaryBillingAddressHtml() ?>
+                </address>
+            </div>
+            <div class="box-actions">
                 <a class="action edit" href="<?php echo $this->getPrimaryBillingAddressEditUrl() ?>" data-ui-id="default-billing-edit-link"><span><?php echo __('Edit Address') ?></span></a>
-            </strong>
-            <address>
-                <?php echo $this->getPrimaryBillingAddressHtml() ?>
-            </address>
+            </div>
         </div>
-        <div class="box address shipping">
-            <strong class="subtitle">
+        <div class="box box-address-shipping">
+            <strong class="box-title">
                 <span><?php echo __('Default Shipping Address') ?></span>
-                <a class="action edit" href="<?php echo $this->getPrimaryShippingAddressEditUrl() ?>" data-ui-id="default-shipping-edit-link"><span><?php echo __('Edit Address') ?></span></a>
             </strong>
-            <address>
-                <?php echo $this->getPrimaryShippingAddressHtml() ?>
-            </address>
+            <div class="box-content">
+                <address>
+                    <?php echo $this->getPrimaryShippingAddressHtml() ?>
+                </address>
+            </div>
+            <div class="box-actions">
+                <a class="action edit" href="<?php echo $this->getPrimaryShippingAddressEditUrl() ?>" data-ui-id="default-shipping-edit-link"><span><?php echo __('Edit Address') ?></span></a>
+            </div>
         </div>
     </div>
 </div>

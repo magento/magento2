@@ -138,7 +138,7 @@ directPost.prototype = {
     loadOrderIframe : function() {
         if (this.orderRequestSent) {
             $(this.iframeId).hide();
-            var data = $('order-' + this.iframeId).contentWindow.document.body.innerHTML;
+            var data = $('order-' + this.iframeId).contentWindow.document.body.getElementsByTagName('pre')[0].innerHTML;
             this.saveAdminOrderSuccess(data);
             this.orderRequestSent = false;
         }

@@ -23,7 +23,6 @@
  */
 namespace Magento\Customer\Controller\Adminhtml\Wishlist\Product\Composite;
 
-use Exception;
 use Magento\Framework\Model\Exception as CoreException;
 
 /**
@@ -74,63 +73,6 @@ class Wishlist extends \Magento\Backend\App\Action
         $this->_wishlistItem = $wishlistItem;
 
         return $this;
-    }
-
-    /**
-     * Ajax handler to response configuration fieldset of composite product in customer's wishlist.
-     *
-     * @return void
-     */
-    public function configureAction()
-    {
-        $configureResult = new \Magento\Framework\Object();
-        try {
-            $this->_initData();
-
-            $configureResult->setProductId($this->_wishlistItem->getProductId());
-            $configureResult->setBuyRequest($this->_wishlistItem->getBuyRequest());
-            $configureResult->setCurrentStoreId($this->_wishlistItem->getStoreId());
-            $configureResult->setCurrentCustomerId($this->_wishlist->getCustomerId());
-
-            $configureResult->setOk(true);
-        } catch (Exception $e) {
-            $configureResult->setError(true);
-            $configureResult->setMessage($e->getMessage());
-        }
-
-        $this->_objectManager->get(
-            'Magento\Catalog\Helper\Product\Composite'
-        )->renderConfigureResult(
-            $configureResult
-        );
-    }
-
-    /**
-     * IFrame handler for submitted configuration for wishlist item.
-     *
-     * @return false
-     */
-    public function updateAction()
-    {
-        // Update wishlist item
-        $updateResult = new \Magento\Framework\Object();
-        try {
-            $this->_initData();
-
-            $buyRequest = new \Magento\Framework\Object($this->getRequest()->getParams());
-
-            $this->_wishlist->updateItem($this->_wishlistItem->getId(), $buyRequest)->save();
-
-            $updateResult->setOk(true);
-        } catch (Exception $e) {
-            $updateResult->setError(true);
-            $updateResult->setMessage($e->getMessage());
-        }
-        $updateResult->setJsVarName($this->getRequest()->getParam('as_js_varname'));
-        $this->_objectManager->get('Magento\Backend\Model\Session')->setCompositeProductResult($updateResult);
-        $this->_redirect('catalog/product/showUpdateResult');
-
-        return false;
     }
 
     /**

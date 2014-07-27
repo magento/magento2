@@ -158,7 +158,7 @@
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-            <xs:pattern value="[A-Z]+[a-z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}" />
+            <xs:pattern value="[A-Z]+[A-Za-z0-9]{1,}_[A-Z]+[A-Z0-9a-z]{1,}" />
         </xs:restriction>
     </xs:simpleType>
 

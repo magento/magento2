@@ -190,9 +190,8 @@
 //    Box-sizing
 //--------------------------------------
 .box-sizing(@type: border-box) {
-    -moz-box-sizing: @type;
     -webkit-box-sizing: @type;
-    -ms-box-sizing: @type;
+    -moz-box-sizing: @type;
     box-sizing: @type;
 }
 
@@ -250,6 +249,31 @@
 }
 .css(@_property, @_value, @_prefix: 0) when not (@_value = false) and not (@_value = '') {
     @{_property}:@_value;
+}
+
+//
+//    Add url to property
+//--------------------------------------
+// usage:
+// .column.left {
+//     .url('images/fallback.png');
+//     background:url("@{url}") repeat-y;
+// }
+// .columns {
+//     .url('images/fallback.png', 'Magento_Catalog');
+//     background:url("@{url}") repeat;
+// }
+
+@urls-resolved: false;
+
+.url (@_path) {
+    @url: "@{baseDir}@{_path}";
+}
+.url (@_path, @_module) when not (@_module = false) and not (@_module = '') and  (@urls-resolved = false) {
+    @url: "@{_module}::@{_path}";
+}
+.url (@_path, @_module) when not (@_module = false) and not (@_module = '') and  (@urls-resolved = true) {
+    @url: "@{baseDir}@{_module}/@{_path}";
 }
 
 //
@@ -389,5 +413,37 @@
         color: @_input-placeholder-color;
         font-weight: @_input-placeholder-font-weight;
     }
+}
+
+//
+//    Flex layout
+//--------------------------------------
+
+.mix-flex(
+        @_display: flex,
+        @_flow: row wrap
+) {
+    display: ~"-webkit-@{_display}";
+    display: ~"-ms-@{_display}";
+    display: @_display;
+
+    -webkit-flex-flow: @_flow;
+    -ms-flex-flow: @_flow;
+    flex-flow: @_flow;
+}
+.mix-flex-flex(
+    @_flex: 1,
+    @_basis: 100%
+) {
+    -webkit-flex: @_flex @_basis;
+    -ms-flex: @_flex @_basis;
+    flex: @_flex @_basis;
+}
+.mix-flex-order(
+    @_order: 1
+) {
+    -webkit-order: @_order;
+    -ms-order: @_order;
+    order: @_order;
 }
 

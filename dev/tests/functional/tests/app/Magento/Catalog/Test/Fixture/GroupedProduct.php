@@ -53,9 +53,9 @@ class GroupedProduct extends Product
     {
         parent::__construct($configuration, $placeholders);
 
-        $this->_placeholders['simple::getProductName'] = array($this, 'productProvider');
-        $this->_placeholders['virtual::getProductName'] = array($this, 'productProvider');
-        $this->_placeholders['downloadable::getProductName'] = array($this, 'productProvider');
+        $this->_placeholders['simple::getName'] = array($this, 'productProvider');
+        $this->_placeholders['virtual::getName'] = array($this, 'productProvider');
+        $this->_placeholders['downloadable::getName'] = array($this, 'productProvider');
         $this->_placeholders['simple::getProductId'] = array($this, 'productProvider');
         $this->_placeholders['virtual::getProductId'] = array($this, 'productProvider');
         $this->_placeholders['downloadable::getProductId'] = array($this, 'productProvider');
@@ -101,7 +101,7 @@ class GroupedProduct extends Product
                     'value' => array(
                         'assigned_product_0' => array(
                             'search_data' => array(
-                                'name' => '%simple::getProductName%',
+                                'name' => '%simple::getName%',
                             ),
                             'data' => array(
                                 'selection_qty' => array(
@@ -114,7 +114,7 @@ class GroupedProduct extends Product
                         ),
                         'assigned_product_1' => array(
                             'search_data' => array(
-                                'name' => '%virtual::getProductName%',
+                                'name' => '%virtual::getName%',
                             ),
                             'data' => array(
                                 'selection_qty' => array(
@@ -127,7 +127,7 @@ class GroupedProduct extends Product
                         ),
                         'assigned_product_2' => array(
                             'search_data' => array(
-                                'name' => '%downloadable::getProductName%',
+                                'name' => '%downloadable::getName%',
                             ),
                             'data' => array(
                                 'selection_qty' => array(

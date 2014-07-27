@@ -33,19 +33,19 @@
     <block>
         <name>topmenu</name>
         <class>Magento\Theme\Test\Block\Html\Topmenu</class>
-        <locator>[role=navigation]</locator>
+        <locator>[role="navigation"]</locator>
         <strategy>css selector</strategy>
     </block>
     <block>
         <name>titleBlock</name>
         <class>Magento\Theme\Test\Block\Html\Title</class>
-        <locator>.page.title</locator>
+        <locator>.page-title</locator>
         <strategy>css selector</strategy>
     </block>
     <block>
         <name>footerBlock</name>
         <class>Magento\Theme\Test\Block\Html\Footer</class>
-        <locator>footer.footer</locator>
+        <locator>footer.page.footer</locator>
         <strategy>css selector</strategy>
     </block>
     <block>
@@ -64,6 +64,12 @@
         <name>cartSidebarBlock</name>
         <class>Magento\Checkout\Test\Block\Cart\Sidebar</class>
         <locator>[data-block="minicart"]</locator>
+        <strategy>css selector</strategy>
+    </block>
+    <block>
+        <name>compareProductsBlock</name>
+        <class>Magento\Catalog\Test\Block\Product\Compare\Sidebar</class>
+        <locator>.sidebar.sidebar-additional</locator>
         <strategy>css selector</strategy>
     </block>
 </page>

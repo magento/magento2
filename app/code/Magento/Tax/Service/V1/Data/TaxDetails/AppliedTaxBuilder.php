@@ -52,6 +52,16 @@ class AppliedTaxBuilder extends \Magento\Framework\Service\Data\AbstractObjectBu
     }
 
     /**
+     * Convenience method that returns AppliedTaxRateBuilder
+     *
+     * @return AppliedTaxRateBuilder
+     */
+    public function getAppliedTaxRateBuilder()
+    {
+        return $this->appliedTaxRateBuilder;
+    }
+
+    /**
      * Set tax rate key
      *
      * @param string $key

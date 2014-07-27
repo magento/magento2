@@ -300,6 +300,21 @@ class Quote extends \Magento\Framework\Model\AbstractModel
     protected $_addressConverter;
 
     /**
+     * @var \Magento\CatalogInventory\Service\V1\StockItemService
+     */
+    protected $stockItemService;
+
+    /**
+     * @var \Magento\Sales\Model\Quote\Item\Processor
+     */
+    protected $itemProcessor;
+
+    /**
+     * @var \Magento\Framework\Object\Factory
+     */
+    protected $objectFactory;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Sales\Helper\Data $salesData
@@ -307,20 +322,23 @@ class Quote extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
-     * @param \Magento\Sales\Model\Quote\AddressFactory $quoteAddressFactory
+     * @param Quote\AddressFactory $quoteAddressFactory
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param CustomerGroupServiceInterface $customerGroupService
-     * @param \Magento\Sales\Model\Resource\Quote\Item\CollectionFactory $quoteItemCollectionFactory
-     * @param \Magento\Sales\Model\Quote\ItemFactory $quoteItemFactory
+     * @param Resource\Quote\Item\CollectionFactory $quoteItemCollectionFactory
+     * @param Quote\ItemFactory $quoteItemFactory
      * @param \Magento\Framework\Message\Factory $messageFactory
-     * @param \Magento\Sales\Model\Status\ListFactory $statusListFactory
+     * @param Status\ListFactory $statusListFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Sales\Model\Quote\PaymentFactory $quotePaymentFactory
-     * @param \Magento\Sales\Model\Resource\Quote\Payment\CollectionFactory $quotePaymentCollectionFactory
+     * @param Quote\PaymentFactory $quotePaymentFactory
+     * @param Resource\Quote\Payment\CollectionFactory $quotePaymentCollectionFactory
      * @param \Magento\Framework\Object\Copy $objectCopyService
      * @param \Magento\Customer\Model\Converter $converter
      * @param \Magento\Customer\Service\V1\CustomerAddressServiceInterface $addressService
      * @param \Magento\Customer\Model\Address\Converter $addressConverter
+     * @param \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
+     * @param Quote\Item\Processor $itemProcessor
+     * @param \Magento\Framework\Object\Factory $objectFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -347,6 +365,9 @@ class Quote extends \Magento\Framework\Model\AbstractModel
         \Magento\Customer\Model\Converter $converter,
         \Magento\Customer\Service\V1\CustomerAddressServiceInterface $addressService,
         \Magento\Customer\Model\Address\Converter $addressConverter,
+        \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService,
+        \Magento\Sales\Model\Quote\Item\Processor $itemProcessor,
+        \Magento\Framework\Object\Factory $objectFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
@@ -370,6 +391,9 @@ class Quote extends \Magento\Framework\Model\AbstractModel
         $this->_converter = $converter;
         $this->_addressService = $addressService;
         $this->_addressConverter = $addressConverter;
+        $this->stockItemService = $stockItemService;
+        $this->itemProcessor = $itemProcessor;
+        $this->objectFactory = $objectFactory;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -725,7 +749,7 @@ class Quote extends \Magento\Framework\Model\AbstractModel
     /**
      * Get Data Object addresses of the customer
      *
-     * TODO: Refactor to use addressDataObject property is used insead of customer model MAGETWO-19930
+     * TODO: Refactor to use addressDataObject property is used instead of customer model MAGETWO-19930
      *
      * @return AddressDataObject[]
      */
@@ -1111,7 +1135,9 @@ class Quote extends \Magento\Framework\Model\AbstractModel
     public function hasItemsWithDecimalQty()
     {
         foreach ($this->getAllItems() as $item) {
-            if ($item->getProduct()->getStockItem() && $item->getProduct()->getStockItem()->getIsQtyDecimal()) {
+            /** @var \Magento\CatalogInventory\Service\V1\Data\StockItem $stockItemDo */
+            $stockItemDo = $this->stockItemService->getStockItem($item->getProduct()->getId());
+            if ($stockItemDo->getStockId() && $stockItemDo->getIsQtyDecimal()) {
                 return true;
             }
         }
@@ -1270,16 +1296,21 @@ class Quote extends \Magento\Framework\Model\AbstractModel
      * @return \Magento\Sales\Model\Quote\Item|string
      * @throws \Magento\Framework\Model\Exception
      */
-    public function addProductAdvanced(\Magento\Catalog\Model\Product $product, $request = null, $processMode = null)
-    {
+    public function addProduct(
+        \Magento\Catalog\Model\Product $product,
+        $request = null,
+        $processMode = \Magento\Catalog\Model\Product\Type\AbstractType::PROCESS_MODE_FULL
+    ) {
         if ($request === null) {
             $request = 1;
         }
         if (is_numeric($request)) {
-            $request = new \Magento\Framework\Object(array('qty' => $request));
+            $request = $this->objectFactory->create(['qty' => $request]);
         }
         if (!$request instanceof \Magento\Framework\Object) {
-            throw new \Magento\Framework\Model\Exception(__('We found an invalid request for adding product to quote.'));
+            throw new \Magento\Framework\Model\Exception(
+                __('We found an invalid request for adding product to quote.')
+            );
         }
 
         $cartCandidates = $product->getTypeInstance()->prepareForCartAdvanced($request, $product, $processMode);
@@ -1300,14 +1331,18 @@ class Quote extends \Magento\Framework\Model\AbstractModel
 
         $parentItem = null;
         $errors = array();
+        $item = null;
         $items = array();
         foreach ($cartCandidates as $candidate) {
             // Child items can be sticked together only within their parent
             $stickWithinParent = $candidate->getParentProductId() ? $parentItem : null;
             $candidate->setStickWithinParent($stickWithinParent);
-            $item = $this->_addCatalogProduct($candidate, $candidate->getCartQty());
-            if ($request->getResetCount() && !$stickWithinParent && $item->getId() === $request->getId()) {
-                $item->setData('qty', 0);
+
+            $item = $this->getItemByProduct($candidate);
+            if (!$item) {
+                $item = $this->itemProcessor->init($candidate, $request);
+                // Add only item that is not in quote already
+                $this->addItem($item);
             }
             $items[] = $item;
 
@@ -1321,10 +1356,7 @@ class Quote extends \Magento\Framework\Model\AbstractModel
                 $item->setParentItem($parentItem);
             }
 
-            /**
-             * We specify qty after we know about parent (for stock)
-             */
-            $item->addQty($candidate->getCartQty());
+            $this->itemProcessor->prepare($item, $request, $candidate);
 
             // collect errors instead of throwing first one
             if ($item->getHasError()) {
@@ -1339,27 +1371,9 @@ class Quote extends \Magento\Framework\Model\AbstractModel
             throw new \Magento\Framework\Model\Exception(implode("\n", $errors));
         }
 
-        $this->_eventManager->dispatch('sales_quote_product_add_after', array('items' => $items));
+        $this->_eventManager->dispatch('sales_quote_product_add_after', ['items' => $items]);
 
         return $item;
-    }
-
-    /**
-     * Add product to quote
-     *
-     * return error message if product type instance can't prepare product
-     *
-     * @param mixed $product
-     * @param null|float|\Magento\Framework\Object $request
-     * @return \Magento\Sales\Model\Quote\Item|string
-     */
-    public function addProduct(\Magento\Catalog\Model\Product $product, $request = null)
-    {
-        return $this->addProductAdvanced(
-            $product,
-            $request,
-            \Magento\Catalog\Model\Product\Type\AbstractType::PROCESS_MODE_FULL
-        );
     }
 
     /**
@@ -1427,7 +1441,9 @@ class Quote extends \Magento\Framework\Model\AbstractModel
     {
         $item = $this->getItemById($itemId);
         if (!$item) {
-            throw new \Magento\Framework\Model\Exception(__('This is the wrong quote item id to update configuration.'));
+            throw new \Magento\Framework\Model\Exception(
+                __('This is the wrong quote item id to update configuration.')
+            );
         }
         $productId = $item->getProduct()->getId();
 
@@ -1673,18 +1689,18 @@ class Quote extends \Magento\Framework\Model\AbstractModel
 
             $address->collectTotals();
 
-            $this->setSubtotal((double)$this->getSubtotal() + $address->getSubtotal());
-            $this->setBaseSubtotal((double)$this->getBaseSubtotal() + $address->getBaseSubtotal());
+            $this->setSubtotal((float)$this->getSubtotal() + $address->getSubtotal());
+            $this->setBaseSubtotal((float)$this->getBaseSubtotal() + $address->getBaseSubtotal());
 
             $this->setSubtotalWithDiscount(
-                (double)$this->getSubtotalWithDiscount() + $address->getSubtotalWithDiscount()
+                (float)$this->getSubtotalWithDiscount() + $address->getSubtotalWithDiscount()
             );
             $this->setBaseSubtotalWithDiscount(
-                (double)$this->getBaseSubtotalWithDiscount() + $address->getBaseSubtotalWithDiscount()
+                (float)$this->getBaseSubtotalWithDiscount() + $address->getBaseSubtotalWithDiscount()
             );
 
-            $this->setGrandTotal((double)$this->getGrandTotal() + $address->getGrandTotal());
-            $this->setBaseGrandTotal((double)$this->getBaseGrandTotal() + $address->getBaseGrandTotal());
+            $this->setGrandTotal((float)$this->getGrandTotal() + $address->getGrandTotal());
+            $this->setBaseGrandTotal((float)$this->getBaseGrandTotal() + $address->getBaseGrandTotal());
         }
 
         $this->_salesData->checkQuoteAmount($this, $this->getGrandTotal());
@@ -1731,7 +1747,7 @@ class Quote extends \Magento\Framework\Model\AbstractModel
                 $this->setVirtualItemsQty($this->getVirtualItemsQty() + $item->getQty());
             }
             $this->setItemsCount($this->getItemsCount() + 1);
-            $this->setItemsQty((double)$this->getItemsQty() + $item->getQty());
+            $this->setItemsQty((float)$this->getItemsQty() + $item->getQty());
         }
 
         return $this;

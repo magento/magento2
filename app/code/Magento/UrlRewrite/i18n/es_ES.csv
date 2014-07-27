@@ -1,2 +1,11 @@
-"Anchor symbol (#) is not supported in url rewrite suffix","El símbolo ancla (#) no está soportado en el sufijo de reescritura de url"
+Custom,Custom
+No,No
+System,System
+"Two and more slashes together are not permitted in request path","Two and more slashes together are not permitted in request path"
+"Anchor symbol (#) is not supported in request path","Anchor symbol (#) is not supported in request path"
 "Two and more slashes together are not permitted in url rewrite suffix","No se permiten dos o más barras juntas en el sufijo de la url"
+"Anchor symbol (#) is not supported in url rewrite suffix","El símbolo ancla (#) no está soportado en el sufijo de reescritura de url"
+"ID Path for Specified Store","ID Path for Specified Store"
+"Request Path for Specified Store","Request Path for Specified Store"
+"Temporary (302)","Temporary (302)"
+"Permanent (301)","Permanent (301)"

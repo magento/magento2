@@ -30,83 +30,57 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     /**
      * @var string
      */
-    protected $_testDir;
+    protected $testDir;
 
     /**
      * @var string
      */
-    protected $_expectedDir;
+    protected $expectedDir;
 
     /**
      * @var string
      */
-    protected $_source;
+    protected $source;
 
     /**
      * @var string
      */
-    protected $_outputFileName;
+    protected $outputFileName;
 
     /**
      * @var \Magento\Tools\I18n\Code\Dictionary\Generator
      */
-    protected $_generator;
+    protected $generator;
 
-    /**
-     * @var array
-     */
-    protected $_filesOptions;
+
 
     protected function setUp()
     {
-        $this->_testDir = realpath(__DIR__ . '/_files');
-        $this->_expectedDir = $this->_testDir . '/expected';
-        $this->_source = $this->_testDir . '/source';
-        $this->_filesOptions = array(
-            array(
-                'type' => 'php',
-                'paths' => array($this->_source . '/app/code/', $this->_source . '/app/design/'),
-                'fileMask' => '/\.(php|phtml)$/'
-            ),
-            array(
-                'type' => 'js',
-                'paths' => array(
-                    $this->_source . '/app/code/',
-                    $this->_source . '/app/design/',
-                    $this->_source . '/lib/web/mage/',
-                    $this->_source . '/lib/web/varien/'
-                ),
-                'fileMask' => '/\.(js|phtml)$/'
-            ),
-            array(
-                'type' => 'xml',
-                'paths' => array($this->_source . '/app/code/', $this->_source . '/app/design/'),
-                'fileMask' => '/\.xml$/'
-            )
-        );
-        $this->_outputFileName = $this->_testDir . '/translate.csv';
-
-        $this->_generator = ServiceLocator::getDictionaryGenerator();
+        $this->testDir = realpath(__DIR__ . '/_files');
+        $this->expectedDir = $this->testDir . '/expected';
+        $this->source = $this->testDir . '/source';
+        $this->outputFileName = $this->testDir . '/translate.csv';
+        $this->generator = ServiceLocator::getDictionaryGenerator();
     }
 
     protected function tearDown()
     {
-        if (file_exists($this->_outputFileName)) {
-            unlink($this->_outputFileName);
+        if (file_exists($this->outputFileName)) {
+            unlink($this->outputFileName);
         }
     }
 
     public function testGenerationWithoutContext()
     {
-        $this->_generator->generate($this->_filesOptions, $this->_outputFileName);
+        $this->generator->generate($this->source, $this->outputFileName);
 
-        $this->assertFileEquals($this->_expectedDir . '/without_context.csv', $this->_outputFileName);
+        $this->assertFileEquals($this->expectedDir . '/without_context.csv', $this->outputFileName);
     }
 
     public function testGenerationWithContext()
     {
-        $this->_generator->generate($this->_filesOptions, $this->_outputFileName, true);
+        $this->generator->generate($this->source, $this->outputFileName, true);
 
-        $this->assertFileEquals($this->_expectedDir . '/with_context.csv', $this->_outputFileName);
+        $this->assertFileEquals($this->expectedDir . '/with_context.csv', $this->outputFileName);
     }
 }

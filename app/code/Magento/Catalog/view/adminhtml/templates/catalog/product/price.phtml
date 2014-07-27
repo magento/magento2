@@ -35,8 +35,8 @@
     $_coreHelper        = $this->helper('Magento\Core\Helper\Data');
     /** @var $weeeHelper \Magento\Weee\Helper\Data */
     $weeeHelper        = $this->helper('Magento\Weee\Helper\Data');
-    /** @var $priceHelper \Magento\Catalog\Helper\Product\Price */
-    $priceHelper         = $this->helper('Magento\Catalog\Helper\Product\Price');
+    /** @var $taxHelper \Magento\Tax\Helper\Data */
+    $taxHelper         = $this->helper('Magento\Tax\Helper\Data');
 
     $_product           = $this->getProduct();
     $_id                = $_product->getId();
@@ -44,15 +44,15 @@
     $_website           = $this->getWebsite($_storeId);
 
     $_weeeSeparator     = '';
-    $_simplePricesTax   = ($priceHelper->displayPriceIncludingTax() || $priceHelper->displayBothPrices());
+    $_simplePricesTax   = ($taxHelper->displayPriceIncludingTax() || $taxHelper->displayBothPrices());
     $_minimalPriceValue = $_product->getMinimalPrice();
-    $_minimalPrice      = $priceHelper->getPrice($_product, $_minimalPriceValue, $_simplePricesTax);
+    $_minimalPrice      = $taxHelper->getPrice($_product, $_minimalPriceValue, $_simplePricesTax);
 ?>
 
 
 <?php
-$_exclTax = $priceHelper->getPrice($_product, $_minimalPriceValue, $includingTax = null);
-$_inclTax = $priceHelper->getPrice($_product, $_minimalPriceValue, $includingTax = true);
+$_exclTax = $taxHelper->getPrice($_product, $_minimalPriceValue, $includingTax = null);
+$_inclTax = $taxHelper->getPrice($_product, $_minimalPriceValue, $includingTax = true);
 ?>
 <?php $_weeeTaxAmount = $weeeHelper->getAmount($_product, $_website); ?>
 <?php if ($weeeHelper->typeOfDisplay(array(1,2,4))): ?>
@@ -61,13 +61,13 @@ $_inclTax = $priceHelper->getPrice($_product, $_minimalPriceValue, $includingTax
 <?php endif; ?>
 
 <div class="price-box">
-<?php $_price = $priceHelper->getPrice($_product, $_product->getPrice()) ?>
-<?php $_regularPrice = $priceHelper->getPrice($_product, $_product->getPrice(), $_simplePricesTax) ?>
-<?php $_finalPrice = $priceHelper->getPrice($_product, $_product->getFinalPrice()) ?>
-<?php $_finalPriceInclTax = $priceHelper->getPrice($_product, $_product->getFinalPrice(), true) ?>
+<?php $_price = $taxHelper->getPrice($_product, $_product->getPrice()) ?>
+<?php $_regularPrice = $taxHelper->getPrice($_product, $_product->getPrice(), $_simplePricesTax) ?>
+<?php $_finalPrice = $taxHelper->getPrice($_product, $_product->getFinalPrice()) ?>
+<?php $_finalPriceInclTax = $taxHelper->getPrice($_product, $_product->getFinalPrice(), true) ?>
 <?php $_weeeDisplayType = $weeeHelper->getPriceDisplayType(); ?>
 <?php if ($_finalPrice == $_price): ?>
-    <?php if ($priceHelper->displayBothPrices()): ?>
+    <?php if ($taxHelper->displayBothPrices()): ?>
         <?php if ($_weeeTaxAmount && $weeeHelper->typeOfDisplay(0)): // including ?>
             <span class="price-excluding-tax">
                 <span class="label"><?php echo __('Excl. Tax:') ?></span>
@@ -207,7 +207,7 @@ $_inclTax = $priceHelper->getPrice($_product, $_minimalPriceValue, $includingTax
             </span>
         </p>
 
-        <?php if ($priceHelper->displayBothPrices()): ?>
+        <?php if ($taxHelper->displayBothPrices()): ?>
             <p class="special-price">
                 <span class="price-label"><?php echo __('Special Price:') ?></span>
                 <span class="price-excluding-tax">
@@ -328,7 +328,7 @@ $_inclTax = $priceHelper->getPrice($_product, $_minimalPriceValue, $includingTax
             </span>
         </p>
 
-        <?php if ($priceHelper->displayBothPrices()): ?>
+        <?php if ($taxHelper->displayBothPrices()): ?>
             <p class="special-price">
                 <span class="price-label"><?php echo __('Special Price:') ?></span>
                 <span class="price-excluding-tax">

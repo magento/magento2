@@ -217,6 +217,15 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
                 ->setEntityTypeFilter($entityTypeId)
                 ->load()
                 ->toOptionArray();
+        } elseif ($this->getAttribute() === 'type_id') {
+            foreach ($selectReady as $value => $label) {
+                if (is_array($label) && isset($label['value'])) {
+                    $selectOptions[] = $label;
+                } else {
+                    $selectOptions[] = array('value' => $value, 'label' => $label);
+                }
+            }
+            $selectReady = null;
         } elseif (is_object($this->getAttributeObject())) {
             $attributeObject = $this->getAttributeObject();
             if ($attributeObject->usesSource()) {

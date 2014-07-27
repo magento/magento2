@@ -25,8 +25,6 @@ namespace Magento\Backend\Block\Urlrewrite;
 
 /**
  * Modes selector for URL rewrites modes
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Selector extends \Magento\Framework\View\Element\Template
 {

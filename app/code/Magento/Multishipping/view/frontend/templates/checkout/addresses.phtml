@@ -36,7 +36,7 @@
     </div>
     <input type="hidden" name="continue" value="0" id="can_continue_flag"/>
     <input type="hidden" name="new_address" value="0" id="add_new_address_flag"/>
-    <div class="wrapper table">
+    <div class="table-wrapper">
         <table class="items data table" id="multiship-addresses-table">
             <caption class="table caption"><?php echo __('Please select a shipping address for applicable items.') ?></caption>
             <thead>
@@ -77,7 +77,7 @@
             </tbody>
         </table>
     </div>
-    <div class="actions toolbar">
+    <div class="actions-toolbar">
         <div class="primary">
             <button type="submit" title="<?php echo __('Continue to Shipping Information') ?>" class="action primary continue<?php if ($this->isContinueDisabled()):?> disabled<?php endif; ?>" data-role="can-continue" data-flag="1"<?php if ($this->isContinueDisabled()):?> disabled="disabled"<?php endif; ?>><span><?php echo __('Continue to Shipping Information') ?></span></button>
             <button type="submit" class="action update" data-role="can-continue" data-flag="0"><span><?php echo __('Update Qty &amp; Addresses') ?></span></button>

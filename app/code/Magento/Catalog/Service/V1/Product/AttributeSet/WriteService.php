@@ -71,7 +71,11 @@ class WriteService implements WriteServiceInterface
         foreach ($basicData as $key => $value) {
             $set->setData($key, $value);
         }
-        $set->validate();
+        try {
+            $set->validate();
+        } catch (\Magento\Eav\Exception $e) {
+            throw new InputException($e->getMessage());
+        }
         $set->save();
         //process skeleton data
         $skeletonId = intval($skeletonId);

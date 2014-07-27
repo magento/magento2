@@ -73,7 +73,7 @@
         </action>
     </referenceBlock>
     <referenceContainer name="content">
-        <container name="bundle.options.container" label="invisible" htmlTag="div" htmlClass="bundle options container" after="product.info.media"/>
+        <container name="bundle.options.container" label="invisible" htmlTag="div" htmlClass="bundle-options-container" after="product.info.media"/>
         <move element="product.info" destination="bundle.options.container" before="-"/>
     </referenceContainer>
     <referenceContainer name="product.info.type">

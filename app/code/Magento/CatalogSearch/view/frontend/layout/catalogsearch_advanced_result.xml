@@ -30,6 +30,11 @@
             <argument translate="true" name="title" xsi:type="string">Catalog Advanced Search</argument>
         </action>
     </referenceBlock>
+    <referenceBlock name="root">
+        <action method="addBodyClass">
+            <argument name="class" xsi:type="string">page-products</argument>
+        </action>
+    </referenceBlock>
     <referenceContainer name="content">
         <block class="Magento\CatalogSearch\Block\Advanced\Result" name="catalogsearch_advanced_result" template="advanced/result.phtml">
             <block class="Magento\CatalogSearch\Block\SearchResult\ListProduct" name="search_result_list" template="product/list.phtml">

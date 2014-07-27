@@ -33,19 +33,25 @@
             <category class="Magento\Catalog\Test\Fixture\Category" />
         </require>
     </assertBundleInCategory>
-    <assertBundleView module="Magento_Bundle">
+    <assertBundleItemsOnProductPage module="Magento_Bundle">
         <severeness>low</severeness>
-        <require>
-            <catalogProductView class="Magento\Catalog\Test\Page\Product\CatalogProductView" />
-            <product class="Magento\Bundle\Test\Fixture\CatalogProductBundle" />
-        </require>
-    </assertBundleView>
-    <assertBundleInCart module="Magento_Bundle">
+    </assertBundleItemsOnProductPage>
+    <assertBundlePriceView module="Magento_Bundle">
         <severeness>low</severeness>
-        <require>
-            <catalogProductView class="Magento\Catalog\Test\Page\Product\CatalogProductView" />
-            <product class="Magento\Bundle\Test\Fixture\CatalogProductBundle" />
-            <checkoutCart class="Magento\Checkout\Test\Page\CheckoutCart" />
-        </require>
-    </assertBundleInCart>
+    </assertBundlePriceView>
+    <assertBundlePriceType module="Magento_Bundle">
+        <severeness>low</severeness>
+    </assertBundlePriceType>
+    <assertBundleProductForm module="Magento_Bundle">
+        <severeness>low</severeness>
+    </assertBundleProductForm>
+    <assertTierPriceOnBundleProductPage module="Magento_Bundle">
+        <severeness>low</severeness>
+    </assertTierPriceOnBundleProductPage>
+    <assertBundleProductPage module="Magento_Bundle">
+        <severeness>low</severeness>
+    </assertBundleProductPage>
+    <assertGroupedPriceOnBundleProductPage module="Magento_Bundle">
+        <severeness>low</severeness>
+    </assertGroupedPriceOnBundleProductPage>
 </constraint>

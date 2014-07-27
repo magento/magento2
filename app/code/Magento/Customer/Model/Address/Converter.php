@@ -140,13 +140,21 @@ class Converter
             }
         }
 
+        $isDefaultBilling = $addressModel->getData('is_default_billing') === null && intval($addressId)
+            ? $addressId === $defaultBillingId
+            : $addressModel->getData('is_default_billing');
+
+        $isDefaultShipping = $addressModel->getData('is_default_shipping') === null && intval($addressId)
+            ? $addressId === $defaultShippingId
+            : $addressModel->getData('is_default_shipping');
+
         $this->_addressBuilder->populateWithArray(
             array_merge(
                 $addressData,
                 array(
                     Address::KEY_STREET => $addressModel->getStreet(),
-                    Address::KEY_DEFAULT_BILLING => $addressId === $defaultBillingId,
-                    Address::KEY_DEFAULT_SHIPPING => $addressId === $defaultShippingId,
+                    Address::KEY_DEFAULT_BILLING => $isDefaultBilling,
+                    Address::KEY_DEFAULT_SHIPPING => $isDefaultShipping,
                     Address::KEY_REGION => array(
                         Region::KEY_REGION => $addressModel->getRegion(),
                         Region::KEY_REGION_ID => $addressModel->getRegionId(),

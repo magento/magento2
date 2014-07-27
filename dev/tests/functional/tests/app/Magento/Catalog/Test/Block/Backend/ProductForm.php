@@ -87,7 +87,7 @@ class ProductForm extends FormTabs
      *
      * @var string
      */
-    protected $advancedSettings = '#ui-accordion-product_info_tabs-advanced-header-0[aria-selected="false"]';
+    protected $advancedSettings = '#product_info_tabs-advanced [data-role="trigger"]';
 
     /**
      * Advanced tab list

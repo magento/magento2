@@ -28,10 +28,10 @@ use Mtf\Block\Mapper;
 use Mtf\Client\Element;
 use Mtf\Client\Browser;
 use Mtf\Factory\Factory;
+use Mtf\Fixture\FixtureInterface;
 use Mtf\Util\XmlConverter;
 use Mtf\Block\BlockFactory;
 use Mtf\Client\Element\Locator;
-use Mtf\Fixture\FixtureInterface;
 use Magento\Catalog\Test\Fixture\CatalogCategory;
 use Magento\Catalog\Test\Block\Adminhtml\Product\ProductForm as ParentForm;
 
@@ -56,6 +56,13 @@ class ProductForm extends ParentForm
     protected $newAttributeFrame = '#create_new_attribute_container';
 
     /**
+     * New variation set button selector
+     *
+     * @var string
+     */
+    protected $newVariationSet = '[data-ui-id="admin-product-edit-tab-super-config-grid-container-add-attribute"]';
+
+    /**
      * Variations tab selector
      *
      * @var string
@@ -74,14 +81,14 @@ class ProductForm extends ParentForm
      *
      * @var string
      */
-    protected $variationsTab = '[data-ui-id="product-tabs-tab-content-super-config"] .title';
+    protected $variationsTab = '#product_info_tabs_super_config_content .title';
 
     /**
      * Variations wrapper selector
      *
      * @var string
      */
-    protected $variationsWrapper = '[data-ui-id="product-tabs-tab-content-super-config"]';
+    protected $variationsWrapper = '#product_info_tabs_super_config_content';
 
     /**
      * @param Element $element
@@ -127,40 +134,6 @@ class ProductForm extends ParentForm
     }
 
     /**
-     * Initialization categories before use in the form of
-     *
-     * @param CatalogCategory $category
-     * @return void
-     */
-    public function setCategory(CatalogCategory $category)
-    {
-        $this->category = $category;
-    }
-
-    /**
-     * Fill the product form
-     *
-     * @param FixtureInterface $fixture
-     * @param Element|null $element
-     * @return $this
-     */
-    public function fill(FixtureInterface $fixture, Element $element = null)
-    {
-        $this->fillCategory($fixture);
-        parent::fill($fixture);
-        if ($fixture->getAttributeOptions()) {
-            $this->_rootElement->find($this->productDetailsTab)->click();
-            $this->clickCreateNewVariationSet();
-            $attributeBlockForm = $this->getConfigurableAttributeEditBlock();
-            $attributeBlockForm->fillAttributeOption($fixture->getAttributeOptions());
-        }
-        if ($fixture->getConfigurableOptions()) {
-            $this->browser->switchToFrame();
-            $this->variationsFill($fixture->getConfigurableOptions());
-        }
-    }
-
-    /**
      * Save product
      *
      * @param FixtureInterface $fixture
@@ -190,6 +163,7 @@ class ProductForm extends ParentForm
      * Fill product variations
      *
      * @param array $variations
+     * @return void
      */
     public function variationsFill(array $variations)
     {
@@ -200,6 +174,8 @@ class ProductForm extends ParentForm
 
     /**
      * Open variations tab
+     *
+     * @return void
      */
     public function openVariationsTab()
     {
@@ -208,6 +184,8 @@ class ProductForm extends ParentForm
 
     /**
      * Click on 'Create New Variation Set' button
+     *
+     * @return void
      */
     public function clickCreateNewVariationSet()
     {

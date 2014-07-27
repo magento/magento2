@@ -470,4 +470,15 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
     public function deleteTypeSpecificData(\Magento\Catalog\Model\Product $product)
     {
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function beforeSave($product)
+    {
+        if ($product->hasData('product_options')) {
+            throw new \Exception('Custom options for grouped product type are not supported');
+        }
+        return parent::beforeSave($product);
+    }
 }

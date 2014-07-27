@@ -32,8 +32,6 @@ class Product extends \Magento\Framework\Service\Data\Eav\AbstractObject
     /**#@+
      * Constants defined for keys of array
      */
-    const ID = 'id';
-
     const SKU = 'sku';
 
     const NAME = 'name';
@@ -56,14 +54,6 @@ class Product extends \Magento\Framework\Service\Data\Eav\AbstractObject
 
     const STORE_ID = 'store_id';
     /**#@-*/
-
-    /**
-     * @return int|null
-     */
-    public function getId()
-    {
-        return $this->_get(self::ID);
-    }
 
     /**
      * @return string|null

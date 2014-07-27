@@ -82,13 +82,17 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
         $mageScopePath = $moduleDir . '/Magento';
         $output = array('base' => array(), 'mage' => array(), 'custom' => array());
         $files = glob($moduleDir . '*/*/etc/module.xml');
-        foreach ($files as $file) {
-            $scope = strpos($file, $mageScopePath) === 0 ? 'mage' : 'custom';
-            $output[$scope][] = $this->rootDirectory->getRelativePath($file);
+        if (!empty($files)) {
+            foreach ($files as $file) {
+                $scope = strpos($file, $mageScopePath) === 0 ? 'mage' : 'custom';
+                $output[$scope][] = $this->rootDirectory->getRelativePath($file);
+            }
         }
         $files = glob($configDir . '*/module.xml');
-        foreach ($files as $file) {
-            $output['base'][] = $this->rootDirectory->getRelativePath($file);
+        if (!empty($files)) {
+            foreach ($files as $file) {
+                $output['base'][] = $this->rootDirectory->getRelativePath($file);
+            }
         }
         return $this->iteratorFactory->create(
             $this->rootDirectory,

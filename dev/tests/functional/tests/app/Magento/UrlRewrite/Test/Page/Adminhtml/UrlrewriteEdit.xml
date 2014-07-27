@@ -32,7 +32,7 @@
     </block>
     <block>
         <name>formBlock</name>
-        <class>Magento\UrlRewrite\Test\Block\Adminhtml\Catalog\Edit\Form</class>
+        <class>Magento\UrlRewrite\Test\Block\Adminhtml\Catalog\Edit\UrlRewriteForm</class>
         <locator>#edit_form</locator>
         <strategy>css selector</strategy>
     </block>

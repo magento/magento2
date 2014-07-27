@@ -130,7 +130,6 @@ class Fault extends \RuntimeException
         $this->_soapServer = $soapServer;
         $this->_localeResolver = $localeResolver;
         $this->appState = $appState;
-        $this->_setFaultName($previousException->getName());
     }
 
     /**
@@ -171,37 +170,6 @@ class Fault extends \RuntimeException
     public function getWrappedErrors()
     {
         return $this->_wrappedErrors;
-    }
-
-    /**
-     * Receive SOAP fault name.
-     *
-     * @return string
-     */
-    public function getFaultName()
-    {
-        return $this->_faultName;
-    }
-
-    /**
-     * Define current SOAP fault name. It is used as a name of the wrapper node for SOAP fault details.
-     *
-     * @param string $exceptionName
-     * @return void
-     */
-    protected function _setFaultName($exceptionName)
-    {
-        if ($exceptionName) {
-            // makes exception name xml safe
-            $exceptionName = str_replace(['\\', '/'], '_', $exceptionName);
-            
-            $contentType = $this->_request->getHeader('Content-Type');
-            /** SOAP action is specified in content type header if content type is application/soap+xml */
-            if (preg_match('|application/soap\+xml.+action="(.+)".*|', $contentType, $matches)) {
-                $soapAction = $matches[1];
-                $this->_faultName = ucfirst($soapAction) . ucfirst($exceptionName) . 'Fault';
-            }
-        }
     }
 
     /**
@@ -295,7 +263,7 @@ FAULT_MESSAGE;
         if (is_array($details) && !empty($details)) {
             $detailsXml = $this->_convertDetailsToXml($details);
             if ($detailsXml) {
-                $errorDetailsNode = $this->getFaultName() ? $this->getFaultName() :self::NODE_DETAIL_WRAPPER;
+                $errorDetailsNode = self::NODE_DETAIL_WRAPPER;
                 $detailsXml = "<env:Detail><m:{$errorDetailsNode}>"
                     . $detailsXml . "</m:{$errorDetailsNode}></env:Detail>";
             } else {

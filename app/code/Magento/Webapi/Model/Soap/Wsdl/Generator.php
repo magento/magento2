@@ -62,23 +62,31 @@ class Generator
     protected $_registeredTypes = array();
 
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    protected $storeManager;
+
+    /**
      * Initialize dependencies.
      *
      * @param \Magento\Webapi\Model\Soap\Config $apiConfig
      * @param Factory $wsdlFactory
      * @param \Magento\Webapi\Model\Cache\Type $cache
      * @param \Magento\Webapi\Model\Config\ClassReflector\TypeProcessor $typeProcessor
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Webapi\Model\Soap\Config $apiConfig,
         Factory $wsdlFactory,
         \Magento\Webapi\Model\Cache\Type $cache,
-        \Magento\Webapi\Model\Config\ClassReflector\TypeProcessor $typeProcessor
+        \Magento\Webapi\Model\Config\ClassReflector\TypeProcessor $typeProcessor,
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->_apiConfig = $apiConfig;
         $this->_wsdlFactory = $wsdlFactory;
         $this->_cache = $cache;
         $this->_typeProcessor = $typeProcessor;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -93,7 +101,8 @@ class Generator
     {
         /** Sort requested services by names to prevent caching of the same wsdl file more than once. */
         ksort($requestedServices);
-        $cacheId = self::WSDL_CACHE_ID . hash('md5', serialize($requestedServices));
+        $currentStore = $this->storeManager->getStore();
+        $cacheId = self::WSDL_CACHE_ID . hash('md5', serialize($requestedServices) . $currentStore->getCode());
         $cachedWsdlContent = $this->_cache->load($cacheId);
         if ($cachedWsdlContent !== false) {
             return $cachedWsdlContent;

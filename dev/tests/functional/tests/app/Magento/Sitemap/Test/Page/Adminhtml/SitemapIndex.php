@@ -28,7 +28,6 @@ use Mtf\Page\BackendPage;
 
 /**
  * Class SitemapIndex
- *
  */
 class SitemapIndex extends BackendPage
 {

@@ -23,54 +23,17 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml;
 
-class ProductTest extends \PHPUnit_Framework_TestCase
+abstract class ProductTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var \Magento\Catalog\Controller\Adminhtml\Product
-     */
-    protected $_controller;
-
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $context;
 
     /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Price\Processor
+     * @var \Magento\Catalog\Controller\Product
      */
-    protected $_priceProcessor;
-
-    public function setUp()
-    {
-        $this->initContext();
-        $this->_priceProcessor = $this->getMockBuilder('Magento\Catalog\Model\Indexer\Product\Price\Processor')
-            ->disableOriginalConstructor()->getMock();
-
-        $productBuilder = $this->getMockBuilder('Magento\Catalog\Controller\Adminhtml\Product\Builder')->setMethods([
-            'build'
-        ])->disableOriginalConstructor()->getMock();
-
-        $product = $this->getMockBuilder('\Magento\Catalog\Model\Product')->disableOriginalConstructor()
-            ->setMethods(['getTypeId', 'getStoreId', '__sleep', '__wakeup'])->getMock();
-        $product->expects($this->any())->method('getTypeId')->will($this->returnValue('simple'));
-        $product->expects($this->any())->method('getStoreId')->will($this->returnValue('1'));
-        $productBuilder->expects($this->any())->method('build')->will($this->returnValue($product));
-
-        $this->_controller = new \Magento\Catalog\Controller\Adminhtml\Product(
-            $this->context,
-            $this->getMock('Magento\Framework\Registry', array(), array(), '', false),
-            $this->getMock('Magento\Framework\Stdlib\DateTime\Filter\Date', array(), array(), '', false),
-            $this->getMockBuilder('Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper')
-                ->disableOriginalConstructor()->getMock(),
-            $this->getMockBuilder('Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter')
-                ->disableOriginalConstructor()->getMock(),
-            $this->getMock('Magento\Catalog\Model\Product\Copier', array(), array(), '', false),
-            $productBuilder,
-            $this->getMock('Magento\Catalog\Model\Product\Validator', array(), array(), '', false),
-            $this->getMock('Magento\Catalog\Model\Product\TypeTransitionManager', array(), array(), '', false),
-            $this->_priceProcessor
-        );
-    }
+    protected $action;
 
     /**
      *  Init context object
@@ -156,26 +119,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->context->expects($this->any())->method('getSession')->will($this->returnValue($sessionMock));
         $this->context->expects($this->any())->method('getActionFlag')->will($this->returnValue($actionFlagMock));
         $this->context->expects($this->any())->method('getHelper')->will($this->returnValue($helperDataMock));
-    }
-
-    public function testMassStatusAction()
-    {
-        $this->_priceProcessor->expects($this->once())->method('reindexList');
-
-        $this->_controller->massStatusAction();
-    }
-
-    /**
-     * Testing `newAction` method
-     */
-    public function testNewAction()
-    {
-        $this->_controller->getRequest()->expects($this->at(0))->method('getParam')
-            ->with('set')->will($this->returnValue(true));
-        $this->_controller->getRequest()->expects($this->at(1))->method('getParam')
-            ->with('popup')->will($this->returnValue(true));
-        $this->_controller->getRequest()->expects($this->any())->method('getFullActionName')
-            ->will($this->returnValue('catalog_product_new'));
-        $this->_controller->newAction();
+        return $this->context;
     }
 }

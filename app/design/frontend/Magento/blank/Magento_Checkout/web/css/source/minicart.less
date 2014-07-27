@@ -1,0 +1,224 @@
+// /**
+// //  * Magento
+//  *
+//  * NOTICE OF LICENSE
+//  *
+//  * This source file is subject to the Academic Free License (AFL 3.0)
+//  * that is bundled with this package in the file LICENSE_AFL.txt.
+//  * It is also available through the world-wide-web at this URL:
+//  * http://opensource.org/licenses/afl-3.0.php
+//  * If you did not receive a copy of the license and are unable to
+//  * obtain it through the world-wide-web, please send an email
+//  * to license@magentocommerce.com so we can send you a copy immediately.
+//  *
+//  * DISCLAIMER
+//  *
+//  * Do not edit or add to this file if you wish to upgrade Magento to newer
+//  * versions in the future. If you wish to customize Magento for your
+//  * needs please refer to http://www.magentocommerce.com for more information.
+//  *
+//  * @category    design
+//  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+//  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+//  */
+
+//
+//    Minicart
+//--------------------------------------
+
+.block.minicart {
+    .subtotal {
+        border-top: 1px solid @color-secondary;
+        padding-top: 10px;
+        .amount {
+            font-size: @font-size-xl;
+            .incl.tax {
+                display: block;
+            }
+        }
+    }
+    .subtitle {
+        .heading(h3);
+        display: inline-block;
+        margin-top: 0;
+        font-weight: 500;
+    }
+    .subtitle.empty {
+        display: block;
+        padding: 30px 0 20px;
+        text-align: center;
+        font-size: 14px;
+    }
+    > .content > .actions {
+        margin-top: 10px;
+        > .secondary,
+        > .primary {
+            padding-right: 20px;
+            display: inline;
+        }
+    }
+}
+
+.minicart-wrapper {
+    .dropdown(
+        @_toggle-selector: ~".action.showcart",
+        @_options-selector: ~".block.minicart",
+        @_dropdown-toggle-icon-content: @icon-cart,
+        @_dropdown-toggle-active-icon-content: @icon-cart,
+        @_dropdown-list-item-padding: false,
+        @_dropdown-list-item-hover: false,
+        @_icon-font-position: before,
+        @_icon-font-size: 35px,
+        @_icon-font-line-height: 33px,
+        @_icon-font-color: @color-primary,
+        @_icon-font-color-hover: @color-primary,
+        @_icon-font-color-active: @color-primary
+    );
+    float: right;
+    .block.minicart {
+        right: -15px;
+        width: 320px;
+        padding: 15px;
+        > .title {
+            display: none;
+        }
+        &:before,
+        &:after {
+            left: auto;
+            right: 25px;
+        }
+        &:before {
+            right: 26px;
+        }
+    }
+    .product.actions {
+        text-align: right;
+        > .primary,
+        > .secondary {
+            display: inline;
+        }
+    }
+    .pricing.details {
+        display: table;
+        .rate,
+        .details.qty {
+            display: table-row;
+        }
+        .value,
+        .label {
+            padding-right:10px;
+            display: table-cell;
+        }
+        .label:after {
+            content: ":";
+        }
+    }
+    .action.edit {
+        .icon-font(
+            @icon-settings,
+            @_icon-font-size: 28px,
+            @_icon-font-line-height: 28px,
+            @_icon-font-text-hide: true,
+            @_icon-font-color: #303030,
+            @_icon-font-color-hover: #303030,
+            @_icon-font-color-active: #303030
+        );
+    }
+    .action.close {
+        position: absolute;
+        right: 14px;
+        top: 6px;
+        .icon-font(
+            @icon-remove,
+            @_icon-font-size: 33px,
+            @_icon-font-line-height: 33px,
+            @_icon-font-color: @text-color-muted,
+            @_icon-font-text-hide: true
+        );
+        .button-reset();
+    }
+    .action.showcart {
+        .text {
+            &:extend(.visually-hidden all);
+        }
+        .icon-font(
+            @_icon-font-content: @icon-cart,
+            @_icon-font-position: before,
+            @_icon-font-size: 35px,
+            @_icon-font-line-height: 33px,
+            @_icon-font-vertical-align: top,
+            @_icon-font-color: @color-primary,
+            @_icon-font-color-hover: @color-primary,
+            @_icon-font-color-active: @color-primary
+        );
+        white-space: nowrap;
+        .counter.qty {
+            &.empty {
+               display: none;
+            }
+            background: @color-active;
+            border-radius: 2px;
+            color: #fff;
+            clip: none;
+            display: inline-block;
+            height: 26px;
+            line-height: 26px;
+            margin: 3px 0 0;
+            max-width: 2em;
+            min-width: 20px;
+            padding: 0 3px;
+            overflow: hidden;
+            text-align: center;
+            white-space: normal;
+        }
+    }
+    .ui-dialog {
+        .action.close {
+            right: 0;
+            top: 46px;
+            z-index: 100;
+        }
+    }
+}
+
+.minilist {
+    .list-reset-styles(0, 0);
+    .item {
+        border-top: 1px solid @color-secondary;
+        padding: 15px 0;
+        z-index: 1;
+    }
+    .item > .product {
+        &:extend(.add-clearfix all);
+    }
+    .product.photo {
+        float: left;
+    }
+    .product.details {
+        padding-left: 88px;
+    }
+    .action.delete {
+        .icon-font(
+            @icon-trash,
+            @_icon-font-size: 28px,
+            @_icon-font-line-height: 28px,
+            @_icon-font-text-hide: true,
+            @_icon-font-color: #303030,
+            @_icon-font-color-hover: #303030,
+            @_icon-font-color-active: #303030
+        );
+    }
+}
+
+//
+//    Desktop
+//--------------------------------------
+
+.responsive(@break) when (@break = @break-point-1) {
+    .minicart-wrapper {
+        margin-left: 30px;
+        .block.minicart {
+            width: 380px;
+        }
+    }
+}

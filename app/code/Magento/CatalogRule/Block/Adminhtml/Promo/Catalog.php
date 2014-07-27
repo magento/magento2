@@ -36,7 +36,13 @@ class Catalog extends \Magento\Backend\Block\Widget\Grid\Container
      */
     protected function _construct()
     {
-        $this->_addButton(
+        $this->_blockGroup = 'Magento_CatalogRule';
+        $this->_controller = 'adminhtml_promo_catalog';
+        $this->_headerText = __('Catalog Price Rules');
+        $this->_addButtonLabel = __('Add New Rule');
+        parent::_construct();
+
+        $this->buttonList->add(
             'apply_rules',
             array(
                 'label' => __('Apply Rules'),
@@ -44,11 +50,5 @@ class Catalog extends \Magento\Backend\Block\Widget\Grid\Container
                 'class' => 'apply'
             )
         );
-
-        $this->_blockGroup = 'Magento_CatalogRule';
-        $this->_controller = 'adminhtml_promo_catalog';
-        $this->_headerText = __('Catalog Price Rules');
-        $this->_addButtonLabel = __('Add New Rule');
-        parent::_construct();
     }
 }

@@ -31,7 +31,7 @@ namespace Magento\ConfigurableProduct\Model\Product\Type;
 class ConfigurableTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable
+     * @var Configurable
      */
     protected $_model;
 
@@ -49,6 +49,11 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $_attributeCollectionFactory;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_productCollectionFactory;
 
     /**
      * @var \Magento\TestFramework\Helper\ObjectManager
@@ -90,9 +95,9 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $productColFactory = $this->getMock(
+        $this->_productCollectionFactory = $this->getMock(
             'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Product\CollectionFactory',
-            array(),
+            array('create'),
             array(),
             '',
             false
@@ -113,7 +118,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'attributeSetFactory' => $setFactoryMock,
                 'eavAttributeFactory' => $attributeFactoryMock,
                 'configurableAttributeFactory' => $this->_configurableAttributeFactoryMock,
-                'productCollectionFactory' => $productColFactory,
+                'productCollectionFactory' => $this->_productCollectionFactory,
                 'attributeCollectionFactory' => $this->_attributeCollectionFactory,
                 'eventManager' => $eventManager,
                 'coreData' => $coreDataMock,
@@ -232,5 +237,57 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(1));
 
         $this->assertTrue($this->_model->canUseAttribute($attribute));
+    }
+
+    public function testgetUsedProducts()
+    {
+        $attributeCollection = $this->getMockBuilder(
+            '\Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\Collection'
+        )->setMethods(['setProductFilter', 'addFieldToFilter', 'walk'])->disableOriginalConstructor()
+            ->getMock();
+        $attributeCollection->expects($this->any())->method('setProductFilter')->will($this->returnSelf());
+        $this->_attributeCollectionFactory->expects($this->any())->method('create')
+            ->will($this->returnValue($attributeCollection));
+        $product = $this->getMockBuilder('\Magento\Catalog\Model\Product')
+            ->setMethods(['dataHasChangedFor', 'getConfigurableAttributesData', 'getStoreId',
+                          'getId', 'getData', 'hasData', 'getAssociatedProductIds', '__wakeup', '__sleep'
+            ])->disableOriginalConstructor()
+            ->getMock();
+        $attributeData = [1 => [
+            'id' => 1,
+            'code' => 'someattr',
+            'attribute_id' => 111,
+            'position' => 0,
+            'label' => 'Some Super Attribute',
+            'values' => []
+        ]];
+        $product->expects($this->any())->method('getConfigurableAttributesData')
+            ->will($this->returnValue($attributeData));
+        $product->expects($this->any())->method('getStoreId')->will($this->returnValue(5));
+        $product->expects($this->any())->method('getId')->will($this->returnValue(1));
+        $product->expects($this->any())->method('getAssociatedProductIds')->will($this->returnValue([2]));
+        $product->expects($this->any())->method('hasData')
+            ->will($this->returnValueMap([
+                ['_cache_instance_used_product_attribute_ids', 1],
+                ['_cache_instance_products', 0],
+                ['_cache_instance_configurable_attributes', 1],
+            ]));
+        $product->expects($this->any())->method('getData')
+            ->will($this->returnValue(1));
+        $productCollection = $this->getMockBuilder(
+            'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Product\Collection'
+        )->setMethods(
+            ['setFlag', 'setProductFilter', 'addStoreFilter', 'addAttributeToSelect', 'addFilterByRequiredOptions',
+             'setStoreId']
+        )->disableOriginalConstructor()
+            ->getMock();
+        $productCollection->expects($this->any())->method('addAttributeToSelect')->will($this->returnSelf());
+        $productCollection->expects($this->any())->method('setProductFilter')->will($this->returnSelf());
+        $productCollection->expects($this->any())->method('setFlag')->will($this->returnSelf());
+        $productCollection->expects($this->any())->method('addFilterByRequiredOptions')->will($this->returnSelf());
+        $productCollection->expects($this->any())->method('setStoreId')->with(5)->will($this->returnValue([]));
+        $this->_productCollectionFactory->expects($this->any())->method('create')
+            ->will($this->returnValue($productCollection));
+        $this->_model->getUsedProducts($product);
     }
 }

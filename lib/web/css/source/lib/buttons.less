@@ -81,7 +81,7 @@
     .css(cursor, @_button-cursor);
     .css(display, @_button-display);
     .css(font-family, @_button-font-family);
-    .css(font-size, @_button-font-size);
+    .font-size(@_button-font-size);
     .css(font-weight, @_button-font-weight);
     .css(line-height, @_button-height);
     //-moz-box-sizing: content-box; // fix Firefox button line-height problem
@@ -192,14 +192,22 @@
 //
 //    Button as link
 //-------------------------------------- */
-.button-as-link() {
+.button-as-link(
+    @_link-color: @link-color,
+    @_link-color-hover: @link-color-hover,
+    @_line-height: @line-height-base,
+    @_disabled_opacity: @button-disabled-opacity
+) {
     background: none;
     border: 0;
     display: inline;
-    .css(line-height, @line-height-base);
+    .css(line-height, @_line-height);
     margin: 0;
     padding: 0;
     .link();
+    &:hover {
+        .css(color, @_link-color-hover);
+    }
     &:hover,
     &:active,
     &:focus {
@@ -210,11 +218,11 @@
     &.disabled,
     &[disabled],
     fieldset[disabled] & {
-        .css(color, @link-color);
+        .css(color, @_link-color);
         text-decoration: underline;
         cursor: default;
         pointer-events: none; // Disabling of clicks
-        .css(opacity, @button-disabled-opacity);
+        .css(opacity, @_disabled_opacity);
     }
 }
 
@@ -340,6 +348,21 @@
         .css(color, @_button-color-hover);
         .css(border, @_button-border-hover);
     }
+}
+
+//
+//    Button revert secondary size
+//-------------------------------------- */
+.button-revert-secondary-size(
+    @_button-font-size: @button-font-size,
+    @_button-height: @button-height,
+    @_button-padding: @button-padding
+) {
+    .font-size(@_button-font-size);
+    .button-size(
+        @_button-height: @_button-height,
+        @_button-padding: @_button-padding
+    )
 }
 
 //

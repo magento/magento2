@@ -65,6 +65,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $storeManager;
 
+    /** @var \Magento\CatalogInventory\Model\Stock\ItemRegistry|\PHPUnit_Framework_MockObject_MockObject */
+    protected $stockItemRegistry;
+
     protected function setUp()
     {
         $this->resource = $this->getMock(
@@ -109,6 +112,14 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfig = $this->getMock('Magento\Framework\App\Config', [], [], '', false);
         $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface', [], [], '', false);
 
+        $this->stockItemRegistry = $this->getMock(
+            '\Magento\CatalogInventory\Model\Stock\ItemRegistry',
+            ['retrieve', '__wakeup'],
+            [],
+            '',
+            false
+        );
+
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->item = $this->objectManagerHelper->getObject(
             'Magento\CatalogInventory\Model\Stock\Item',
@@ -119,7 +130,8 @@ class ItemTest extends \PHPUnit_Framework_TestCase
                 'scopeConfig' => $this->scopeConfig,
                 'storeManager' => $this->storeManager,
                 'productFactory' => $productFactory,
-                'resource' => $this->resource
+                'resource' => $this->resource,
+                'stockItemRegistry' => $this->stockItemRegistry
             ]
         );
     }
@@ -194,8 +206,8 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     protected function prepareNotCompositeProductMock()
     {
         $productGroup = [
-            [$this->getGroupProductMock(), $this->getGroupProductMock(), $this->getGroupProductMock()],
-            [$this->getGroupProductMock(), $this->getGroupProductMock()],
+            [$this->getGroupProductMock(0), $this->getGroupProductMock(1), $this->getGroupProductMock(2)],
+            [$this->getGroupProductMock(3), $this->getGroupProductMock(4)],
         ];
 
         $typeInstance = $this->getMock(
@@ -216,26 +228,26 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param int $at
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getGroupProductMock()
+    protected function getGroupProductMock($at)
     {
         $product = $this->getMock(
             'Magento\Catalog\Model\Product',
-            ['hasStockItem', 'getStockItem', 'getStockQty', '__wakeup'],
+            ['getStockQty', '__wakeup'],
             [],
             '',
             false
         );
         $product->expects($this->once())
-            ->method('hasStockItem')
-            ->will($this->returnValue(true));
-        $product->expects($this->once())
-            ->method('getStockItem')
-            ->will($this->returnSelf());
-        $product->expects($this->once())
             ->method('getStockQty')
             ->will($this->returnValue(2));
+
+        $this->stockItemRegistry->expects($this->at($at))
+            ->method('retrieve')
+            ->will($this->returnValue($product));
+
         return $product;
     }
 
@@ -662,5 +674,23 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     public function testGetStockId()
     {
         $this->assertSame(1, $this->item->getStockId());
+    }
+
+    public function testProcessIsInStock()
+    {
+        $this->item->setData(
+            [
+                'qty' => 100,
+                'is_in_stock' => \Magento\CatalogInventory\Model\Stock\Status::STATUS_IN_STOCK,
+                'manage_stock' => 1,
+                'use_config_manage_stock' => 0
+            ]
+        );
+        $this->item->setData('qty', 0);
+        $this->item->processIsInStock();
+        $this->assertEquals(
+            \Magento\CatalogInventory\Model\Stock\Status::STATUS_OUT_OF_STOCK,
+            $this->item->getIsInStock()
+        );
     }
 }

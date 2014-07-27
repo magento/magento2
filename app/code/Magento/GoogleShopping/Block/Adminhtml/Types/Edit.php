@@ -36,12 +36,12 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Backend\Block\Widget\Context $context,
         \Magento\Framework\Registry $registry,
         array $data = array()
     ) {
@@ -59,12 +59,12 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         $this->_controller = 'adminhtml_types';
         $this->_mode = 'edit';
         $model = $this->_coreRegistry->registry('current_item_type');
-        $this->_removeButton('reset');
-        $this->_updateButton('save', 'label', __('Save Mapping'));
-        $this->_updateButton('save', 'id', 'save_button');
-        $this->_updateButton('delete', 'label', __('Delete Mapping'));
+        $this->buttonList->remove('reset');
+        $this->buttonList->update('save', 'label', __('Save Mapping'));
+        $this->buttonList->update('save', 'id', 'save_button');
+        $this->buttonList->update('delete', 'label', __('Delete Mapping'));
         if ($model && !$model->getId()) {
-            $this->_removeButton('delete');
+            $this->buttonList->remove('delete');
         }
     }
 

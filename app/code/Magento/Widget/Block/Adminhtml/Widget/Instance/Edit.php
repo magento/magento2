@@ -39,12 +39,12 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Backend\Block\Widget\Context $context,
         \Magento\Framework\Registry $registry,
         array $data = array()
     ) {
@@ -84,7 +84,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     protected function _preparelayout()
     {
         if ($this->getWidgetInstance()->isCompleteToCreate()) {
-            $this->_addButton(
+            $this->buttonList->add(
                 'save_and_edit_button',
                 array(
                     'label' => __('Save and Continue Edit'),

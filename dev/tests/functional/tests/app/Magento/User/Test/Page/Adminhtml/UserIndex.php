@@ -52,6 +52,12 @@ class UserIndex extends BackendPage
             'locator' => '#messages',
             'strategy' => 'css selector',
         ],
+        'accessDeniedBlock' => [
+            'name' => 'accessDeniedBlock',
+            'class' => 'Magento\Backend\Test\Block\Denied',
+            'locator' => '#anchor-content',
+            'strategy' => 'css selector',
+        ],
     ];
 
     /**
@@ -76,5 +82,13 @@ class UserIndex extends BackendPage
     public function getMessagesBlock()
     {
         return $this->getBlockInstance('messagesBlock');
+    }
+
+    /**
+     * @return \Magento\Backend\Test\Block\Denied
+     */
+    public function getAccessDeniedBlock()
+    {
+        return $this->getBlockInstance('accessDeniedBlock');
     }
 }

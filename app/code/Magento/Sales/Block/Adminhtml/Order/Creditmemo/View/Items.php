@@ -25,8 +25,6 @@ namespace Magento\Sales\Block\Adminhtml\Order\Creditmemo\View;
 
 /**
  * Adminhtml sales item renderer
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
 {

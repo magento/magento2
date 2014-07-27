@@ -41,7 +41,7 @@
         ?>
         <?php foreach ($rates as $rate): ?>
         <tr class="totals tax details details-<?php echo $taxIter; ?> <?php echo ($this->getIsPlaneMode()) ? ' plane' : '';?>">
-            <td class="mark" <?php echo $this->getLabelProperties()?>>
+            <td <?php echo $this->getLabelProperties()?>>
                 <?php echo $this->escapeHtml($rate['title']); ?>
                 <?php if (!is_null($rate['percent'])): ?>
                     (<?php echo (float)$rate['percent']; ?>%)
@@ -49,7 +49,7 @@
                 <br />
             </td>
             <?php if ($isFirst): ?>
-                <td class="amount" <?php echo $this->getValueProperties()?> rowspan="<?php echo count($rates); ?>">
+                <td <?php echo $this->getValueProperties()?> rowspan="<?php echo count($rates); ?>">
                     <?php echo $_order->formatPrice($amount); ?>
                 </td>
             <?php endif; ?>
@@ -61,18 +61,18 @@
 <?php endif;?>
 
 <?php if ($this->displayFullSummary() && $_fullInfo && !$this->getIsPlaneMode()): ?>
-<tr class="totals tax summary">
+<tr class="totals-tax-summary">
 <?php elseif ($this->displayFullSummary() && $_fullInfo && $this->getIsPlaneMode()): ?>
-<tr class="totals tax summary plane">
+<tr class="totals-tax-summary plane">
 <?php else: ?>
-<tr class="totals tax">
+<tr class="totals-tax">
 <?php endif; ?>
-    <td class="mark" <?php echo $this->getLabelProperties()?>>
+    <td <?php echo $this->getLabelProperties()?>>
         <?php if ($this->displayFullSummary()): ?>
             <div class="detailed"><?php echo __('Tax'); ?></div>
         <?php else: ?>
             <?php echo __('Tax'); ?>
         <?php endif;?>
     </td>
-    <td class="amount" <?php echo $this->getValueProperties()?>><?php echo $_order->formatPrice($_source->getTaxAmount()) ?></td>
+    <td <?php echo $this->getValueProperties()?>><?php echo $_order->formatPrice($_source->getTaxAmount()) ?></td>
 </tr>

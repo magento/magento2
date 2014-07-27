@@ -277,7 +277,7 @@ class Url extends \Magento\Index\Model\Indexer\AbstractIndexer
             $this->_catalogUrl->clearStoreInvalidRewrites();
             // Maybe some categories were moved
             foreach ($data['rewrite_category_ids'] as $categoryId) {
-                $this->_catalogUrl->refreshCategoryRewrite($categoryId);
+                $this->_catalogUrl->refreshCategoryRewrite($categoryId, null, true, true);
             }
         }
     }

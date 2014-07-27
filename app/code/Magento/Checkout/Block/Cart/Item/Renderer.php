@@ -523,4 +523,18 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     {
         return $this->getLayout()->getBlock('product.price.render.default');
     }
+
+    /**
+     * Convert prices for template
+     *
+     * @param float $amount
+     * @param bool $format
+     * @return float
+     */
+    public function convertPrice($amount, $format = false)
+    {
+        $store = $this->_storeManager->getStore();
+
+        return $store->convertPrice($amount, $format);
+    }
 }

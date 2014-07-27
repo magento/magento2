@@ -44,19 +44,13 @@ class Store extends \Magento\Backend\Block\Widget\Grid\Container
         $this->_controller = 'system_store';
         $this->_headerText = __('Stores');
         parent::_construct();
-    }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function _prepareLayout()
-    {
         /* Update default add button to add website button */
-        $this->_updateButton('add', 'label', __('Create Website'));
-        $this->_updateButton('add', 'onclick', "setLocation('" . $this->getUrl('adminhtml/*/newWebsite') . "')");
+        $this->buttonList->update('add', 'label', __('Create Website'));
+        $this->buttonList->update('add', 'onclick', "setLocation('" . $this->getUrl('adminhtml/*/newWebsite') . "')");
 
         /* Add Store Group button */
-        $this->_addButton(
+        $this->buttonList->add(
             'add_group',
             array(
                 'label' => __('Create Store'),
@@ -67,7 +61,7 @@ class Store extends \Magento\Backend\Block\Widget\Grid\Container
         );
 
         /* Add Store button */
-        $this->_addButton(
+        $this->buttonList->add(
             'add_store',
             array(
                 'label' => __('Create Store View'),
@@ -75,7 +69,5 @@ class Store extends \Magento\Backend\Block\Widget\Grid\Container
                 'class' => 'add add-store-view'
             )
         );
-
-        return parent::_prepareLayout();
     }
 }

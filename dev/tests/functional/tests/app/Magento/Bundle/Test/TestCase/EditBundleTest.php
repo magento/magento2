@@ -72,13 +72,11 @@ class EditBundleTest extends Functional
         $cachePage = Factory::getPageFactory()->getAdminCache();
 
         $productGridPage->open();
-        $gridBlock->searchAndOpen(
-            array(
-                'sku' => $product->getProductSku(),
-                'type' => 'Bundle Product'
-            )
-        );
-        $productForm->fillProduct($editProduct);
+        $gridBlock->searchAndOpen([
+            'sku' => $product->getProductSku(),
+            'type' => 'Bundle Product'
+        ]);
+        $productForm->fill($editProduct);
         $editProductPage->getFormAction()->save();
         //Verifying
         $editProductPage->getMessagesBlock()->assertSuccessMessage();
@@ -97,10 +95,10 @@ class EditBundleTest extends Functional
      */
     public function createDataProvider()
     {
-        return array(
-            array('getMagentoBundleBundleFixed'),
-            array('getMagentoBundleBundleDynamic')
-        );
+        return [
+            ['getMagentoBundleBundleFixed'],
+            ['getMagentoBundleBundleDynamic']
+        ];
     }
 
     /**
@@ -135,11 +133,11 @@ class EditBundleTest extends Functional
         $frontendHomePage->getTopmenu()->selectCategoryByName($categoryName);
         //Verification on category product list
         $productListBlock = $categoryPage->getListProductBlock();
-        $this->assertTrue($productListBlock->isProductVisible($product->getProductName()));
-        $productListBlock->openProductViewPage($product->getProductName());
+        $this->assertTrue($productListBlock->isProductVisible($product->getName()));
+        $productListBlock->openProductViewPage($product->getName());
         //Verification on product detail page
         $productViewBlock = $productPage->getViewBlock();
-        $this->assertSame($product->getProductName(), $productViewBlock->getProductName());
+        $this->assertSame($product->getName(), $productViewBlock->getProductName());
         $this->assertEquals($product->getProductPrice(), $productViewBlock->getProductPrice());
     }
 }

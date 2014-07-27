@@ -51,6 +51,8 @@ class Weee extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
     }
 
     /**
+     * Collect Weee amounts for the credit memo
+     *
      * @param Creditmemo $creditmemo
      * @return $this
      */
@@ -61,13 +63,27 @@ class Weee extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
         $totalTax = 0;
         $baseTotalTax = 0;
 
+        $weeeTaxAmount = 0;
+        $baseWeeeTaxAmount = 0;
+        
         foreach ($creditmemo->getAllItems() as $item) {
             if ($item->getOrderItem()->isDummy()) {
                 continue;
             }
 
-            $totalTax += $item->getWeeeTaxAppliedAmount() * $item->getQty();
-            $baseTotalTax += $item->getBaseWeeeTaxAppliedAmount() * $item->getQty();
+            $weeeAmountExclTax = ($this->_weeeData->getWeeeTaxInclTax($item) -
+                $this->_weeeData->getTotalTaxAppliedForWeeeTax($item)) * $item->getQty();
+            $totalTax += $weeeAmountExclTax;
+
+            $baseWeeeAmountExclTax = ($this->_weeeData->getBaseWeeeTaxInclTax($item) -
+                $this->_weeeData->getBaseTotalTaxAppliedForWeeeTax($item)) * $item->getQty();
+            $baseTotalTax += $baseWeeeAmountExclTax;
+
+            $item->setWeeeTaxAppliedRowAmount($weeeAmountExclTax);
+            $item->setBaseWeeeTaxAppliedRowAmount($baseWeeeAmountExclTax);
+            
+            $weeeTaxAmount += $this->_weeeData->getWeeeTaxInclTax($item)* $item->getQty();
+            $baseWeeeTaxAmount += $this->_weeeData->getBaseWeeeTaxInclTax($item)* $item->getQty();
 
             $newApplied = array();
             $applied = $this->_weeeData->getApplied($item);
@@ -88,10 +104,10 @@ class Weee extends \Magento\Sales\Model\Order\Creditmemo\Total\AbstractTotal
         if ($this->_weeeData->includeInSubtotal($store)) {
             $creditmemo->setSubtotal($creditmemo->getSubtotal() + $totalTax);
             $creditmemo->setBaseSubtotal($creditmemo->getBaseSubtotal() + $baseTotalTax);
-        } else {
-            $creditmemo->setTaxAmount($creditmemo->getTaxAmount() + $totalTax);
-            $creditmemo->setBaseTaxAmount($creditmemo->getBaseTaxAmount() + $baseTotalTax);
         }
+
+        $creditmemo->setSubtotalInclTax($creditmemo->getSubtotalInclTax() + $weeeTaxAmount);
+        $creditmemo->setBaseSubtotalInclTax($creditmemo->getBaseSubtotalInclTax() + $baseWeeeTaxAmount);
 
         $creditmemo->setGrandTotal($creditmemo->getGrandTotal() + $totalTax);
         $creditmemo->setBaseGrandTotal($creditmemo->getBaseGrandTotal() + $baseTotalTax);

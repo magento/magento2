@@ -41,6 +41,6 @@ class Variable extends \Magento\Backend\Block\Widget\Grid\Container
         $this->_controller = 'system_variable';
         $this->_headerText = __('Custom Variables');
         parent::_construct();
-        $this->_updateButton('add', 'label', __('Add New Variable'));
+        $this->buttonList->update('add', 'label', __('Add New Variable'));
     }
 }

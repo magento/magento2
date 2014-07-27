@@ -29,9 +29,9 @@
         <lastname />
         <company />
         <telephone />
-        <street_1>
+        <street>
             <selector>#street_1</selector>
-        </street_1>
+        </street>
         <city />
         <region_id>
             <input>select</input>

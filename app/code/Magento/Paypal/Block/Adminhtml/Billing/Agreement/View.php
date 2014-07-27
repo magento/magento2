@@ -36,12 +36,12 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Backend\Block\Widget\Context $context,
         \Magento\Framework\Registry $registry,
         array $data = array()
     ) {
@@ -64,13 +64,13 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
         parent::_construct();
 
         if (!$this->_isAllowed('Magento_Paypal::actions_manage')) {
-            $this->_removeButton('delete');
+            $this->buttonList->remove('delete');
         }
-        $this->_removeButton('reset');
-        $this->_removeButton('save');
+        $this->buttonList->remove('reset');
+        $this->buttonList->remove('save');
         $this->setId('billing_agreement_view');
 
-        $this->_addButton(
+        $this->buttonList->add(
             'back',
             array(
                 'label' => __('Back'),
@@ -83,7 +83,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
         $agreement = $this->_getBillingAgreement();
         if ($agreement && $agreement->canCancel() && $this->_isAllowed('Magento_Paypal::actions_manage')) {
             $confirmText = __('Are you sure you want to do this?');
-            $this->_addButton(
+            $this->buttonList->add(
                 'cancel',
                 array(
                     'label' => __('Cancel'),

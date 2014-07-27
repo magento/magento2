@@ -50,14 +50,14 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     protected $_reviewFactory;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Review\Model\ReviewFactory $reviewFactory
      * @param \Magento\Review\Helper\Action\Pager $reviewActionPager
      * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Backend\Block\Widget\Context $context,
         \Magento\Review\Model\ReviewFactory $reviewFactory,
         \Magento\Review\Helper\Action\Pager $reviewActionPager,
         \Magento\Framework\Registry $registry,
@@ -149,12 +149,12 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
                 105
             );
         }
-        $this->_updateButton('save', 'label', __('Save Review'));
-        $this->_updateButton('save', 'id', 'save_button');
-        $this->_updateButton('delete', 'label', __('Delete Review'));
+        $this->buttonList->update('save', 'label', __('Save Review'));
+        $this->buttonList->update('save', 'id', 'save_button');
+        $this->buttonList->update('delete', 'label', __('Delete Review'));
 
         if ($this->getRequest()->getParam('productId', false)) {
-            $this->_updateButton(
+            $this->buttonList->update(
                 'back',
                 'onclick',
                 'setLocation(\'' . $this->getUrl(
@@ -165,7 +165,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         }
 
         if ($this->getRequest()->getParam('customerId', false)) {
-            $this->_updateButton(
+            $this->buttonList->update(
                 'back',
                 'onclick',
                 'setLocation(\'' . $this->getUrl(
@@ -176,8 +176,8 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         }
 
         if ($this->getRequest()->getParam('ret', false) == 'pending') {
-            $this->_updateButton('back', 'onclick', 'setLocation(\'' . $this->getUrl('catalog/*/pending') . '\')');
-            $this->_updateButton(
+            $this->buttonList->update('back', 'onclick', 'setLocation(\'' . $this->getUrl('catalog/*/pending') . '\')');
+            $this->buttonList->update(
                 'delete',
                 'onclick',
                 'deleteConfirm(' . '\'' . __(

@@ -26,7 +26,7 @@
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
     <update handle="sales_order_shipment_renderers" />
     <referenceContainer name="content">
-        <block class="Magento\Shipping\Block\Order\Shipment" name="sales.order.shipment" after="sales.order.info" cacheable="false">
+        <block class="Magento\Shipping\Block\Order\Shipment" name="sales.order.shipment" cacheable="false">
             <block class="Magento\Shipping\Block\Items" name="shipment_items" template="items.phtml">
                 <block class="Magento\Framework\View\Element\RendererList" name="sales.order.shipment.renderers" as="renderer.list" />
                 <block class="Magento\Shipping\Block\Tracking\Link" name="track-all-link" template="tracking/link.phtml">

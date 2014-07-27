@@ -106,7 +106,17 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsPriceOrSetAvailable($isInCatalog, $productPrice, $isProductSet, $expected)
     {
-        $currentProduct = new \Magento\Framework\Object(['final_price' => $productPrice, 'type_id' => 'simple']);
+        $currentProduct = $this->getMockBuilder('Magento\Catalog\Model\Product')->disableOriginalConstructor()
+            ->setMethods(['__wakeup', 'getFinalPrice', 'getTypeId', 'getTypeInstance'])
+            ->getMock();
+        $typeInstance = $this->getMockBuilder('Magento\Catalog\Model\Product\Type\AbstractType')
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $currentProduct->expects($this->any())->method('getFinalPrice')->will($this->returnValue($productPrice));
+        $currentProduct->expects($this->any())->method('getTypeId')->will($this->returnValue('simple'));
+        $currentProduct->expects($this->any())->method('getTypeInstance')->will($this->returnValue($typeInstance));
+
         $this->_registry->expects($this->any())
             ->method('registry')
             ->with($this->equalTo('current_product'))
@@ -115,6 +125,11 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->_productTypeConfig->expects($this->any())
             ->method('isProductSet')
             ->will($this->returnValue($isProductSet));
+
+        $typeInstance->expects($this->any())
+            ->method('canConfigure')
+            ->with($currentProduct)
+            ->will($this->returnValue(false));
 
         $this->assertEquals($expected, $this->helper->isPriceOrSetAvailable($isInCatalog));
     }

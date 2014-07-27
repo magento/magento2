@@ -146,6 +146,18 @@ class Http extends \Zend_Controller_Response_Http implements HttpInterface
     }
 
     /**
+     * Represents an HTTP response body in JSON format by sending appropriate header
+     *
+     * @param string $content String in JSON format
+     * @return \Magento\Framework\App\Response\Http
+     */
+    public function representJson($content)
+    {
+        $this->setHeader('Content-Type', 'application/json', true);
+        return $this->setBody($content);
+    }
+
+    /**
      * @return string[]
      */
     public function __sleep()

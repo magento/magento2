@@ -67,6 +67,8 @@ class CreateConfigurableEntityTest extends Injectable
     protected $newProductPage;
 
     /**
+     * Prepare data
+     *
      * @param CatalogCategory $category
      * @return array
      */
@@ -80,6 +82,8 @@ class CreateConfigurableEntityTest extends Injectable
     }
 
     /**
+     * Inject data
+     *
      * @param CatalogCategory $category
      * @param CatalogProductIndex $productPageGrid
      * @param CatalogProductNew $newProductPage
@@ -105,11 +109,10 @@ class CreateConfigurableEntityTest extends Injectable
     {
         // Steps
         $this->productPageGrid->open();
-        $this->productPageGrid->getProductBlock()->addProduct('configurable');
+        $this->productPageGrid->getGridPageActionBlock()->addProduct('configurable');
         // Fill form
         $productBlockForm = $this->newProductPage->getConfigurableProductForm();
-        $productBlockForm->setCategory($category);
-        $productBlockForm->fill($configurable);
+        $productBlockForm->fill($configurable, null, $category);
         $this->newProductPage->getFormAction()->saveProduct($this->newProductPage, $configurable);
     }
 }

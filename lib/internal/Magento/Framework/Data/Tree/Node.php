@@ -65,15 +65,15 @@ class Node extends \Magento\Framework\Object
      * Data tree node constructor
      *
      * @param array $data
-     * @param string $idFeild
+     * @param string $idField
      * @param Tree $tree
      * @param Node $parent
      */
-    public function __construct($data, $idFeild, $tree, $parent = null)
+    public function __construct($data, $idField, $tree, $parent = null)
     {
         $this->setTree($tree);
         $this->setParent($parent);
-        $this->setIdField($idFeild);
+        $this->setIdField($idField);
         $this->setData($data);
         $this->_childNodes = new Collection($this);
     }

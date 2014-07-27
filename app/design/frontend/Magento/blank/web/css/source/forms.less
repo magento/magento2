@@ -27,16 +27,17 @@
     .legend + div {
         clear: both;
     }
+    .legend {
+        strong {
+            margin-left: @indent-xs-base;
+        }
+    }
     .form-fieldset();
     &:last-child {
         margin-bottom: 0;
     }
-    > .field,
-    .fields > .field {
+    > .field {
         .form-field();
-        &:not(:first-child):last-of-type {
-            margin-bottom: 0;
-        }
         &.no-label {
             > .label {
                 .visually-hidden();
@@ -45,10 +46,10 @@
         &.choice {
             .label {
                 font-weight: normal;
+                display: inline;
             }
         }
         .label {
-            &:extend(.add-box-sizing all);
             .column:not(.main) & {
                 font-weight: normal;
             }
@@ -59,6 +60,10 @@
                 margin-bottom: 0;
             }
         }
+    }
+    fieldset.field {
+        border: 0;
+        padding: 0;
     }
 }
 
@@ -83,18 +88,12 @@ select:focus ~ .tooltip .tooltip-content { display: block; }
 //    Desktop
 //--------------------------------------
 .responsive(@break) when (@break = @break-point-1) {
-    .column.main {
-        .fieldset {
-            > .legend {
-                &:extend(.margin-for-forms-desktop all);
-            }
-            > .field,
-            .fields > .field {
-                .form-field-type-revert();
-                &:not(:first-child):last-of-type {
-                    margin-bottom: 0;
-                }
-            }
+    .fieldset {
+        .legend {
+            &:extend(.margin-for-forms-desktop all);
+        }
+        > .field {
+            .form-field-type-revert();
         }
     }
 }

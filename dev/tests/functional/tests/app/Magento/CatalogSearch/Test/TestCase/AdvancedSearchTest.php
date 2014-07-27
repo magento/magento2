@@ -60,7 +60,7 @@ class AdvancedSearchTest extends Functional
         $searchForm->submit();
 
         //Verifying
-        $productName = $productFixture->getProductName();
+        $productName = $productFixture->getName();
         $this->assertTrue(
             $advancedSearchResultPage->getListProductBlock()->isProductVisible($productName),
             sprintf('Product "%s" is not displayed on the "Catalog Advanced Search" results page."', $productName)

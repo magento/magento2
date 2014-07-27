@@ -62,7 +62,7 @@ class Merged implements \Iterator
      * @param \Magento\Framework\Logger $logger
      * @param MergeStrategyInterface $mergeStrategy
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
-     * @param array $assets
+     * @param MergeableInterface[] $assets
      * @throws \InvalidArgumentException
      */
     public function __construct(

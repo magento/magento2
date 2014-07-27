@@ -59,16 +59,12 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
         )
     )
     ->setDescription('Description with <b>html tag</b>')
-
     ->setMetaTitle('meta title')
     ->setMetaKeyword('meta keyword')
     ->setMetaDescription('meta description')
-
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
-
     ->setCategoryIds(array(2))
-
     ->setStockData(
         array(
             'use_config_manage_stock'   => 1,

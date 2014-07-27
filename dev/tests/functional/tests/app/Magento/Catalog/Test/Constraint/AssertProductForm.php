@@ -24,38 +24,22 @@
 
 namespace Magento\Catalog\Test\Constraint;
 
+use Mtf\Constraint\AbstractAssertForm;
 use Mtf\Fixture\FixtureInterface;
-use Mtf\Constraint\AbstractConstraint;
-use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
+use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 
 /**
  * Class AssertProductForm
  */
-class AssertProductForm extends AbstractConstraint
+class AssertProductForm extends AbstractAssertForm
 {
     /**
-     * Formatting options for numeric values
+     * Sort fields for fixture and form data
      *
      * @var array
      */
-    protected $formattingOptions = [
-        'price' => [
-            'decimals' => 2,
-            'dec_point' => '.',
-            'thousands_sep' => ''
-        ],
-        'qty' => [
-            'decimals' => 4,
-            'dec_point' => '.',
-            'thousands_sep' => ''
-        ],
-        'weight' => [
-            'decimals' => 4,
-            'dec_point' => '.',
-            'thousands_sep' => ''
-        ]
-    ];
+    protected $sortFields = [];
 
     /**
      * Constraint severeness
@@ -78,82 +62,47 @@ class AssertProductForm extends AbstractConstraint
         CatalogProductEdit $productPage
     ) {
         $filter = ['sku' => $product->getSku()];
-        $productGrid->open()->getProductGrid()->searchAndOpen($filter);
+        $productGrid->open();
+        $productGrid->getProductGrid()->searchAndOpen($filter);
 
-        $formData = $productPage->getForm()->getData($product);
-        $fixtureData = $this->prepareFixtureData($product);
-
-        $errors = $this->compareArray($fixtureData, $formData);
-        \PHPUnit_Framework_Assert::assertTrue(
-            empty($errors),
-            "These data must be equal to each other:\n" . implode("\n", $errors)
-        );
+        $fixtureData = $this->prepareFixtureData($product->getData(), $this->sortFields);
+        $formData = $this->prepareFormData($productPage->getForm()->getData($product), $this->sortFields);
+        $error = $this->verifyData($fixtureData, $formData);
+        \PHPUnit_Framework_Assert::assertTrue(empty($error), $error);
     }
 
     /**
-     * Prepares and returns data to the fixture, ready for comparison
+     * Prepares fixture data for comparison
      *
-     * @param FixtureInterface $product
+     * @param array $data
+     * @param array $sortFields [optional]
      * @return array
      */
-    protected function prepareFixtureData(FixtureInterface $product)
+    protected function prepareFixtureData(array $data, array $sortFields = [])
     {
-        $compareData = $product->getData();
-        $compareData = array_filter($compareData);
+        if (isset($data['website_ids']) && !is_array($data['website_ids'])) {
+            $data['website_ids'] = [$data['website_ids']];
+        }
 
-        array_walk_recursive(
-            $compareData,
-            function (&$item, $key, $formattingOptions) {
-                if (isset($formattingOptions[$key])) {
-                    $item = number_format(
-                        $item,
-                        $formattingOptions[$key]['decimals'],
-                        $formattingOptions[$key]['dec_point'],
-                        $formattingOptions[$key]['thousands_sep']
-                    );
-                }
-            },
-            $this->formattingOptions
-        );
-
-        return $compareData;
+        foreach ($sortFields as $path) {
+            $data = $this->sortDataByPath($data, $path);
+        }
+        return $data;
     }
 
     /**
-     * Comparison of multidimensional arrays
+     * Prepares form data for comparison
      *
-     * @param array $fixtureData
-     * @param array $formData
+     * @param array $data
+     * @param array $sortFields [optional]
      * @return array
-     *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function compareArray(array $fixtureData, array $formData)
+    protected function prepareFormData(array $data, array $sortFields = [])
     {
-        $errors = [];
-        $keysDiff = array_diff(array_keys($formData), array_keys($fixtureData));
-        if (!empty($keysDiff)) {
-            return ['- fixture data do not correspond to form data in composition.'];
+        foreach ($sortFields as $path) {
+            $data = $this->sortDataByPath($data, $path);
         }
-
-        foreach ($fixtureData as $key => $value) {
-            if (is_array($value) && is_array($formData[$key])
-                && ($innerErrors = $this->compareArray($value, $formData[$key])) && !empty($innerErrors)
-            ) {
-                $errors = array_merge($errors, $innerErrors);
-            } elseif ($value != $formData[$key]) {
-                $fixtureValue = empty($value) ? '<empty-value>' : $value;
-                $formValue = empty($formData[$key]) ? '<empty-value>' : $formData[$key];
-                $errors = array_merge(
-                    $errors,
-                    [
-                        "error key -> '{$key}' : error value ->  '{$fixtureValue}' does not equal -> '{$formValue}'"
-                    ]
-                );
-            }
-        }
-
-        return $errors;
+        return $data;
     }
 
     /**

@@ -99,9 +99,14 @@ class TaxRuleFixtureFactory
         $rates = [];
         foreach ($ratesData as $rateData) {
             $code = "{$rateData['country']} - {$rateData['region']} - {$rateData['percentage']}";
+            $postcode = '*';
+            if (isset($rateData['postcode'])) {
+                $postcode = $rateData['postcode'];
+                $code = $code . " - " . $postcode;
+            }
             $taxRateBuilder->setCountryId($rateData['country'])
                 ->setRegionId($rateData['region'])
-                ->setPostcode('*')
+                ->setPostcode($postcode)
                 ->setCode($code)
                 ->setPercentageRate($rateData['percentage']);
 
@@ -155,7 +160,7 @@ class TaxRuleFixtureFactory
         /** @var \Magento\Tax\Model\ClassModel $class */
         $class = $this->objectManager->create('Magento\Tax\Model\ClassModel');
         foreach ($classIds as $classId) {
-            $class->setId($classId);
+            $class->load($classId);
             $class->delete();
         }
     }

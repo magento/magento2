@@ -32,23 +32,23 @@ use Magento\Catalog\Model\Product;
 class Stock extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
     /**
-     * Stock item factory
+     * Stock item service
      *
-     * @var \Magento\CatalogInventory\Model\Stock\ItemFactory
+     * @var \Magento\CatalogInventory\Service\V1\StockItemService
      */
-    protected $_stockItemFactory;
+    protected $stockItemService;
 
     /**
      * Construct
      *
      * @param \Magento\Framework\Logger $logger
-     * @param \Magento\CatalogInventory\Model\Stock\ItemFactory $stockItemFactory
+     * @param \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
      */
     public function __construct(
         \Magento\Framework\Logger $logger,
-        \Magento\CatalogInventory\Model\Stock\ItemFactory $stockItemFactory
+        \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
     ) {
-        $this->_stockItemFactory = $stockItemFactory;
+        $this->stockItemService = $stockItemService;
         parent::__construct($logger);
     }
 
@@ -60,11 +60,10 @@ class Stock extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      */
     public function afterLoad($object)
     {
-        $item = $this->_stockItemFactory->create();
-        $item->loadByProduct($object);
+        $stockItemDo = $this->stockItemService->getStockItem($object->getId());
         $object->setData(
             $this->getAttribute()->getAttributeCode(),
-            array('is_in_stock' => $item->getIsInStock(), 'qty' => $item->getQty())
+            array('is_in_stock' => $stockItemDo->getIsInStock(), 'qty' => $stockItemDo->getQty())
         );
         return parent::afterLoad($object);
     }

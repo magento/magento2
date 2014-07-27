@@ -52,9 +52,7 @@ class FrontControllerTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['isDispatched', 'setDispatched', 'initForward', 'setActionName'])
             ->getMock();
 
-        $this->router = $this->getMockBuilder('Magento\Framework\App\Router\AbstractRouter')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->router = $this->getMock('Magento\Framework\App\RouterInterface');
         $this->routerList = $this->getMock('Magento\Framework\App\RouterList', array(), array(), '', false);
         $this->model = new \Magento\Framework\App\FrontController($this->routerList);
     }

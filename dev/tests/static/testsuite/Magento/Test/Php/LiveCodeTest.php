@@ -141,7 +141,6 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
     public function testAnnotationStandard()
     {
         $reportFile = self::$reportDir . '/phpcs_annotations_report.xml';
-        $warningSeverity = 5;
         $wrapper = new Wrapper();
         $codeSniffer = new CodeSniffer(
             realpath(__DIR__ . '/../../../../framework/Magento/ruleset.xml'),
@@ -152,14 +151,11 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
             $this->markTestSkipped('PHP Code Sniffer is not installed.');
         }
         self::setupFileLists('phpcs');
-        // Scan for error amount
-        $result = $codeSniffer->run(self::$whiteList, self::$blackList, array('php'), 0);
-        // Rescan to generate report with warnings.
-        $codeSniffer->run(self::$whiteList, self::$blackList, array('php'), $warningSeverity);
-        // Fail if there are errors in report.
+
+        $severity = 0; // Change to 5 to see the warnings
         $this->assertEquals(
             0,
-            $result,
+            $result = $codeSniffer->run(self::$whiteList, self::$blackList, array('php'), $severity),
             "PHP Code Sniffer has found {$result} error(s): See detailed report in {$reportFile}"
         );
     }

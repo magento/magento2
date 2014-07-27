@@ -42,7 +42,7 @@ class UrlRewrite extends InjectableFixture
     protected $handlerInterface = 'Magento\UrlRewrite\Test\Handler\UrlRewrite\UrlRewriteInterface';
 
     protected $defaultDataSet = [
-        'store_id' => 'Default Store View',
+        'store_id' => 'Main Website/Main Website Store/Default Store View',
         'request_path' => 'test_request%isolation%',
     ];
 
@@ -62,6 +62,7 @@ class UrlRewrite extends InjectableFixture
         'backend_type' => 'varchar',
         'is_required' => '1',
         'default_value' => 'Default Store View',
+        'source' => 'Magento\UrlRewrite\Test\Fixture\UrlRewrite\StoreId',
         'input' => 'select',
     ];
 
@@ -77,6 +78,14 @@ class UrlRewrite extends InjectableFixture
         'backend_type' => 'varchar',
         'is_required' => '1',
         'default_value' => 'request_path%isolation%',
+        'input' => 'text',
+    ];
+
+    protected $target_path = [
+        'attribute_code' => 'target_path',
+        'backend_type' => 'varchar',
+        'is_required' => '1',
+        'default_value' => 'target_path%isolation%',
         'input' => 'text',
     ];
 
@@ -110,6 +119,11 @@ class UrlRewrite extends InjectableFixture
     public function getRequestPath()
     {
         return $this->getData('request_path');
+    }
+
+    public function getTargetPath()
+    {
+        return $this->getData('target_path');
     }
 
     public function getDescription()

@@ -27,8 +27,6 @@ use Magento\Sales\Model\Resource\Order\Item\Collection;
 
 /**
  * Adminhtml order items grid
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
 {

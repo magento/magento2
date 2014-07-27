@@ -39,7 +39,6 @@ interface WriteServiceInterface
      * @return int
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Eav\Exception from validate()
      */
     public function create(AttributeSet $attributeSet, $skeletonId);
 

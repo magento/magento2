@@ -83,7 +83,7 @@ class HelloTest extends \PHPUnit_Framework_TestCase
     {
         $this->customerSession->setCustomerId(1);
         $html = $this->block->toHtml();
-        $this->assertContains("<div class=\"block dashboard welcome\">", $html);
+        $this->assertContains("<div class=\"block block-dashboard-welcome\">", $html);
         $this->assertContains("<strong>Hello, Firstname Lastname!</strong>", $html);
     }
 }

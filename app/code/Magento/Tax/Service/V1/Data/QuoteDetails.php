@@ -33,9 +33,11 @@ class QuoteDetails extends \Magento\Framework\Service\Data\AbstractObject
 
     const KEY_SHIPPING_ADDRESS = 'shipping_address';
 
-    const KEY_CUSTOMER_TAX_CLASS_ID = 'customer_tax_class_id';
+    const KEY_CUSTOMER_TAX_CLASS_KEY = 'customer_tax_class_key';
 
     const KEY_ITEMS = 'items';
+
+    const KEY_CUSTOMER_ID = 'customer_id';
     /**#@-*/
 
     /**
@@ -59,17 +61,27 @@ class QuoteDetails extends \Magento\Framework\Service\Data\AbstractObject
     }
 
     /**
-     * Get customer tax class id
+     * Get customer tax class key
      *
-     * @return int|null
+     * @return \Magento\Tax\Service\V1\Data\TaxClassKey|null
      */
-    public function getCustomerTaxClassId()
+    public function getCustomerTaxClassKey()
     {
-        return $this->_get(self::KEY_CUSTOMER_TAX_CLASS_ID);
+        return $this->_get(self::KEY_CUSTOMER_TAX_CLASS_KEY);
     }
 
     /**
-     * Get quote items
+     * Get customer id
+     *
+     * @return int|null
+     */
+    public function getCustomerId()
+    {
+        return $this->_get(self::KEY_CUSTOMER_ID);
+    }
+
+    /**
+     * Get customer data
      *
      * @return \Magento\Tax\Service\V1\Data\QuoteDetails\Item[]|null
      */

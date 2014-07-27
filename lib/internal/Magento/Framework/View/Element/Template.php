@@ -199,16 +199,17 @@ class Template extends AbstractBlock
     /**
      * Get absolute path to template
      *
+     * @param null $template
      * @return string
      */
-    public function getTemplateFile()
+    public function getTemplateFile($template = null)
     {
         $params = array('module' => $this->getModuleName());
         $area = $this->getArea();
         if ($area) {
             $params['area'] = $area;
         }
-        $templateName = $this->_viewFileSystem->getTemplateFileName($this->getTemplate(), $params);
+        $templateName = $this->_viewFileSystem->getTemplateFileName($template ?: $this->getTemplate(), $params);
         return $templateName;
     }
 

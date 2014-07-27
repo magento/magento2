@@ -24,7 +24,7 @@
 ?>
 <?php /* @var $this \Magento\Sales\Block\Order\PrintOrder\Shipment */ ?>
 <?php $order = $this->getOrder(); ?>
-<div class="page title">
+<div class="page-title">
     <h1 class="title">
         <?php echo __('Order #%1', $this->getObjectData($order, 'real_order_id')); ?>
     </h1>
@@ -81,7 +81,7 @@
             <?php endif; ?>
         </div>
 
-        <div class="block order payment method">
+        <div class="block order payment-method">
             <div class="title">
                 <strong><?php echo __('Payment Method') ?></strong>
             </div>
@@ -91,8 +91,8 @@
         </div>
 
     </div>
-    <div class="order details items">
-        <div class="order subtitle caption">
+    <div class="order-details-items">
+        <div class="order-title">
             <strong><?php echo __('Items Shipped') ?></strong>
         </div>
         <table class="data table order items" id="my-shipment-table-<?php echo $this->getObjectData($shipment, 'id') ?>">

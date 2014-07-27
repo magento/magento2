@@ -1,202 +1,220 @@
-"Abandoned Cart",废弃的购物车
-"Abandoned Carts",废弃的物车
-"Abandoned carts",废弃的购物车
-Action,操作
-"Add to Cart",添加到购物车
-"Add to Compare",添加并比较
-"Add to Wish List",添加到收藏
-"Add to Wishlist",添加到收藏
-Added,添加日期
-Any,任意
-"Applied Coupon",已应用的优惠券
-"Applies to Any of the Specified Order Statuses",适用于任何指定的顺序状态
-"Are you sure you want to refresh lifetime statistics? There can be performance impact during this operation.",您确认要刷新生命期统计数据吗？此操作过程可能会影响性能。
-"Are you sure you want to refresh statistics for last day?",您确定要刷新最后一天的统计吗？
-"Are you sure?",您是否确认？
-Average,平均订单量
-"Average (Approved)",平均（已批准）
-"Best Sellers Report",最好的卖家报表
-Bestsellers,最佳销量
-"By Customers",按顾客
-"By Products",按产品
-CSV,CSV
-Carts,购物车
-"Compared Product Images Only Template",比较的产品图片仅模板
-"Compared Product Names Only Template",比较产品名仅模板
-"Compared Products Grid Template",比对的产品网格模板
-"Compared Products Images and Names Template",比较产品图片和名字模板
-"Compared Products List Template",比对的产品列表模板
-Coupons,优惠券
-"Coupons Report",优惠券报表
-"Coupons Usage Report",优惠券使用报表
-"Created At",创建于
-"Current Month Starts",当前月起始
-Customer,顾客姓名
-"Customer Reviews Report",顾客评论报表
-"Customer Shopping Carts",顾客购物车
-Customers,顾客
-"Customers Report",顾客报表
-"Customers Reviews",顾客评论
-"Customers by Number of Orders",按订单数统计的顾客
-"Customers by Orders Total",按订单数量排列顾客
-"Customers by number of orders",按订单数排列顾客
-"Customers that have wish list: %1%","有收藏清单的顾客： %1%"
-Dashboard,仪表板
-Day,天
-"Default Recently Compared Products Count",默认最近比较的产品数量
-"Default Recently Viewed Products Count",默认最近查看的产品数量
-Description,描述
-Detail,详情
-Downloads,下载
-"Downloads Report",下载报表
-Email,电子邮件
-"Empty Rows",空行
-"Excel XML","Excel XML"
-Filter,筛选器
-"First Invoice Created Date",第一张发票的创建日期
-"First Name",名字
-From,来自
-Fulfilled,履行的
-Guest,访客
-Hits,提示
-ID,ID
-"IP Address",IP地址
-"Index type is not valid",无效的索引类型
-Interval,周期
-"Invalid date specified",无效的日期
-"Invoice Report",发票报表
-Invoiced,已出发票
-"Invoiced Orders",已开票的订单
-"Items in Cart",购物车中的条目
-"Last Credit Memo Created Date",上次信用记录创建日期
-"Last Invoice Created Date",上一个发票创建日期
-"Last Name",姓氏
-"Last Review",上次评论
-Link,链接
-"List of Products Recently Compared and Removed from the Compare List by Visitor",最近由访客从比较列表中比较和删除的产品列表
-"List of Products Recently Viewed by Visitor",最近由访客浏览过的产品列表
-"Low Stock",库存量低
-"Low Stock Report",低库存报表
-"Low stock",低库存
-Marketing,市场
-"Match Period To",匹配时期到
-Month,月
-"Most Viewed",最受欢迎
-Name,姓名
-"New Accounts",新账户数量
-"New Accounts Report",新账户报表
-No,否
-"No report code is specified.",未指定报表代码。
-"Number of Products to display",显示产品的数量
-"Number of items bought from a wish list: %1","从收藏清单里购买的数量： %1"
-"Number of times wish lists have been shared (emailed): %1",收藏清单里分享的次数（发邮件的）：%1
-"Number of wish list conversions: %1","收藏清单转化数量： %1"
-"Number of wish list referrals: %1","收藏清单导入的数量： %1"
-"Number of wish lists: %1","收藏的数量： %1"
-"Offline Refunds",离线的退款
-"Online Refunds",在线的退款
-"Order Count",订单数
-"Order Count Report",订单数报表
-"Order Created Date",订单创建日期
-"Order Quantity",下单的数量
-"Order Status",订单状态
-"Order Taxes Report Grouped by Tax Rate",按税率分组的订购税费报表
-"Order Total Report",订单总数报表
-"Order Updated Date",订单更新日期
-"Ordered Products Report",已订购产品报表
-"Ordered Quantity",订购数量
-Orders,订单
-"Out of stock",缺货
-"Paid Invoices",已经支付的发票
-Price,价格
-"Price Rule",共享购物车规则
 Product,产品名
-"Product Reviews",产品评论
-"Product Reviews Report",产品评论报表
-"Product Views Report",产品浏览量报表
-Products,产品
-"Products Most Viewed Report",浏览最多产品报表
-"Products Ordered",已订购产品
-"Products Report",产品报表
-"Products Reviews",产品评论
-"Products in Cart",购物车中的产品
-"Products in Carts",购物车中的产品
-"Products in carts",购物车中的产品
-Purchased,购买的
-Purchases,购买
+Price,价格
 Quantity,商品的数量
-"Recent statistics have been updated.",最近更新的统计信息。
-"Recently Compared",最近比较过的
-"Recently Compared Products",最近比较过的产品
-"Recently Viewed",最近查看过的
-"Recently Viewed Products",最近查看过的产品
-"Recently Viewed/Compared Products",最近查看/比较过的产品
-"Refresh Lifetime Statistics",刷新生命周期统计
-"Refresh Statistics",刷新统计
-"Refresh Statistics for the Last Day",刷新昨天的统计
-"Refresh statistics",刷新统计
-"Refunded Orders",退款的订单
-Refunds,退款
-"Refunds Report",退款报表
-Report,报表
-Reports,报表
-Results,结果
-Revenue,收入
-Review,评论
-Reviews,评论
-"Reviews for %1",%1的评论
-Sales,销售
-"Sales Report",销售报表
-"Search Query",搜索查询
-"Search Terms",搜索词
-"Search Terms Report",搜索词报表
-"Select day of the month.",选择每月的天数。
-Shipping,货运
-"Shipping Report",货运报表
+Products,产品
+ID,ID
+SKU,SKU
+Customers,客户
 "Shopping Cart",购物车
-"Show Actual Values",显示实际值
-"Show By",显示条件
-"Show Report",显示报表
-"Show Report For:",显示报表：
-"Show Reviews",显示评论
-"Show for Current",显示最新值
-Specified,已指定
-Statistics,统计
-"Stock Quantity",库存数量
+No,否
 Subtotal,小计
-Tax,传真
-"Tax Report",税报表
-"The Order Updated Date report is displayed in real-time, and does not need to be refreshed.",该订单更新的日期报表被实时显示，不需要刷新。
-"The product type filter specified is incorrect.",产品类型筛选器不正确。
-"This report uses timezone configuration data. Be sure to refresh lifetime statistics any time you change store timezone.",该报表使用时区配置数据。确保任何时间改变店铺时区时刷新生命周期统计。
-"Times Deleted",已删除时间数量
-Title,标题
-To,发送至
+Discount,Discount
+Action,操作
 Total,总数
-"Total Invoiced vs. Paid Report","发票总数 vs. 付款报表"
-"Total Ordered Report",订单总数报表
-"Total Refunded Report",退款总数报表
-"Total Shipped Report",发货总数报表
-"Unpaid Invoices",位支付的发票
-"Updated At",更新于
-Viewed,浏览数
-"Viewed Products Grid Template",查看过的产品网格模板
-"Viewed Products Images Only Template",查看产品图片仅模板
-"Viewed Products Images and Names Template",查看产品图片和名字模板
-"Viewed Products List Template",查看的产品列表模板
-"Viewed Products Names Only Template",查看图片名字仅模板
-Views,浏览数
-Visibility,可见性
-"We can't refresh lifetime statistics.",不能刷新生命周期统计。
-"We can't refresh recent statistics.",不能刷新最近的统计。
-"We couldn't find records for this period.",找不到该时期的记录。
-"We updated lifetime statistics.",更新了生命周期统计。
-"Wish List vs. Regular Order",收藏清单vs.正规订单
-"Wish Lists",收藏清单
-"Wishlist Purchase",购买自收藏清单
-Year,年
-"Year-To-Date Starts",开始的年月日
+"Add to Cart",添加到购物车
+Orders,订单
+Bestsellers,最佳销量
+Customer,顾客姓名
+Guest,来宾
+Items,Items
+Results,结果
+Uses,Uses
+Average,Average
+"Order Quantity",下单的数量
+Views,浏览数量
+Revenue,收入
+Tax,传真
+Shipping,运送
+"First Name",名字
+"Last Name",姓氏
+Email,电子邮件
+Refresh,Refresh
+Store,Store
 Yes,是
-"Your Recently Compared",您最近的比较
-"Your Recently Viewed",您最近看过的
+Name,姓名
+Title,标题
+Description,描述
+From,来自
+To,发送至
+Dashboard,Dashboard
+"IP Address",IP地址
+"All Websites","All Websites"
+"Tax Amount","Tax Amount"
+Invoiced,已出发票
+Refunded,Refunded
+Canceled,Canceled
+"In stock","In stock"
+"Out of stock",缺货
+Day,天
+Month,月
+Year,年
+"Search Query",搜索查询
+"Search Terms",搜索条件
+"Add to Wishlist",添加到收藏
+"Add to Compare",添加并比较
+"Items in Cart",购物车中的项目
+Sales,销售
+Created,Created
+"Product Reviews",产品评测
+Updated,Updated
+Reports,报告
+Details,Details
+Unlimited,Unlimited
+Fulfilled,Fulfilled
+Filter,过滤器
+Link,链接
+Report,报告
+Added,Added
+"Coupon Code","Coupon Code"
+"New Accounts",新账户数量
+"Customers by number of orders",按订单数排列顾客
+"Customers by Orders Total",按订单数量排列顾客
+"Match Period To","Match Period To"
+Period,Period
+"Empty Rows",空行
+"Invalid date specified","Invalid date specified"
+"We couldn't find records for this period.","We couldn't find records for this period."
+"Show Reviews","Show Reviews"
+"Products Report",产品报告
+Downloads,下载
+Purchases,购买
+CSV,CSV
+"Excel XML","Excel XML"
+Viewed,浏览数目
+Purchased,Purchased
+"Low stock",低库存
+"Products Ordered",产品已下单
+"Most Viewed",最受欢迎
+"Show Report",显示报告
+Interval,周期
+"Refresh Statistics",刷新状态
+"Customers Reviews",客户评测
+"Reviews for %1","Reviews for %1"
+Detail,详情
+"Products Reviews",产品评论
+"Products Bestsellers Report","Products Bestsellers Report"
+"Coupons Usage Report",优惠券使用报告
+"Price Rule",共享购物车规则
+"Sales Subtotal","Sales Subtotal"
+"Sales Discount","Sales Discount"
+"Sales Total","Sales Total"
+"Total Invoiced vs. Paid Report","发票总数 vs. 付款报告"
+"Invoiced Orders","Invoiced Orders"
+"Total Invoiced","Total Invoiced"
+"Paid Invoices","Paid Invoices"
+"Unpaid Invoices","Unpaid Invoices"
+"Total Refunded Report",退款总数报告
+"Refunded Orders","Refunded Orders"
+"Total Refunded","Total Refunded"
+"Online Refunds","Online Refunds"
+"Offline Refunds","Offline Refunds"
+"Total Ordered Report",订单总数报告
+"Sales Items","Sales Items"
+Profit,Profit
+Paid,Paid
+"Sales Tax","Sales Tax"
+"Sales Shipping","Sales Shipping"
+"Total Shipped Report",发货总数报告
+Carrier/Method,Carrier/Method
+"Total Sales Shipping","Total Sales Shipping"
+"Total Shipping","Total Shipping"
+"Order Taxes Report Grouped by Tax Rate",按税率分组的订购税费报告
+Rate,Rate
+"Abandoned carts",废弃的购物车
+"Applied Coupon",已应用的优惠券
+"Products in carts",购物车中的产品
+Carts,购物车
+"Wish Lists","Wish Lists"
+"Wishlist Purchase",购买自愿望清单
+"Wish List vs. Regular Order","Wish List vs. Regular Order"
+"Times Deleted",已删除时间数量
+"Index type is not valid","Index type is not valid"
+"Search Terms Report","Search Terms Report"
+"Last updated: %1. To refresh last day's <a href=""%2"">statistics</a>, ' 'click <a href=""%3"">here</a>.","Last updated: %1. To refresh last day's <a href=""%2"">statistics</a>, ' 'click <a href=""%3"">here</a>."
+"New Accounts Report","New Accounts Report"
+"Order Count Report","Order Count Report"
+"Customers by Number of Orders","Customers by Number of Orders"
+"Order Total Report","Order Total Report"
+"Ordered Products Report","Ordered Products Report"
+"Product Views Report","Product Views Report"
+"Products Most Viewed Report","Products Most Viewed Report"
+"Low Stock Report","Low Stock Report"
+"Low Stock",库存量低
+"Downloads Report","Downloads Report"
+Review,评测
+Reviews,评测
+"Customer Reviews Report","Customer Reviews Report"
+"Customers Report",顾客报告
+"Product Reviews Report","Product Reviews Report"
+"Sales Report",销售报告
+"Best Sellers Report","Best Sellers Report"
+"Tax Report","Tax Report"
+"Shipping Report","Shipping Report"
+"Invoice Report","Invoice Report"
+"Refunds Report","Refunds Report"
+"Coupons Report","Coupons Report"
+Coupons,折价券
+"Customer Shopping Carts","Customer Shopping Carts"
+"Products in Carts","Products in Carts"
+"Abandoned Carts",放弃购物车
+Statistics,状态
+"No report code is specified.","No report code is specified."
+"Recent statistics have been updated.","Recent statistics have been updated."
+"We can't refresh recent statistics.","We can't refresh recent statistics."
+"We updated lifetime statistics.","We updated lifetime statistics."
+"We can't refresh lifetime statistics.","We can't refresh lifetime statistics."
+"The product type filter specified is incorrect.","The product type filter specified is incorrect."
+"Order Taxes Report Grouped by Tax Rates","Order Taxes Report Grouped by Tax Rates"
+"Total Invoiced VS Paid Report","Total Invoiced VS Paid Report"
+"Promotion Coupons Usage Report","Promotion Coupons Usage Report"
+"Most Viewed Products Report","Most Viewed Products Report"
+"Show By","Show By"
+"Select Date","Select Date"
+"Customers that have wish list: %1%","Customers that have wish list: %1%"
+"Number of wish lists: %1","Number of wish lists: %1"
+"Number of items bought from a wish list: %1","Number of items bought from a wish list: %1"
+"Number of times wish lists have been shared (emailed): %1","Number of times wish lists have been shared (emailed): %1"
+"Number of wish list referrals: %1","Number of wish list referrals: %1"
+"Number of wish list conversions: %1","Number of wish list conversions: %1"
+"Show Report For:","Show Report For:"
+"Recently Viewed",最近查看过的
+"Recently Compared Products",最近比较过的产品
+"Recently Viewed Products",最近查看过的产品
+"Recently Compared",最近比较过的
+"Recently Viewed/Compared Products","Recently Viewed/Compared Products"
+"Show for Current","Show for Current"
+"Default Recently Viewed Products Count","Default Recently Viewed Products Count"
+"Default Recently Compared Products Count","Default Recently Compared Products Count"
+"Year-To-Date Starts","Year-To-Date Starts"
+"Current Month Starts","Current Month Starts"
+"Select day of the month.","Select day of the month."
+"List of Products Recently Viewed by Visitor",最近由访客浏览过的产品列表
+"Number of Products to display",显示产品的数量
+"Viewed Products Grid Template",查看过的产品网格模板
+"Viewed Products List Template",查看的产品列表模板
+"Viewed Products Images and Names Template","Viewed Products Images and Names Template"
+"Viewed Products Names Only Template","Viewed Products Names Only Template"
+"Viewed Products Images Only Template","Viewed Products Images Only Template"
+"List of Products Recently Compared and Removed from the Compare List by Visitor",最近由访客从比较列表中比较和删除的产品列表
+"Compared Products Grid Template",比对的产品网格模板
+"Compared Products List Template",比对的产品列表模板
+"Compared Products Images and Names Template","Compared Products Images and Names Template"
+"Compared Product Names Only Template","Compared Product Names Only Template"
+"Compared Product Images Only Template","Compared Product Images Only Template"
+Hits,提示
+"Stock Quantity",库存数量
+"Ordered Quantity","Ordered Quantity"
+"This report uses timezone configuration data. Be sure to refresh lifetime statistics any time you change store timezone.","This report uses timezone configuration data. Be sure to refresh lifetime statistics any time you change store timezone."
+"Average (Approved)","Average (Approved)"
+"Last Review",上次评论
+"Order Created Date","Order Created Date"
+"Order Updated Date","Order Updated Date"
+"The Order Updated Date report is displayed in real-time, and does not need to be refreshed.","The Order Updated Date report is displayed in real-time, and does not need to be refreshed."
+"Last Invoice Created Date","Last Invoice Created Date"
+"Last Credit Memo Created Date","Last Credit Memo Created Date"
+"First Invoice Created Date","First Invoice Created Date"
+"Refresh Lifetime Statistics",刷新寿命状态
+"Are you sure you want to refresh lifetime statistics? There can be performance impact during this operation.",您确认要刷新生命期数据吗？此操作过程可能会影响性能。
+"Refresh Statistics for the Last Day",刷新昨天的状态
+"Are you sure you want to refresh statistics for last day?","Are you sure you want to refresh statistics for last day?"
 undefined,未定义

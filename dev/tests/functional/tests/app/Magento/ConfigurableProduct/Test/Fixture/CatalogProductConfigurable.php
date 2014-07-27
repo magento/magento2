@@ -44,11 +44,12 @@ class CatalogProductConfigurable extends InjectableFixture
      */
     protected $repositoryClass = 'Magento\ConfigurableProduct\Test\Repository\CatalogProductConfigurable';
 
+    // @codingStandardsIgnoreStart
     /**
      * @var string
      */
-    protected $handlerInterface =
-        'Magento\ConfigurableProduct\Test\Handler\CatalogProductConfigurable\CatalogProductConfigurableInterface';
+    protected $handlerInterface = 'Magento\ConfigurableProduct\Test\Handler\CatalogProductConfigurable\CatalogProductConfigurableInterface';
+    // @codingStandardsIgnoreEnd
 
     /**
      * Constructor
@@ -83,6 +84,7 @@ class CatalogProductConfigurable extends InjectableFixture
             $dataSet,
             $persist
         );
+
         if (!isset($this->data['url_key']) && isset($this->data['name'])) {
             $this->data['url_key'] = trim(strtolower(preg_replace('#[^0-9a-z%]+#i', '-', $this->data['name'])), '-');
         }
@@ -372,7 +374,7 @@ class CatalogProductConfigurable extends InjectableFixture
         'default_value' => '',
         'input' => 'price',
         'group' => 'product-details',
-        'source' => 'Magento\Catalog\Test\Fixture\CatalogProductSimple\Price'
+        'source' => 'Magento\ConfigurableProduct\Test\Fixture\CatalogProductConfigurable\Price'
     ];
 
     protected $quantity_and_stock_status = [
@@ -462,8 +464,9 @@ class CatalogProductConfigurable extends InjectableFixture
         'attribute_code' => 'status',
         'backend_type' => 'int',
         'is_required' => '0',
-        'default_value' => '',
-        'input' => 'select',
+        'default_value' => 'Product online',
+        'input' => 'checkbox',
+        'group' => 'product-details',
     ];
 
     protected $tax_class_id = [
@@ -558,18 +561,14 @@ class CatalogProductConfigurable extends InjectableFixture
     protected $attribute_set_id = [
         'attribute_code' => 'attribute_set_id',
         'backend_type' => 'virtual',
+        'group' => 'product-details',
+        'source' => 'Magento\Catalog\Test\Fixture\CatalogProductSimple\AttributeSetId',
     ];
 
     protected $attribute_set_name = [
         'attribute_code' => 'attribute_set_name',
         'backend_type' => 'virtual',
         'group' => 'variations'
-    ];
-
-    protected $qty = [
-        'attribute_code' => 'qty',
-        'input' => 'input',
-        'group' => 'product-details',
     ];
 
     protected $custom_options = [
@@ -580,38 +579,20 @@ class CatalogProductConfigurable extends InjectableFixture
         'source' => 'Magento\Catalog\Test\Fixture\CatalogProductSimple\CustomOptions',
     ];
 
-    protected $configurable_options = [
-        'attribute_code' => 'configurable_options',
-        'backend_type' => 'virtual',
-        'is_required' => '0',
-        'input' => 'variations',
-        'group' => 'product-details',
-        'source' => 'Magento\ConfigurableProduct\Test\Fixture\CatalogProductConfigurable\ConfigurableOptions',
-    ];
-
-    protected $attribute_options = [
-        'attribute_code' => 'attribute_options',
-        'backend_type' => 'virtual',
-        'is_required' => '0',
-        'input' => 'variations',
-        'group' => 'product-details',
-        'source' => 'Magento\ConfigurableProduct\Test\Fixture\CatalogProductConfigurable\AttributeOptions',
-    ];
-
     protected $configurable_attributes_data = [
-        'attribute_code' => 'configurable_options_data',
+        'attribute_code' => 'configurable_attributes_data',
         'backend_type' => 'virtual',
         'is_required' => '0',
         'input' => 'variations',
         'group' => 'variations',
+        'source' => 'Magento\ConfigurableProduct\Test\Fixture\CatalogProductConfigurable\ConfigurableAttributesData'
     ];
 
-    protected $variations_matrix = [
-        'attribute_code' => 'variations_matrix',
+    protected $website_ids = [
+        'attribute_code' => 'website_ids',
         'backend_type' => 'virtual',
-        'is_required' => '0',
-        'input' => 'variations',
-        'group' => 'variations',
+        'default_value' => ['Main Website'],
+        'group' => 'websites',
     ];
 
     public function getCategoryIds()
@@ -894,28 +875,23 @@ class CatalogProductConfigurable extends InjectableFixture
         return $this->getData('attribute_set_id');
     }
 
-    public function getQty()
-    {
-        return $this->getData('qty');
-    }
-
     public function getCustomOptions()
     {
         return $this->getData('custom_options');
     }
 
-    public function getConfigurableOptions()
-    {
-        return $this->getData('configurable_options');
-    }
-
-    public function getAttributeOptions()
-    {
-        return $this->getData('attribute_options');
-    }
-
     public function getAttributeSetName()
     {
         return $this->getData('attribute_set_name');
+    }
+
+    public function getConfigurableAttributesData()
+    {
+        return $this->getData('configurable_attributes_data');
+    }
+
+    public function getWebsiteIds()
+    {
+        return $this->getData('website_ids');
     }
 }

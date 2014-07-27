@@ -55,6 +55,16 @@ class ItemBuilder extends \Magento\Framework\Service\Data\AbstractObjectBuilder
     }
 
     /**
+     * Convenience getter method for AppliedTaxBuilder
+     *
+     * @return AppliedTaxBuilder
+     */
+    public function getAppliedTaxBuilder()
+    {
+        return $this->appliedTaxBuilder;
+    }
+
+    /**
      * Set code (sku or shipping code)
      *
      * @param string $code
@@ -127,6 +137,18 @@ class ItemBuilder extends \Magento\Framework\Service\Data\AbstractObjectBuilder
     }
 
     /**
+     * Set row total including tax
+     *
+     * @param float $rowTotalInclTax
+     * @return $this
+     */
+    public function setRowTotalInclTax($rowTotalInclTax)
+    {
+        $this->_set(Item::KEY_ROW_TOTAL_INCL_TAX, $rowTotalInclTax);
+        return $this;
+    }
+
+    /**
      * Set tax amount
      *
      * @param float $taxAmount
@@ -175,20 +197,42 @@ class ItemBuilder extends \Magento\Framework\Service\Data\AbstractObjectBuilder
     }
 
     /**
+     * Set applied taxes for the item
+     *
+     * @param \Magento\Tax\Service\V1\Data\TaxDetails\AppliedTax[] $appliedTaxes
+     * @return $this
+     */
+    public function setAppliedTaxes($appliedTaxes)
+    {
+        $this->_set(Item::KEY_APPLIED_TAXES, $appliedTaxes);
+        return $this;
+    }
+
+    /**
+     * Set the associated item code
+     *
+     * @param string $code
+     * @return $this
+     */
+    public function setAssociatedItemCode($code)
+    {
+        $this->_set(Item::KEY_ASSOCIATED_ITEM_CODE, $code);
+        return $this;
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function _setDataValues(array $data)
     {
-        $appliedTaxDataObjects = [];
-
         if (isset($data[Item::KEY_APPLIED_TAXES])) {
+            $appliedTaxDataObjects = [];
             $appliedTaxes = $data[Item::KEY_APPLIED_TAXES];
             foreach ($appliedTaxes as $appliedTax) {
                 $appliedTaxDataObjects[] = $this->appliedTaxBuilder->populateWithArray($appliedTax)->create();
             }
+            $data[Item::KEY_APPLIED_TAXES] = $appliedTaxDataObjects;
         }
-
-        $data[Item::KEY_APPLIED_TAXES] = $appliedTaxDataObjects;
 
         return parent::_setDataValues($data);
     }

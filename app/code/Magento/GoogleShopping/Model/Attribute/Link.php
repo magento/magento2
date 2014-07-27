@@ -25,8 +25,6 @@ namespace Magento\GoogleShopping\Model\Attribute;
 
 /**
  * Link attribute model
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Link extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
 {
@@ -41,7 +39,7 @@ class Link extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\GoogleShopping\Helper\Data $gsData
+     * @param \Magento\GoogleShopping\Helper\Data $googleShoppingHelper
      * @param \Magento\GoogleShopping\Helper\Product $gsProduct
      * @param \Magento\Catalog\Model\Product\CatalogPrice $catalogPrice
      * @param \Magento\GoogleShopping\Model\Resource\Attribute $resource
@@ -53,7 +51,7 @@ class Link extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\GoogleShopping\Helper\Data $gsData,
+        \Magento\GoogleShopping\Helper\Data $googleShoppingHelper,
         \Magento\GoogleShopping\Helper\Product $gsProduct,
         \Magento\Catalog\Model\Product\CatalogPrice $catalogPrice,
         \Magento\GoogleShopping\Model\Resource\Attribute $resource,
@@ -66,7 +64,7 @@ class Link extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
             $context,
             $registry,
             $productFactory,
-            $gsData,
+            $googleShoppingHelper,
             $gsProduct,
             $catalogPrice,
             $resource,
@@ -86,7 +84,11 @@ class Link extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
     {
         $url = $product->getProductUrl(false);
         if ($url) {
-            if (!$this->_scopeConfig->isSetFlag('web/url/use_store', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)) {
+            $isStoreInUrl = $this->_scopeConfig->isSetFlag(
+                \Magento\Store\Model\Store::XML_PATH_STORE_IN_URL,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
+            if (!$isStoreInUrl) {
                 $urlInfo = parse_url($url);
                 $store = $product->getStore()->getCode();
                 if (isset($urlInfo['query']) && $urlInfo['query'] != '') {

@@ -41,6 +41,6 @@ class Search extends \Magento\Backend\Block\Widget\Grid\Container
         $this->_controller = 'adminhtml_search';
         $this->_headerText = __('Search Terms');
         parent::_construct();
-        $this->_removeButton('add');
+        $this->buttonList->remove('add');
     }
 }

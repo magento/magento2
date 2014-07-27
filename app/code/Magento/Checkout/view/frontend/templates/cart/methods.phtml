@@ -27,7 +27,7 @@
 ?>
 <?php if(!$this->hasError()): ?>
 <?php $methods = $this->getMethods('methods') ? : $this->getMethods('top_methods') ?>
-<ul class="checkout methods items">
+<ul class="checkout methods items checkout-methods-items">
 <?php foreach ($methods as $method): ?>
     <?php if ($methodHtml = $this->getMethodHtml($method)): ?>
     <li class="item"><?php echo $methodHtml; ?></li>

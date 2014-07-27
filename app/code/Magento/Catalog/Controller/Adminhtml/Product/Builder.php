@@ -26,7 +26,7 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
 
 use Magento\Framework\App\RequestInterface;
 use Magento\Catalog\Model\ProductFactory;
-use Magento\Cms\Model\Wysiwyg;
+use Magento\Cms\Model\Wysiwyg as WysiwygModel;
 use Magento\Framework\Registry;
 use Magento\Framework\Logger;
 
@@ -56,13 +56,13 @@ class Builder
      * @param ProductFactory $productFactory
      * @param Logger $logger
      * @param Registry $registry
-     * @param Wysiwyg\Config $wysiwygConfig
+     * @param WysiwygModel\Config $wysiwygConfig
      */
     public function __construct(
         ProductFactory $productFactory,
         Logger $logger,
         Registry $registry,
-        Wysiwyg\Config $wysiwygConfig
+        WysiwygModel\Config $wysiwygConfig
     ) {
         $this->productFactory = $productFactory;
         $this->logger = $logger;

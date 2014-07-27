@@ -40,20 +40,40 @@ class CartTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Checkout\Model\Session|\PHPUnit_Framework_MockObject_MockObject */
     protected $checkoutSessionMock;
 
-    /** @var \Magento\CatalogInventory\Service\V1\StockItem|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $customerSessionMock;
+
+    /** @var \Magento\CatalogInventory\Service\V1\StockItemService|\PHPUnit_Framework_MockObject_MockObject */
     protected $stockItemMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $scopeConfigMock;
 
     protected function setUp()
     {
         $this->checkoutSessionMock = $this->getMock('Magento\Checkout\Model\Session', [], [], '', false);
-        $this->stockItemMock = $this->getMock('Magento\CatalogInventory\Service\V1\StockItem', [], [], '', false);
+        $this->customerSessionMock = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
+        $this->scopeConfigMock = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface');
+        $this->stockItemMock = $this->getMock(
+            'Magento\CatalogInventory\Service\V1\StockItemService',
+            [],
+            [],
+            '',
+            false
+        );
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->cart = $this->objectManagerHelper->getObject(
             'Magento\Checkout\Model\Cart',
             [
+                'scopeConfig' => $this->scopeConfigMock,
                 'checkoutSession' => $this->checkoutSessionMock,
-                'stockItemService' => $this->stockItemMock
+                'stockItemService' => $this->stockItemMock,
+                'customerSession' => $this->customerSessionMock,
             ]
         );
     }
@@ -124,5 +144,43 @@ class CartTest extends \PHPUnit_Framework_TestCase
             ->method('getProduct')
             ->will($this->returnValue($product));
         return $quoteItem;
+    }
+
+    /**
+     * @param boolean $useQty
+     * @dataProvider useQtyDataProvider
+     */
+    public function testGetSummaryQty($useQty)
+    {
+        $quoteId = 1;
+        $itemsCount = 1;
+        $quoteMock = $this->getMock(
+            'Magento\Sales\Model\Quote',
+            ['getItemsCount', 'getItemsQty', '__wakeup'],
+            [],
+            '',
+            false
+        );
+
+        $this->checkoutSessionMock->expects($this->any())->method('getQuote')->will($this->returnValue($quoteMock));
+        $this->checkoutSessionMock->expects($this->at(2))->method('getQuoteId')->will($this->returnValue($quoteId));
+        $this->customerSessionMock->expects($this->any())->method('isLoggedIn')->will($this->returnValue(true));
+
+        $this->scopeConfigMock->expects($this->once())->method('getValue')
+            ->with('checkout/cart_link/use_qty', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
+            ->will($this->returnValue($useQty));
+
+        $qtyMethodName = ($useQty) ? 'getItemsQty' : 'getItemsCount';
+        $quoteMock->expects($this->once())->method($qtyMethodName)->will($this->returnValue($itemsCount));
+
+        $this->assertEquals($itemsCount, $this->cart->getSummaryQty());
+    }
+
+    public function useQtyDataProvider()
+    {
+        return [
+            ['useQty' => true],
+            ['useQty' => false]
+        ];
     }
 }

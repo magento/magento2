@@ -28,6 +28,8 @@
     <type name="Magento\ImportExport\Model\Import">
         <plugin name="catalogProductFlatIndexerImport" type="\Magento\CatalogImportExport\Model\Indexer\Product\Flat\Plugin\Import" />
         <plugin name="invalidatePriceIndexerOnImport" type="\Magento\CatalogImportExport\Model\Indexer\Product\Price\Plugin\Import" />
+        <plugin name="invalidateStockIndexerOnImport" type="\Magento\CatalogImportExport\Model\Indexer\Stock\Plugin\Import" />
+        <plugin name="invalidateEavIndexerOnImport" type="\Magento\CatalogImportExport\Model\Indexer\Product\Eav\Plugin\Import" />
     </type>
     <type name="Magento\CatalogImportExport\Model\Export\RowCustomizer\Composite">
         <arguments>

@@ -30,11 +30,6 @@ namespace Magento\Bundle\Block\Catalog\Product;
 class Price extends \Magento\Catalog\Block\Product\Price
 {
     /**
-     * @var \Magento\Tax\Model\Calculation
-     */
-    protected $_taxCalc;
-
-    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Catalog\Helper\Data $catalogData
@@ -43,7 +38,6 @@ class Price extends \Magento\Catalog\Block\Product\Price
      * @param \Magento\Framework\Stdlib\String $string
      * @param \Magento\Framework\Math\Random $mathRandom
      * @param \Magento\Checkout\Helper\Cart $cartHelper
-     * @param \Magento\Tax\Model\Calculation $taxCalc
      * @param array $data
      */
     public function __construct(
@@ -55,7 +49,6 @@ class Price extends \Magento\Catalog\Block\Product\Price
         \Magento\Framework\Stdlib\String $string,
         \Magento\Framework\Math\Random $mathRandom,
         \Magento\Checkout\Helper\Cart $cartHelper,
-        \Magento\Tax\Model\Calculation $taxCalc,
         array $data = array()
     ) {
         parent::__construct(
@@ -69,23 +62,6 @@ class Price extends \Magento\Catalog\Block\Product\Price
             $cartHelper,
             $data
         );
-        $this->_taxCalc = $taxCalc;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isRatesGraterThenZero()
-    {
-        $request = $this->_taxCalc->getRateRequest(false, false, false);
-        $request->setProductClassId($this->getProduct()->getTaxClassId());
-        $defaultTax = $this->_taxCalc->getRate($request);
-
-        $request = $this->_taxCalc->getRateRequest();
-        $request->setProductClassId($this->getProduct()->getTaxClassId());
-        $currentTax = $this->_taxCalc->getRate($request);
-
-        return floatval($defaultTax) > 0 || floatval($currentTax) > 0;
     }
 
     /**

@@ -26,11 +26,16 @@
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
     <update handle="sales_order_creditmemo_renderers" />
     <update handle="customer_account"/>
-    <referenceContainer name="content">
-        <block class="Magento\Sales\Block\Order\Info" as="info" name="sales.order.info">
+    <referenceContainer name="page.main.title">
+        <block class="Magento\Sales\Block\Order\Info" name="order.status" template="order/order_status.phtml" />
+        <block class="Magento\Sales\Block\Order\Info" name="order.date" template="order/order_date.phtml" />
+        <container name="order.actions.container" htmlTag="div" htmlClass="actions-toolbar order-actions-toolbar">
             <block class="Magento\Sales\Block\Order\Info\Buttons" as="buttons" name="sales.order.info.buttons" cacheable="false"/>
-        </block>
-        <block class="Magento\Sales\Block\Order\Creditmemo" name="sales.order.creditmemo" after="sales.order.info" cacheable="false">
+            <block class="Magento\Sales\Block\Order\Info" name="order.rss" template="order/order_rss.phtml" />
+        </container>
+    </referenceContainer>
+    <referenceContainer name="content">
+        <block class="Magento\Sales\Block\Order\Creditmemo" name="sales.order.creditmemo" cacheable="false">
             <block class="Magento\Sales\Block\Order\Creditmemo\Items" name="creditmemo_items" template="order/creditmemo/items.phtml">
                 <block class="Magento\Framework\View\Element\RendererList" name="sales.order.creditmemo.renderers" as="renderer.list" />
                 <block class="Magento\Sales\Block\Order\Creditmemo\Totals" name="creditmemo_totals" template="order/totals.phtml">

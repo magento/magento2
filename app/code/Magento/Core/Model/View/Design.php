@@ -22,11 +22,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+namespace Magento\Core\Model\View;
+
 /**
  * Keeps design settings for current request
  */
-namespace Magento\Core\Model\View;
-
 class Design implements \Magento\Framework\View\DesignInterface
 {
     /**
@@ -177,14 +177,18 @@ class Design implements \Magento\Framework\View\DesignInterface
         $store = isset($params['store']) ? $params['store'] : null;
 
         if ($this->_isThemePerStoveView($area)) {
-            $theme = $this->_storeManager->isSingleStoreMode() ? $this->_scopeConfig->getValue(
-                self::XML_PATH_THEME_ID,
-                \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT
-            ) : (string)$this->_scopeConfig->getValue(
-                self::XML_PATH_THEME_ID,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                $store
-            );
+            if ($this->_storeManager->isSingleStoreMode()) {
+                $theme = $this->_scopeConfig->getValue(
+                    self::XML_PATH_THEME_ID,
+                    \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT
+                );
+            } else {
+                $theme = (string) $this->_scopeConfig->getValue(
+                    self::XML_PATH_THEME_ID,
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                    $store
+                );
+            }
         }
 
         if (!$theme && isset($this->_themes[$area])) {

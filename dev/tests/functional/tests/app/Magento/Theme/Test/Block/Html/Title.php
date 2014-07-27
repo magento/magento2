@@ -33,7 +33,7 @@ use Mtf\Block\Block;
 class Title extends Block
 {
     /**
-     * Get title of current category
+     * Get title of current page
      *
      * @return string
      */

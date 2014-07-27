@@ -46,6 +46,7 @@ class WishlistRss extends \Magento\Wishlist\Helper\Data
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Helper\PostData $postDataHelper
      * @param \Magento\Customer\Helper\View $customerViewHelper
+     * @param \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider
      * @param \Magento\Customer\Service\V1\Data\CustomerBuilder $customerBuilder
      */
     public function __construct(
@@ -58,6 +59,7 @@ class WishlistRss extends \Magento\Wishlist\Helper\Data
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Helper\PostData $postDataHelper,
         \Magento\Customer\Helper\View $customerViewHelper,
+        \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider,
         \Magento\Customer\Service\V1\Data\CustomerBuilder $customerBuilder
     ) {
         $this->_customerBuilder = $customerBuilder;
@@ -71,7 +73,8 @@ class WishlistRss extends \Magento\Wishlist\Helper\Data
             $wishlistFactory,
             $storeManager,
             $postDataHelper,
-            $customerViewHelper
+            $customerViewHelper,
+            $wishlistProvider
         );
     }
 

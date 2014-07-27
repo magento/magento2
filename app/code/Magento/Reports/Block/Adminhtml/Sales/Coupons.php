@@ -45,7 +45,7 @@ class Coupons extends \Magento\Backend\Block\Widget\Grid\Container
         $this->_headerText = __('Coupons Usage Report');
         parent::_construct();
 
-        $this->_removeButton('add');
+        $this->buttonList->remove('add');
         $this->addButton(
             'filter_form_submit',
             array('label' => __('Show Report'), 'onclick' => 'filterFormSubmit()', 'class' => 'primary')

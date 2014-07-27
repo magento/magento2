@@ -97,12 +97,14 @@ class DataTest extends \PHPUnit_Framework_TestCase
         );
         $provider = array();
         $provider[] = array(
-            array(),
+            array('baseImage' => 'http://example.com/base_img_url'),
             array(
                 'allowed_products' => array(),
-                'current_product_mock' => $currentProductMock
+                'current_product_mock' => $currentProductMock,
+                'baseImage' => 'http://example.com/base_img_url'
             )
         );
+
         $attributesCount = 3;
         $attributes = array();
         for ($i = 1; $i < $attributesCount; $i++) {
@@ -175,11 +177,13 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 ),
                 'attribute_id_2' => array(
                     'attribute_code_value_2' => array('product_id_1', 'product_id_2')
-                )
+                ),
+                'baseImage' => 'http://example.com/base_img_url'
             ),
             array(
                 'allowed_products' => $allowedProducts,
-                'current_product_mock' => $currentProductMock
+                'current_product_mock' => $currentProductMock,
+                'baseImage' => 'http://example.com/base_img_url'
             )
         );
         return $provider;

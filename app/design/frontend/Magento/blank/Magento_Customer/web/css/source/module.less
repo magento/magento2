@@ -22,10 +22,17 @@
 //  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 //  */
 
+@account-nav-background: #e8e8e8;
+@account-nav-color: false;
+@account-nav-current-color: false;
+@account-nav-current-font-weight: @font-weight-base;
+@account-nav-current-border: 3px solid transparent;
+@account-nav-current-border-color: #ff5501;
+
 .login.container {
     .block {
         &.new {
-            .actions.toolbar {
+            .actions-toolbar {
                 margin-top: 25px;
             }
         }
@@ -42,7 +49,7 @@
     }
 }
 
-.block.addresses.list {
+.block-addresses-list {
     .items.addresses {
         > .item {
             margin-bottom: @indent-base;
@@ -53,24 +60,23 @@
     }
 }
 
-.address.edit {
+.form-address-edit {
     #region_id {
-		display: none;
-	}
-}
-
-.form.edit.account{
-    .fieldset.password{
         display: none;
-	}
+    }
 }
 
-.address.billing,
-.address.shipping,
-.box.information,
-.box.newsletter {
-    address,
-    p {
+.form-edit-account {
+    .fieldset.password {
+        display: none;
+    }
+}
+
+.box-address-billing,
+.box-address-shipping,
+.box-information,
+.box-newsletter {
+    .box-content {
         line-height: 26px;
     }
 }
@@ -85,12 +91,14 @@
         h2 {
             margin-top: 0;
         }
-        .products.toolbar {
-            background: transparent;
-            margin-bottom: @indent-base;
+        .toolbar {
+            text-align: center;
+            .limiter-options {
+                width: auto;
+            }
         }
         .block:not(.widget) {
-            .title {
+            .block-title {
                 > strong {
                     .heading(h3);
                 }
@@ -99,7 +107,7 @@
                     margin-left: 15px;
                 }
             }
-            .subtitle {
+            .box-title {
                 > span {
                     .heading(h4);
                 }
@@ -110,7 +118,7 @@
                     margin-left: 15px;
                 }
             }
-            .content {
+            .block-content {
                 p:last-child {
                     margin-bottom: 0;
                 }
@@ -120,8 +128,8 @@
             }
         }
     }
-    .block.account.nav {
-        background: @sidebar-background;
+    .block.account-nav {
+        .css(background, @sidebar-background);
         padding: 15px 0;
         .title {
             padding: 0 18px;
@@ -146,32 +154,29 @@
                     border-left: 3px solid transparent;
                 }
                 a {
+                    .css(color, @account-nav-color);
                     text-decoration: none;
                     &:hover {
-                        background: #e8e8e8;
+                        .css(background, @account-nav-background);
                     }
                 }
                 &.current {
                     strong {
-                        border-color: #ff5501;
+                        .css(color, @account-nav-current-color);
+                        .css(border-color, @account-nav-current-border-color);
                         font-weight: normal;
                     }
                 }
             }
         }
     }
-
-    .wrapper.table {
+    .table-wrapper {
         margin-bottom: @indent-base;
         &:last-child {
             margin-bottom: 0;
         }
         .data.table {
-            .table-bordered(
-                @_type: light,
-                @_border-width: 1px
-            );
-            margin-bottom: 0;
+            .table-striped(@_stripped-highlight: even);
             .col.actions {
                 .action {
                     margin-right: 15px;
@@ -180,7 +185,7 @@
                     }
                 }
             }
-        }
+        } 
     }
 }
 
@@ -201,19 +206,22 @@
         }
         margin-bottom: @indent-s-base;
     }
+    p:last-child {
+        margin: 0;
+    }
+    .box-actions {
+        margin-top: @indent-xs-base;
+    }
 }
 
-.widget,
-.block {
-    ol, ul {
-        .list-reset-styles();
 
-        li {
-            margin-bottom: 6px;
-        }
-        strong {
-            font-weight: normal;
-        }
+.control.captcha-image {
+    .captcha-img {
+        float: left;
+        margin: 0 20px 0 0;
+    }
+    .action.reload {
+        margin: 10px 0 0;
     }
 }
 
@@ -226,7 +234,7 @@
         .block {
             &:extend(.blocks-2columns all);
             &.login {
-                .actions.toolbar {
+                .actions-toolbar {
                     > .primary {
                         margin-bottom: 0;
                         margin-right: 30px;
@@ -260,7 +268,8 @@
 
     // My account
     .account.layout-2-left {
-        .column.sidebar {
+        .sidebar-main,
+        .sidebar-additional {
             width: 22.3%;
         }
         .column.main {
@@ -271,7 +280,7 @@
     .account {
         .column.main {
             .block:not(.widget) {
-                .content {
+                .block-content {
                     &:extend(.add-clearfix-desktop all);
                     .box {
                         &:extend(.blocks-2columns all);
@@ -279,9 +288,38 @@
                 }
             }
         }
+        .data.table {
+            .table-bordered(
+                @_type: light,
+                @_border-width: 1px
+            );
+            margin-bottom: 0;
+        }
+        .toolbar {
+            position: relative;
+            margin-bottom: @indent-base;
+            &:extend(.add-clearfix-desktop all);
+            .limiter {
+                float: right;
+                position: relative;
+                z-index: 1;
+            }
+            .toolbar-amount {
+                float: left;
+                line-height: normal;
+                padding: 7px 0 0;
+                position: relative;
+                z-index: 1;
+            }
+            .pages {
+                position: absolute;
+                z-index: 0;
+                width: 100%;
+            }
+        }
     }
 
-    .block.addresses.list {
+    .block-addresses-list {
         .items.addresses {
             &:extend(.add-clearfix-desktop all);
             > .item {
@@ -297,5 +335,30 @@
 
     .widget {
         clear: both;
+    }
+}
+
+//
+//    Mobile
+//--------------------------------------
+.responsive-smaller(@break) when (@break = @break-point-0) {
+    .account {
+        .data.table {
+            &:extend(.table-vertical-mobile all);
+            .col.actions {
+                padding-top: 9px;
+                padding-bottom: 15px;
+                &:before {
+                    &:extend(.visually-hidden-mobile all);
+                }
+            }
+        }
+        .toolbar {
+            .toolbar-amount,
+            .limiter,
+            .pages {
+                margin-bottom: 25px;
+            }
+        }
     }
 }

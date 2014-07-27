@@ -219,14 +219,14 @@ test( "testValidateSsn", function() {
 
 test( "testValidateZip", function() {
     expect(8);
-    equal(true, $.validator.methods['validate-zip'].call(this, ""));
-    equal(true, $.validator.methods['validate-zip'].call(this, null));
-    equal(true, $.validator.methods['validate-zip'].call(this, undefined));
-    equal(false, $.validator.methods['validate-zip'].call(this, "   "));
-    equal(true, $.validator.methods['validate-zip'].call(this, "12345-1234"));
-    equal(true, $.validator.methods['validate-zip'].call(this, "02345"));
-    equal(false, $.validator.methods['validate-zip'].call(this, "1234"));
-    equal(false, $.validator.methods['validate-zip'].call(this, "1234-1234"));
+    equal(true, $.validator.methods['validate-zip-us'].call(this, ""));
+    equal(true, $.validator.methods['validate-zip-us'].call(this, null));
+    equal(true, $.validator.methods['validate-zip-us'].call(this, undefined));
+    equal(false, $.validator.methods['validate-zip-us'].call(this, "   "));
+    equal(true, $.validator.methods['validate-zip-us'].call(this, "12345-1234"));
+    equal(true, $.validator.methods['validate-zip-us'].call(this, "02345"));
+    equal(false, $.validator.methods['validate-zip-us'].call(this, "1234"));
+    equal(false, $.validator.methods['validate-zip-us'].call(this, "1234-1234"));
 });
 
 test( "testValidateDateAu", function() {

@@ -66,6 +66,15 @@
             <default_sort_by>
                 <input>select</input>
             </default_sort_by>
+            <display_mode>
+                <input>select</input>
+            </display_mode>
+            <landing_page>
+                <input>select</input>
+            </landing_page>
+            <is_anchor>
+                <input>select</input>
+            </is_anchor>
         </fields>
     </display_setting>
     <custom_design>
@@ -75,7 +84,7 @@
         <wrapper>general</wrapper>
     </custom_design>
     <category_products>
-        <class>\Magento\Backend\Test\Block\Widget\Tab</class>
+        <class>\Magento\Catalog\Test\Block\Adminhtml\Category\Edit\Tab\Product</class>
         <selector>#category_info_tabs_products</selector>
         <strategy>css selector</strategy>
     </category_products>

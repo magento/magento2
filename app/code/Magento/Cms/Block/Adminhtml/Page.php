@@ -42,9 +42,9 @@ class Page extends \Magento\Backend\Block\Widget\Grid\Container
         parent::_construct();
 
         if ($this->_isAllowedAction('Magento_Cms::save')) {
-            $this->_updateButton('add', 'label', __('Add New Page'));
+            $this->buttonList->update('add', 'label', __('Add New Page'));
         } else {
-            $this->_removeButton('add');
+            $this->buttonList->remove('add');
         }
     }
 

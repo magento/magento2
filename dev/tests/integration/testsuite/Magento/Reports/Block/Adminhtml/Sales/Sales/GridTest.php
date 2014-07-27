@@ -75,4 +75,44 @@ class GridTest extends \PHPUnit_Framework_TestCase
 
         $this->assertNotEquals($normalCollection, $filteredCollection);
     }
+
+
+    /**
+     * Check that grid does not contain unnecessary totals row
+     *
+     * @param $from string
+     * @param $to string
+     * @param $expectedResult bool
+     *
+     * @dataProvider getCountTotalsDataProvider
+     * @magentoDataFixture Magento/Reports/_files/orders.php
+     */
+    public function testGetCountTotals($from, $to, $expectedResult)
+    {
+        $block = $this->_createBlock();
+        $filterData = new \Magento\Framework\Object();
+
+        $filterData->setReportType('updated_at_order');
+        $filterData->setPeriodType('day');
+        $filterData->setData('from', $from);
+        $filterData->setData('to', $to);
+        $block->setFilterData($filterData);
+
+        $block->toHtml();
+        $this->assertEquals($block->getCountTotals(), $expectedResult);
+    }
+
+    /**
+     * Data provider for testGetCountTotals
+     *
+     * @return array
+     */
+    public function getCountTotalsDataProvider()
+    {
+        return [
+            [date("Y-m-d", time() + 24 * 60 * 60), date("Y-m-d", time() + 48 * 60 * 60), false],
+            [date("Y-m-d", time() - 24 * 60 * 60), date("Y-m-d", time() + 24 * 60 * 60), true],
+            [null, null, false],
+        ];
+    }
 }

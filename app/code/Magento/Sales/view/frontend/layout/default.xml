@@ -27,7 +27,7 @@
     <referenceBlock name="head.components">
         <block class="Magento\Framework\View\Element\Js\Components" name="sales_page_head_components" template="Magento_Sales::js/components.phtml"/>
     </referenceBlock>
-    <referenceContainer name="right">
+    <referenceContainer name="sidebar.additional">
         <block class="Magento\Sales\Block\Reorder\Sidebar" name="sale.reorder.sidebar" as="reorder" template="reorder/sidebar.phtml"/>
     </referenceContainer>
     <referenceBlock name="footer_links">

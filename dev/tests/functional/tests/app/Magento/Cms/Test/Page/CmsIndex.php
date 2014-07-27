@@ -49,13 +49,13 @@ class CmsIndex extends FrontendPage
         'titleBlock' => [
             'name' => 'titleBlock',
             'class' => 'Magento\Theme\Test\Block\Html\Title',
-            'locator' => '.page.title',
+            'locator' => '[data-ui-id="page-title"]',
             'strategy' => 'css selector',
         ],
         'footerBlock' => [
             'name' => 'footerBlock',
             'class' => 'Magento\Theme\Test\Block\Html\Footer',
-            'locator' => 'footer.footer',
+            'locator' => 'footer.page-footer',
             'strategy' => 'css selector',
         ],
         'linksBlock' => [
@@ -74,6 +74,18 @@ class CmsIndex extends FrontendPage
             'name' => 'cartSidebarBlock',
             'class' => 'Magento\Checkout\Test\Block\Cart\Sidebar',
             'locator' => '[data-block="minicart"]',
+            'strategy' => 'css selector',
+        ],
+        'compareProductsBlock' => [
+            'name' => 'compareProductsBlock',
+            'class' => 'Magento\Catalog\Test\Block\Product\Compare\Sidebar',
+            'locator' => '.sidebar.sidebar-additional',
+            'strategy' => 'css selector',
+        ],
+        'mainContentBlock' => [
+            'name' => 'mainContentBlock',
+            'class' => 'Magento\Cms\Test\Block\Page',
+            'locator' => '#maincontent',
             'strategy' => 'css selector',
         ],
     ];
@@ -132,5 +144,20 @@ class CmsIndex extends FrontendPage
     public function getCartSidebarBlock()
     {
         return $this->getBlockInstance('cartSidebarBlock');
+    }
+
+    /**
+     * @return \Magento\Catalog\Test\Block\Product\Compare\Sidebar
+     */
+    public function getCompareProductsBlock()
+    {
+        return $this->getBlockInstance('compareProductsBlock');
+    }
+    /**
+     * @return \Magento\Cms\Test\Block\Page
+     */
+    public function getMainContentBlock()
+    {
+        return $this->getBlockInstance('mainContentBlock');
     }
 }

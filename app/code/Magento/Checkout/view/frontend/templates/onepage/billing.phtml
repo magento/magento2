@@ -167,7 +167,7 @@
         <div class="field confirm required">
             <label class="label" for="billing:confirm_password"><span><?php echo __('Confirm Password') ?></span></label>
             <div class="control">
-                <input type="password" name="billing[confirm_password]" title="<?php echo __('Confirm Password') ?>" id="billing:confirm_password" class="input-text" data-validate="{required:true, 'validate-cpassword':true}"/>
+                <input type="password" name="billing[confirm_password]" title="<?php echo __('Confirm Password') ?>" id="billing:confirm_password" class="input-text" data-validate="{required:true, 'validate-cpassword':true, equalTo: '#billing\\:customer_password'}"/>
             </div>
         </div>
         <?php endif; ?>

@@ -22,14 +22,14 @@
 //  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
 //  */
 
-.actions.bundle {
-    margin: @indent-s-base 0;
-    .action.primary.customize {
-        .button-l();
+.bundle-actions {
+    &:extend(.abstract-box-tocart all);
+    .action.primary {
+        &:extend(.abstract-button-l all);
     }
 }
 
-.bundle.options.container {
+.bundle-options-container {
     clear: both;
     margin-bottom: @indent-xl-base;
 
@@ -37,19 +37,19 @@
         .heading(h2);
     }
 
-    .product.add.form {
+    .product-add-form {
         display: none;
     }
 
     .input-text.qty {
-        &:extend(.input-qty all);
+        &:extend(.abstract-input-qty all);
     }
 
-    .product.options.wrapper {
+    .product-options-wrapper {
         margin-bottom: @indent-l-base;
     }
 
-    .product.options.bottom {
+    .product-options-bottom {
         clear: both;
     }
 
@@ -60,17 +60,20 @@
         }
     }
 
-    .block.bundle.summary {
+    .block-bundle-summary {
         padding: @indent-s-base @indent-base;
         background: @color-secondary;
         &:extend(.add-box-sizing all);
 
-        > .title > strong{
+        > .title > strong {
             .heading(h2);
         }
 
-        .bundle.summary {
+        .bundle-summary {
             margin-top: @indent-l-base;
+            &.empty {
+                display: none;
+            }
             > .subtitle {
                 .heading(h3);
                 display: block;
@@ -84,17 +87,17 @@
             }
         }
 
-        .tocart {
+        .box-tocart {
             .actions {
-                margin: @indent-s-base 0;
+                margin-bottom: @indent-s-base;
             }
             .action.primary {
+                &:extend(.abstract-button-l all);
             }
         }
-        .addto.links {
-            .action {
-                .button();
-                margin-bottom: @indent-xs-base;
+        .product-addto-links {
+            > .action {
+                &:extend(.abstract-action-addto all);
             }
         }
     }
@@ -107,25 +110,25 @@
 //    Desktop
 //--------------------------------------
 .responsive(@break) when (@break = @break-point-1) {
-    .bundle.options.container {
+    .bundle-options-container {
         .legend.title {
             &:extend(.reset-left-margin all);
         }
-        .product.options.wrapper {
+        .product-options-wrapper {
             float: left;
             width: 57%;
         }
-        .product.options.bottom {
+        .product-options-bottom {
             width: 57%;
         }
-        .block.bundle.summary {
+        .block-bundle-summary {
             float: right;
             width: 40%;
             position: relative;
         }
-        .product.options.wrapper,
-        .product.options.bottom,
-        .block.bundle.summary {
+        .product-options-wrapper,
+        .product-options-bottom,
+        .block-bundle-summary {
             .layout-2-left &,
             .layout-2-right &,
             .layout-3 & {

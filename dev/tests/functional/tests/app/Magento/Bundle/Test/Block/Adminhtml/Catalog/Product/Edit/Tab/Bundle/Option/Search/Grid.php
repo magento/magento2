@@ -24,18 +24,16 @@
 
 namespace Magento\Bundle\Test\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option\Search;
 
-use Mtf\Client\Element\Locator;
 use Magento\Backend\Test\Block\Widget\Grid as GridInterface;
 
 /**
  * Class Grid
  * 'Add Products to Bundle Option' grid
- *
  */
 class Grid extends GridInterface
 {
     /**
-     * 'Add Selected Products' button
+     * Selector for 'Add Selected Products' button
      *
      * @var string
      */
@@ -49,20 +47,23 @@ class Grid extends GridInterface
     protected $selectItem = 'tbody tr .col-id';
 
     /**
-     * {@inheritdoc}
+     * Filters param for grid
+     *
+     * @var array
      */
-    protected $filters = array(
-        'name' => array(
+    protected $filters = [
+        'name' => [
             'selector' => 'input[name=name]'
-        ),
-        'sku' => array(
+        ],
+        'sku' => [
             'selector' => 'input[name=sku]'
-        ),
-    );
-
+        ],
+    ];
 
     /**
      * Press 'Add Selected Products' button
+     *
+     * @return void
      */
     public function addProducts()
     {

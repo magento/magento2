@@ -44,6 +44,6 @@ class Accounts extends \Magento\Backend\Block\Widget\Grid\Container
         $this->_controller = 'adminhtml_customer_accounts';
         $this->_headerText = __('New Accounts');
         parent::_construct();
-        $this->_removeButton('add');
+        $this->buttonList->remove('add');
     }
 }

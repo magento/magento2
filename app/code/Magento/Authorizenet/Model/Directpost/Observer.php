@@ -137,7 +137,7 @@ class Observer
                     $result['directpost'] = array('fields' => $requestToAuthorizenet->getData());
 
                     $response->clearHeader('Location');
-                    $response->setBody($this->_coreData->jsonEncode($result));
+                    $response->representJson($this->_coreData->jsonEncode($result));
                 }
             }
         }

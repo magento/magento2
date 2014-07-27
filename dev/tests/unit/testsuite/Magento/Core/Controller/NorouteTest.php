@@ -52,7 +52,7 @@ class NorouteTest extends \PHPUnit_Framework_TestCase
         $this->_viewMock = $this->getMock('\Magento\Framework\App\ViewInterface');
         $this->_statusMock = $this->getMock('Magento\Framework\Object', array('getLoaded'), array(), '', false);
         $this->_controller = $helper->getObject(
-            'Magento\Core\Controller\Noroute',
+            'Magento\Core\Controller\Noroute\Index',
             array('request' => $this->_requestMock, 'view' => $this->_viewMock)
         );
     }
@@ -71,7 +71,7 @@ class NorouteTest extends \PHPUnit_Framework_TestCase
         $this->_statusMock->expects($this->any())->method('getLoaded')->will($this->returnValue(false));
         $this->_viewMock->expects($this->once())->method('loadLayout')->with(array('default', 'noroute'));
         $this->_viewMock->expects($this->once())->method('renderLayout');
-        $this->_controller->indexAction();
+        $this->_controller->execute();
     }
 
     public function testIndexActionWhenStatusLoaded()
@@ -95,7 +95,7 @@ class NorouteTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($this->_requestMock)
         );
-        $this->_controller->indexAction();
+        $this->_controller->execute();
     }
 
     public function testIndexActionWhenStatusNotInstanceofMagentoObject()
@@ -109,6 +109,6 @@ class NorouteTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue('string')
         );
-        $this->_controller->indexAction();
+        $this->_controller->execute();
     }
 }

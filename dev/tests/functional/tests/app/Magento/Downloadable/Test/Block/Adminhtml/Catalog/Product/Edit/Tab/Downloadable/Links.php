@@ -96,7 +96,9 @@ class Links extends Form
         );
         $this->_fill($mapping);
         foreach ($fields['downloadable']['link'] as $index => $link) {
-            $element->find($this->addNewLinkRow, Locator::SELECTOR_XPATH)->click();
+            if (!$element->find(sprintf($this->rowBlock, $index + 1), Locator::SELECTOR_XPATH)->isVisible()) {
+                $element->find($this->addNewLinkRow, Locator::SELECTOR_XPATH)->click();
+            }
             $this->getRowBlock($index, $element)->fillLinkRow($link);
         }
     }

@@ -38,4 +38,50 @@
             <productSearch class="Magento\Catalog\Test\Fixture\CatalogProductSimple" />
         </require>
     </assertAdvancedSearchProductsResult>
+    <assertCatalogSearchResult module="Magento_CatalogSearch">
+        <severeness>high</severeness>
+        <require>
+            <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
+            <catalogSearch class="Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery" />
+            <editPage class="Magento\CatalogSearch\Test\Page\Adminhtml\CatalogSearchEdit" />
+        </require>
+    </assertCatalogSearchResult>
+    <assertSearchTermForm module="Magento_CatalogSearch">
+        <severeness>high</severeness>
+        <require>
+            <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
+            <searchTerm class="Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery" />
+            <editPage class="Magento\CatalogSearch\Test\Page\Adminhtml\CatalogSearchEdit" />
+        </require>
+    </assertSearchTermForm>
+    <assertSearchTermInGrid module="Magento_CatalogSearch">
+        <severeness>high</severeness>
+        <require>
+            <indexPage class="Magento\CatalogSearch\Test\Page\Adminhtml\CatalogSearchIndex" />
+            <editPage class="Magento\CatalogSearch\Test\Page\Adminhtml\CatalogSearchEdit" />
+            <searchTerm class="Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery" />
+        </require>
+    </assertSearchTermInGrid>
+    <assertSearchTermOnFrontend module="Magento_CatalogSearch">
+        <severeness>high</severeness>
+        <require>
+            <searchTerm class="Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery" />
+            <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
+            <browser class="Mtf\Client\Browser" />
+        </require>
+    </assertSearchTermOnFrontend>
+    <assertSearchTermSuccessSaveMessage  module="Magento_CatalogSearch">
+        <severeness>high</severeness>
+        <require>
+            <indexPage class="Magento\CatalogSearch\Test\Page\Adminhtml\CatalogSearchIndex" />
+        </require>
+    </assertSearchTermSuccessSaveMessage>
+    <assertSearchTermSynonymOnFrontend  module="Magento_CatalogSearch">
+        <severeness>high</severeness>
+        <require>
+            <searchTerm class="Magento\CatalogSearch\Test\Fixture\CatalogSearchQuery" />
+            <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
+            <browser class="Mtf\Client\Browser" />
+        </require>
+    </assertSearchTermSynonymOnFrontend>
 </constraint>

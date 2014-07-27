@@ -42,4 +42,13 @@
     <assertSitemapNotInGrid module="Magento_Sitemap">
         <severeness>low</severeness>
     </assertSitemapNotInGrid>
+    <assertSitemapSuccessSaveAndGenerateMessages module="Magento_Sitemap">
+        <severeness>low</severeness>
+    </assertSitemapSuccessSaveAndGenerateMessages>
+    <assertSitemapContent module="Magento_Sitemap">
+        <severeness>low</severeness>
+    </assertSitemapContent>
+    <assertSitemapSuccessGenerateMessage module="Magento_Sitemap">
+        <severeness>low</severeness>
+    </assertSitemapSuccessGenerateMessage>
 </constraint>

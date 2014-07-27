@@ -22,9 +22,9 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="block dashboard orders">
+<div class="block block-dashboard-orders">
 <?php $_orders = $this->getOrders(); ?>
-    <div class="order title">
+    <div class="block-title order">
         <strong><?php echo __('Recent Orders') ?></strong>
         <?php if( sizeof($_orders->getItems()) > 0 ): ?>
             <a class="action view" href="<?php echo $this->getUrl('sales/order/history') ?>">
@@ -32,31 +32,31 @@
             </a>
         <?php endif; ?>
     </div>
-    <div class="content">
+    <div class="block-content">
     <?php echo $this->getChildHtml()?>
     <?php if( sizeof($_orders->getItems()) > 0 ): ?>
-        <div class="wrapper table orders recent">
-            <table class="data table orders recent" id="my-orders-table">
+        <div class="table-wrapper orders-recent">
+            <table class="data table table-order-items recent" id="my-orders-table">
                 <caption class="table caption"><?php echo __('Recent Orders') ?></caption>
                 <thead>
                     <tr>
-                        <th class="col id"><?php echo __('Order #') ?></th>
-                        <th class="col date"><?php echo __('Date') ?></th>
-                        <th class="col shipping"><?php echo __('Ship To') ?></th>
-                        <th class="col total"><?php echo __('Order Total') ?></th>
-                        <th class="col status"><?php echo __('Status') ?></th>
-                        <th class="col actions">&nbsp;</th>
+                        <th scope="col" class="col id"><?php echo __('Order #') ?></th>
+                        <th scope="col" class="col date"><?php echo __('Date') ?></th>
+                        <th scope="col" class="col shipping"><?php echo __('Ship To') ?></th>
+                        <th scope="col" class="col total"><?php echo __('Order Total') ?></th>
+                        <th scope="col" class="col status"><?php echo __('Status') ?></th>
+                        <th scope="col" class="col actions">&nbsp;</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php foreach ($_orders as $_order): ?>
                         <tr>
-                            <td class="col id"><?php echo $_order->getRealOrderId() ?></td>
-                            <td class="col date"><?php echo $this->formatDate($_order->getCreatedAtStoreDate()) ?></td>
-                            <td class="col shipping"><?php echo $_order->getShippingAddress() ? $this->escapeHtml($_order->getShippingAddress()->getName()) : '&nbsp;' ?></td>
-                            <td class="col total"><?php echo $_order->formatPrice($_order->getGrandTotal()) ?></td>
-                            <td class="col status"><em><?php echo $_order->getStatusLabel() ?></em></td>
-                            <td class="col actions">
+                            <td data-th="<?php echo $this->escapeHtml(__('Order #')) ?>" class="col id"><?php echo $_order->getRealOrderId() ?></td>
+                            <td data-th="<?php echo $this->escapeHtml(__('Date')) ?>" class="col date"><?php echo $this->formatDate($_order->getCreatedAtStoreDate()) ?></td>
+                            <td data-th="<?php echo $this->escapeHtml(__('Ship To')) ?>" class="col shipping"><?php echo $_order->getShippingAddress() ? $this->escapeHtml($_order->getShippingAddress()->getName()) : '&nbsp;' ?></td>
+                            <td data-th="<?php echo $this->escapeHtml(__('Order Total')) ?>" class="col total"><?php echo $_order->formatPrice($_order->getGrandTotal()) ?></td>
+                            <td data-th="<?php echo $this->escapeHtml(__('Status')) ?>" class="col status"><?php echo $_order->getStatusLabel() ?></td>
+                            <td data-th="<?php echo $this->escapeHtml(__('Actions')) ?>" class="col actions">
                                 <a href="<?php echo $this->getViewUrl($_order) ?>" class="action view">
                                     <span><?php echo __('View Order') ?></span>
                                 </a>

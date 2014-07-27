@@ -61,7 +61,7 @@ class ItemRegistry extends \Magento\Framework\Model\AbstractModel
      */
     public function retrieve($productId)
     {
-        if (!isset($this->stockItemRegistry[$productId])) {
+        if (empty($this->stockItemRegistry[$productId])) {
             /** @var \Magento\CatalogInventory\Model\Stock\Item $stockItem */
             $stockItem = $this->stockItemFactory->create();
 
@@ -70,5 +70,15 @@ class ItemRegistry extends \Magento\Framework\Model\AbstractModel
         }
 
         return $this->stockItemRegistry[$productId];
+    }
+
+    /**
+     * @param int $productId
+     * @return $this
+     */
+    public function erase($productId)
+    {
+        $this->stockItemRegistry[$productId] = null;
+        return $this;
     }
 }

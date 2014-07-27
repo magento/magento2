@@ -30,7 +30,6 @@ use Magento\Sitemap\Test\Page\Adminhtml\SitemapIndex;
 
 /**
  * Class AssertSitemapNotInGrid
- *
  */
 class AssertSitemapNotInGrid extends AbstractConstraint
 {

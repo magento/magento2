@@ -37,15 +37,20 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected $_eavConfig;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $attributeConfig;
+
+    /**
      * Initialize helper
      */
     protected function setUp()
     {
         $context = $this->getMock('\Magento\Framework\App\Helper\Context', [], [], '', false);
-        $attributeConfig = $this->getMock('\Magento\Eav\Model\Entity\Attribute\Config', [], [], '', false);
+        $this->attributeConfig = $this->getMock('\Magento\Eav\Model\Entity\Attribute\Config', [], [], '', false);
         $scopeConfig = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface', [], [], '', false);
         $eavConfig = $this->getMock('\Magento\Eav\Model\Config', [], [], '', false);
-        $this->_helper = new Data($context, $attributeConfig, $scopeConfig, $eavConfig);
+        $this->_helper = new Data($context, $this->attributeConfig, $scopeConfig, $eavConfig);
         $this->_eavConfig = $eavConfig;
     }
 
@@ -77,5 +82,63 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 'Attribute metadata with key "' . $key . '" has invalid value.'
             );
         }
+    }
+
+    /**
+     * @covers \Magento\Eav\Helper\Data::getFrontendClasses
+     * @covers \Magento\Eav\Helper\Data::_getDefaultFrontendClasses
+     */
+    public function testGetFrontendClasses()
+    {
+        $result = $this->_helper->getFrontendClasses('someNonExistedClass');
+        $this->assertTrue(count($result) > 1);
+        $this->assertContains(['value' => '', 'label' => 'None'], $result);
+        $this->assertContains(['value' => 'validate-number', 'label' => 'Decimal Number'], $result);
+    }
+
+    /**
+     * @covers \Magento\Eav\Helper\Data::getAttributeLockedFields
+     */
+    public function testGetAttributeLockedFieldsNoEntityCode()
+    {
+        $this->attributeConfig->expects($this->never())->method('getEntityAttributesLockedFields');
+        $this->assertEquals([], $this->_helper->getAttributeLockedFields(''));
+    }
+
+    /**
+     * @covers \Magento\Eav\Helper\Data::getAttributeLockedFields
+     */
+    public function testGetAttributeLockedFieldsNonCachedLockedFiled()
+    {
+        $lockedFields = ['lockedField1', 'lockedField2'];
+
+        $this->attributeConfig->expects($this->once())->method('getEntityAttributesLockedFields')
+            ->with('entityTypeCode')->will($this->returnValue($lockedFields));
+        $this->assertEquals($lockedFields, $this->_helper->getAttributeLockedFields('entityTypeCode'));
+    }
+
+    /**
+     * @covers \Magento\Eav\Helper\Data::getAttributeLockedFields
+     */
+    public function testGetAttributeLockedFieldsCachedLockedFiled()
+    {
+        $lockedFields = ['lockedField1', 'lockedField2'];
+
+        $this->attributeConfig->expects($this->once())->method('getEntityAttributesLockedFields')
+            ->with('entityTypeCode')->will($this->returnValue($lockedFields));
+
+        $this->_helper->getAttributeLockedFields('entityTypeCode');
+        $this->assertEquals($lockedFields, $this->_helper->getAttributeLockedFields('entityTypeCode'));
+    }
+
+    /**
+     * @covers \Magento\Eav\Helper\Data::getAttributeLockedFields
+     */
+    public function testGetAttributeLockedFieldsNoLockedFields()
+    {
+        $this->attributeConfig->expects($this->once())->method('getEntityAttributesLockedFields')
+            ->with('entityTypeCode')->will($this->returnValue([]));
+
+        $this->assertEquals([], $this->_helper->getAttributeLockedFields('entityTypeCode'));
     }
 }

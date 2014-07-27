@@ -24,13 +24,13 @@
 namespace Magento\Webapi\Controller\Soap\Request;
 
 use Magento\Authz\Service\AuthorizationV1Interface as AuthorizationService;
+use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Service\Data\AbstractObject;
 use Magento\Framework\Service\DataObjectConverter;
-use Magento\Webapi\Model\Soap\Config as SoapConfig;
+use Magento\Webapi\Controller\ServiceArgsSerializer;
 use Magento\Webapi\Controller\Soap\Request as SoapRequest;
 use Magento\Webapi\Exception as WebapiException;
-use Magento\Webapi\ServiceAuthorizationException;
-use Magento\Webapi\Controller\ServiceArgsSerializer;
+use Magento\Webapi\Model\Soap\Config as SoapConfig;
 
 /**
  * Handler of requests to SOAP server.
@@ -95,7 +95,7 @@ class Handler
      * @return \stdClass|null
      * @throws WebapiException
      * @throws \LogicException
-     * @throws ServiceAuthorizationException
+     * @throws AuthorizationException
      */
     public function __call($operation, $arguments)
     {
@@ -119,14 +119,9 @@ class Handler
 
         if (!$isAllowed) {
             // TODO: Consider passing Integration ID instead of Consumer ID
-            throw new ServiceAuthorizationException(
-                "Not Authorized.",
-                0,
-                null,
-                array(),
-                'authorization',
-                "Consumer ID = {$this->_request->getConsumerId()}",
-                implode($serviceMethodInfo[SoapConfig::KEY_ACL_RESOURCES], ', ')
+            throw new AuthorizationException(
+                AuthorizationException::NOT_AUTHORIZED,
+                ['resources' => implode($serviceMethodInfo[SoapConfig::KEY_ACL_RESOURCES], ', ')]
             );
         }
         $service = $this->_objectManager->get($serviceClass);

@@ -26,12 +26,15 @@ namespace Magento\Framework\Simplexml\Config\Cache;
 
 /**
  * Abstract class for configuration cache
+ * @method void setComponents(array $components)
+ * @method void setIsAllowedToSave(bool $isAllowedToSave)
+ * @method array getComponents()
  */
 abstract class AbstractCache extends \Magento\Framework\Object
 {
     /**
      * Constructor
-     * 
+     *
      * Initializes components and allows to save the cache
      *
      * @param array $data
@@ -72,7 +75,7 @@ abstract class AbstractCache extends \Magento\Framework\Object
         if (empty($data) || !is_array($data)) {
             return false;
         }
-        // check that no source files were changed or check file exsists
+        // check that no source files were changed or check file exists
         foreach ($data as $sourceFile => $stat) {
             if (empty($stat['mtime']) || !is_file($sourceFile) || filemtime($sourceFile) !== $stat['mtime']) {
                 return false;
@@ -93,4 +96,14 @@ abstract class AbstractCache extends \Magento\Framework\Object
         $hash = md5($sum);
         return $hash;
     }
+
+    /**
+     * @return bool
+     */
+    abstract public function load();
+
+    /**
+     * @return bool
+     */
+    abstract public function save();
 }

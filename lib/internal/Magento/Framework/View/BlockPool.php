@@ -49,12 +49,10 @@ class BlockPool
     /**
      * Constructor
      *
-     * @param ObjectManager $objectManager
      * @param BlockFactory $blockFactory
      */
-    public function __construct(ObjectManager $objectManager, BlockFactory $blockFactory)
+    public function __construct(BlockFactory $blockFactory)
     {
-        $this->objectManager = $objectManager;
         $this->blockFactory = $blockFactory;
     }
 

@@ -107,12 +107,13 @@ class CreateTest extends \Magento\Backend\Utility\Controller
         $order->addProducts(array(1 => array('qty' => 1)));
         $this->dispatch('backend/sales/order_create/index');
         $html = $this->getResponse()->getBody();
-        $this->assertContains('<div id="order-customer-selector"', $html);
-        $this->assertContains('<div id="sales_order_create_customer_grid">', $html);
-        $this->assertContains('<div id="order-billing_method_form">', $html);
-        $this->assertContains('id="shipping-method-overlay"', $html);
-        $this->assertContains('<div id="sales_order_create_search_grid">', $html);
-        $this->assertContains('id="coupons:code"', $html);
+
+        $this->assertSelectCount('div#order-customer-selector', true, $html);
+        $this->assertSelectCount('[data-grid-id=sales_order_create_customer_grid]', true, $html);
+        $this->assertSelectCount('div#order-billing_method_form', true, $html);
+        $this->assertSelectCount('#shipping-method-overlay', true, $html);
+        $this->assertSelectCount('div#sales_order_create_search_grid', true, $html);
+        $this->assertSelectCount('#coupons:code', true, $html);
     }
 
     /**
@@ -205,7 +206,7 @@ class CreateTest extends \Magento\Backend\Utility\Controller
             ->loadArea('adminhtml');
 
         $this->dispatch('backend/sales/order_create/save');
-        $this->assertEquals('denied', $this->getRequest()->getActionName());
+        $this->assertEquals('403', $this->getResponse()->getHttpResponseCode());
     }
 }
 
@@ -220,6 +221,6 @@ class AuthorizationMock extends \Magento\Framework\Authorization
      */
     public function isAllowed($resource, $privilege = null)
     {
-        return $resource == 'Magento_Customer::manage' ? false : parent::isAllowed($resource, $privilege);
+        return $resource == 'Magento_Sales::create' ? false : parent::isAllowed($resource, $privilege);
     }
 }

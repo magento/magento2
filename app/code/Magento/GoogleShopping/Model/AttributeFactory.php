@@ -42,7 +42,7 @@ class AttributeFactory
      *
      * @var \Magento\GoogleShopping\Helper\Data
      */
-    protected $_gsData;
+    protected $_googleShoppingHelper;
 
     /**
      * @var \Magento\Framework\Stdlib\String
@@ -51,16 +51,16 @@ class AttributeFactory
 
     /**
      * @param \Magento\Framework\ObjectManager $objectManager
-     * @param \Magento\GoogleShopping\Helper\Data $gsData
+     * @param \Magento\GoogleShopping\Helper\Data $googleShoppingHelper
      * @param \Magento\Framework\Stdlib\String $string
      */
     public function __construct(
         \Magento\Framework\ObjectManager $objectManager,
-        \Magento\GoogleShopping\Helper\Data $gsData,
+        \Magento\GoogleShopping\Helper\Data $googleShoppingHelper,
         \Magento\Framework\Stdlib\String $string
     ) {
         $this->_objectManager = $objectManager;
-        $this->_gsData = $gsData;
+        $this->_googleShoppingHelper = $googleShoppingHelper;
         $this->_string = $string;
     }
 
@@ -73,7 +73,7 @@ class AttributeFactory
     public function createAttribute($name)
     {
         $modelName = 'Magento\GoogleShopping\Model\Attribute\\' . $this->_string->upperCaseWords(
-            $this->_gsData->normalizeName($name)
+            $this->_googleShoppingHelper->normalizeName($name)
         );
         try {
             /** @var \Magento\GoogleShopping\Model\Attribute\DefaultAttribute $attributeModel */

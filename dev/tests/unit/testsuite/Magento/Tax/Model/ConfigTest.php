@@ -27,8 +27,6 @@
  */
 namespace Magento\Tax\Model;
 
-use Magento\Tax\Model\Config;
-
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -52,55 +50,20 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Returns a set of 'true' and 'false' parameters for each of the setter/getter method pairs
-     *
      * @return array
      */
     public function dataProviderDirectSettersGettersMethods()
     {
-        return $this->_buildTrueFalsePairs(
-            [
-                [
-                    'setShippingPriceIncludeTax',
-                    'shippingPriceIncludesTax'
-                ],
-                [
-                    'setNeedUseShippingExcludeTax',
-                    'getNeedUseShippingExcludeTax'
-                ],
-                [
-                    'setPriceIncludesTax',
-                    'priceIncludesTax'
-                ]
-            ]
-        );
+        return [
+            ['setShippingPriceIncludeTax', 'shippingPriceIncludesTax', true],
+            ['setShippingPriceIncludeTax', 'shippingPriceIncludesTax', false],
+            ['setNeedUseShippingExcludeTax', 'getNeedUseShippingExcludeTax', true],
+            ['setNeedUseShippingExcludeTax', 'getNeedUseShippingExcludeTax', false],
+            ['setPriceIncludesTax', 'priceIncludesTax', true],
+            ['setPriceIncludesTax', 'priceIncludesTax', false],
+            ['setPriceIncludesTax', 'priceIncludesTax', null]
+        ];
     }
-
-    /**
-     * Returns an output array that is twice the size of the input array by adding 'true' and then 'false' to the
-     * set of parameters given
-     *
-     * @param array $arrayIn
-     * @return array
-     */
-    protected function _buildTrueFalsePairs($arrayIn)
-    {
-        $arrayOut = [];
-
-        foreach ($arrayIn as $paramArray) {
-            // replicate the paramArray, append 'true', and add the new array to the output array
-            $arrayT = $paramArray;
-            $arrayT[] = true;
-            $arrayOut[] = $arrayT;
-            // replicate the paramArray, append 'false', and add the new array to the output array
-            $arrayF = $paramArray;
-            $arrayF[] = false;
-            $arrayOut[] = $arrayF;
-        }
-
-        return $arrayOut;
-    }
-
 
     /**
      * Tests the getCalculationSequence method
@@ -397,6 +360,24 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             [
                 'crossBorderTradeEnabled',
                 Config::CONFIG_XML_PATH_CROSS_BORDER_TRADE_ENABLED,
+                true,
+                true
+            ],
+            [
+                'isWrongDisplaySettingsIgnored',
+                Config::XML_PATH_TAX_NOTIFICATION_IGNORE_PRICE_DISPLAY,
+                true,
+                true
+            ],
+            [
+                'isWrongDiscountSettingsIgnored',
+                Config::XML_PATH_TAX_NOTIFICATION_IGNORE_DISCOUNT,
+                true,
+                true
+            ],
+            [
+                'getInfoUrl',
+                Config::XML_PATH_TAX_NOTIFICATION_INFO_URL,
                 true,
                 true
             ]

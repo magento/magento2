@@ -50,6 +50,10 @@ class StringTest extends \PHPUnit_Framework_TestCase
             array('12345', '123', '12345', '6789'),
             $this->_string->split('12345  123    123456789', 5, true, true)
         );
+        $this->assertEquals(
+            array('1234', '5', '123', '1234', '5678', '9'),
+            $this->_string->split('12345  123    123456789', 4, true, true)
+        );
     }
 
     /**
@@ -68,6 +72,17 @@ class StringTest extends \PHPUnit_Framework_TestCase
     {
         $string = '12345';
         $this->assertEquals($string, $this->_string->cleanString($string));
+    }
+
+    public function testSubstr()
+    {
+        $this->assertSame('tring', $this->_string->substr('string', 1));
+    }
+
+    public function testStrrev()
+    {
+        $this->assertSame('0987654321', $this->_string->strrev('1234567890'));
+        $this->assertSame('', $this->_string->strrev(''));
     }
 
     /**

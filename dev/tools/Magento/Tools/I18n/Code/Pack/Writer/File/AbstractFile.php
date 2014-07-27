@@ -127,10 +127,18 @@ abstract class AbstractFile implements WriterInterface
         $files = array();
         foreach ($dictionary->getPhrases() as $key => $phrase) {
             if (!$phrase->getContextType() || !$phrase->getContextValue()) {
-                throw new \RuntimeException(sprintf('Missed context in row #%d.', $key + 1));
+                throw new \RuntimeException(
+                    sprintf('Missed context in row #%d.', $key + 1)
+                    . "\n"
+                    . 'Each row has to consist of 3 columns: original phrase, translation, context'
+                );
             }
             foreach ($phrase->getContextValue() as $context) {
-                $path = $this->_context->buildPathToLocaleDirectoryByContext($phrase->getContextType(), $context);
+                try {
+                    $path = $this->_context->buildPathToLocaleDirectoryByContext($phrase->getContextType(), $context);
+                } catch (\InvalidArgumentException $e) {
+                    throw new \InvalidArgumentException($e->getMessage() . ' Row #' . ($key + 1) . '.');
+                }
                 $filename = $this->_packPath . $path . $this->_locale . '.' . $this->_getFileExtension();
                 $files[$filename][$phrase->getPhrase()] = $phrase;
             }

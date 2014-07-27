@@ -25,7 +25,7 @@
  */
 namespace Magento\Framework\App;
 
-use Magento\Framework\App\Action\AbstractAction;
+use Magento\Framework\App\ActionInterface;
 
 class ActionFactory
 {
@@ -43,14 +43,20 @@ class ActionFactory
     }
 
     /**
-     * @param string $controllerName
+     * Create action
+     *
+     * @param string $actionName
      * @param array $arguments
-     * @return AbstractAction
+     * @return ActionInterface
+     * @throws \InvalidArgumentException
      */
-    public function createController($controllerName, array $arguments = array())
+    public function create($actionName, array $arguments = array())
     {
+        if (!is_subclass_of($actionName, '\Magento\Framework\App\ActionInterface')) {
+            throw new \InvalidArgumentException('Invalid action name provided');
+        }
         $context = $this->_objectManager->create('Magento\Framework\App\Action\Context', $arguments);
         $arguments['context'] = $context;
-        return $this->_objectManager->create($controllerName, $arguments);
+        return $this->_objectManager->create($actionName, $arguments);
     }
 }

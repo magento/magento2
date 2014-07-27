@@ -502,12 +502,6 @@ class Status extends \Magento\Framework\Model\AbstractModel
             }
         }
 
-        /* back compatible stock item */
-        foreach ($productCollection as $product) {
-            $object = new \Magento\Framework\Object(array('is_in_stock' => $product->getData('is_salable')));
-            $product->setStockItem($object);
-        }
-
         return $this;
     }
 

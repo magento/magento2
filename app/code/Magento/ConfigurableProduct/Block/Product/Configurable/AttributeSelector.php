@@ -48,7 +48,7 @@ class AttributeSelector extends \Magento\Backend\Block\Template
     public function getSuggestWidgetOptions()
     {
         return array(
-            'source' => $this->getUrl('*/product_attribute_suggestConfigurableAttributes'),
+            'source' => $this->getUrl('*/product_attribute/suggestConfigurableAttributes'),
             'minLength' => 0,
             'className' => 'category-select',
             'showAll' => true

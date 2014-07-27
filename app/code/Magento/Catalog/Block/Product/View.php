@@ -24,6 +24,7 @@
 namespace Magento\Catalog\Block\Product;
 
 use Magento\Catalog\Model\Product;
+use Magento\Tax\Service\V1\TaxCalculationServiceInterface;
 
 /**
  * Product View block
@@ -44,13 +45,6 @@ class View extends AbstractProduct implements \Magento\Framework\View\Block\Iden
      * @var \Magento\Framework\Stdlib\String
      */
     protected $string;
-
-    /**
-     * Tax calculation
-     *
-     * @var \Magento\Tax\Model\Calculation
-     */
-    protected $_taxCalculation;
 
     /**
      * Product factory
@@ -85,15 +79,26 @@ class View extends AbstractProduct implements \Magento\Framework\View\Block\Iden
     protected $_localeFormat;
 
     /**
+     * @var \Magento\Customer\Model\Session
+     */
+    protected $customerSession;
+
+    /**
+     * @var TaxCalculationServiceInterface
+     */
+    protected $taxCalculationService;
+
+    /**
      * @param Context $context
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Tax\Model\Calculation $taxCalculation
      * @param \Magento\Framework\Stdlib\String $string
      * @param \Magento\Catalog\Helper\Product $productHelper
      * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param TaxCalculationServiceInterface $taxCalculationService
      * @param array $data
      */
     public function __construct(
@@ -101,21 +106,23 @@ class View extends AbstractProduct implements \Magento\Framework\View\Block\Iden
         \Magento\Core\Helper\Data $coreData,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Tax\Model\Calculation $taxCalculation,
         \Magento\Framework\Stdlib\String $string,
         \Magento\Catalog\Helper\Product $productHelper,
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypeConfig,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
+        \Magento\Customer\Model\Session $customerSession,
+        TaxCalculationServiceInterface $taxCalculationService,
         array $data = array()
     ) {
         $this->_productHelper = $productHelper;
         $this->_coreData = $coreData;
         $this->_jsonEncoder = $jsonEncoder;
         $this->_productFactory = $productFactory;
-        $this->_taxCalculation = $taxCalculation;
         $this->productTypeConfig = $productTypeConfig;
         $this->string = $string;
         $this->_localeFormat = $localeFormat;
+        $this->customerSession = $customerSession;
+        $this->taxCalculationService = $taxCalculationService;
         parent::__construct(
             $context,
             $data
@@ -236,15 +243,17 @@ class View extends AbstractProduct implements \Magento\Framework\View\Block\Iden
             return $this->_jsonEncoder->encode($config);
         }
 
-        $request = $this->_taxCalculation->getDefaultRateRequest();
+        $customerId = $this->getCustomerId();
         /* @var $product \Magento\Catalog\Model\Product */
         $product = $this->getProduct();
-        $request->setProductClassId($product->getTaxClassId());
-        $defaultTax = $this->_taxCalculation->getRate($request);
-
-        $request = $this->_taxCalculation->getRateRequest();
-        $request->setProductClassId($product->getTaxClassId());
-        $currentTax = $this->_taxCalculation->getRate($request);
+        $defaultTax = $this->taxCalculationService->getDefaultCalculatedRate(
+            $product->getTaxClassId(),
+            $customerId
+        );
+        $currentTax = $this->taxCalculationService->getCalculatedRate(
+            $product->getTaxClassId(),
+            $customerId
+        );
 
         $tierPrices = array();
 
@@ -393,5 +402,15 @@ class View extends AbstractProduct implements \Magento\Framework\View\Block\Iden
             $identities[] = Product::CACHE_PRODUCT_CATEGORY_TAG . '_' . $category->getId();
         }
         return $identities;
+    }
+
+    /**
+     * Retrieve customer data object
+     *
+     * @return int
+     */
+    protected function getCustomerId()
+    {
+        return $this->customerSession->getCustomerId();
     }
 }

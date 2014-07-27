@@ -23,6 +23,8 @@
  */
 namespace Magento\Wishlist\Helper;
 
+use Magento\Wishlist\Controller\WishlistProviderInterface;
+
 /**
  * Wishlist Data Helper
  *
@@ -115,6 +117,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_customerViewHelper;
 
     /**
+     * @var \Magento\Wishlist\Controller\WishlistProviderInterface
+     */
+    protected $wishlistProvider;
+
+    /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Framework\Registry $coreRegistry
@@ -124,6 +131,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Core\Helper\PostData $postDataHelper
      * @param \Magento\Customer\Helper\View $customerViewHelper
+     * @param WishlistProviderInterface $wishlistProvider
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -134,7 +142,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Wishlist\Model\WishlistFactory $wishlistFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Core\Helper\PostData $postDataHelper,
-        \Magento\Customer\Helper\View $customerViewHelper
+        \Magento\Customer\Helper\View $customerViewHelper,
+        WishlistProviderInterface $wishlistProvider
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_coreData = $coreData;
@@ -144,6 +153,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_storeManager = $storeManager;
         $this->_postDataHelper = $postDataHelper;
         $this->_customerViewHelper = $customerViewHelper;
+        $this->wishlistProvider = $wishlistProvider;
         parent::__construct($context);
     }
 
@@ -201,12 +211,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         if (is_null($this->_wishlist)) {
             if ($this->_coreRegistry->registry('shared_wishlist')) {
                 $this->_wishlist = $this->_coreRegistry->registry('shared_wishlist');
-            } elseif ($this->_coreRegistry->registry('wishlist')) {
-                $this->_wishlist = $this->_coreRegistry->registry('wishlist');
             } else {
-                $this->_wishlist = $this->_wishlistFactory->create();
-                if ($this->getCustomer()) {
-                    $this->_wishlist->loadByCustomerId($this->getCustomer()->getId());
+                $this->_wishlist = $this->wishlistProvider->getWishlist();
+                if (!$this->_wishlist) {
+                    $this->_wishlist = $this->_wishlistFactory->create();
+                    if ($this->getCustomer()) {
+                        $this->_wishlist->loadByCustomerId($this->getCustomer()->getId());
+                    }
                 }
             }
         }

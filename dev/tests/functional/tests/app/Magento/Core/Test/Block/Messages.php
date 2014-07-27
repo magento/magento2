@@ -74,12 +74,19 @@ class Messages extends Block
     /**
      * Get all success messages which are present on the page
      *
-     * @return string
+     * @return string|array
      */
     public function getSuccessMessages()
     {
         $this->waitForElementVisible($this->successMessage);
-        return $this->_rootElement->find($this->successMessage)->getText();
+        $elements = $this->_rootElement->find($this->successMessage)->getElements();
+
+        $messages = [];
+        foreach ($elements as $key => $element) {
+            $messages[$key] = $element->getText();
+        }
+
+        return count($messages) > 1 ? $messages : $messages[0];
     }
 
     /**

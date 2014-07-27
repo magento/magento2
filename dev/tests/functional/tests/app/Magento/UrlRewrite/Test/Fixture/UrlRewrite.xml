@@ -56,6 +56,13 @@
             <default_value>request_path%isolation%</default_value>
             <input>text</input>
         </request_path>
+        <target_path>
+            <attribute_code>target_path</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required>1</is_required>
+            <default_value>target_path%isolation%</default_value>
+            <input>text</input>
+        </target_path>
         <description>
             <attribute_code>description</attribute_code>
             <backend_type>varchar</backend_type>

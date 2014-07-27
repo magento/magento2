@@ -23,39 +23,11 @@
  */
 ?>
 <?php global $taxIter; $taxIter++; ?>
-<?php if ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary() && $this->getTotal()->getValue()!=0): ?>
-<?php $isTop = 1; ?>
-            <?php foreach ($this->getTotal()->getFullInfo() as $info): ?>
-                <?php if (isset($info['hidden']) && $info['hidden']) continue; ?>
-                <?php $percent = $info['percent']; ?>
-                <?php $amount = $info['amount']; ?>
-                <?php $rates = $info['rates']; ?>
-                <?php $isFirst = 1; ?>
 
-                <?php foreach ($rates as $rate): ?>
-                <tr class="totals tax details details-<?php echo $taxIter; ?>">
-                    <td class="mark" style="<?php echo $this->getTotal()->getStyle() ?>" colspan="<?php echo $this->getColspan(); ?>">
-                        <?php echo $this->escapeHtml($rate['title']); ?>
-                        <?php if (!is_null($rate['percent'])): ?>
-                            (<?php echo (float)$rate['percent']; ?>%)
-                        <?php endif; ?>
-                        <br />
-                    </td>
-                    <?php if ($isFirst): ?>
-                        <td class="amount" rowspan="<?php echo count($rates); ?>" class="a-right" style="<?php echo $this->getTotal()->getStyle() ?>">
-                            <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($amount); ?>
-                        </td>
-                    <?php endif; ?>
-                </tr>
-                <?php $isFirst = 0; ?>
-                <?php $isTop = 0; ?>
-                <?php endforeach; ?>
-            <?php endforeach; ?>
-<?php endif;?>
 <?php
-    $attributes = 'class="totals tax"';
+    $attributes = 'class="totals-tax"';
     if ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary() && $this->getTotal()->getValue()!=0) {
-        $attributes = 'class="totals tax summary"';
+        $attributes = 'class="totals-tax-summary"';
     }
 ?>
 <tr <?php echo $attributes; ?>>
@@ -70,3 +42,33 @@
         <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($this->getTotal()->getValue()) ?>
     </td>
 </tr>
+
+<?php if ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary() && $this->getTotal()->getValue()!=0): ?>
+    <?php $isTop = 1; ?>
+    <?php foreach ($this->getTotal()->getFullInfo() as $info): ?>
+        <?php if (isset($info['hidden']) && $info['hidden']) continue; ?>
+        <?php $percent = $info['percent']; ?>
+        <?php $amount = $info['amount']; ?>
+        <?php $rates = $info['rates']; ?>
+        <?php $isFirst = 1; ?>
+
+        <?php foreach ($rates as $rate): ?>
+            <tr class="totals tax details details-<?php echo $taxIter; ?>">
+                <td class="mark" style="<?php echo $this->getTotal()->getStyle() ?>" colspan="<?php echo $this->getColspan(); ?>">
+                    <?php echo $this->escapeHtml($rate['title']); ?>
+                    <?php if (!is_null($rate['percent'])): ?>
+                        (<?php echo (float)$rate['percent']; ?>%)
+                    <?php endif; ?>
+                    <br />
+                </td>
+                <?php if ($isFirst): ?>
+                    <td class="amount" rowspan="<?php echo count($rates); ?>" style="<?php echo $this->getTotal()->getStyle() ?>">
+                        <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($amount); ?>
+                    </td>
+                <?php endif; ?>
+            </tr>
+            <?php $isFirst = 0; ?>
+            <?php $isTop = 0; ?>
+        <?php endforeach; ?>
+    <?php endforeach; ?>
+<?php endif;?>

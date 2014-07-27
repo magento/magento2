@@ -47,6 +47,9 @@ class CreateTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Service\V1\CustomerGroupServiceInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $customerGroupServiceMock;
 
+    /** @var \Magento\Sales\Model\Quote\Item\Updater|\PHPUnit_Framework_MockObject_MockObject */
+    protected $itemUpdater;
+
     protected function setUp()
     {
         $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager');
@@ -83,6 +86,8 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         $customerHelperMock = $this->getMock('Magento\Customer\Helper\Data', array(), array(), '', false);
         $this->customerGroupServiceMock = $this->getMock('Magento\Customer\Service\V1\CustomerGroupServiceInterface');
 
+        $this->itemUpdater = $this->getMock('Magento\Sales\Model\Quote\Item\Updater', array(), array(), '', false);
+
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->adminOrderCreate = $objectManagerHelper->getObject(
             'Magento\Sales\Model\AdminOrder\Create',
@@ -101,7 +106,8 @@ class CreateTest extends \PHPUnit_Framework_TestCase
                 'metadataFormFactory' => $this->formFactoryMock,
                 'customerBuilder' => $this->customerBuilderMock,
                 'customerHelper' => $customerHelperMock,
-                'customerGroupService' => $this->customerGroupServiceMock
+                'customerGroupService' => $this->customerGroupServiceMock,
+                'quoteItemUpdater' => $this->itemUpdater
             )
         );
     }
@@ -191,5 +197,69 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->adminOrderCreate->setAccountData(array());
+    }
+
+    public function testUpdateQuoteItemsNotArray()
+    {
+        $this->adminOrderCreate->updateQuoteItems('string');
+    }
+
+    public function testUpdateQuoteItemsEmptyConfiguredOption()
+    {
+        $items = array(
+            1 => array(
+                'qty' => 10,
+                'configured' => false,
+                'action' => false
+            )
+        );
+
+        $itemMock = $this->getMock('Magento\Sales\Model\Quote\Item', array(), array(), '', false);
+
+        $quoteMock = $this->getMock('Magento\Sales\Model\Quote', array(), array(), '', false);
+        $quoteMock->expects($this->once())
+            ->method('getItemById')
+            ->will($this->returnValue($itemMock));
+
+        $this->sessionQuoteMock->expects($this->any())->method('getQuote')->will($this->returnValue($quoteMock));
+        $this->itemUpdater->expects($this->once())
+            ->method('update')
+            ->with($this->equalTo($itemMock), $this->equalTo($items[1]));
+
+        $this->adminOrderCreate->setRecollect(false);
+        $this->adminOrderCreate->updateQuoteItems($items);
+    }
+
+    public function testUpdateQuoteItemsWithConfiguredOption()
+    {
+        $qty = 100000000;
+        $items = array(
+            1 => array(
+                'qty' => 10,
+                'configured' => true,
+                'action' => false
+            )
+        );
+
+        $itemMock = $this->getMock('Magento\Sales\Model\Quote\Item', array(), array(), '', false);
+        $itemMock->expects($this->once())
+            ->method('getQty')
+            ->will($this->returnValue($qty));
+
+        $quoteMock = $this->getMock('Magento\Sales\Model\Quote', array(), array(), '', false);
+        $quoteMock->expects($this->once())
+            ->method('updateItem')
+            ->will($this->returnValue($itemMock));
+
+        $this->sessionQuoteMock->expects($this->any())->method('getQuote')->will($this->returnValue($quoteMock));
+
+        $expectedInfo = $items[1];
+        $expectedInfo['qty'] = $qty;
+        $this->itemUpdater->expects($this->once())
+            ->method('update')
+            ->with($this->equalTo($itemMock), $this->equalTo($expectedInfo));
+
+        $this->adminOrderCreate->setRecollect(false);
+        $this->adminOrderCreate->updateQuoteItems($items);
     }
 }

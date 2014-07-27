@@ -75,6 +75,13 @@ class Inline extends \Magento\Framework\View\Element\Template
     protected $httpContext;
 
     /**
+     * Checkout type. 'onepage_checkout' and 'multishipping_address' are standard types
+     *
+     * @var string
+     */
+    protected $checkoutType;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\GiftMessage\Helper\Message $giftMessageMessage
@@ -140,6 +147,28 @@ class Inline extends \Magento\Framework\View\Element\Template
     public function getType()
     {
         return $this->_type;
+    }
+
+    /**
+     * Define checkout type
+     *
+     * @param $type string
+     * @return $this
+     */
+    public function setCheckoutType($type)
+    {
+        $this->checkoutType = $type;
+        return $this;
+    }
+
+    /**
+     * Return checkout type. Typical values are 'onepage_checkout' and 'multishipping_address'
+     *
+     * @return string|null
+     */
+    public function getCheckoutType()
+    {
+        return $this->checkoutType;
     }
 
     /**

@@ -24,16 +24,14 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product;
 
+use Magento\Backend\Test\Block\Widget\FormTabs;
 use Mtf\Client\Element;
-use Mtf\Factory\Factory;
-use Mtf\Client\Element\Locator;
 use Mtf\Fixture\FixtureInterface;
 use Mtf\Fixture\InjectableFixture;
 use Magento\Catalog\Test\Fixture\Product;
-use Magento\Backend\Test\Block\Widget\Tab;
-use Magento\Backend\Test\Block\Widget\FormTabs;
-use Magento\Catalog\Test\Fixture\ConfigurableProduct;
+use Mtf\Client\Element\Locator;
 use Magento\Catalog\Test\Fixture\CatalogCategory;
+use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 
 /**
  * Class ProductForm
@@ -42,157 +40,101 @@ use Magento\Catalog\Test\Fixture\CatalogCategory;
 class ProductForm extends FormTabs
 {
     /**
-     * New variation set button selector
+     * Attribute on the Product page
      *
      * @var string
      */
-    protected $newVariationSet = '[data-ui-id="admin-product-edit-tab-super-config-grid-container-add-attribute"]';
+    protected $attribute = './/*[contains(@class,"label")]/span[text()="%s"]';
 
     /**
-     * Category name selector
+     * Attribute Search locator the Product page
      *
      * @var string
      */
-    protected $categoryName = '//*[contains(@class, "mage-suggest-choice")]/*[text()="%categoryName%"]';
+    protected $attributeSearch = '#product-attribute-search-container';
 
     /**
-     * 'Advanced Settings' tab
+     * Selector for trigger(show/hide) of advanced setting content
      *
      * @var string
      */
-    protected $advancedSettings = '#ui-accordion-product_info_tabs-advanced-header-0[aria-selected="false"]';
+    protected $advancedSettingTrigger = '#product_info_tabs-advanced [data-role="trigger"]';
 
     /**
-     * Advanced tab list
+     * Selector for advanced setting content
      *
      * @var string
      */
-    protected $advancedTabList = '#product_info_tabs-advanced[role="tablist"]';
+
+    protected $advancedSettingContent = '#product_info_tabs-advanced [data-role="content"]';
 
     /**
-     * Advanced tab panel
+     * Variations Attribute Search locator the Product page
      *
      * @var string
      */
-    protected $advancedTabPanel = './/*[role="tablist"]//ul[!contains(@style,"overflow")]';
+    protected $variationsAttributeSearch = '#variations-search-field';
 
     /**
-     * CSS locator button status of the product
+     * Variations Tab locator the Product page
      *
      * @var string
      */
-    protected $onlineSwitcher = '#product-online-switcher%s + [for="product-online-switcher"]';
+    protected $variationsTab = '#product_info_tabs_super_config_content .title';
 
     /**
-     * Category fixture
+     * Custom Tab locator
      *
-     * @var CatalogCategory
+     * @var string
      */
-    protected $category;
+    protected $customTab = './/*/a[contains(@id,"product_info_tabs_%s")]';
 
     /**
      * Fill the product form
      *
-     * @param FixtureInterface $fixture
-     * @param CatalogCategory $category
-     * @param Element $element
-     * @return $this
+     * @param FixtureInterface $product
+     * @param Element|null $element [optional]
+     * @param FixtureInterface|null $category [optional]
+     * @return FormTabs
      */
-    public function fillProduct(
-        FixtureInterface $fixture,
-        CatalogCategory $category = null,
-        Element $element = null
-    ) {
-        $this->category = $category;
-        $this->fillCategory($fixture);
+    public function fill(FixtureInterface $product, Element $element = null, FixtureInterface $category = null)
+    {
+        $tabs = $this->getFieldsByTabs($product);
 
-        if ($fixture instanceof InjectableFixture) {
-            $status = $fixture->getStatus();
-            if (($status === 'Product offline'
-                && $this->_rootElement->find(sprintf($this->onlineSwitcher, ':checked'))->isVisible())
-                || ($status === 'Product online'
-                && $this->_rootElement->find(sprintf($this->onlineSwitcher, ':not(:checked)'))->isVisible())
-            ) {
-                $this->_rootElement->find(sprintf($this->onlineSwitcher, ''))->click();
-            }
+        if ($category) {
+            $tabs['product-details']['category_ids']['value'] = ($category instanceof InjectableFixture )
+                ? $category->getName()
+                : $category->getCategoryName();
         }
 
-        return parent::fill($fixture, $element);
+        $this->showAdvancedSettings();
+        return parent::fillTabs($tabs, $element);
     }
 
     /**
-     * Fill product variations
+     * Get data of the tabs
      *
-     * @param ConfigurableProduct $variations
+     * @param FixtureInterface|null $fixture
+     * @param Element|null $element
+     * @return array
+     */
+    public function getData(FixtureInterface $fixture = null, Element $element = null)
+    {
+        $this->showAdvancedSettings();
+        return parent::getData($fixture, $element);
+    }
+
+    /**
+     * Show Advanced Setting
+     *
      * @return void
      */
-    public function fillVariations(ConfigurableProduct $variations)
+    protected function showAdvancedSettings()
     {
-        $variationsBlock = Factory::getBlockFactory()->getMagentoCatalogAdminhtmlProductEditTabSuperConfig(
-            $this->_rootElement->find($this->variationsWrapper)
-        );
-        $variationsBlock->fillAttributeOptions($variations->getConfigurableAttributes());
-        $variationsBlock->generateVariations();
-        $variationsBlock->fillVariationsMatrix($variations->getVariationsMatrix());
-    }
-
-    /**
-     * Select category
-     *
-     * @param FixtureInterface $fixture
-     * @return void|null
-     */
-    protected function fillCategory(FixtureInterface $fixture)
-    {
-        // TODO should be removed after suggest widget implementation as typified element
-        $categoryName = null;
-        if (!empty($this->category)) {
-            $categoryName = $this->category->getName();
+        if (!$this->_rootElement->find($this->advancedSettingContent)->isVisible()) {
+            $this->_rootElement->find($this->advancedSettingTrigger)->click();
+            $this->waitForElementVisible($this->advancedSettingContent);
         }
-        if (empty($categoryName) && !($fixture instanceof InjectableFixture)) {
-            $categoryName = $fixture->getCategoryName();
-        }
-        if (empty($categoryName)) {
-            return;
-        }
-
-        $category = $this->_rootElement->find(
-            str_replace(
-                '%categoryName%',
-                $categoryName,
-                $this->categoryName
-            ),
-            Locator::SELECTOR_XPATH
-        );
-        if (!$category->isVisible()) {
-            $this->fillCategoryField(
-                $categoryName,
-                'category_ids-suggest',
-                '//*[@id="attribute-category_ids-container"]'
-            );
-        }
-    }
-
-    /**
-     * Fills select category field
-     *
-     * @param string $name
-     * @param string $elementId
-     * @param string $parentLocation
-     * @return void
-     */
-    protected function fillCategoryField($name, $elementId, $parentLocation)
-    {
-        // TODO should be removed after suggest widget implementation as typified element
-        $this->_rootElement->find($elementId, Locator::SELECTOR_ID)->setValue($name);
-        $this->waitForElementVisible(
-            $parentLocation . '//div[@class="mage-suggest-dropdown"]',
-            Locator::SELECTOR_XPATH
-        );
-        $this->_rootElement->find(
-            $parentLocation . '//li[contains(@data-suggest-option, \'"label":"' . $name . '",\')]//a',
-            Locator::SELECTOR_XPATH
-        )->click();
     }
 
     /**
@@ -254,76 +196,85 @@ class ProductForm extends FormTabs
     }
 
     /**
-     * Open tab
+     * Check visibility of the attribute on the product page
      *
-     * @param string $tabName
-     * @return Tab|bool
+     * @param mixed $productAttribute
+     * @return bool
      */
-    public function openTab($tabName)
+    public function checkAttributeLabel($productAttribute)
     {
-        $rootElement = $this->_rootElement;
-        $selector = $this->tabs[$tabName]['selector'];
-        $strategy = isset($this->tabs[$tabName]['strategy'])
-            ? $this->tabs[$tabName]['strategy']
-            : Locator::SELECTOR_CSS;
-        $tab = $this->_rootElement->find($selector, $strategy);
-        $advancedSettings = $this->_rootElement->find($this->advancedSettings);
+        $frontendLabel = (is_array($productAttribute))
+            ? $productAttribute['frontend_label']
+            : $productAttribute->getFrontendLabel();
+        $attributeLabelLocator = sprintf($this->attribute, $frontendLabel);
 
-        // Wait until all tabs will load
-        $advancedTabList = $this->advancedTabList;
-        $this->_rootElement->waitUntil(
-            function () use ($rootElement, $advancedTabList) {
-                return $rootElement->find($advancedTabList)->isVisible();
-            }
-        );
-
-        if ($tab->isVisible()) {
-            $tab->click();
-        } elseif ($advancedSettings->isVisible()) {
-            $advancedSettings->click();
-            // Wait for open tab animation
-            $tabPanel = $this->advancedTabPanel;
-            $this->_rootElement->waitUntil(
-                function () use ($rootElement, $tabPanel) {
-                    return $rootElement->find($tabPanel, Locator::SELECTOR_XPATH)->isVisible();
-                }
-            );
-            // Wait until needed tab will appear
-            $this->_rootElement->waitUntil(
-                function () use ($rootElement, $selector, $strategy, $tabPanel) {
-                    $this->_rootElement->waitUntil(
-                        function () use ($rootElement, $tabPanel) {
-                            return $rootElement->find($tabPanel, Locator::SELECTOR_XPATH)->isVisible();
-                        }
-                    );
-                    return $rootElement->find($selector, $strategy)->isVisible();
-                }
-            );
-            $tab->click();
-        } else {
-            return false;
-        }
-
-        return $this;
+        return $this->_rootElement->find($attributeLabelLocator, Locator::SELECTOR_XPATH)->isVisible();
     }
 
     /**
-     * Get data of the tabs
+     * Call method that checking present attribute in search result
      *
-     * @param FixtureInterface|null $fixture
-     * @param Element|null $element
-     * @return array
+     * @param CatalogProductAttribute $productAttribute
+     * @return bool
      */
-    public function getData(FixtureInterface $fixture = null, Element $element = null)
+    public function checkAttributeInSearchAttributeForm(CatalogProductAttribute $productAttribute)
     {
-        $data = parent::getData($fixture);
-        if ($fixture->hasData('status')) {
-            $data['status'] = 'Product offline';
-            if ($this->_rootElement->find(sprintf($this->onlineSwitcher, ':checked'))->isVisible()) {
-                $data['status'] = 'Product online';
-            }
-        }
+        return $this->_rootElement->find(
+            $this->attributeSearch,
+            Locator::SELECTOR_CSS,
+            'Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Attributes\Search'
+        )->isExistAttributeInSearchResult($productAttribute);
+    }
 
-        return $data;
+    /**
+     * Call method that checking present attribute in search result
+     *
+     * @param CatalogProductAttribute $productAttribute
+     * @return bool
+     */
+    public function checkAttributeInVariationsSearchAttributeForm(CatalogProductAttribute $productAttribute)
+    {
+        return $this->_rootElement->find(
+            $this->variationsAttributeSearch,
+            Locator::SELECTOR_CSS,
+            'Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Variations\Search'
+        )->isExistAttributeInSearchResult($productAttribute);
+    }
+
+    /**
+     * Open Variations tab on Product form
+     *
+     * @return void
+     */
+    public function openVariationsTab()
+    {
+        if (!$this->_rootElement->find($this->variationsAttributeSearch, Locator::SELECTOR_CSS)->isVisible()) {
+            $this->_rootElement->find($this->variationsTab, Locator::SELECTOR_CSS)->click();
+        }
+    }
+
+    /**
+     * Check tab visibility on Product form
+     *
+     * @param string $tabName
+     * @return bool
+     */
+    public function isTabVisible($tabName)
+    {
+        $tabName = strtolower($tabName);
+
+        return $this->_rootElement->find(sprintf($this->customTab, $tabName), Locator::SELECTOR_XPATH)->isVisible();
+    }
+
+    /**
+     * Open custom tab on Product form
+     *
+     * @param string $tabName
+     * @return void
+     */
+    public function openCustomTab($tabName)
+    {
+        $tabName = strtolower($tabName);
+        $this->_rootElement->find(sprintf($this->customTab, $tabName), Locator::SELECTOR_XPATH)->click();
     }
 }

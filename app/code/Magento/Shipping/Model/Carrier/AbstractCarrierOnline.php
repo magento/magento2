@@ -108,6 +108,11 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
     protected $_currencyFactory;
 
     /**
+     * @var \Magento\CatalogInventory\Service\V1\StockItemService
+     */
+    protected $stockItemService;
+
+    /**
      * Raw rate request data
      *
      * @var \Magento\Framework\Object|null
@@ -128,6 +133,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
      * @param \Magento\Directory\Model\CountryFactory $countryFactory
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Directory\Helper\Data $directoryData
+     * @param \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -146,6 +152,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
         \Magento\Directory\Model\CountryFactory $countryFactory,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Directory\Helper\Data $directoryData,
+        \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService,
         array $data = array()
     ) {
         $this->_xmlElFactory = $xmlElFactory;
@@ -158,6 +165,7 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
         $this->_countryFactory = $countryFactory;
         $this->_currencyFactory = $currencyFactory;
         $this->_directoryData = $directoryData;
+        $this->stockItemService = $stockItemService;
         parent::__construct($scopeConfig, $rateErrorFactory, $logAdapterFactory, $data);
     }
 
@@ -303,19 +311,23 @@ abstract class AbstractCarrierOnline extends AbstractCarrier
         $defaultErrorMsg = __('The shipping module is not available.');
         $showMethod = $this->getConfigData('showmethod');
 
+        /** @var $item \Magento\Sales\Model\Quote\Item */
         foreach ($this->getAllItems($request) as $item) {
-            if ($item->getProduct() && $item->getProduct()->getId()) {
-                $weight = $item->getProduct()->getWeight();
-                $stockItem = $item->getProduct()->getStockItem();
+            $product = $item->getProduct();
+            if ($product && $product->getId()) {
+                $weight = $product->getWeight();
+                $stockItemData = $this->stockItemService->getStockItem($product->getId());
                 $doValidation = true;
 
-                if ($stockItem->getIsQtyDecimal() && $stockItem->getIsDecimalDivided()) {
-                    if ($stockItem->getEnableQtyIncrements() && $stockItem->getQtyIncrements()) {
-                        $weight = $weight * $stockItem->getQtyIncrements();
+                if ($stockItemData->getIsQtyDecimal() && $stockItemData->getIsDecimalDivided()) {
+                    if ($this->stockItemService->getEnableQtyIncrements($product->getId())
+                        && $this->stockItemService->getQtyIncrements($product->getId())
+                    ) {
+                        $weight = $weight * $this->stockItemService->getQtyIncrements($product->getId());
                     } else {
                         $doValidation = false;
                     }
-                } elseif ($stockItem->getIsQtyDecimal() && !$stockItem->getIsDecimalDivided()) {
+                } elseif ($stockItemData->getIsQtyDecimal() && !$stockItemData->getIsDecimalDivided()) {
                     $weight = $weight * $item->getQty();
                 }
 

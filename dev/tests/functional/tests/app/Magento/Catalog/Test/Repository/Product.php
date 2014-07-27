@@ -101,20 +101,30 @@ class Product extends AbstractRepository
                 'fields' => array(
                     'inventory_manage_stock' => array(
                         'value' => 'Yes',
-                        'input_value' => '1',
+                        'input_value' => 1,
                     ),
                     'inventory_qty' => array(
                         'value' => 0,
                         'group' => Fixture\Product::GROUP_PRODUCT_INVENTORY
                     ),
+                    'quantity_and_stock_status' => array(
+                        'value' => 'Out of Stock',
+                        'input_value' => 0,
+                        'group' => Fixture\Product::GROUP_PRODUCT_INVENTORY,
+                        'input_name' => 'product[quantity_and_stock_status][is_in_stock]'
+                    ),
                     'inventory_stock_availability' => array(
                         'value' => 'Out of Stock', // Out of Stock
+                        'input_value' => 0,
+                        'group' => Fixture\Product::GROUP_PRODUCT_INVENTORY,
+                        'input' => 'select',
+                        'input_name' => 'product[stock_data][is_in_stock]'
                     )
                 )
             )
         );
         $product = array_replace_recursive($this->_data['simple'], $inventory);
-        unset($product['data']['fields']['qty']);
+
         return $product;
     }
 }

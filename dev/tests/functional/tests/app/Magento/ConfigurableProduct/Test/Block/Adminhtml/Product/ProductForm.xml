@@ -36,12 +36,14 @@
             <is_virtual>
                 <input>checkbox</input>
             </is_virtual>
-            <qty>
-                <selector>[name='product[quantity_and_stock_status][qty]']</selector>
-            </qty>
-            <quantity_and_stock_status>
-                <selector>[name='product[quantity_and_stock_status][is_in_stock]']</selector>
-                <input>select</input>
+            <quantity_and_stock_status composite="1">
+                <qty>
+                    <selector>#qty</selector>
+                </qty>
+                <is_in_stock>
+                    <selector>#quantity_and_stock_status</selector>
+                    <input>select</input>
+                </is_in_stock>
             </quantity_and_stock_status>
         </fields>
     </product-details>
@@ -66,5 +68,13 @@
         <class>\Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Super\Config</class>
         <selector>#product_info_tabs_product-details</selector>
         <strategy>css selector</strategy>
+        <fields>
+            <attributes_data>
+                <selector>#super_config-wrapper</selector>
+            </attributes_data>
+            <matrix>
+                <selector>#product-variations-matrix</selector>
+            </matrix>
+        </fields>
     </variations>
 </tabs>

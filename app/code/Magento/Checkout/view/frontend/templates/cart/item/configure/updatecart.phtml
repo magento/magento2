@@ -27,24 +27,26 @@
 <?php $_product = $this->getProduct(); ?>
 <?php $buttonTitle = __('Update Cart'); ?>
 <?php if ($_product->isSaleable()): ?>
-    <div class="box tocart update">
-        <?php if ($this->shouldRenderQuantity()): ?>
-        <div class="field qty">
-            <label class="label" for="qty"><span><?php echo __('Qty') ?></span></label>
-            <div class="control">
-                <input type="number" name="qty" id="qty" maxlength="12" value="<?php echo $this->getProductDefaultQty() * 1 ?>" title="<?php echo __('Qty') ?>" class="input-text qty" data-validate="{required:true,digits:true}"/>
+    <div class="box-tocart update">
+        <fieldset class="fieldset">
+            <?php if ($this->shouldRenderQuantity()): ?>
+            <div class="field qty">
+                <label class="label" for="qty"><span><?php echo __('Qty') ?></span></label>
+                <div class="control">
+                    <input type="number" name="qty" id="qty" maxlength="12" value="<?php echo $this->getProductDefaultQty() * 1 ?>" title="<?php echo __('Qty') ?>" class="input-text qty" data-validate="{required:true,digits:true}"/>
+                </div>
             </div>
-        </div>
-        <?php endif; ?>
-        <div class="actions">
-            <button type="button"
-                    title="<?php echo $buttonTitle ?>"
-                    class="action primary tocart"
-                    id="product-updatecart-button">
-                <span><?php echo $buttonTitle ?></span>
-            </button>
-            <?php echo $this->getChildHtml('', true) ?>
-        </div>
+            <?php endif; ?>
+            <div class="actions">
+                <button type="button"
+                        title="<?php echo $buttonTitle ?>"
+                        class="action primary tocart"
+                        id="product-updatecart-button">
+                    <span><?php echo $buttonTitle ?></span>
+                </button>
+                <?php echo $this->getChildHtml('', true) ?>
+            </div>
+        </fieldset>
     </div>
 
     <script type="text/javascript">
@@ -58,5 +60,3 @@
         })(jQuery);
     </script>
 <?php endif; ?>
-
-

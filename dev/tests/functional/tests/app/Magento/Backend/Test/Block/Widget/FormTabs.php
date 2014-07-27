@@ -305,7 +305,7 @@ class FormTabs extends Form
      * @return Tab
      * @throws \Exception
      */
-    protected function getTabElement($tabName)
+    public function getTabElement($tabName)
     {
         $tabClass = $this->tabs[$tabName]['class'];
         /** @var Tab $tabElement */

@@ -28,13 +28,14 @@
         <mca>catalogsearch/result</mca>
         <class>Magento\CatalogSearch\Test\Page\CatalogsearchResult</class>
     </catalogsearchResult>
-    <advanced>
-        <mca>catalogsearch/advanced</mca>
-        <class>Magento\CatalogSearch\Test\Page\Advanced</class>
-    </advanced>
-    <result>
-        <mca>catalogsearch/advanced/result</mca>
-        <area>advanced</area>
-        <class>Magento\CatalogSearch\Test\Page\Advanced\Result</class>
-    </result>
+    <catalogSearchIndex>
+        <area>adminhtml</area>
+        <mca>catalog/search/index</mca>
+        <class>Magento\CatalogSearch\Test\Page\Adminhtml\CatalogSearchIndex</class>
+    </catalogSearchIndex>
+    <catalogSearchEdit>
+        <area>adminhtml</area>
+        <mca>catalog/search/edit</mca>
+        <class>Magento\CatalogSearch\Test\Page\Adminhtml\CatalogSearchEdit</class>
+    </catalogSearchEdit>
 </page>

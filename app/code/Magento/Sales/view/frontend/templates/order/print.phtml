@@ -23,7 +23,7 @@
  */
 ?>
 <?php $_order = $this->getOrder() ?>
-<div class="page title">
+<div class="page-title">
     <h1 class="title"><?php echo __('Order #%1', $_order->getRealOrderId()) ?></h1>
 </div>
 <p class="order-date"><?php echo __('Order Date: %1', $this->formatDate($_order->getCreatedAtStoreDate(), 'long')) ?></p>
@@ -65,8 +65,8 @@
     </div>
 </div>
 
-<div class="order details items">
-    <div class="order subtitle caption">
+<div class="order-details-items">
+    <div class="order-title">
         <strong><?php echo __('Items Ordered') ?></strong>
     </div>
     <table class="data table order items" id="my-orders-table">

@@ -47,13 +47,13 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     /**
      * Constructor
      *
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Backend\Block\Widget\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Customer\Service\V1\CustomerGroupServiceInterface $groupService,
         array $data = array()
@@ -76,12 +76,12 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         $this->_controller = 'adminhtml_group';
         $this->_blockGroup = 'Magento_Customer';
 
-        $this->_updateButton('save', 'label', __('Save Customer Group'));
-        $this->_updateButton('delete', 'label', __('Delete Customer Group'));
+        $this->buttonList->update('save', 'label', __('Save Customer Group'));
+        $this->buttonList->update('delete', 'label', __('Delete Customer Group'));
 
         $groupId = $this->_coreRegistry->registry(RegistryConstants::CURRENT_GROUP_ID);
         if (!$groupId || !$this->_groupService->canDelete($groupId)) {
-            $this->_removeButton('delete');
+            $this->buttonList->remove('delete');
         }
     }
 

@@ -1,6 +1,4 @@
 <?php
-namespace Magento\Backend\Block\Template;
-
 /**
  * Backend block template context
  *
@@ -24,7 +22,11 @@ namespace Magento\Backend\Block\Template;
  *
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
- *
+ */
+
+namespace Magento\Backend\Block\Template;
+
+/**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Context extends \Magento\Framework\View\Element\Template\Context

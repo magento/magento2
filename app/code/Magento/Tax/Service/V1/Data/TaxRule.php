@@ -47,12 +47,14 @@ class TaxRule extends AbstractObject
     const PRIORITY = 'priority';
 
     const SORT_ORDER = 'sort_order';
+
+    const CALCULATE_SUBTOTAL = 'calculate_subtotal';
     /**#@-*/
 
     /**
      * Get id
      *
-     * @return int
+     * @return int|null
      */
     public function getId()
     {
@@ -72,7 +74,7 @@ class TaxRule extends AbstractObject
     /**
      * Get customer tax class id
      *
-     * @return int[]|null
+     * @return int[]
      */
     public function getCustomerTaxClassIds()
     {
@@ -82,7 +84,7 @@ class TaxRule extends AbstractObject
     /**
      * Get product tax class id
      *
-     * @return int[]|null
+     * @return int[]
      */
     public function getProductTaxClassIds()
     {
@@ -92,7 +94,7 @@ class TaxRule extends AbstractObject
     /**
      * Get tax rate ids
      *
-     * @return int[]|null
+     * @return int[]
      */
     public function getTaxRateIds()
     {
@@ -117,5 +119,15 @@ class TaxRule extends AbstractObject
     public function getSortOrder()
     {
         return $this->_get(self::SORT_ORDER);
+    }
+
+    /**
+     * Get calculate subtotal.
+     *
+     * @return bool|null
+     */
+    public function getCalculateSubtotal()
+    {
+        return $this->_get(self::CALCULATE_SUBTOTAL);
     }
 }

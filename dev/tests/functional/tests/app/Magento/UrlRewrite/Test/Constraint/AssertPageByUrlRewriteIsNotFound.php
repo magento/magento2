@@ -51,8 +51,8 @@ class AssertPageByUrlRewriteIsNotFound extends AbstractConstraint
      * Checking the server response 404 page on frontend
      *
      * @param Browser $browser
-     * @param UrlRewrite $productRedirect
      * @param CatalogProductView $catalogProductView
+     * @param UrlRewrite $productRedirect
      * @return void
      */
     public function processAssert(

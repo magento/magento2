@@ -33,7 +33,7 @@ class TaxDetails extends \Magento\Framework\Service\Data\AbstractObject
 
     const KEY_TAX_AMOUNT = 'tax_amount';
 
-    const KEY_DISCOUNT_AMOUNT = 'discount_amount';
+    const KEY_DISCOUNT_TAX_COMPENSATION_AMOUNT = 'discount_tax_compensation_amount';
 
     const KEY_APPLIED_TAXES = 'applied_taxes';
 
@@ -66,9 +66,9 @@ class TaxDetails extends \Magento\Framework\Service\Data\AbstractObject
      *
      * @return float
      */
-    public function getDiscountAmount()
+    public function getDiscountTaxCompensationAmount()
     {
-        return $this->_get(self::KEY_DISCOUNT_AMOUNT);
+        return $this->_get(self::KEY_DISCOUNT_TAX_COMPENSATION_AMOUNT);
     }
 
     /**

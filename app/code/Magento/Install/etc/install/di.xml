@@ -36,11 +36,13 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Install\Controller\Action">
+    <type name="Magento\Install\Controller\Index\Index">
         <plugin name="installInitializer" disabled="true" />
         <plugin name="designLoader" type="Magento\Install\App\Action\Plugin\Design" />
-    </type>
-    <type name="Magento\Install\Controller\Index">
         <plugin name="directoryCleaner" type="Magento\Install\App\Action\Plugin\Dir" sortOrder="10"/>
+    </type>
+    <type name="Magento\Install\Controller\Wizard">
+        <plugin name="installInitializer" disabled="true" />
+        <plugin name="designLoader" type="Magento\Install\App\Action\Plugin\Design" />
     </type>
 </config>

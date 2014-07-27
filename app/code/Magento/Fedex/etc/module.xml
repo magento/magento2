@@ -32,6 +32,7 @@
             <module name="Magento_Core"/>
             <module name="Magento_Catalog"/>
             <module name="Magento_Sales"/>
+            <module name="Magento_CatalogInventory"/>
         </depends>
     </module>
 </config>

@@ -248,14 +248,9 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
         $checkoutModel->returnFromPaypal('token');
 
         $billingAddress = $quote->getBillingAddress();
-        $this->assertEquals($billingAddress->getEmail(), $quote->getCustomerEmail());
-        $this->assertEquals($billingAddress->getPrefix(), $quote->getCustomerPrefix());
-        $this->assertEquals($billingAddress->getFirstname(), $quote->getCustomerFirstname());
-        $this->assertEquals($billingAddress->getMiddlename(), $quote->getCustomerMiddlename());
-        $this->assertEquals($billingAddress->getLastname(), $quote->getCustomerLastname());
-        $this->assertEquals($billingAddress->getSuffix(), $quote->getCustomerSuffix());
-        $this->assertTrue($billingAddress->getShouldIgnoreValidation());
+
         $this->assertContains('exported', $billingAddress->getFirstname());
+        $this->assertEquals('note', $billingAddress->getCustomerNote());
 
         $shippingAddress = $quote->getShippingAddress();
         $this->assertTrue((bool)$shippingAddress->getSameAsBilling());
@@ -293,6 +288,7 @@ class CheckoutTest extends \PHPUnit_Framework_TestCase
         }
         $fixture = new \Magento\Framework\Object($result);
         $fixture->setExportedKeys($addressDataKeys);
+        $fixture->setData('note', 'note');
         return $fixture;
     }
 

@@ -1,66 +1,122 @@
-"Authorization","Berechtigung"
-"Authorization Waiting from Ogone","Warte auf Authorisierung von Ogone"
-"Authorization not known: A technical problem arose during authorization process, giving unpredictable result","Authorisierung ist nicht bekannt: Während der Authorisierungsvorgangs ist ein Problem aufgetreten, das zu unvorhersehbaren Ergebnissen führt"
-"Background Color of Ogone Template","Hintergrundfarbe des Ogone Templates"
-"Button Background Color of the Ogone Template","Schaltflächenhintergrundfarbe des Ogone Templates"
-"Button Text Color of the Ogone Template","Schaltflächentextfarbe des Ogone Templates"
+Enabled,Enabled
+Title,Title
+Magento,Magento
+"The hash is not valid.","The hash is not valid."
+"The order is not valid.","The order is not valid."
+"Start Ogone Processing","Ogone-Bearbeitung starten"
 "Can't detect Ogone payment action","Ogone Zahlungsvorgang konnte nicht erkannt werden"
-"Cancelled Ogone","Ogone wurde abgebrochen"
-"Debug","Fehlerbeseitigung"
-"Declined Ogone","Ogone wurde abgelehnt"
-"Declined Order on Ogone side.","Bestellung wurde von Ogone abgelehnt"
-"Direct Sale","Direktverkauf"
-"E.g: ""Verdana"".","z.B.: ""Verdana""."
-"E.g: ""black"".","z.B.: ""schwarz""."
-"E.g: ""white"".","z.B. ""weiß""."
-"Enabled","Aktiviert"
-"Enabling this feature needs adjusting ""Technical information > Global security parameters"" on merchant administration.","Um dieses Feature zu aktivieren, müssen Sie unter ""Technische Informationen > Globale Sicherheitsparameter"" unter der Verkäuferverwaltung weitere Einstellungen vornehmen."
+"The order cannot be saved.","Die Bestellung kann nicht gespeichert werden."
+"Authorization Waiting from Ogone","Warte auf Authorisierung von Ogone"
+"Processed by Ogone","Durch Ogone bearbeitet"
+"Order can't save","Bestellung kann/nicht gespeichert werden"
+"Something went wrong during the payment process, and so the result is unpredictable.","Something went wrong during the payment process, and so the result is unpredictable."
+"Something went wrong during the authorization process, and so the result is unpredictable.","Something went wrong during the authorization process, and so the result is unpredictable."
+"Unknown exception","Unbekannte Ausnahme"
+"Something went wrong while saving this order.","Something went wrong while saving this order."
 "Exception not defined","Ausnahme ist nicht definiert"
-"Font Family of the Ogone Template","Schriftartfamilie des Ogone Templates"
-"For production, replace ""test"" with ""prod"". Example: https://secure.ogone.com/ncol/prod/orderstandard.asp","Für die Produktion ersetzen Sie ""test"" mit ""prod"". Beispiel unter: https://secure.ogone.com/ncol/prod/orderstandard.asp"
-"Gateway URL","Gateway URL"
-"Hash All Parameters","Alle Parameter vermischen"
-"Hashing Algorithm","Hashing-Algorithmus"
+"Declined Order on Ogone side","Declined Order on Ogone side"
+"The payment transaction has been declined.","The payment transaction has been declined."
+"The order was canceled on the Ogone side.","The order was canceled on the Ogone side."
+"Something went wrong while canceling this order.","Something went wrong while canceling this order."
+"Ogone Default Operation","Ogone Standard-Operation"
+Authorization,Berechtigung
+"Direct Sale",Direktverkauf
 "Horizontally grouped logo with group name on left","horizontal angeordnetes Logo mit dem Gruppennamen links"
 "Horizontally grouped logo with no group name","horizontal angeordnetes Logo ohne Gruppenname"
-"If you choose ""No Operation"", Ogone will use default payment procedure setup in Ogone configuration.","Wenn Sie ""Keine Operation"" wählen, verfährt Ogone nach dem Standard-Bezahlverfahren in der Ogone-Konfiguration."
-"If you choose ""Ogone Template"", you will need to fill in all the following fields.","Wenn Sie ""Ogone Template"" wählen, müssen Sie alle nachfolgenden Felder ausfüllen."
-"Layout of Payment Methods","Layout der Zahlungsmethoden"
-"Logo of the Ogone Template","Logo des Ogone-Templates"
-"Magento","Magento"
-"Ogone","Ogone"
-"Ogone Default Operation","Ogone Standard-Operation"
-"Order can't save","Bestellung kann/nicht gespeichert werden"
-"PSPID","PSPID"
-"Payment Action","Zahlungsaktion"
-"Payment Template","Zahlungs-Template"
-"Payment transaction has been declined.","Zahlungstransaktion wurde verweigert."
-"Payment uncertain: A technical problem arose during payment process, giving unpredictable result","Zahlung ungewiss: Während des Zahlungsvorganges ist ein Fehler aufgetreten, der zu nicht gesicherten Ergebnissen geführt hat"
-"Pending Ogone","Ogone in Bearbeitung"
-"Please, wait a moment. This page will transfer your data to Ogone payment gateway in a few seconds.","Bitte warten Sie einen Moment. Diese Seite überträgt Ihre Daten in wenigen Sekunden zum Ogone-Zahlungsbereich."
-"Processed Ogone Payment","Bearbeitete Ogone-Zahlung"
-"Processed by Ogone","Durch Ogone bearbeitet"
-"Processing Ogone Payment","Ogone-Zahlung in Bearbeitung"
-"SHA-IN Pass Phrase","SHA-IN Passwortsatz"
-"SHA-OUT Pass Phrase","SHA-OUT Passwortsatz"
-"Start Ogone Processing","Ogone-Bearbeitung starten"
-"Table Background Color of the Ogone Template","Tafel-Hintergrundfarbe des Ogone-Templates"
-"Table Text Color of the Ogone Template","Tafel-Textfarbe des Ogone-Templates"
-"Text Color of the Ogone Template","Textfarbe des Ogone-Templates"
-"The hash is not valid","Die Mischung ist ungültig"
-"The order cannot be canceled for a system reason.","Die Bestellung kann aus Systemgründen nicht storniert werden."
-"The order cannot be saved for a system reason.","Die Bestellung kann aus Systemgründen nicht gespeichert werden."
-"The order cannot be saved.","Die Bestellung kann nicht gespeichert werden."
-"The order is not valid","Die Bestellung ist nicht gültig"
-"The order was canceled on ogone side.","Die Bestellung wurde von Ogone aus storniert."
-"Title","Titel"
-"Title of the Ogone Template","Titel des Ogone-Templates"
-"To hash <strong>all parameters</strong>, select the following options in the ""Global security parameters"" fieldset: <ul><li>Each parameter followed by the pass phrase.</li><li>""Hash algorithm"" same as ""Hashing Algorithm"" below</li><li>UTF-8</li></ul>","Um <strong>alle Parameter</strong> zu hashen, wählen Sie die folgenden Optionen im Formularfeld ""Globale Sicherheitsparameter"" aus: <ul><li>Jeder Parameter gefolgt von der Passphrase.</li><li>""Hash-Algorithmus"" wie ""Hashing-Algorithmus"" unter</li><li>UTF-8</li></ul>"
-"URL/filename of the logo.<br />The URL must be absolute and stored on a secure server.","URL/Dateiname des Logos.<br/>Die URL muss absolut sein und auf einem sicheren Server gespeichert sein."
-"Unknown exception","Unbekannte Ausnahme"
-"Use in posting data from Magento to Ogone.<br/>Use in data checking by Ogone before the payment.","Verwenden Sie beim Posting Daten von Magento zu Ogone.<br/>Verwenden Sie  Datenprüfung durch Ogone vor der Zahlung."
-"Use in posting data from Ogone to Magento.<br/>Use in feedback data checking by Magento.","Verwenden Sie beim Posting Daten von Ogone zu Magento.<br/>Verwenden Sie in Feedback Datenprüfung durch Magento."
 "Verical list","Vertikale Liste"
+Ogone,Ogone
+"Pending Ogone","Ogone in Bearbeitung"
+"Cancelled Ogone","Ogone wurde abgebrochen"
+"Declined Ogone","Ogone wurde abgelehnt"
+"Processing Ogone Payment","Ogone-Zahlung in Bearbeitung"
+"Processed Ogone Payment","Bearbeitete Ogone-Zahlung"
 "Waiting Authorization","Erwarte Authorisierung"
-"You can arrange the layout/list of the payment methods on Ogone payment page.","Sie können das Layout bzw. die Liste der Bezahlungsmethoden neu ordnen auf der Ogone-Zahlungsseite."
+"Payment ID: %1","Payment ID: %1"
 "You will be redirected to Ogone website when you place an order.","Sie werden weitergeleitet zur Ogone-Webseite, wenn Sie eine Bestellung aufgeben."
+"Please stand by. In a moment, this page will transfer your data to the Ogone payment gateway.","Please stand by. In a moment, this page will transfer your data to the Ogone payment gateway."
+Debug,Debug
+"Payment Action","Payment Action"
+"Gateway URL","Gateway URL"
+"
+                    <br />
+                    <div class=""custom-options"">
+                    <div class=""box"">
+                    <p class=""grand-total""><br /><b>Signing up with Ogone</b></p>
+                    <p>Please enter the correct post back url and offline processiong url in Ogone configuration</p>
+                    <p>post back url example: http://myMagentoStore.com/ogone/api/postBack</p>
+                    <p>offline processing url example: http://myMagentoStore.com/ogone/api/offlineProcess</p>
+                    </div>
+                    </div>
+                    
+                ","
+                    <br />
+                    <div class=""custom-options"">
+                    <div class=""box"">
+                    <p class=""grand-total""><br /><b>Signing up with Ogone</b></p>
+                    <p>Please enter the correct post back url and offline processiong url in Ogone configuration</p>
+                    <p>post back url example: http://myMagentoStore.com/ogone/api/postBack</p>
+                    <p>offline processing url example: http://myMagentoStore.com/ogone/api/offlineProcess</p>
+                    </div>
+                    </div>
+                    
+                "
+PSPID,PSPID
+"SHA-IN Pass Phrase","SHA-IN Pass Phrase"
+"
+                        Use in posting data from Magento to Ogone.<br/>Use in data checking by Ogone before the payment.
+                    ","
+                        Use in posting data from Magento to Ogone.<br/>Use in data checking by Ogone before the payment.
+                    "
+"SHA-OUT Pass Phrase","SHA-OUT Pass Phrase"
+"
+                        Use in posting data from Ogone to Magento.<br/>Use in feedback data checking by Magento.
+                    ","
+                        Use in posting data from Ogone to Magento.<br/>Use in feedback data checking by Magento.
+                    "
+"Hash All Parameters","Hash All Parameters"
+"
+                        To enable this feature, please edit your global security parameters.
+                    ","
+                        To enable this feature, please edit your global security parameters.
+                    "
+"
+                        To hash <strong>all parameters</strong>, select the following options in the ""Global security parameters"" fieldset: <ul><li>Each parameter followed by the pass phrase.</li><li>""Hash algorithm"" same as ""Hashing Algorithm"" below</li><li>UTF-8</li></ul>
+                    ","
+                        To hash <strong>all parameters</strong>, select the following options in the ""Global security parameters"" fieldset: <ul><li>Each parameter followed by the pass phrase.</li><li>""Hash algorithm"" same as ""Hashing Algorithm"" below</li><li>UTF-8</li></ul>
+                    "
+"Hashing Algorithm","Hashing Algorithm"
+"For production, replace ""test"" with ""prod"". Example: https://secure.ogone.com/ncol/prod/orderstandard.asp","For production, replace ""test"" with ""prod"". Example: https://secure.ogone.com/ncol/prod/orderstandard.asp"
+"If you choose ""No Operation"", Ogone will use the default payment procedure in your Ogone setup.","If you choose ""No Operation"", Ogone will use the default payment procedure in your Ogone setup."
+"Payment Template","Payment Template"
+"If you choose ""Ogone Template"", you will need to fill in all the following fields.","If you choose ""Ogone Template"", you will need to fill in all the following fields."
+"Title of the Ogone Template","Title of the Ogone Template"
+"Background Color of Ogone Template","Background Color of Ogone Template"
+"
+                        E.g: ""white""
+                    ","
+                        E.g: ""white""
+                    "
+"Text Color of the Ogone Template","Text Color of the Ogone Template"
+"
+                        E.g: ""black""
+                    ","
+                        E.g: ""black""
+                    "
+"Table Background Color of the Ogone Template","Table Background Color of the Ogone Template"
+"Table Text Color of the Ogone Template","Table Text Color of the Ogone Template"
+"Button Background Color of the Ogone Template","Button Background Color of the Ogone Template"
+"Button Text Color of the Ogone Template","Button Text Color of the Ogone Template"
+"Font Family of the Ogone Template","Font Family of the Ogone Template"
+"
+                        E.g: ""Verdana""
+                    ","
+                        E.g: ""Verdana""
+                    "
+"Logo of the Ogone Template","Logo of the Ogone Template"
+"
+                        URL/filename of the logo.<br />The URL must be absolute and stored on a secure server.
+                    ","
+                        URL/filename of the logo.<br />The URL must be absolute and stored on a secure server.
+                    "
+"Layout of Payment Methods","Layout of Payment Methods"
+"You can arrange the layout/list of the payment methods on Ogone payment page.","You can arrange the layout/list of the payment methods on Ogone payment page."

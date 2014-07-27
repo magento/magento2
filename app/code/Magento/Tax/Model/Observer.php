@@ -112,6 +112,14 @@ class Observer
             $order->setAppliedTaxes($taxes);
             $order->setConvertingFromQuote(true);
         }
+
+        $itemAppliedTaxes = $address->getItemsAppliedTaxes();
+        if (is_array($itemAppliedTaxes)) {
+            if (is_array($order->getItemAppliedTaxes())) {
+                $itemAppliedTaxes = array_merge($order->getItemAppliedTaxes(), $itemAppliedTaxes);
+            }
+            $order->setItemAppliedTaxes($itemAppliedTaxes);
+        }
     }
 
     /**
@@ -128,7 +136,7 @@ class Observer
             return;
         }
 
-        $getTaxesForItems = $order->getQuote()->getTaxesForItems();
+        $getTaxesForItems = $order->getItemAppliedTaxes();
         $taxes = $order->getAppliedTaxes();
 
         $ratesIdQuoteItemId = array();
@@ -139,18 +147,32 @@ class Observer
             foreach ($taxesArray as $rates) {
                 if (count($rates['rates']) == 1) {
                     $ratesIdQuoteItemId[$rates['id']][] = array(
-                        'id' => $quoteItemId,
+                        'id' => $rates['item_id'],
                         'percent' => $rates['percent'],
-                        'code' => $rates['rates'][0]['code']
+                        'code' => $rates['rates'][0]['code'],
+                        'associated_item_id' => $rates['associated_item_id'],
+                        'item_type' => $rates['item_type'],
+                        'amount' => $rates['amount'],
+                        'base_amount' => $rates['base_amount'],
+                        'real_amount' => $rates['amount'],
+                        'real_base_amount' => $rates['base_amount'],
                     );
                 } else {
                     $percentDelta = $rates['percent'];
                     $percentSum = 0;
                     foreach ($rates['rates'] as $rate) {
+                        $real_amount = $rates['amount'] * $rate['percent'] / $rates['percent'];
+                        $real_base_amount = $rates['base_amount'] * $rate['percent'] / $rates['percent'];
                         $ratesIdQuoteItemId[$rates['id']][] = array(
-                            'id' => $quoteItemId,
+                            'id' => $rates['item_id'],
                             'percent' => $rate['percent'],
-                            'code' => $rate['code']
+                            'code' => $rate['code'],
+                            'associated_item_id' => $rates['associated_item_id'],
+                            'item_type' => $rates['item_type'],
+                            'amount' => $rates['amount'],
+                            'base_amount' => $rates['base_amount'],
+                            'real_amount' => $real_amount,
+                            'real_base_amount' => $real_base_amount,
                         );
                         $percentSum += $rate['percent'];
                     }
@@ -178,17 +200,20 @@ class Observer
                     $baseRealAmount = $row['base_amount'] / $row['percent'] * $tax['percent'];
                 }
                 $hidden = isset($row['hidden']) ? $row['hidden'] : 0;
+                $priority = isset($tax['priority']) ? $tax['priority'] : 0;
+                $position = isset($tax['position']) ? $tax['position'] : 0;
+                $process = isset($row['process']) ? $row['process'] : 0;
                 $data = array(
                     'order_id' => $order->getId(),
                     'code' => $tax['code'],
                     'title' => $tax['title'],
                     'hidden' => $hidden,
                     'percent' => $tax['percent'],
-                    'priority' => $tax['priority'],
-                    'position' => $tax['position'],
+                    'priority' => $priority,
+                    'position' => $position,
                     'amount' => $row['amount'],
                     'base_amount' => $row['base_amount'],
-                    'process' => $row['process'],
+                    'process' => $process,
                     'base_real_amount' => $baseRealAmount
                 );
 
@@ -199,17 +224,32 @@ class Observer
                 if (isset($ratesIdQuoteItemId[$id])) {
                     foreach ($ratesIdQuoteItemId[$id] as $quoteItemId) {
                         if ($quoteItemId['code'] == $tax['code']) {
-                            $item = $order->getItemByQuoteItemId($quoteItemId['id']);
-                            if ($item) {
-                                $data = array(
-                                    'item_id' => $item->getId(),
-                                    'tax_id' => $result->getTaxId(),
-                                    'tax_percent' => $quoteItemId['percent']
-                                );
-                                /** @var $taxItem \Magento\Tax\Model\Sales\Order\Tax\Item */
-                                $taxItem = $this->_taxItemFactory->create();
-                                $taxItem->setData($data)->save();
+                            $itemId = null;
+                            $associatedItemId = null;
+                            if (isset($quoteItemId['id'])) {
+                                //This is a product item
+                                $item = $order->getItemByQuoteItemId($quoteItemId['id']);
+                                $itemId = $item->getId();
+                            } elseif (isset($quoteItemId['associated_item_id'])) {
+                                //This item is associated with a product item
+                                $item = $order->getItemByQuoteItemId($quoteItemId['associated_item_id']);
+                                $associatedItemId = $item->getId();
                             }
+
+                            $data = array(
+                                'item_id' => $itemId,
+                                'tax_id' => $result->getTaxId(),
+                                'tax_percent' => $quoteItemId['percent'],
+                                'associated_item_id' => $associatedItemId,
+                                'amount' => $quoteItemId['amount'],
+                                'base_amount' => $quoteItemId['base_amount'],
+                                'real_amount' => $quoteItemId['real_amount'],
+                                'real_base_amount' => $quoteItemId['real_base_amount'],
+                                'taxable_item_type' => $quoteItemId['item_type'],
+                            );
+                            /** @var $taxItem \Magento\Tax\Model\Sales\Order\Tax\Item */
+                            $taxItem = $this->_taxItemFactory->create();
+                            $taxItem->setData($data)->save();
                         }
                     }
                 }
@@ -217,37 +257,6 @@ class Observer
         }
 
         $order->setAppliedTaxIsSaved(true);
-    }
-
-    /**
-     * Add tax percent values to product collection items
-     *
-     * @param   \Magento\Framework\Event\Observer $observer
-     * @return  $this
-     */
-    public function addTaxPercentToProductCollection($observer)
-    {
-        $helper = $this->_taxData;
-        $collection = $observer->getEvent()->getCollection();
-        $store = $collection->getStoreId();
-        if (!$helper->needPriceConversion($store)) {
-            return $this;
-        }
-
-        if ($collection->requireTaxPercent()) {
-            $request = $this->_calculation->getRateRequest();
-            foreach ($collection as $item) {
-                if (null === $item->getTaxClassId()) {
-                    $item->setTaxClassId($item->getMinimalTaxClassId());
-                }
-                if (!isset($classToRate[$item->getTaxClassId()])) {
-                    $request->setProductClassId($item->getTaxClassId());
-                    $classToRate[$item->getTaxClassId()] = $this->_calculation->getRate($request);
-                }
-                $item->setTaxPercent($classToRate[$item->getTaxClassId()]);
-            }
-        }
-        return $this;
     }
 
     /**

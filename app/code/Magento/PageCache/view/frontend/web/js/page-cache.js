@@ -46,6 +46,9 @@
         _searchPlaceholders: function (elements) {
             var placeholders = [],
                 tmp = {};
+            if (!elements.length) {
+                return placeholders;
+            }
             for (var i = 0; i < elements.length; i++) {
                 var el = elements[i],
                     matches = this.options.patternPlaceholderOpen.exec(el.nodeValue),

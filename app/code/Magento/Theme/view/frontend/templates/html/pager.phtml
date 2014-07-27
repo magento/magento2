@@ -35,39 +35,26 @@
     <div class="pager">
     <?php endif ?>
 
-    <?php if($this->getShowAmounts()): ?>
-    <p class="amount">
-        <?php if($this->getLastPageNum()>1): ?>
-            <?php echo __('Items %1 to %2 of %3 total', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
-        <?php elseif ($this->getLastPageNum() == 1): ?>
-            <?php echo __('%1 Item', $this->getTotalNum()) ?>
-        <?php else: ?>
-            <?php echo __('%1 Item(s)', $this->getTotalNum()) ?>
-        <?php endif; ?>
-    </p>
-    <?php endif ?>
-
-        <?php if($this->isShowPerPage()): ?>
-            <div class="limiter">
-                <strong class="label"><?php echo __('Show') ?></strong>
-                <select id="limiter" data-mage-redirect="{'event':'change'}">
-                    <?php foreach ($this->getAvailableLimit() as $_key => $_limit): ?>
-                    <option value="<?php echo $this->getLimitUrl($_key) ?>"<?php if ($this->isLimitCurrent($_key)): ?>
-                            selected="selected"<?php endif ?>>
-                        <?php echo $_limit ?>
-                    </option>
-                    <?php endforeach; ?>
-                </select>
-                <span class="text"><?php echo __('per page') ?></span>
-            </div>
+        <?php if($this->getShowAmounts()): ?>
+        <p class="toolbar-amount">
+            <span class="toolbar-number">
+            <?php if($this->getLastPageNum()>1): ?>
+                <?php echo __('Items %1 to %2 of %3 total', $this->getFirstNum(), $this->getLastNum(), $this->getTotalNum()) ?>
+            <?php elseif ($this->getLastPageNum() == 1): ?>
+                <?php echo __('%1 Item', $this->getTotalNum()) ?>
+            <?php else: ?>
+                <?php echo __('%1 Item(s)', $this->getTotalNum()) ?>
+            <?php endif; ?>
+            </span>
+        </p>
         <?php endif ?>
 
         <?php if($this->getLastPageNum()>1): ?>
         <div class="pages">
-            <strong class="label" id="paging-label"><?php echo __('Page') ?></strong>
-            <ul class="items" aria-labelledby="paging-label">
+            <strong class="label pages-label" id="paging-label"><?php echo __('Page') ?></strong>
+            <ul class="items pages-items" aria-labelledby="paging-label">
             <?php if (!$this->isFirstPage()): ?>
-                <li class="item">
+                <li class="item pages-item-previous">
                     <?php $text = $this->getAnchorTextForPrevious() ? $this->getAnchorTextForPrevious() : '';?>
                     <a class="<?php echo $text ? 'link ' : 'action '?> previous" href="<?php echo $this->getPreviousPageUrl() ?>" title="<?php echo $text ? $text : __('Previous') ?>">
                         <span class="label"><?php echo __('Page') ?></span>
@@ -129,7 +116,7 @@
             <?php endif;?>
 
             <?php if (!$this->isLastPage()): ?>
-                <li class="item">
+                <li class="item pages-item-next">
                     <?php $text = $this->getAnchorTextForNext() ? $this->getAnchorTextForNext() : '';?>
                     <a class="<?php echo $text ? 'link ' : 'action '?> next" href="<?php echo $this->getNextPageUrl() ?>" title="<?php echo $text ? $text : __('Next') ?>">
                         <span class="label"><?php echo __('Page') ?></span>
@@ -140,6 +127,21 @@
             </ul>
         </div>
         <?php endif; ?>
+
+        <?php if($this->isShowPerPage()): ?>
+            <div class="limiter">
+                <strong class="limiter-label"><?php echo __('Show') ?></strong>
+                <select id="limiter" data-mage-redirect="{'event':'change'}" class="limiter-options">
+                    <?php foreach ($this->getAvailableLimit() as $_key => $_limit): ?>
+                    <option value="<?php echo $this->getLimitUrl($_key) ?>"<?php if ($this->isLimitCurrent($_key)): ?>
+                            selected="selected"<?php endif ?>>
+                        <?php echo $_limit ?>
+                    </option>
+                    <?php endforeach; ?>
+                </select>
+                <span class="limiter-text"><?php echo __('per page') ?></span>
+            </div>
+        <?php endif ?>
 
     <?php if($this->getUseContainer()): ?>
     </div>

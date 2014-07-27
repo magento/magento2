@@ -41,13 +41,13 @@ class Content extends \Magento\Backend\Block\Widget\Container
     protected $_coreHelper;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Theme\Helper\Storage $storageHelper
      * @param \Magento\Core\Helper\Data $coreHelper
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Backend\Block\Widget\Context $context,
         \Magento\Theme\Helper\Storage $storageHelper,
         \Magento\Core\Helper\Data $coreHelper,
         array $data = array()
@@ -66,8 +66,9 @@ class Content extends \Magento\Backend\Block\Widget\Container
     {
         parent::_construct();
         $this->_headerText = __('Media Storage');
-        $this->_removeButton('back')->_removeButton('edit');
-        $this->_addButton(
+        $this->buttonList->remove('back');
+        $this->buttonList->remove('edit');
+        $this->buttonList->add(
             'newfolder',
             array(
                 'class' => 'save',
@@ -77,7 +78,7 @@ class Content extends \Magento\Backend\Block\Widget\Container
             )
         );
 
-        $this->_addButton(
+        $this->buttonList->add(
             'delete_folder',
             array(
                 'class' => 'delete no-display',
@@ -88,7 +89,7 @@ class Content extends \Magento\Backend\Block\Widget\Container
             )
         );
 
-        $this->_addButton(
+        $this->buttonList->add(
             'delete_files',
             array(
                 'class' => 'delete no-display',
@@ -99,7 +100,7 @@ class Content extends \Magento\Backend\Block\Widget\Container
             )
         );
 
-        $this->_addButton(
+        $this->buttonList->add(
             'insert_files',
             array(
                 'class' => 'save no-display',

@@ -43,12 +43,12 @@ class Items extends \Magento\Backend\Block\Widget\Grid\Container
     protected $_flagFactory;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\GoogleShopping\Model\FlagFactory $flagFactory
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Backend\Block\Widget\Context $context,
         \Magento\GoogleShopping\Model\FlagFactory $flagFactory,
         array $data = array()
     ) {

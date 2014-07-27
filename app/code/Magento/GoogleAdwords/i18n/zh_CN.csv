@@ -1,11 +1,13 @@
-Constant,常量
-"Conversion Color",换算Color
-"Conversion Color value is not valid ""%1"". Please set hexadecimal 6-digit value.","换算颜色值""%1""无效。 请设置十六紧致的6为数字值。"
-"Conversion Format",换算Format
-"Conversion ID",换算ID
-"Conversion Id value is not valid ""%1"". Conversion Id should be an integer.","换算ID值""%1""无效。 换算ID应该是整数。"
-"Conversion Label",换算标签
-"Conversion Language",换算语言
-"Conversion Value",换算值
-"Conversion Value Type",换算值类型
+Enable,Enable
+Dynamic,Dynamic
+Constant,Constant
+"Conversion Color value is not valid ""%1"". Please set hexadecimal 6-digit value.","Conversion Color value is not valid ""%1"". Please set hexadecimal 6-digit value."
+"Conversion Id value is not valid ""%1"". Conversion Id should be an integer.","Conversion Id value is not valid ""%1"". Conversion Id should be an integer."
 "Google AdWords","Google AdWords"
+"Conversion ID","Conversion ID"
+"Conversion Language","Conversion Language"
+"Conversion Format","Conversion Format"
+"Conversion Color","Conversion Color"
+"Conversion Label","Conversion Label"
+"Conversion Value Type","Conversion Value Type"
+"Conversion Value","Conversion Value"

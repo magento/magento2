@@ -28,8 +28,13 @@ namespace Magento\Cms\Controller;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Router extends \Magento\Framework\App\Router\AbstractRouter
+class Router implements \Magento\Framework\App\RouterInterface
 {
+    /**
+     * @var \Magento\Framework\App\ActionFactory
+     */
+    protected $actionFactory;
+
     /**
      * Event manager
      *
@@ -73,8 +78,6 @@ class Router extends \Magento\Framework\App\Router\AbstractRouter
     protected $_response;
 
     /**
-     * Construct
-     *
      * @param \Magento\Framework\App\ActionFactory $actionFactory
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\UrlInterface $url
@@ -92,7 +95,7 @@ class Router extends \Magento\Framework\App\Router\AbstractRouter
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\ResponseInterface $response
     ) {
-        parent::__construct($actionFactory);
+        $this->actionFactory = $actionFactory;
         $this->_eventManager = $eventManager;
         $this->_url = $url;
         $this->_appState = $appState;
@@ -128,7 +131,7 @@ class Router extends \Magento\Framework\App\Router\AbstractRouter
         if ($condition->getRedirectUrl()) {
             $this->_response->setRedirect($condition->getRedirectUrl());
             $request->setDispatched(true);
-            return $this->_actionFactory->createController(
+            return $this->actionFactory->create(
                 'Magento\Framework\App\Action\Redirect',
                 array('request' => $request)
             );
@@ -148,7 +151,7 @@ class Router extends \Magento\Framework\App\Router\AbstractRouter
         $request->setModuleName('cms')->setControllerName('page')->setActionName('view')->setParam('page_id', $pageId);
         $request->setAlias(\Magento\Framework\Url::REWRITE_REQUEST_PATH_ALIAS, $identifier);
 
-        return $this->_actionFactory->createController(
+        return $this->actionFactory->create(
             'Magento\Framework\App\Action\Forward',
             array('request' => $request)
         );

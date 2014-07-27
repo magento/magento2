@@ -133,7 +133,8 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
                 'Fee Currency' => 13,
                 'Custom Field' => 14,
                 'Consumer ID' => 15,
-                'Payment Tracking ID' => 16
+                'Payment Tracking ID' => 16,
+                'Store ID' => 17
             ),
             'rowmap' => array(
                 'Transaction ID' => 'transaction_id',
@@ -151,7 +152,8 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
                 'Fee Currency' => 'fee_currency',
                 'Custom Field' => 'custom_field',
                 'Consumer ID' => 'consumer_id',
-                'Payment Tracking ID' => 'payment_tracking_id'
+                'Payment Tracking ID' => 'payment_tracking_id',
+                'Store ID' => 'store_id'
             )
         )
     );
@@ -246,8 +248,11 @@ class Settlement extends \Magento\Framework\Model\AbstractModel
 
                 $encoded = $this->_tmpDirectory->readFile($localCsv);
                 $csvFormat = 'new';
-                if (self::FILES_OUT_CHARSET != mb_detect_encoding($encoded)) {
-                    $decoded = @iconv(self::FILES_IN_CHARSET, self::FILES_OUT_CHARSET . '//IGNORE', $encoded);
+
+                $fileEncoding = mb_detect_encoding($encoded);
+
+                if (self::FILES_OUT_CHARSET != $fileEncoding) {
+                    $decoded = @iconv($fileEncoding, self::FILES_OUT_CHARSET.'//IGNORE', $encoded);
                     $this->_tmpDirectory->writeFile($localCsv, $decoded);
                     $csvFormat = 'old';
                 }

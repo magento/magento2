@@ -41,31 +41,39 @@ class IdPath implements FixtureInterface
     protected $data;
 
     /**
-     * Return category
+     * Return entity
      *
      * @var FixtureInterface
      */
-    protected $entity;
+    protected $entity = null;
+
+    /**
+     * Data set configuration settings
+     *
+     * @var array
+     */
+    protected $params;
 
     /**
      * @param FixtureFactory $fixtureFactory
      * @param array $params
-     * @param array $data
+     * @param array $data [optional]
      */
     public function __construct(FixtureFactory $fixtureFactory, array $params, array $data = [])
     {
         $this->params = $params;
-        if (!isset($data['entity'])) {
+        if (!isset($data['entity']) || $data['entity'] === '-') {
             $this->data = array_shift($data);
             return;
         }
         preg_match('`%(.*?)%`', $data['entity'], $dataSet);
-        $explodeValue = explode('::', $dataSet[1]);
-        if (!empty($explodeValue) && count($explodeValue) > 1) {
+        $entityConfig = isset($dataSet[1]) ? explode('::', $dataSet[1]) : [];
+        if (count($entityConfig) > 1) {
             /** @var FixtureInterface $fixture */
-            $this->entity = $fixtureFactory->createByCode($explodeValue[0], ['entity' => $explodeValue[1]]);
+            $this->entity = $fixtureFactory->createByCode($entityConfig[0], ['dataSet' => $entityConfig[1]]);
             $this->entity->persist();
-            $this->data = preg_replace('`(%.*?%)`', $this->entity->getId(), $data['entity']);
+            $id = $this->entity->hasData('id') ? $this->entity->getId() : $this->entity->getPageId();
+            $this->data = preg_replace('`(%.*?%)`', $id, $data['entity']);
         } else {
             $this->data = strval($data['entity']);
         }
@@ -107,7 +115,7 @@ class IdPath implements FixtureInterface
     /**
      * Return entity
      *
-     * @return FixtureInterface
+     * @return FixtureInterface|null
      */
     public function getEntity()
     {

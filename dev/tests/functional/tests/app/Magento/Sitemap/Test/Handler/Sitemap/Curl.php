@@ -31,10 +31,11 @@ use Mtf\Util\Protocol\CurlInterface;
 use Mtf\Util\Protocol\CurlTransport;
 use Mtf\Util\Protocol\CurlTransport\BackendDecorator;
 use Mtf\System\Config;
+use Magento\Backend\Test\Handler\Extractor;
 
 /**
  * Class Curl
- *
+ * Curl handler for creating sitemap
  */
 class Curl extends AbstractCurl implements SitemapInterface
 {
@@ -46,7 +47,7 @@ class Curl extends AbstractCurl implements SitemapInterface
     protected $defaultAttributeValues = ['store_id' => 1];
 
     /**
-     * Prepare data for deleting sitemap
+     * Post request for creating sitemap
      *
      * @param FixtureInterface $fixture
      * @return array
@@ -54,7 +55,7 @@ class Curl extends AbstractCurl implements SitemapInterface
      */
     public function persist(FixtureInterface $fixture = null)
     {
-        $url = $_ENV['app_backend_url'] . 'admin/sitemap/save/';
+        $url = $_ENV['app_backend_url'] . 'admin/sitemap/save/generate/';
         $data = array_merge($this->defaultAttributeValues, $fixture->getData());
         $curl = new BackendDecorator(new CurlTransport(), new Config);
         $curl->addOption(CURLOPT_HEADER, 1);
@@ -73,24 +74,17 @@ class Curl extends AbstractCurl implements SitemapInterface
      * Get id after created sitemap
      *
      * @param array $data
-     * @return mixed
-     * @throws \Exception
+     * @return string|null
      */
     protected function getSitemapId(array $data)
     {
         //Sort data in grid to define sitemap id if more than 20 items in grid
-        $url = $_ENV['app_backend_url'] . 'admin/sitemap/index/sort/sitemap_id/dir/desc';
-        $curl = new BackendDecorator(new CurlTransport(), new Config);
-        $curl->write(CurlInterface::POST, $url, '1.0');
-        $response = $curl->read();
-        $curl->close();
-
+        $url = 'admin/sitemap/index/sort/sitemap_id/dir/desc';
         $pattern = '/class=\" col\-id col\-sitemap_id\W*>\W+(\d+)\W+<\/td>\W+<td[\w\s\"=\-]*?>\W+?'
             . $data['sitemap_filename'] . '/siu';
-        preg_match($pattern, $response, $matches);
-        if (empty($matches)) {
-            throw new \Exception('Cannot find sitemap id');
-        }
-        return $matches[1];
+        $extractor = new Extractor($url, $pattern);
+        $match = $extractor->getData();
+
+        return empty($match[1]) ? null : $match[1];
     }
 }

@@ -27,6 +27,7 @@ namespace Mtf\Client\Driver\Selenium\Element;
 use Mtf\Client\Element;
 use Mtf\Client\Element\Locator;
 use Mtf\Client\Driver\Selenium\Element as AbstractElement;
+use Mtf\ObjectManager;
 
 /**
  * Class ConditionsElement
@@ -60,6 +61,13 @@ class ConditionsElement extends AbstractElement
      * @var string
      */
     protected $mainCondition = './/ul[contains(@id,"__1__children")]/..';
+
+    /**
+     * Identification for chooser grid
+     *
+     * @var string
+     */
+    protected $chooserLocator = '.rule-chooser-trigger';
 
     /**
      * Button add condition
@@ -164,6 +172,13 @@ class ConditionsElement extends AbstractElement
     protected $loader = './/ancestor::body/div[@id="loading-mask"]';
 
     /**
+     * Chooser grid locator
+     *
+     * @var string
+     */
+    protected $chooserGridLocator = 'div[id*=chooser]';
+
+    /**
      * Set value to conditions
      *
      * @param string $value
@@ -253,6 +268,20 @@ class ConditionsElement extends AbstractElement
         foreach ($rules as $rule) {
             $param = $this->findNextParam($element);
             $param->find('a')->click();
+
+            if (preg_match('`%(.*?)%`', $rule, $chooserGrid)) {
+                $chooserConfig = explode('#', $chooserGrid[1]);
+                $param->find($this->chooserLocator)->click();
+                $rule = preg_replace('`%(.*?)%`', '', $rule);
+                $grid = ObjectManager::getInstance()->create(
+                    str_replace('/', '\\', $chooserConfig[0]),
+                    [
+                        'element' => $this->find($this->chooserGridLocator)
+                    ]
+                );
+                $grid->searchAndSelect([$chooserConfig[1] => $rule]);
+                continue;
+            }
 
             $value = $param->find('select', Locator::SELECTOR_CSS, 'select');
             if ($value->isVisible()) {

@@ -36,12 +36,12 @@ class Address extends \Magento\Backend\Block\Widget\Form\Container
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Backend\Block\Widget\Context $context,
         \Magento\Framework\Registry $registry,
         array $data = array()
     ) {
@@ -60,8 +60,8 @@ class Address extends \Magento\Backend\Block\Widget\Form\Container
         $this->_mode = 'address';
         $this->_blockGroup = 'Magento_Sales';
         parent::_construct();
-        $this->_updateButton('save', 'label', __('Save Order Address'));
-        $this->_removeButton('delete');
+        $this->buttonList->update('save', 'label', __('Save Order Address'));
+        $this->buttonList->remove('delete');
     }
 
     /**

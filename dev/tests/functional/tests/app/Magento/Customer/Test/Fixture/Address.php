@@ -53,7 +53,7 @@ class Address extends DataFixture
             . (isset($data['fields']['middlename']['value']) ? $data['fields']['middlename']['value'] . ' ' : '')
             . $data['fields']['lastname']['value'] . ', '
             . (isset($data['fields']['suffix']['value']) ? $data['fields']['suffix']['value'] . ' ' : '')
-            . $data['fields']['street_1']['value'] . ', '
+            . $data['fields']['street']['value'] . ', '
             . $data['fields']['city']['value'] . ', '
             . $data['fields']['region_id']['value'] . ' '
             . $data['fields']['postcode']['value'] . ', '

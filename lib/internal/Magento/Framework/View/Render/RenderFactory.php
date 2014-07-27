@@ -59,13 +59,11 @@ class RenderFactory
     {
         $className = 'Magento\\Framework\\View\\Render\\' . ucfirst($type);
         $model = $this->objectManager->get($className);
-
-        if ($model instanceof RenderInterface === false) {
+        if (!$model instanceof RenderInterface) {
             throw new \InvalidArgumentException(
-                sprintf('Type "%s" is not instance on Magento\Framework\View\RenderInterface', $type)
+                'Type "' . $type . '" is not instance on Magento\Framework\View\RenderInterface'
             );
         }
-
         return $model;
     }
 }

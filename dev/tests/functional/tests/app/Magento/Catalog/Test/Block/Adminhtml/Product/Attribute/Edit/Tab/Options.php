@@ -53,7 +53,7 @@ class Options extends Tab
             $this->_rootElement->find($this->addOption)->click();
             $this->blockFactory->create(
                 'Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Edit\Tab\Options\Option',
-                ['element' => $this->_rootElement->find('.ui-sortable tr:nth-child(1)')]
+                ['element' => $this->_rootElement->find('.ui-sortable tr:last-child')]
             )->fillOptions($field);
         }
         return $this;

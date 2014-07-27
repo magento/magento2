@@ -1,18 +1,16 @@
-"* Required Fields",*必要字段
-Comment,评论
-"Contact Information",联系信息
-"Contact Us",联系我们
-Contacts,联系人
-"Contacts Section",联系人区域
 Email,电子邮件
-"Email Options",电子邮件选项
-"Email Sender",电子邮件发送人
-"Email Template",电子邮件模板
-"Enable Contact Us",启用联系功能
 Name,姓名
-Phone,电话
-"Send Emails To",发送邮件到
-"Something went wrong submitting your request.",提交请求时发生错误。
 Submit,提交
-"Thanks for contacting us with your comments and questions. We'll respond to you very soon.",感谢您联系我们提交问题，我们将尽快给您反馈。
-"We can't process your request right now. Sorry, that's all we know.",对不起，我们不能立即处理你的请求。
+"* Required Fields",*必要字段
+Telephone,Telephone
+"Thanks for contacting us with your comments and questions. We'll respond to you very soon.","Thanks for contacting us with your comments and questions. We'll respond to you very soon."
+"We can't process your request right now. Sorry, that's all we know.","We can't process your request right now. Sorry, that's all we know."
+"Contact Information",联系信息
+Comment,评论
+"Email Template","Email Template"
+Contacts,Contacts
+"Contact Us",联系我们
+"Enable Contact Us","Enable Contact Us"
+"Email Options","Email Options"
+"Send Emails To","Send Emails To"
+"Email Sender","Email Sender"

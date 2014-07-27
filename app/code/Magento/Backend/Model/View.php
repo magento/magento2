@@ -57,9 +57,9 @@ class View extends \Magento\Framework\App\View
     /**
      * {@inheritdoc}
      */
-    public function loadLayout($handles = null, $generateBlocks = true, $generateXml = true)
+    public function loadLayout($handles = null, $generateBlocks = true, $generateXml = true, $addActionHandles = true)
     {
-        parent::loadLayout($handles, false, $generateXml);
+        parent::loadLayout($handles, false, $generateXml, $addActionHandles);
         $this->_aclFilter->filterAclNodes($this->getLayout()->getNode());
         if ($generateBlocks) {
             $this->generateLayoutBlocks();

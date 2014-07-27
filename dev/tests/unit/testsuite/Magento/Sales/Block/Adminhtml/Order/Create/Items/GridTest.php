@@ -28,64 +28,56 @@ class GridTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Block\Adminhtml\Order\Create\Items\Grid
      */
-    protected $_block;
+    protected $block;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\CatalogInventory\Service\V1\StockItemService */
+    protected $stockItemService;
 
     /**
      * Initialize required data
      */
     protected function setUp()
     {
-        $orderCreateMock = $this->getMock(
-            'Magento\Sales\Model\AdminOrder\Create',
-            array('__wakeup'),
-            array(),
+        $orderCreateMock = $this->getMock('Magento\Sales\Model\AdminOrder\Create', ['__wakeup'], [], '', false);
+        $taxData = $this->getMockBuilder('Magento\Tax\Helper\Data')->disableOriginalConstructor()->getMock();
+        $coreData = $this->getMockBuilder('Magento\Core\Helper\Data')->disableOriginalConstructor()->getMock();
+        $sessionMock = $this->getMockBuilder('Magento\Backend\Model\Session\Quote')
+            ->disableOriginalConstructor()
+            ->setMethods(array('getQuote', '__wakeup'))
+            ->getMock();
+
+        $quoteMock = $this->getMockBuilder('Magento\Sales\Model\Quote')
+            ->disableOriginalConstructor()
+            ->setMethods(array('getStore', '__wakeup'))
+            ->getMock();
+
+        $storeMock = $this->getMockBuilder('Magento\Store\Model\Store')
+            ->disableOriginalConstructor()
+            ->setMethods(array('__wakeup', 'convertPrice'))
+            ->getMock();
+        $storeMock->expects($this->any())->method('convertPrice')->will($this->returnArgument(0));
+        $quoteMock->expects($this->any())->method('getStore')->will($this->returnValue($storeMock));
+        $sessionMock->expects($this->any())->method('getQuote')->will($this->returnValue($quoteMock));
+        $wishlistFactoryMock = $this->getMockBuilder('Magento\Wishlist\Model\WishlistFactory')
+            ->setMethods(array('methods', '__wakeup'))
+            ->getMock();
+
+        $giftMessageSave = $this->getMockBuilder('Magento\Giftmessage\Model\Save')
+            ->setMethods(array('__wakeup'))
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $taxConfig = $this->getMockBuilder('Magento\Tax\Model\Config')->disableOriginalConstructor()->getMock();
+        $this->stockItemService = $this->getMock(
+            'Magento\CatalogInventory\Service\V1\StockItemService',
+            [],
+            [],
             '',
             false
         );
 
-        $taxData = $this->getMockBuilder('Magento\Tax\Helper\Data')->disableOriginalConstructor()->getMock();
-
-        $coreData = $this->getMockBuilder('Magento\Core\Helper\Data')->disableOriginalConstructor()->getMock();
-
-        $sessionMock = $this->getMockBuilder(
-            'Magento\Backend\Model\Session\Quote'
-        )->disableOriginalConstructor()->setMethods(
-            array('getQuote', '__wakeup')
-        )->getMock();
-
-        $quoteMock = $this->getMockBuilder(
-            'Magento\Sales\Model\Quote'
-        )->disableOriginalConstructor()->setMethods(
-            array('getStore', '__wakeup')
-        )->getMock();
-
-        $storeMock = $this->getMockBuilder(
-            'Magento\Store\Model\Store'
-        )->disableOriginalConstructor()->setMethods(
-            array('__wakeup', 'convertPrice')
-        )->getMock();
-        $storeMock->expects($this->any())->method('convertPrice')->will($this->returnArgument(0));
-
-        $quoteMock->expects($this->any())->method('getStore')->will($this->returnValue($storeMock));
-
-        $sessionMock->expects($this->any())->method('getQuote')->will($this->returnValue($quoteMock));
-
-        $wishlistFactoryMock = $this->getMockBuilder(
-            'Magento\Wishlist\Model\WishlistFactory'
-        )->setMethods(
-            array('methods', '__wakeup')
-        )->getMock();
-
-        $giftMessageSave = $this->getMockBuilder(
-            'Magento\Giftmessage\Model\Save'
-        )->setMethods(
-            array('__wakeup')
-        )->disableOriginalConstructor()->getMock();
-
-        $taxConfig = $this->getMockBuilder('Magento\Tax\Model\Config')->disableOriginalConstructor()->getMock();
-
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_block = $helper->getObject(
+        $this->block = $helper->getObject(
             'Magento\Sales\Block\Adminhtml\Order\Create\Items\Grid',
             array(
                 'wishlistFactory' => $wishlistFactoryMock,
@@ -94,7 +86,8 @@ class GridTest extends \PHPUnit_Framework_TestCase
                 'taxData' => $taxData,
                 'sessionQuote' => $sessionMock,
                 'orderCreate' => $orderCreateMock,
-                'coreData' => $coreData
+                'coreData' => $coreData,
+                'stockItemService' => $this->stockItemService
             )
         );
     }
@@ -107,9 +100,8 @@ class GridTest extends \PHPUnit_Framework_TestCase
      */
     public function testTierPriceInfo($itemData, $expectedMessage, $productType)
     {
-        $itemMock = $this->_prepareItem($itemData, $productType);
-        $result = $this->_block->getTierHtml($itemMock);
-
+        $itemMock = $this->prepareItem($itemData, $productType);
+        $result = $this->block->getTierHtml($itemMock);
         $this->assertEquals($expectedMessage, $result);
     }
 
@@ -128,7 +120,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
             ),
             array(
                 array(array('price' => 100, 'price_qty' => 1), array('price' => 200, 'price_qty' => 2)),
-                '1 with 100% discount each<br/>2 with 200% discount each',
+                '1 with 100% discount each<br />2 with 200% discount each',
                 \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE
             ),
             array(
@@ -138,7 +130,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
             ),
             array(
                 array(array('price' => 50, 'price_qty' => 2), array('price' => 150, 'price_qty' => 3)),
-                '2 for 50<br/>3 for 150',
+                '2 for 50<br />3 for 150',
                 \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
             ),
             array(0, '', \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
@@ -150,13 +142,12 @@ class GridTest extends \PHPUnit_Framework_TestCase
      * @param string $productType
      * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Sales\Model\Quote\Item
      */
-    protected function _prepareItem($tierPrices, $productType)
+    protected function prepareItem($tierPrices, $productType)
     {
-        $product = $this->getMockBuilder(
-            'Magento\Catalog\Model\Product'
-        )->disableOriginalConstructor()->setMethods(
-            array('getTierPrice', '__wakeup')
-        )->getMock();
+        $product = $this->getMockBuilder('Magento\Catalog\Model\Product')
+            ->disableOriginalConstructor()
+            ->setMethods(array('getTierPrice', '__wakeup'))
+            ->getMock();
         $product->expects($this->once())->method('getTierPrice')->will($this->returnValue($tierPrices));
         $item = $this->getMock(
             'Magento\Sales\Model\Quote\Item',
@@ -177,29 +168,27 @@ class GridTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetItems()
     {
-        $layoutMock = $this->getMock('\Magento\Framework\View\LayoutInterface');
-        $blockMock = $this->getMock(
-            '\Magento\Framework\View\Element\AbstractBlock',
-            array('getItems'), array(), '', false
-        );
-
+        $productId = 8;
+        $itemQty = 23;
+        $layoutMock = $this->getMock('Magento\Framework\View\LayoutInterface');
+        $blockMock = $this->getMock('Magento\Framework\View\Element\AbstractBlock', ['getItems'], [], '', false);
 
         $itemMock = $this->getMock(
-            '\Magento\Sales\Model\Quote\Item',
-            array('getProduct', 'setHasError', 'setQty', 'getQty', '__sleep', '__wakeup'), array(), '', false
+            'Magento\Sales\Model\Quote\Item',
+            array('getProduct', 'setHasError', 'setQty', 'getQty', '__sleep', '__wakeup'),
+            array(),
+            '',
+            false
         );
         $productMock = $this->getMock(
-            '\Magento\Catalog\Model\Product',
-            array('getStockItem', 'getStatus', '__sleep', '__wakeup'), array(), '', false
+            'Magento\Catalog\Model\Product',
+            array('getStockItem', 'getID', '__sleep', '__wakeup'),
+            array(),
+            '',
+            false
         );
-        $stockItemMock = $this->getMock(
-            '\Magento\CatalogInventory\Model\Stock\Item',
-            array(), array(), '', false
-        );
-        $checkMock = $this->getMock(
-            '\Magento\Framework\Object',
-            array('getMessage', 'getHasError'), array(), '', false
-        );
+
+        $checkMock = $this->getMock('Magento\Framework\Object', ['getMessage', 'getHasError'], [], '', false);
 
         $layoutMock->expects($this->once())->method('getParentName')->will($this->returnValue('parentBlock'));
         $layoutMock->expects($this->once())->method('getBlock')->with('parentBlock')
@@ -209,20 +198,28 @@ class GridTest extends \PHPUnit_Framework_TestCase
 
         $itemMock->expects($this->any())->method('getChildren')->will($this->returnValue(array($itemMock)));
         $itemMock->expects($this->any())->method('getProduct')->will($this->returnValue($productMock));
+        $itemMock->expects($this->any())->method('getQty')->will($this->returnValue($itemQty));
 
-        $productMock->expects($this->any())->method('getStockItem')->will($this->returnValue($stockItemMock));
+        $productMock->expects($this->any())->method('getId')->will($this->returnValue($productId));
         $productMock->expects($this->any())->method('getStatus')
             ->will($this->returnValue(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED));
 
         $checkMock->expects($this->any())->method('getMessage')->will($this->returnValue('Message'));
         $checkMock->expects($this->any())->method('getHasError')->will($this->returnValue(false));
 
-        $stockItemMock->expects($this->once())->method('checkQuoteItemQty')->will($this->returnValue($checkMock));
+        $this->stockItemService->expects($this->once())
+            ->method('checkQuoteItemQty')
+            ->with(
+                $this->equalTo($productId),
+                $this->equalTo($itemQty),
+                $this->equalTo($itemQty)
+            )
+            ->will($this->returnValue($checkMock));
 
-        $this->_block->getQuote()->setIsSuperMode(true);
-        $items = $this->_block->setLayout($layoutMock)->getItems();
+        $this->block->getQuote()->setIsSuperMode(true);
+        $items = $this->block->setLayout($layoutMock)->getItems();
 
         $this->assertEquals('Message', $items[0]->getMessage());
-        $this->assertEquals(true, $this->_block->getQuote()->getIsSuperMode());
+        $this->assertEquals(true, $this->block->getQuote()->getIsSuperMode());
     }
 }

@@ -63,8 +63,37 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
      */
     public function testCollect($price, $originalPrice, $itemHasParent, $expectedPrice, $expectedOriginalPrice)
     {
+        /** @var \Magento\CatalogInventory\Service\V1\Data\StockItem $stockItemDoMock */
+        $stockItemDoMock = $this->getMock(
+            '\Magento\CatalogInventory\Service\V1\Data\StockItem',
+            ['getStockId'],
+            [],
+            '',
+            false
+        );
+
+        $stockItemDoMock->expects($this->any())
+            ->method('getStockId')
+            ->will($this->returnValue(false));
+
+        /** @var \Magento\CatalogInventory\Service\V1\StockItemService $stockItemServiceMock */
+        $stockItemServiceMock = $this->getMock(
+            'Magento\CatalogInventory\Service\V1\StockItemService',
+            ['getStockItem'],
+            [],
+            '',
+            false
+        );
+
+        $stockItemServiceMock->expects($this->any())
+            ->method('getStockItem')
+            ->will($this->returnValue($stockItemDoMock));
+
         /** @var \Magento\Sales\Model\Quote\Item|\PHPUnit_Framework_MockObject_MockObject $quoteItem */
-        $quoteItem = $this->objectManager->getObject('Magento\Sales\Model\Quote\Item');
+        $quoteItem = $this->objectManager->getObject(
+            'Magento\Sales\Model\Quote\Item',
+            ['stockItemService' => $stockItemServiceMock]
+        );
         /** @var \Magento\Sales\Model\Quote\Address|\PHPUnit_Framework_MockObject_MockObject $address */
         $address = $this->getMock(
             'Magento\Sales\Model\Quote\Address',

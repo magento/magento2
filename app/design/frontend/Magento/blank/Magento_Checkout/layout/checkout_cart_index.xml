@@ -27,8 +27,8 @@
         xsi:noNamespaceSchemaLocation="../../../../../../../app/code/Magento/Core/etc/layout_single.xsd">
     <update handle="page_one_column" />
     <referenceContainer name="checkout.cart.items">
-        <container name="checkout.cart.container" label="invisible" htmlTag="div" htmlClass="cart container" before="-">
-            <container name="cart.summary" label="Cart Summary Container" htmlTag="div" htmlClass="cart summary" after="-">
+        <container name="checkout.cart.container" label="invisible" htmlTag="div" htmlClass="cart-container" before="-">
+            <container name="cart.summary" label="Cart Summary Container" htmlTag="div" htmlClass="cart-summary" after="-">
                 <block class="Magento\Framework\View\Element\Template" name="checkout.cart.summary.title" before="-" template="Magento_Core::text.phtml">
                     <arguments>
                         <argument translate="true" name="text" xsi:type="string">Summary</argument>
@@ -42,8 +42,10 @@
             </container>
         </container>
     </referenceContainer>
-    <move element="checkout.cart.form" destination="checkout.cart.container"/>
-    <move element="checkout.cart.shipping" destination="cart.summary"/>
+    <move element="checkout.cart.form.before" destination="checkout.cart.container" before="cart.summary" />
+    <move element="checkout.cart.form" destination="checkout.cart.container" after="cart.summary" />
+    <move element="checkout.cart.widget" destination="checkout.cart.container" after="checkout.cart.form" />
+    <move element="checkout.cart.shipping" destination="cart.summary" after="checkout.cart.summary.title" />
     <move element="checkout.cart.coupon" destination="cart.summary" />
     <move element="checkout.cart.totals" destination="cart.summary"/>
     <move element="checkout.cart.methods.bottom" destination="cart.summary"/>

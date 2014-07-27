@@ -61,9 +61,14 @@ class LayoutFactory
      *
      * @param array $data
      * @return LayoutInterface
+     * @throws \InvalidArgumentException
      */
     public function create(array $data = array())
     {
-        return $this->_objectManager->create($this->_instanceName, $data);
+        $layout = $this->_objectManager->create($this->_instanceName, $data);
+        if (!$layout instanceof LayoutInterface) {
+            throw new \InvalidArgumentException(get_class($layout) . ' must be an instance of LayoutInterface.');
+        }
+        return $layout;
     }
 }

@@ -22,51 +22,60 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-
-<?php 
+<?php
+/**
+ * @description:
+ *
+ */
+?>
+<?php
     $_items = $this->getReviewsCollection()->getItems();
     $format = $this->getDateFormat() ?: 'short';
 ?>
 <?php if (count($_items)):?>
-<div class="block reviews list" id="customer-reviews">
-    <div class="title">
+<div class="block review-list" id="customer-reviews">
+    <div class="block-title">
         <strong><?php echo __('Customer Reviews') ?></strong>
     </div>
-    <div class="content">
-        <div class="toolbar products">
+    <div class="block-content">
+        <div class="toolbar review-toolbar">
             <?php echo $this->getChildHtml('toolbar') ?>
         </div>
-    <ol class="reviews items">
-    <?php foreach ($_items as $_review):?>
-        <li class="item review">
-            <?php foreach ($_review->getRatingVotes() as $_vote): ?>
-            <div class="rating summary item">
-                <span class="label"><span><?php echo $this->escapeHtml($_vote->getRatingCode()) ?>:</span></span>
-                <div class="rating result" title="<?php echo $_vote->getPercent() ?>%">
-                    <span style="width:<?php echo $_vote->getPercent() ?>%">
-                        <span><?php echo $_vote->getPercent() ?>%</span>
-                    </span>
+        <ol class="items review-items">
+        <?php foreach ($_items as $_review):?>
+            <li class="item review-item">
+                <div class="review-title"><?php echo $this->escapeHtml($_review->getTitle()) ?></div>
+                <?php if (count($_review->getRatingVotes())): ?>
+                    <div class="review-ratings">
+                    <?php foreach ($_review->getRatingVotes() as $_vote): ?>
+                    <div class="rating-summary item">
+                        <span class="label rating-label"><span><?php echo $this->escapeHtml($_vote->getRatingCode()) ?></span></span>
+                        <div class="rating-result" title="<?php echo $_vote->getPercent() ?>%">
+                            <span style="width:<?php echo $_vote->getPercent() ?>%">
+                                <span><?php echo $_vote->getPercent() ?>%</span>
+                            </span>
+                        </div>
+                    </div>
+                    <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
+                <div class="review-content">
+                    <?php echo nl2br($this->escapeHtml($_review->getDetail())) ?>
                 </div>
-            </div>
-            <?php endforeach; ?>
-            <div class="review details">
-                <p class="author">
-                    <span><?php echo __('Review by')?></span>
-                    <strong class="nickname"><?php echo $this->escapeHtml($_review->getNickname()) ?></strong>
-                </p>
-                <p class="review date">
-                    <span><?php echo __('Posted on') ?></span>
-                    <time class="date"><?php echo $this->formatDate($_review->getCreatedAt(), $format) ?></time>
-                </p>
-            </div>
-            <div class="review title"><?php echo $this->escapeHtml($_review->getTitle()) ?></div>
-            <div class="review content">
-                <?php echo nl2br($this->escapeHtml($_review->getDetail())) ?>
-            </div>
-        </li>
-    <?php endforeach; ?>
-    </ol>
-        <div class="toolbar products">
+                <div class="review-details">
+                    <p class="review-author">
+                        <span class="review-details-label"><?php echo __('Review by')?></span>
+                        <strong class="review-details-value"><?php echo $this->escapeHtml($_review->getNickname()) ?></strong>
+                    </p>
+                    <p class="review-date">
+                        <span class="review-details-label"><?php echo __('Posted on') ?></span>
+                        <time class="review-details-value"><?php echo $this->formatDate($_review->getCreatedAt(), $format) ?></time>
+                    </p>
+                </div>
+            </li>
+        <?php endforeach; ?>
+        </ol>
+        <div class="toolbar review-toolbar">
             <?php echo $this->getChildHtml('toolbar') ?>
         </div>
     </div>

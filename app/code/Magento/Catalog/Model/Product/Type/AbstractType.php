@@ -239,6 +239,8 @@ abstract class AbstractType
      *   group => array(ids)
      * )
      *
+     * @deplacated TODO: refactor to child relation manager
+     *
      * @param int $parentId
      * @param bool $required
      * @return array
@@ -506,7 +508,7 @@ abstract class AbstractType
                             $rootDir->create($rootDir->getRelativePath($path));
                         } catch (\Magento\Framework\Filesystem\FilesystemException $e) {
                             throw new \Magento\Framework\Model\Exception(
-                                __("We can't create writeable directory \"%1\".", $path)
+                                __('We can\'t create writeable directory "%1".', $path)
                             );
                         }
 

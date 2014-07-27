@@ -103,15 +103,9 @@ class View implements ViewInterface
     }
 
     /**
-     * Load layout by handles(s)
-     *
-     * @param   string|null|bool $handles
-     * @param   bool $generateBlocks
-     * @param   bool $generateXml
-     * @return  $this
-     * @throws  \RuntimeException
+     * {@inheritdoc}
      */
-    public function loadLayout($handles = null, $generateBlocks = true, $generateXml = true)
+    public function loadLayout($handles = null, $generateBlocks = true, $generateXml = true, $addActionHandles = true)
     {
         if ($this->_isLayoutLoaded) {
             throw new \RuntimeException('Layout must be loaded only once.');
@@ -121,9 +115,10 @@ class View implements ViewInterface
             $this->getLayout()->getUpdate()->addHandle($handles ? $handles : 'default');
         }
 
-        // add default layout handles for this action
-        $this->addActionLayoutHandles();
-
+        if ($addActionHandles) {
+            // add default layout handles for this action
+            $this->addActionLayoutHandles();
+        }
         $this->loadLayoutUpdates();
 
         if (!$generateXml) {

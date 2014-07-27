@@ -40,17 +40,27 @@ class TaxRateBuilder extends \Magento\Framework\Service\Data\AbstractObjectBuild
     protected $zipRangeBuilder;
 
     /**
+     * ZipRange builder
+     *
+     * @var TaxRateTitleBuilder
+     */
+    protected $taxRateTitleBuilder;
+
+    /**
      * Initialize dependencies.
      *
      * @param ObjectFactory $objectFactory
      * @param ZipRangeBuilder $zipRangeBuilder
+     * @param TaxRateTitleBuilder $taxRateTitleBuilder
      */
     public function __construct(
         ObjectFactory $objectFactory,
-        ZipRangeBuilder $zipRangeBuilder
+        ZipRangeBuilder $zipRangeBuilder,
+        TaxRateTitleBuilder $taxRateTitleBuilder
     ) {
         parent::__construct($objectFactory);
         $this->zipRangeBuilder = $zipRangeBuilder;
+        $this->taxRateTitleBuilder = $taxRateTitleBuilder;
     }
 
     /**
@@ -86,6 +96,18 @@ class TaxRateBuilder extends \Magento\Framework\Service\Data\AbstractObjectBuild
     public function setRegionId($regionId)
     {
         $this->_set(TaxRate::KEY_REGION_ID, $regionId);
+        return $this;
+    }
+
+    /**
+     * Set region name
+     *
+     * @param string $regionName
+     * @return $this
+     */
+    public function setRegionName($regionName)
+    {
+        $this->_set(TaxRate::KEY_REGION_NAME, $regionName);
         return $this;
     }
 
@@ -138,6 +160,18 @@ class TaxRateBuilder extends \Magento\Framework\Service\Data\AbstractObjectBuild
     }
 
     /**
+     * Set tax rate titles
+     *
+     * @param \Magento\Tax\Service\V1\Data\TaxRateTitle[] $titles
+     * @return $this
+     */
+    public function setTitles($titles)
+    {
+        $this->_set(TaxRate::KEY_TITLES, $titles);
+        return $this;
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function _setDataValues(array $data)
@@ -145,6 +179,13 @@ class TaxRateBuilder extends \Magento\Framework\Service\Data\AbstractObjectBuild
         if (array_key_exists(TaxRate::KEY_ZIP_RANGE, $data)) {
             $data[TaxRate::KEY_ZIP_RANGE] =
                 $this->zipRangeBuilder->populateWithArray($data[TaxRate::KEY_ZIP_RANGE])->create();
+        }
+        if (array_key_exists(TaxRate::KEY_TITLES, $data)) {
+            $titles = array();
+            foreach ($data[TaxRate::KEY_TITLES] as $titleData) {
+                $titles[] = $this->taxRateTitleBuilder->populateWithArray($titleData)->create();
+            }
+            $data[TaxRate::KEY_TITLES] = $titles;
         }
         return parent::_setDataValues($data);
     }

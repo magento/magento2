@@ -1,80 +1,70 @@
-"A consumer having the specified key does not exist",指定密钥的消费者不存在。
-"A consumer with ID %1 does not exist",ID为%1的消费者不存在。
-"A consumer with the ID %1 does not exist",ID为%1的消费者不存在。
-"A token with consumer ID %1 does not exist",消费者ID为%1的令牌不存在。
-"Access Token",存取令牌
-"Access Token Secret",存取令牌秘钥
-"Access token has been revoked",存取令牌已经被撤销。
-"Add New Integration",添加新集成
-"An error occurred validating the nonce",当前校验发生错误
-"Are you sure ?",你确定吗？
-Authentication,认证
-"Basic Settings",基础设置
-"Callback URL",回调URL
-"Cannot convert to access token due to token is not request type",由于令牌不是请求类型不能转成换存取令牌
-"Cannot create request token because consumer token is not a verifier token",由于消费者令牌不是核验者令牌，所以不能创建请求令牌
-"Cannot get access token because consumer token is not a request token",因为消费者令牌不是一个请求令牌所以不能得到存取令牌
-"Cleanup Probability",清除几率
-"Cleanup Settings",清除设置
-"Cleanup entries older than X minutes.",清除早于X非整的条目.
-"Client ID",客户ID
-"Client Secret",客户密钥
-"Consumer Key",消费者键
-"Consumer Secret",消费者密钥
-"Consumer Settings",消费者设置
-"Consumer key has expired",消费者密钥已经过期
-"Consumer key is not the correct length",消费者密钥长度错误。
-Deactivate,钝化
-"Disable consumer key/secret credentials if not used within X seconds.",如果X分钟内未使用则禁止消费者密钥证书。
-"Edit ""%1"" Integration","编辑""%1""集成"
-"Expiration Period",过期时间
-Extensions,扩展
-"Identity link URL",标识链接URL
-"Incorrect timestamp value in the oauth_timestamp parameter",在oauth_timestamp参数中时间戳值不正确
-"Integer. Launch cleanup in X OAuth requests. 0 (not recommended) - to disable cleanup","整数. 在X OAuth请求中运行清除例程。 0 （不推荐） - 禁止清除"
-Integration,集成
-"Integration Details",集成详细
-"Integration ID is not specified or is invalid.",未指定或指定了无效的集成ID。
-"Integration Info",集成信息
-"Integration Information",集成信息
-"Integration Name",集成名
-"Integration Tokens for Extensions",扩展的集成令牌
-Integrations,集成
-"Integrations Configuration",继承配置
-"Internal error. Check exception log for details.",内部错误。检查异常日志看详细原因。
-"Invalid Callback URL",无效的回调URL
-"Invalid Rejected Callback URL",无效的拒绝回调URL
-"New Integration",新集成
-"No Integrations Found",未发现集成
-"Number of maximum redirects for OAuth consumer credentials Post request.",OAuth消费者陪凭证发送请求的最大的转向数。
+Remove,Remove
+Cancel,Cancel
+Edit,Edit
+Email,Email
+Save,Save
+General,General
+Name,Name
+Status,Status
+View,View
+Active,Active
+"Basic Settings","Basic Settings"
+Allow,Allow
+Inactive,Inactive
+Integrations,Integrations
+"Add New Integration","Add New Integration"
+"Save & Activate","Save & Activate"
+"New Integration","New Integration"
+"Edit Integration '%1'","Edit Integration '%1'"
+"Integration Info","Integration Info"
+"Callback URL","Callback URL"
+"Enter URL where Oauth credentials can be sent when using Oauth for token exchange. We strongly recommend using https://.","Enter URL where Oauth credentials can be sent when using Oauth for token exchange. We strongly recommend using https://."
+"Identity link URL","Identity link URL"
+"URL to redirect user to link their 3rd party account with this Magento integration credentials.","URL to redirect user to link their 3rd party account with this Magento integration credentials."
+"Integration Details","Integration Details"
+"Integration Tokens for Extensions","Integration Tokens for Extensions"
+"Consumer Key","Consumer Key"
+"Consumer Secret","Consumer Secret"
+"Access Token","Access Token"
+"Access Token Secret","Access Token Secret"
+"Uninstall the extension to remove this integration","Uninstall the extension to remove this integration"
+Activate,Activate
+Reauthorize,Reauthorize
+"Warning! Integrations not using HTTPS are insecure and potentially expose private or personally identifiable information","Warning! Integrations not using HTTPS are insecure and potentially expose private or personally identifiable information"
+"Internal error. Check exception log for details.","Internal error. Check exception log for details."
+"Integration ID is not specified or is invalid.","Integration ID is not specified or is invalid."
+"View ""%1"" Integration","View ""%1"" Integration"
+"Edit ""%1"" Integration","Edit ""%1"" Integration"
+"The integration '%1' has been saved.","The integration '%1' has been saved."
+"The integration was not saved.","The integration was not saved."
+"Uninstall the extension to remove integration '%1'.","Uninstall the extension to remove integration '%1'."
+"This integration no longer exists.","This integration no longer exists."
+"The integration '%1' has been deleted.","The integration '%1' has been deleted."
+"The integration '%1' has been re-authorized.","The integration '%1' has been re-authorized."
+"The integration '%1' has been activated.","The integration '%1' has been activated."
+"Integration '%1' has been sent for re-authorization.","Integration '%1' has been sent for re-authorization."
+"Integration '%1' has been sent for activation.","Integration '%1' has been sent for activation."
+"Invalid Callback URL","Invalid Callback URL"
+"Invalid Rejected Callback URL","Invalid Rejected Callback URL"
+"%name% '%value%' is too long. It must has length %min% symbols.","%name% '%value%' is too long. It must has length %min% symbols."
+"%name% '%value%' is too short. It must has length %min% symbols.","%name% '%value%' is too short. It must has length %min% symbols."
+"Integration with name '%1' exists.","Integration with name '%1' exists."
+"Integration with ID '%1' does not exist.","Integration with ID '%1' does not exist."
+"A consumer with ID %1 does not exist","A consumer with ID %1 does not exist"
+"Consumer with ID '%1' does not exist.","Consumer with ID '%1' does not exist."
+"The integration you selected asks you to approve access to the following:","The integration you selected asks you to approve access to the following:"
+"Are you sure ?","Are you sure ?"
+"Are you sure you want to delete this integration? You can't undo this action.","Are you sure you want to delete this integration? You can't undo this action."
+"Please setup or sign in into your 3rd party account to complete setup of this integration.","Please setup or sign in into your 3rd party account to complete setup of this integration."
+Done,Done
+"Sorry, something went wrong. Please try again later.","Sorry, something went wrong. Please try again later."
 OAuth,OAuth
-"OAuth consumer credentials HTTP Post maxredirects",OAuth消费者凭证HTTP发送最大转向
-"OAuth consumer credentials HTTP Post timeout",OAuth消费者凭证HTTP发送最大超时
-"Please enter endpoint for oAuth.",请输入oAuth的端点。
-"Request token is not associated with the specified consumer",请求令牌与指定的消费者未关联。
-"Save & Activate",存储并激活
-"Specified token does not exist",指定的令牌不存在
-"The integration '%1' has been saved.",集成'%1'已经被存储。
-"The integration was not saved.",该集成未被存储。
-"The integration you selected asks you to approve access to the following:",你选择的集成要求批准存取以下：
-"The nonce is already being used by the consumer with ID %1",当前正在被ID为%1的消费者使用
-"This integration no longer exists.",集成不存在。
-"Timeout for OAuth consumer credentials Post request within X seconds.",在X秒内的OAuth消费者凭证发送请求超时。
-"Token Secret",令牌密钥
-"Token is already authorized",令牌已经被授权
-"Token is already being used",令牌正在被使用
-"Token is not an access token",令牌不是一个存取令牌
-"Token is not associated with the specified consumer",令牌未与指定的消费者关联
-"Token is not ready to be authorized",令牌没有准备好被授权
-"Token is not the correct length",令牌长度不正确
-"Token verifier and verifier token do not match",令牌核验者与核验者令牌不匹配
-"Unable to post data to consumer due to an unexpected error",由于不期望的错误导致不能发送数据到消费者
-"Unexpected error. Unable to create OAuth Consumer account.",不期望的错误。不能创建OAuth消费者账号。
-"Unexpected error. Unable to create oAuth consumer account.",不期望的错误。不能创建oAuth消费者账户。
-"Unexpected error. Unable to load oAuth consumer account.",不期望的错误。不能加载oAuth消费者账户。
-"Uninstall the extension to remove this integration",卸载扩展来移除集成
-"User type is unknown",未知的用户类型
-"Verifier is invalid",核验者是无效的
-"Verifier is not the correct length",核验者长度不正确
-"View ""%1"" Integration","查看""%1""集成"
-"When using Oauth for token exchange, enter URL where Oauth credentials can be POST-ed. We strongly recommend you to use https://",当使用令牌交换的Oauth，输入Oauth证书能被发布的URL。我们强烈推荐你使用https：//
+"Cleanup Settings","Cleanup Settings"
+"Cleanup Probability","Cleanup Probability"
+"Expiration Period","Expiration Period"
+"Consumer Settings","Consumer Settings"
+"OAuth consumer credentials HTTP Post maxredirects","OAuth consumer credentials HTTP Post maxredirects"
+"OAuth consumer credentials HTTP Post timeout","OAuth consumer credentials HTTP Post timeout"
+"Integrations Configuration","Integrations Configuration"
+"Integration configuration file.","Integration configuration file."
+"No Integrations Found","No Integrations Found"

@@ -43,13 +43,12 @@
     <?php $isBasic = $tabGroupCode == \Magento\Catalog\Block\Adminhtml\Product\Edit\Tabs::BASIC_TAB_GROUP_CODE; ?>
     <div id="<?php echo $tabGroupId ?>"
         <?php if (!$isBasic): ?>
-        data-mage-init='{"accordion":{"active":<?php echo $this->isAdvancedTabGroupActive() ? '0' : 'false' ?>, "collapsible": true}}'
+            data-mage-init='{"collapsible":{"active": <?php echo $this->isAdvancedTabGroupActive() ? 'true' : 'false' ?>, "collapsible": true}}'
         <?php endif;?>>
-        <h3 <?php echo $this->getUiId('title') ?>>
-            <?php echo $isBasic ? __('Basic Settings')
-            : __('Advanced Settings') ?>
+        <h3 <?php echo $this->getUiId('title') ?> data-role="title" <?php if (!$isBasic): ?>class="ui-accordion-header"<?php endif;?>>
+            <span data-role="trigger"> <?php echo $isBasic ? __('Basic Settings') : __('Advanced Settings') ?></span>
         </h3>
-        <ul <?php echo $this->getUiId('tab', $tabGroupId) ?> class="tabs">
+        <ul <?php echo $this->getUiId('tab', $tabGroupId) ?> class="tabs" data-role="content">
             <?php foreach ($tabs as $_tab): ?>
             <?php if (!$this->canShowTab($_tab) || $_tab->getParentTab()
                 || ($_tab->getGroupCode() && $_tab->getGroupCode() != $tabGroupCode)

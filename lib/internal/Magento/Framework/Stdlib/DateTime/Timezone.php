@@ -54,7 +54,7 @@ class Timezone implements TimezoneInterface
     protected $_dateTime;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateFactory
+     * @var DateFactory
      */
     protected $_dateFactory;
 
@@ -72,7 +72,7 @@ class Timezone implements TimezoneInterface
      * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param \Magento\Framework\Stdlib\DateTime\DateFactory $dateFactory
+     * @param DateFactory $dateFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param string $scopeType
      * @param string $defaultTimezonePath
@@ -198,20 +198,17 @@ class Timezone implements TimezoneInterface
     /**
      * {@inheritdoc}
      */
-    public function formatDate(
-        $date = null,
-        $format = \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT,
-        $showTime = false
-    ) {
+    public function formatDate($date = null, $format = TimezoneInterface::FORMAT_TYPE_SHORT, $showTime = false)
+    {
         if (!in_array($format, $this->_allowedFormats, true)) {
             return $date;
         }
-        if (!$date instanceof \Magento\Framework\Stdlib\DateTime\DateInterface && $date && !strtotime($date)) {
+        if (!$date instanceof DateInterface && $date && !strtotime($date)) {
             return '';
         }
         if (is_null($date)) {
             $date = $this->date(gmdate('U'), null, null);
-        } elseif (!$date instanceof \Magento\Framework\Stdlib\DateTime\DateInterface) {
+        } elseif (!$date instanceof DateInterface) {
             $date = $this->date(strtotime($date), null, null);
         }
 
@@ -227,11 +224,8 @@ class Timezone implements TimezoneInterface
     /**
      * {@inheritdoc}
      */
-    public function formatTime(
-        $time = null,
-        $format = \Magento\Framework\Stdlib\DateTime\TimezoneInterface::FORMAT_TYPE_SHORT,
-        $showDate = false
-    ) {
+    public function formatTime($time = null, $format = TimezoneInterface::FORMAT_TYPE_SHORT, $showDate = false)
+    {
         if (!in_array($format, $this->_allowedFormats, true)) {
             return $time;
         }
@@ -304,11 +298,11 @@ class Timezone implements TimezoneInterface
     }
 
     /**
-     * Returns a localized information string, supported are several types of informations.
+     * Returns a localized information string, supported are several types of information.
      * For detailed information about the types look into the documentation
      *
-     * @param  string             $value  Name to get detailed information about
-     * @param  string             $path   (Optional) Type of information to return
+     * @param string $value Name to get detailed information about
+     * @param string $path (Optional) Type of information to return
      * @return string|false The wished information in the given language
      */
     protected function _getTranslation($value = null, $path = null)

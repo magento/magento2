@@ -33,6 +33,7 @@ use Mtf\Repository\AbstractRepository;
 class CatalogCategory extends AbstractRepository
 {
     /**
+     * @constructor
      * @param array $defaultConfig
      * @param array $defaultData
      *
@@ -40,12 +41,35 @@ class CatalogCategory extends AbstractRepository
      */
     public function __construct(array $defaultConfig = [], array $defaultData = [])
     {
+        $this->_data['default_category'] = [
+            'name' => 'Default Category',
+            'parent_id' => 1,
+            'is_active' => 'Yes',
+            'id' => 2,
+        ];
+
         $this->_data['default_subcategory'] = [
-            'name' => 'Subcategory%isolation%',
-            'path' => 'Default Category',
-            'parent_id' => 2,
+            'name' => 'DefaultSubcategory%isolation%',
+            'url_key' => 'default-subcategory-%isolation%',
+            'parent_id' => ['dataSet' => 'default_category'],
             'is_active' => 'Yes',
             'include_in_menu' => 'Yes',
+        ];
+
+        $this->_data['root_category'] = [
+            'name' => 'RootCategory%isolation%',
+            'url_key' => 'root-category-%isolation%',
+            'parent_id' => 1,
+            'is_active' => 'Yes',
+            'include_in_menu' => 'Yes'
+        ];
+
+        $this->_data['root_subcategory'] = [
+            'name' => 'RootSubCategory%isolation%',
+            'url_key' => 'root-sub-category-%isolation%',
+            'parent_id' => ['dataSet' => 'root_category'],
+            'is_active' => 'Yes',
+            'include_in_menu' => 'Yes'
         ];
     }
 }

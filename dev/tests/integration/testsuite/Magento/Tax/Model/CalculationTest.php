@@ -76,15 +76,6 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
         $this->_groupService = $this->_objectManager->create('Magento\Customer\Service\V1\CustomerGroupService');
     }
 
-    public function testSetCustomerData()
-    {
-        $customerDataSet = $this->_customerAccountService->getCustomer(self::FIXTURE_CUSTOMER_ID);
-        $this->_model->setCustomerData($customerDataSet);
-
-        $customerDataRetrieved = $this->_model->getCustomerData();
-        $this->assertEquals($customerDataSet->__toArray(), $customerDataRetrieved->__toArray());
-    }
-
     public function testDefaultCustomerTaxClass()
     {
         $defaultCustomerTaxClass = 3;
@@ -94,10 +85,9 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
     public function testGetDefaultRateRequest()
     {
         $customerDataSet = $this->_customerAccountService->getCustomer(self::FIXTURE_CUSTOMER_ID);
-        $this->_model->setCustomerData($customerDataSet);
         $address = $this->_addressService->getAddress(self::FIXTURE_ADDRESS_ID);
 
-        $rateRequest = $this->_model->getRateRequest();
+        $rateRequest = $this->_model->getRateRequest(null, null, null, null, $customerDataSet->getId());
 
         $this->assertNotNull($rateRequest);
         $this->assertEquals($address->getCountryId(), $rateRequest->getCountryId());

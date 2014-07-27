@@ -23,10 +23,12 @@
  */
 namespace Magento\Tax\Model\Calculation\Rate;
 
+use Magento\Directory\Model\Region;
 use Magento\Tax\Model\Calculation\Rate as TaxRateModel;
 use Magento\Tax\Model\Calculation\RateFactory as TaxRateModelFactory;
 use Magento\Tax\Service\V1\Data\TaxRate as TaxRateDataObject;
 use Magento\Tax\Service\V1\Data\TaxRateBuilder as TaxRateDataObjectBuilder;
+use Magento\Tax\Service\V1\Data\TaxRateTitleBuilder as TaxRateTitleDataObjectBuilder;
 use Magento\Tax\Service\V1\Data\ZipRangeBuilder as ZipRangeDataObjectBuilder;
 
 /**
@@ -52,18 +54,34 @@ class Converter
     protected $zipRangeDataObjectBuilder;
 
     /**
+     * @var TaxRateTitleDataObjectBuilder
+     */
+    protected $taxRateTitleDataObjectBuilder;
+
+    /**
+     * @var Region
+     */
+    protected $directoryRegion;
+
+    /**
      * @param TaxRateDataObjectBuilder $taxRateDataObjectBuilder
      * @param TaxRateModelFactory $taxRateModelFactory
      * @param ZipRangeDataObjectBuilder $zipRangeDataObjectBuilder
+     * @param TaxRateTitleDataObjectBuilder $taxRateTitleDataObjectBuilder
+     * @param Region $directoryRegion
      */
     public function __construct(
         TaxRateDataObjectBuilder $taxRateDataObjectBuilder,
         TaxRateModelFactory $taxRateModelFactory,
-        ZipRangeDataObjectBuilder $zipRangeDataObjectBuilder
+        ZipRangeDataObjectBuilder $zipRangeDataObjectBuilder,
+        TaxRateTitleDataObjectBuilder $taxRateTitleDataObjectBuilder,
+        Region $directoryRegion
     ) {
         $this->taxRateDataObjectBuilder = $taxRateDataObjectBuilder;
         $this->taxRateModelFactory = $taxRateModelFactory;
         $this->zipRangeDataObjectBuilder = $zipRangeDataObjectBuilder;
+        $this->taxRateTitleDataObjectBuilder = $taxRateTitleDataObjectBuilder;
+        $this->directoryRegion = $directoryRegion;
     }
 
     /**
@@ -71,6 +89,7 @@ class Converter
      *
      * @param TaxRateModel $rateModel
      * @return TaxRateDataObject
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function createTaxRateDataObjectFromModel(TaxRateModel $rateModel)
     {
@@ -81,8 +100,14 @@ class Converter
         if ($rateModel->getTaxCountryId()) {
             $this->taxRateDataObjectBuilder->setCountryId($rateModel->getTaxCountryId());
         }
-        if ($rateModel->getTaxRegionId()) {
+        /* tax region id may be 0 which is "*" which would fail an if check */
+        if ($rateModel->getTaxRegionId() !== null) {
             $this->taxRateDataObjectBuilder->setRegionId($rateModel->getTaxRegionId());
+            $regionName = $this->directoryRegion->load($rateModel->getTaxRegionId())->getCode();
+            $this->taxRateDataObjectBuilder->setRegionName($regionName);
+        }
+        if ($rateModel->getRegionName()) {
+            $this->taxRateDataObjectBuilder->setRegionName($rateModel->getRegionName());
         }
         if ($rateModel->getTaxPostcode()) {
             $this->taxRateDataObjectBuilder->setPostcode($rateModel->getTaxPostcode());
@@ -91,7 +116,7 @@ class Converter
             $this->taxRateDataObjectBuilder->setCode($rateModel->getCode());
         }
         if ($rateModel->getRate()) {
-            $this->taxRateDataObjectBuilder->setPercentageRate($rateModel->getRate());
+            $this->taxRateDataObjectBuilder->setPercentageRate((float)$rateModel->getRate());
         }
         if ($rateModel->getZipIsRange()) {
             $zipRange = $this->zipRangeDataObjectBuilder->populateWithArray([])
@@ -100,6 +125,7 @@ class Converter
                 ->create();
             $this->taxRateDataObjectBuilder->setZipRange($zipRange);
         }
+        $this->taxRateDataObjectBuilder->setTitles($this->createTitleArrayFromModel($rateModel));
         return $this->taxRateDataObjectBuilder->create();
     }
 
@@ -121,6 +147,7 @@ class Converter
         $rateModel->setRate($taxRate->getPercentageRate());
         $rateModel->setCode($taxRate->getCode());
         $rateModel->setTaxPostcode($taxRate->getPostCode());
+        $rateModel->setRegionName($taxRate->getRegionName());
         $zipRange = $taxRate->getZipRange();
         if ($zipRange) {
             $zipFrom = $zipRange->getFrom();
@@ -132,5 +159,44 @@ class Converter
             $rateModel->setZipTo($zipTo);
         }
         return $rateModel;
+    }
+
+    /**
+     * Convert a tax rate data object to an array of associated titles
+     *
+     * @param TaxRateDataObject $taxRate
+     * @return array
+     */
+    public function createTitleArrayFromServiceObject(TaxRateDataObject $taxRate)
+    {
+        $titles = $taxRate->getTitles();
+        $titleData = [];
+        if ($titles) {
+            foreach ($titles as $title) {
+                $titleData[$title->getStoreId()] = $title->getValue();
+            }
+        }
+        return $titleData;
+    }
+
+    /**
+     * Create an array with tax rate titles having tax rate model.
+     *
+     * @param TaxRateModel $rateModel
+     * @return array
+     */
+    public function createTitleArrayFromModel(TaxRateModel $rateModel)
+    {
+        $titlesData = $rateModel->getTitles();
+        $titles = [];
+        if ($titlesData) {
+            foreach ($titlesData as $title) {
+                $titles[] = $this->taxRateTitleDataObjectBuilder
+                    ->setStoreId($title->getStoreId())
+                    ->setValue($title->getValue())
+                    ->create();
+            }
+        }
+        return $titles;
     }
 }

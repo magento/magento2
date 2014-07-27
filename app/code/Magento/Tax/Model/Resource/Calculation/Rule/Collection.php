@@ -41,6 +41,20 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     }
 
     /**
+     * Process loaded collection data
+     *
+     * @return $this
+     */
+    protected function _afterLoadData()
+    {
+        parent::_afterLoadData();
+        $this->addCustomerTaxClassesToResult();
+        $this->addProductTaxClassesToResult();
+        $this->addRatesToResult();
+        return $this;
+    }
+
+    /**
      * Join calculation data to result
      *
      * @param string $alias table alias

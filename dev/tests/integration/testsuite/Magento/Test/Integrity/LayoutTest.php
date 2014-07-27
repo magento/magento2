@@ -76,9 +76,6 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         if ($refName) {
             $refNode = $xml->xpath("/layouts/{$refName}");
             if (!$refNode) {
-                if ($refName == 'checkout_cart_configure' || $refName == 'checkout_cart_configurefailed') {
-                    $this->markTestIncomplete('MAGETWO-9182');
-                }
                 $errors[$name][] = "Node '{$refName}', referenced in hierarchy, does not exist";
             }
         }

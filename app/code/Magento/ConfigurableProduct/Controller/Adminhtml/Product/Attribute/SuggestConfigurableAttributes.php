@@ -69,9 +69,9 @@ class SuggestConfigurableAttributes extends Action
      *
      * @return void
      */
-    public function indexAction()
+    public function execute()
     {
-        $this->getResponse()->setBody(
+        $this->getResponse()->representJson(
             $this->coreHelper->jsonEncode(
                 $this->attributeList->getSuggestedAttributes($this->getRequest()->getParam('label_part'))
             )

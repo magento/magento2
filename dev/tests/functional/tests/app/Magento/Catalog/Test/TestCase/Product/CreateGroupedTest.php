@@ -62,7 +62,7 @@ class CreateGroupedTest extends Functional
         $productForm = $createProductPage->getProductForm();
         //Steps
         $manageProductsGrid->open();
-        $manageProductsGrid->getProductBlock()->addProduct('grouped');
+        $manageProductsGrid->getGridPageActionBlock()->addProduct('grouped');
         $productForm->fill($product);
         $createProductPage->getFormAction()->save();
         //Verifying
@@ -116,14 +116,14 @@ class CreateGroupedTest extends Functional
         //Verification on category product list
         $productListBlock = $categoryPage->getListProductBlock();
         $this->assertTrue(
-            $productListBlock->isProductVisible($product->getProductName()),
+            $productListBlock->isProductVisible($product->getName()),
             'Product is absent on category page.'
         );
         //Verification on product detail page
         $productViewBlock = $productPage->getViewBlock();
-        $productListBlock->openProductViewPage($product->getProductName());
+        $productListBlock->openProductViewPage($product->getName());
         $this->assertEquals(
-            $product->getProductName(),
+            $product->getName(),
             $productViewBlock->getProductName(),
             'Product name does not correspond to specified.'
         );

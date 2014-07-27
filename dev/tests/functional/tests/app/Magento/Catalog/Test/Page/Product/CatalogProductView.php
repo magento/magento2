@@ -79,7 +79,7 @@ class CatalogProductView extends FrontendPage
         'reviewSummary' => [
             'name' => 'reviewSummary',
             'class' => 'Magento\Review\Test\Block\Product\View\Summary',
-            'locator' => '.product.reviews.summary',
+            'locator' => '.product-reviews-summary',
             'strategy' => 'css selector',
         ],
         'reviewFormBlock' => [
@@ -103,7 +103,7 @@ class CatalogProductView extends FrontendPage
         'titleBlock' => [
             'name' => 'titleBlock',
             'class' => 'Magento\Theme\Test\Block\Html\Title',
-            'locator' => '.page.title',
+            'locator' => '.page-title h1.title .base',
             'strategy' => 'css selector',
         ]
     ];

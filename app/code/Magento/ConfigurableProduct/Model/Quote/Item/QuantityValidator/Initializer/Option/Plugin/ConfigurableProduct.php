@@ -31,24 +31,23 @@ class ConfigurableProduct
      * Initialize stock item for configurable product type
      *
      * @param \Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option $subject
+     * @param callable $proceed
      * @param \Magento\Sales\Model\Quote\Item\Option $option
      * @param \Magento\Sales\Model\Quote\Item $quoteItem
-     * @param int $qty
      *
-     * @return void
+     * @return \Magento\CatalogInventory\Model\Stock\Item
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeInitialize(
+    public function aroundGetStockItem(
         \Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option $subject,
+        \Closure $proceed,
         \Magento\Sales\Model\Quote\Item\Option $option,
-        \Magento\Sales\Model\Quote\Item $quoteItem,
-        $qty
+        \Magento\Sales\Model\Quote\Item $quoteItem
     ) {
-        /* @var $stockItem \Magento\CatalogInventory\Model\Stock\Item */
-        $stockItem = $option->getProduct()->getStockItem();
-
+        $stockItem = $proceed($option, $quoteItem);
         if ($quoteItem->getProductType() == \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE) {
             $stockItem->setProductName($quoteItem->getName());
         }
+        return $stockItem;
     }
 }

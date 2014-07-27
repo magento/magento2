@@ -55,6 +55,11 @@
                 </input_types>
             </validator_data>
         </general>
+        <web>
+            <seo>
+                <use_rewrites>0</use_rewrites>
+            </seo>
+        </web>
     </default>
     <stores>
         <admin>

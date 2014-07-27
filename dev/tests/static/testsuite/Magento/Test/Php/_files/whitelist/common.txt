@@ -116,6 +116,7 @@ app/code/Magento/Shipping/Model/Resource/Order
 app/code/Magento/Theme
 app/code/Magento/Webapi
 app/code/Magento/GroupedProduct
+app/code/Magento/UrlRedirect
 app/code/Magento/Wishlist/Block/Link.php
 dev/shell
 dev/tests/functional

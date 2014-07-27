@@ -49,4 +49,13 @@
             <argument name="paymentSpecification" xsi:type="object">multishippingPaymentSpecification</argument>
         </arguments>
     </type>
+    <type name="Magento\Checkout\Controller\Cart\Add">
+        <plugin name="multishipping_disabler" type="Magento\Multishipping\Controller\Checkout\Plugin" sortOrder="50" />
+    </type>
+    <type name="Magento\Checkout\Controller\Cart\UpdatePost">
+        <plugin name="multishipping_disabler" type="Magento\Multishipping\Controller\Checkout\Plugin" sortOrder="50" />
+    </type>
+    <type name="Magento\Checkout\Controller\Onepage\Index">
+        <plugin name="multishipping_disabler" type="Magento\Multishipping\Controller\Checkout\Plugin" sortOrder="50" />
+    </type>
 </config>

@@ -23,7 +23,6 @@
  */
 namespace Magento\Catalog\Service\V1\Data;
 
-use Magento\Catalog\Service\V1\Data\ProductBuilder;
 use Magento\Catalog\Service\V1\Data\Product as ProductDataObject;
 
 /**
@@ -54,7 +53,7 @@ class Converter
      */
     public function createProductDataFromModel(\Magento\Catalog\Model\Product $productModel)
     {
-        $this->_populateBuilderWithAttributes($productModel);
+        $this->populateBuilderWithAttributes($productModel);
         return $this->productBuilder->create();
     }
 
@@ -64,21 +63,19 @@ class Converter
      * @param \Magento\Catalog\Model\Product $productModel
      * @return void
      */
-    protected function _populateBuilderWithAttributes(\Magento\Catalog\Model\Product $productModel)
+    protected function populateBuilderWithAttributes(\Magento\Catalog\Model\Product $productModel)
     {
         $attributes = array();
-        foreach ($this->productBuilder->getCustomAttributesCodes() as $attrCode) {
-            $value = $productModel->getDataUsingMethod($attrCode);
-            $value = $value ? $value : $productModel->getData($attrCode);
+        foreach ($productModel->getAttributes() as $attribute) {
+            $attrCode = $attribute->getAttributeCode();
+            $value = $productModel->getDataUsingMethod($attrCode) ?: $productModel->getData($attrCode);
             if (null !== $value) {
-                if ($attrCode == 'entity_id') {
-                    $attributes[ProductDataObject::ID] = $value;
-                } else {
+                if ($attrCode != 'entity_id') {
                     $attributes[$attrCode] = $value;
                 }
             }
         }
-
+        $attributes[ProductDataObject::STORE_ID] = $productModel->getStoreId();
         $this->productBuilder->populateWithArray($attributes);
         return;
     }

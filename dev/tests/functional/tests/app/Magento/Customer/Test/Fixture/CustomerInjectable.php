@@ -60,6 +60,12 @@ class CustomerInjectable extends InjectableFixture
         'input' => 'text',
     ];
 
+    protected $id = [
+        'attribute_code' => 'id',
+        'backend_type' => 'virtual',
+        'group' => null,
+    ];
+
     protected $created_at = [
         'attribute_code' => 'created_at',
         'backend_type' => 'static',
@@ -234,6 +240,15 @@ class CustomerInjectable extends InjectableFixture
         'group' => 'account_information',
     ];
 
+    protected $amount_delta = [
+        'attribute_code' => 'amount_delta',
+        'backend_type' => 'static',
+        'is_required' => '1',
+        'default_value' => '',
+        'input' => 'text',
+        'group' => 'store_credit',
+    ];
+
     protected $is_subscribed = [
         'attribute_code' => 'is_subscribed',
         'backend_type' => 'virtual',
@@ -242,11 +257,13 @@ class CustomerInjectable extends InjectableFixture
     protected $password = [
         'attribute_code' => 'password',
         'backend_type' => 'virtual',
+        'group' => null,
     ];
 
     protected $password_confirmation = [
         'attribute_code' => 'password_confirmation',
         'backend_type' => 'virtual',
+        'group' => null,
     ];
 
     public function getConfirmation()
@@ -317,6 +334,11 @@ class CustomerInjectable extends InjectableFixture
     public function getPasswordHash()
     {
         return $this->getData('password_hash');
+    }
+
+    public function getAmountDelta()
+    {
+        return $this->getData('amount_delta');
     }
 
     public function getPrefix()

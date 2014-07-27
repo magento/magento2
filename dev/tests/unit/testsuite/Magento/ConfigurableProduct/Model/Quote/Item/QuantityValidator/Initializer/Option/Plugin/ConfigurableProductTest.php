@@ -27,9 +27,9 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @param array $data
-     * @dataProvider beforeInitializeDataProvider
+     * @dataProvider aroundGetStockItemDataProvider
      */
-    public function testBeforeInitialize(array $data)
+    public function testAroundGetStockItem(array $data)
     {
         $subjectMock = $this->getMock(
             'Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option',
@@ -53,29 +53,22 @@ class ConfigurableProductTest extends \PHPUnit_Framework_TestCase
         $stockItemMock->expects($this->$matcherMethod())
             ->method('setProductName');
 
-        $productMock = $this->getMock(
-            'Magento\Catalog\Model\Product', array('getStockItem', '__wakeup'), array(), '', false
-        );
-        $productMock->expects($this->once())
-            ->method('getStockItem')
-            ->will($this->returnValue($stockItemMock));
-
         $optionMock = $this->getMock(
             'Magento\Sales\Model\Quote\Item\Option', array('getProduct', '__wakeup'), array(), '', false
         );
-        $optionMock->expects($this->once())
-            ->method('getProduct')
-            ->will($this->returnValue($productMock));
+
+        $proceed = function () use ($stockItemMock) {
+            return $stockItemMock;
+        };
 
         $model = new ConfigurableProduct;
-        $model->beforeInitialize($subjectMock, $optionMock, $quoteItemMock, 0);
-
+        $model->aroundGetStockItem($subjectMock, $proceed, $optionMock, $quoteItemMock, 0);
     }
 
     /**
      * @return array
      */
-    public function beforeInitializeDataProvider()
+    public function aroundGetStockItemDataProvider()
     {
         return array(
             array(

@@ -242,9 +242,12 @@ class Rule extends \Magento\Rule\Model\Resource\AbstractResource
         $rows = array();
 
         try {
-            foreach ($productIds as $productId) {
+            foreach ($productIds as $productId => $validationByWebsite) {
                 foreach ($websiteIds as $websiteId) {
                     foreach ($customerGroupIds as $customerGroupId) {
+                        if (empty($validationByWebsite[$websiteId])) {
+                            continue;
+                        }
                         $rows[] = array(
                             'rule_id' => $ruleId,
                             'from_time' => $fromTime,

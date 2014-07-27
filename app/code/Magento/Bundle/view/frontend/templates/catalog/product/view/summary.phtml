@@ -28,15 +28,15 @@
 ?>
 <?php if ($_product->isSaleable() && $this->hasOptions()): ?>
 <div id="bundleSummary"
-     class="block bundle summary"
-     data-mage-init='{"sticky":{"container": ".product.add.form"}}'>
+     class="block-bundle-summary"
+     data-mage-init='{"sticky":{"container": ".product-add-form"}}'>
     <div class="title">
         <strong><?php echo __('Your Customization'); ?></strong>
     </div>
     <div class="content">
-        <div class="bundle info">
+        <div class="bundle-info">
             <?php echo $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image')->init($_product, 'bundled_product_customization_page')->toHtml() ?>
-            <div class="product details">
+            <div class="product-details">
                 <strong class="product name"><?php echo $this->escapeHtml($_product->getName()) ?></strong>
                 <?php if($_product->getIsSalable()): ?>
                     <p class="available stock" title="<?php echo __('Availability') ?>">
@@ -50,7 +50,7 @@
                 <?php echo $this->getChildHtml('', true);?>
             </div>
         </div>
-        <div class="bundle summary">
+        <div class="bundle-summary">
             <strong class="subtitle"><?php echo __('Summary'); ?></strong>
             <div id="bundle-summary" data-container="product-summary">
                 <ul data-mage-init='{"productSummary": []}' class="bundle items"></ul>
@@ -70,12 +70,12 @@
 <script>
     //<![CDATA[
     (function ($) {
-        $('.product.add.form').mage('slide', {
+        $('.product-add-form').mage('slide', {
             'slideSpeed': 1500,
             'slideSelector': '#bundle-slide',
             'slideBackSelector': '.action.customization.back',
             'bundleProductSelector': '#bundleProduct',
-            'bundleOptionsContainer': '.product.add.form',
+            'bundleOptionsContainer': '.product-add-form',
             <?php if ($this->isStartCustomization()): ?>
             'autostart': true
             <?php endif;?>

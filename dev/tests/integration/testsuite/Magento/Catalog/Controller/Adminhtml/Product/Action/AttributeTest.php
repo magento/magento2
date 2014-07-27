@@ -62,4 +62,58 @@ class AttributeTest extends \Magento\Backend\Utility\Controller
 
         $this->assertTrue($isRedirectPresent);
     }
+
+
+    /**
+     * @covers \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribute::validateAction
+     *
+     * @dataProvider validateActionDataProvider
+     *
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_duplicated.php
+     */
+    public function testValidateActionWithMassUpdate($attributes)
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        /** @var $session \Magento\Backend\Model\Session */
+        $session = $objectManager->get('Magento\Backend\Model\Session');
+        $session->setProductIds(array(1, 2));
+
+        $this->getRequest()->setParam('attributes', $attributes);
+
+        $this->dispatch('backend/catalog/product_action_attribute/validate/store/0');
+
+        $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
+
+        $response = $this->getResponse()->getBody();
+        $this->assertJson($response);
+        $data = json_decode($response, true);
+        $this->assertArrayHasKey('error', $data);
+        $this->assertFalse($data['error']);
+        $this->assertCount(1, $data);
+    }
+
+    /**
+     * Data Provider for validation
+     *
+     * @return array
+     */
+    public function validateActionDataProvider()
+    {
+        return array(
+            [
+                'arguments' => [
+                    'name'              => 'Name',
+                    'description'       => 'Description',
+                    'short_description' => 'Short Description',
+                    'price'             => '512',
+                    'weight'            => '16',
+                    'meta_title'        => 'Meta Title',
+                    'meta_keyword'      => 'Meta Keywords',
+                    'meta_description'  => 'Meta Description',
+                ],
+            ]
+        );
+    }
 }

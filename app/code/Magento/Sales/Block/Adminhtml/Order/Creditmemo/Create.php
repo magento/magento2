@@ -36,12 +36,12 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Backend\Block\Widget\Context $context,
         \Magento\Framework\Registry $registry,
         array $data = array()
     ) {
@@ -62,8 +62,8 @@ class Create extends \Magento\Backend\Block\Widget\Form\Container
 
         parent::_construct();
 
-        $this->_removeButton('delete');
-        $this->_removeButton('save');
+        $this->buttonList->remove('delete');
+        $this->buttonList->remove('save');
     }
 
     /**

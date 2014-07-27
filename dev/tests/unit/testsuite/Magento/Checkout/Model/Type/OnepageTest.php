@@ -110,7 +110,8 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         $this->checkoutHelperMock = $this->getMock('Magento\Checkout\Helper\Data', [], [], '', false);
         $this->customerHelperMock = $this->getMock('Magento\Customer\Helper\Data', [], [], '', false);
         $this->loggerMock = $this->getMock('Magento\Framework\Logger', [], [], '', false);
-        $this->checkoutSessionMock = $this->getMock('Magento\Checkout\Model\Session', [], [], '', false);
+        $this->checkoutSessionMock = $this->getMock('Magento\Checkout\Model\Session',
+            ['getLastOrderId', 'getQuote', 'setStepData', 'getStepData'], [], '', false);
         $this->customerSessionMock = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
         $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
         $this->requestMock = $this->getMock(
@@ -121,7 +122,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         $this->formFactoryMock = $this->getMock('Magento\Customer\Model\FormFactory');
         $this->customerFactoryMock = $this->getMock('Magento\Customer\Model\CustomerFactory');
         $this->quoteFactoryMock = $this->getMock('Magento\Sales\Model\Service\QuoteFactory');
-        $this->orderFactoryMock = $this->getMock('Magento\Sales\Model\OrderFactory');
+        $this->orderFactoryMock = $this->getMock('Magento\Sales\Model\OrderFactory', ['create'], [], '', false);
         $this->copyMock = $this->getMock('Magento\Framework\Object\Copy', [], [], '', false);
         $this->messageManagerMock = $this->getMock('Magento\Framework\Message\ManagerInterface');
 
@@ -468,5 +469,18 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
                 [] // $expected
             ]
         ];
+    }
+
+    public function testGetLastOrderId()
+    {
+        $orderIncrementId = 100001;
+        $orderId = 1;
+        $this->checkoutSessionMock->expects($this->once())->method('getLastOrderId')
+            ->will($this->returnValue($orderId));
+        $orderMock = $this->getMock('Magento\Sales\Model\Order', ['load', 'getIncrementId', '__wakeup'], [], '', false);
+        $orderMock->expects($this->once())->method('load')->with($orderId)->will($this->returnSelf());
+        $orderMock->expects($this->once())->method('getIncrementId')->will($this->returnValue($orderIncrementId));
+        $this->orderFactoryMock->expects($this->once())->method('create')->will($this->returnValue($orderMock));
+        $this->assertEquals($orderIncrementId, $this->onepage->getLastOrderId());
     }
 }

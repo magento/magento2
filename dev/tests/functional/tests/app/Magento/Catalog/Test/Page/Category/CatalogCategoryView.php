@@ -62,15 +62,15 @@ class CatalogCategoryView extends FrontendPage
         'titleBlock' => [
             'name' => 'titleBlock',
             'class' => 'Magento\Theme\Test\Block\Html\Title',
-            'locator' => '.page.title h1.title',
+            'locator' => '.page-title h1.title .base',
             'strategy' => 'css selector',
         ],
         'viewBlock' => [
-            'name' => 'descriptionBlock',
+            'name' => 'viewBlock',
             'class' => 'Magento\Catalog\Test\Block\Category\View',
-            'locator' => '.category.view',
+            'locator' => '.column.main',
             'strategy' => 'css selector',
-        ]
+        ],
     ];
 
     /**

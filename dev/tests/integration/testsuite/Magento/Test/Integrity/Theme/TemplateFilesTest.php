@@ -33,19 +33,6 @@ class TemplateFilesTest extends \Magento\TestFramework\TestCase\AbstractIntegrit
         $invalidTemplates = array();
         foreach ($this->templatesDataProvider() as $template) {
             list($area, $themeId, $module, $file, $xml) = $template;
-
-            if ($area === 'frontend' && in_array(
-                $module . '::' . $file,
-                array(
-                    'Magento_Reports::Magento_Catalog::product/list/items.phtml',
-                    'Magento_Review::redirect.phtml',
-                    'Magento_Theme::blank.phtml'
-                )
-            )
-            ) {
-                continue; // $this->markTestIncomplete('MAGETWO-9806');
-            }
-
             $params = array('area' => $area, 'themeId' => $themeId, 'module' => $module);
             try {
                 $templateFilename = \Magento\TestFramework\Helper\Bootstrap::getObjectmanager()
