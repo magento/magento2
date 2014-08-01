@@ -22,7 +22,15 @@
  */
 /*jshint browser:true jquery:true*/
 /*global alert:true*/
-(function ($) {
+define([
+    "jquery",
+    "jquery/ui",
+    "jquery/template",
+    "js/theme",
+    "mage/translate",
+    "mage/backend/validation"
+], function($){
+
     $.widget('mage.customOptions', {
         options: {
             selectionItemCount: {}
@@ -372,4 +380,5 @@
             return $('#' + this.options.fieldId + '_' + id).length ? this.getFreeOptionId(parseInt(id, 10) + 1) : id;
         }
     });
-})(jQuery);
+
+});

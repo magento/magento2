@@ -52,11 +52,15 @@
                     </label>
                 <?php if ($_isRequired): ?>
                     <script type="text/javascript">
-                        //<![CDATA[
-                        $('links_<?php echo $_link->getId() ?>').advaiceContainer = 'links-advice-container';
-                        $('links_<?php echo $_link->getId() ?>').callbackFunction = 'validateDownloadableCallback';
-                        //]]>
-                    </script>
+require(['prototype'], function(){
+
+    //<![CDATA[
+    $('links_<?php echo $_link->getId() ?>').advaiceContainer = 'links-advice-container';
+    $('links_<?php echo $_link->getId() ?>').callbackFunction = 'validateDownloadableCallback';
+    //]]>
+                    
+});
+</script>
                 <?php endif; ?>
             </div>
             <?php endforeach; ?>
@@ -68,17 +72,21 @@
 </fieldset>
 
     <script type="text/javascript">
-    //<![CDATA[
-        validateDownloadableCallback = function (elmId, result) {
-            var container = $('downloadable-links-list');
-            if (result == 'failed') {
-                container.removeClassName('validation-passed');
-                container.addClassName('validation-failed');
-            } else {
-                container.removeClassName('validation-failed');
-                container.addClassName('validation-passed');
-            }
+require(['prototype'], function(){
+
+//<![CDATA[
+    validateDownloadableCallback = function (elmId, result) {
+        var container = $('downloadable-links-list');
+        if (result == 'failed') {
+            container.removeClassName('validation-passed');
+            container.addClassName('validation-failed');
+        } else {
+            container.removeClassName('validation-failed');
+            container.addClassName('validation-passed');
         }
-    //]]>
-    </script>
+    }
+//]]>
+    
+});
+</script>
 <?php endif;?>

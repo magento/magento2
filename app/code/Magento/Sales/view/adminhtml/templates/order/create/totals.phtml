@@ -45,6 +45,8 @@
 </div>
 
 <script type="text/javascript">
+require(['prototype'], function(){
+
 //<![CDATA[
 var sendEmailCheckbox = $('send_confirmation');
 if (sendEmailCheckbox) {
@@ -60,4 +62,9 @@ function notifyCustomerUpdate() {
     notifyCustomerCheckbox.disabled = !sendEmailCheckbox.checked;
 }
 //]]>
+
+window.notifyCustomerUpdate = notifyCustomerUpdate;
+window.sendEmailCheckbox = sendEmailCheckbox;
+
+});
 </script>

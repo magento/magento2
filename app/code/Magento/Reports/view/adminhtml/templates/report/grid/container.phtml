@@ -30,6 +30,12 @@
 <?php echo $this->getGridHtml() ?>
 
 <script type="text/javascript">
+require([
+    'jquery',
+    'mage/backend/validation',
+    "prototype"
+], function(jQuery){
+
 //<![CDATA[
     jQuery('#filter_form').mage('validation', {errorClass: 'mage-error'});
     function filterFormSubmit() {
@@ -39,8 +45,10 @@
             if(filters[i].value && filters[i].value.length && !filters[i].disabled) elements.push(filters[i]);
         }
         if (jQuery('#filter_form').valid()) {
-            setLocation('<?php echo $this->getFilterUrl(); ?>filter/'+encode_base64(Form.serializeElements(elements))+'/');
+            setLocation('<?php echo $this->getFilterUrl(); ?>filter/'+Base64.encode(Form.serializeElements(elements))+'/');
         }
     }
 //]]>
+    window.filterFormSubmit = filterFormSubmit;
+});
 </script>

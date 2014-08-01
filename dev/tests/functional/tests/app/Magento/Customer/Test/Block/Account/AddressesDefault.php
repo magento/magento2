@@ -38,7 +38,7 @@ class AddressesDefault extends Block
      *
      * @var string
      */
-    protected $changeBillingAddressSelector = '.box.address.billing .subtitle a';
+    protected $changeBillingAddressSelector = '.box-address-billing a';
 
     /**
      * Click on address book menu item

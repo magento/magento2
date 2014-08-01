@@ -255,7 +255,7 @@ $table = $installer->getConnection()->newTable(
     'string',
     \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     255,
-    array('nullable' => false, 'default' => \Magento\Framework\TranslateInterface::DEFAULT_STRING),
+    array('nullable' => false, 'default' => 'Translate String'),
     'Translation String'
 )->addColumn(
     'store_id',
@@ -372,7 +372,11 @@ $table = $installer->getConnection()->newTable(
     array(),
     'Variable Name'
 )->addIndex(
-    $installer->getIdxName('core_variable', array('code'), \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE),
+    $installer->getIdxName(
+        'core_variable',
+        array('code'),
+        \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+    ),
     array('code'),
     array('type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE)
 )->setComment(

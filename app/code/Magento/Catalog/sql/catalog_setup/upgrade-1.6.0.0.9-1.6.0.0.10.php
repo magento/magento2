@@ -112,22 +112,6 @@ $table = $installer->getConnection()->newTable(
 );
 $installer->getConnection()->createTable($table);
 
-$installer->addAttribute(
-    'catalog_product',
-    'group_price',
-    array(
-        'type' => 'decimal',
-        'label' => 'Group Price',
-        'input' => 'text',
-        'backend' => 'Magento\Catalog\Model\Product\Attribute\Backend\Groupprice',
-        'required' => false,
-        'sort_order' => 6,
-        'global' => \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_WEBSITE,
-        'apply_to' => 'simple,virtual',
-        'group' => 'Prices'
-    )
-);
-
 /**
  * Create table 'catalog_product_index_group_price'
  */

@@ -33,5 +33,14 @@
     <?php echo $this->getFormHtml() ?>
 </div>
 <script type="text/javascript">
-   jQuery('#edit_form').mage('form').mage('validation');
+require([
+    "jquery",
+    "mage/mage",
+    "mage/backend/form",
+    "mage/backend/validation"
+], function($){
+
+   $('#edit_form').mage('form').mage('validation');
+
+});
 </script>

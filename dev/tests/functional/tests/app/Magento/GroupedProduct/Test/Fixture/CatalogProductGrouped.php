@@ -117,6 +117,7 @@ class CatalogProductGrouped extends InjectableFixture
         'is_required' => '0',
         'default_value' => '',
         'input' => 'text',
+        'group' => 'product-details',
         'source' => 'Magento\Catalog\Test\Fixture\CatalogProductSimple\CategoryIds',
     ];
 
@@ -322,6 +323,11 @@ class CatalogProductGrouped extends InjectableFixture
         'input' => 'select',
         'group' => 'product-details'
 
+    ];
+
+    protected $stock_data = [
+        'attribute_code' => 'stock_data',
+        'group' => 'advanced-inventory'
     ];
 
     protected $related_tgtr_position_behavior = [

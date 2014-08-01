@@ -40,11 +40,18 @@
 </div>
 
 <script type="text/javascript">
+require([
+    "Magento_Sales/order/create/giftmessage",
+    "Magento_Sales/order/giftoptions_tooltip"
+], function(){
+
 //<![CDATA[
 var giftMessageSet = new GiftMessageSet();
 
 _giftOptions = new GiftOptionsPopup();
 giftOptionsTooltip.setTooltipWindow('giftoptions_tooltip_window','giftoptions_tooltip_window_content');
 //]]>
+window.giftMessageSet = giftMessageSet;
+});
 </script>
 <?php endif;?>

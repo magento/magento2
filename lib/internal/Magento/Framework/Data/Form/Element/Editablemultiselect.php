@@ -62,11 +62,10 @@ class Editablemultiselect extends \Magento\Framework\Data\Form\Element\Multisele
         $selectConfigJson = \Zend_Json::encode($selectConfig);
         $jsObjectName = $this->getJsObjectName();
         $html .= '<script type="text/javascript">' .
-            '/*<![CDATA[*/' .
-            '(function($) { $().ready(function () { ' .
+            'require(["jquery","jquery/ui"], function($) {'.
+            'setTimeout(function () { ' .
             "var {$jsObjectName} = new {$elementJsClass}({$selectConfigJson}); " .
-            "{$jsObjectName}.init(); }); })(jQuery);" .
-            '/*]]>*/' .
+            "{$jsObjectName}.init(); }); }, 1000);" .
             '</script>';
         return $html;
     }

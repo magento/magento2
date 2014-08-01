@@ -21,8 +21,12 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /*jshint jquery:true*/
-(function($) {
+define([
+    "jquery",
+    "jquery/ui"
+], function($){
     "use strict";
+
     $.widget('mage.recentlyViewedProducts', {
         options: {
             localStorageKey: "recently-viewed-products",
@@ -63,4 +67,5 @@
             window.localStorage.setItem(this.options.localStorageKey, JSON.stringify(products));
         }
     });
-})(jQuery);
+
+});

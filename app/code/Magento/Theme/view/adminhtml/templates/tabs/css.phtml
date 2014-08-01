@@ -28,64 +28,68 @@
 <?php echo $this->getFormHtml(); ?>
 
 <script type="text/javascript">
-    (function ($) {
+require([
+    "jquery",
+    "jquery/file-uploader",
+    "mage/translate"
+], function($){
 
-        $( '#css_file_uploader' ).fileupload({
-            dataType: 'json',
-            replaceFileInput: false,
-            url : '<?php echo $this->getUrl('*/system_design_theme/uploadcss') ?>',
-            acceptFileTypes: /(.|\/)(css)$/i,
+    $( '#css_file_uploader' ).fileupload({
+        dataType: 'json',
+        replaceFileInput: false,
+        url : '<?php echo $this->getUrl('*/system_design_theme/uploadcss') ?>',
+        acceptFileTypes: /(.|\/)(css)$/i,
 
-            /**
-             * Add data
-             * @param e
-             * @param data
-             */
-            add: function (e, data) {
-                var uploadButton = $('#css_uploader_button');
-                /** Unbind click event on file change */
-                uploadButton.unbind('click');
-                uploadButton.removeAttr('disabled');
+        /**
+         * Add data
+         * @param e
+         * @param data
+         */
+        add: function (e, data) {
+            var uploadButton = $('#css_uploader_button');
+            /** Unbind click event on file change */
+            uploadButton.unbind('click');
+            uploadButton.removeAttr('disabled');
 
-                uploadButton.click(function () {
-                    $('#messages').html('');
-                    $(this).attr('disabled', 'disabled');
-                    data.submit();
-                });
-            },
+            uploadButton.click(function () {
+                $('#messages').html('');
+                $(this).attr('disabled', 'disabled');
+                data.submit();
+            });
+        },
 
-            /**
-             * On done event
-             * @param e
-             * @param data
-             */
-            done: function (e, data) {
-                var contentArea = $('#custom_css_content');
-                $(this).val('');
+        /**
+         * On done event
+         * @param e
+         * @param data
+         */
+        done: function (e, data) {
+            var contentArea = $('#custom_css_content');
+            $(this).val('');
 
-                $('#css_uploader_button').attr('disabled', 'disabled');
+            $('#css_uploader_button').attr('disabled', 'disabled');
 
-                if (!data.result.error) {
-                    contentArea.trigger('focusin');
-                    contentArea.val(data.result.content);
-                    contentArea.trigger('focusout');
-                }
-            },
-
-            /**
-             * Fail event
-             * @param e
-             * @param data
-             */
-            fail: function(e, data) {
-                $(this).val('');
-                alert($.mage.__("We don't recognize this file extension."));
+            if (!data.result.error) {
+                contentArea.trigger('focusin');
+                contentArea.val(data.result.content);
+                contentArea.trigger('focusout');
             }
-        });
+        },
 
-        $(document).on('beforeSubmit', function() {
-            $('#css_file_uploader').val('');
-        });
+        /**
+         * Fail event
+         * @param e
+         * @param data
+         */
+        fail: function(e, data) {
+            $(this).val('');
+            alert($.mage.__("We don't recognize this file extension."));
+        }
+    });
 
-    })(jQuery);
+    $(document).on('beforeSubmit', function() {
+        $('#css_file_uploader').val('');
+    });
+
+});
 </script>

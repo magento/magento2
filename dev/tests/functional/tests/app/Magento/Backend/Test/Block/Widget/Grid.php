@@ -34,6 +34,7 @@ use Mtf\Client\Element\Locator;
  * Basic grid actions
  *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 abstract class Grid extends Block
 {
@@ -42,7 +43,7 @@ abstract class Grid extends Block
      *
      * @var array
      */
-    protected $filters = array();
+    protected $filters = [];
 
     /**
      * Locator value for 'Search' button
@@ -101,6 +102,13 @@ abstract class Grid extends Block
     protected $massactionSelect = '[id*=massaction-select]';
 
     /**
+     * Massaction dropdown
+     *
+     * @var string
+     */
+    protected $massactionAction = '#massaction-select';
+
+    /**
      * Massaction 'Submit' button
      *
      * @var string
@@ -134,6 +142,13 @@ abstract class Grid extends Block
      * @var boolean
      */
     protected $waitForSelectorVisible = true;
+
+    /**
+     * Selector for status select
+     *
+     * @var string
+     */
+    protected $status = '[name="status"]';
 
     /**
      * Get backend abstract block
@@ -247,34 +262,44 @@ abstract class Grid extends Block
     /**
      * Perform selected massaction over checked items
      *
-     * @param string $actionType
      * @param array $items
-     * @param bool $acceptAlert
+     * @param array|string $action
+     * @param bool $acceptAlert [optional]
+     * @param string $massActionSelection [optional]
+     * @return void
      */
-    protected function massaction($actionType, array $items = array(), $acceptAlert = false)
+    public function massaction(array $items, $action, $acceptAlert = false, $massActionSelection = '')
     {
-        if ($items) {
-            foreach ($items as $item) {
-                $this->searchAndSelect($item);
-            }
-        } else {
-            $this->_rootElement->find($this->selectAll, Locator::SELECTOR_CSS)->click();
+        if (!is_array($action)) {
+            $action = [$action => '-'];
         }
+        foreach ($items as $item) {
+            $this->searchAndSelect($item);
+        }
+        if ($massActionSelection) {
+            $this->_rootElement->find($this->massactionAction, Locator::SELECTOR_CSS, 'select')
+                ->setValue($massActionSelection);
+        }
+        $actionType = key($action);
         $this->_rootElement->find($this->massactionSelect, Locator::SELECTOR_CSS, 'select')->setValue($actionType);
+        if (isset($action[$actionType]) && $action[$actionType] != '-') {
+            $this->_rootElement->find($this->status, Locator::SELECTOR_CSS, 'select')->setValue($action[$actionType]);
+        }
+        $this->massActionSubmit($acceptAlert);
+    }
+
+    /**
+     * Submit mass actions
+     *
+     * @param bool $acceptAlert
+     * @return void
+     */
+    protected function massActionSubmit($acceptAlert)
+    {
         $this->_rootElement->find($this->massactionSubmit, Locator::SELECTOR_CSS)->click();
         if ($acceptAlert) {
             $this->_rootElement->acceptAlert();
         }
-    }
-
-    /**
-     * Delete selected items in grid
-     *
-     * @param array $items
-     */
-    public function delete($items = array())
-    {
-        $this->massaction('Delete', $items, true);
     }
 
     /**

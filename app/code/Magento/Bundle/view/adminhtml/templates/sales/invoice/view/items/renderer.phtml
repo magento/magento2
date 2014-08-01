@@ -319,10 +319,14 @@
                         <?php if ($_remainder):?>
                             ... <span id="<?php echo $_id = 'id' . uniqid()?>"><?php echo $_remainder ?></span>
                             <script type="text/javascript">
-                            $('<?php echo $_id ?>').hide();
-                            $('<?php echo $_id ?>').up().observe('mouseover', function(){$('<?php echo $_id ?>').show();});
-                            $('<?php echo $_id ?>').up().observe('mouseout',  function(){$('<?php echo $_id ?>').hide();});
-                            </script>
+require(['protoype'], function(){
+
+    $('<?php echo $_id ?>').hide();
+    $('<?php echo $_id ?>').up().observe('mouseover', function(){$('<?php echo $_id ?>').show();});
+    $('<?php echo $_id ?>').up().observe('mouseout',  function(){$('<?php echo $_id ?>').hide();});
+                            
+});
+</script>
                         <?php endif;?>
                     <?php endif;?>
                     </dd>

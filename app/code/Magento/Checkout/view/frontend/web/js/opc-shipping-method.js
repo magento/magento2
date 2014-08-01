@@ -24,8 +24,15 @@
  */
 /*jshint browser:true jquery:true*/
 /*global alert*/
-(function($, window) {
+define([
+    "jquery",
+    "jquery/ui",
+    "Magento_Checkout/js/opc-shipping-info",
+    "mage/validation",
+    "mage/translate"
+], function($){
     'use strict';    
+
     // Extension for mage.opcheckout - fourth section(Shipping Method) in one page checkout accordion
     $.widget('mage.opcShippingMethod', $.mage.opcShippingInfo, {
         options: {
@@ -80,4 +87,5 @@
             return false;
         }
     });
-})(jQuery, window);
+
+});

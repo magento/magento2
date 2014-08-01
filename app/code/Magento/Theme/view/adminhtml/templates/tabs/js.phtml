@@ -26,103 +26,108 @@
 <?php echo $this->getFormHtml(); ?>
 
 <script type="text/javascript">
-    (function ($) {
+require([
+    "jquery",
+    "jquery/file-uploader",
+    "mage/translate"
+], function($){
 
-        $('#js_files_uploader').fileupload({
-            dataType: 'json',
-            replaceFileInput: false,
-            sequentialUploads: true,
-            url : '<?php echo $this->getJsUploadUrl(); ?>',
+    $('#js_files_uploader').fileupload({
+        dataType: 'json',
+        replaceFileInput: false,
+        sequentialUploads: true,
+        url : '<?php echo $this->getJsUploadUrl(); ?>',
 
-            /**
-             * Add data
-             * @param e
-             * @param data
-             */
-            add: function (e, data) {
-                $.each(data.files, function (index, file) {
-                    data.fileId =  Math.random().toString(36).substr(2,9);
-                    var progressTmpl = $('#js-file-uploader-template').children(':first').clone();
-                    progressTmpl.attr('id', data.fileId);
-                    var fileSize = typeof(file.size) == "undefined"
-                        ? $.mage.__('We cannot detect a size.')
-                        : byteConvert(file.size);
-                    var fileInfoHtml = progressTmpl.html().replace('{{size}}', fileSize)
-                        .replace('{{name}}', file.name);
-                    progressTmpl.html(fileInfoHtml) ;
-                    progressTmpl.appendTo('#js-file-uploader');
-                });
+        /**
+         * Add data
+         * @param e
+         * @param data
+         */
+        add: function (e, data) {
+            $.each(data.files, function (index, file) {
+                data.fileId =  Math.random().toString(36).substr(2,9);
+                var progressTmpl = $('#js-file-uploader-template').children(':first').clone();
+                progressTmpl.attr('id', data.fileId);
+                var fileSize = typeof(file.size) == "undefined"
+                    ? $.mage.__('We cannot detect a size.')
+                    : byteConvert(file.size);
+                var fileInfoHtml = progressTmpl.html().replace('{{size}}', fileSize)
+                    .replace('{{name}}', file.name);
+                progressTmpl.html(fileInfoHtml) ;
+                progressTmpl.appendTo('#js-file-uploader');
+            });
 
-                var uploadButton = $('#js_uploader_button');
-                uploadButton.removeAttr('disabled');
+            var uploadButton = $('#js_uploader_button');
+            uploadButton.removeAttr('disabled');
 
-                uploadButton.click(function () {
-                    $('#messages').html('');
-                    $(this).attr('disabled', 'disabled');
+            uploadButton.click(function () {
+                $('#messages').html('');
+                $(this).attr('disabled', 'disabled');
 
-                    data.submit();
-                });
-            },
+                data.submit();
+            });
+        },
 
-            /**
-             * On done event
-             * @param e
-             * @param data
-             */
+        /**
+         * On done event
+         * @param e
+         * @param data
+         */
         done: function (e, data) {
-                $('#no-js-files-found').remove();
+            $('#no-js-files-found').remove();
 
-                var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
-                $(progressSelector).css('width','100%');
+            var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
+            $(progressSelector).css('width','100%');
 
-                $(this).val('');
+            $(this).val('');
 
-                if (!data.result.error) {
-                    $(progressSelector).removeClass('upload-progress').addClass('upload-success');
+            if (!data.result.error) {
+                $(progressSelector).removeClass('upload-progress').addClass('upload-success');
 
-                    $('#' + data.fileId).delay(2000).fadeOut(2000);
-                    $('body').trigger('refreshJsList', {jsList : data.result.files});
-                } else {
-                    $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
-                    /** fix for ie 8 to display error message if file wasn't uploaded */
-                    if ($.browser.msie && $.browser.version == '8.0') {
-                        alert(data.result.message);
-                    }
-                }
-
-                $('.ui-sortable').sortable('initButtons');
-            },
-
-            /**
-             * On progress
-             * @param e
-             * @param data
-             */
-            progress: function(e, data) {
-                var progress = parseInt(data.loaded / data.total * 100, 10);
-                var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
-                $(progressSelector).css('width', progress + '%');
-            },
-
-            /**
-             * Fail event
-             * @param e
-             * @param data
-             */
-            fail: function(e, data) {
-                var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
+                $('#' + data.fileId).delay(2000).fadeOut(2000);
+                $('body').trigger('refreshJsList', {jsList : data.result.files});
+            } else {
                 $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
-
-                $(this).val('');
-                alert($.mage.__("We don't recognize this file extension."));
+                /** fix for ie 8 to display error message if file wasn't uploaded */
+                if ($.browser.msie && $.browser.version == '8.0') {
+                    alert(data.result.message);
+                }
             }
-        });
 
-        $('#js_files_uploader').click(function () {
-            /** Unbind click event on file change */
-            $('#js-file-uploader').html('');
-            $('#js_uploader_button').unbind('click');
-        });
+            $('.ui-sortable').sortable('initButtons');
+        },
 
-    })(jQuery);
+        /**
+         * On progress
+         * @param e
+         * @param data
+         */
+        progress: function(e, data) {
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
+            $(progressSelector).css('width', progress + '%');
+        },
+
+        /**
+         * Fail event
+         * @param e
+         * @param data
+         */
+        fail: function(e, data) {
+            var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
+            $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
+
+            $(this).val('');
+            alert($.mage.__("We don't recognize this file extension."));
+        }
+    });
+
+    $('#js_files_uploader').click(function () {
+        /** Unbind click event on file change */
+        $('#js-file-uploader').html('');
+        $('#js_uploader_button').unbind('click');
+    });
+
+
+});
 </script>

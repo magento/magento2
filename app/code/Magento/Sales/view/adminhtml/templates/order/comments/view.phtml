@@ -58,12 +58,16 @@
     </ul>
 </div>
 <script type="text/javascript">
-function submitComment() {
+require(['prototype'], function(){
+
+submitComment = function() {
     submitAndReloadArea($('comments_block').parentNode, '<?php echo $this->getSubmitUrl() ?>')
 }
 
 if ($('submit_comment_button')) {
     $('submit_comment_button').observe('click', submitComment);
 }
+
+});
 </script>
 <?php endif; ?>

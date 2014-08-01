@@ -35,7 +35,7 @@ $connection->addColumn(
         'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
         'length' => 5,
         'nullable' => false,
-        'default' => \Magento\Framework\Locale\ResolverInterface::DEFAULT_LOCALE,
+        'default' => 'en_US',
         'comment' => 'Backend interface locale'
     )
 );

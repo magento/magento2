@@ -48,7 +48,7 @@ class ReviewInjectable extends AbstractRepository
             'title' => 'title_%isolation%',
             'detail' => 'review_detail_%isolation%',
             'ratings' => [
-                1 => [
+                [
                     'dataSet' => 'visibleOnDefaultWebsite',
                     'rating' => mt_rand(1, 5)
                 ]

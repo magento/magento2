@@ -75,13 +75,13 @@ class Form extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
      */
     protected function _prepareLayout()
     {
-        if ($head = $this->getLayout()->getBlock('head')) {
-            $head->addChild(
-                'magento-adminhtml-catalog-category-edit-js',
-                'Magento\Theme\Block\Html\Head\Script',
-                array('file' => 'Magento_Catalog::catalog/category/edit.js')
-            );
-        }
+        //if ($head = $this->getLayout()->getBlock('head')) {
+        //    $head->addChild(
+        //        'magento-adminhtml-catalog-category-edit-js',
+        //        'Magento\Theme\Block\Html\Head\Script',
+        //        array('file' => 'Magento_Catalog::catalog/category/edit.js')
+        //    );
+        //}
 
         $category = $this->getCategory();
         $categoryId = (int)$category->getId();

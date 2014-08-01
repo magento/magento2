@@ -36,7 +36,7 @@ $table = $installer->getConnection()->newTable(
     'country_id',
     \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     2,
-    array('nullable' => false, 'primary' => true, 'default' => ''),
+    array('nullable' => false, 'primary' => true, 'default' => false),
     'Country Id in ISO-2'
 )->addColumn(
     'iso2_code',
@@ -143,7 +143,7 @@ $table = $installer->getConnection()->newTable(
     'locale',
     \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     8,
-    array('nullable' => false, 'primary' => true, 'default' => ''),
+    array('nullable' => false, 'primary' => true, 'default' => false),
     'Locale'
 )->addColumn(
     'region_id',
@@ -181,13 +181,13 @@ $table = $installer->getConnection()->newTable(
     'currency_from',
     \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     3,
-    array('nullable' => false, 'primary' => true, 'default' => ''),
+    array('nullable' => false, 'primary' => true, 'default' => false),
     'Currency Code Convert From'
 )->addColumn(
     'currency_to',
     \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     3,
-    array('nullable' => false, 'primary' => true, 'default' => ''),
+    array('nullable' => false, 'primary' => true, 'default' => false),
     'Currency Code Convert To'
 )->addColumn(
     'rate',

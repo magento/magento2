@@ -24,6 +24,8 @@
  */
 ?>
 <script type="text/javascript">
+require(["jquery", "js/theme", "prototype"], function(){
+
 function checkIsConfigurableVisibility()
 {
     if (!$('is_configurable') || !$('is_global') || !$('frontend_input')) return;
@@ -47,4 +49,8 @@ showDefaultRows = showDefaultRows.wrap(function(original) {
 if($('frontend_input')){
     Event.observe($('is_global'), 'change', checkIsConfigurableVisibility);
 }
+
+window.checkIsConfigurableVisibility = checkIsConfigurableVisibility;
+
+});
 </script>

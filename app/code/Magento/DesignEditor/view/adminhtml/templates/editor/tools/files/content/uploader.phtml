@@ -69,8 +69,16 @@
 </div>
 
 <script type="text/javascript">
+require([
+    'jquery',
+    'jquery/ui',
+    'jquery/template',
+    'jquery/file-uploader',
+    'mage/mage',
+    'mage/translate'
+], function($){
+
 //<![CDATA[
-(function($) {
     $(function () {
         $('[data-action="upload"]').on('click', function() {
             $('[data-action="browse"]').prop('disabled', true);
@@ -226,6 +234,7 @@
             }
         });
     });
-})(jQuery);
 //]]>
+
+});
 </script>

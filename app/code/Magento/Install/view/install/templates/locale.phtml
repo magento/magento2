@@ -62,9 +62,12 @@
 </div>
 </form>
 <script type="text/javascript">
-    (function($) {
-        head.js("<?php echo $this->getViewFileUrl('Magento_Install::js/install.js') ?>", head.ready(function () {
-            $.mage.install.changeLocale('#locale', '<?php echo $this->getChangeUrl();?>');
-        }));
-    })(jQuery);
+require([
+    "jquery",
+    "Magento_Install/js/install"
+], function($){
+
+    $.mage.install.changeLocale('#locale', '<?php echo $this->getChangeUrl();?>');
+
+});
 </script>

@@ -1,0 +1,18 @@
+{
+    "name": "magento/language-pt_br",
+    "description": "Portuguese (Brazil) language",
+    "version": "0.1.0-alpha89",
+    "require": {
+        "magento/framework": "0.1.0-alpha89",
+        "magento/magento-composer-installer": "*"
+    },
+    "type": "magento2-language",
+    "extra": {
+        "map": [
+            [
+                "*",
+                "magento/pt_br"
+            ]
+        ]
+    }
+}

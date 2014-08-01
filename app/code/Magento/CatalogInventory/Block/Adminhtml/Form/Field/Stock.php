@@ -184,66 +184,68 @@ class Stock extends \Magento\Framework\Data\Form\Element\Select
     {
         return "
             <script type='text/javascript'>
-                jQuery(function($) {
-                    var qty = $('#{$quantityFieldId}'),
-                        productType = $('#product_type_id').val(),
-                        stockAvailabilityField = $('#{$inStockFieldId}'),
-                        manageStockField = $('#inventory_manage_stock'),
-                        useConfigManageStockField = $('#inventory_use_config_manage_stock'),
-                        fieldsAssociations = {
-                            '{$quantityFieldId}' : 'inventory_qty',
-                            '{$inStockFieldId}'  : 'inventory_stock_availability'
+                require(['jquery'], function(jQuery){
+                    jQuery(function($) {
+                        var qty = $('#{$quantityFieldId}'),
+                            productType = $('#product_type_id').val(),
+                            stockAvailabilityField = $('#{$inStockFieldId}'),
+                            manageStockField = $('#inventory_manage_stock'),
+                            useConfigManageStockField = $('#inventory_use_config_manage_stock'),
+                            fieldsAssociations = {
+                                '{$quantityFieldId}' : 'inventory_qty',
+                                '{$inStockFieldId}'  : 'inventory_stock_availability'
+                            };
+
+                        var disabler = function(event) {
+                            var stockBeforeDisable = $.Event('stockbeforedisable', {productType: productType});
+                            $('[data-tab-panel=product-details]').trigger(stockBeforeDisable);
+                            if (stockBeforeDisable.result !== false) {
+                                var manageStockValue = (qty.val() === '') ? 0 : 1;
+                                stockAvailabilityField.prop('disabled', !manageStockValue);
+                                $('#' + fieldsAssociations['{$inStockFieldId}']).prop('disabled', !manageStockValue);
+                                if (manageStockField.val() != manageStockValue && !(event && event.type == 'keyup')) {
+                                    if (useConfigManageStockField.val() == 1) {
+                                        useConfigManageStockField.removeAttr('checked').val(0);
+                                    }
+                                    manageStockField.toggleClass('disabled', false).prop('disabled', false);
+                                    manageStockField.val(manageStockValue);
+                                }
+                            }
                         };
 
-                    var disabler = function(event) {
-                        var stockBeforeDisable = $.Event('stockbeforedisable', {productType: productType});
-                        $('[data-tab-panel=product-details]').trigger(stockBeforeDisable);
-                        if (stockBeforeDisable.result !== false) {
-                            var manageStockValue = (qty.val() === '') ? 0 : 1;
-                            stockAvailabilityField.prop('disabled', !manageStockValue);
-                            $('#' + fieldsAssociations['{$inStockFieldId}']).prop('disabled', !manageStockValue);
-                            if (manageStockField.val() != manageStockValue && !(event && event.type == 'keyup')) {
-                                if (useConfigManageStockField.val() == 1) {
-                                    useConfigManageStockField.removeAttr('checked').val(0);
+                        //Fill corresponding field
+                        var filler = function() {
+                            var id = $(this).attr('id');
+                            if ('undefined' !== typeof fieldsAssociations[id]) {
+                                $('#' + fieldsAssociations[id]).val($(this).val());
+                            } else {
+                                $('#' + getKeyByValue(fieldsAssociations, id)).val($(this).val());
+                            }
+
+                            if (manageStockField.length) {
+                                fireEvent(manageStockField.get(0), 'change');
+                            }
+                        };
+                        //Get key by value from object
+                        var getKeyByValue = function(object, value) {
+                            var returnVal = false;
+                            $.each(object, function(objKey, objValue){
+                                if (value === objValue) {
+                                    returnVal = objKey;
                                 }
-                                manageStockField.toggleClass('disabled', false).prop('disabled', false);
-                                manageStockField.val(manageStockValue);
-                            }
-                        }
-                    };
-
-                    //Fill corresponding field
-                    var filler = function() {
-                        var id = $(this).attr('id');
-                        if ('undefined' !== typeof fieldsAssociations[id]) {
-                            $('#' + fieldsAssociations[id]).val($(this).val());
-                        } else {
-                            $('#' + getKeyByValue(fieldsAssociations, id)).val($(this).val());
-                        }
-
-                        if (manageStockField.length) {
-                            fireEvent(manageStockField.get(0), 'change');
-                        }
-                    };
-                    //Get key by value from object
-                    var getKeyByValue = function(object, value) {
-                        var returnVal = false;
-                        $.each(object, function(objKey, objValue){
-                            if (value === objValue) {
-                                returnVal = objKey;
-                            }
+                            });
+                            return returnVal;
+                        };
+                        $.each(fieldsAssociations, function(generalTabField, advancedTabField) {
+                            $('#' + generalTabField + ', #' + advancedTabField)
+                                .bind('focus blur change keyup click', filler)
+                                .bind('keyup change blur', disabler);
+                            filler.call($('#' + generalTabField));
+                            filler.call($('#' + advancedTabField));
                         });
-                        return returnVal;
-                    };
-                    $.each(fieldsAssociations, function(generalTabField, advancedTabField) {
-                        $('#' + generalTabField + ', #' + advancedTabField)
-                            .bind('focus blur change keyup click', filler)
-                            .bind('keyup change blur', disabler);
-                        filler.call($('#' + generalTabField));
-                        filler.call($('#' + advancedTabField));
+                        disabler();
                     });
-                    disabler();
-                });
+                })
             </script>
         ";
     }

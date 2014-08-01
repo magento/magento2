@@ -84,11 +84,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'Magento\Theme\Block\Html\Head\Css',
                 array('file' => 'Magento_Core::prototype/magento.css')
             );
-            $head->addChild(
-                'magento-adminhtml-variables-js',
-                'Magento\Theme\Block\Html\Head\Script',
-                array('file' => 'Magento_Backend::variables.js')
-            );
         }
         return parent::_prepareLayout();
     }

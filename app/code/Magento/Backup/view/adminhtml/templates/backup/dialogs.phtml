@@ -152,11 +152,16 @@
 ?>
 
 <script type="text/javascript">
+require([
+    "prototype",
+    "mage/adminhtml/backup"
+], function(){
+
 //<![CDATA[
-    document.observe('dom:loaded', function () {
-        backup = new AdminBackup();
-        backup.rollbackUrl = '<?php echo $this->escapeJsQuote($rollbackUrl);?>';
-        backup.backupUrl = '<?php echo $this->escapeJsQuote($backupUrl);?>';
-    });
+    backup = new AdminBackup();
+    backup.rollbackUrl = '<?php echo $this->escapeJsQuote($rollbackUrl);?>';
+    backup.backupUrl = '<?php echo $this->escapeJsQuote($backupUrl);?>';
 //]]>
+
+});
 </script>

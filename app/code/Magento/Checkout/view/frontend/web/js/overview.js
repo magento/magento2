@@ -23,8 +23,13 @@
  */
 /*jshint jquery:true*/
 /*global alert*/
-(function($) {
+define([
+    "jquery",
+    "jquery/ui",
+    "mage/translate"
+], function($){
     "use strict";
+    
     $.widget('mage.orderOverview', {
         options: {
             opacity: 0.5, // CSS opacity for the 'Place Order' button when it's clicked and then disabled.
@@ -57,4 +62,5 @@
             return true;
         }
     });
-})(jQuery);
+
+});

@@ -64,6 +64,8 @@
 </fieldset>
 
 <script type="text/javascript">
+require(["prototype"], function(){
+
     //<![CDATA[
     var productWebsiteCheckboxes = $$('.website-checkbox');
 
@@ -87,5 +89,8 @@
             }
         }
     }
+    window.toggleStoreFromChoosers = toggleStoreFromChoosers;
     //]]>
+
+});
 </script>

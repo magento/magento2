@@ -22,8 +22,13 @@
  */
 /*jshint browser:true jquery:true*/
 /*global alert:true*/
-(function($) {
+define([
+    "jquery",
+    "jquery/ui",
+    "jquery/template"
+], function($){
     "use strict";
+    
     $.widget('mage.directpost', {
         options: {
             placeOrderSelector: '[data-role="review-save"]',
@@ -141,5 +146,6 @@
             return data;
         }
     });
-})(jQuery);
 
+
+});

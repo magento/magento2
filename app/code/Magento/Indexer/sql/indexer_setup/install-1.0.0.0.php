@@ -48,7 +48,7 @@ $table = $installer->getConnection()->newTable(
     'status',
     \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     16,
-    array('default' => \Magento\Indexer\Model\Indexer\State::STATUS_INVALID),
+    array('default' => 'invalid'),
     'Indexer Status'
 )->addColumn(
     'updated',
@@ -91,13 +91,13 @@ $table = $installer->getConnection()
         'mode',
         \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
         16,
-        array('default' => \Magento\Framework\Mview\View\StateInterface::MODE_DISABLED,),
+        array('default' => 'disabled'),
         'View Mode'
     )->addColumn(
         'status',
         \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
         16,
-        array('default' => \Magento\Framework\Mview\View\StateInterface::STATUS_IDLE,),
+        array('default' => 'idle'),
         'View Status'
     )->addColumn(
         'updated',

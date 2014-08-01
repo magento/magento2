@@ -23,6 +23,12 @@
  */
  ?>
 <script type="text/javascript">
+require([
+    "prototype",
+    "Magento_Sales/order/create/form",
+    "Magento_Catalog/catalog/product/composite/configure"
+], function(){
+
     order.sidebarHide();
     Event.observe(window, 'load',  function() {
         if (window.productConfigure) {
@@ -34,4 +40,6 @@
             });
         }
     });
+
+});
 </script>

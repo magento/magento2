@@ -28,11 +28,6 @@
         <action method="setCanLoadExtJs">
             <argument name="flag" xsi:type="string">1</argument>
         </action>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-wysiwyg-widget-js">
-            <arguments>
-                <argument name="file" xsi:type="string">mage/adminhtml/wysiwyg/widget.js</argument>
-            </arguments>
-        </block>
         <block class="Magento\Theme\Block\Html\Head\Script" name="prototype-window-js">
             <arguments>
                 <argument name="file" xsi:type="string">prototype/window.js</argument>

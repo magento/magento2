@@ -31,6 +31,16 @@
     <link rel="icon" href="<?php echo $this->getViewFileUrl('Magento_Theme::favicon.ico') ?>" type="image/x-icon" />
     <link rel="shortcut icon" href="<?php echo $this->getViewFileUrl('Magento_Theme::favicon.ico') ?>" type="image/x-icon" />
 
+    <script type="text/javascript">
+        var require = {
+            "baseUrl": "<?php echo $this->getViewFileUrl('/') ?>",
+            "paths": {
+                "jquery/ui": "jquery/jquery-ui-1.9.2",
+                "mage/components": "mage/backend/components"
+            }
+        };
+    </script>
+
     <link rel="stylesheet" href="<?php echo $this->getViewFileUrl('mui/reset.css') ?>" media="all" />
     <link rel="stylesheet" href="<?php echo $this->getViewFileUrl('mui/base.css') ?>" media="all" />
     <link rel="stylesheet" href="<?php echo $this->getViewFileUrl('mui/elements.css') ?>" media="all" />
@@ -39,21 +49,15 @@
     <link rel="stylesheet" href="<?php echo $this->getViewFileUrl('css/pages.css') ?>" media="all" />
     <link rel="stylesheet" href="<?php echo $this->getViewFileUrl('mui/utils.css') ?>" media="all" />
 
-    <script src="<?php echo $this->getViewFileUrl('jquery/jquery-1.8.2.js') ?>"></script>
-    <script src="<?php echo $this->getViewFileUrl('mage/jquery-no-conflict.js') ?>"></script>
-    <script src="<?php echo $this->getViewFileUrl('jquery/jquery-ui-1.9.2.js') ?>"></script>
-    <script src="<?php echo $this->getViewFileUrl('jquery/jquery.tmpl.min.js') ?>"></script>
-    <script src="<?php echo $this->getViewFileUrl('jquery/jquery.validate.js') ?>"></script>
-    <script src="<?php echo $this->getViewFileUrl('mage/translate.js') ?>"></script>
-    <script src="<?php echo $this->getViewFileUrl('mage/validation.js') ?>"></script>
-    <script src="<?php echo $this->getViewFileUrl('mage/backend/validation.js') ?>"></script>
-    <script src="<?php echo $this->getViewFileUrl('mage/backend/form.js') ?>"></script>
-
     <script src="<?php echo $this->getViewFileUrl('prototype/prototype.js') ?>"></script>
     <script src="<?php echo $this->getViewFileUrl('scriptaculous/effects.js') ?>"></script>
     <script src="<?php echo $this->getViewFileUrl('mage/captcha.js') ?>"></script>
     <script src="<?php echo $this->getViewFileUrl('modernizr/modernizr.js') ?>"></script>
-    <script src="<?php echo $this->getViewFileUrl('headjs/head.min.js') ?>"></script>
+
+    <script src="<?php echo $this->getViewFileUrl('requirejs/require.js') ?>"></script>
+    <script src="<?php echo $this->getViewFileUrl('jquery/jquery-1.8.2.js') ?>"></script>
+    <script src="<?php echo $this->getViewFileUrl('mage/jquery-no-conflict.js') ?>"></script>
+    <script src="<?php echo $this->getViewFileUrl('app-config.js') ?>"></script>
 </head>
 <body id="page-login" class="page-login" onload="document.forms['login-form'].username.focus();">
     <div class="wrapper">
@@ -90,7 +94,13 @@
                     </fieldset>
                 </form>
                 <script type="text/javascript">
-                    jQuery('#login-form').form().validation();
+                    require([
+                        "jquery",
+                        "mage/backend/form",
+                        "mage/backend/validation"
+                    ], function(jQuery){
+                        jQuery('#login-form').form().validation();
+                    });
                 </script>
             </div>
         </div>

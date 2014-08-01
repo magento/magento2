@@ -20,9 +20,12 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-
-(function($) {
+define([
+    "jquery",
+    "jquery/ui"
+], function($){
     'use strict';
+    
     $.widget("marketing.ratingControl", {
         options: {
             colorFilled: '#333',
@@ -66,4 +69,5 @@
             checkedInputs.prevAll('label').css('color', this.options.colorUnfilled).data('checked', false);
         }
     });
-})(jQuery);
+
+});

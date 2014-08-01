@@ -22,7 +22,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-(function ($) {
+define(["jquery","mage/backend/validation"], function($){
     $.validator.addMethod('validate-greater-zero-based-on-option', function(v, el) {
         var optionType = $(el)
                 .closest('.form-list')
@@ -35,4 +35,4 @@
         }
         return true;
     }, 'Please enter a number greater 0 in this field.');
-})(jQuery);
+});

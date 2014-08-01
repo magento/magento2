@@ -59,6 +59,8 @@ $_showWebsite= $this->isMultiWebsites();
         </table>
 
 <script type="text/javascript">
+require(["prototype"], function(){
+
 //<![CDATA[
 var groupPriceRowTemplate = '<tr>'
     + '<td<?php if (!$_showWebsite): ?> style="display:none"<?php endif; ?>>'
@@ -162,6 +164,10 @@ $('<?php echo $_htmlId; ?>_container').up('table').select('button')
     .each(groupPriceControl.disableElement);
 <?php endif; ?>
 //]]>
+
+window.groupPriceRowTemplate = groupPriceRowTemplate;
+window.groupPriceControl = groupPriceControl;
+});
 </script>
     </div>
 </div>

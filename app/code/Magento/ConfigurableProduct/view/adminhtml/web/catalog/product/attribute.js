@@ -20,9 +20,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
+define([
+	"jquery",
+	"jquery/ui",
+	"Magento_Catalog/catalog/product"
+], function($){
 
-(function ($) {
-$.widget("mage.configurableAttribute", $.mage.productAttributes, {
+    $.widget("mage.configurableAttribute", $.mage.productAttributes, {
         _prepareUrl: function() {
             var name = $('#configurable-attribute-selector').val();
             return this.options.url +
@@ -32,4 +36,5 @@ $.widget("mage.configurableAttribute", $.mage.productAttributes, {
                 window.encodeURIComponent(name);
         }
     });
-})(jQuery);
+
+});

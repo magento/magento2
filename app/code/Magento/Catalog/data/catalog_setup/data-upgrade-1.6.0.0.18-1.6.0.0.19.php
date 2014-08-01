@@ -41,4 +41,11 @@ if ($attribute) {
         'frontend_input_renderer',
         'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\BaseImage'
     );
+
+    $this->updateAttribute(
+        $attribute['entity_type_id'],
+        $attribute['attribute_id'],
+        'used_in_product_listing',
+        '1'
+    );
 }

@@ -24,8 +24,12 @@
 ?>
 
 <script type="text/javascript">
-//<![CDATA[
-validateOptionsCallback = function (elmId, result){
+require([
+    "prototype",
+    "Magento_Catalog/catalog/product/composite/configure"
+], function(){
+
+window.validateOptionsCallback = function (elmId, result){
     var container = $(elmId).up('ul.options-list');
     if (!container) {
         return;
@@ -37,7 +41,7 @@ validateOptionsCallback = function (elmId, result){
         container.removeClassName('validation-failed');
         container.addClassName('validation-passed');
     }
-}
+};
 
 productConfigure.opConfig = {};
 
@@ -99,6 +103,8 @@ var DateOption = Class.create({
         }
     }
 });
+
 productConfigure.opConfig.dateOption = new DateOption();
-//]]>
+
+});
 </script>

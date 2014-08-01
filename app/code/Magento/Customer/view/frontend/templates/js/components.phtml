@@ -23,32 +23,18 @@
  */
 ?>
 <script type="text/javascript">
-    (function($) {
-        "use strict";
+    require([
+        "jquery",
+        "mage/mage"
+    ], function($){
+        'use strict';
+        
         /**
          * Declaration of resources needed for defined components
          */
         $.mage.component({
-            validation: [
-                '<?php echo $this->getViewFileUrl('jquery/jquery.validate.js') ?>',
-                '<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js') ?>',
-                '<?php echo $this->getViewFileUrl('mage/validation.js')?>',
-                '<?php echo $this->getViewFileUrl('mage/validation/validation.js') ?>',
-                '<?php echo $this->getViewFileUrl('mage/validation/dob-rule.js') ?>'
-            ],
-            regionUpdater: [
-                '<?php echo $this->getViewFileUrl('Magento_Checkout::js/region-updater.js') ?>'
-            ],
-            requireCookie: [
-                '<?php echo $this->getViewFileUrl('Magento_Core::js/require-cookie.js') ?>'
-            ],
-            address: [
-                '<?php echo $this->getViewFileUrl('Magento_Customer::address.js') ?>'
-            ],
-            setPassword: [
-                '<?php echo $this->getViewFileUrl('Magento_Customer::set-password.js') ?>'
-            ]
+            validation: 'mage/validation/dob-rule'
         });
-    })(jQuery);
+    });
 </script>
 <?php echo $this->getChildHtml() ?>

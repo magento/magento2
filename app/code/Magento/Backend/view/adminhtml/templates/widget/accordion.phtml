@@ -35,6 +35,10 @@ $items = $this->getItems();
     <?php endforeach ?>
     </dl>
     <script type="text/javascript">
-        tab_content_<?php echo $this->getHtmlId() ?>AccordionJs = new varienAccordion('tab_content_<?php echo $this->getHtmlId() ?>', '<?php echo $this->getShowOnlyOne() ?>');
+        require([
+            'mage/adminhtml/accordion'
+        ], function(){
+        	tab_content_<?php echo $this->getHtmlId() ?>AccordionJs = new varienAccordion('tab_content_<?php echo $this->getHtmlId() ?>', '<?php echo $this->getShowOnlyOne() ?>');
+    	});
     </script>
 <?php endif; ?>

@@ -24,11 +24,5 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
-    <referenceBlock name="head">
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-weee-tax-toggle-js">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Weee::tax-toggle.js</argument>
-            </arguments>
-        </block>
-    </referenceBlock>
+    <referenceBlock name="head"></referenceBlock>
 </layout>

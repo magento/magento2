@@ -22,7 +22,14 @@
  */
 /*jshint browser:true jquery:true*/
 /*global FORM_KEY*/
-(function($) {
+define([
+    "jquery",
+    "jquery/ui",
+    "jquery/template",
+    "mage/translate",
+    "mage/backend/tree-suggest",
+    "mage/backend/validation"
+], function($){
     'use strict';
     var clearParentCategory = function () {
         $('#new_category_parent').find('option').each(function(){
@@ -38,7 +45,7 @@
                 placeholder: $.mage.__('start typing to search category')
             }));
 
-            $('#new_category_parent-suggest').mage('treeSuggest', this.options.suggestOptions)
+            $('#new_category_parent-suggest').treeSuggest(this.options.suggestOptions)
                 .on('suggestbeforeselect', function (event) {
                     clearParentCategory();
                     $(event.target).treeSuggest('close');
@@ -143,4 +150,4 @@
             });
         }
     });
-})(jQuery);
+});

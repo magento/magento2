@@ -109,7 +109,7 @@ abstract class AbstractAssertForm extends AbstractConstraint
 
         foreach ($data as $key => $value) {
             if (is_array($value)) {
-                $arrayValues[$key] = $this->dataSort($value);
+                $arrayValues[$key] = $this->sortData($value);
             } else {
                 $scalarValues[$key] = $value;
             }
@@ -181,10 +181,10 @@ abstract class AbstractAssertForm extends AbstractConstraint
 
         if ($key) {
             $data[$key] = $order ? $this->sortMultidimensionalArray($data[$key], $order) : $data[$key];
-            $data[$key] = $nextPath ? $this->sortData($data[$key], $nextPath) : $data[$key];
+            $data[$key] = $nextPath ? $this->sortDataByPath($data[$key], $nextPath) : $data[$key];
         } else {
             $data = $this->sortMultidimensionalArray($data, $order);
-            $data = $nextPath ? $this->sortData($data, $nextPath) : $data;
+            $data = $nextPath ? $this->sortDataByPath($data, $nextPath) : $data;
         }
 
         return $data;

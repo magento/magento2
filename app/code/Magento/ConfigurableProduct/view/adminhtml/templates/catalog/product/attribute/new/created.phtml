@@ -25,6 +25,7 @@
 ?>
 <script type="text/javascript">
 (function ($) {
+
     var data = <?php echo $this->getAttributesBlockJson() ?>;
     var set = data.set || {id: $('#attribute_set_id').val()};
     if (data.tab == 'variations') {
@@ -33,6 +34,7 @@
         $('[data-form=edit-product]').trigger('changeAttributeSet', set);
     }
     $('#create_new_attribute').dialog('close');
+
 })(window.parent.jQuery);
 </script>
 <div class="a-center">

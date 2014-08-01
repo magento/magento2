@@ -24,14 +24,6 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
-    <referenceBlock name="head">
-        <block class="Magento\Theme\Block\Html\Head\Script" name="requirejs" before="-">
-            <arguments>
-                <argument name="file" xsi:type="string">requirejs/require.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\RequireJs\Block\Html\Head\Config" name="requirejs-config" after="requirejs"/>
-    </referenceBlock>
     <referenceBlock name="head.components">
         <block class="Magento\Framework\View\Element\Js\Components" name="configurableproduct_product_view_head_components" template="Magento_ConfigurableProduct::js/components.phtml"/>
     </referenceBlock>

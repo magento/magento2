@@ -38,104 +38,14 @@
                 <argument name="file" xsi:type="string">jquery/fileUploader/css/jquery.fileupload-ui.css</argument>
             </arguments>
         </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-jquery-tabs-js">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/jquery.tabs.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-jstree-jquery-jstree-js">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/jstree/jquery.jstree.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-slimscroll-slimscroll-min-js">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/slimScroll/slimScroll.min.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-designeditor-js-tools-js">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_DesignEditor::js/tools.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-designeditor-js-tools-panel-js">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_DesignEditor::js/tools-panel.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-designeditor-js-custom-css-js">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_DesignEditor::js/custom-css.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-theme-js-custom-js-list-js">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Theme::js/custom-js-list.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-designeditor-js-dialog-js">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_DesignEditor::js/dialog.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-designeditor-js-theme-assign-js">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_DesignEditor::js/theme-assign.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-designeditor-js-vde-frame-js">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_DesignEditor::js/vde-frame.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-designeditor-js-theme-save-js">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_DesignEditor::js/theme-save.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-designeditor-js-image-sizing-js">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_DesignEditor::js/image-sizing.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-designeditor-js-quick-style-element-js">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_DesignEditor::js/quick-style-element.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-fileuploader-jquery-iframe-transport-js">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/fileUploader/jquery.iframe-transport.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-fileuploader-jquery-fileupload-js">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/fileUploader/jquery.fileupload.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-fileuploader-jquery-fileupload-fp-js">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/fileUploader/jquery.fileupload-fp.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-designeditor-js-quick-style-uploader-js">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_DesignEditor::js/quick-style-uploader.js</argument>
-            </arguments>
-        </block>
         <block class="Magento\Theme\Block\Html\Head\Css" name="magento-designeditor-css-styles-css">
             <arguments>
                 <argument name="file" xsi:type="string">Magento_DesignEditor::css/styles.css</argument>
             </arguments>
         </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-designeditor-js-message-js">
+        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-designeditor-js-bootstrap-launch-js">
             <arguments>
-                <argument name="file" xsi:type="string">Magento_DesignEditor::js/message.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-designeditor-js-tools-files-js">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_DesignEditor::js/tools-files.js</argument>
+                <argument name="file" xsi:type="string">Magento_DesignEditor::js/bootstrap/launch.js</argument>
             </arguments>
         </block>
     </referenceBlock>

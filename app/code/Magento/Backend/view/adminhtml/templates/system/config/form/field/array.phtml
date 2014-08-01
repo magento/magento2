@@ -52,7 +52,6 @@ $_colspan = $this->isAddAfter() ? 2 : 1;
     <input type="hidden" name="<?php echo $this->getElement()->getName(); ?>[__empty]" value="" />
 
     <script type="text/javascript">
-        //<![CDATA[
 
         // create row creator
         var arrayRow<?php echo $_htmlId ?> = {
@@ -134,6 +133,5 @@ $_colspan = $this->isAddAfter() ? 2 : 1;
         toggleValueElements({checked: true}, $('grid<?php echo $_htmlId; ?>').parentNode);
             <?php endif;?>
 
-        //]]>
     </script>
 </div>

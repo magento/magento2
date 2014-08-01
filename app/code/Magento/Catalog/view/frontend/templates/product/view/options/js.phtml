@@ -23,7 +23,10 @@
  */
 ?>
 <script type="text/javascript">
-    //<![CDATA[
+require([
+    "prototype"
+], function(){
+
     var DateOption = Class.create({
 
         getDaysInMonth: function(month, year)
@@ -82,6 +85,8 @@
             }
         }
     });
-    dateOption = new DateOption();
-    //]]>
+
+    window.dateOption = new DateOption();
+
+});
 </script>

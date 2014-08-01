@@ -1,0 +1,57 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<div class="step-controls">
+    <a href="#" class="btn btn-primary" ng-disabled="disabled" ng-click="previousState()"><?php echo $this->translate('Previous'); ?></a>
+    <a href="#" class="btn btn-primary" ng-disabled="disabled" ng-click="start()" ng-show="isStart"><?php echo $this->translate('Try Again'); ?></a>
+</div>
+
+<div class="page-header">
+    <h1>{{$state.current.header}}</h1>
+</div>
+
+<div ng-show="!isStart" class="text-center" style="padding-top: 50px; padding-bottom: 50px;">
+    <p><?php echo $this->translate('You\'re ready!'); ?></p>
+    <button ng-click="start()" class="btn btn-primary">Install Now</button>
+</div>
+
+<div ng-show="isStart" ng-init="errorStatus='<?php echo $this->translate('Sorry we can not install Magento right now.'); ?>'">
+    <div class="progress"><div class="progress-bar progress-bar-striped" role="progressbar" aria-valuenow="{{progress}}" aria-valuemin="0" aria-valuemax="100" style="width: {{progress}}%;">{{progressText}}</div></div>
+    <div ng-show="error" class="error-container">
+        <span class="glyphicon glyphicon-remove-sign "></span>
+        <span><?php echo $this->translate('We don\'t know the exact reason. Check the console log for errors before trying again.'); ?></span>
+    </div>
+    <div class="collapsed-options">
+        <a href="#" class="collapsed-options" ng-click="toggleConsole()"><?php echo $this->translate('Console Log'); ?></a>
+        <span class="caret"></span>
+    </div>
+    <div ng-show="console" id="console">
+        <div class="highlight" style="background-color: #000000;"><pre ng-bind-html="log"></pre></div>
+    </div>
+</div>
+
+<div class="step-controls">
+    <a href="#" class="btn btn-primary" ng-disabled="disabled" ng-click="previousState()"><?php echo $this->translate('Previous'); ?></a>
+    <a href="#" class="btn btn-primary" ng-disabled="disabled" ng-click="start()" ng-show="isStart"><?php echo $this->translate('Try Again'); ?></a>
+</div>

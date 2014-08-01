@@ -53,15 +53,20 @@ $element = $this->getElement();
     </div>
 
     <script type="text/javascript">
-        (function($) {
-            $(document.getElementById('<?php echo $imageUploader->getHtmlId(); ?>-uploader')).quickStyleUploader({
-                uploader_id: '<?php echo $imageUploader->getHtmlId(); ?>',
-                container:   '<?php echo $imageUploader->getHtmlId(); ?>-uploader',
-                value:       '<?php echo $imageUploader->getValue(); ?>',
-                url:         '<?php echo $this->getImageUploadUrl(); ?>',
-                remove_url:  '<?php echo $this->getImageRemoveUrl(); ?>',
-                tile_available:'<?php echo $element->isTileAvailable(); ?>'
-            });
-        })(jQuery);
-    </script>
+require([
+    "jquery",
+    "Magento_DesignEditor/js/quick-style-uploader"
+], function($){
+
+    $(document.getElementById('<?php echo $imageUploader->getHtmlId(); ?>-uploader')).quickStyleUploader({
+        uploader_id: '<?php echo $imageUploader->getHtmlId(); ?>',
+        container:   '<?php echo $imageUploader->getHtmlId(); ?>-uploader',
+        value:       '<?php echo $imageUploader->getValue(); ?>',
+        url:         '<?php echo $this->getImageUploadUrl(); ?>',
+        remove_url:  '<?php echo $this->getImageRemoveUrl(); ?>',
+        tile_available:'<?php echo $element->isTileAvailable(); ?>'
+    });
+    
+});
+</script>
 </div>

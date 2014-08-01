@@ -1,0 +1,270 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<div class="step-controls">
+    <a href="#" class="btn btn-primary" ng-click="previousState()"><?php echo $this->translate('Previous'); ?></a>
+    <a href="#" class="btn btn-primary" ng-click="nextState()"><?php echo $this->translate('Next'); ?></a>
+</div>
+
+<div class="page-header">
+    <h1>{{$state.current.header}}</h1>
+</div>
+
+<form novalidate name="database" class="form-horizontal" role="form" ng-submit="testConnection()">
+    <div class="bs-callout bs-callout-warning col-sm-12 hide">
+        <h4><?php echo $this->translate('Did you want to use an existing or create a new database?'); ?></h4>
+        <div class="radio col-sm-6">
+            <label>
+                <input type="radio" name="useExistingDb" ng-model="db.useExistingDb" value="1">
+                <?php echo $this->translate('Use my existing database'); ?>
+            </label>
+        </div>
+        <div class="radio col-sm-6">
+            <label>
+                <input type="radio" name="useExistingDb" ng-model="db.useExistingDb" value="0">
+                <?php echo $this->translate('Create a database for me'); ?>
+            </label>
+        </div>
+    </div>
+
+    <div class="form-group" ng-class="{'has-error': database.dbHost.$invalid && database.submitted}">
+        <label class="col-sm-4 control-label"><?php echo $this->translate('Database Server Host'); ?>&nbsp;<span class="required">*</span></label>
+        <div class="col-sm-4">
+            <input tooltip-placement="right"
+                   tooltip="<?php echo $this->translate('Name and location of the server that hosts your store\'s database.'); ?>"
+                   tooltip-trigger="focus"
+                   tooltip-append-to-body="true"
+                   class="form-control"
+                   type="text"
+                   name="dbHost"
+                   ng-model="db.host"
+                   required />
+        </div>
+        <div class="col-sm-offset-4 col-sm-4" ng-show="database.dbHost.$invalid && database.submitted">
+            <div class="error-container">
+                <span ng-show="database.dbHost.$error.required"><?php echo $this->translate('You must enter a valid host name. Please check the syntax and try again.'); ?></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group" ng-class="{'has-error': database.dbUser.$invalid && database.submitted}">
+        <label class="col-sm-4 control-label"><?php echo $this->translate('Database Server Username'); ?>&nbsp;<span class="required">*</span></label>
+        <div class="col-sm-4" ng-switch="db.useExistingDb">
+            <input ng-switch-when="1"
+                   tooltip-placement="right"
+                   tooltip="<?php echo $this->translate('Sign-in credentials for your store\'s database on the database server (does not need to be admin-level credentials).'); ?>"
+                   tooltip-trigger="focus"
+                   tooltip-append-to-body="true"
+                   class="form-control"
+                   type="text"
+                   name="dbUser"
+                   ng-model="db.user"
+                   required />
+            <input ng-switch-when="0"
+                   tooltip-placement="right"
+                   tooltip="<?php echo $this->translate('Administrator credentials to sign in to the server that will host your store\'s database.'); ?>"
+                   tooltip-trigger="focus"
+                   tooltip-append-to-body="true"
+                   class="form-control"
+                   type="text"
+                   name="dbUser"
+                   ng-model="db.user"
+                   required />
+        </div>
+        <div class="col-sm-offset-4 col-sm-4" ng-show="database.dbUser.$invalid && database.submitted">
+            <div class="error-container">
+                <span ng-show="database.dbUser.$error.required"><?php echo $this->translate('Please enter a username to continue.'); ?></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-4 control-label"><?php echo $this->translate('Database Server Password'); ?></label>
+        <div class="col-sm-4" ng-switch="db.useExistingDb">
+            <input ng-switch-when="1"
+                   tooltip-placement="right"
+                   tooltip="<?php echo $this->translate('Sign-in credentials for your store\'s database on the database server (does not need to be admin-level credentials).'); ?>"
+                   tooltip-trigger="focus"
+                   tooltip-append-to-body="true"
+                   class="form-control"
+                   type="password"
+                   name="dbPassword"
+                   ng-model="db.password"
+                   placeholder="<?php echo $this->translate('(not always necessary)'); ?>" />
+            <input ng-switch-when="0"
+                   tooltip-placement="right"
+                   tooltip="<?php echo $this->translate('Administrator credentials to sign in to the server that will host your store\'s database.'); ?>"
+                   tooltip-trigger="focus"
+                   tooltip-append-to-body="true"
+                   class="form-control"
+                   type="password"
+                   name="dbPassword"
+                   ng-model="db.password"
+                   placeholder="<?php echo $this->translate('(not always necessary)'); ?>" />
+        </div>
+    </div>
+
+    <div class="form-group" ng-if="db.useExistingDb">
+        <label class="col-sm-4 control-label"><?php echo $this->translate('Database Name'); ?><span class="required">*</span></label>
+        <div class="col-sm-4">
+            <input tooltip-placement="right"
+                   tooltip="<?php echo $this->translate('Enter the name of your store\'s database.'); ?>"
+                   tooltip-trigger="focus"
+                   tooltip-append-to-body="true"
+                   class="form-control"
+                   type="text"
+                   name="dbName"
+                   ng-model="db.name"
+                   required />
+        </div>
+        <div class="col-sm-offset-4 col-sm-4" ng-show="database.dbName.$invalid && database.submitted">
+            <div class="error-container">
+                <span ng-show="database.dbName.$error.required"><?php echo $this->translate('You must enter a valid database name. Please check the syntax and try again.'); ?></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-offset-4 col-sm-4">
+            <button type="submit" class="btn btn-default" style="width: 100%;">
+                <?php echo $this->translate('Test Connection and Authentication'); ?>
+            </button>
+        </div>
+        <div class="col-sm-4" style="padding-top: 8px;">
+            <div ng-show="testConnection.result.success && testConnection.pressed" class="animate-show text-success">
+                <span class="glyphicon glyphicon-ok-sign text-success"></span>&nbsp;<?php echo $this->translate('Test connection successful.'); ?>
+            </div>
+            <div ng-show="!testConnection.result.success && testConnection.pressed" class="animate-show text-danger">
+                <span class="glyphicon glyphicon-remove-sign"></span>&nbsp;<?php echo $this->translate('Cannot connect to server.'); ?>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group" ng-if="db.useExistingDb==0">
+        <label class="col-sm-4 control-label"><?php echo $this->translate('New Database Name'); ?>&nbsp;<span class="required">*</span></label>
+        <div class="col-sm-4">
+            <input tooltip-placement="right"
+                   tooltip="<?php echo $this->translate('Create sign-in credentials for your store\'s database.'); ?>"
+                   tooltip-trigger="focus"
+                   tooltip-append-to-body="true"
+                   class="form-control"
+                   type="text"
+                   name="dbNewName"
+                   ng-model="db.newName"
+                   required />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-4 control-label"><?php echo $this->translate('Table prefix'); ?></label>
+        <div class="col-sm-4">
+            <input tooltip-placement="right"
+                   tooltip="<?php echo $this->translate('Enter a tracking prefix to be used for database tables created for this Magento installation. (ex: \'mg1_\' )'); ?>"
+                   tooltip-trigger="focus"
+                   tooltip-append-to-body="true"
+                   class="form-control"
+                   type="text"
+                   name="dbTablePrefix"
+                   ng-model="db.tablePrefix"
+                   placeholder="<?php echo $this->translate('(optional)'); ?>" />
+        </div>
+    </div>
+
+    <div class="form-group" ng-if="db.useExistingDb==0">
+        <label class="col-sm-3 control-label"><?php echo $this->translate('Data Access'); ?><span class="required">*</span></label>
+        <div class="col-sm-9">
+            <div class="radio">
+                <label>
+                    <input type="radio" name="db.useAccess" ng-model="db.useAccess" value="0">
+                    <?php echo $this->translate('Enter existing credentials to create the Magento database'); ?>
+                </label>
+                <div class="form-group" style="margin-top: 20px;" ng-if="db.useAccess==0">
+                    <label class="col-sm-3 control-label"><?php echo $this->translate('Username'); ?><span class="required">*</span></label>
+                    <div class="col-sm-6">
+                        <input class="form-control"
+                               style="width: 80%;"
+                               type="text"
+                               name="dbGrandUsername"
+                               ng-model="dbGrandUsername"
+                               required>
+                    </div>
+                </div>
+                <div class="form-group" ng-if="db.useAccess==0">
+                    <label class="col-sm-3 control-label"><?php echo $this->translate('Password'); ?></label>
+                    <div class="col-sm-6">
+                        <input class="form-control"
+                               style="width: 80%;"
+                               type="password"
+                               name="dbGrandPassword"
+                               ng-model="db.grandPassword"
+                               placeholder="<?php echo $this->translate('(optional)'); ?>">
+                    </div>
+                </div>
+            </div>
+            <div class="radio">
+                <label>
+                    <input type="radio" name="useAccess" ng-model="db.useAccess" value="1">
+                    <?php echo $this->translate('Enter new credentials to create the Magento database'); ?>
+                </label>
+                <div class="form-group" style="margin-top: 20px;" ng-if="db.useAccess">
+                    <label class="col-sm-3 control-label"><?php echo $this->translate('New Username'); ?><span class="required">*</span></label>
+                    <div class="col-sm-6">
+                        <input class="form-control"
+                               style="width: 80%;"
+                               type="text"
+                               name="dbNewUsername"
+                               ng-model="db.newUsername"
+                               required>
+                    </div>
+                </div>
+                <div class="form-group" ng-if="db.useAccess">
+                    <label class="col-sm-3 control-label"><?php echo $this->translate('New Password'); ?></label>
+                    <div class="col-sm-6">
+                        <input class="form-control"
+                               style="width: 80%;"
+                               type="password"
+                               name="dbNewPassword"
+                               ng-model="db.newPassword"
+                               placeholder="<?php echo $this->translate('(optional)'); ?>">
+                    </div>
+                </div>
+                <div class="form-group" ng-if="db.useAccess">
+                    <label class="col-sm-3 control-label"><?php echo $this->translate('Confirm Password'); ?></label>
+                    <div class="col-sm-6">
+                        <input class="form-control"
+                               style="width: 80%;"
+                               type="password"
+                               name="dbConfirmPassword"
+                               ng-model="db.confirmPassword">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="step-controls">
+    <a href="#" class="btn btn-primary" ng-click="previousState()"><?php echo $this->translate('Previous'); ?></a>
+    <a href="#" class="btn btn-primary" ng-click="nextState()"><?php echo $this->translate('Next'); ?></a>
+</div>

@@ -129,6 +129,8 @@
 </div>
 
 <script type="text/javascript">
+require(['prototype'], function(){
+
 //<![CDATA[
 var submitButtons = $$('.submit-button');
 var updateButtons = $$('.update-button');
@@ -179,5 +181,10 @@ function bindSendEmail()
         //invoiceCommentText.disabled = true;
     }
 }
+
+window.bindSendEmail = bindSendEmail;
+window.checkButtonsRelation = checkButtonsRelation;
 //]]>
+
+});
 </script>

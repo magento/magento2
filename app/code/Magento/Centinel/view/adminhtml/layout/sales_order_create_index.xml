@@ -24,13 +24,6 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
-    <referenceBlock name="head">
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-centinel-order-create-js">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Centinel::order_create.js</argument>
-            </arguments>
-        </block>
-    </referenceBlock>
     <referenceBlock name="data">
         <block class="Magento\Centinel\Block\Adminhtml\Validation" as="card_validation" name="card_validation" template="order/create/abstract.phtml">
             <block class="Magento\Centinel\Block\Adminhtml\Validation\Form" template="validation/form.phtml" name="centinel.validation.form" as="form"/>

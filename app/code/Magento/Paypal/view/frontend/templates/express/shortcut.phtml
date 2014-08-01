@@ -55,16 +55,16 @@ if ($this->isOrPositionBefore()) {
         <a href="<?php echo $linkImage['href']?>"><img src="<?php echo $linkImage['src']?>" /></a>
     <?php endif; ?>
     <script type="text/javascript">
-        (function ($) {
-            head.js("<?php echo $this->getViewFileUrl('Magento_Paypal::js/paypal-checkout.js') ?>", head.ready(function () {
-                $('.paypal-logo.<?php echo $shortcutHtmlId ?>').paypalCheckout({
-                    confirmMessage: "<?php echo $this->escapeJsQuote($this->getConfirmationMessage())?>",
-                    confirmUrl: "<?php echo !empty($confirmationUrl) ? $confirmationUrl : false ?>",
-                    isCatalogProduct: "<?php echo !empty($isInCatalogProduct) ? $isInCatalogProduct : false ?>",
-                    paypalCheckoutSelector: '#pp-checkout-url',
-                    productAddToCartForm: '#product_addtocart_form'
-                });
-            }));
-        })(jQuery);
-    </script>
+require(['jquery', 'Magento_Paypal/js/paypal-checkout'], function($){
+
+    $('.paypal-logo.<?php echo $shortcutHtmlId ?>').paypalCheckout({
+        confirmMessage: "<?php echo $this->escapeJsQuote($this->getConfirmationMessage())?>",
+        confirmUrl: "<?php echo !empty($confirmationUrl) ? $confirmationUrl : false ?>",
+        isCatalogProduct: "<?php echo !empty($isInCatalogProduct) ? $isInCatalogProduct : false ?>",
+        paypalCheckoutSelector: '#pp-checkout-url',
+        productAddToCartForm: '#product_addtocart_form'
+    });
+    
+});
+</script>
 </div>

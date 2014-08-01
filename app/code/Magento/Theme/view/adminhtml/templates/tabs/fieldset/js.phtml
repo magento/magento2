@@ -57,6 +57,12 @@
 <ul id="js-files-container" class="js-files-container ui-sortable" ></ul>
 
 <script type="text/javascript">
+require([
+    "jquery",
+    "jquery/ui",
+    "Magento_Theme/js/custom-js-list"
+], function(jQuery){
+
 jQuery(function($) {
     $('.ui-sortable').sortable();
     $('.ui-sortable').disableSelection();
@@ -70,5 +76,7 @@ jQuery(function($) {
         'refreshJsList',
         {jsList: <?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode($this->getJsFiles()) ?>}
     );
+});
+
 });
 </script>

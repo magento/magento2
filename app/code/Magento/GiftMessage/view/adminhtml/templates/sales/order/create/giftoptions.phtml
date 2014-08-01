@@ -31,8 +31,14 @@
             <td colspan="8">
                 <a class="action-link" href="#" id="gift_options_link_<?php echo $_item->getId() ?>"><?php echo __('Gift Options') ?></a>
                 <script type="text/javascript">
-                    giftOptionsTooltip.addTargetLink('gift_options_link_<?php echo $_item->getId() ?>', <?php echo $_item->getId() ?>);
-                </script>
+require([
+    "Magento_Sales/order/giftoptions_tooltip"
+], function(){
+
+    giftOptionsTooltip.addTargetLink('gift_options_link_<?php echo $_item->getId() ?>', <?php echo $_item->getId() ?>);
+                
+});
+</script>
                 <div id="gift_options_data_<?php echo $_item->getId() ?>">
                     <?php echo $_childHtml ?>
                 </div>

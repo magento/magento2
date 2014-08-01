@@ -24,13 +24,7 @@
 ?>
 
 <?php /** @var $this \Magento\Framework\View\Element\Template */ ?>
-<script type="text/javascript" src="<?php echo $this->getViewFileUrl('mage/translate.js') ?>"></script>
-<script type="text/javascript" src="<?php echo $this->getViewFileUrl('mage/loader_old.js') ?>"></script>
-<script type="text/javascript" src="<?php echo $this->getViewFileUrl('mage/bootstrap.js') ?>"></script>
 <link rel="stylesheet" type="text/css" href="<?php echo $this->getViewFileUrl('prototype/windows/themes/default.css') ?>"/>
-<script type="text/javascript" src="<?php echo $this->getViewFileUrl('mage/edit-trigger.js') ?>"></script>
-<script type="text/javascript" src="<?php echo $this->getViewFileUrl('mage/translate-inline.js') ?>"></script>
-<script type="text/javascript" src="<?php echo $this->getViewFileUrl('mage/translate-inline-vde.js') ?>"></script>
 <link rel="stylesheet" type="text/css" href="<?php echo $this->getViewFileUrl('mage/translate-inline-vde.css') ?>"/>
 
 <script id="translate-inline-dialog-form-template" type="text/x-jQuery-tmpl">
@@ -52,7 +46,15 @@
  </div>
 
 <script type="text/javascript">
-    (function($){
+require([
+    "jquery",
+    "mage/translate",
+    "mage/loader_old",
+    "mage/bootstrap",
+    "mage/edit-trigger",
+    "mage/translate-inline",
+    "mage/translate-inline-vde"
+], function($){
         $(window).load(function() {
             var $body = $('body');
             var $textTranslations = $('[data-translate-mode="text"]');
@@ -130,5 +132,5 @@
                 dialogWidgetElement: dialogVde
             });
         });
-    })(jQuery);
+});
 </script>

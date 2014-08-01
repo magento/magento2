@@ -21,8 +21,13 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /*jshint browser:true jquery:true*/
-jQuery(function($) {
+define([
+    "jquery",
+    "jquery/ui",
+    "jquery/jstree/jquery.jstree"
+], function($){
     'use strict';
+
     $.widget('mage.rolesTree', {
         options: {
             treeInitData: {},
@@ -81,4 +86,5 @@ jQuery(function($) {
             return false;
         }
     });
+
 });

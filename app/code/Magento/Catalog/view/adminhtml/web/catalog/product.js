@@ -20,8 +20,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
+define([
+    "jquery",
+    "jquery/ui",
+    "prototype"
+], function(jQuery){
 
-var Product = {};
+window.Product = {};
 
 (function ($) {
     $.widget("mage.productAttributes", {
@@ -77,7 +82,7 @@ var Product = {};
     });
 })(jQuery);
 
-var onInitDisableFieldsList = [];
+window.onInitDisableFieldsList = [];
 
 function toogleFieldEditMode(toogleIdentifier, fieldContainer) {
     if ($(toogleIdentifier).checked) {
@@ -136,4 +141,14 @@ function onCustomUseParentChanged(element) {
     });
 }
 
+window.onCustomUseParentChanged = onCustomUseParentChanged;
+window.onUrlkeyChanged = onUrlkeyChanged;
+window.onCompleteDisableInited = onCompleteDisableInited;
+window.initDisableFields = initDisableFields;
+window.enableFieldEditMode = enableFieldEditMode;
+window.disableFieldEditMode = disableFieldEditMode;
+window.toogleFieldEditMode = toogleFieldEditMode;
+
 Event.observe(window, 'load', onCompleteDisableInited);
+
+});

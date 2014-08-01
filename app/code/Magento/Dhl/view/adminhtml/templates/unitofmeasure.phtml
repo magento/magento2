@@ -28,6 +28,8 @@
  */
 ?>
 <script type="text/javascript">
+require(['prototype'], function(){
+
     //<![CDATA[
     function changeDimensions()
     {
@@ -43,9 +45,14 @@
 
         $('carriers_dhl_divide_order_weight').next().down().innerHTML = dhlUnitOfMeasureNote;
     }
+
+    window.changeDimensions = changeDimensions;
+
     document.observe("dom:loaded", function() {
         $("carriers_dhl_unit_of_measure").observe("change", changeDimensions);
         changeDimensions();
     });
     //]]>
+
+});
 </script>

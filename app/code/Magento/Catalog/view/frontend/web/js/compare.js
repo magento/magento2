@@ -22,7 +22,12 @@
  */
 /*jshint browser:true jquery:true*/
 /*global confirm:true*/
-(function ($) {
+define([
+    "jquery",
+    "jquery/ui",
+    "mage/decorate"
+], function($){
+    
     $.widget('mage.compareItems', {
         _create: function() {
             this.element.decorate('list', true);
@@ -43,4 +48,4 @@
             });
         }
     });
-})(jQuery);
+});

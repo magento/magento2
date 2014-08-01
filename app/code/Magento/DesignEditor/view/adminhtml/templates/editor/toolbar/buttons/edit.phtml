@@ -43,15 +43,14 @@
 </div>
 
 <script type="text/javascript">
-    (function($) {
+    require([
+        "jquery",
+        "mage/mage"
+    ], function($){
         'use strict';
-        $.mage.component({
-            'vde-edit-button': [
-                '<?php echo $this->getViewFileUrl('Magento_DesignEditor::js/theme-revert.js') ?>'
-            ]
-        });
+        
         $('#vde_edit_options').on('click', function(){
             $(this).toggleClass('active');
         });
-    })(jQuery);
+    });
 </script>

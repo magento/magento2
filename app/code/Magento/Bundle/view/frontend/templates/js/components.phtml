@@ -22,24 +22,4 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-    <script type="text/javascript">
-        (function($) {
-            "use strict";
-            /**
-             * Declaration of resources needed for defined components
-             */
-            $.mage.component({
-                sticky: [
-                    '<?php echo $this->getViewFileUrl('mage/sticky.js') ?>'
-                ],
-                bundleOption: [
-                    '<?php echo $this->getViewFileUrl('Magento_Catalog::js/price-option.js') ?>',
-                    '<?php echo $this->getViewFileUrl('Magento_Bundle::bundle.js') ?>'
-                ],
-                slide: [
-                    '<?php echo $this->getViewFileUrl('Magento_Bundle::js/slide.js') ?>'
-                ]
-            });
-        })(jQuery);
-    </script>
 <?php echo $this->getChildHtml() ?>

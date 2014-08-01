@@ -155,27 +155,38 @@ $numColumns = sizeof($this->getColumns());
         <?php if ($this->canDisplayContainer()): ?>
     </div>
     <script type="text/javascript">
-        <?php echo $this->getJsObjectName() ?> = new varienGrid('<?php echo $this->getId() ?>', '<?php echo $this->getGridUrl() ?>', '<?php echo $this->getVarNamePage() ?>', '<?php echo $this->getVarNameSort() ?>', '<?php echo $this->getVarNameDir() ?>', '<?php echo $this->getVarNameFilter() ?>');
-        <?php echo $this->getJsObjectName() ?>.useAjax = <?php echo $this->getUseAjax() ? 'true' : 'false' ?>;
-        <?php if ($this->getRowClickCallback()): ?>
-        <?php echo $this->getJsObjectName() ?>.rowClickCallback = <?php echo $this->getRowClickCallback() ?>;
-        <?php endif; ?>
-        <?php if ($this->getCheckboxCheckCallback()): ?>
-        <?php echo $this->getJsObjectName() ?>.checkboxCheckCallback = <?php echo $this->getCheckboxCheckCallback() ?>;
-        <?php endif; ?>
-        <?php if ($this->getSortableUpdateCallback()): ?>
-        <?php echo $this->getJsObjectName() ?>.sortableUpdateCallback = <?php echo $this->getSortableUpdateCallback()?>;
-        <?php endif; ?>
-        <?php echo $this->getJsObjectName() ?>.bindSortable();
-        <?php if ($this->getRowInitCallback()): ?>
-        <?php echo $this->getJsObjectName() ?>.initRowCallback = <?php echo $this->getRowInitCallback() ?>;
-        <?php echo $this->getJsObjectName() ?>.initGridRows();
-        <?php endif; ?>
-        <?php if ($this->getChildBlock('grid.massaction') && $this->getChildBlock('grid.massaction')->isAvailable()): ?>
-        <?php echo $this->getChildBlock('grid.massaction')->getJavaScript() ?>
-        <?php endif ?>
-        <?php echo $this->getAdditionalJavaScript(); ?>
-    </script>
+        var deps = ['mage/adminhtml/grid'];
+
+    <?php if (strpos($this->getRowClickCallback(), 'order.')!==false): ?>
+    deps.push('Magento_Sales/order/create/form')
+    <?php endif; ?>
+
+        require(deps, function(){
+            <?php //TODO: getJsObjectName and getRowClickCallback has unexpected behavior. Should be removed ?>
+
+            <?php echo $this->getJsObjectName() ?> = new varienGrid('<?php echo $this->getId() ?>', '<?php echo $this->getGridUrl() ?>', '<?php echo $this->getVarNamePage() ?>', '<?php echo $this->getVarNameSort() ?>', '<?php echo $this->getVarNameDir() ?>', '<?php echo $this->getVarNameFilter() ?>');
+            <?php echo $this->getJsObjectName() ?>.useAjax = <?php echo $this->getUseAjax() ? 'true' : 'false' ?>;
+            <?php if ($this->getRowClickCallback()): ?>
+            <?php echo $this->getJsObjectName() ?>.rowClickCallback = <?php echo $this->getRowClickCallback() ?>;
+            <?php endif; ?>
+            <?php if ($this->getCheckboxCheckCallback()): ?>
+            <?php echo $this->getJsObjectName() ?>.checkboxCheckCallback = <?php echo $this->getCheckboxCheckCallback() ?>;
+            <?php endif; ?>
+            <?php if ($this->getSortableUpdateCallback()): ?>
+            <?php echo $this->getJsObjectName() ?>.sortableUpdateCallback = <?php echo $this->getSortableUpdateCallback()?>;
+            <?php endif; ?>
+            <?php echo $this->getJsObjectName() ?>.bindSortable();
+            <?php if ($this->getRowInitCallback()): ?>
+            <?php echo $this->getJsObjectName() ?>.initRowCallback = <?php echo $this->getRowInitCallback() ?>;
+            <?php echo $this->getJsObjectName() ?>.initGridRows();
+            <?php endif; ?>
+            <?php if ($this->getChildBlock('grid.massaction') && $this->getChildBlock('grid.massaction')->isAvailable()): ?>
+            <?php echo $this->getChildBlock('grid.massaction')->getJavaScript() ?>
+            <?php endif ?>
+            <?php echo $this->getAdditionalJavaScript(); ?>
+    
+        });
+</script>
 <?php endif; ?>
     <?php if ($this->getChildBlock('grid.js')): ?>
         <?php echo $this->getChildHtml('grid.js'); ?>

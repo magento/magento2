@@ -35,13 +35,19 @@
 
     <link rel="icon" href="<?php echo $this->getViewFileUrl('Magento_Theme::favicon.ico') ?>" type="image/x-icon"/>
     <link rel="shortcut icon" href="<?php echo $this->getViewFileUrl('Magento_Theme::favicon.ico') ?>" type="image/x-icon"/>
+    <script type="text/javascript">
+        var require = {
+            "baseUrl": "<?php echo $this->getViewFileUrl('/') ?>",
+            "paths": {
+                "jquery/ui": "jquery/jquery-ui"
+            }
+        };
+    </script>
 
-    <script type="text/javascript" src="<?php echo $this->getViewFileUrl('jquery/jquery.js') ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->getViewFileUrl('jquery/jquery-migrate.js') ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->getViewFileUrl('jquery/jquery-ui.js') ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->getViewFileUrl('headjs/head.min.js') ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->getViewFileUrl('mage/mage.js') ?>"></script>
-    <script type="text/javascript" src="<?php echo $this->getViewFileUrl('mage/translate.js') ?>"></script>
+
+    <script src="<?php echo $this->getViewFileUrl('requirejs/require.js') ?>"></script>
+    <script src="<?php echo $this->getViewFileUrl('jquery/jquery.js') ?>"></script>
+    <script src="<?php echo $this->getViewFileUrl('app-config.js') ?>"></script>
 
     <link rel="stylesheet" href="<?php echo $this->getViewFileUrl('Magento_Install::css/mage-js-style.css') ?>" type="text/css"
           media="all"/>

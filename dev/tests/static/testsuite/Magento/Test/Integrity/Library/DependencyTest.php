@@ -129,7 +129,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
         // @TODO: remove this code when class Magento\Framework\Data\Collection will fixed
         include_once BP . '/lib/internal/Magento/Framework/Option/ArrayInterface.php';
         $blackList = file(__DIR__ . '/_files/blacklist.txt', FILE_IGNORE_NEW_LINES);
-        $dataProvider = Files::init()->getClassFiles(false, false, false, false, false, true, true);
+        $dataProvider = Files::init()->getClassFiles(false, false, false, true, true);
 
         foreach ($dataProvider as $key => $data) {
             $file = str_replace(BP . '/', '', $data[0]);

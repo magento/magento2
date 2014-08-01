@@ -64,7 +64,17 @@ $numColumns = sizeof($this->getColumns());
 </div>
 <?php if($this->canDisplayContainer()): ?>
 <script type="text/javascript">
-//<![CDATA[
+var <?php echo $this->getJsObjectName() ?>;
+
+var deps = ['mage/adminhtml/grid'];
+
+<?php if (strpos($this->getRowClickCallback(), 'order.')!==false): ?>
+deps.push('Magento_Sales/order/create/form')
+<?php endif; ?>
+
+require(deps, function(){
+    <?php //TODO: getJsObjectName and getRowClickCallback has unexpected behavior. Should be removed ?>
+
     <?php echo $this->getJsObjectName() ?> = new varienGrid('<?php echo $this->getId() ?>', '<?php echo $this->getGridUrl() ?>', '<?php echo $this->getVarNamePage() ?>', '<?php echo $this->getVarNameSort() ?>', '<?php echo $this->getVarNameDir() ?>', '<?php echo $this->getVarNameFilter() ?>');
     <?php echo $this->getJsObjectName() ?>.useAjax = '<?php echo $this->getUseAjax() ?>';
     <?php if($this->getRowClickCallback()): ?>
@@ -80,7 +90,8 @@ $numColumns = sizeof($this->getColumns());
     <?php if($this->getMassactionBlock()->isAvailable()): ?>
     <?php echo $this->getMassactionBlock()->getJavaScript() ?>
     <?php endif ?>
-//]]>
+
+});
 </script>
 <?php endif; ?>
 <?php endif ?>

@@ -20,7 +20,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-var Packaging = Class.create();
+define(["prototype"], function(){
+
+window.Packaging = Class.create();
 Packaging.prototype = {
     /**
      * Initialize object
@@ -822,3 +824,5 @@ Packaging.prototype = {
     }
 //******************** End Private functions ******************************//
 };
+
+});

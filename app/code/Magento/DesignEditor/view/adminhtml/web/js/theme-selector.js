@@ -20,8 +20,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
+define([
+    "jquery",
+    "jquery/ui",
+    "mage/translate",
+    "Magento_DesignEditor/js/dialog"
+], function($){
 
-(function($) {
     /**
      * Theme quick edit controls
      */
@@ -182,4 +187,5 @@
         });
     });
 
-})(jQuery);
+
+});

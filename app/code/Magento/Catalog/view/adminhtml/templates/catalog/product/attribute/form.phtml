@@ -36,7 +36,11 @@
     <?php echo $this->getButtonsHtml('header') ?>
 </div>
 <script type="text/javascript">
+require(['jquery', "mage/mage"], function(jQuery){
+
     jQuery('#edit_form').mage('form').mage('validation', {validationUrl: '<?php echo $this->getValidationUrl() ?>'});
+
+});
 </script>
 <?php echo $this->getFormScripts() ?>
 

@@ -22,7 +22,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-(function ($) {
+define([
+	"jquery",
+	"jquery/validate"
+], function(jQuery){
+
     jQuery.validator.addMethod('required-synchronize', function(){
         storage = getConnectionName(
             jQuery('#system_media_storage_configuration_media_storage').val(),
@@ -30,4 +34,5 @@
         );
         return allowedStorages.include(storage);
     }, 'Synchronization is required.');
-})(jQuery);
+
+});

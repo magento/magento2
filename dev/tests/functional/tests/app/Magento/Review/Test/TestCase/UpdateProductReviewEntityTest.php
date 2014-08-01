@@ -29,7 +29,6 @@ use Magento\Review\Test\Page\Adminhtml\ReviewEdit;
 use Magento\Review\Test\Page\Adminhtml\RatingIndex;
 use Magento\Review\Test\Page\Adminhtml\RatingEdit;
 use Magento\Review\Test\Fixture\ReviewInjectable;
-use Mtf\Fixture\FixtureFactory;
 use Mtf\TestCase\Injectable;
 
 /**
@@ -89,20 +88,6 @@ class UpdateProductReviewEntityTest extends Injectable
      * @var ReviewInjectable
      */
     protected $review;
-
-    /**
-     * Prepare data
-     *
-     * @param FixtureFactory $fixtureFactory
-     * @return array
-     */
-    public function __prepare(FixtureFactory $fixtureFactory)
-    {
-        $product = $fixtureFactory->createByCode('catalogProductSimple', ['dataSet' => 'default']);
-        $product->persist();
-
-        return ['product' => $product];
-    }
 
     /**
      * Injection data

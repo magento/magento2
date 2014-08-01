@@ -20,8 +20,14 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
+require([
+    "jquery",
+    "mage/translate",
+    "prototype"
+], function(jQuery){
 
-var VarienRulesForm = new Class.create();
+window.VarienRulesForm = new Class.create();
+
 VarienRulesForm.prototype = {
     initialize : function(parent, newChildUrl){
         this.parent = $(parent);
@@ -379,3 +385,5 @@ VarienRulesForm.prototype = {
         this.updateElement.value = this.chooserSelectedItems.keys().join(', ');
     }
 };
+
+});

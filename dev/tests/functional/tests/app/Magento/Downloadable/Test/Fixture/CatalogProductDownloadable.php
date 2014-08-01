@@ -102,7 +102,7 @@ class CatalogProductDownloadable extends InjectableFixture
     protected $defaultDataSet = [
         'name' => 'DownloadableProduct_%isolation%',
         'sku' => 'DownloadableProduct_%isolation%',
-        'price' => '100',
+        'price' => ['value' => 100.00],
         'tax_class_id' => ['dataSet' => 'Taxable Goods'],
         'description' => 'This is description for downloadable product',
         'short_description' => 'This is short description for downloadable product',

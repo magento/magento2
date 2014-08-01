@@ -68,12 +68,6 @@ $table = $installer->getConnection()->newTable(
     array('nullable' => false, 'default' => '0'),
     'Uses Per Customer'
 )->addColumn(
-    'customer_group_ids',
-    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-    '64k',
-    array(),
-    'Customer Group Ids'
-)->addColumn(
     'is_active',
     \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
@@ -158,12 +152,6 @@ $table = $installer->getConnection()->newTable(
     array('nullable' => false, 'default' => '0'),
     'Is Rss'
 )->addColumn(
-    'website_ids',
-    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-    4000,
-    array(),
-    'Website Ids'
-)->addColumn(
     'coupon_type',
     \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
@@ -231,7 +219,11 @@ $table = $installer->getConnection()->newTable(
     array('unsigned' => true),
     'Is Primary'
 )->addIndex(
-    $installer->getIdxName('salesrule_coupon', array('code'), \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE),
+    $installer->getIdxName(
+        'salesrule_coupon',
+        array('code'),
+        \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+    ),
     array('code'),
     array('type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE)
 )->addIndex(

@@ -96,5 +96,7 @@
     </div>
 </form>
 <script type="text/javascript">
-    jQuery('#config-edit-form').mage('form').mage('validation');
+    require(["jquery","mage/mage"],function($){
+       $('#config-edit-form').mage('form').mage('validation');
+    });
 </script>

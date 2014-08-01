@@ -46,7 +46,7 @@ $table = $installer->getConnection()->newTable(
     'class_type',
     \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     8,
-    array('nullable' => false, 'default' => \Magento\Tax\Model\ClassModel::TAX_CLASS_TYPE_CUSTOMER),
+    array('nullable' => false, 'default' => 'CUSTOMER'),
     'Class Type'
 )->setComment(
     'Tax Class'
@@ -396,37 +396,5 @@ $table = $installer->getConnection()->newTable(
     'Tax Order Aggregation'
 );
 $installer->getConnection()->createTable($table);
-
-/**
- * Add tax_class_id attribute to the 'eav_attribute' table
- */
-$catalogInstaller = $installer->getCatalogResourceSetup(array('resourceName' => 'catalog_setup'));
-$catalogInstaller->addAttribute(
-    \Magento\Catalog\Model\Product::ENTITY,
-    'tax_class_id',
-    array(
-        'group' => 'Prices',
-        'type' => 'int',
-        'backend' => '',
-        'frontend' => '',
-        'label' => 'Tax Class',
-        'input' => 'select',
-        'class' => '',
-        'source' => 'Magento\Tax\Model\TaxClass\Source\Product',
-        'global' => \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_WEBSITE,
-        'visible' => true,
-        'required' => true,
-        'user_defined' => false,
-        'default' => '',
-        'searchable' => false,
-        'filterable' => false,
-        'comparable' => false,
-        'visible_on_front' => false,
-        'visible_in_advanced_search' => false,
-        'used_in_product_listing' => true,
-        'unique' => false,
-        'apply_to' => implode($this->getTaxableItems(), ',')
-    )
-);
 
 $installer->endSetup();

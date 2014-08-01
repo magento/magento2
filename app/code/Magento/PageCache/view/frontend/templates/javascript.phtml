@@ -24,9 +24,16 @@
 ?>
 <?php /** @var \Magento\PageCache\Block\Javascript $this */ ?>
 <script type="text/javascript">
+require([
+	"jquery",
+	"mage/mage"
+], function(jQuery){
+
     //<![CDATA[
     jQuery(function () {
         jQuery('body').mage('pageCache', <?php echo $this->getScriptOptions(); ?>);
     });
     //]]>
+
+});
 </script>

@@ -23,6 +23,8 @@
  */
 ?>
 <script type="text/javascript">
+require(['jquery', "prototype"], function(jQuery){
+
 //<![CDATA[
 var couponTypeSpecific = '<?php echo \Magento\SalesRule\Model\Rule::COUPON_TYPE_SPECIFIC ?>';
 var tmpButtonsActionsStorage = [];
@@ -114,7 +116,15 @@ Ajax.Responders.register({
     }
 });
 
+window.generateCouponCodes = generateCouponCodes;
+window.refreshCouponCodesGrid = refreshCouponCodesGrid;
+window.handleCouponTypeChange = handleCouponTypeChange;
+window.handleCouponsTabContentActivity = handleCouponsTabContentActivity;
+window.disableEnableCouponsTabContent = disableEnableCouponsTabContent;
+
 document.observe("dom:loaded", handleCouponsTabContentActivity);
 document.observe("dom:loaded", handleCouponTypeChange);
 //]]>
+
+});
 </script>

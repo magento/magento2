@@ -1,0 +1,2 @@
+"review/data/nickname";"review/data/title";"review/data/detail";"review/data/ratings/1/dataSet";"review/data/ratings/1/rating";"review/data/entity_id/dataSet";"constraint"
+"name_%isolation%";"title_%isolation%";"review_%isolation%";"visibleOnDefaultWebsite";"4";"catalogProductSimple::default";"assertReviewCreationSuccessMessage, assertProductReviewInGrid, assertProductRatingOnReviewPage, assertProductRatingInProductPage"

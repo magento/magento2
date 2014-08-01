@@ -25,6 +25,12 @@
 -->
 <page mca="catalog/product_attribute/new">
     <block>
+        <name>messagesBlock</name>
+        <class>Magento\Core\Test\Block\Messages</class>
+        <locator>#messages</locator>
+        <strategy>css selector</strategy>
+    </block>
+    <block>
         <name>pageActions</name>
         <class>Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\FormPageActions</class>
         <locator>.page-main-actions</locator>

@@ -52,6 +52,8 @@ if (!$storeCode && $websiteCode) {
 }
 ?>
 <script type="text/javascript">
+require(["prototype"], function(){
+
 //<![CDATA[
     function hideRowArrayElements(arr)
     {
@@ -189,4 +191,6 @@ if (!$storeCode && $websiteCode) {
     };
     xml = new upsXml();
     //]]>
+
+});
 </script>

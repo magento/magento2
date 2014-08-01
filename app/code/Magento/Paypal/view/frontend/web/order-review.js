@@ -22,7 +22,13 @@
  */
 /*jshint browser:true jquery:true*/
 /*global alert*/
-(function ($) {
+define([
+    "jquery",
+    "jquery/ui",
+    "mage/translate",
+    "mage/mage",
+    "mage/validation"
+], function($){
     "use strict";
 
     $.widget('mage.orderReview', {
@@ -301,4 +307,5 @@
             }
         }
     });
-})(jQuery);
+
+});

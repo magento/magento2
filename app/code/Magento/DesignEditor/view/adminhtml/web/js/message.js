@@ -21,7 +21,12 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /*jshint jquery:true*/
-(function ($) {
+define([
+    "jquery",
+    "jquery/ui",
+    "jquery/template"
+], function($){
+
     $.widget('vde.vdeMessage', {
         options: {
             addMessageEvent: 'addMessage',
@@ -104,4 +109,5 @@
             messageTemplate.appendTo(containerId);
         }
     });
-})(jQuery);
+
+});

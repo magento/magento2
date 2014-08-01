@@ -109,6 +109,11 @@ class Wysiwyg extends \Magento\Framework\Data\Form\Element\Textarea
             )->toHtml();
             $html .= <<<HTML
 <script type="text/javascript">
+require([
+    'jquery',
+    'mage/adminhtml/wysiwyg/tiny_mce/setup'
+], function(jQuery){
+
 jQuery('#{$this->getHtmlId()}')
     .addClass('wysiwyg-editor')
     .data(
@@ -127,6 +132,8 @@ jQuery('#{$this->getHtmlId()}')
             }
         ).turnOn()
     );
+
+});
 </script>
 HTML;
         }

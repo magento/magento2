@@ -29,13 +29,19 @@
 <iframe name="vde_container_frame" data-frame="editor" id="vde_container_frame" class="vde_container_frame" src="<?php echo $this->getFrameUrl(); ?>"></iframe>
 <?php echo $this->getChildHtml('design_editor_tools'); ?>
 <script type="text/javascript">
-    (function ($) {
-        $(document).ready(function(){
-            $("#vde_container_frame").vdeFrame({
-                vdeToolbar: '#vde_toolbar_row',
-                vdePanel: '.vde-tools'
-            });
-            $("#vde_toolbar_row").themeSave();
-        });
-    })(jQuery);
+require([
+	"jquery",
+	"Magento_DesignEditor/js/theme-save",
+	"Magento_DesignEditor/js/vde-frame"
+], function($){
+
+$(document).ready(function(){
+    $("#vde_container_frame").vdeFrame({
+        vdeToolbar: '#vde_toolbar_row',
+        vdePanel: '.vde-tools'
+    });
+    $("#vde_toolbar_row").themeSave();
+});
+
+});
 </script>

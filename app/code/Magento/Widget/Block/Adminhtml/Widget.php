@@ -51,12 +51,12 @@ class Widget extends \Magento\Backend\Block\Widget\Form\Container
         $this->buttonList->update('save', 'onclick', 'wWidget.insertWidget()');
         $this->buttonList->update('save', 'region', 'footer');
 
-        $this->_formScripts[] = 'wWidget = new WysiwygWidget.Widget(' .
+        $this->_formScripts[] = 'require(["mage/adminhtml/wysiwyg/widget"], function(){wWidget = new WysiwygWidget.Widget(' .
             '"widget_options_form", "select_widget_type", "widget_options", "' .
             $this->getUrl(
                 'adminhtml/*/loadOptions'
             ) . '", "' . $this->getRequest()->getParam(
                 'widget_target_id'
-            ) . '");';
+            ) . '");});';
     }
 }

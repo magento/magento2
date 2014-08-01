@@ -170,11 +170,14 @@ class NewCategory extends \Magento\Backend\Block\Widget\Form\Generic
                 'saveCategoryUrl' => $this->getUrl('catalog/category/save')
             )
         );
+        //TODO: JavaScript logic should be moved to separate file or reviewed
         return <<<HTML
-<script>
-(function($) { // waiting for page to load to have '#category_ids-template' available
-    $('#new-category').mage('newCategoryDialog', $widgetOptions);
-})(jQuery);
+<script type="text/javascript">
+require(["jquery","mage/mage"],function($) {  // waiting for dependencies at first
+    $(function(){ // waiting for page to load to have '#category_ids-template' available
+        $('#new-category').mage('newCategoryDialog', $widgetOptions);
+    });
+});
 </script>
 HTML;
     }

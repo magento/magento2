@@ -434,6 +434,7 @@ class CommonTaxCollector extends AbstractTotal
                 ->create()
         );
         $this->quoteDetailsBuilder->setItems($itemDataObjects);
+        $this->quoteDetailsBuilder->setCustomerId($address->getCustomerId());
 
         $quoteDetails = $this->quoteDetailsBuilder->create();
         return $quoteDetails;

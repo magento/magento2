@@ -33,20 +33,27 @@
     </ul>
 </div>
 <script type="text/javascript">
-    jQuery(function() {
-        jQuery("#system_messages_list").dialog({
+require([
+    "jquery",
+    "jquery/ui"
+], function($){
+
+    $(function() {
+        $("#system_messages_list").dialog({
             autoOpen: true,
             resizable: false,
             width: 650,
             position: {
                 using: function(pos) {
-                    jQuery(this).css({
+                    $(this).css({
                         "position": "absolute",
-                        "top": Math.ceil(jQuery(window).height()/2 - jQuery(this).height()/2),
+                        "top": Math.ceil($(window).height()/2 - $(this).height()/2),
                         "left": pos.left
                     });
                 }
             }
         });
     });
+
+});
 </script>

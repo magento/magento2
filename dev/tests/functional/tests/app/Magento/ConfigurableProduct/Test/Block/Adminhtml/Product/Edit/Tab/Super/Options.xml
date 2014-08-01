@@ -29,7 +29,7 @@
             <selector>[name$='[pricing_value]']</selector>
         </pricing_value>
         <include>
-            <selector>[name$='[include]']</selector>
+            <selector>[type="checkbox"][name$='[include]']</selector>
             <input>checkbox</input>
         </include>
     </fields>

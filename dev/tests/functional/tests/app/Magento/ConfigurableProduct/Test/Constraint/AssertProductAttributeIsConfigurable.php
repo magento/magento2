@@ -77,7 +77,7 @@ class AssertProductAttributeIsConfigurable extends AbstractConstraint
                 'dataSet' => 'default',
                 'data' => [
                     'configurable_attributes_data' => [
-                        'preset' => 'one_variations',
+                        'preset' => 'one_variation',
                         'attributes' => [
                             $this->attribute
                         ]

@@ -99,12 +99,14 @@ $product = $this->getSaleableItem();
     </ul>
     <?php if ($msrpShowOnGesture):?>
         <script type="text/javascript">
-            (function($) {
-                $('.product-info-main').mage('tierPrice', {
-                    inputQty: '#qty',
-                    productForm: '#product_addtocart_form'
-                });
-            })(jQuery);
-        </script>
+        require(["jquery", "mage/mage"], function($){
+
+            $('.product-info-main').mage('tierPrice', {
+                inputQty: '#qty',
+                productForm: '#product_addtocart_form'
+            });
+                
+        });
+</script>
     <?php endif;?>
 <?php endif; ?>

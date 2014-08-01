@@ -38,16 +38,21 @@
 
             <?php if (!$this->useCalendar()): ?>
                 <script type="text/javascript">
-                    //<![CDATA[
-                    (function($) {
-                        $('#product_addtocart_form').mage('dateOption', {
-                            'datepickerFieldSelector': 'select.datetime-picker',
-                            'monthSelector': '#options_<?php echo $_optionId ?>_month',
-                            'yearSelector': '#options_<?php echo $_optionId ?>_year'
-                        });
-                    })(jQuery);
-                    //]]>
-                </script>
+require([
+    "jquery",
+    "mage/mage"
+], function($){
+
+    //<![CDATA[
+        $('#product_addtocart_form').mage('dateOption', {
+            'datepickerFieldSelector': 'select.datetime-picker',
+            'monthSelector': '#options_<?php echo $_optionId ?>_month',
+            'yearSelector': '#options_<?php echo $_optionId ?>_year'
+        });
+    //]]>
+                
+});
+</script>
             <?php endif; ?>
 
         <?php endif; ?>
@@ -71,14 +76,16 @@
                    data-validate="{'validate-optional-datetime':<?php echo $_optionId?>}"/>
         <?php endif; ?>
         <script type="text/javascript">
-            //<![CDATA[
-            (function($) {
-                var addtocartForm = $('#product_addtocart_form');
-                addtocartForm.mage('validation', {
-                    ignore: ':hidden:not(input[name^="validate_datetime_"])'
-                });
-            })(jQuery);
-            //]]>
-        </script>
+require(['jquery', "mage/mage"], function($){
+
+    //<![CDATA[
+        var addtocartForm = $('#product_addtocart_form');
+        addtocartForm.mage('validation', {
+            ignore: ':hidden:not(input[name^="validate_datetime_"])'
+        });
+    //]]>
+        
+});
+</script>
     </div>
 </div>

@@ -48,6 +48,11 @@
 <div id="tree" style="width:100%; overflow:auto;"></div>
 
 <script type="text/javascript">
+require([
+    'jquery',
+    'Magento_DesignEditor/js/tools-files'
+], function(jQuery){
+
 Ext.onReady(function(){
     var Tree = Ext.tree;
     var tree = new Tree.TreePanel('tree', {
@@ -91,4 +96,6 @@ Ext.onReady(function(){
             MediabrowserInstance.newFolder();
         });
     })(jQuery);
+
+});
 </script>

@@ -25,7 +25,11 @@
 <?php $_giftMessage = false; ?>
 <?php if(!$this->getDontDisplayContainer()): ?>
 <script type="text/javascript">
+require(['jquery', "mage/mage"], function(jQuery){
+
     jQuery('#checkoutSteps').mage('extraOptions', {additionalUrl: '<?php echo $this->getAdditionalUrl(); ?>'});
+
+});
 </script>
 <?php endif ?>
 
@@ -74,9 +78,13 @@
                             </div>
                         </fieldset>
                         <script type="text/javascript">
-                            jQuery('#add-gift-options-<?php echo $this->getEntity()->getId() ?>')
-                                .add('#add-gift-options-for-order-<?php echo $this->getEntity()->getId() ?>').removeClass('hidden');
-                        </script>
+require(['jquery'], function(jQuery){
+
+    jQuery('#add-gift-options-<?php echo $this->getEntity()->getId() ?>')
+        .add('#add-gift-options-for-order-<?php echo $this->getEntity()->getId() ?>').removeClass('hidden');
+                        
+});
+</script>
                     </div>
             </dd>
             <?php endif ?>
@@ -137,16 +145,27 @@
                 </ol>
             </dd>
             <script type="text/javascript">
-                jQuery('#add-gift-options-<?php echo $this->getEntity()->getId() ?>')
-                    .add('#add-gift-options-for-items-<?php echo $this->getEntity()->getId() ?>').removeClass('hidden');
-            </script>
+require(['jquery'], function(jQuery){
+
+    jQuery('#add-gift-options-<?php echo $this->getEntity()->getId() ?>')
+        .add('#add-gift-options-for-items-<?php echo $this->getEntity()->getId() ?>').removeClass('hidden');
+            
+});
+</script>
             <?php endif; ?>
             <dt class="extra-options-container" id="extra-options-container-<?php echo $this->getEntity()->getId() ?>"></dt>
         </dl>
     </fieldset>
     <script type="text/javascript">
+require([
+    'jquery',
+    'mage/mage'
+], function(jQuery){
+
         jQuery('#allow_gift_options').add('#allow_gift_options_for_order').add('#allow_gift_options_for_items').mage('giftOptions');
-    </script>
+    
+});
+</script>
 <?php break; ?>
 
 <?php case 'multishipping_address': ?>
@@ -262,15 +281,23 @@
         </dl>
     </fieldset>
         <script type="text/javascript">
+require(['jquery', 'mage/mage'], function(jQuery){
+
             jQuery('#allow_gift_options_<?php echo $this->getEntity()->getId() ?>')
                 .add('#allow_gift_options_for_order_<?php echo $this->getEntity()->getId() ?>')
                 .add('#allow_gift_options_for_items_<?php echo $this->getEntity()->getId() ?>')
                 .mage('giftOptions');
-        </script>
+        
+});
+</script>
     <?php break; ?>
 <?php endswitch ?>
 <?php if ($_giftMessage): ?>
 <script type="text/javascript">
+require(['jquery', "mage/mage"], function(jQuery){
+
     jQuery('#shipping_method_form').mage('validation');
+
+});
 </script>
 <?php endif; ?>

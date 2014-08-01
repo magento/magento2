@@ -44,8 +44,12 @@
 </div>
 
 <script type="text/javascript">
-//<![CDATA[
-(function($) {
+require([
+    "jquery",
+    "mage/translate",
+    "jquery/file-uploader"
+], function($){
+
     $(function () {
         $('#fileupload').fileupload({
             dataType: 'json',
@@ -110,6 +114,6 @@
             ]
         });
     });
-})(jQuery);
-//]]>
+
+});
 </script>

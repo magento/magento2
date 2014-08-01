@@ -83,32 +83,32 @@
     </div>
 </div>
 <script type="text/javascript">
-    (function($) {
+    require(['jquery'], function($){
         'use strict';
         $('#massaction-select').change(function () {
             var massAction = $('option:selected', this).val();
             switch (massAction) {
                 <?php if ($this->getUseSelectAll()):?>
                 case 'selectAll':
-                    return <?php echo $this->getJsObjectName() ?>.selectAll()
+                    return <?php echo $this->getJsObjectName() ?>.selectAll();
                     break
                 case 'unselectAll':
-                    return <?php echo $this->getJsObjectName() ?>.unselectAll()
+                    return <?php echo $this->getJsObjectName() ?>.unselectAll();
                     break
                 <?php endif; ?>
                 case 'selectVisible':
-                    return <?php echo $this->getJsObjectName() ?>.selectVisible()
+                    return <?php echo $this->getJsObjectName() ?>.selectVisible();
                     break
                 case 'unselectVisible':
-                    return <?php echo $this->getJsObjectName() ?>.unselectVisible()
+                    return <?php echo $this->getJsObjectName() ?>.unselectVisible();
                     break
             }
         });
-    })(window.jQuery);
+
+    });
+
+    <?php if (!$this->getParentBlock()->canDisplayContainer()): ?>
+        <?php echo $this->getJsObjectName() ?>.setGridIds('<?php echo $this->getGridIdsJson() ?>');
+    <?php endif; ?>
 </script>
-<?php if (!$this->getParentBlock()->canDisplayContainer()): ?>
-<script type="text/javascript">
-    <?php echo $this->getJsObjectName() ?>.setGridIds('<?php echo $this->getGridIdsJson() ?>');
-</script>
-<?php endif; ?>
 </div>

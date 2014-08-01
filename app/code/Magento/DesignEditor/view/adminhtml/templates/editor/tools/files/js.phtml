@@ -24,8 +24,14 @@
 ?>
 
 <script type="text/javascript">
+require([
+	'Magento_DesignEditor/js/tools-files'
+], function(){
+
 //<![CDATA[
 MediabrowserInstance = new Mediabrowser(<?php echo $this->getFilebrowserSetupObject() ?>);
 MediabrowserInstance.storeId = '<?php echo $this->getStoreId() ?>';
 //]]>
+
+});
 </script>

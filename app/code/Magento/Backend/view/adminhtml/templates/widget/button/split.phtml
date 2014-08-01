@@ -59,12 +59,10 @@ $_helper = $this->helper('Magento\Core\Helper\Data');
 </div>
 
 <script type="text/javascript">
-    (function($) {
-        'use strict';
-
+require(['jquery'], function($){
         $('.actions-split')
             .on('click.splitDefault', '.action-default', function() {
                 $(this).siblings('.dropdown-menu').find('.item-default').trigger('click');
             });
-    })(window.jQuery);
+});
 </script>

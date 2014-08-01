@@ -66,7 +66,6 @@ class LicenseTest extends \PHPUnit_Framework_TestCase
             $rootFolderName . '/[^/]+\.' . $extensions,
             $rootFolderName . '/app/.+\.' . $extensions,
             $rootFolderName . '/dev/(?!tests/integration/tmp|tests/functional).+\.' . $extensions,
-            $rootFolderName . '/downloader/.+\.' . $extensions,
             $rootFolderName . '/lib/internal/(Mage|Magento|Varien)/.+\.' . $extensions,
             $rootFolderName . '/pub/.+\.' . $extensions
         );

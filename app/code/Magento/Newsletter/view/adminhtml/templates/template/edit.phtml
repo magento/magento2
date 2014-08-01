@@ -41,10 +41,12 @@
     </div>
 </form>
 <script type="text/javascript">
+require(['jquery', 'mage/mage', 'prototype'], function(jQuery){
+
 //<![CDATA[
     jQuery('#newsletter_template_edit_form').mage('form').mage('validation');
     jQuery('#newsletter_template_preview_form').mage('form').mage('validation');
-    var templateControl = {
+    templateControl = {
 
         unconvertedText: '',
         typeChange: false,
@@ -170,4 +172,6 @@
     templateControl.init();
     templateControl.templateName = "<?php echo $this->getJsTemplateName() ?>";
 //]]>
+
+});
 </script>

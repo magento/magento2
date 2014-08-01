@@ -71,7 +71,11 @@ $table = $connection->newTable(
     array('unsigned' => true, 'default' => '0'),
     'Defines Is Website Default'
 )->addIndex(
-    $installer->getIdxName('store_website', array('code'), \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE),
+    $installer->getIdxName(
+        'store_website',
+        array('code'),
+        \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+    ),
     array('code'),
     array('type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE)
 )->addIndex(

@@ -157,7 +157,7 @@ class View extends Block
      *
      * @var string
      */
-    protected $priceBlock = '.product-info-main .price-box';
+    protected $priceBlock = '//*[@class="product-info-main"]//*[contains(@class,"price-box")]';
 
     /**
      * 'Add to Compare' button
@@ -185,7 +185,10 @@ class View extends Block
      */
     protected function getPriceBlock()
     {
-        return Factory::getBlockFactory()->getMagentoCatalogProductPrice($this->_rootElement->find($this->priceBlock));
+        return $this->blockFactory->create(
+            'Magento\Catalog\Test\Block\Product\Price',
+            ['element' => $this->_rootElement->find($this->priceBlock, Locator::SELECTOR_XPATH)]
+        );
     }
 
     /**

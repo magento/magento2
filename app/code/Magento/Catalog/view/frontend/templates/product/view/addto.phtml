@@ -43,5 +43,12 @@ $compareHelper = $this->helper('Magento\Catalog\Helper\Product\Compare');
        class="action tocompare"><span><?php echo __('Add to Compare') ?></span></a>
 </div>
 <script type="text/javascript">
+  require([
+    "jquery",
+    "mage/mage"
+  ], function(jQuery){
+
     jQuery('body').mage('addToWishlist', <?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode(array('productType' => $_product->getTypeId()))?>);
+
+  });
 </script>

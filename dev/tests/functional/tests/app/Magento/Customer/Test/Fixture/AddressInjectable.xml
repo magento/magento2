@@ -162,6 +162,20 @@
             <default_value></default_value>
             <input>text</input>
         </vat_request_success>
+        <default_billing>
+            <attribute_code>default_billing</attribute_code>
+            <backend_type>int</backend_type>
+            <is_required>0</is_required>
+            <default_value></default_value>
+            <input>checkbox</input>
+        </default_billing>
+        <default_shipping>
+            <attribute_code>default_shipping</attribute_code>
+            <backend_type>int</backend_type>
+            <is_required>0</is_required>
+            <default_value></default_value>
+            <input>checkbox</input>
+        </default_shipping>
     </fields>
     <repository_class>Magento\Customer\Test\Repository\AddressInjectable</repository_class>
     <handler_interface>Magento\Customer\Test\Handler\AddressInjectable\AddressInjectableInterface</handler_interface>

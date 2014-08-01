@@ -23,6 +23,11 @@
  */
 ?>
 <script type="text/javascript">
+require([
+    'jquery',
+    'mage/adminhtml/grid'
+], function(jQuery){
+
 <!--
 <?php $myBlock = $this->getLayout()->getBlock('roleUsersGrid'); ?>
 <?php if( is_object($myBlock) && $myBlock->getJsObjectName() ): ?>
@@ -100,7 +105,7 @@
             roleUsersRowInit(<?php echo $myBlock->getJsObjectName() ?>, row);
         });
     }
-    jQuery(function() {
+    document.observe('dom:loaded', function(){
         <?php echo $myBlock->getJsObjectName() ?>.rowClickCallback = roleUsersRowClick;
         <?php echo $myBlock->getJsObjectName() ?>.initRowCallback = roleUsersRowInit;
         <?php echo $myBlock->getJsObjectName() ?>.checkboxCheckCallback = registerUserRole;
@@ -110,4 +115,6 @@
     });
 <?php endif; ?>
 //-->
+
+});
 </script>

@@ -74,5 +74,9 @@ $_rates = ( $_newRates ) ? $_newRates : $_oldRates;
     </div>
 </form>
 <script type="text/javascript">
+require(['jquery', "mage/mage"], function(jQuery){
+
     jQuery('#rate-form').mage('form').mage('validation');
+
+});
 </script>

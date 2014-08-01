@@ -28,39 +28,9 @@
         <action method="setCanLoadExtJs">
             <argument name="flag" xsi:type="string">1</argument>
         </action>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-variables-js">
+        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-backend-js-bootstrap-editor-js">
             <arguments>
-                <argument name="file" xsi:type="string">Magento_Backend::variables.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-wysiwyg-widget-js">
-            <arguments>
-                <argument name="file" xsi:type="string">mage/adminhtml/wysiwyg/widget.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="lib-flex-js">
-            <arguments>
-                <argument name="file" xsi:type="string">mage/flex.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="lib-fabridge-js">
-            <arguments>
-                <argument name="file" xsi:type="string">lib/FABridge.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-flexuploader-js">
-            <arguments>
-                <argument name="file" xsi:type="string">mage/adminhtml/flexuploader.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-browser-js">
-            <arguments>
-                <argument name="file" xsi:type="string">mage/adminhtml/browser.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="prototype-window-js">
-            <arguments>
-                <argument name="file" xsi:type="string">prototype/window.js</argument>
+                <argument name="file" xsi:type="string">Magento_Backend::js/bootstrap/editor.js</argument>
             </arguments>
         </block>
         <block class="Magento\Theme\Block\Html\Head\Css" name="prototype-windows-themes-default-css">

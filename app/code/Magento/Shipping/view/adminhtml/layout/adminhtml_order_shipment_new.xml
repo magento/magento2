@@ -24,13 +24,6 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
-    <referenceBlock name="head">
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-order-shipment-packaging-js">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Shipping::order/packaging.js</argument>
-            </arguments>
-        </block>
-    </referenceBlock>
     <referenceContainer name="content">
         <block class="Magento\Shipping\Block\Adminhtml\Create" name="sales_shipment_create">
             <block class="Magento\Shipping\Block\Adminhtml\Create\Form" name="form" template="create/form.phtml">

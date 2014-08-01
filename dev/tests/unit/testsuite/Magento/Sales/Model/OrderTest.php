@@ -30,28 +30,221 @@ namespace Magento\Sales\Model;
 class OrderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Prepare items for the order
-     *
-     * @param \PHPUnit_Framework_MockObject_MockObject $order
-     * @param bool $allInvoiced
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function _prepareOrderItems($order, $allInvoiced)
+    protected $paymentCollectionFactoryMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $orderItemCollectionFactoryMock;
+
+    /**
+     * @var \Magento\Sales\Model\Order
+     */
+    protected $order;
+
+    protected function setUp()
     {
-        $items = array();
-        if (!$allInvoiced) {
-            $item = $this->getMockBuilder(
-                'Magento\Sales\Model\Order\Item'
-            )->setMethods(
-                array('getQtyToInvoice', 'isDeleted', '__wakeup')
-            )->disableOriginalConstructor()->getMock();
-            $item->expects($this->any())->method('getQtyToInvoice')->will($this->returnValue(1));
-            $item->expects($this->any())->method('isDeleted')->will($this->returnValue(false));
-            $items[] = $item;
+        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->paymentCollectionFactoryMock = $this->getMock(
+            'Magento\Sales\Model\Resource\Order\Payment\CollectionFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
+        $this->orderItemCollectionFactoryMock = $this->getMock(
+            'Magento\Sales\Model\Resource\Order\Item\CollectionFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
+
+        $this->order = $helper->getObject(
+            'Magento\Sales\Model\Order',
+            [
+                'paymentCollectionFactory' => $this->paymentCollectionFactoryMock,
+                'orderItemCollectionFactory' => $this->orderItemCollectionFactoryMock
+            ]
+        );
+    }
+
+    public function testCanCancelCanUnhold()
+    {
+        $this->order->setActionFlag(\Magento\Sales\Model\Order::ACTION_FLAG_UNHOLD, true);
+        $this->order->setState(\Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW);
+        $this->assertFalse($this->order->canCancel());
+    }
+
+    public function testCanCancelIsPaymentReview()
+    {
+        $this->order->setActionFlag(\Magento\Sales\Model\Order::ACTION_FLAG_UNHOLD, false);
+        $this->order->setState(\Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW);
+        $this->assertFalse($this->order->canCancel());
+    }
+
+    public function testCanCancelCanReviewPayment()
+    {
+        $paymentMock = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\Payment')
+            ->disableOriginalConstructor()
+            ->setMethods(['isDeleted', 'canReviewPayment', 'canFetchTransactionInfo'])
+            ->getMock();
+        $paymentMock->expects($this->once())
+            ->method('canReviewPayment')
+            ->will($this->returnValue(false));
+        $paymentMock->expects($this->once())
+            ->method('canFetchTransactionInfo')
+            ->will($this->returnValue(true));
+
+        $this->preparePaymentMock($paymentMock);
+
+        $this->order->setActionFlag(\Magento\Sales\Model\Order::ACTION_FLAG_UNHOLD, false);
+        $this->order->setState(\Magento\Sales\Model\Order::STATE_NEW);
+        $this->assertFalse($this->order->canCancel());
+    }
+
+    public function testCanCancelAllInvoiced()
+    {
+        $paymentMock = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\Payment')
+            ->disableOriginalConstructor()
+            ->setMethods(['isDeleted', 'canReviewPayment', 'canFetchTransactionInfo'])
+            ->getMock();
+        $paymentMock->expects($this->once())
+            ->method('canReviewPayment')
+            ->will($this->returnValue(false));
+        $paymentMock->expects($this->once())
+            ->method('canFetchTransactionInfo')
+            ->will($this->returnValue(false));
+
+        $this->preparePaymentMock($paymentMock);
+
+        $this->prepareItemMock(0);
+
+        $this->order->setActionFlag(\Magento\Sales\Model\Order::ACTION_FLAG_UNHOLD, false);
+        $this->order->setState(\Magento\Sales\Model\Order::STATE_NEW);
+        $this->assertFalse($this->order->canCancel());
+    }
+
+    public function testCanCancelState()
+    {
+        $paymentMock = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\Payment')
+            ->disableOriginalConstructor()
+            ->setMethods(['isDeleted', 'canReviewPayment', 'canFetchTransactionInfo'])
+            ->getMock();
+        $paymentMock->expects($this->once())
+            ->method('canReviewPayment')
+            ->will($this->returnValue(false));
+        $paymentMock->expects($this->once())
+            ->method('canFetchTransactionInfo')
+            ->will($this->returnValue(false));
+
+        $this->preparePaymentMock($paymentMock);
+
+        $this->prepareItemMock(1);
+        $this->order->setActionFlag(\Magento\Sales\Model\Order::ACTION_FLAG_UNHOLD, false);
+        $this->order->setState(\Magento\Sales\Model\Order::STATE_CANCELED);
+        $this->assertFalse($this->order->canCancel());
+    }
+
+    /**
+     * @param bool $cancelActionFlag
+     * @dataProvider dataProviderActionFlag
+     */
+    public function testCanCancelActionFlag($cancelActionFlag)
+    {
+        $paymentMock = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\Payment')
+            ->disableOriginalConstructor()
+            ->setMethods(['isDeleted', 'canReviewPayment', 'canFetchTransactionInfo'])
+            ->getMock();
+        $paymentMock->expects($this->once())
+            ->method('canReviewPayment')
+            ->will($this->returnValue(false));
+        $paymentMock->expects($this->once())
+            ->method('canFetchTransactionInfo')
+            ->will($this->returnValue(false));
+
+        $this->preparePaymentMock($paymentMock);
+
+        $this->prepareItemMock(1);
+
+        $actionFlags= [
+            \Magento\Sales\Model\Order::ACTION_FLAG_UNHOLD => false,
+            \Magento\Sales\Model\Order::ACTION_FLAG_CANCEL => $cancelActionFlag
+        ];
+        foreach ($actionFlags as $action => $flag) {
+            $this->order->setActionFlag($action, $flag);
+        }
+        $this->order->setState(\Magento\Sales\Model\Order::STATE_NEW);
+        $this->assertEquals($cancelActionFlag, $this->order->canCancel());
+    }
+
+    /**
+     * @param array $actionFlags
+     * @param string $orderState
+     * @dataProvider canVoidPaymentDataProvider
+     */
+    public function testCanVoidPayment($actionFlags, $orderState)
+    {
+        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        /** @var Order $order */
+        $order = $helper->getObject('Magento\Sales\Model\Order');
+        foreach ($actionFlags as $action => $flag) {
+            $order->setActionFlag($action, $flag);
+        }
+        $order->setData('state', $orderState);
+        $payment = $this->_prepareOrderPayment($order);
+        $canVoidOrder = true;
+        if ($orderState == \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW) {
+            $canVoidOrder = false;
+        }
+        if ($orderState == \Magento\Sales\Model\Order::STATE_HOLDED && (!isset(
+                    $actionFlags[\Magento\Sales\Model\Order::ACTION_FLAG_UNHOLD]
+                ) || $actionFlags[\Magento\Sales\Model\Order::ACTION_FLAG_UNHOLD] !== false)
+        ) {
+            $canVoidOrder = false;
         }
 
-        $itemsProperty = new \ReflectionProperty('Magento\Sales\Model\Order', '_items');
-        $itemsProperty->setAccessible(true);
-        $itemsProperty->setValue($order, $items);
+        $expected = false;
+        if ($canVoidOrder) {
+            $expected = 'some value';
+            $payment->expects(
+                $this->once()
+            )->method(
+                'canVoid'
+            )->with(
+                new \PHPUnit_Framework_Constraint_IsIdentical($payment)
+            )->will(
+                $this->returnValue($expected)
+            );
+        } else {
+            $payment->expects($this->never())->method('canVoid');
+        }
+        $this->assertEquals($expected, $order->canVoidPayment());
+    }
+
+    /**
+     * @param $paymentMock
+     */
+    protected function preparePaymentMock($paymentMock)
+    {
+        $iterator = new \ArrayIterator([$paymentMock]);
+
+        $collectionMock = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\Payment\Collection')
+            ->disableOriginalConstructor()
+            ->setMethods(['setOrderFilter', 'getIterator'])
+            ->getMock();
+        $collectionMock->expects($this->any())
+            ->method('getIterator')
+            ->will($this->returnValue($iterator));
+        $collectionMock->expects($this->once())
+            ->method('setOrderFilter')
+            ->will($this->returnSelf());
+
+        $this->paymentCollectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($collectionMock));
     }
 
     /**
@@ -76,80 +269,8 @@ class OrderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @SuppressWarnings("complexity")
-     *
-     * @param array $actionFlags
-     * @param string $orderState
-     * @param bool $canReviewPayment
-     * @param bool $canUpdatePayment
-     * @param bool $allInvoiced
-     * @dataProvider canCancelDataProvider
-     */
-    public function testCanCancel($actionFlags, $orderState, $canReviewPayment, $canUpdatePayment, $allInvoiced)
-    {
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        /** @var Order $order */
-        $order = $helper->getObject('Magento\Sales\Model\Order');
-        foreach ($actionFlags as $action => $flag) {
-            $order->setActionFlag($action, $flag);
-        }
-        $order->setData('state', $orderState);
-        $this->_prepareOrderPayment(
-            $order,
-            [
-                'canReviewPayment' => $canReviewPayment,
-                'canFetchTransactionInfo' => $canUpdatePayment,
-                'canVoid' => true
-            ]
-        );
-        $this->_prepareOrderItems($order, $allInvoiced);
-
-        // Calculate result
-        $expectedResult = true;
-        if ((!isset(
-            $actionFlags[\Magento\Sales\Model\Order::ACTION_FLAG_UNHOLD]
-        ) ||
-            $actionFlags[\Magento\Sales\Model\Order::ACTION_FLAG_UNHOLD] !== false) &&
-            $orderState == \Magento\Sales\Model\Order::STATE_HOLDED
-        ) {
-            $expectedResult = false;
-        }
-        if ($orderState == \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW && !$canReviewPayment && $canUpdatePayment
-        ) {
-            $expectedResult = false;
-        }
-        if ($allInvoiced || in_array(
-            $orderState,
-            array(
-                \Magento\Sales\Model\Order::STATE_CANCELED,
-                \Magento\Sales\Model\Order::STATE_COMPLETE,
-                \Magento\Sales\Model\Order::STATE_CLOSED,
-                \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW
-            )
-        )
-        ) {
-            $expectedResult = false;
-        }
-        if (isset(
-            $actionFlags[\Magento\Sales\Model\Order::ACTION_FLAG_CANCEL]
-        ) && $actionFlags[\Magento\Sales\Model\Order::ACTION_FLAG_CANCEL] === false
-        ) {
-            $expectedResult = false;
-        }
-
-        if (isset($actionFlags[\Magento\Sales\Model\Order::ACTION_FLAG_UNHOLD])
-        && $actionFlags[\Magento\Sales\Model\Order::ACTION_FLAG_UNHOLD] == false
-        && $orderState == \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW) {
-            $expectedResult = false;
-        }
-
-        $this->assertEquals($expectedResult, $order->canCancel());
-    }
-
-    /**
      * Get action flags
      *
-     * @return array
      */
     protected function _getActionFlagsValues()
     {
@@ -183,68 +304,37 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function canCancelDataProvider()
-    {
-        $boolValues = array(true, false);
-
-        $data = array();
-        foreach ($this->_getActionFlagsValues() as $actionFlags) {
-            foreach ($this->_getOrderStatuses() as $status) {
-                foreach ($boolValues as $canReviewPayment) {
-                    foreach ($boolValues as $canUpdatePayment) {
-                        foreach ($boolValues as $allInvoiced) {
-                            $data[] = array($actionFlags, $status, $canReviewPayment, $canUpdatePayment, $allInvoiced);
-                        }
-                    }
-                }
-            }
-        }
-
-        return $data;
-    }
-
     /**
-     * @param array $actionFlags
-     * @param string $orderState
-     * @dataProvider canVoidPaymentDataProvider
+     * @param int $qtyInvoiced
+     * @return void
      */
-    public function testCanVoidPayment($actionFlags, $orderState)
+    protected function prepareItemMock($qtyInvoiced)
     {
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        /** @var Order $order */
-        $order = $helper->getObject('Magento\Sales\Model\Order');
-        foreach ($actionFlags as $action => $flag) {
-            $order->setActionFlag($action, $flag);
-        }
-        $order->setData('state', $orderState);
-        $payment = $this->_prepareOrderPayment($order);
-        $canVoidOrder = true;
-        if ($orderState == \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW) {
-            $canVoidOrder = false;
-        }
-        if ($orderState == \Magento\Sales\Model\Order::STATE_HOLDED && (!isset(
-            $actionFlags[\Magento\Sales\Model\Order::ACTION_FLAG_UNHOLD]
-        ) || $actionFlags[\Magento\Sales\Model\Order::ACTION_FLAG_UNHOLD] !== false)
-        ) {
-            $canVoidOrder = false;
-        }
+        $itemMock = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\Item')
+            ->disableOriginalConstructor()
+            ->setMethods(['isDeleted', 'filterByTypes', 'filterByParent', 'getQtyToInvoice'])
+            ->getMock();
 
-        $expected = false;
-        if ($canVoidOrder) {
-            $expected = 'some value';
-            $payment->expects(
-                $this->once()
-            )->method(
-                'canVoid'
-            )->with(
-                new \PHPUnit_Framework_Constraint_IsIdentical($payment)
-            )->will(
-                $this->returnValue($expected)
-            );
-        } else {
-            $payment->expects($this->never())->method('canVoid');
-        }
-        $this->assertEquals($expected, $order->canVoidPayment());
+        $itemMock->expects($this->once())
+            ->method('getQtyToInvoice')
+            ->will($this->returnValue($qtyInvoiced));
+
+        $iterator = new \ArrayIterator([$itemMock]);
+
+        $itemCollectionMock = $this->getMockBuilder('Magento\Sales\Model\Resource\Order\Item\Collection')
+            ->disableOriginalConstructor()
+            ->setMethods(['setOrderFilter', 'getIterator'])
+            ->getMock();
+        $itemCollectionMock->expects($this->any())
+            ->method('getIterator')
+            ->will($this->returnValue($iterator));
+        $itemCollectionMock->expects($this->once())
+            ->method('setOrderFilter')
+            ->will($this->returnSelf());
+
+        $this->orderItemCollectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($itemCollectionMock));
     }
 
     public function canVoidPaymentDataProvider()
@@ -256,5 +346,13 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             }
         }
         return $data;
+    }
+
+    public function dataProviderActionFlag()
+    {
+        return [
+            [false],
+            [true]
+        ];
     }
 }

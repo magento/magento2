@@ -26,8 +26,9 @@
 <?php /** @var \Magento\PageCache\Block\System\Config\Form\Field\Export $this */
 ?>
 <script type="text/javascript">
+require(['jquery'], function($){
+
     //<![CDATA[
-    (function ($) {
         var fieldset = $('#system_full_page_cache_varnish'),
             fields = fieldset.find(':input:not(button)');
         if (fieldset.is(':visible') == false) {
@@ -43,6 +44,7 @@
             });
             $('#system_full_page_cache_varnish_export_button').prop('disabled', (invalidFields.length > 0));
         });
-    })(jQuery);
     //]]>
+
+});
 </script>

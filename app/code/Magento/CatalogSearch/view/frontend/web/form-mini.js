@@ -22,8 +22,15 @@
  */
 /*jshint browser:true jquery:true*/
 /*global Handlebars*/
-(function ($) {
+define([
+    "jquery",
+    "jquery/ui",
+    "jquery/template",
+    "handlebars",
+    "mage/translate"
+], function($){
     "use strict";
+
     $.widget('mage.catalogSearch', {
         options: {
             autocomplete: 'off',
@@ -99,7 +106,7 @@
          */
         _onSubmit: function(e) {
             if (this.element.val() === this.options.placeholder || this.element.val() === '') {
-                this.options.placeholder = jQuery.mage.__('Please specify at least one search term.');
+                this.options.placeholder = $.mage.__('Please specify at least one search term.');
                 this.element.val(this.options.placeholder);
                 e.preventDefault();
             }
@@ -214,4 +221,5 @@
             }
         }
     });
-})(jQuery);
+
+});

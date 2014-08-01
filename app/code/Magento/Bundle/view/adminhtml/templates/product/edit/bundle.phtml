@@ -25,9 +25,11 @@
 /** @var $this \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle */
 ?>
 <script type="text/javascript">
-    if(typeof Bundle=='undefined') {
-        Bundle = {};
-    }
+
+if(typeof Bundle=='undefined') {
+    Bundle = {};
+}
+
 </script>
 
 <div class="entry-edit form-inline" id="bundle_product_container">
@@ -62,7 +64,10 @@
     </div>
 </div>
 
+<input type="hidden" name="affect_bundle_product_selections" value="1" />
+
 <script type="text/javascript">
+require(["prototype", "mage/adminhtml/form"], function(){
     // re-bind form elements onchange
     varienWindowOnload(true);
 
@@ -74,16 +79,19 @@
         }
     });
     <?php endif; ?>
+});
+require([
+    "jquery",
+    "jquery/jquery.tabs",
+    "mage/mage",
+    "Magento_Bundle/js/bundle-product",
+    "mage/backend/validation"
+], function($){
 
-    jQuery.mage.extend('validation', 'validation',
-        '<?php echo $this->getViewFileUrl('Magento_Bundle::product/validation-rules.js'); ?>');
+    $.mage.extend('validation', 'validation', 'Magento_Bundle/product/validation-rules');
 
-    jQuery(function($) {
-        head.js("<?php echo $this->getViewFileUrl('Magento_Bundle::js/bundle-product.js') ?>", head.ready(function () {
-            $('#bundle_product_container').mage('bundleProduct');
-            $('#product_bundle_container .collapse').collapse('hide');
-        }));
-    });
+    $('#bundle_product_container').bundleProduct();
+    $('#product_bundle_container .collapse').collapse('hide');
+
+});
 </script>
-
-<input type="hidden" name="affect_bundle_product_selections" value="1" />

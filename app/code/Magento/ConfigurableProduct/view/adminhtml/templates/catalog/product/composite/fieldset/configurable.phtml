@@ -44,6 +44,11 @@
     </div>
 </fieldset>
 <script type="text/javascript">
+require([
+    "Magento_ConfigurableProduct/js/configurable",
+    "Magento_Catalog/catalog/product/composite/configure"
+], function(){
+
     var config = <?php echo $this->getJsonConfig() ?>;
     if (window.productConfigure) {
         config.containerId = window.productConfigure.blockFormFields.id;
@@ -51,6 +56,9 @@
             config.inputsInitialized = true;
         }
     }
+
     ProductConfigure.spConfig = new Product.Config(config);
+
+});
 </script>
 <?php endif;?>

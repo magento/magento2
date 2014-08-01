@@ -31,15 +31,17 @@ $element = $this->getElement();
 <?php echo $this->getHtml() ?>
 
 <script type="text/javascript">
-    (function($) {
-        var checkbox = document.getElementById('<?php echo $element->getHtmlId() ?>');
-        $(checkbox).on('quickStyleElementBeforeChange', function(e) {
-            var checkbox = $(e.target);
-            if (checkbox && checkbox.attr('checked')) {
-                checkbox.val('<?php echo $element->getValue() ?>');
-            } else {
-                checkbox.val('<?php echo $element->getUncheckedValue() ?>');
-            }
-        });
-    })(jQuery);
+require(['jquery'], function($){
+
+    var checkbox = document.getElementById('<?php echo $element->getHtmlId() ?>');
+    $(checkbox).on('quickStyleElementBeforeChange', function(e) {
+        var checkbox = $(e.target);
+        if (checkbox && checkbox.attr('checked')) {
+            checkbox.val('<?php echo $element->getValue() ?>');
+        } else {
+            checkbox.val('<?php echo $element->getUncheckedValue() ?>');
+        }
+    });
+
+});
 </script>

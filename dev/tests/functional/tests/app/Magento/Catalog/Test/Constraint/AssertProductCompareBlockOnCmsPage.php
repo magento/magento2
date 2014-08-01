@@ -53,7 +53,7 @@ class AssertProductCompareBlockOnCmsPage extends AbstractConstraint
      */
     public function processAssert(array $products, CmsIndex $cmsIndex, FixtureFactory $fixtureFactory, Browser $browser)
     {
-        $newCmsPage = $fixtureFactory->createByCode('cmsPage', ['dataSet' => 'with_compare']);
+        $newCmsPage = $fixtureFactory->createByCode('cmsPage', ['dataSet' => '3_column_template']);
         $newCmsPage->persist();
         $browser->open($_ENV['app_frontend_url'] . $newCmsPage->getIdentifier());
         foreach ($products as &$product) {

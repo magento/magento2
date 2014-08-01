@@ -20,10 +20,14 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-
 /*jshint browser:true jquery:true expr:true*/
-(function ($) {
-    "use strict";
+define([
+    "jquery",
+    "jquery/ui",
+    "mage/cookies"
+], function($){
+     "use strict";
+    
     /**
      * MsgBox Widget checks if message box is displayed and sets cookie
      */
@@ -40,8 +44,9 @@
             }
         }
     });
-})(jQuery);
 
-jQuery(document).ready(function($){
-    $('body').msgBox();
+    $(document).ready(function($){
+        $('body').msgBox();
+    });
+
 });

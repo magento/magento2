@@ -38,6 +38,10 @@
     $listType = $this->getJsObjectName();
 ?>
 <script type="text/javascript">
+require([
+    "Magento_Catalog/catalog/product/composite/configure"
+], function(){
+
 <?php echo $this->getJsObjectName() ?>cartControl = {
     reload: function (params) {
         if (!params) {
@@ -89,6 +93,8 @@ productConfigure.addListType(
         urlConfirm: '<?php echo $this->getUrl('customer/cart_product_composite_cart/update', $params) ?>'
     }
 );
+
+});
 </script>
 <?php endif ?>
 <br />

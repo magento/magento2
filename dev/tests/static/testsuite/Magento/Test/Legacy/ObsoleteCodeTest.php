@@ -604,8 +604,6 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
             true,
             true,
             true,
-            true,
-            true,
             false
         );
         $files = array_map('realpath', $files);

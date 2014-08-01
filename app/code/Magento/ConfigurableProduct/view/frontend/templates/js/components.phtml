@@ -22,18 +22,4 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<script type="text/javascript">
-    (function($) {
-        "use strict";
-        /**
-         * Declaration of resources needed for defined components
-         */
-        $.mage.component({
-            configurable: [
-                '<?php echo $this->getViewFileUrl('jquery/jquery.parsequery.js') ?>',
-                '<?php echo $this->getViewFileUrl('Magento_ConfigurableProduct::js/configurable.js') ?>'
-            ]
-        });
-    })(jQuery);
-</script>
 <?php echo $this->getChildHtml() ?>

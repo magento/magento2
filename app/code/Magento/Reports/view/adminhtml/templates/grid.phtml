@@ -77,20 +77,24 @@ $numColumns = sizeof($this->getColumns());
                 <?php echo $this->getRefreshButtonHtml() ?>
             </div>
             <script type="text/javascript">
-                (function ($) {
-                    $("#<?php echo $this->getSuffixId('period_date_range') ?>").dateRange({
-                        dateFormat:"<?php echo $this->getDateFormat() ?>",
-                        buttonImage:"<?php echo $this->getViewFileUrl('images/grid-cal.gif') ?>",
-                        buttonText:"<?php echo __('Select Date') ?>",
-                        from:{
-                            id:"<?php echo $this->getSuffixId('period_date_from')?>"
-                        },
-                        to:{
-                            id:"<?php echo $this->getSuffixId('period_date_to')?>"
-                        }
-                    })
-                })(jQuery)
-            </script>
+require([
+    "jquery",
+    "mage/calendar"
+], function($){
+
+    $("#<?php echo $this->getSuffixId('period_date_range') ?>").dateRange({
+        dateFormat:"<?php echo $this->getDateFormat() ?>",
+        buttonImage:"<?php echo $this->getViewFileUrl('images/grid-cal.gif') ?>",
+        buttonText:"<?php echo __('Select Date') ?>",
+        from:{
+            id:"<?php echo $this->getSuffixId('period_date_from')?>"
+        },
+        to:{
+            id:"<?php echo $this->getSuffixId('period_date_to')?>"
+        }
+    });           
+});
+</script>
         </div>
         <?php endif; ?>
     </div>
@@ -106,6 +110,12 @@ $numColumns = sizeof($this->getColumns());
 </div>
 <?php if ($this->canDisplayContainer()): ?>
     <script type="text/javascript">
+require([
+    "jquery",
+    "mage/mage",
+    "mage/adminhtml/grid"
+], function(jQuery){
+
         jQuery.mage.load('validation');
         //<![CDATA[
             <?php echo $this->getJsObjectName() ?> = new varienGrid('<?php echo $this->getId() ?>', '<?php echo $this->getGridUrl() ?>', '<?php echo $this->getVarNamePage() ?>', '<?php echo $this->getVarNameSort() ?>', '<?php echo $this->getVarNameDir() ?>', '<?php echo $this->getVarNameFilter() ?>');
@@ -117,7 +127,7 @@ $numColumns = sizeof($this->getColumns());
         period_date_from.adviceContainer = $('<?php echo $this->getSuffixId('period_date_from_advice')?>');
         period_date_to.adviceContainer = $('<?php echo $this->getSuffixId('period_date_to_advice')?>');
 
-        function validateFilterDate() {
+        validateFilterDate = function() {
             if (period_date_from && period_date_to) {
                 var valid = true;
                 jQuery(period_date_from).add(period_date_to).each(function() {
@@ -132,7 +142,7 @@ $numColumns = sizeof($this->getColumns());
             <?php endif;?>
             <?php if ($this->getStoreSwitcherVisibility()): ?>
         /* Overwrite function from switcher.phtml widget*/
-        function switchStore(obj) {
+        switchStore = function(obj) {
             if (obj.options[obj.selectedIndex].getAttribute('website') == 'true') {
                 var selectionType = 'website';
             } else if (obj.options[obj.selectedIndex].getAttribute('group') == 'true') {
@@ -157,6 +167,8 @@ $numColumns = sizeof($this->getColumns());
         }
             <?php endif; ?>
         //]]>
-    </script>
+    
+});
+</script>
     <?php endif; ?>
 <?php endif; ?>

@@ -1,3 +1,27 @@
+0.1.0-alpha89
+=============
+* Fixed bugs:
+  * Fixed an issue where the Price indexer did not pass successfully from console after the first run
+  * Fixed an issue where deleted items were displayed in the Mini shopping cart
+  * Fixed an issue with the Mage_Sales_Model_OrderTest  unit test violating the Cyclomatic and NPath complexity requirements
+  * Fixed an issue where taxes were not applied for logged in users
+  * Fixed a JavaScript issue where the Checkout with PayPal button did not redirect to the PayPal site
+* Framework improvements:
+  * Removed the head.js library and its calls
+  * Implemented the usage of RequireJS for runtime resources loading on the storefront
+* Added the following functional tests:
+  * Create Backend Product Review
+  * Delete Used in Configurable Product Attribute
+  * Delete Search Term
+  * Mass Actions for Product Review
+  * Mass Delete Search Term
+  * Reset Currency Symbol
+  * Update Currency Symbol
+  * Update Grouped Product
+* Added composer.json for all the Magento components: modules, language packs, themes and the whole Magento framework
+* Removed the downloader, the Magento_Connect module and the Magento_Connect framework component
+* Implemented the “alpha-version” of the Independent Deployment Tool
+
 2.0.0.0-dev88
 =============
 * Fixed bugs:

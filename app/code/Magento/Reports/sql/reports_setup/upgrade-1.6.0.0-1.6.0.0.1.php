@@ -30,9 +30,9 @@ $installer = $this;
 $installer->startSetup();
 
 $aggregationTables = array(
-    \Magento\Reports\Model\Resource\Report\Product\Viewed::AGGREGATION_DAILY,
-    \Magento\Reports\Model\Resource\Report\Product\Viewed::AGGREGATION_MONTHLY,
-    \Magento\Reports\Model\Resource\Report\Product\Viewed::AGGREGATION_YEARLY
+    'report_viewed_product_aggregated_daily',
+    'report_viewed_product_aggregated_monthly',
+    'report_viewed_product_aggregated_yearly'
 );
 $aggregationTableComments = array(
     'Most Viewed Products Aggregated Daily',

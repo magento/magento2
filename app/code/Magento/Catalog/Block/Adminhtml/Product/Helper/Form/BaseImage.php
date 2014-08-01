@@ -145,14 +145,17 @@ class BaseImage extends \Magento\Framework\Data\Form\Element\AbstractElement
     <span>{$imageManagementText}</span>
 </span>
 <script>
-    (function($) {
+    require([
+        'jquery'
+    ],function($){
+
         'use strict';
 
         $('[data-activate-tab=image-management]')
             .on('click.toggleImageManagementTab', function() {
                 $('#product_info_tabs_image-management').trigger('click');
             });
-    })(window.jQuery);
+    });
 </script>
 
 HTML;

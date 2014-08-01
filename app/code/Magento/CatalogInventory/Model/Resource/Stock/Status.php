@@ -227,26 +227,6 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
     }
 
     /**
-     * Add stock status limitation to catalog product price index select object
-     *
-     * @param \Magento\Framework\DB\Select $select
-     * @param string|\Zend_Db_Expr $entityField
-     * @param string|\Zend_Db_Expr $websiteField
-     * @return $this
-     */
-    public function prepareCatalogProductIndexSelect(\Magento\Framework\DB\Select $select, $entityField, $websiteField)
-    {
-        $select->join(
-            array('ciss' => $this->getMainTable()),
-            "ciss.product_id = {$entityField} AND ciss.website_id = {$websiteField}",
-            array()
-        );
-        $select->where('ciss.stock_status = ?', Stock\Status::STATUS_IN_STOCK);
-
-        return $this;
-    }
-
-    /**
      * Add only is in stock products filter to product collection
      *
      * @param \Magento\Catalog\Model\Resource\Product\Collection $collection

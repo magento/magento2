@@ -23,8 +23,14 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /*jshint browser:true jquery:true expr:true*/
-(function ($) {
+define([
+    "jquery",
+    "jquery/ui",
+    "mage/cookies",
+    "Magento_PageCache/js/comments"
+], function($){
     "use strict";
+    
     $.widget('mage.pageCache', {
         options: {
             url: '/',
@@ -132,4 +138,4 @@
             });
         }
     });
-})(jQuery);
+});

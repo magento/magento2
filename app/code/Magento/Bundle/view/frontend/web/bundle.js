@@ -22,8 +22,14 @@
  */
 /*jshint browser:true jquery:true*/
 /*jshint loopfunc: true */
-(function($, undefined) {
+define([
+    "jquery",
+    "jquery/ui",
+    "jquery/template",
+    "Magento_Catalog/js/price-option"
+], function($){
     "use strict";
+
     $.widget('mage.bundleOption', {
         options: {
             productBundleSelector: '.product.bundle.option',
@@ -324,4 +330,6 @@
             }
         }
     });
-})(jQuery);
+
+
+});

@@ -31,6 +31,8 @@
     </div>
 </fieldset>
 <script type="text/javascript">
+require(['prototype'], function(){
+
 //<![CDATA[
 
 var pageGroupTemplate = '<div class="fieldset-wrapper page_group_container" id="page_group_container_{{id}}">'+
@@ -188,6 +190,8 @@ var pageGroupTemplate = '<div class="fieldset-wrapper page_group_container" id="
 '</div>'+
 '</div>'+
 '</div>';
+
+window.pageGroupTemplate = pageGroupTemplate;
 
 var WidgetInstance = {
     pageGroupTemplate    : pageGroupTemplate,
@@ -472,6 +476,8 @@ var WidgetInstance = {
     }
 };
 
+window.WidgetInstance = WidgetInstance;
+
 Ext.onReady(function(){
     <?php foreach ($this->getPageGroups() as $pageGroup): ?>
         WidgetInstance.addPageGroup(<?php echo Zend_Json::encode($pageGroup) ?>);
@@ -489,4 +495,6 @@ Ext.onReady(function(){
     });
 });
 //]]>
+
+});
 </script>

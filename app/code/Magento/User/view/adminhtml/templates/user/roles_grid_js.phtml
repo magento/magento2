@@ -23,7 +23,10 @@
  */
 ?>
 <script type="text/javascript">
-<!--
+require([
+    "mage/adminhtml/grid"
+], function(){
+
 <?php $myBlock = $this->getLayout()->getBlock('user.roles.grid'); ?>
 <?php if( is_object($myBlock) && $myBlock->getJsObjectName()): ?>
     var radioBoxes = $H({});
@@ -79,5 +82,6 @@
 <?php echo $myBlock->getJsObjectName() ?>.checkboxCheckCallback = registerUserRole;
 <?php echo $myBlock->getJsObjectName() ?>.rows.each(function(row){rolesRowInit(<?php echo $myBlock->getJsObjectName() ?>, row)});
 <?php endif; ?>
-//-->
+
+});
 </script>

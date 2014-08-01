@@ -20,8 +20,17 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
+/********************* GIFT OPTIONS POPUP ***********************/
+/********************* GIFT OPTIONS SET ***********************/
+define([
+    "jquery",
+    "jquery/ui",
+    "mage/translate",
+    "mage/validation",
+    "prototype"
+], function(jQuery){
 
-var giftMessagesController = {
+window.giftMessagesController = {
     toogleRequired: function(source, objects)
     {
         if(!$(source).value.blank()) {
@@ -132,9 +141,9 @@ function findFieldLabel(field) {
     return false;
 }
 
+window.findFieldLabel = findFieldLabel;
 
-/********************* GIFT OPTIONS POPUP ***********************/
-var GiftOptionsPopup = Class.create();
+window.GiftOptionsPopup = Class.create();
 GiftOptionsPopup.prototype = {
     //giftOptionsWindowMask: null,
     giftOptionsWindow: null,
@@ -217,8 +226,8 @@ GiftOptionsPopup.prototype = {
 }
 
 
-/********************* GIFT OPTIONS SET ***********************/
-GiftMessageSet = Class.create();
+window.GiftMessageSet = Class.create();
+
 GiftMessageSet.prototype = {
     destPrefix: 'current_item_giftmessage_',
     sourcePrefix: 'giftmessage_',
@@ -266,3 +275,5 @@ GiftMessageSet.prototype = {
         }
     }
 };
+
+});

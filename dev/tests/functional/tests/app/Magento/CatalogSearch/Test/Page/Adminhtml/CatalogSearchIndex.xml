@@ -39,7 +39,7 @@
     <block>
         <name>messagesBlock</name>
         <class>Magento\Core\Test\Block\Messages</class>
-        <locator>.page-main-actions</locator>
+        <locator>#messages</locator>
         <strategy>css selector</strategy>
     </block>
 </page>

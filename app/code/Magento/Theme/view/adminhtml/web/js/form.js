@@ -20,6 +20,8 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
+define(["prototype"], function(){
+
 function parentThemeOnChange(selected, defaultsById) {
     var statusBar = $$('.tab-item-link')[0];
     var isChanged = statusBar.hasClassName('changed');
@@ -28,3 +30,7 @@ function parentThemeOnChange(selected, defaultsById) {
         $('theme_title').value = defaults.theme_title;
     }
 }
+
+window.parentThemeOnChange = parentThemeOnChange;
+
+});

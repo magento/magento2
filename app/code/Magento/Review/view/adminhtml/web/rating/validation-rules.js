@@ -22,7 +22,11 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-(function ($) {
+define([
+    "jquery",
+    "mage/validation"
+], function($){
+
     $.validator.addMethod(
         'validate-rating',
         function () {
@@ -35,4 +39,5 @@
             return noError;
         },
         'Please select one of each ratings above.');
-})(jQuery);
+
+});

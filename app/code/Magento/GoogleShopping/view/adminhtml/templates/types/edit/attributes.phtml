@@ -25,6 +25,8 @@
 
 <?php if ($this->getAttributeSetSelected()): ?>
 <script type="text/javascript">
+require(['prototype'], function(){
+
 //<![CDATA[
 Gcontent = {};
 Gcontent.Attribute = Class.create();
@@ -85,9 +87,11 @@ var attributesSelectTemplate = '<tr id="<?php echo $this->getFieldId() ?>_{{inde
                 '<td class="col-delete">' + <?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode($this->getDeleteButtonHtml()) ?> + '</td>' +
             '</tr>';
 
-var optionIndex = 0;
+optionIndex = 0;
 gContentAttribute = new Gcontent.Attribute(attributesSelectTemplate);
 //]]>
+
+});
 </script>
 
 <div id="gcontent_attributes_container">
@@ -114,11 +118,15 @@ gContentAttribute = new Gcontent.Attribute(attributesSelectTemplate);
 
 <?php if ($this->getAttributesData()): ?>
 <script type="text/javascript">
+require(['prototype'], function(){
+
 //<![CDATA[
     <?php foreach ($this->getAttributesData() as $data): ?>
         gContentAttribute.add(<?php echo $this->jsonFormat($data) ?>);
     <?php endforeach; ?>
 //]]>
+
+});
 </script>
 <?php endif; ?>
 

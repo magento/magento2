@@ -149,7 +149,7 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
         $html .= '<input type="hidden" name="' . $this->_getHtmlName() . '[locale]"' . ' value="'
             . $this->_localeResolver->getLocaleCode() . '"/>';
         $html .= '<script type="text/javascript">
-            (function( $ ) {
+            require(["jquery", "mage/calendar"],function($){
                     $("#' . $htmlId . '_range").dateRange({
                         dateFormat: "' . $format . '",
                         timeFormat: "' . $timeFormat . '",
@@ -163,7 +163,7 @@ class Datetime extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Date
                             id: "' . $htmlId . '_to"
                         }
                     })
-            })(jQuery)
+            });
         </script>';
         return $html;
     }

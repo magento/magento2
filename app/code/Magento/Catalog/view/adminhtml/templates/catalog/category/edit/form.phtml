@@ -53,17 +53,20 @@
     <div id="category_tab_content"></div>
 </form>
 <script type="text/javascript">
-    (function($) {
-        $.mage.extend('categoryForm', 'form',
-                '<?php echo $this->getViewFileUrl('Magento_Catalog::catalog/category/form.js') ?>');
-        $('#category_edit_form')
-                .mage('categoryForm', {refreshUrl: '<?php echo $this->getRefreshPathUrl() ?>'})
-                .mage('validation', {submitHandler: function(form){
-                    form.submit();
-                    displayLoadingMask();
-                }});
-    })(jQuery);
-    <?php if(($block = $this->getLayout()->getBlock('category.product.grid')) && ($_gridJsObject=$block->getJsObjectName())): ?>
+require(['jquery', "mage/mage"], function($){
+    $.mage.extend('categoryForm', 'form', 'Magento_Catalog/catalog/category/form');
+    $('#category_edit_form')
+        .mage('categoryForm', {refreshUrl: '<?php echo $this->getRefreshPathUrl() ?>'})
+        .mage('validation', {submitHandler: function(form){
+            form.submit();
+            displayLoadingMask();
+        }});
+});
+
+<?php if(($block = $this->getLayout()->getBlock('category.product.grid')) && ($_gridJsObject=$block->getJsObjectName())): ?>
+require([
+    "mage/adminhtml/grid"
+], function(){
 
     var categoryProducts = $H(<?php echo $this->getProductsJson() ?>);
     $('in_category_products').value = Object.toJSON(categoryProducts);
@@ -120,16 +123,21 @@
         <?php echo $_gridJsObject ?>.rowClickCallback = categoryProductRowClick;
         <?php echo $_gridJsObject ?>.initRowCallback = categoryProductRowInit;
         <?php echo $_gridJsObject ?>.checkboxCheckCallback = registerCategoryProduct;
-        <?php echo $_gridJsObject ?>.rows.each(function(row){categoryProductRowInit(<?php echo $_gridJsObject ?>, row)});
-
-        <?php endif; ?>
-    <?php if($this->isAjax() && ($block = $this->getLayout()->getBlock('tabs')) && ($_tabsJsObject=$block->getJsObjectName())): ?>
+        if(<?php echo $_gridJsObject ?>.rows) {
+            <?php echo $_gridJsObject ?>.rows.each(function(row){categoryProductRowInit(<?php echo $_gridJsObject ?>, row)});
+        }
+});
+<?php endif; ?>
+<?php if($this->isAjax() && ($block = $this->getLayout()->getBlock('tabs')) && ($_tabsJsObject=$block->getJsObjectName())): ?>
     // Temporary solution, will be replaced after refactoring of manage category functionality
-        <?php $tabsBlock = $this->getLayout()->getBlock('tabs'); ?>
-    var activeAnchor = jQuery('#<?php echo $tabsBlock->getId() ?>').tabs('activeAnchor');
-    if (activeAnchor.length) {
-        $('active_tab_id').value = activeAnchor.prop('id');
-    }
-    $('active_tab_id').tabsJsObject = jQuery('#<?php echo $tabsBlock->getId() ?>');
-        <?php endif; ?>
+    <?php $tabsBlock = $this->getLayout()->getBlock('tabs'); ?>
+    require(["jquery","mage/backend/tabs"],function($){
+        var activeAnchor = $('#<?php echo $tabsBlock->getId() ?>').tabs('activeAnchor');
+        if (activeAnchor.length) {
+            $('active_tab_id').value = activeAnchor.prop('id');
+        }
+        $('active_tab_id').tabsJsObject = $('#<?php echo $tabsBlock->getId() ?>');
+    });
+<?php endif; ?>
+
 </script>

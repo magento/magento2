@@ -92,6 +92,11 @@
 <div><input type="hidden" name="affect_product_custom_options" value="1"/></div>
 <?php endif; ?>
 <script type="text/javascript">
+require([
+    "jquery",
+    "Magento_Catalog/js/custom-options"
+], function(jQuery){
+
 jQuery(function ($) {
     var fieldSet = $('#Custom_Options');
     fieldSet.customOptions(<?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode(
@@ -109,5 +114,7 @@ jQuery(function ($) {
     <?php foreach ($this->getOptionValues() as $_value): ?>
         fieldSet.customOptions('addOption', <?php echo $_value->toJson() ?>);
     <?php endforeach; ?>
+});
+
 });
 </script>

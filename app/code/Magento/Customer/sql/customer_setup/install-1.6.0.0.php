@@ -1159,25 +1159,3 @@ $table = $installer->getConnection()->newTable(
 $installer->getConnection()->createTable($table);
 
 $installer->endSetup();
-
-// insert default customer groups
-$installer->getConnection()->insertForce(
-    $installer->getTable('customer_group'),
-    array('customer_group_id' => 0, 'customer_group_code' => 'NOT LOGGED IN', 'tax_class_id' => 3)
-);
-$installer->getConnection()->insertForce(
-    $installer->getTable('customer_group'),
-    array('customer_group_id' => 1, 'customer_group_code' => 'General', 'tax_class_id' => 3)
-);
-$installer->getConnection()->insertForce(
-    $installer->getTable('customer_group'),
-    array('customer_group_id' => 2, 'customer_group_code' => 'Wholesale', 'tax_class_id' => 3)
-);
-$installer->getConnection()->insertForce(
-    $installer->getTable('customer_group'),
-    array('customer_group_id' => 3, 'customer_group_code' => 'Retailer', 'tax_class_id' => 3)
-);
-
-$installer->installEntities();
-
-$installer->installCustomerForms();

@@ -33,8 +33,11 @@
 ?>
 
 <script type="text/javascript">
-//<![CDATA[
-(function($) {
+require([
+    "jquery",
+    "jquery/ui"
+], function($){
+    
     $.extend(true, $, {
         calendarConfig: {
             dayNames: <?php echo $days['wide']?>,
@@ -68,9 +71,8 @@
             yearRange: '<?php echo $this->getYearRange() ?>'
         }
     });
-})(jQuery);
 
 enUS = <?php echo $enUS?>; // en_US locale reference
 
-//]]>
+});
 </script>

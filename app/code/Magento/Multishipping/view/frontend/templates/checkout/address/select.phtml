@@ -54,8 +54,12 @@
     </div>
 </div>
 <script type="text/javascript">
+require(['jquery', 'mage/mage'], function(jQuery){
+
     jQuery('.actions').mage('address', {
         addAddress: "button[role='add-address']",
         addAddressLocation: '<?php echo $this->getAddNewUrl() ?>'
     });
+
+});
 </script>

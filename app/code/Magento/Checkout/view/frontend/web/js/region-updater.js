@@ -22,7 +22,13 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /*jshint browser:true jquery:true expr:true*/
-(function($) {
+define([
+    "jquery",
+    "jquery/ui",
+    "jquery/template",
+    "mage/validation"
+], function($){
+
     $.widget('mage.regionUpdater', {
         options: {
             regionTemplate: '<option value="${value}" title="${title}" {{if isSelected}}selected="selected"{{/if}}>${title}</option>',
@@ -182,4 +188,5 @@
             });
         }
     });
-})(jQuery);
+
+});

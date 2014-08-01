@@ -25,8 +25,6 @@
 
 <link rel="stylesheet" type="text/css" href="<?php echo $this->getViewFileUrl('Magento_Core::prototype/magento.css') ?>"/>
 <link rel="stylesheet" type="text/css" href="<?php echo $this->getViewFileUrl('mage/translate-inline.css') ?>"/>
-<script type="text/javascript" src="<?php echo $this->getViewFileUrl('mage/edit-trigger.js') ?>"></script>
-<script type="text/javascript" src="<?php echo $this->getViewFileUrl('mage/translate-inline.js') ?>"></script>
 
 <script id="translate-inline-icon" type="text/x-jQuery-tmpl">
     <span class="action translate"></span>
@@ -61,7 +59,11 @@
 
 <div data-role="translate-dialog" data-mage-init='{"translateInline":{"ajaxUrl":"<?php echo $this->getAjaxUrl() ?>"}, "loader": {}}'></div>
 <script type="text/javascript">
-    (function($){
+    require([
+        "jquery",
+        "mage/edit-trigger",
+        "mage/translate-inline"
+    ], function($){
         $('body').editTrigger({alwaysShown:true, singleElement:false}).addClass('trnslate-inline-area');
-    })(jQuery);
+    });
 </script>

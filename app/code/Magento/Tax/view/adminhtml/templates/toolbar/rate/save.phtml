@@ -26,35 +26,40 @@
 <?php echo $form->toHtml();?>
 
 <script type="text/javascript">
-    jQuery('#<?php echo $form->getForm()->getId() ?>').mage('form').mage('validation');
+require([
+    "jquery",
+    "mage/mage"
+], function($){
 
-    (function ($) {
-        $(document).ready(function () {
-            'use strict';
+    $('#<?php echo $form->getForm()->getId() ?>').mage('form').mage('validation');
 
-            $('.field-zip_from').addClass('ignore-validate');
-            $('.field-zip_to').addClass('ignore-validate');
+    $(document).ready(function () {
+        'use strict';
 
-            $('#zip_is_range').on('change.zipRange', function(){
+        $('.field-zip_from').addClass('ignore-validate');
+        $('.field-zip_to').addClass('ignore-validate');
 
-                var elem = $(this),
-                    zipFrom =$('.field-zip_from'),
-                    zipTo =$('.field-zip_to'),
-                    zipCode =$('.field-tax_postcode');
+        $('#zip_is_range').on('change.zipRange', function(){
 
-                if (elem.is(':checked')) {
-                    zipCode.addClass('hidden').addClass('ignore-validate');
-                    zipFrom.removeClass('hidden').removeClass('ignore-validate');
-                    zipTo.removeClass('hidden').removeClass('ignore-validate');
+            var elem = $(this),
+                zipFrom =$('.field-zip_from'),
+                zipTo =$('.field-zip_to'),
+                zipCode =$('.field-tax_postcode');
 
-                } else {
-                    zipCode.removeClass('hidden').removeClass('ignore-validate');
-                    zipFrom.addClass('hidden').addClass('ignore-validate');
-                    zipTo.addClass('hidden').addClass('ignore-validate');
-                }
+            if (elem.is(':checked')) {
+                zipCode.addClass('hidden').addClass('ignore-validate');
+                zipFrom.removeClass('hidden').removeClass('ignore-validate');
+                zipTo.removeClass('hidden').removeClass('ignore-validate');
 
-            });
+            } else {
+                zipCode.removeClass('hidden').removeClass('ignore-validate');
+                zipFrom.addClass('hidden').addClass('ignore-validate');
+                zipTo.addClass('hidden').addClass('ignore-validate');
+            }
+
         });
-    })(jQuery);
+    });
+
+});
 </script>
 <?php endif; ?>

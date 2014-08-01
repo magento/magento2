@@ -3,8 +3,6 @@
 #
 app
 dev
-downloader/app/Magento
-downloader/lib/Magento
 index.php
 lib/internal/Magento
 pub

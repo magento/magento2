@@ -72,4 +72,10 @@
         <locator>.sidebar.sidebar-additional</locator>
         <strategy>css selector</strategy>
     </block>
+    <block>
+        <name>currencyBlock</name>
+        <class>Magento\Directory\Test\Block\Currency\Switcher</class>
+        <locator>.switcher.currency</locator>
+        <strategy>css selector</strategy>
+    </block>
 </page>

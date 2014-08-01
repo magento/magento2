@@ -21,8 +21,14 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /*jshint jquery:true*/
-(function ($) {
+define([
+    "jquery",
+    "jquery/ui",
+    "jquery/template"
+], function($){
+
     'use strict';
+
     $.widget('theme.themeJsList', {
         options : {
             templateId : null,
@@ -108,4 +114,5 @@
         }
     });
 
-})(window.jQuery);
+
+});

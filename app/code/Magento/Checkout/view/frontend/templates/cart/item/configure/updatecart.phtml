@@ -50,13 +50,18 @@
     </div>
 
     <script type="text/javascript">
-        (function ($) {
-            var addtocartForm = $('#product_addtocart_form');
-            addtocartForm.mage('validation');
-            addtocartForm.mage('addToCart', {
-                cartButtonId: "#product-updatecart-button",
-                cartForm: "#product_addtocart_form"
-            });
-        })(jQuery);
-    </script>
+require([
+    "jquery",
+    "mage/mage"
+], function($){
+
+    var addtocartForm = $('#product_addtocart_form');
+    addtocartForm.mage('validation');
+    addtocartForm.mage('addToCart', {
+        cartButtonId: "#product-updatecart-button",
+        cartForm: "#product_addtocart_form"
+    });
+    
+});
+</script>
 <?php endif; ?>

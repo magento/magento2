@@ -24,6 +24,7 @@
 
 /** @var $installer \Magento\Catalog\Model\Resource\Setup */
 $installer = $this;
+/** @var $connection \Magento\Framework\DB\Adapter\Pdo\Mysql */
 $connection = $installer->getConnection();
 
 $priceIndexerTables = array('catalog_product_index_price_bundle_idx', 'catalog_product_index_price_bundle_tmp');
@@ -72,13 +73,12 @@ foreach ($optionsPriceIndexerTables as $table) {
     );
 }
 
-$applyTo = explode(',', $installer->getAttribute(\Magento\Catalog\Model\Product::ENTITY, 'group_price', 'apply_to'));
-if (!in_array('bundle', $applyTo)) {
-    $applyTo[] = 'bundle';
-    $installer->updateAttribute(
-        \Magento\Catalog\Model\Product::ENTITY,
-        'group_price',
-        'apply_to',
-        implode(',', $applyTo)
-    );
+$memoryTables = array(
+    'catalog_product_index_price_bundle_opt_tmp',
+    'catalog_product_index_price_bundle_sel_tmp',
+    'catalog_product_index_price_bundle_tmp'
+);
+
+foreach ($memoryTables as $table) {
+    $connection->changeTableEngine($this->getTable($table), \Magento\Framework\DB\Adapter\Pdo\Mysql::ENGINE_MEMORY);
 }

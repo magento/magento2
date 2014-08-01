@@ -138,7 +138,8 @@ class Editor extends Textarea
                 $js .
                 '
                 <script type="text/javascript">
-                //<![CDATA[' .
+                //<![CDATA[
+                require(["jquery", "mage/translate", "mage/adminhtml/events", "mage/adminhtml/wysiwyg/tiny_mce/setup"], function(jQuery){' .
                 "\n" .
                 '(function($) {$.mage.translate.add(' .
                 \Zend_Json::encode(
@@ -186,6 +187,7 @@ class Editor extends Textarea
                 $jsSetupObject .
                 '));
                 //]]>
+                });
                 </script>';
 
             $html = $this->_wrapIntoContainer($html);

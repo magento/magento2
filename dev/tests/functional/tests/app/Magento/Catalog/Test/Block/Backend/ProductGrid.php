@@ -63,6 +63,6 @@ class ProductGrid extends Grid
      */
     public function updateAttributes(array $items = array())
     {
-        $this->massaction('Update Attributes', $items);
+        $this->massaction($items, 'Update Attributes');
     }
 }

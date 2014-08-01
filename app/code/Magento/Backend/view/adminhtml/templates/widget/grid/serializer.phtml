@@ -47,7 +47,11 @@
 <?php else :?>
 <input type="hidden" name="<?php echo $this->getInputElementName()?>"  value="" id="<?php echo $_id?>" />
 <script type="text/javascript">
-    new serializerController('<?php echo $_id?>', <?php echo $this->getDataAsJSON() ?>, <?php echo $this->getColumnInputNames(true) ?>, <?php echo $this->getGridBlock()->getJsObjectName() ?>, '<?php echo $this->getReloadParamName()?>');
+    require([
+        'mage/adminhtml/grid'
+    ], function(){
+        new serializerController('<?php echo $_id?>', <?php echo $this->getDataAsJSON() ?>, <?php echo $this->getColumnInputNames(true) ?>, <?php echo $this->getGridBlock()->getJsObjectName() ?>, '<?php echo $this->getReloadParamName()?>');
+    });
 </script>
 <?php endif;?>
 

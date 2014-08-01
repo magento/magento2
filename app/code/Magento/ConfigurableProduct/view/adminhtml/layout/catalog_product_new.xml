@@ -30,11 +30,6 @@
         <block class="Magento\Framework\View\Element\Template" template="Magento_ConfigurableProduct::product/configurable/stock/disabler.phtml"/>
     </referenceContainer>
     <referenceBlock name="head">
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-catalog-product-variation-js">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_ConfigurableProduct::catalog/product-variation.js</argument>
-            </arguments>
-        </block>
         <block class="Magento\Theme\Block\Html\Head\Css" name="magento-configurableproduct-product-product-css">
             <arguments>
                 <argument name="file" xsi:type="string">Magento_ConfigurableProduct::product/product.css</argument>

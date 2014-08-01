@@ -82,7 +82,6 @@ $attributesOrder = array(
     'name' => array($newGeneralTabName => 10),
     'sku' => array($newGeneralTabName => 20),
     'price' => array($newGeneralTabName => 30),
-    'tax_class_id' => array($newGeneralTabName => 40, 'is_required' => 0, 'default_value' => 2),
     'image' => array($newGeneralTabName => 50),
     'weight' => array($newGeneralTabName => 70, 'is_required' => 0),
     'category_ids' => array($newGeneralTabName => 80),

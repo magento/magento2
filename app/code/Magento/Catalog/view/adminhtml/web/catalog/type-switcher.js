@@ -20,7 +20,10 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-(function ($) {
+define([
+    "jquery"
+], function($){
+
     /**
      * Type Switcher
      *
@@ -150,4 +153,5 @@
     });
     // export to global scope
     window.TypeSwitcher = TypeSwitcher;
-})(jQuery);
+
+});

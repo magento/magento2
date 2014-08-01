@@ -37,53 +37,58 @@
     </div>
 </fieldset>
 
-<script>
-var BundleControl = Class.create();
-BundleControl.prototype = {
-    initialize: function (config) {
-        this.config = config;
-    },
+<script type="text/javascript">
+require([
+    "Magento_Catalog/catalog/product/composite/configure"
+], function(){
+    BundleControl = Class.create();
+    
+    BundleControl.prototype = {
+        initialize: function (config) {
+            this.config = config;
+        },
 
-    changeSelection: function (selection) {
-        if (selection.multiple) {
-            return;
-        }
-        var parts = selection.id.split('-'), optionId = parts[2],
-            showQtyInput = selection.value && selection.value != 'none',
-            options = this.config.options[optionId],
-            selectionOptions = options && options.selections && options.selections[selection.value] || {};
+        changeSelection: function (selection) {
+            if (selection.multiple) {
+                return;
+            }
+            var parts = selection.id.split('-'), optionId = parts[2],
+                showQtyInput = selection.value && selection.value != 'none',
+                options = this.config.options[optionId],
+                selectionOptions = options && options.selections && options.selections[selection.value] || {};
 
-        selectionOptions.can_change_qty = Number(selectionOptions.can_change_qty) && showQtyInput;
-        this.updateQtyInput(optionId, selectionOptions);
-    },
+            selectionOptions.can_change_qty = Number(selectionOptions.can_change_qty) && showQtyInput;
+            this.updateQtyInput(optionId, selectionOptions);
+        },
 
-    updateQtyInput: function(optionId, selectionOptions) {
-        var elem = $('bundle-option-' + optionId + '-qty-input'),
-            default_qty = Number(selectionOptions.default_qty);
-        if (!elem) {
-            return;
-        }
-        if (selectionOptions.can_change_qty) {
-            elem.removeClassName('qty-disabled');
-            elem.disabled = false;
-            elem.value = default_qty || 1;
-        } else {
-            elem.addClassName('qty-disabled');
-            elem.disabled = true;
-            elem.value = default_qty || 0;
-        }
-    },
+        updateQtyInput: function(optionId, selectionOptions) {
+            var elem = $('bundle-option-' + optionId + '-qty-input'),
+                default_qty = Number(selectionOptions.default_qty);
+            if (!elem) {
+                return;
+            }
+            if (selectionOptions.can_change_qty) {
+                elem.removeClassName('qty-disabled');
+                elem.disabled = false;
+                elem.value = default_qty || 1;
+            } else {
+                elem.addClassName('qty-disabled');
+                elem.disabled = true;
+                elem.value = default_qty || 0;
+            }
+        },
 
-    updateForDefaults: function () {
-        for (var optionId in this.config.options) {
-            var selection = $('bundle-option-' + optionId);
-            if (selection) {
-                this.changeSelection(selection);
+        updateForDefaults: function () {
+            for (var optionId in this.config.options) {
+                var selection = $('bundle-option-' + optionId);
+                if (selection) {
+                    this.changeSelection(selection);
+                }
             }
         }
-    }
-}
-ProductConfigure.bundleControl = new BundleControl(<?php echo $this->getJsonConfig() ?>);
+    };
+    ProductConfigure.bundleControl = new BundleControl(<?php echo $this->getJsonConfig() ?>);
+});
 </script>
 
 <?php endif; ?>

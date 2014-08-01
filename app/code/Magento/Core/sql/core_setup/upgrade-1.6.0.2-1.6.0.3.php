@@ -44,7 +44,7 @@ $connection->addColumn(
     array(
         'type' => \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
         'nullable' => false,
-        'default' => crc32(\Magento\Framework\TranslateInterface::DEFAULT_STRING),
+        'default' => crc32('Translate String'),
         'comment' => 'Translation String CRC32 Hash'
     )
 );

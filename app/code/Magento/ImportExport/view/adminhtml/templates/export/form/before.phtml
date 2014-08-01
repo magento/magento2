@@ -23,6 +23,8 @@
  */
 ?>
 <script type="text/javascript">
+require(['prototype'], function(){
+
 //<![CDATA[
     // Temporary Class will be replaced after refactoring of import/export functionality
     VarienExport = Class.create();
@@ -86,7 +88,7 @@
      *
      * return void
      */
-    function getFile() {
+    getFile = function() {
         if ($('entity') && $F('entity')) {
             var form      = $('export_filter_form');
             var oldAction = form.action;
@@ -102,4 +104,6 @@
 
     varienExport = new VarienExport();
 //]]>
+
+});
 </script>

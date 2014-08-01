@@ -1,4 +1,4 @@
-    /**
+/**
  * Magento
  *
  * NOTICE OF LICENSE
@@ -20,9 +20,20 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-    /*jshint jquery:true*/
-(function($) {
+/*jshint jquery:true*/
+(function (factory) {
+    if (typeof define === 'function' && define.amd) {
+        define([
+            "jquery",
+            "jquery/ui",
+            "mage/translate"
+        ], factory);
+    } else {
+        factory(jQuery);
+    }
+}(function ($) {
     'use strict';
+
     /**
      * Load theme list
      */
@@ -172,4 +183,4 @@
             }
         }
     });
-})(jQuery);
+}));

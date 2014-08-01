@@ -26,8 +26,15 @@
     <div class="edit-attribute-set attribute-set-col">
         <?php echo $this->getSetFormHtml() ?>
         <script type="text/javascript">
-            jQuery('#set-prop-form').mage('validation', {errorClass: 'mage-error'});
-        </script>
+require([
+    "jquery",
+    "mage/mage"
+], function(jQuery){
+
+    jQuery('#set-prop-form').mage('validation', {errorClass: 'mage-error'});
+        
+});
+</script>
     </div>
     <div class="attribute-set-col fieldset-wrapper">
         <div class="fieldset-wrapper-title">
@@ -47,6 +54,8 @@
         </div>
         <div id="tree-div2" class="attribute-set-tree"></div>
             <script type="text/javascript">
+require(['jquery'], function(jQuery){
+
             //<![CDATA[
             var allowDragAndDrop = <?php echo ($this->getIsReadOnly() ? 'false' : 'true'); ?>;
             var canEditGroups = <?php echo ($this->getIsReadOnly() ? 'false' : 'true'); ?>;
@@ -410,6 +419,8 @@
                 TreePanels.init();
             });
             //]]>
-            </script>
+            
+});
+</script>
     </div>
 </div>

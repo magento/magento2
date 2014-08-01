@@ -30,35 +30,5 @@
                 <argument name="file" xsi:type="string">css/styles.css</argument>
             </arguments>
         </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="js-jquery-dropdowns-js">
-            <arguments>
-                <argument name="file" xsi:type="string">mage/dropdowns.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-terms">
-            <arguments>
-                <argument name="file" xsi:type="string">mage/terms.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="js-matchmedia-js">
-            <arguments>
-                <argument name="file" xsi:type="string">matchMedia.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="js-responsive-js">
-            <arguments>
-                <argument name="file" xsi:type="string">js/responsive.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="js-navigation-menu-js">
-            <arguments>
-                <argument name="file" xsi:type="string">mage/menu.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="js-theme-js">
-            <arguments>
-                <argument name="file" xsi:type="string">js/theme.js</argument>
-            </arguments>
-        </block>
     </referenceBlock>
 </layout>

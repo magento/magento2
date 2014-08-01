@@ -60,13 +60,13 @@ $table = $installer->getConnection()->newTable(
 )->addColumn(
     'key',
     \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-    \Magento\Framework\Oauth\Helper\Oauth::LENGTH_CONSUMER_KEY,
+    32,
     array('nullable' => false),
     'Key code'
 )->addColumn(
     'secret',
     \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-    \Magento\Framework\Oauth\Helper\Oauth::LENGTH_CONSUMER_SECRET,
+    32,
     array('nullable' => false),
     'Secret code'
 )->addColumn(
@@ -146,19 +146,19 @@ $table = $installer->getConnection()->newTable(
 )->addColumn(
     'token',
     \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-    \Magento\Framework\Oauth\Helper\Oauth::LENGTH_TOKEN,
+    32,
     array('nullable' => false),
     'Token'
 )->addColumn(
     'secret',
     \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-    \Magento\Framework\Oauth\Helper\Oauth::LENGTH_TOKEN_SECRET,
+    32,
     array('nullable' => false),
     'Token Secret'
 )->addColumn(
     'verifier',
     \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-    \Magento\Framework\Oauth\Helper\Oauth::LENGTH_TOKEN_VERIFIER,
+    32,
     array('nullable' => true),
     'Token Verifier'
 )->addColumn(

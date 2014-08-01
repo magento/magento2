@@ -34,7 +34,6 @@ $_helper = $this->helper('Magento\Authorizenet\Helper\HelperInterface');
 <html>
 <head>
 <script type="text/javascript">
-//<![CDATA[
 <?php if (isset($_params['redirect'])): ?>
 window.location="<?php echo $this->escapeUrl($_params['redirect']) ?>";
 <?php endif; ?>
@@ -47,7 +46,6 @@ window.top.directPostModel.showError(<?php echo $this->helper('Magento\Core\Help
 window.top.directPostModel.successUrl="<?php echo $_helper->getSuccessOrderUrl($_params) ?>";
 <?php endif; ?>
 <?php endif; ?>
-//]]>
 </script>
 </head>
 <body></body>

@@ -82,4 +82,6 @@ return [
     ['Magento\Image', 'Magento\Framework\Image'],
     ['Magento\Oauth', 'Magento\Framework\Oauth'],
     ['Magento\Object', 'Magento\Framework\Object'],
+    ['Magento\Connect'],
+    ['Magento\Framework\Connect'],
 ];

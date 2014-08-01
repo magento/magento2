@@ -110,6 +110,20 @@
             <default_value></default_value>
             <input></input>
         </customer_id>
+        <type>
+            <attribute_code>type</attribute_code>
+            <backend_type>string</backend_type>
+            <is_required></is_required>
+            <default_value></default_value>
+            <input></input>
+        </type>
+        <select_stores>
+            <attribute_code>select_stores</attribute_code>
+            <backend_type>virtual</backend_type>
+            <is_required>1</is_required>
+            <default_value>0</default_value>
+            <input>multiselectgrouplist</input>
+        </select_stores>
         <ratings>
             <attribute_code>ratings</attribute_code>
             <backend_type>virtual</backend_type>

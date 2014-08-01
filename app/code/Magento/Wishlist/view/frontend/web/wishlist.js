@@ -20,13 +20,18 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-
 /*jshint browser:true jquery:true sub:true*/
 /*global alert*/
 /*global Handlebars*/
+define([
+    "jquery",
+    "handlebars",
+    "jquery/ui",
+    "mage/validation/validation",
+    "mage/dataPost"
+], function($){
+     "use strict";
 
-(function($, Handlebars, window) {
-    "use strict";
     $.widget('mage.wishlist', {
         options: {
             dataAttribute: 'item-id',
@@ -210,4 +215,6 @@
             });
         }
     });
-})(jQuery, Handlebars, window);
+
+
+});

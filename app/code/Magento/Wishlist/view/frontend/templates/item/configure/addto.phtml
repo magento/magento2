@@ -38,7 +38,14 @@
     <?php endif; ?>
 </div>
 <script type="text/javascript">
-    jQuery('body').mage('addToWishlist',
-        <?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode(array('productType' => $_product->getTypeId()))?>
-    );
+    require([
+        "jquery",
+        "mage/mage"
+    ], function(jQuery){
+
+        jQuery('body').mage('addToWishlist',
+            <?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode(array('productType' => $_product->getTypeId()))?>
+        );
+
+    });
 </script>

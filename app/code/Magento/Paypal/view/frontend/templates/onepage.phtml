@@ -23,7 +23,10 @@
  */
 ?>
 <script type="text/javascript">
-    (function($) {
-    	$('#checkoutSteps').mage('opcheckoutPaypalIframe');
-    })(jQuery);
+require([
+    "jquery",
+    "mage/mage"
+], function($){
+    $('#checkoutSteps').mage('opcheckoutPaypalIframe');
+});
 </script>

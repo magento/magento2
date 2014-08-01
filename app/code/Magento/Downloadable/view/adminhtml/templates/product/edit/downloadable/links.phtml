@@ -84,6 +84,13 @@
 
 </div>
 <script type="text/javascript">
+require([
+    'jquery',
+    'jquery/file-uploader',
+    'mage/mage',
+    'prototype'
+], function(jQuery){
+
 //<![CDATA[
 var linkTemplate = '<tr>'+
     '<td>'+
@@ -408,7 +415,8 @@ if($('add_link_item')) {
 <?php foreach ($this->getLinkData() as $item): ?>
     linkItems.add(<?php echo $item->toJson()?>);
 <?php endforeach; ?>
-jQuery.mage.extend('validation', 'validation',
-    '<?php echo $this->getViewFileUrl('Magento_Downloadable::product/validation-rules.js'); ?>');
+jQuery.mage.extend('validation', 'validation', 'Magento_Downloadable/product/validation-rules');
 //]]>
+
+});
 </script>

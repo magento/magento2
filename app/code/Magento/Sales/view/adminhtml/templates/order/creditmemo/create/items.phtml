@@ -120,6 +120,8 @@
 </div>
 
 <script type="text/javascript">
+require(['jquery', 'prototype'], function(jQuery){
+
 //<![CDATA[
 var submitButtons = $$('.submit-button');
 var updateButtons = $$('.update-button');
@@ -149,24 +151,27 @@ function checkButtonsRelation() {
     }
 }
 
-function submitCreditMemo() {
+submitCreditMemo = function() {
     if ($('creditmemo_do_offline')) $('creditmemo_do_offline').value=0;
     // Temporary solution will be replaced after refactoring order functionality
     jQuery('#edit_form').triggerHandler('save');
 }
-function submitCreditMemoOffline() {
+
+submitCreditMemoOffline = function() {
     if ($('creditmemo_do_offline')) $('creditmemo_do_offline').value=1;
     // Temporary solution will be replaced after refactoring order functionality
     jQuery('#edit_form').triggerHandler('save');
 }
 
 var sendEmailCheckbox = $('send_email');
+
 if (sendEmailCheckbox) {
     var notifyCustomerCheckbox = $('notify_customer');
     var creditmemoCommentText = $('creditmemo_comment_text');
     Event.observe(sendEmailCheckbox, 'change', bindSendEmail);
     bindSendEmail();
 }
+
 function bindSendEmail()
 {
     if (sendEmailCheckbox.checked == true) {
@@ -178,5 +183,10 @@ function bindSendEmail()
         //creditmemoCommentText.disabled = true;
     }
 }
+
+window.bindSendEmail = bindSendEmail;
+window.checkButtonsRelation = checkButtonsRelation;
 //]]>
+
+});
 </script>

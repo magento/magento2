@@ -56,6 +56,7 @@ class CustomerInjectable extends AbstractRepository
             'password_confirmation' => '123123q',
             'dob' => '01/01/1990',
             'gender' => 'Male',
+            'group_id' => 'General',
         ];
 
         $this->_data['johndoe_retailer'] = [

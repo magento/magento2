@@ -24,13 +24,7 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
-    <referenceBlock name="head">
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-jquery-ba-hashchange-min-js">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/jquery.ba-hashchange.min.js</argument>
-            </arguments>
-        </block>
-    </referenceBlock>
+    <referenceBlock name="head"/>
     <referenceContainer name="js">
         <block class="Magento\Backend\Block\Template" template="Magento_Backend::system/config/js.phtml"/>
         <block class="Magento\Backend\Block\Template" template="Magento_Backend::system/shipping/applicable_country.phtml"/>

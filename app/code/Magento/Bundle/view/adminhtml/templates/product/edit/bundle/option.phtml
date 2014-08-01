@@ -126,13 +126,21 @@
         <div id="<?php echo $this->getFieldId() ?>_search_{{index}}" class="selection-search"></div>
     </div>
 </script>
-<script type="text/javascript">
-    var optionTemplate = jQuery('#bundle-option-template').html();
-</script>
 
 <?php echo $this->getSelectionHtml() ?>
 
 <script type="text/javascript">
+require([
+    "jquery",
+    "js/theme",
+    "Magento_Bundle/js/bundle-product",
+
+    "prototype",
+    "mage/adminhtml/form"
+], function(jQuery){
+
+    var optionTemplate = jQuery('#bundle-option-template').html();
+
 function changeInputType(oldObject, oType) {
     var newObject = document.createElement('input');
     newObject.type = oType;
@@ -299,5 +307,7 @@ function togglePriceType() {
 document.observe("dom:loaded", function() {
     togglePriceType();
     Event.observe('price_type', 'change', togglePriceType);
+});
+
 });
 </script>

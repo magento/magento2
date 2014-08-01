@@ -84,8 +84,12 @@ $canApplyMsrp = $this->helper('Magento\Catalog\Helper\Data')->canApplyMsrp($_ite
                 <?php $helpLinkId = 'cart-msrp-help-' . $_item->getId(); ?>
                 <a id="<?php echo $helpLinkId ?>" href="#" class="action help map"><?php echo __("What's this?"); ?></a>
                 <script type="text/javascript">
-                    Catalog.Map.addHelpLink($('<?php echo $helpLinkId ?>'), "<?php echo __("What's this?") ?>");
-                </script>
+require(['prototype'], function(){
+
+    Catalog.Map.addHelpLink($('<?php echo $helpLinkId ?>'), "<?php echo __("What's this?") ?>");
+                
+});
+</script>
             </span>
             <?php $cols++; ?>
         </td>
@@ -299,7 +303,11 @@ $canApplyMsrp = $this->helper('Magento\Catalog\Helper\Data')->canApplyMsrp($_ite
                 <?php if ($isVisibleProduct): ?>
                     <a class="action edit" href="<?php echo $this->getConfigureUrl() ?>" title="<?php echo __('Edit item parameters') ?>"><span><?php echo __('Edit') ?></span></a>
                 <?php endif ?>
-                <a href="<?php echo $this->getDeleteUrl()?>" title="<?php echo __('Remove item')?>" class="action delete"><span><?php echo __('Remove item')?></span></a>
+                <button title="<?php echo __('Remove item') ?>"
+                        class="action delete"
+                        data-post='<?php echo $this->helper('Magento\Checkout\Helper\Cart')->getDeletePostJson($_item); ?>'>
+                    <span><?php echo __('Remove item')?></span>
+                </button>
             </div>
         </td>
     </tr>

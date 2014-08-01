@@ -31,6 +31,10 @@ use Mtf\Util\Protocol\CurlInterface;
 use Mtf\Util\Protocol\CurlTransport\BackendDecorator;
 use Mtf\System\Config;
 
+/**
+ * Class RemoveCustomerGroup
+ * Curl handler for remove customer group
+ */
 class RemoveCustomerGroup extends Curl
 {
     /**
@@ -48,14 +52,14 @@ class RemoveCustomerGroup extends Curl
      */
     public function persist(FixtureInterface $fixture = null)
     {
-        /** @var \Magento\Customer\Test\Fixture\VatGroup $fixture*/
+        /** @var \Magento\Customer\Test\Fixture\VatGroup $fixture */
         $groups = $fixture->getGroupsIds();
         $curl = new BackendDecorator(new CurlTransport(), new Config);
         $curl->addOption(CURLOPT_HEADER, 1);
         $response = '';
         foreach ($groups as $groupId) {
             $url = sprintf($_ENV['app_backend_url'] . $this->deleteUrl, $groupId);
-            $curl->write(CurlInterface::GET, $url, '1.0', array());
+            $curl->write(CurlInterface::GET, $url, '1.0', []);
             $response = $curl->read();
         }
         $curl->close();

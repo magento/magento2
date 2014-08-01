@@ -78,6 +78,6 @@ class Grid extends ParentGrid
      */
     public function updateAttributes(array $items = [])
     {
-        $this->massaction('Update Attributes', $items);
+        $this->massaction($items, 'Update Attributes');
     }
 }

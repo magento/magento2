@@ -21,9 +21,15 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /*jshint jquery:true*/
-(function($) {
+define([
+    "jquery",
+    "jquery/ui",
+    "mage/translate",
+    "jquery/file-uploader"
+], function($){
 
     var parentWidget = ($.blueimpFP || $.blueimp).fileupload;
+    
     $.widget("vde.quickStyleUploader", parentWidget, {
         options: {
             dataType: 'json',
@@ -189,4 +195,5 @@
             return document.getElementById(id);
         }
     });
-})(jQuery);
+
+});

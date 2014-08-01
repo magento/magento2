@@ -71,4 +71,12 @@
             <product class="Mtf\Fixture\FixtureInterface" />
         </require>
     </assertProductConfigurableDuplicateForm>
+    <assertConfigurableProductForm module="Magento_ConfigurableProduct">
+        <severeness>high</severeness>
+        <require>
+            <productGrid class="Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex" />
+            <productPage class="Magento\ConfigurableProduct\Test\Page\Adminhtml\CatalogProductEdit" />
+            <product class="Mtf\Fixture\FixtureInterface" />
+        </require>
+    </assertConfigurableProductForm>
 </constraint>

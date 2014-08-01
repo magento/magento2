@@ -34,8 +34,12 @@
     <?php endif; ?>
 </form>
 <script type="text/javascript">
+require(['jquery'], function(jQuery){
+
     // submit the form as soon as it is displayed to transfer over to the ogone website
     window.onload = function() {
         jQuery("#ogone-review-form").submit();
     };
+
+});
 </script>

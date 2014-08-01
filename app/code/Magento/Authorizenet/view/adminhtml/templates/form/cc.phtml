@@ -40,33 +40,38 @@
                 </div>
                 <?php echo $this->showNoticeMessage(__('Please enter a different credit card number to complete your purchase.')) ?>
                     <script type="text/javascript">
-                    //<![CDATA[
-                    function cancelPaymentAuthorizations(){
-                        new Ajax.Request('<?php echo $this->getAdminCancelUrl() ?>', {
-                            onSuccess : function(transport) {
-                                try{
-                                    response = eval('(' + transport.responseText + ')');
-                                } catch (e) {
-                                    response = {};
-                                }
+                    require([
+                        "prototype",
+                        "Magento_Sales/order/create/form"
+                    ], function(){
 
-                                if (response.success) {
-                                    order.loadArea(['billing_method','totals'], true, []);
-                                } else {
-                                    var msg = response.error_message;
-                                    if (msg) {
-                                        alert(msg);
+                        window.cancelPaymentAuthorizations = function(){
+                            new Ajax.Request('<?php echo $this->getAdminCancelUrl() ?>', {
+                                onSuccess : function(transport) {
+                                    try{
+                                        response = eval('(' + transport.responseText + ')');
+                                    } catch (e) {
+                                        response = {};
+                                    }
+
+                                    if (response.success) {
+                                        order.loadArea(['billing_method','totals'], true, []);
+                                    } else {
+                                        var msg = response.error_message;
+                                        if (msg) {
+                                            alert(msg);
+                                        }
                                     }
                                 }
-                            }
-                        });
-                    }
-                    <?php if ($_message = $this->getPartialAuthorizationConfirmationMessage()): ?>
-                    if (!confirm('<?php echo $this->escapeMessage($_message) ?>')) {
-                        cancelPaymentAuthorizations();
-                    }
-                    <?php endif;?>
-                    //]]>
+                            });
+                        }
+                        <?php if ($_message = $this->getPartialAuthorizationConfirmationMessage()): ?>
+                        if (!confirm('<?php echo $this->escapeMessage($_message) ?>')) {
+                            cancelPaymentAuthorizations();
+                        }
+                        <?php endif;?>
+
+                    });
                     </script>
         <?php endif;?>
     </div>

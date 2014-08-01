@@ -38,16 +38,36 @@ class Grid extends GridAbstract
      *
      * @var array
      */
-    protected $filters = array(
-        'review_id' => array(
-            'selector' => '#reviwGrid_filter_review_id',
-        ),
-        'title' => array(
-            'selector' => '#reviwGrid_filter_title',
-        ),
-        'status' => array(
-            'selector' => '#reviwGrid_filter_status',
+    protected $filters = [
+        'review_id' => [
+            'selector' => 'input[name="review_id"]',
+        ],
+        'title' => [
+            'selector' => 'input[name="title"]',
+        ],
+        'status' => [
+            'selector' => '.grid select[name="status"]',
             'input' => 'select',
-        ),
-    );
+        ],
+        'nickname' => [
+            'selector' => 'input[name="nickname"]',
+        ],
+        'detail' => [
+            'selector' => 'input[name="detail"]',
+        ],
+        'visible_in' => [
+            'selector' => 'select[name="visible_in"]',
+            'input' => 'selectstore',
+        ],
+        'type' => [
+            'selector' => 'select[name="type"]',
+            'input' => 'select',
+        ],
+        'name' => [
+            'selector' => 'input[name="name"]',
+        ],
+        'sku' => [
+            'selector' => 'input[name="sku"]',
+        ],
+    ];
 }

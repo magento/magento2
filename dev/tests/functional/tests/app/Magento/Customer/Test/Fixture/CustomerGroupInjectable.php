@@ -28,9 +28,15 @@ use Mtf\Fixture\InjectableFixture;
 
 /**
  * Class CustomerGroupInjectable
+ * CustomerGroupInjectable fixture
  */
 class CustomerGroupInjectable extends InjectableFixture
 {
+    /**
+     * @var string
+     */
+    protected $repositoryClass = 'Magento\Customer\Test\Repository\CustomerGroupInjectable';
+
     /**
      * @var string
      */

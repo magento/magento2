@@ -42,6 +42,8 @@
 </div>
 <?php endif; ?>
 <script type="text/javascript">
+require(["prototype", "mage/captcha"], function(){
+
 //<![CDATA[
     document.observe('dom:loaded', function () {
         var captcha = new Captcha('<?php echo $this->getRefreshUrl() ?>', '<?php echo $this->getFormId() ?>');
@@ -52,4 +54,6 @@
 
     });
 //]]>
+
+});
 </script>

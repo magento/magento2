@@ -41,12 +41,17 @@
         <input type="hidden" name="validate_rating" class="validate-rating" value="" />
     </div>
 <script type="text/javascript">
-    (function($) {
-        "use strict";
-        $.mage.extend('validation', 'validation',
-            '<?php echo $this->getViewFileUrl('Magento_Review::rating/validation-rules.js'); ?>');
-        $('[data-widget=ratingControl]').ratingControl();
-    })(jQuery);
+require([
+    "jquery",
+    "mage/mage",
+    "Magento_Review/js/rating"
+], function($){
+    "use strict";
+    
+    $.mage.extend('validation', 'validation', 'Magento_Review/rating/validation-rules');
+    $('[data-widget=ratingControl]').ratingControl();
+
+});
 </script>
 <?php else: ?>
     <?php echo __("Rating isn't Available") ?>

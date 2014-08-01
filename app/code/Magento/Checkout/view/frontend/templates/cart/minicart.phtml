@@ -115,14 +115,17 @@
     <?php endif ?>
 <?php endif; ?>
 <script type="text/javascript">
-    (function($) {
-        $('[data-block="minicart"]').mage('sidebar', {
+require([
+    "jquery",
+    "mage/mage"
+], function($){
+        $('[data-block="minicart"]').mage('sidebar',{
             checkoutUrl: '<?php echo $this->getCheckoutUrl();?>',
             checkoutButton: '#top-cart-btn-checkout',
             removeButton: '#mini-cart a.action.delete',
             confirmMessage: '<?php echo __('Are you sure you would like to remove this item from the shopping cart?') ?>'
         });
-    })(jQuery);
+});
 </script>
 <?php if ($this->getInList()): ?>
     </li>

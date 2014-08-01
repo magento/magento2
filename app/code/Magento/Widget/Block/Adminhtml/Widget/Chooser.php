@@ -204,7 +204,9 @@ class Chooser extends \Magento\Backend\Block\Template
             <div id="' .
             $chooserId .
             'advice-container" class="hidden"></div>
-            <script type="text/javascript">//<![CDATA[
+            <script type="text/javascript">
+            require(["prototype", "mage/adminhtml/wysiwyg/widget"], function(){
+            //<![CDATA[
                 (function() {
                     var instantiateChooser = function() {
                         window.' .
@@ -237,7 +239,9 @@ class Chooser extends \Magento\Backend\Block\Template
                         document.observe("dom:loaded", instantiateChooser);
                     }
                 })();
-            //]]></script>
+            //]]>
+            });
+            </script>
         ';
     }
 }

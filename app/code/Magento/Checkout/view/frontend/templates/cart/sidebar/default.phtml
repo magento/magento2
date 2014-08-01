@@ -200,7 +200,7 @@
             </div>
             <?php endif ?>
             <div class="secondary">
-                <a href="<?php echo $this->getDeleteUrl() ?>" title="<?php echo __('Remove item') ?>" class="action delete">
+                <a href="#" data-post='<?php echo $this->helper('Magento\Checkout\Helper\Cart')->getDeletePostJson($_item); ?>' title="<?php echo __('Remove item') ?>" class="action delete">
                     <span><?php echo __('Remove')?></span>
                 </a>
             </div>

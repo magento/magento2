@@ -20,8 +20,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
+define([
+    "jquery",
+    "jquery/ui",
+    "jquery/template",
+    "mage/backend/tabs"
+], function($){
 
-(function ($, window) {
     $.widget('mage.addressTabs', $.mage.tabs, {
         options: {
             itemCount: 0,
@@ -522,4 +527,6 @@
             return false;
         }
     });
-})(jQuery, window);
+
+
+});

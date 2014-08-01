@@ -33,9 +33,6 @@
     <event name="catalog_product_collection_load_after">
         <observer name="inventory" instance="Magento\CatalogInventory\Model\Observer" method="addStockStatusToCollection" />
     </event>
-    <event name="catalog_product_prepare_index_select">
-        <observer name="inventory" instance="Magento\CatalogInventory\Model\Observer" method="prepareCatalogProductIndexSelect" />
-    </event>
     <event name="sales_quote_item_collection_products_after_load">
         <observer name="inventory" instance="Magento\CatalogInventory\Model\Observer" method="addInventoryDataToCollection" />
     </event>
@@ -68,8 +65,5 @@
     </event>
     <event name="admin_system_config_changed_section_cataloginventory">
         <observer name="inventory" instance="Magento\CatalogInventory\Model\Observer" method="updateItemsStockUponConfigChange" />
-    </event>
-    <event name="prepare_catalog_product_index_select">
-        <observer name="cataloginventory" instance="Magento\CatalogInventory\Model\Observer" method="prepareCatalogProductIndexSelect" />
     </event>
 </config>

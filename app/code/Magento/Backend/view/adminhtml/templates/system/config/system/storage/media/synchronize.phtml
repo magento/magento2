@@ -26,9 +26,13 @@
 <?php /* @var $this \Magento\Backend\Block\System\Config\System\Storage\Media\Synchronize */ ?>
 
 <script type="text/javascript">
-//<![CDATA[
-    jQuery.mage.extend('validation', 'validation',
-        '<?php echo $this->getViewFileUrl('Magento_Backend::system/validation-rules.js'); ?>');
+require([
+    'jquery',
+    'prototype',
+    'mage/backend/validation'
+], function(jQuery){
+
+    jQuery.mage.extend('validation', 'validation', 'Magento_Backend/system/validation-rules');
 
     allowedStorages = [];
     addAllowedStorage(
@@ -165,7 +169,7 @@
         params = {
             storage:    $('system_media_storage_configuration_media_storage').value,
             connection: $('system_media_storage_configuration_media_database').value
-        }
+        };
 
         new Ajax.Request('<?php echo $this->getAjaxSyncUrl() ?>', {
             parameters:     params,
@@ -179,6 +183,8 @@
         disableSyncButton();
     }
 //]]>
+
+});
 </script>
 
 <?php echo $this->getButtonHtml() ?>

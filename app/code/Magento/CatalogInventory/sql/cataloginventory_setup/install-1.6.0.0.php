@@ -388,8 +388,3 @@ $table = $installer->getConnection()->newTable(
 $installer->getConnection()->createTable($table);
 
 $installer->endSetup();
-
-$installer->getConnection()->insertForce(
-    $installer->getTable('cataloginventory_stock'),
-    array('stock_id' => 1, 'stock_name' => 'Default')
-);

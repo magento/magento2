@@ -136,10 +136,14 @@
     </div>
 </div>
 <script type="text/javascript">
+require(['jquery', 'mage/mage'], function(jQuery){
+
     jQuery('#order-review-form').mage('validation', {}).mage('orderReview', {
         shippingSubmitFormSelector: '#shipping-method-form',
         shippingSelector: '#shipping-method',
         shippingMethodUpdateUrl: '<?php echo $this->escapeHtml($this->getUpdateShippingMethodsUrl()) ?>',
         isAjax: <?php echo $this->getUseAjax() ? 'true' : 'false' ?>
     });
+
+});
 </script>

@@ -36,7 +36,13 @@
 </div>
 
 <script type="text/javascript">
-//<![CDATA[
-cardValidator = new centinelValidator('<?php echo $this->getMethodCode() ?>', '<?php echo $this->getFrameUrl() ?>', '<?php echo $this->getContainerId() ?>');
-//]]>
+require([
+	"Magento_Centinel/order_create"
+], function(){
+
+	//<![CDATA[
+	cardValidator = new centinelValidator('<?php echo $this->getMethodCode() ?>', '<?php echo $this->getFrameUrl() ?>', '<?php echo $this->getContainerId() ?>');
+	//]]>
+
+});
 </script>

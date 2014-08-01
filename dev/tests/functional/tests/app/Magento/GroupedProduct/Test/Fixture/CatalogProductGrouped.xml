@@ -350,6 +350,10 @@
             <backend_type>virtual</backend_type>
             <source>'Magento\Catalog\Test\Fixture\CatalogProductSimple\Price</source>
         </price>
+        <stock_data>
+            <attribute_code>stock_data</attribute_code>
+            <group>advanced-inventory</group>
+        </stock_data>
     </fields>
     <data_set>
         <sku></sku>

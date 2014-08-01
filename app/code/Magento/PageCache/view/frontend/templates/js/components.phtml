@@ -22,20 +22,4 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<script type="text/javascript">
-    (function($) {
-        "use strict";
-        /**
-         * Declaration of resources needed for defined components
-         */
-        $.mage.component({
-            formKey: [
-                '<?php echo $this->getViewFileUrl('Magento_PageCache::js/form-key.js') ?>'
-            ],
-            pageCache: [
-                '<?php echo $this->getViewFileUrl('Magento_PageCache::js/page-cache.js') ?>'
-            ]
-        });
-    })(jQuery);
-</script>
 <?php echo $this->getChildHtml() ?>

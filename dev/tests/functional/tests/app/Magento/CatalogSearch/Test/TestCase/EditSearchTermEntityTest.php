@@ -48,7 +48,7 @@ use Magento\CatalogSearch\Test\Page\Adminhtml\CatalogSearchIndex;
  * 7. Save the Search Term
  * 8. Perform all assertions
  *
- * @group Search Terms (MX)
+ * @group Search_Terms_(MX)
  * @ZephyrId MAGETWO-26100
  */
 class EditSearchTermEntityTest extends Injectable

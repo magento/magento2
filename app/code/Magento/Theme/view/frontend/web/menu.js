@@ -20,13 +20,15 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-
 /**
  * @classDescription simple Navigation with replacing old handlers
  * @param {String} id id of ul element with navigation lists
  * @param {Object} settings object with settings
  */
-var mainNav = function() {
+define(["prototype"], function(){
+
+
+window.mainNav = function() {
 
     var main = {
         obj_nav :   $(arguments[0]) || $("nav"),
@@ -127,4 +129,6 @@ document.observe("dom:loaded", function() {
 
     //run navigation with delays
     mainNav("nav", {"show_delay":"100","hide_delay":"100"});
+});
+
 });

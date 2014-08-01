@@ -52,7 +52,7 @@
 </div>
 
 <script type="text/javascript">
-jQuery(function ($) {
+require(['jquery'], function($){
     var priceType = $('#price_type');
     var priceWarning = $('#dynamic-price-warning');
     if (priceType && priceType.val() == 0 && priceWarning) {

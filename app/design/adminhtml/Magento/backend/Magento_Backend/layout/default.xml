@@ -89,40 +89,5 @@
                 </argument>
             </arguments>
         </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="lib-modernizr-js">
-            <arguments>
-                <argument name="file" xsi:type="string">modernizr/modernizr.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-dropdown-js">
-            <arguments>
-                <argument name="file" xsi:type="string">mage/dropdown_old.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-jquery-tabs-js">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/jquery.tabs.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-farbtastic-jquery-farbtastic-js">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/farbtastic/jquery.farbtastic.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="js-theme-js">
-            <arguments>
-                <argument name="file" xsi:type="string">js/theme.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="js-modernizr-details-js">
-            <arguments>
-                <argument name="file" xsi:type="string">modernizr/modernizr.details.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="js-jquery-details-js">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/jquery.details.js</argument>
-            </arguments>
-        </block>
     </referenceBlock>
 </layout>

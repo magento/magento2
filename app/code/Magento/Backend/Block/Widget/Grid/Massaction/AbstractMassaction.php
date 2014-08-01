@@ -258,14 +258,16 @@ abstract class AbstractMassaction extends \Magento\Backend\Block\Widget
      */
     public function getJavaScript()
     {
-        return " var {$this->getJsObjectName()} = new varienGridMassaction('{$this->getHtmlId()}', " .
+        return " {$this->getJsObjectName()} = new varienGridMassaction('{$this->getHtmlId()}', " .
             "{$this->getGridJsObjectName()}, '{$this->getSelectedJson()}'" .
             ", '{$this->getFormFieldNameInternal()}', '{$this->getFormFieldName()}');" .
             "{$this->getJsObjectName()}.setItems({$this->getItemsJson()}); " .
             "{$this->getJsObjectName()}.setGridIds('{$this->getGridIdsJson()}');" .
             ($this->getUseAjax() ? "{$this->getJsObjectName()}.setUseAjax(true);" : '') .
             ($this->getUseSelectAll() ? "{$this->getJsObjectName()}.setUseSelectAll(true);" : '') .
-            "{$this->getJsObjectName()}.errorText = '{$this->getErrorText()}';";
+            "{$this->getJsObjectName()}.errorText = '{$this->getErrorText()}';" . "\n" .
+            "window.{$this->getJsObjectName()} = {$this->getJsObjectName()};"
+            ;
     }
 
     /**

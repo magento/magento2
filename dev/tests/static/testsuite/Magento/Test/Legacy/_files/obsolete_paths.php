@@ -145,7 +145,9 @@ return [
     ['/lib/Magento/Pricing', '/lib/Magento/Framework/Pricing'],
     ['/dev/tests/integration/testsuite/Magento/Pricing', '/dev/tests/integration/testsuite/Magento/Framework/Pricing'],
     ['/dev/tests/unit/testsuite/Magento/Pricing', '/dev/tests/unit/testsuite/Magento/Framework/Pricing'],
-    ['/lib/Magento/Connect', '/lib/Magento/Framework/Connect'],
+    ['/lib/Magento/Connect'],
+    ['/lib/Magento/Framework/Connect'],
+    ['/lib/internal/Magento/Framework/Connect'],
     ['/lib/Magento/Profiler', '/lib/Magento/Framework/Profiler'],
     ['/dev/tests/unit/testsuite/Magento/Profiler', '/dev/tests/unit/testsuite/Magento/Framework/Profiler'],
     [
@@ -242,4 +244,5 @@ return [
     ['/lib/Magento/Object', '/lib/Magento/Framework/Object'],
     ['/dev/tests/unit/testsuite/Magento/Object', '/dev/tests/unit/testsuite/Magento/Framework/Object'],
     ['/dev/tests/integration/testsuite/Magento/Object', '/dev/tests/integration/testsuite/Magento/Framework/Object'],
+    ['/downloader'],
 ];

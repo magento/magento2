@@ -16,7 +16,5 @@ app/code/Magento/Theme/view/frontend/web/menu.js
 dev/tests/js/testsuite/mage/translate_inline_vde/translate-inline-vde-test.js
 dev/tests/js/framework/qunit
 lib/web/mage/adminhtml
-lib/web/mage/backend/editablemultiselect.js
 lib/web/mage/captcha.js
-lib/web/mage/flex.js
 lib/web/mage/jquery-no-conflict.js

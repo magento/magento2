@@ -20,8 +20,12 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
+define([
+    "jquery",
+    "jquery/ui",
+    "mage/cookies"
+], function($){
 
-(function($) {
     /**
      * FormKey Widget - this widget is generating from key, saves it to cookie and
      */
@@ -50,7 +54,9 @@
             return result;
         }
     });
+
     $(function() {
         $('body').formKey();
     });
-})(jQuery);
+
+});

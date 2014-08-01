@@ -99,19 +99,23 @@
             <div class="adv-container">&nbsp;</div>
 
             <script type="text/javascript">
-                //<![CDATA[
-                var SSChecked<?php echo $_code ?> = function() {
-                    var elm = $('<?php echo $_code ?>_cc_type');
-                    if (['SS','SM','SO'].indexOf(elm.value) != -1) {
-                        jQuery('#' + '<?php echo $_code ?>_cc_type_ss_div').show().removeClass('ignore-validate');
-                    } else {
-                        jQuery('#' + '<?php echo $_code ?>_cc_type_ss_div').hide().addClass('ignore-validate');
-                    }
-                };
-                Event.observe($('<?php echo $_code ?>_cc_type'), 'change', SSChecked<?php echo $_code ?>);
-                SSChecked<?php echo $_code ?>();
-                //]]>
-            </script>
+require(['jquery', 'prototype'], function(jQuery){
+
+    //<![CDATA[
+    SSChecked<?php echo $_code ?> = function() {
+        var elm = $('<?php echo $_code ?>_cc_type');
+        if (['SS','SM','SO'].indexOf(elm.value) != -1) {
+            jQuery('#' + '<?php echo $_code ?>_cc_type_ss_div').show().removeClass('ignore-validate');
+        } else {
+            jQuery('#' + '<?php echo $_code ?>_cc_type_ss_div').hide().addClass('ignore-validate');
+        }
+    };
+    Event.observe($('<?php echo $_code ?>_cc_type'), 'change', SSChecked<?php echo $_code ?>);
+    SSChecked<?php echo $_code ?>();
+    //]]>
+            
+});
+</script>
         </div>
     <?php endif; ?>
 </fieldset>

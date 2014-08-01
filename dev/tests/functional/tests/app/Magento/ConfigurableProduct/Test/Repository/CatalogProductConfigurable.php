@@ -58,5 +58,22 @@ class CatalogProductConfigurable extends AbstractRepository
             'website_ids' => ['Main Website'],
             'attribute_set_id' => ['dataSet' => 'default'],
         ];
+
+        $this->_data['default_one_variation'] = [
+            'name' => 'Test configurable product %isolation%',
+            'sku' => 'sku_test_configurable_product_%isolation%',
+            'price' => ['value' => 120.00],
+            'weight' => 30.0000,
+            'status' => 'Product online',
+            'visibility' => 'Catalog, Search',
+            'tax_class_id' => ['dataSet' => 'Taxable Goods'],
+            'url_key' => 'test-configurable-product-%isolation%',
+            'configurable_attributes_data' => ['preset' => 'one_variation'],
+            'quantity_and_stock_status' => [
+                'is_in_stock' => 'In Stock',
+            ],
+            'website_ids' => ['Main Website'],
+            'attribute_set_id' => ['dataSet' => 'default'],
+        ];
     }
 }

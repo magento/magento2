@@ -45,8 +45,9 @@
 </div>
 
 <script type="text/javascript">
+require(['jquery', "jquery/file-uploader"], function($){
+
 //<![CDATA[
-(function($) {
     $(function () {
         $('#fileupload').fileupload({
             dataType: 'json',
@@ -93,6 +94,7 @@
             }
         });
     });
-})(jQuery);
 //]]>
+
+});
 </script>

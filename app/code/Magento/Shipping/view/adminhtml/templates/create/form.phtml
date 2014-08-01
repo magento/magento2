@@ -70,6 +70,8 @@
 </form>
 <?php echo $this->getChildHtml('shipment_packaging') ?>
 <script type="text/javascript">
+require(["jquery", "mage/mage", "prototype"], function(jQuery){
+
 //<![CDATA[
     document.observe("dom:loaded", function() {
         setTimeout(function(){
@@ -99,4 +101,6 @@
 
     jQuery('#edit_form').mage('form').mage('validation');
 //]]>
+
+});
 </script>

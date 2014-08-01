@@ -38,8 +38,12 @@
     <input type="hidden" name="MODE" value="<?php echo $this->isTestMode() ? 'TEST' : 'LIVE'; ?>"/>
 </form>
 <script type="text/javascript">
+require(['jquery'], function(jQuery){
+
     // this is NOT tested.
     jQuery('#token_form').submit();
+
+});
 </script>
 </body>
 </html>

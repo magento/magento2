@@ -25,6 +25,12 @@
 /** @var \Magento\Catalog\Block\Adminhtml\Product\Edit\Js $this */
 ?>
 <script type="text/javascript">
+require([
+    "jquery",
+    "prototype",
+    "mage/backend/tabs"
+], function(jQuery){
+
 //<![CDATA[
 Event.observe(window, 'load', recalculateTax);
 Event.observe(window, 'load', registerTaxRecalcs);
@@ -86,7 +92,7 @@ jQuery(document).on('tabsactivate', bindActiveProductTab);
 
 // bind active tab
 <?php if($tabsBlock = $this->getLayout()->getBlock('product_tabs')): ?>
-jQuery(document).ready(function () {
+jQuery(function () {
     if (jQuery('#<?php echo $tabsBlock->getId() ?>').length && jQuery('#<?php echo $tabsBlock->getId() ?>').is(':mage-tabs')) {
         var activeAnchor = jQuery('#<?php echo $tabsBlock->getId() ?>').tabs('activeAnchor');
         if (activeAnchor && $('store_switcher')) {
@@ -95,5 +101,11 @@ jQuery(document).ready(function () {
     }
 });
 <?php endif; ?>
+
+window.recalculateTax = recalculateTax;
+window.bindActiveProductTab = bindActiveProductTab;
+window.registerTaxRecalcs = registerTaxRecalcs;
 //]]>
+
+});
 </script>

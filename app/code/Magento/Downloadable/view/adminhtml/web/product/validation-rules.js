@@ -23,7 +23,12 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /*global newFileContainer:true, alertAlreadyDisplayed:true, alert:true, linkType:true*/
-(function ($) {
+define([
+    "jquery",
+    "mage/validation",
+    "mage/translate"
+], function($){
+
     $.validator.addMethod('validate-downloadable-file', function (v, element) {
         var elmParent = $(element).parent(),
             linkType = elmParent.find('input[value="file"]');
@@ -46,4 +51,5 @@
         }
         return true;
     }, 'Please specify Url.');
-})(jQuery);
+
+});

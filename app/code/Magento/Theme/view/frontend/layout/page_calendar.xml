@@ -24,18 +24,6 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
-    <referenceBlock name="head">
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-jquery-ui-timepicker-addon-js">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/jquery-ui-timepicker-addon.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-calendar-js">
-            <arguments>
-                <argument name="file" xsi:type="string">mage/calendar.js</argument>
-            </arguments>
-        </block>
-    </referenceBlock>
     <referenceContainer name="content">
         <block class="Magento\Framework\View\Element\Html\Calendar" name="html_calendar" as="html_calendar" template="Magento_Theme::js/calendar.phtml"/>
     </referenceContainer>

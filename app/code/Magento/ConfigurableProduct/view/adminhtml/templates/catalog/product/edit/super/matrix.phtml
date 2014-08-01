@@ -263,6 +263,14 @@ $productByUsedAttributes = $this->getAssociatedProducts();
     <img src="${url}" class="variation" data-role="image"/>
 </script>
 <script type="text/javascript">
+require([
+    "jquery",
+    "jquery/template",
+    "jquery/file-uploader",
+    "mage/mage",
+    "mage/translate"
+], function(jQuery){
+
 jQuery(function ($) {
     var matrix = $('[data-role=product-variations-matrix]');
     matrix.find('[data-action=upload-image] [name=image]').each(function() {
@@ -305,5 +313,7 @@ jQuery(function ($) {
         parentElement.find('[name$="[image]"]').val('');
         parentElement.find('[data-toggle=dropdown]').trigger('close.dropdown').hide();
     });
+});
+
 });
 </script>

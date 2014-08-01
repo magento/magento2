@@ -38,13 +38,7 @@
         </block>
     </referenceContainer>
     <referenceContainer name="form.billing.additional.info">
-        <referenceBlock name="head">
-            <block class="Magento\Theme\Block\Html\Head\Script" name="magento-captcha-onepage-js">
-                <arguments>
-                    <argument name="file" xsi:type="string">Magento_Captcha::onepage.js</argument>
-                </arguments>
-            </block>
-        </referenceBlock>
+        <referenceBlock name="head" />
         <block class="Magento\Captcha\Block\Captcha" name="captcha.guest.checkout">
             <action method="setFormId">
                 <argument name="formId" xsi:type="string">guest_checkout</argument>

@@ -86,6 +86,8 @@
     </div>
 </form>
 <script type="text/javascript">
+require(['prototype'], function(){
+
 //<![CDATA[
     var createShipment = $('invoice_do_shipment');
     if (createShipment) {
@@ -106,5 +108,11 @@
         shipmentElement.disabled = true;
         document.getElementById('tracking').style.display = 'block';
     }
+
+    window.createShipment = createShipment;
+    window.forcedShipmentCreate = forcedShipmentCreate;
+    window.shipmentElement = shipmentElement;
 //]]>
+
+});
 </script>

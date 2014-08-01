@@ -32,11 +32,14 @@
 <?php $_product = $this->getProduct(); ?>
 
 <script type="text/javascript">
-    (function ($) {
-        $(document).ready(function() {
-            $('#product_addtocart_form').mage('priceOption', {"priceConfig":<?php echo $this->getJsonConfig() ?>});
-        });
-    })(jQuery);
+require([
+    "jquery",
+    "mage/mage"
+], function($){
+    $(document).ready(function() {
+        $('#product_addtocart_form').mage('priceOption', {"priceConfig":<?php echo $this->getJsonConfig() ?>});
+    });
+});
 </script>
 <div class="product-add-form">
     <form action="<?php echo $this->getSubmitUrl($_product) ?>" method="post"

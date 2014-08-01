@@ -29,6 +29,10 @@ use Mtf\Page\Page;
 use Mtf\Factory\Factory;
 use Mtf\Client\Element\Locator;
 
+/**
+ * Class DefaultAddress
+ * Default address page
+ */
 class DefaultAddress extends Page
 {
     /**
@@ -41,7 +45,7 @@ class DefaultAddress extends Page
      *
      * @var string
      */
-    protected $defaultAddressesSelector = '.column.main .default div.content';
+    protected $defaultAddressesSelector = '.block-addresses-default .box-address-billing';
 
     /**
      * Get default addresses block

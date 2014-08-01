@@ -57,7 +57,9 @@
     <?php echo $this->getHintHtml() ?>
 </div>
 <script type="text/javascript">
-    function switchStore(obj){
+require(['prototype'], function(){
+
+    switchStore = function(obj){
         if (obj.options[obj.selectedIndex].getAttribute('website') == 'true') {
             var selectionType = 'website';
         } else if (obj.options[obj.selectedIndex].getAttribute('group') == 'true') {
@@ -71,5 +73,7 @@
         }
         setLocation('<?php echo $this->getSwitchUrl() ?>'+storeParam);
     }
+
+});
 </script>
 <?php endif; ?>

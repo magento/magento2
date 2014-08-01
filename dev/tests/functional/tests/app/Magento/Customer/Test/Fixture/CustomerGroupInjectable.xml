@@ -48,4 +48,6 @@
             <backend_type>virtual</backend_type>
         </customer_group_id>
     </fields>
+    <repository_class>Magento\Customer\Test\Repository\CustomerGroupInjectable</repository_class>
+    <handler_interface>Magento\Customer\Test\Handler\CustomerGroupInjectable\CustomerGroupInjectableInterface</handler_interface>
 </fixture>

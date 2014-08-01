@@ -84,7 +84,11 @@
     </div>
 </form>
 <script type="text/javascript">
-    (function($) {
+    require([
+        "jquery",
+        "mage/mage"
+    ], function($){
+
         $('#change-password').mage('setPassword', {
             'currentPasswordId': '#current-password',
             'passwordId': '#password',
@@ -114,5 +118,6 @@
             ignore: ignore ? ':hidden:not(' + ignore + ')' : ':hidden'
         <?php endif ?>
         });
-    })(jQuery);
+
+    });
 </script>

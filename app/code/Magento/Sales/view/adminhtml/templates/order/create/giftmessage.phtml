@@ -36,7 +36,10 @@
         <?php endif; ?>
     </fieldset>
     <script type="text/javascript">
-        order.giftmessageFieldsBind('order-giftmessage');
-    </script>
+require(['Magento_Sales/order/create/form'], function(){
+
+    order.giftmessageFieldsBind('order-giftmessage');
+});
+</script>
 </div>
 <?php endif; ?>

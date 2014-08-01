@@ -50,7 +50,6 @@
 </select>
 </p>
 <script type="text/javascript">
-//<![CDATA[
     function switchStore(obj){
         if (obj.options[obj.selectedIndex].getAttribute('website') == 'true') {
             var selectionType = 'website';
@@ -71,5 +70,4 @@
         var periodParam = select.value ? 'period/'+select.value + '/' : '';
         setLocation('<?php echo $this->getSwitchUrl() ?>'+storeParam+periodParam);
     }
-//]]>
 </script>

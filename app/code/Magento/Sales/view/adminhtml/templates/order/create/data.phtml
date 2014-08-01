@@ -23,7 +23,11 @@
  */
 ?>
 <div class="page-create-order">
-    <script type="text/javascript">order.setCurrencySymbol('<?php echo $this->getCurrencySymbol($this->getCurrentCurrencyCode()) ?>')</script>
+    <script type="text/javascript">
+    require(["Magento_Sales/order/create/form"], function(){
+        order.setCurrencySymbol('<?php echo $this->getCurrencySymbol($this->getCurrentCurrencyCode()) ?>')
+    });
+</script>
     <?php if($this->getCustomerId()): ?>
     <div class="order-sidebar">
         <div class="store-switcher order-currency">

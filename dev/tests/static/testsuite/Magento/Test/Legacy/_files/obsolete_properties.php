@@ -274,7 +274,6 @@ return array(
     array('_frameOpenTag', 'Magento\Framework\View\Element\AbstractBlock'),
     array('_frameCloseTag', 'Magento\Framework\View\Element\AbstractBlock'),
     array('_messagesBlock', 'Magento\Framework\View\Element\AbstractBlock'),
-    array('_messagesBlock', 'Magento\Connect\Helper\Data'),
     array('escapeMessageFlag', 'Magento\Framework\View\Block\Messages'),
     array('_handlerFactory', 'Magento\Backend\Block\Widget\Grid\Massaction\Additional'),
     array('_flatResourceFactory', 'Magento\Catalog\Model\Observer'),

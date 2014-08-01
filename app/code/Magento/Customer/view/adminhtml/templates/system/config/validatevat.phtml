@@ -28,6 +28,8 @@
  */
 ?>
 <script type="text/javascript">
+require(['prototype'], function(){
+
 //<![CDATA[
     function validateVat() {
         var validationMessage = $('validation_result');
@@ -56,7 +58,11 @@
             }
         });
     }
+
+    window.validateVat = validateVat;
 //]]>
+
+});
 </script>
 <div class="actions actions-validate-vat">
     <div id="validation_result" class="message-validation hidden"></div>

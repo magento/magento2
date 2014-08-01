@@ -324,24 +324,6 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     }
 
     /**
-     * Get item delete url
-     *
-     * @return string
-     */
-    public function getDeleteUrl()
-    {
-        if ($this->hasDeleteUrl()) {
-            return $this->getData('delete_url');
-        }
-        $params = ['id' => $this->getItem()->getId()];
-        if (!$this->_request->isAjax()) {
-            $encodedUrl = $this->_urlHelper->getEncodedUrl();
-            $params[\Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED] = $encodedUrl;
-        }
-        return $this->getUrl('checkout/cart/delete', $params);
-    }
-
-    /**
      * Get quote item qty
      *
      * @return float|int

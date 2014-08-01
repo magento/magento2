@@ -21,8 +21,12 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /*jshint jquery:true*/
-(function($) {
+define([
+    "jquery",
+    "jquery/ui"
+], function($){
     "use strict";
+
     $.widget('mage.giftMessage', {
         options: {
             rowPrefix: '#order-item-row-', // Selector prefix for item's row in the table.
@@ -69,4 +73,5 @@
             event.preventDefault(); // Prevent event propagation and avoid going to the link's href.
         }
     });
-})(jQuery);
+
+});

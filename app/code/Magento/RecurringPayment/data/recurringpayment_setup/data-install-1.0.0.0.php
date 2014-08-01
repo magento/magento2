@@ -22,6 +22,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 /** @var $this \Magento\Catalog\Model\Resource\Setup */
+$this->installEntities();
 $entityTypeId = $this->getEntityTypeId(\Magento\Catalog\Model\Product::ENTITY);
 $attributeSetId = $this->getAttributeSetId($entityTypeId, 'Default');
 

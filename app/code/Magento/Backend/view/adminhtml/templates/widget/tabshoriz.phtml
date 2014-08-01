@@ -47,12 +47,14 @@
 </ul>
 </div>
 <script type="text/javascript">
-    jQuery(function() {
-        jQuery('#<?php echo $this->getId() ?>').tabs({
+require(["jquery","mage/backend/tabs"], function($){
+    $(function() {
+        $('#<?php echo $this->getId() ?>').tabs({
             active: '<?php echo $this->getActiveTabId() ?>',
             destination: '#<?php echo $this->getDestElementId() ?>',
             shadowTabs: <?php echo $this->getAllShadowTabs()?>
         });
     });
+});
 </script>
 <?php endif; ?>

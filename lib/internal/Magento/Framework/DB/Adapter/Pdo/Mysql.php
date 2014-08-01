@@ -241,7 +241,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
 
     /**
      * @param Filesystem $filesystem
-     * @param String $string
+     * @param \Magento\Framework\Stdlib\String|String $string
      * @param DateTime $dateTime
      * @param array $config
      */

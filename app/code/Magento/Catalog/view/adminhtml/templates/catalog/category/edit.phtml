@@ -32,6 +32,12 @@
     <?php echo $this->getChildHtml('form') ?>
 </div>
 <script type="text/javascript">
+require([
+    "jquery",
+    "js/theme",
+    "mage/backend/floating-header"
+], function(jQuery){
+
 //<![CDATA[
     function categoryReset(url,useAjax){
         if(useAjax){
@@ -109,7 +115,7 @@
                     $('.messages').html(data.messages);
                 }
             });
-        })(win.jQuery);
+        })(jQuery);
     }
 
     /**
@@ -168,5 +174,13 @@
     function displayLoadingMask() {
         jQuery('body').loadingPopup();
     }
+
+    window.refreshTreeArea = refreshTreeArea;
+    window.updateContent = updateContent;
+    window.categoryDelete = categoryDelete;
+    window.categoryReset = categoryReset;
+    window.displayLoadingMask = displayLoadingMask;
 //]]>
+
+});
 </script>

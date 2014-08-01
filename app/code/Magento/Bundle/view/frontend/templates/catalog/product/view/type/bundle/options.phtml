@@ -31,16 +31,21 @@ $helper = $this->helper('Magento\Catalog\Helper\Output');
 <?php if ($product->isSaleable()):?>
     <?php if (count($options)): ?>
         <script type="text/javascript">
-            //<![CDATA[
-            (function ($) {
-                $(document).ready(function() {
-                    $('#product_addtocart_form').mage('bundleOption', {
-                        optionConfig:<?php echo $this->getJsonConfig()?>})
-                        .trigger('changeSelection');
-                });
-            })(jQuery);
-            //]]>
-        </script>
+require([
+    "jquery",
+    "mage/mage"
+], function($){
+
+//<![CDATA[
+    $(document).ready(function() {
+        $('#product_addtocart_form').mage('bundleOption', {
+            optionConfig:<?php echo $this->getJsonConfig()?>})
+            .trigger('changeSelection');
+    });
+//]]>
+        
+});
+</script>
         <fieldset class="fieldset bundle options">
             <legend id="customizeTitle" class="legend title">
                 <span><?php echo __('Customize %1', $helper->productAttribute($product, $product->getName(), 'name')) ?></span>

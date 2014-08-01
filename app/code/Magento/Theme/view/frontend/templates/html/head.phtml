@@ -29,6 +29,14 @@
 <meta name="robots" content="<?php echo $this->escapeHtml($this->getRobots())?>"/>
 <link rel="icon" href="<?php echo $this->getFaviconFile(); ?>" type="image/x-icon"/>
 <link rel="shortcut icon" href="<?php echo $this->getFaviconFile(); ?>" type="image/x-icon"/>
+<script type="text/javascript">
+    var require = {
+    	"baseUrl": "<?php echo $this->getViewFileUrl('/') ?>",
+    	"paths": {
+    		"jquery/ui": "jquery/jquery-ui"
+    	}
+    };
+</script>
 <?php echo $this->getCssJsHtml() ?>
 <?php echo $this->getChildHtml() ?>
 <?php echo $this->getIncludes() ?>

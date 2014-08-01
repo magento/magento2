@@ -381,7 +381,11 @@ $table = $installer->getConnection()->newTable(
     array('nullable' => false, 'default' => 1),
     'Rating is active.'
 )->addIndex(
-    $installer->getIdxName('rating', array('rating_code'), \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE),
+    $installer->getIdxName(
+        'rating',
+        array('rating_code'),
+        \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+    ),
     array('rating_code'),
     array('type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE)
 )->addIndex(

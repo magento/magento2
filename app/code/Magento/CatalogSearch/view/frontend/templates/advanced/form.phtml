@@ -147,9 +147,12 @@
 </div>
 </form>
 <script type="text/javascript">
-    //<![CDATA[
-    (function($) {
-        $('#form-validate').mage('validation', {
+require([
+    "jquery",
+    "mage/mage",
+    "mage/validation"
+], function($){
+    $('#form-validate').mage('validation', {
             errorPlacement: function (error, element) {
                 var parent = element.parent();
                 if (parent.hasClass('range')) {
@@ -163,6 +166,5 @@
                 'price[from]': {'less-than-equals-to': 'Please enter a valid price range.'}
             }
         });
-    })(jQuery);
-    //]]>
+});
 </script>

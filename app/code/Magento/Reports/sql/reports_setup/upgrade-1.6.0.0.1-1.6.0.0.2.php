@@ -30,9 +30,9 @@ $installer = $this;
 $installer->startSetup();
 
 $aggregationTablesToRename = array(
-    'reports_viewed_aggregated_daily' => \Magento\Reports\Model\Resource\Report\Product\Viewed::AGGREGATION_DAILY,
-    'reports_viewed_aggregated_monthly' => \Magento\Reports\Model\Resource\Report\Product\Viewed::AGGREGATION_MONTHLY,
-    'reports_viewed_aggregated_yearly' => \Magento\Reports\Model\Resource\Report\Product\Viewed::AGGREGATION_YEARLY
+    'reports_viewed_aggregated_daily' => 'report_viewed_product_aggregated_daily',
+    'reports_viewed_aggregated_monthly' => 'report_viewed_product_aggregated_monthly',
+    'reports_viewed_aggregated_yearly' => 'report_viewed_product_aggregated_yearly'
 );
 
 foreach ($aggregationTablesToRename as $wrongName => $rightName) {

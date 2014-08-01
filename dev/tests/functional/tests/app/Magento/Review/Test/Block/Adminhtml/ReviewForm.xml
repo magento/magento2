@@ -28,6 +28,8 @@
         <status_id>
             <input>select</input>
         </status_id>
+        <title />
+        <nickname />
         <select_stores>
             <selector>[name="select_stores[]"]</selector>
             <input>multiselectgrouplist</input>
@@ -35,5 +37,9 @@
         <detail>
             <input>textarea</input>
         </detail>
+        <ratings>
+            <selector>#detailed_rating</selector>
+            <class>Magento\Review\Test\Block\Adminhtml\Edit\RatingElement</class>
+        </ratings>
     </fields>
 </mapping>

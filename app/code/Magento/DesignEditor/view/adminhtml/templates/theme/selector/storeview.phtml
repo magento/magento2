@@ -63,9 +63,15 @@
 </div>
 
 <script type="text/javascript">
-    (function ($) {
-        $(document).ready(function() {
-            $('body').themeAssign(<?php echo $this->getOptionsJson(); ?>);
-        });
-    })(jQuery);
+require([
+    'jquery',
+    'Magento_DesignEditor/js/theme-assign'
+], function($){
+
+
+    $(document).ready(function() {
+        $('body').themeAssign(<?php echo $this->getOptionsJson(); ?>);
+    });
+
+});
 </script>

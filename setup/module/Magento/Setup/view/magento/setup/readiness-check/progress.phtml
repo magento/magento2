@@ -1,0 +1,186 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<div class="rediness-check-items">
+    <div class="bg-info" ng-switch="isCompleted()">
+        <div ng-switch-when="true" ng-switch="hasErrors">
+            <span ng-switch-when="true"><?php echo $this->translate('Completed! You need to resolve these issues to continue.'); ?></span>
+            <span ng-switch-default><?php echo $this->translate('Completed!'); ?></span>
+        </div>
+        <div ng-switch-default>
+            <img src="../pub/images/ajax-loader.gif" />&nbsp;
+            <span><?php echo $this->translate('We\'re making sure your server environment is ready for Magento to be installed.'); ?></span>
+        </div>
+    </div>
+
+    <div id="php-version" ng-show="version.visible">
+        <div ng-hide="version.processed">
+            <span><?php echo $this->translate('Checking PHP Version...'); ?></span>
+        </div>
+        <div ng-show="version.processed" ng-switch="version.responseType">
+            <div ng-switch-when="success" ng-init="updateOnSuccess(version)">
+                <span class="glyphicon glyphicon-ok-sign text-success"></span>
+                <span><?php echo $this->translate('PHP Version Check'); ?></span>
+                <div class="rediness-check-info">
+                    <?php echo $this->translate('Your PHP version is correct ({{version.data.current}}).'); ?>
+                </div>
+            </div>
+            <div ng-switch-default ng-init="updateOnError(version)">
+                <div class="rediness-check-panel-right">
+                    <p><?php echo $this->translate('Need Help?'); ?></p>
+                    <p><a href="http://www.php.net/docs.php" target="_blank"><?php echo $this->translate('PHP Documentation'); ?></a></p>
+                </div>
+                <span class="glyphicon glyphicon-remove text-danger"></span>
+                <span><?php echo $this->translate('PHP Version Check'); ?></span>
+                <div class="rediness-check-info">
+                    <p>
+                        <?php echo $this->translate('Your PHP version is {{version.data.current}}. The required PHP version is {{version.data.required}}.'); ?>
+                        <a href="#" ng-click="updateOnExpand(version)">
+                            <span ng-hide="version.expanded"><?php echo $this->translate('More detail'); ?></span>
+                            <span ng-show="version.expanded"><?php echo $this->translate('Less detail'); ?></span>
+                        </a>
+                    </p>
+                    <div class="rediness-check-block" ng-show="version.expanded">
+                        <p><?php echo $this->translate('Donwload and install PHP version {{version.data.required}} from <a href="http://www.php.net" target="_blank">www.php.net</a> using this <a href="http://www.php.net/docs.php" target="_blank">PHP Documentation</a>.'); ?></p>
+                        <p><?php echo $this->translate('If you need more help please call your hosting provider.'); ?></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="php-extensions" ng-show="extensions.visible">
+        <div ng-hide="extensions.processed">
+            <span><?php echo $this->translate('Checking PHP Extensions...'); ?></span>
+        </div>
+        <div ng-show="extensions.processed" ng-switch="extensions.responseType">
+            <div ng-switch-when="success" ng-init="updateOnSuccess(extensions)">
+                <span class="glyphicon glyphicon-ok-sign text-success"></span>
+                <span><?php echo $this->translate('PHP Extensions Check'); ?></span>
+                <div class="rediness-check-info">
+                    <p>
+                        <?php echo $this->translate('You meet {{extensions.data.current.length}} out of {{extensions.data.required.length}} PHP extensions requirements.'); ?>
+                        <a href="#" ng-click="updateOnExpand(extensions)">
+                            <span ng-hide="extensions.expanded"><?php echo $this->translate('More detail'); ?></span>
+                            <span ng-show="extensions.expanded"><?php echo $this->translate('Less detail'); ?></span>
+                        </a>
+                    </p>
+                    <div class="rediness-check-block" ng-show="extensions.expanded">
+                        <ul class="list-unstyled">
+                            <li ng-repeat="name in extensions.data.required">
+                                <span class="glyphicon glyphicon-ok text-success"></span>
+                                <span><?php echo $this->translate('PHP Extension {{name}}.'); ?></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div ng-switch-default ng-init="updateOnError(extensions)">
+                <div class="rediness-check-panel-right">
+                    <p>Need Help?</p>
+                    <p><a href="#" target="_blank"><?php echo $this->translate('PHP Extension Help'); ?></a></p>
+                </div>
+                <span class="glyphicon glyphicon-remove text-danger"></span>
+                <span><?php echo $this->translate('PHP Extensions Check'); ?></span>
+                <div class="rediness-check-info">
+                    <p>
+                        <?php echo $this->translate('{{extensions.data.required.length - extensions.data.current.length}} missing PHP extensions.'); ?>
+                        <a href="#" ng-click="updateOnExpand(extensions)">
+                            <span ng-hide="extensions.expanded"><?php echo $this->translate('More detail'); ?></span>
+                            <span ng-show="extensions.expanded"><?php echo $this->translate('Less detail'); ?></span>
+                        </a>
+                    </p>
+                    <p><?php echo $this->translate('The best way to resolve this is to install the correct missing extensions. The exact fix depends on our server, your host, and other system variables.</br>Our <a href="#">PHP Extension Help</a> can get you started.'); ?></p>
+                    <p><?php echo $this->translate('If you need more help, please call your hosting provider.'); ?></p>
+                    <div class="rediness-check-block" ng-show="extensions.expanded">
+                        <ul class="list-unstyled">
+                            <li ng-repeat="name in extensions.data.required" ng-switch="hasItem(extensions.data.current, name)">
+                                <span ng-switch-when="true" class="glyphicon glyphicon-ok text-success"></span>
+                                <span ng-switch-default class="glyphicon glyphicon-remove text-danger"></span>
+                                <span><?php echo $this->translate('PHP Extension {{name}}.'); ?></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="php-permissions" ng-show="permissions.visible">
+        <div ng-hide="permissions.processed">
+            <span><?php echo $this->translate('Checking File Permissions...'); ?></span>
+        </div>
+        <div ng-show="permissions.processed" ng-switch="permissions.responseType">
+            <div ng-switch-when="success" ng-init="updateOnSuccess(permissions)">
+                <span class="glyphicon glyphicon-ok-sign text-success"></span>
+                <span><?php echo $this->translate('File Permission Check'); ?></span>
+                <div class="rediness-check-info">
+                    <p>
+                        <?php echo $this->translate('You meet {{permissions.data.current.length}} out of {{permissions.data.required.length}} file permission requirements.'); ?>
+                        <a href="#" ng-click="updateOnExpand(permissions)">
+                            <span ng-hide="permissions.expanded"><?php echo $this->translate('More detail'); ?></span>
+                            <span ng-show="permissions.expanded"><?php echo $this->translate('Less detail'); ?></span>
+                        </a>
+                    </p>
+                    <div class="rediness-check-block" ng-show="permissions.expanded">
+                        <ul class="list-unstyled">
+                            <li ng-repeat="name in permissions.data.required">
+                                <span class="glyphicon glyphicon-ok text-success"></span>
+                                <span><?php echo $this->translate('"{{name}}" directory permission.'); ?></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div ng-switch-default ng-init="updateOnError(permissions)">
+                <div class="rediness-check-panel-right">
+                    <p><?php echo $this->translate('Need Help?'); ?></p>
+                    <p><a href="#" target="_blank"><?php echo $this->translate('File Permission Help'); ?></a></p>
+                </div>
+                <span class="glyphicon glyphicon-remove text-danger"></span>
+                <span><?php echo $this->translate('File Permission Check'); ?></span>
+                <div class="rediness-check-info">
+                    <p>
+                        <?php echo $this->translate('{{permissions.data.required.length - permissions.data.current.length}} file permission not met.'); ?>
+                        <a href="#" ng-click="updateOnExpand(permissions)">
+                            <span ng-hide="permissions.expanded"><?php echo $this->translate('More detail'); ?></span>
+                            <span ng-show="permissions.expanded"><?php echo $this->translate('Less detail'); ?></span>
+                        </a>
+                    </p>
+                    <p><?php echo $this->translate('The best way to resolve this is to allow write permissions for the following Magento directories. The exact fix depends on your server, your host, and other system variables.</br>Our <a href="#">File Permission Help</a> can get you started.'); ?></p>
+                    <p><?php echo $this->translate('If you need more help, please call your hosting provider.'); ?></p>
+                    <div class="rediness-check-block" ng-show="permissions.expanded">
+                        <ul class="list-unstyled">
+                            <li ng-repeat="name in permissions.data.required" ng-switch="hasItem(permissions.data.current, name)">
+                                <span ng-switch-when="true" class="glyphicon glyphicon-ok text-success"></span>
+                                <span ng-switch-default class="glyphicon glyphicon-remove text-danger"></span>
+                                <span><?php echo $this->translate('"{{name}}" directory permission.'); ?></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

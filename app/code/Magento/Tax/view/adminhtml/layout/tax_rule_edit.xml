@@ -25,19 +25,9 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
     <referenceBlock name="head">
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-editablemultiselect-js-jquery-editable-js">
+        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-tax-js-bootstrap-js">
             <arguments>
-                <argument name="file" xsi:type="string">jquery/editableMultiselect/js/jquery.editable.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-editablemultiselect-js-jquery-multiselect-js">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/editableMultiselect/js/jquery.multiselect.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-backend-editablemultiselect-js">
-            <arguments>
-                <argument name="file" xsi:type="string">mage/backend/editablemultiselect.js</argument>
+                <argument name="file" xsi:type="string">Magento_Tax::js/bootstrap.js</argument>
             </arguments>
         </block>
         <block class="Magento\Theme\Block\Html\Head\Css" name="jquery-editablemultiselect-css-jquery-multiselect-css">

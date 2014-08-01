@@ -31,6 +31,10 @@
 <?php if ($form): ?>
 <?php echo $form->toHtml(); ?>
 <script type="text/javascript">
+require(['jquery', "mage/mage"], function(jQuery){
+
     jQuery('#<?php echo $form->getForm()->getId() ?>').mage('form').mage('validation');
+
+});
 </script>
 <?php endif; ?>

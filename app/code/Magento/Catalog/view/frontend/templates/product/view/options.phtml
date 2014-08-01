@@ -27,13 +27,18 @@
 <?php $_options = $this->decorateArray($this->getOptions()) ?>
 <?php if (count($_options)):?>
     <script type="text/javascript">
-        (function ($) {
-            $('#product_addtocart_form').mage('priceOption', {
-                'optionConfig':<?php echo $this->getJsonConfig()?>,
-                'controlContainer': '.field'
-            }).trigger('reloadPrice');
-        })(jQuery);
-    </script>
+require([
+    "jquery",
+    "mage/mage"
+], function($){
+
+    $('#product_addtocart_form').mage('priceOption', {
+        'optionConfig':<?php echo $this->getJsonConfig()?>,
+        'controlContainer': '.field'
+    }).trigger('reloadPrice');
+    
+});
+</script>
     <?php foreach($_options as $_option): ?>
         <?php echo $this->getOptionHtml($_option) ?>
     <?php endforeach; ?>

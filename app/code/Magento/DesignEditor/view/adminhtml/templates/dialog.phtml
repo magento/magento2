@@ -29,15 +29,20 @@
 </div>
 
 <script type="text/javascript">
-    (function ($) {
-        $(document).ready(function() {
-            var options = {
-                autoOpen:    false,
-                modal:       true,
-                width:       570,
-                dialogClass: 'vde-dialog'
-            };
-            $('#dialog-message-confirm').dialog(options);
-        });
-    })(jQuery);
+require([
+    'jquery',
+    'Magento_DesignEditor/js/dialog'
+], function($){
+
+    $(document).ready(function() {
+        var options = {
+            autoOpen:    false,
+            modal:       true,
+            width:       570,
+            dialogClass: 'vde-dialog'
+        };
+        $('#dialog-message-confirm').dialog(options);
+    });
+
+});
 </script>

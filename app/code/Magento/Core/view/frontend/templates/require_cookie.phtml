@@ -24,9 +24,10 @@
 ?>
 <?php /** @var \Magento\Core\Block\RequireCookie $this */ ?>
 <script type="text/javascript">
-    //<![CDATA[
-    (function ($) {
-        $('body').mage('requireCookie', <?php echo $this->getScriptOptions(); ?>);
-    })(jQuery);
-    //]]>
+require([
+    "jquery",
+    "mage/mage"
+], function($){
+    $('body').mage('requireCookie', <?php echo $this->getScriptOptions(); ?>);
+});
 </script>

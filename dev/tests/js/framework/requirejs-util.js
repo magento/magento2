@@ -48,6 +48,10 @@
         });
     };
 
+    window.require = function(dependencies, callback){
+        return callback && callback();
+    };
+
     // Exposed interface
     var requirejsUtil = {
         getDefineArgsInScript: function (scriptPath) {

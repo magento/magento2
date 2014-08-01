@@ -22,21 +22,4 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-    <script type="text/javascript">
-        (function($) {
-            "use strict";
-            /**
-             * Declaration of resources needed for defined components
-             */
-            $.mage.component({
-                newsletter: [
-                    '<?php echo $this->getViewFileUrl('Magento_Newsletter::newsletter.js')?>',
-                    '<?php echo $this->getViewFileUrl('jquery/jquery.validate.js') ?>',
-                    '<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js') ?>',
-                    '<?php echo $this->getViewFileUrl('mage/validation.js')?>',
-                    '<?php echo $this->getViewFileUrl('mage/validation/validation.js') ?>'
-                ]
-            });
-        })(jQuery);
-    </script>
 <?php echo $this->getChildHtml() ?>

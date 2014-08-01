@@ -21,8 +21,12 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /*jshint jquery:true browser:true*/
-(function($) {
+define([
+    "jquery",
+    "jquery/ui"
+], function($){
     'use strict';
+
     // mage.accordion base functionality
     $.widget('mage.accordion', $.ui.accordion, {
         options: {
@@ -53,4 +57,5 @@
             $(this.options.activeSelector).addClass('allow active').find('h2').trigger('click');
         }
     });
-})(jQuery);
+
+});

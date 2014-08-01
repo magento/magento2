@@ -28,9 +28,14 @@
 <div class="themes-unassigned"><?php echo $this->getChildHtml('unassigned.theme.list') ?></div>
 
 <script type="text/javascript">
-    (function ($) {
-        $(document).ready(function() {
-            $('body').themeDelete();
-        });
-    })(jQuery);
+require([
+	'jquery',
+	'Magento_DesignEditor/js/theme-delete'
+], function($){
+
+    $(document).ready(function() {
+        $('body').themeDelete();
+    });
+
+});
 </script>

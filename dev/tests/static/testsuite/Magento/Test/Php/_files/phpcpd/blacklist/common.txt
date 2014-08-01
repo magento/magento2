@@ -8,7 +8,6 @@ Magento/Catalog/Model/Category/Indexer
 Magento/Catalog/Model/Product
 Magento/Core/Model/Resource/Design
 Zend
-downloader
 dev
 Mysql
 lib/internal/Magento/Framework/DB
@@ -27,7 +26,6 @@ Magento/Centinel/Controller
 Magento/Centinel/Model/State
 Magento/Checkout/Block/Multishipping
 Magento/Checkout/Model/Type
-Magento/Connect/Block/Adminhtml/Extension/Custom/Edit/Tab
 Magento/Catalog/Model/Template
 Magento/Cms/Model
 Magento/GiftMessage/Model
@@ -98,7 +96,6 @@ Magento/Widget/Model/Widget/Instance
 Magento/Wishlist/Block
 Magento/Wishlist/Model
 lib/internal/Magento/Framework/Archive
-lib/internal/Magento/Framework/Connect/Channel
 lib/internal/Magento/Framework/HTTP/Client
 lib/internal/Magento/Framework/Acl
 lib/internal/PEAR
@@ -109,7 +106,6 @@ Magento/Cron/Model
 Magento/SalesRule/Model/Resource/Report/Rule
 Magento/SalesRule/Model/Resource/Rule
 Magento/SalesRule/Model/Quote/Nominal
-Magento/Connect/Block/Adminhtml/Extension/Custom/Edit
 Magento/Tax/Model/Sales/Total/Quote/Nominal
 Magento/Theme/Block/Adminhtml/System/Design/Theme/Edit
 Magento/User/Block/User/Edit
@@ -126,3 +122,4 @@ Magento/Dhl/Model
 Magento/Shipping/Model
 Magento/Catalog/Service/V1/Category
 Magento/UrlRedirect/Model
+setup

@@ -164,7 +164,9 @@ class Io
             return true;
         }
         try {
-            $this->filesystemDriver->createDirectory($directory, self::DIRECTORY_PERMISSION);
+            if (!$this->filesystemDriver->isDirectory($directory)) {
+                $this->filesystemDriver->createDirectory($directory, self::DIRECTORY_PERMISSION);
+            }
             return true;
         } catch (\Magento\Framework\Filesystem\FilesystemException $e) {
             return false;

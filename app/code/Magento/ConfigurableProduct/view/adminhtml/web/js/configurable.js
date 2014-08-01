@@ -20,11 +20,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
+/**************************** CONFIGURABLE PRODUCT **************************/
+define(["prototype"], function(){
+
 if (typeof Product == 'undefined') {
-    var Product = {};
+    window.Product = {};
 }
 
-/**************************** CONFIGURABLE PRODUCT **************************/
 Product.Config = Class.create();
 Product.Config.prototype = {
     initialize: function(config){
@@ -320,3 +322,5 @@ Product.Config.prototype = {
         }
     }
 };
+
+});

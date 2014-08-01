@@ -24,8 +24,14 @@
 /*global FORM_KEY*/
 /*global bSelection*/
 /*global $H*/
-(function($) {
+define([
+    "jquery",
+    "jquery/ui",
+    "mage/translate",
+    "prototype"
+], function($){
     'use strict';
+
     $.widget('mage.bundleProduct', {
         _create: function () {
             this._initOptionBoxes();
@@ -202,4 +208,5 @@
             return this;
         }
     });
-})(jQuery);
+
+});

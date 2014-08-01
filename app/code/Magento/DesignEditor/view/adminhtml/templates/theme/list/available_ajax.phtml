@@ -26,5 +26,12 @@
 <?php echo join("\n", $this->getListItems()) ?>
 
 <script type="text/javascript">
+require([
+	'jquery',
+	'Magento_DesignEditor/js/infinitescroll'
+], function(jQuery){
+
     jQuery('.infinite_scroll').infinite_scroll({url :'<?php echo $this->getNextPageUrl() ?>'});
+
+});
 </script>

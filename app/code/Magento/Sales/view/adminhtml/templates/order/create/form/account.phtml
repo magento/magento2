@@ -29,4 +29,8 @@
 <div class="form-inline" id="customer_account_fieds">
     <?php echo $this->getForm()->getHtml() ?>
 </div>
-<script type="text/javascript">order.accountFieldsBind($('customer_account_fieds'))</script>
+<script type="text/javascript">
+	require(["prototype", "Magento_Sales/order/create/form"], function(){
+		order.accountFieldsBind($('customer_account_fieds'));
+	});
+</script>

@@ -30,9 +30,13 @@
  */
 ?>
 <script type="text/javascript">
+require([
+    'prototype'
+], function(){
+
 //<![CDATA[
-var dbTypeIds = [];
-function showContent(select)
+dbTypeIds = [];
+showContent = function(select)
 {
     dbTypeIds.each(function (name) {
         $(name + '_conn_form').hide()
@@ -40,6 +44,8 @@ function showContent(select)
     $(select.value + '_conn_form').show();
 }
 //]]>
+
+});
 </script>
 
 <fieldset class="group-select">
@@ -62,10 +68,16 @@ function showContent(select)
 
         <?php foreach ($dbTypeOptions as $block): ?>
             <script type="text/javascript">
-            //<![CDATA[
-                dbTypeIds[dbTypeIds.length] = "<?php echo $block->getIdPrefix(); ?>";
-            //]]>
-            </script>
+require([
+    'prototype'
+], function(){
+
+    //<![CDATA[
+        dbTypeIds[dbTypeIds.length] = "<?php echo $block->getIdPrefix(); ?>";
+    //]]>
+            
+});
+</script>
             <?php $block = $this->getDatabaseBlock($block->getIdPrefix()) ?>
 
             <div id="<?php echo $block->getIdPrefix() ?>_conn_form" <?php if($this->getFormData()->getDbModel() != $block->getIdPrefix()):?>style="display:none;"<?php endif;?>>

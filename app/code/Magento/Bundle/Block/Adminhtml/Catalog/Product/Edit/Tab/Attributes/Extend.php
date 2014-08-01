@@ -161,7 +161,7 @@ class Extend extends \Magento\Catalog\Block\Adminhtml\Form\Renderer\Fieldset\Ele
                             $('dynamic-price-warning').hide();
                         }
                     }
-                }";
+                }"."\n";
 
             if (!($this->getAttribute()->getAttributeCode() == 'price' &&
                 !$this->getCanEditPrice() &&

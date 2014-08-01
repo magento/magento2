@@ -25,8 +25,6 @@
 /* @var $installer \Magento\Sales\Model\Resource\Setup */
 $installer = $this;
 
-$installer->installEntities();
-
 $invoiceTable = $installer->getTable('sales_flat_invoice');
 $installer->getConnection()->addColumn(
     $invoiceTable,

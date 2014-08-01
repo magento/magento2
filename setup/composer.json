@@ -1,0 +1,26 @@
+{
+    "name": "Magento Setup Tool",
+    "require": {
+        "zendframework/zendframework": "2.3.1",
+        "composer/composer": "1.0.*@dev"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "4.1.*",
+        "squizlabs/php_codesniffer": "1.*",
+        "phpmd/phpmd" : "1.4.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Magento\\Setup\\": "module/Magento/Setup/src/",
+            "Magento\\Config\\": "module/Magento/Config/src/",
+            "Magento\\Install\\": "module/Magento/Install/src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Magento\\Setup\\Tests\\": "module/Magento/Setup/tests/",
+            "Magento\\Config\\Tests\\": "module/Magento/Config/tests/",
+            "Magento\\Install\\Tests\\": "module/Magento/Install/tests/"
+        }
+    }
+}

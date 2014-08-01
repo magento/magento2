@@ -27,19 +27,6 @@
     <referenceContainer name="content">
         <block class="Magento\Customer\Block\Adminhtml\Edit" name="customer_edit"/>
     </referenceContainer>
-    <referenceBlock name="head">
-        <block class="Magento\Backend\Block\Template" name="optional_zip_countries" as="optional_zip_countries" template="Magento_Directory::js/optional_zip_countries.phtml"/>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-catalog-product-composite-configure-js">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Catalog::catalog/product/composite/configure.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-customer-edit-tab-js-addresses.js">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Customer::edit/tab/js/addresses.js</argument>
-            </arguments>
-        </block>
-    </referenceBlock>
     <referenceContainer name="left">
         <block class="Magento\Customer\Block\Adminhtml\Edit\Tabs" name="customer_edit_tabs">
             <block class="Magento\Customer\Block\Adminhtml\Edit\Tab\View" name="customer_edit_tab_view" template="tab/view.phtml">

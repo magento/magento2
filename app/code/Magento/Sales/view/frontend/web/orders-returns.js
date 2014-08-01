@@ -21,8 +21,12 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /*jshint browser:true, jquery:true*/
-(function($) {
+define([
+    "jquery",
+    "jquery/ui"
+], function($){
     "use strict";
+
     $.widget('mage.ordersReturns', {
         options: {
             zipCode: '#oar-zip', // Search by zip code.
@@ -45,4 +49,5 @@
             $(this.options.emailAddress).toggle(value === 'email');
         }
     });
-})(jQuery);
+
+});

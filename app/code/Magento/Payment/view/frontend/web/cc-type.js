@@ -21,8 +21,12 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /*jshint jquery:true*/
-(function($) {
+define([
+    "jquery",
+    "jquery/ui"
+], function($){
     "use strict";
+
     $.widget('mage.creditCardType', {
         options: {
             typeCodes: ['SS', 'SM', 'SO'] // Type codes for Switch/Maestro/Solo credit cards.
@@ -47,4 +51,5 @@
                 .toggle($.inArray(this.element.val(), this.options.typeCodes) !== -1);
         }
     });
-})(jQuery);
+
+});

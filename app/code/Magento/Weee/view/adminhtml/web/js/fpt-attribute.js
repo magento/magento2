@@ -20,7 +20,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-(function ($) {
+define([
+    "jquery",
+    "jquery/ui",
+    "jquery/template",
+    "mage/adminhtml/form"
+], function($){
+
     $.widget('mage.fptAttribute', {
         _create: function () {
             var widget = this;
@@ -103,4 +109,5 @@
             }
         }
     });
-})(jQuery);
+
+});

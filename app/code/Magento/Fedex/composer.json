@@ -1,0 +1,27 @@
+{
+    "name": "magento/module-fedex",
+    "description": "N/A",
+    "require": {
+        "php": "5.4.*|5.5.*",
+        "magento/module-store": "0.1.0-alpha89",
+        "magento/module-shipping": "0.1.0-alpha89",
+        "magento/module-directory": "0.1.0-alpha89",
+        "magento/module-core": "0.1.0-alpha89",
+        "magento/module-catalog": "0.1.0-alpha89",
+        "magento/module-sales": "0.1.0-alpha89",
+        "magento/module-catalog-inventory": "0.1.0-alpha89",
+        "magento/framework": "0.1.0-alpha89",
+        "lib-libxml": "*",
+        "magento/magento-composer-installer": "*"
+    },
+    "type": "magento2-module",
+    "version": "0.1.0-alpha89",
+    "extra": {
+        "map": [
+            [
+                "*",
+                "Magento/Fedex"
+            ]
+        ]
+    }
+}

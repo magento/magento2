@@ -65,7 +65,7 @@ class Js
     {
         $json = \Zend_Json::encode($this->dataProvider->getTranslateData());
         $this->translateInline->processResponseBody($json, false);
-        $script = '(function($) {$.mage.translate.add(' . $json . ')})(jQuery);';
+        $script = 'require(["jquery", "mage/translate"], function($){ $.mage.translate.add(' . $json . '); })';
         return '<script type="text/javascript">//<![CDATA[' . "\n{$script}\n" . '//]]></script>';
     }
 }

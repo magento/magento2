@@ -32,6 +32,7 @@ use Magento\Tax\Service\V1\Data\TaxClassKey;
 use Magento\Tax\Service\V1\Data\TaxClassKeyBuilder;
 use Magento\Tax\Service\V1\TaxCalculationServiceInterface;
 use Magento\Customer\Model\Address\Converter as AddressConverter;
+use Magento\Customer\Model\Session as CustomerSession;
 
 /**
  * Catalog data helper
@@ -152,6 +153,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $addressConverter;
 
     /**
+     * @var CustomerSession
+     */
+    protected $customerSession;
+
+    /**
      * TaxClassKey builder
      *
      * @var TaxClassKeyBuilder
@@ -174,6 +180,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param QuoteDetailsItemBuilder $quoteDetailsItemBuilder
      * @param TaxClassKeyBuilder $taxClassKeyBuilder
      * @param TaxCalculationServiceInterface $taxCalculationService
+     * @param CustomerSession $customerSession
      * @param AddressConverter $addressConverter
      */
     public function __construct(
@@ -192,6 +199,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         QuoteDetailsItemBuilder $quoteDetailsItemBuilder,
         TaxClassKeyBuilder $taxClassKeyBuilder,
         TaxCalculationServiceInterface $taxCalculationService,
+        CustomerSession $customerSession,
         AddressConverter $addressConverter
     ) {
         parent::__construct($context);
@@ -209,6 +217,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->quoteDetailsItemBuilder = $quoteDetailsItemBuilder;
         $this->taxClassKeyBuilder = $taxClassKeyBuilder;
         $this->taxCalculationService = $taxCalculationService;
+        $this->customerSession = $customerSession;
         $this->addressConverter = $addressConverter;
     }
 
@@ -596,6 +605,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                     $this->taxClassKeyBuilder->setType(TaxClassKey::TYPE_ID)
                         ->setValue($ctc)->create()
                 )->setItems([$item])
+                ->setCustomerId($this->customerSession->getCustomerId())
                 ->create();
 
             $storeId = null;

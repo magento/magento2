@@ -83,7 +83,8 @@
         </tr>
     </script>
     <script type="text/javascript">
-    //<![CDATA[
+require(['jquery', "jquery/ui"], function(jQuery){
+
     var optionDefaultInputType = 'radio';
 
     // IE removes quotes from element.innerHTML whenever it thinks they're not needed, which breaks html.
@@ -162,7 +163,7 @@
                 }
             }
         }
-    }
+    };
 
     attributeOption.bindRemoveButtons();
 
@@ -187,6 +188,12 @@
         });
     });
     <?php endif; ?>
+
+    window.attributeOption = attributeOption;
+    window.templateText = templateText;
+    window.optionDefaultInputType = optionDefaultInputType;
     //]]>
-    </script>
+    
+});
+</script>
 </fieldset>

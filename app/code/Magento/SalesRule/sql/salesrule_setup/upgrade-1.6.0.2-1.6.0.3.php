@@ -118,45 +118,6 @@ $connection->createTable($table);
 
 
 /**
- * Fill out relation table 'salesrule_website' with website Ids
- */
-$select = $connection->select()->from(
-    array('sr' => $rulesTable),
-    array('sr.rule_id', 'cw.website_id')
-)->join(
-    array('cw' => $websitesTable),
-    $connection->prepareSqlCondition('sr.website_ids', array('finset' => new \Zend_Db_Expr('cw.website_id'))),
-    array()
-);
-$query = $select->insertFromSelect($rulesWebsitesTable, array('rule_id', 'website_id'));
-$connection->query($query);
-
-
-/**
- * Fill out relation table 'salesrule_customer_group' with customer group Ids
- */
-
-$select = $connection->select()->from(
-    array('sr' => $rulesTable),
-    array('sr.rule_id', 'cg.customer_group_id')
-)->join(
-    array('cg' => $customerGroupsTable),
-    $connection->prepareSqlCondition(
-        'sr.customer_group_ids',
-        array('finset' => new \Zend_Db_Expr('cg.customer_group_id'))
-    ),
-    array()
-);
-$query = $select->insertFromSelect($rulesCustomerGroupsTable, array('rule_id', 'customer_group_id'));
-$connection->query($query);
-
-/**
- * Eliminate obsolete columns
- */
-$connection->dropColumn($rulesTable, 'website_ids');
-$connection->dropColumn($rulesTable, 'customer_group_ids');
-
-/**
  * Change default value to "null" for "from" and "to" dates columns
  */
 $connection->modifyColumn(

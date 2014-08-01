@@ -24,6 +24,8 @@
 ?>
 
 <script type="text/javascript">
+require(['prototype'], function(){
+
 //<![CDATA[
 var itemType = function() {
     return {
@@ -77,5 +79,9 @@ var itemType = function() {
          Event.observe($("select_target_country"), 'change', itemType.reloadItemTypes);
      }
 });
+
+window.itemType = itemType;
 //]]>
+
+});
 </script>

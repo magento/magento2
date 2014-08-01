@@ -68,11 +68,17 @@
     </div>
 </form>
 <script type="text/javascript">
+require([
+    "jquery",
+    "mage/mage",
+    "Magento_Backend/variables"
+], function(jQuery){
+
 //<![CDATA[
     jQuery('#email_template_edit_form').mage('form').mage('validation');
     jQuery('#email_template_preview_form').mage('form').mage('validation');
     jQuery('#email_template_load_form').mage('validation');
-    var templateControl = {
+    templateControl = {
         unconvertedText: '',
         typeChange: false,
         variables: null,
@@ -230,4 +236,6 @@
 
     templateControl.init();
 //]]>
+
+});
 </script>

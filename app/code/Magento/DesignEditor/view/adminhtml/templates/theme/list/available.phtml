@@ -29,7 +29,11 @@
 </div>
 
 <script type="text/javascript">
-    (function ($) {
+require([
+    'jquery',
+    'Magento_DesignEditor/js/infinitescroll'
+], function($){
+
         $( document ).ready(function( ) {
             <?php if ($this->getTabId()): ?>
                 $('.infinite_scroll').infinite_scroll({
@@ -42,5 +46,6 @@
                 });
             <?php endif; ?>
         });
-    })(jQuery);
+
+});
 </script>

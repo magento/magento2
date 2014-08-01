@@ -84,7 +84,11 @@
             </a>
         </div>
     <?php else: ?>
-        <script type="text/javascript">$('order-shipping-method-choose').show();</script>
+        <script type="text/javascript">
+require(['prototype'], function(){
+    $('order-shipping-method-choose').show();
+});
+</script>
     <?php endif; ?>
 <?php elseif($this->getIsRateRequest()): ?>
     <strong><?php echo __('Sorry, no quotes are available for this order.') ?></strong>
@@ -98,6 +102,10 @@
 <?php endif; ?>
 <div style="display:none;" id="shipping-method-overlay" class="overlay"><span><?php echo __('You don\'t need to select a shipping method.') ?></span></div>
 <script type="text/javascript">
-order.overlay('shipping-method-overlay', <?php if ($this->getQuote()->isVirtual()): ?>false<?php else: ?>true<?php endif; ?>);
-order.overlay('address-shipping-overlay', <?php if ($this->getQuote()->isVirtual()): ?>false<?php else: ?>true<?php endif; ?>);
+    require(["Magento_Sales/order/create/form"], function(){
+
+        order.overlay('shipping-method-overlay', <?php if ($this->getQuote()->isVirtual()): ?>false<?php else: ?>true<?php endif; ?>);
+        order.overlay('address-shipping-overlay', <?php if ($this->getQuote()->isVirtual()): ?>false<?php else: ?>true<?php endif; ?>);
+
+    });
 </script>

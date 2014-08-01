@@ -49,11 +49,13 @@
     </div>
 </form>
 <script type="text/javascript">
+require(['jquery', 'mage/mage', 'prototype'], function(jQuery){
+
 //<![CDATA[
 jQuery('#queue_edit_form').mage('form').mage('validation');
 jQuery('#newsletter_queue_preview_form').mage('form').mage('validation');
 
-var queueControl = {
+queueControl = {
     id: 'text',
     preview: function() {
         if (this.isEditor() && tinyMCE.get(this.id)) {
@@ -78,4 +80,6 @@ var queueControl = {
     }
 };
 //]]>
+
+});
 </script>

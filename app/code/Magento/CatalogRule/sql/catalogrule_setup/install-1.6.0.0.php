@@ -65,12 +65,6 @@ $table = $installer->getConnection()->newTable(
     array(),
     'To Date'
 )->addColumn(
-    'customer_group_ids',
-    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-    '64k',
-    array(),
-    'Customer Group Ids'
-)->addColumn(
     'is_active',
     \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
     null,
@@ -112,12 +106,6 @@ $table = $installer->getConnection()->newTable(
     array(12, 4),
     array('nullable' => false, 'default' => 0.0000),
     'Discount Amount'
-)->addColumn(
-    'website_ids',
-    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-    4000,
-    array(),
-    'Website Ids'
 )->addIndex(
     $installer->getIdxName('catalogrule', array('is_active', 'sort_order', 'to_date', 'from_date')),
     array('is_active', 'sort_order', 'to_date', 'from_date')

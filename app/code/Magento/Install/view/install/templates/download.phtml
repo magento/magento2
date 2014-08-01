@@ -29,36 +29,42 @@
  */
 ?>
 <script type="text/javascript">
-function startInstall(state)
-{
-    $$('button').each(function(el) {
-        el.disabled = true;
-        el.addClassName('disabled');
-    });
-    var install = $('install_iframe');
-    install.setStyle({'display':'block', 'width':'100%', 'height':'300px'});
-    install.src = '<?php echo $this->getUrl('*/*/install') ?>do/start/state/'+state;
-}
+require([
+    'prototype'
+], function(){
 
-function installSuccess()
-{
-    alert("<?php echo __("All packages were installed. Click 'OK' to continue with installation.") ?>");
-    location.href = "<?php echo $this->getNextUrl() ?>";
-    $$('button').each(function(el) {
-        el.disabled = true;
-        el.removeClassName('disabled');
-    });
-}
+    startInstall = function(state)
+    {
+        $$('button').each(function(el) {
+            el.disabled = true;
+            el.addClassName('disabled');
+        });
+        var install = $('install_iframe');
+        install.setStyle({'display':'block', 'width':'100%', 'height':'300px'});
+        install.src = '<?php echo $this->getUrl('*/*/install') ?>do/start/state/'+state;
+    }
 
-function installFailure()
-{
-    alert("<?php echo __("Something went wrong installing the Magento packages. Please read the log, correct any errors and try again.") ?>\n<?php echo __('As another option, you could try the "Manual Downloads and Upgrades" method.') ?>");
-    $$('button').each(function(el) {
-        el.disabled = true;
-        el.removeClassName('disabled');
-    });
-}
+    installSuccess = function()
+    {
+        alert("<?php echo __("All packages were installed. Click 'OK' to continue with installation.") ?>");
+        location.href = "<?php echo $this->getNextUrl() ?>";
+        $$('button').each(function(el) {
+            el.disabled = true;
+            el.removeClassName('disabled');
+        });
+    }
 
+    installFailure = function()
+    {
+        alert("<?php echo __("Something went wrong installing the Magento packages. Please read the log, correct any errors and try again.") ?>\n<?php echo __('As another option, you could try the "Manual Downloads and Upgrades" method.') ?>");
+        $$('button').each(function(el) {
+            el.disabled = true;
+            el.removeClassName('disabled');
+        });
+    }
+
+
+});
 </script>
 <div class="page-head">
     <h3><?php echo __('Download Magento Core Modules and Updates') ?></h3>
@@ -121,5 +127,9 @@ function installFailure()
 </form>
 
 <script type="text/javascript">
-var tabs = new Varien.Tabs('.tabs');
+require(['prototype'], function(){
+
+    tabs = new Varien.Tabs('.tabs');
+
+});
 </script>

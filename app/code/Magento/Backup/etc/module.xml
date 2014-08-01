@@ -35,7 +35,6 @@
             <module name="Magento_Backend"/>
             <module name="Magento_Cron"/>
             <module name="Magento_Index"/>
-            <module name="Magento_Theme"/>
         </depends>
     </module>
 </config>

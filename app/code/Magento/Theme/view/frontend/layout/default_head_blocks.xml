@@ -31,111 +31,33 @@
         <block class="Magento\Theme\Block\Html\Head\Css" name="magento-calendar-css">
             <arguments>
                 <argument name="file" xsi:type="string">mage/calendar.css</argument>
-                <argument name="properties" xsi:type="array">
-                    <item name="attributes" xsi:type="string"/>
-                </argument>
             </arguments>
         </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-jquery-js">
+        <block class="Magento\Theme\Block\Html\Head\Script" name="requirejs">
+            <arguments>
+                <argument name="file" xsi:type="string">requirejs/require.js</argument>
+            </arguments>
+        </block>
+        <block class="Magento\Theme\Block\Html\Head\Script" name="app-config" after="jquery">
+            <arguments>
+                <argument name="file" xsi:type="string">app-config.js</argument>
+            </arguments>
+        </block>
+        <!-- /**
+        TODO: remove jQuery. jQuery could be loaded through RequireJS. But only in case ALL MODULES ARE AMD MODULES.
+        Detail: http://requirejs.org/docs/jquery.html#noconflictmap
+        */ -->
+        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery" after="requirejs">
             <arguments>
                 <argument name="file" xsi:type="string">jquery/jquery.js</argument>
             </arguments>
         </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-jquery-migrate-js">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/jquery-migrate.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-jquery-no-conflict-js">
+        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-no-conflict" after="jquery">
             <arguments>
                 <argument name="file" xsi:type="string">mage/jquery-no-conflict.js</argument>
             </arguments>
         </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-mobile-custom-js">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/jquery.mobile.custom.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="js-head-js">
-            <arguments>
-                <argument name="file" xsi:type="string">headjs/head.min.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-magento-js">
-            <arguments>
-                <argument name="file" xsi:type="string">mage/mage.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-decorate-js">
-            <arguments>
-                <argument name="file" xsi:type="string">mage/decorate.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-translate-js">
-            <arguments>
-                <argument name="file" xsi:type="string">mage/translate.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-jquery-cookie-js">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/jquery.cookie.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-cookies-js">
-            <arguments>
-                <argument name="file" xsi:type="string">mage/cookies.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-jquery-ui-js" after="jquery-jquery-js">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/jquery-ui.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-jquery-tmpl-min-js">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/jquery.tmpl.min.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-bootstrap-js">
-            <arguments>
-                <argument name="file" xsi:type="string">mage/bootstrap.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-page-js-truncate-js">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Theme::js/truncate.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-common-js">
-            <arguments>
-                <argument name="file" xsi:type="string">mage/common.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-toggle-js">
-            <arguments>
-                <argument name="file" xsi:type="string">mage/toggle.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-popup-window-js">
-            <arguments>
-                <argument name="file" xsi:type="string">mage/popup-window.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-loader-js">
-            <arguments>
-                <argument name="file" xsi:type="string">mage/loader.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-dataPost-js">
-            <arguments>
-                <argument name="file" xsi:type="string">mage/dataPost.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-menu-js">
-            <arguments>
-                <argument name="file" xsi:type="string">mage/menu.js</argument>
-            </arguments>
-        </block>
+
         <block class="Magento\Framework\View\Element\Js\Components" name="head.components" as="components" template="Magento_Theme::js/components.phtml"/>
     </referenceBlock>
 </layout>

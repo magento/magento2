@@ -96,7 +96,7 @@ $table = $installer->getConnection()->newTable(
     'increment_model',
     \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     255,
-    array('nullable' => true, 'default' => ''),
+    array('nullable' => true, 'default' => false),
     'Increment Model'
 )->addColumn(
     'increment_per_store',
@@ -120,7 +120,7 @@ $table = $installer->getConnection()->newTable(
     'additional_attribute_table',
     \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     255,
-    array('nullable' => true, 'default' => ''),
+    array('nullable' => true, 'default' => false),
     'Additional Attribute Table'
 )->addColumn(
     'entity_attribute_collection',

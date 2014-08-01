@@ -67,73 +67,81 @@
 
 
 <script type="text/javascript">
-    (function ($) {
-        $('[data-manage="fonts"]').on('click', function() {
-            MediabrowserUtility.openDialog(
-                '<?php echo $this->getMediaBrowserUrl('custom_code', \Magento\Theme\Model\Wysiwyg\Storage::TYPE_FONT) ?>',
-                null,
-                null,
-                '<?php echo $this->escapeQuote(__('Font Assets'), true); ?>'
-            );
-        });
-        $('[data-manage="images"]').on('click', function() {
-            MediabrowserUtility.openDialog(
-                '<?php echo $this->getMediaBrowserUrl('custom_code', \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE) ?>',
-                null,
-                null,
-                '<?php echo $this->escapeQuote(__('Image Assets'), true); ?>'
-            );
-        });
-        $('#vde-tab-custom').customCssPanel({
-            saveCustomCssUrl: '<?php echo $this->getSaveCustomCssUrl() ?>',
-            downloadCustomCssUrl: '<?php echo $this->getDownloadCustomCssUrl() ?>'
-        });
+require([
+    "jquery",
+    "jquery/file-uploader",
+    "Magento_DesignEditor/js/tools-files",
+    "Magento_DesignEditor/js/custom-css"
+], function($){
 
-        $( '#' + '<?php echo $this->getFileElementName() ?>' ).fileupload({
-            dataType: 'json',
-            replaceFileInput: false,
-            url : '<?php echo $this->getUploadUrl() ?>',
 
-            /**
-             * Handler of "file selected" event
-             * @param e
-             * @param data
-             */
-            add: function (e, data) {
-                data.submit();
-            },
+    $('[data-manage="fonts"]').on('click', function() {
+        MediabrowserUtility.openDialog(
+            '<?php echo $this->getMediaBrowserUrl('custom_code', \Magento\Theme\Model\Wysiwyg\Storage::TYPE_FONT) ?>',
+            null,
+            null,
+            '<?php echo $this->escapeQuote(__('Font Assets'), true); ?>'
+        );
+    });
+    $('[data-manage="images"]').on('click', function() {
+        MediabrowserUtility.openDialog(
+            '<?php echo $this->getMediaBrowserUrl('custom_code', \Magento\Theme\Model\Wysiwyg\Storage::TYPE_IMAGE) ?>',
+            null,
+            null,
+            '<?php echo $this->escapeQuote(__('Image Assets'), true); ?>'
+        );
+    });
+    $('#vde-tab-custom').customCssPanel({
+        saveCustomCssUrl: '<?php echo $this->getSaveCustomCssUrl() ?>',
+        downloadCustomCssUrl: '<?php echo $this->getDownloadCustomCssUrl() ?>'
+    });
 
-            /**
-             * Handler on "upload ajax request done" event
-             * @param e
-             * @param data
-             */
-            done: function (e, data) {
-                var contentArea = $('#custom_code');
-                contentArea.val('');
-                $(this).val('');
-                $('#css_uploader_button').attr('disabled', true);
-                if (!data.result.error) {
-                    contentArea.val(data.result.content);
-                    $('#vde-tab-custom').customCssPanel('updateButtons');
-                    $('#vde-tab-custom').trigger('refreshIframe');
-                }
+    $( '#' + '<?php echo $this->getFileElementName() ?>' ).fileupload({
+        dataType: 'json',
+        replaceFileInput: false,
+        url : '<?php echo $this->getUploadUrl() ?>',
 
-                $('#vde-tab-custom').trigger('addMessage', {
-                    containerId: '#vde-tab-custom-messages-placeholder',
-                    message: data.result.message
-                });
-                $('.vde-tools-content').trigger('resize.vdeToolsResize');
-            },
+        /**
+         * Handler of "file selected" event
+         * @param e
+         * @param data
+         */
+        add: function (e, data) {
+            data.submit();
+        },
 
-            /**
-             * Handle on "upload ajax request fail" event
-             * @param e
-             * @param data
-             */
-            fail: function (e, data) {
+        /**
+         * Handler on "upload ajax request done" event
+         * @param e
+         * @param data
+         */
+        done: function (e, data) {
+            var contentArea = $('#custom_code');
+            contentArea.val('');
+            $(this).val('');
+            $('#css_uploader_button').attr('disabled', true);
+            if (!data.result.error) {
+                contentArea.val(data.result.content);
                 $('#vde-tab-custom').customCssPanel('updateButtons');
+                $('#vde-tab-custom').trigger('refreshIframe');
             }
-        });
-    })(jQuery);
+
+            $('#vde-tab-custom').trigger('addMessage', {
+                containerId: '#vde-tab-custom-messages-placeholder',
+                message: data.result.message
+            });
+            $('.vde-tools-content').trigger('resize.vdeToolsResize');
+        },
+
+        /**
+         * Handle on "upload ajax request fail" event
+         * @param e
+         * @param data
+         */
+        fail: function (e, data) {
+            $('#vde-tab-custom').customCssPanel('updateButtons');
+        }
+    });
+
+});
 </script>

@@ -62,6 +62,8 @@ $element = $this->getElement();
         </table>
 
 <script type="text/javascript">
+require(["prototype"], function(){
+
 //<![CDATA[
 var tierPriceRowTemplate = '<tr>'
     + '<td class="col-websites"<?php if (!$_showWebsite): ?> style="display:none"<?php endif; ?>>'
@@ -162,7 +164,12 @@ tierPriceControl.addItem('<?php echo $_item['website_id'] ?>', '<?php echo $_ite
 $('<?php echo $_htmlId ?>_container').up('table').select('button')
     .each(tierPriceControl.disableElement);
 <?php endif; ?>
+
+window.tierPriceRowTemplate = tierPriceRowTemplate;
+window.tierPriceControl = tierPriceControl;
 //]]>
+
+});
 </script>
     </div>
 </div>

@@ -24,14 +24,19 @@
 ?>
 
 <script type="text/javascript">
-    (function ($) {
-        $(document).ready(function() {
-            $('body').themeEdit({
-                dialogSelector: '#dialog-message-confirm',
-                title: '<?php echo __('Edit Theme') ?>',
-                confirmMessage: '<?php echo __('When you edit a theme, we save it as a unique version in "My Customizations."') ?>',
-                launchUrl: '<?php echo $this->getUrl('*/*/launch') ?>'
-            });
+require([
+    'jquery',
+    'Magento_DesignEditor/js/theme-edit'
+], function($){
+
+    $(document).ready(function() {
+        $('body').themeEdit({
+            dialogSelector: '#dialog-message-confirm',
+            title: '<?php echo __('Edit Theme') ?>',
+            confirmMessage: '<?php echo __('When you edit a theme, we save it as a unique version in "My Customizations."') ?>',
+            launchUrl: '<?php echo $this->getUrl('*/*/launch') ?>'
         });
-    })(jQuery);
+    });
+
+});
 </script>

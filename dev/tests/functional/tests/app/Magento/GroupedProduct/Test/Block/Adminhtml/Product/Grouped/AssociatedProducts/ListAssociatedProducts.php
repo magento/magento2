@@ -39,7 +39,7 @@ class ListAssociatedProducts extends Form
      *
      * @var string
      */
-    protected $itemProduct = '//tr[@data-role="row"][%d]';
+    protected $itemProduct = '//tr[@data-role="row"][@class="pointer"][%d]';
 
     /**
      * Getting block products

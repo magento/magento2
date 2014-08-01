@@ -49,7 +49,7 @@ $table = $installer->getConnection()
         255,
         array(
             'nullable' => false,
-            'default' => \Magento\Framework\TranslateInterface::DEFAULT_STRING,
+            'default' => 'Translate String',
         ),
         'Translation String'
     )->addColumn(
@@ -83,7 +83,7 @@ $table = $installer->getConnection()
         null,
         array(
             'nullable' => false,
-            'default'  => crc32(\Magento\Framework\TranslateInterface::DEFAULT_STRING)
+            'default'  => crc32('Translate String')
         ),
         'Translation String CRC32 Hash'
     )->addIndex(

@@ -24,14 +24,22 @@
 /* @var $this \Magento\ConfigurableProduct\Block\Product\Configurable\AttributeSelector */
 ?>
 <script type="text/javascript">
-jQuery(function($) {
-    'use strict';
-    $(function() {
-        var $form = $('#affected-attribute-set-form'),
-            resetValidation = function() {
-                $form.find('.messages .message.error').hide();
-                $form.find('form').validation().data('validator').resetForm();
-            };
+(function($){
+    var $form;
+
+    require([
+        "jquery",
+        "jquery/ui",
+        "Magento_ConfigurableProduct/catalog/product-variation"
+    ], function($){
+        'use strict';
+
+        $form = $('#affected-attribute-set-form');
+
+        var resetValidation = function() {
+            $form.find('.messages .message.error').hide();
+            $form.find('form').validation().data('validator').resetForm();
+        };
 
         $('[data-form=edit-product]').append($('<input>', {
             type: 'hidden',
@@ -107,32 +115,38 @@ jQuery(function($) {
                     $form.find('input[name=new-attribute-set-name]').focus();
                 }
             });
-
-        $('#save-split-button .item')
-            .on('click', function(event) {
-                if ($('#new-variations-attribute-set-id').val() != '') {
-                    return; // affected attribute set was already chosen
-                }
-                var extendingAttributes = [];
-                $.each($('#configurable-attributes-container').variationsAttributes('getAttributes'), function () {
-                    if (!$('#attribute-' + this.code + '-container').length) {
-                        extendingAttributes.push(this.id);
-                    }
-                });
-                if (!extendingAttributes.length) {
-                    $('#new-variations-attribute-set-id').val($('#attribute_set_id').val());
-                    return; // all selected configurable attributes belong to current attribute set
-                }
-                if (!$('[data-role=product-variations-matrix] [data-column=entity_id]:checked')
-                    .closest('tr').has('input[name$="[name]"]').length
-                ) {
-                    return; // no new simple products to save from matrix: uniting attribute set is not needed
-                }
-
-                event.stopImmediatePropagation();
-                $form.data('target', event.target)
-                    .dialog('open');
-            });
     });
-});
+    
+    /**
+     * This fix was made in order to properly handle 'stopImmediatePropagation'.
+     */
+    $('#save-split-button .item').on('click', function(event) {
+        if ($('#new-variations-attribute-set-id').val() != '') {
+            return; // affected attribute set was already chosen
+        }
+        
+        var extendingAttributes = [];
+
+        $.each($('#configurable-attributes-container').variationsAttributes('getAttributes'), function () {
+            if (!$('#attribute-' + this.code + '-container').length) {
+                extendingAttributes.push(this.id);
+            }
+        });
+        if (!extendingAttributes.length) {
+            $('#new-variations-attribute-set-id').val($('#attribute_set_id').val());
+            return; // all selected configurable attributes belong to current attribute set
+        }
+        if (!$('[data-role=product-variations-matrix] [data-column=entity_id]:checked')
+            .closest('tr').has('input[name$="[name]"]').length
+        ) {
+            return; // no new simple products to save from matrix: uniting attribute set is not needed
+        }
+
+        event.stopImmediatePropagation();
+
+        $form.data('target', event.target)
+            .dialog('open');
+    });
+
+})(jQuery);
 </script>

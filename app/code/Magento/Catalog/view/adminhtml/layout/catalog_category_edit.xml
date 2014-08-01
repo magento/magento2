@@ -31,29 +31,9 @@
                 <argument name="file" xsi:type="string">jquery/fileUploader/css/jquery.fileupload-ui.css</argument>
             </arguments>
         </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-fileuploader-jquery-iframe-transport-js">
+        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-catalog-js-bootstrap-category-edit-js">
             <arguments>
-                <argument name="file" xsi:type="string">jquery/fileUploader/jquery.iframe-transport.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-fileuploader-jquery-fileupload-js">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/fileUploader/jquery.fileupload.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-fileuploader-load-image-min-js">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/fileUploader/load-image.min.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-fileuploader-canvas-to-blob-min-js">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/fileUploader/canvas-to-blob.min.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-fileuploader-jquery-fileupload-fp-js">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/fileUploader/jquery.fileupload-fp.js</argument>
+                <argument name="file" xsi:type="string">Magento_Catalog::js/bootstrap/category-edit.js</argument>
             </arguments>
         </block>
     </referenceBlock>
@@ -77,4 +57,8 @@
     <referenceContainer name="js">
         <block class="Magento\Framework\View\Element\Template" template="Magento_Catalog::catalog/wysiwyg/js.phtml" name="catalog.wysiwyg.js"/>
     </referenceContainer>
+    <referenceBlock name="head.components">
+        <block class="Magento\Framework\View\Element\Js\Components" name="catalog_category_page_head_components" template="Magento_Catalog::js/components.phtml"/>
+    </referenceBlock>
+
 </layout>

@@ -25,7 +25,7 @@
 /** @var $this \Magento\ConfigurableProduct\Block\Product\Configurable\AttributeSelector */
 ?>
 <script type="text/javascript">
-jQuery(function($) {
+require(["jquery","mage/mage","mage/backend/suggest"], function($){
     var options = <?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode($this->getSuggestWidgetOptions())?>;
     $('#configurable-attribute-selector')
         .mage('suggest', options)
@@ -42,7 +42,7 @@ jQuery(function($) {
                 if (!$('#configurable_attribute_' + item.id ).length) {
                     items.push(item);
                 }
-            })
+            });
             renderer(items);
             return false;
         })

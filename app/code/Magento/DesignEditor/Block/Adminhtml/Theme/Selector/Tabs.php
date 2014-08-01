@@ -63,10 +63,9 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
     protected function _getScript()
     {
         $script = sprintf(
-            "
-            (function ($) {
+            "require(['jquery', 'Magento_DesignEditor/js/theme-selector'], function($){
                 $('.themes-customizations .theme').themeControl({url: '%s'});
-            })(jQuery);",
+            });",
             $this->getUrl('adminhtml/*/quickEdit')
         );
         return sprintf('<script type="text/javascript">%s</script>', $script);

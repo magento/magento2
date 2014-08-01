@@ -66,6 +66,12 @@ $this->getConfigJson();
     <div><small><?php echo __('Alphanumeric, dash and underscore characters are recommended for filenames. Improper characters are replaced with \'_\'.')?></small></div>
 </div>
 <script type="text/javascript">
+require([
+    'jquery',
+    'jquery/file-uploader',
+    'prototype'
+], function(jQuery){
+
 //<![CDATA[>
 var sampleTemplate = '<tr>'+
                         '<td>'+
@@ -108,7 +114,7 @@ var sampleTemplate = '<tr>'+
                             '<button type="button" class="action- scalable delete icon-btn delete-sample-item"><span>Delete</span></button>'+
                         '</td>'+
                     '</tr>';
-var sampleItems = {
+sampleItems = {
     tbody: $('sample_items_body'),
     templateSyntax: /(^|.|\r|\n)({{(\w+)}})/,
     templateText: sampleTemplate,
@@ -245,15 +251,6 @@ sampleUploader = function (id) {
     })(jQuery, id);
 };
 
-
-if($('add_sample_item')){
-    Event.observe('add_sample_item', 'click', sampleItems.add.bind(sampleItems));
-}
-
-<?php foreach ($this->getSampleData() as $item): ?>
-    sampleItems.add(<?php echo $item->toJson() ?>);
-<?php endforeach; ?>
-
-//]]>
+});
 </script>
 

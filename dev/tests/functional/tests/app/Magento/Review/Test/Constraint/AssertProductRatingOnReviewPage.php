@@ -66,8 +66,8 @@ class AssertProductRatingOnReviewPage extends AbstractAssertForm
             $review->hasData('ratings') ? $review->getRatings() : []
         );
         $ratingReview = $this->sortDataByPath($ratingReview, '::title');
-        $ratingForm = $reviewEdit->getReviewForm()->getRatings();
-        $ratingForm = $this->sortDataByPath($ratingForm, '::title');
+        $ratingForm = $reviewEdit->getReviewForm()->getData();
+        $ratingForm = $this->sortDataByPath($ratingForm['ratings'], '::title');
         $error = $this->verifyData($ratingReview, $ratingForm);
         \PHPUnit_Framework_Assert::assertTrue(empty($error), $error);
     }

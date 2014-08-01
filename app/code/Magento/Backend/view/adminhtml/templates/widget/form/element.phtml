@@ -77,6 +77,7 @@
       <label for="<?php echo $element->getHtmlId() ?>"><?php echo $element->getLabel() ?>:</label>
         <script type="text/javascript" src="<?php echo $this->getViewFileUrl('tiny_mce/tiny_mce.js') ?>"></script>
         <script type="text/javascript">
+
         //<![CDATA[
         tinyMCE.init({
             mode : "exact",
@@ -100,7 +101,8 @@
 
         });
         //]]>
-        </script>
+        
+</script>
       <textarea name="<?php echo $element->getName() ?>" title="<?php echo $element->getTitle() ?>" id="<?php echo $element->getHtmlId() ?>" class="textarea <?php echo $element->getClass() ?>" cols="80" rows="20"><?php echo $element->getValue(); ?></textarea>
     </span>
       <?php break;

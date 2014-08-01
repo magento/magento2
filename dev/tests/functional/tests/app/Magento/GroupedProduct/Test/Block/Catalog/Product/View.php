@@ -37,7 +37,7 @@ class View extends ParentView
      *
      * @var string
      */
-    protected $groupedProductBlock = '.wrapper.table.grouped';
+    protected $groupedProductBlock = '.table-wrapper.grouped';
 
     /**
      * This member holds the class name of the tier price block.
@@ -51,7 +51,7 @@ class View extends ParentView
      *
      * @var string
      */
-    protected $formatSpecialPrice = ".product-info-main tr:nth-child(%row-number%) .price-box";
+    protected $formatSpecialPrice = '//tbody[%row-number%]//*[contains(@class,"price-box")]';
 
     /**
      * Get grouped product block

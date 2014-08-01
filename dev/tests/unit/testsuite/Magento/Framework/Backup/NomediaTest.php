@@ -26,6 +26,7 @@ namespace Magento\Framework\Backup;
 require_once __DIR__ . '/_files/Fs.php';
 require_once __DIR__ . '/_files/Helper.php';
 require_once __DIR__ . '/_files/io.php';
+require_once __DIR__ . '/_files/app_dirs.php';
 
 class NomediaTest extends \PHPUnit_Framework_TestCase
 {
@@ -84,7 +85,7 @@ class NomediaTest extends \PHPUnit_Framework_TestCase
     {
         $this->_backupFactoryMock->expects($this->once())->method('create');
 
-        $rootDir = __DIR__ . '/_files/data';
+        $rootDir = TESTS_TEMP_DIR . '/Magento/Backup/data';
 
         $model = new \Magento\Framework\Backup\Nomedia($this->_filesystemMock, $this->_backupFactoryMock);
         $model->setRootDir($rootDir);

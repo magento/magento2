@@ -31,6 +31,9 @@
 </head>
 <body>
 <script type="text/javascript">
+require(['jquery'], function(jQuery){
+var $ = jQuery;
+
     if (window.top == window.self) {
         window.location = "<?php echo $this->getUrl('checkout/cart') ?>";
     }
@@ -59,6 +62,8 @@
     <?php else : ?>
     window.top.location = "<?php echo $this->getUrl('checkout/cart') ?>";
     <?php endif; ?>
+
+});
 </script>
 </body>
 </html>

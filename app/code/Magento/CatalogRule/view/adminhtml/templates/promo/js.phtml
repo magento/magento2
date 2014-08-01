@@ -23,7 +23,8 @@
  */
 ?>
 <script type="text/javascript">
-//<![CDATA[
+require(["prototype"], function(){
+
 function hideShowSubproductOptions()
 {
     if ($('rule_sub_is_enable').value == 1) {
@@ -40,5 +41,6 @@ function hideShowSubproductOptions()
 }
 
 document.observe("dom:loaded", hideShowSubproductOptions);
-//]]>
+window.hideShowSubproductOptions = hideShowSubproductOptions;
+});
 </script>

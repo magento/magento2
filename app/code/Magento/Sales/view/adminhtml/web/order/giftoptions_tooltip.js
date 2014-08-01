@@ -20,13 +20,15 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-
 /**
  * Gift Options Tooltip Model
  * 
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-GiftOptionsTooltip = Class.create();
+define(["prototype"], function(){
+
+
+window.GiftOptionsTooltip = Class.create();
 GiftOptionsTooltip.prototype = {
     _tooltipLines: [],
     _tooltipWindow: null,
@@ -205,4 +207,6 @@ GiftOptionsTooltip.prototype = {
     }
 };
 
-giftOptionsTooltip = new GiftOptionsTooltip();
+window.giftOptionsTooltip = new GiftOptionsTooltip();
+
+});

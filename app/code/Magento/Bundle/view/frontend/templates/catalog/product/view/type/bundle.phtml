@@ -27,25 +27,29 @@
 <?php $_product = $this->getProduct() ?>
 <?php if($_product->isSaleable()): ?>
     <script type="text/javascript">
-        //<![CDATA[
-        (function ($) {
-            $(document).ready(function() {
-                $('#product_addtocart_form').mage('bundleOption', {
-                    "bundleConfig": <?php echo $this->getJsonConfig() ?>,
-                    "roundingMethod" : "<?php echo $this->getRoundingMethod() ?>",
-                    "bundleOptionQtyPrefix": "#bundle-option-",
-                    "bundleOptionQtySuffix": "-qty-input",
-                    "priceSelectors": {
-                        "product-price": "#product-price-<?php echo $_product->getId()?>",
-                        "bundle-price": "#bundle-price-<?php echo $_product->getId()?>",
-                        "price-including-tax": "#price-including-tax-product-price-<?php echo $_product->getId()?>",
-                        "price-excluding-tax": "#price-excluding-tax-product-price-<?php echo $_product->getId()?>"
-                    }
-                });
+require([
+    "jquery",
+    "mage/mage"
+], function($){
+    //<![CDATA[
+        $(document).ready(function() {
+            $('#product_addtocart_form').mage('bundleOption', {
+                "bundleConfig": <?php echo $this->getJsonConfig() ?>,
+                "roundingMethod" : "<?php echo $this->getRoundingMethod() ?>",
+                "bundleOptionQtyPrefix": "#bundle-option-",
+                "bundleOptionQtySuffix": "-qty-input",
+                "priceSelectors": {
+                    "product-price": "#product-price-<?php echo $_product->getId()?>",
+                    "bundle-price": "#bundle-price-<?php echo $_product->getId()?>",
+                    "price-including-tax": "#price-including-tax-product-price-<?php echo $_product->getId()?>",
+                    "price-excluding-tax": "#price-excluding-tax-product-price-<?php echo $_product->getId()?>"
+                }
             });
-        })(jQuery);
-        //]]>
-    </script>
+        });
+    //]]>
+    
+});
+</script>
 <?php endif; ?>
 <?php if ($this->displayProductStockStatus()): ?>
     <?php if ($_product->isAvailable()): ?>

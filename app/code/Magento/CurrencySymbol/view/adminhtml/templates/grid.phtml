@@ -61,6 +61,8 @@
     </div>
 </form>
 <script type="text/javascript">
+require(['jquery', "mage/mage"], function(jQuery){
+
     jQuery('#currency-symbols-form').mage('form').mage('validation');
 
     function toggleUseDefault(code, value)
@@ -74,5 +76,8 @@
             input.disabled = false;
         }
     }
+
+    window.toggleUseDefault = toggleUseDefault;
+});
 </script>
 

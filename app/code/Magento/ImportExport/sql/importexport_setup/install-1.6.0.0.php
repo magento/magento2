@@ -47,13 +47,13 @@ $table = $installer->getConnection()->newTable(
     'behavior',
     \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     10,
-    array('nullable' => false, 'default' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND),
+    array('nullable' => false, 'default' => 'append'),
     'Behavior'
 )->addColumn(
     'data',
     \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
     '64k',
-    array('default' => ''),
+    array('default' => false),
     'Data'
 )->setComment(
     'Import Data Table'

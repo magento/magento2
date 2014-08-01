@@ -28,6 +28,7 @@ use Mtf\Page\BackendPage;
 
 /**
  * Class ReviewEdit
+ * Review edit page
  */
 class ReviewEdit extends BackendPage
 {
@@ -46,6 +47,12 @@ class ReviewEdit extends BackendPage
             'locator' => '#edit_form',
             'strategy' => 'css selector',
         ],
+        'productGrid' => [
+            'name' => 'productGrid',
+            'class' => 'Magento\Review\Test\Block\Adminhtml\Product\Grid',
+            'locator' => '#productGrid',
+            'strategy' => 'css selector',
+        ],
     ];
 
     /**
@@ -62,5 +69,13 @@ class ReviewEdit extends BackendPage
     public function getReviewForm()
     {
         return $this->getBlockInstance('reviewForm');
+    }
+
+    /**
+     * @return \Magento\Review\Test\Block\Adminhtml\Product\Grid
+     */
+    public function getProductGrid()
+    {
+        return $this->getBlockInstance('productGrid');
     }
 }

@@ -29,6 +29,8 @@ $sizeSource = $this->getSourceSizeModel()->toOptionArray();
 $girthEnabled = $this->isDisplayGirthValue() && $this->isGirthAllowed() ? 1 : 0;
 ?>
 <script type="text/javascript">
+require(["prototype", "Magento_Shipping/order/packaging"], function(){
+
     //<![CDATA[
     document.observe("dom:loaded", function() {
         packaging = new Packaging(<?php echo $this->getConfigDataJson() ?>);
@@ -39,6 +41,8 @@ $girthEnabled = $this->isDisplayGirthValue() && $this->isGirthAllowed() ? 1 : 0;
         );
     });
     //]]>
+
+});
 </script>
 <div id="packaging_window" class="packaging-window" style="display:none;">
     <div class="popup-window-wrapper">

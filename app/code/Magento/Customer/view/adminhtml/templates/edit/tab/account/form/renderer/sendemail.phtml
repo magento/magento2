@@ -35,6 +35,8 @@ $element = $this->getElement();
 </div>
 
 <script type="text/javascript">
+require(['prototype'], function(){
+
     document.observe('dom:loaded', function() {
         $('<?php echo $this->getFormHtmlId() ?>website_id').disableSendemail = function() {
             $('<?php echo $this->getFormHtmlId() ?>sendemail').disabled = ('' == this.value || '0' == this.value);
@@ -49,4 +51,6 @@ $element = $this->getElement();
         );
         $('<?php echo $this->getFormHtmlId() ?>website_id').disableSendemail();
     });
+
+});
 </script>

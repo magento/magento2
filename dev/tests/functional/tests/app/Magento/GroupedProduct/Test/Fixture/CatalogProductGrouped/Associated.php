@@ -66,32 +66,31 @@ class Associated implements FixtureInterface
     {
         $this->params = $params;
 
-        if ($data['preset']) {
+        if (isset($data['preset'])) {
             $this->currentPreset = $data['preset'];
             $this->data = $this->getPreset($this->currentPreset);
         }
 
-        if (!empty($this->data['products'])) {
-            $this->data['products'] = is_array($this->data['products'])
-                ? $this->data['products']
-                : explode(',', $this->data['products']);
-            foreach ($this->data['products'] as $key => $product) {
-                list($fixture, $dataSet) = explode('::', $product);
-                /** @var $productFixture InjectableFixture */
-                $productFixture = $fixtureFactory->createByCode($fixture, ['dataSet' => $dataSet]);
-                if (!$productFixture->hasData('id')) {
-                    $productFixture->persist();
-                }
+        $this->data['products'] = isset($data['products']) && $data['products'] != '-'
+            ? explode(',', $data['products'])
+            : $this->data['products'];
 
-                $this->data['products'][$key] = $productFixture;
+        foreach ($this->data['products'] as $key => $product) {
+            list($fixture, $dataSet) = explode('::', $product);
+            /** @var $productFixture InjectableFixture */
+            $productFixture = $fixtureFactory->createByCode($fixture, ['dataSet' => $dataSet]);
+            if (!$productFixture->hasData('id')) {
+                $productFixture->persist();
             }
 
-            $assignedProducts = & $this->data['assigned_products'];
-            foreach (array_keys($assignedProducts) as $key) {
-                $assignedProducts[$key]['name'] = $this->data['products'][$key]->getName();
-                $assignedProducts[$key]['id'] = $this->data['products'][$key]->getId();
-                $assignedProducts[$key]['position'] = $key + 1;
-            }
+            $this->data['products'][$key] = $productFixture;
+        }
+
+        $assignedProducts = & $this->data['assigned_products'];
+        foreach (array_keys($assignedProducts) as $key) {
+            $assignedProducts[$key]['name'] = $this->data['products'][$key]->getName();
+            $assignedProducts[$key]['id'] = $this->data['products'][$key]->getId();
+            $assignedProducts[$key]['position'] = $key + 1;
         }
     }
 
@@ -154,7 +153,47 @@ class Associated implements FixtureInterface
                 ],
                 'products' => [
                     'catalogProductSimple::default',
-                    'catalogProductSimple::default'
+                    'catalogProductSimple::100_dollar_product'
+                ],
+            ],
+            'defaultSimpleProduct_without_qty' => [
+                'assigned_products' => [
+                    [
+                        'id' => '%id%',
+                        'name' => '%item1_simple::getProductName%',
+                        'position' => '%position%',
+                        'qty' => 0,
+                    ],
+                    [
+                        'id' => '%id%',
+                        'name' => '%item1_simple::getProductName%',
+                        'position' => '%position%',
+                        'qty' => 0,
+                    ],
+                ],
+                'products' => [
+                    'catalogProductSimple::default',
+                    'catalogProductSimple::100_dollar_product'
+                ],
+            ],
+            'defaultSimpleProduct_with_specialPrice' => [
+                'assigned_products' => [
+                    [
+                        'id' => '%id%',
+                        'name' => '%item1_simple::getProductName%',
+                        'position' => '%position%',
+                        'qty' => 1,
+                    ],
+                    [
+                        'id' => '%id%',
+                        'name' => '%item1_simple::getProductName%',
+                        'position' => '%position%',
+                        'qty' => 2,
+                    ],
+                ],
+                'products' => [
+                    'catalogProductSimple::withSpecialPrice',
+                    'catalogProductSimple::withSpecialPrice'
                 ],
             ],
             'defaultVirtualProduct' => [
@@ -174,7 +213,7 @@ class Associated implements FixtureInterface
                 ],
                 'products' => [
                     'catalogProductVirtual::default',
-                    'catalogProductVirtual::default'
+                    'catalogProductVirtual::50_dollar_product'
                 ],
             ]
         ];

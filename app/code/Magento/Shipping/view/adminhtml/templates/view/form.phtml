@@ -76,6 +76,8 @@
             <div><?php echo $this->getChildHtml('shipment_tracking') ?></div>
         <?php echo $this->getChildHtml('shipment_packaging') ?>
         <script type="text/javascript">
+require(['prototype'], function(){
+
         //<![CDATA[
             document.observe("dom:loaded", function() {
                 setTimeout(function(){
@@ -91,7 +93,9 @@
                 }, 500);
             });
         //]]>
-        </script>
+        
+});
+</script>
         </div>
     </div>
 </div>

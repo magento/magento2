@@ -40,9 +40,8 @@
         </div>
     </script>
     <script type="text/javascript">
-    //<![CDATA[
-    (function($) {
-        $(function () {
+require(["jquery","jquery/file-uploader","jquery/template"], function($){
+    $(function () {
             $('#<?php echo $this->getHtmlId() ?> .fileupload').fileupload({
                 dataType: 'json',
                 formData: {
@@ -104,7 +103,6 @@
                 ]
             });
         });
-    })(jQuery);
-    //]]>
-    </script>
+    });
+</script>
 </div>

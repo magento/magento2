@@ -56,6 +56,13 @@ class AssociatedProducts extends Tab
     protected $associatedProductsBlock = '[data-role=grouped-product-grid]';
 
     /**
+     * Selector for delete button
+     *
+     * @var string
+     */
+    protected $deleteButton = '.delete';
+
+    /**
      * Get search grid
      *
      * @return AssociatedProducts\Search\Grid
@@ -91,6 +98,12 @@ class AssociatedProducts extends Tab
     public function fillFormTab(array $fields, Element $element = null)
     {
         if (isset($fields['associated'])) {
+            $options = $this->_rootElement->find($this->deleteButton)->getElements();
+            if (count($options)) {
+                foreach ($options as $option) {
+                    $option->click();
+                }
+            }
             foreach ($fields['associated']['value']['assigned_products'] as $key => $groupedProduct) {
                 $element->find($this->addNewOption)->click();
                 $searchBlock = $this->getSearchGridBlock();

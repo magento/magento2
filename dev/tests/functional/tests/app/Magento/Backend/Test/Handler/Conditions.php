@@ -70,6 +70,7 @@ abstract class Conditions extends Curl
             'is' => '==',
             'is not' => '!=',
             'equal to' => '==',
+            'matches' => '==',
         ],
         'value_type' => [
             'same_as' => 'the Same as Matched Product Categories',

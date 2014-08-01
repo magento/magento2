@@ -39,12 +39,16 @@
 
       <?php if (!$this->useCalendar()): ?>
       <script type="text/javascript">
-      //<![CDATA[
-          var dateOption = productConfigure.opConfig.dateOption;
-          Event.observe('options_<?php echo $_optionId ?>_month', 'change', dateOption.reloadMonth.bind(dateOption));
-          Event.observe('options_<?php echo $_optionId ?>_year', 'change', dateOption.reloadMonth.bind(dateOption));
-      //]]>
-      </script>
+require([
+  "prototype",
+  "Magento_Catalog/catalog/product/composite/configure"
+], function(){
+
+      window.dateOption = productConfigure.opConfig.dateOption;
+      Event.observe('options_<?php echo $_optionId ?>_month', 'change', dateOption.reloadMonth.bind(dateOption));
+      Event.observe('options_<?php echo $_optionId ?>_year', 'change', dateOption.reloadMonth.bind(dateOption));      
+});
+</script>
       <?php endif; ?>
 
   <?php endif; ?>
@@ -56,6 +60,11 @@
 
     <input type="hidden" name="validate_datetime_<?php echo $_optionId ?>" class="validate-datetime-<?php echo $_optionId ?>" value="" />
     <script type="text/javascript">
+require([
+  "jquery",
+  "mage/validation"
+], function(jQuery){
+
     //<![CDATA[
 <?php if ($_option->getIsRequire()): ?>
         jQuery.validator.addMethod('validate-datetime-<?php echo $_optionId ?>', function(v) {
@@ -83,6 +92,8 @@
         }, '<?php echo $this->escapeJsQuote( __('Field is not complete') )?>');
 <?php endif; ?>
     //]]>
-    </script>
+    
+});
+</script>
   </div>
 </div>

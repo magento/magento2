@@ -39,13 +39,11 @@ dev/tests/unit/testsuite/Magento/Framework/View/TemplateEngine/_files
 dev/tools/Magento/Tools/I18n/Zend
 lib/internal/Magento/Framework/App/Config/Element.php
 lib/internal/Magento/Framework/Archive
-lib/internal/Magento/Framework/Autoload/Simple.php
 lib/internal/Magento/Framework/Backup
 lib/internal/Magento/Framework/Cache/Backend/Database.php
 lib/internal/Magento/Framework/Cache/Backend/Eaccelerator.php
 lib/internal/Magento/Framework/Cache/Backend/Memcached.php
 lib/internal/Magento/Framework/Cache/Core.php
-lib/internal/Magento/Framework/Connect
 lib/internal/Magento/Framework/Data/Collection.php
 lib/internal/Magento/Framework/Data/Collection/Db.php
 lib/internal/Magento/Framework/Data/Collection/Db/FetchStrategy/Cache.php

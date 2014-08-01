@@ -73,7 +73,13 @@
 </form>
 <?php endif; ?>
 <script type="text/javascript">
-jQuery(function($) {
+require([
+    "jquery",
+    "mage/mage",
+    "Magento_Catalog/catalog/type-switcher",
+    "mage/backend/tabs",
+    "_"
+], function($){
     var $form = $('[data-form=edit-product]');
     $form.data('typeSwitcher', new TypeSwitcher(<?php echo $this->getTypeSwitcherData();?>).bindAll());
 

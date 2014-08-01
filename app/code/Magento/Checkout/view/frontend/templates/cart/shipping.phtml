@@ -68,21 +68,28 @@
         </fieldset>
     </form>
     <script type="text/javascript">
-        (function($) {
-            var $form = $('#shipping-zip-form');
-            $form.mage('validation');
-            $('#country').mage('regionUpdater', {
-                optionalRegionAllowed: <?php echo ($this->getConfig('general/region/display_all')? 'true' : 'false'); ?>,
-                regionListId: '#region_id',
-                regionInputId: '#region',
-                postcodeId: '#postcode',
-                form: $form,
-                regionJson: <?php echo $this->helper('Magento\Directory\Helper\Data')->getRegionJson() ?>,
-                defaultRegion: "<?php echo $this->getEstimateRegionId() ?>",
-                countriesWithOptionalZip: <?php echo $this->helper('Magento\Directory\Helper\Data')->getCountriesWithOptionalZip(true) ?>
-            });
-        })(jQuery);
-    </script>
+require([
+    "jquery",
+    "mage/mage"
+], function($){
+
+    var $form = $('#shipping-zip-form');
+    
+    $form.mage('validation');
+    
+    $('#country').mage('regionUpdater', {
+        optionalRegionAllowed: <?php echo ($this->getConfig('general/region/display_all')? 'true' : 'false'); ?>,
+        regionListId: '#region_id',
+        regionInputId: '#region',
+        postcodeId: '#postcode',
+        form: $form,
+        regionJson: <?php echo $this->helper('Magento\Directory\Helper\Data')->getRegionJson() ?>,
+        defaultRegion: "<?php echo $this->getEstimateRegionId() ?>",
+        countriesWithOptionalZip: <?php echo $this->helper('Magento\Directory\Helper\Data')->getCountriesWithOptionalZip(true) ?>
+    });
+    
+});
+</script>
     <?php if (($_shippingRateGroups = $this->getEstimateRates())): ?>
     <form id="co-shipping-method-form" action="<?php echo $this->getUrl('checkout/cart/estimateUpdatePost') ?>">
         <fieldset class="fieldset rates">

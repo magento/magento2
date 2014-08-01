@@ -31,11 +31,6 @@
         <block class="Magento\Catalog\Block\Product\Compare\Sidebar" name="catalog.compare.sidebar" template="product/compare/sidebar.phtml"/>
     </referenceContainer>
     <referenceBlock name="head">
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-toolbar-form-js" after="magento-dataPost-js">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Catalog::js/product/list/toolbar.js</argument>
-            </arguments>
-        </block>
         <block class="Magento\Framework\View\Element\Js\Components" name="head.components" as="components" template="Magento_Catalog::js/components.phtml"/>
     </referenceBlock>
 </layout>

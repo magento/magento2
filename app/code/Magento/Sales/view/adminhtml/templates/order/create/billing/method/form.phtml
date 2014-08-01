@@ -46,7 +46,11 @@
     <?php endforeach; ?>
     </dl>
 </div>
-<script type="text/javascript">order.setPaymentMethod('<?php echo $this->getSelectedMethodCode() ?>')</script>
+<script type="text/javascript">
+    require(["Magento_Sales/order/create/form"], function(){
+        order.setPaymentMethod('<?php echo $this->getSelectedMethodCode() ?>')
+    });
+</script>
 <?php else: ?>
     <div><?php echo __('No Payment Methods') ?></div>
 <?php endif; ?>

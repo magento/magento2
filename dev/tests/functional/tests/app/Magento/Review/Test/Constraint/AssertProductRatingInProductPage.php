@@ -32,6 +32,7 @@ use Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertProductRatingInProductPage
+ * Assert that product rating is displayed on product review(frontend)
  */
 class AssertProductRatingInProductPage extends AbstractConstraint
 {
@@ -57,10 +58,13 @@ class AssertProductRatingInProductPage extends AbstractConstraint
         ReviewInjectable $review = null,
         Rating $productRating = null
     ) {
+        $product = $review === null ? $product : $review->getDataFieldConfig('entity_id')['source']->getEntity();
         $catalogProductView->init($product);
         $catalogProductView->open();
-        $catalogProductView->getReviewSummaryBlock()->getAddReviewLink()->click();
-
+        $reviewSummaryBlock = $catalogProductView->getReviewSummaryBlock();
+        if ($reviewSummaryBlock->isVisible()) {
+            $reviewSummaryBlock->getAddReviewLink()->click();
+        }
         $rating = $productRating ? $productRating : $review->getDataFieldConfig('ratings')['source']->getRatings()[0];
         $reviewForm = $catalogProductView->getReviewFormBlock();
         \PHPUnit_Framework_Assert::assertTrue(

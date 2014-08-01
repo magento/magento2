@@ -40,6 +40,7 @@ class Date extends \Magento\Framework\View\Element\Template
         $html .= 'class="' . $this->getClass() . '" ' . $this->getExtraParams() . '/> ';
         $calendarYearsRange = $this->getYearsRange();
         $html .= '<script type="text/javascript">
+            require(["jquery", "mage/calendar"], function($){
             //<![CDATA[
             (function($) {
                 $(document).ready(function(){
@@ -72,7 +73,8 @@ class Date extends \Magento\Framework\View\Element\Template
             '"
                     })
                 });
-            })(jQuery)
+            });
+            });
             //]]>
             </script>';
 

@@ -23,7 +23,12 @@
 /**
  * Create/edit some category
  */
-function categorySubmit(url, useAjax) {
+define([
+    "jquery",
+    "prototype"
+], function(jQuery){
+
+var categorySubmit = function (url, useAjax) {
     var activeTab = $('active_tab_id');
     if (activeTab) {
         if (activeTab.tabsJsObject && activeTab.tabsJsObject.tabs('activeAnchor')) {
@@ -80,4 +85,8 @@ function categorySubmit(url, useAjax) {
 
     // Submit form
     jQuery('#category_edit_form').trigger('submit');
-}
+};
+
+window.categorySubmit = categorySubmit;
+
+});

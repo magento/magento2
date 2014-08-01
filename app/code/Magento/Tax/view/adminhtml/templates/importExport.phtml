@@ -38,19 +38,23 @@
         </form>
         <?php endif; ?>
         <script type="text/javascript">
-            jQuery('#import-form').mage('form').mage('validation');
-            (function ($) {
-                $('.import-submit').click(function(){
-                    if($(':input[name="import_rates_file"]').val()) {
-                        $('body').loadingPopup({
-                            timeout: false
-                        });
+require(['jquery', "mage/mage", "js/theme"], function(jQuery){
 
-                        $(this.form).submit();
-                    }
+    jQuery('#import-form').mage('form').mage('validation');
+    (function ($) {
+        $('.import-submit').click(function(){
+            if($(':input[name="import_rates_file"]').val()) {
+                $('body').loadingPopup({
+                    timeout: false
                 });
-            })(jQuery);
-        </script>
+
+                $(this.form).submit();
+            }
+        });
+    })(jQuery);
+        
+});
+</script>
     </div>
     <?php endif; ?>
     <div class="export-tax-rates <?php if ($this->getIsReadonly()): ?>box-left<?php else: ?>box-right<?php endif; ?>">

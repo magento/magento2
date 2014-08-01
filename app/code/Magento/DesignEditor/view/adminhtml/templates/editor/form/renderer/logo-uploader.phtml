@@ -53,16 +53,21 @@
         </div>
 
         <script type="text/javascript">
-            (function($) {
-                $(document.getElementById('<?php echo $elementId; ?>-uploader')).quickStyleUploader({
-                    uploader_id:   '<?php echo $elementId; ?>',
-                    container:     '<?php echo $elementId; ?>-uploader',
-                    value:         '<?php echo $this->getLogoImage($store); ?>',
-                    url:           '<?php echo $this->getLogoUploadUrl($store); ?>',
-                    remove_url:    '<?php echo $this->getLogoRemoveUrl($store); ?>',
-                    hide_uploader: false
-                });
-            })(jQuery);
-        </script>
+require([
+    'jquery',
+    'Magento_DesignEditor/js/quick-style-uploader'
+], function($){
+
+    $(document.getElementById('<?php echo $elementId; ?>-uploader')).quickStyleUploader({
+        uploader_id:   '<?php echo $elementId; ?>',
+        container:     '<?php echo $elementId; ?>-uploader',
+        value:         '<?php echo $this->getLogoImage($store); ?>',
+        url:           '<?php echo $this->getLogoUploadUrl($store); ?>',
+        remove_url:    '<?php echo $this->getLogoRemoveUrl($store); ?>',
+        hide_uploader: false
+    });
+        
+});
+</script>
     <?php endforeach; ?>
 <?php endif; ?>

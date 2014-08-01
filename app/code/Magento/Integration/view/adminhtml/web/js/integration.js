@@ -23,8 +23,13 @@
 /*jshint jquery:true*/
 /*global FORM_KEY*/
 /*global integration*/
-(function ($, window) {
+define([
+    "jquery",
+    "jquery/ui",
+    "mage/translate"
+], function($){
     "use strict";
+
     $.widget('mage.integration', {
         /**
          * Options common to all instances of this widget.
@@ -97,7 +102,7 @@
                     window.console && console.log(status + ': ' + error + "\nResponse text:\n" + jqXHR.responseText);
                 },
                 complete: function () {
-                    jQuery('body').trigger('processStop');
+                    $('body').trigger('processStop');
                 }
             });
 
@@ -343,31 +348,4 @@
         };
     };
 
-    /**
-     * Confirm dialog for delete integration action
-     */
-    $(function () {
-        $('#integrationGrid_table').on('click', 'button#delete', function (e) {
-            $('#integration-delete-container').dialog({
-                modal: true,
-                autoOpen: true,
-                resizable: false,
-                minHeight: 200,
-                minWidth: 300,
-                dialogClass: "no-close",
-                position: {at: 'top'},
-                buttons: {
-                    Cancel: function () {
-                        $(this).dialog("close");
-                    },
-                    Delete: function () {
-                        $(this).dialog("close");
-                        window.location.href = $(e.target).data('url');
-                    }
-                }
-            });
-            e.stopPropagation();
-        });
-    });
-
-})(jQuery, window);
+});

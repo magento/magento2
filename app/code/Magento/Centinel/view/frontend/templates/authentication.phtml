@@ -32,6 +32,10 @@
     </div>
 <?php else:?>
     <script type="text/javascript">
-        jQuery('[data-container="body"]').trigger("paymentAuthentication", {state: "cancel"});
-    </script>
+require(['jquery'], function(jQuery){
+
+    jQuery('[data-container="body"]').trigger("paymentAuthentication", {state: "cancel"});
+    
+});
+</script>
 <?php endif;?>

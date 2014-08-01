@@ -65,20 +65,25 @@ $mageConfig = json_encode($config);
     <?php endforeach ?>
     </ol>
     <script type="text/javascript">
-        (function($) {
-            'use strict';
-            $(document).ready(function() {
-                $('#checkoutSteps').mage('accordion',{
-                    'collapsibleElement' : ' > li',
-                    'openedState' : 'active'
-                }).mage('opcOrderReview', $.extend({
-                    'checkoutAgreements': '#checkout-agreements',
-                    'checkoutProgressContainer': '#checkout-progress-wrapper',
-                    'methodDescription': '.items'
-                    },
-                    <?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode($_paymentBlock->getOptions()); ?>
-                ));
-            });
-        })(jQuery);
-    </script>
+require([
+    "jquery",
+    "mage/mage"
+], function($){
+    'use strict';
+    
+    $(document).ready(function() {
+        $('#checkoutSteps').mage('accordion',{
+            'collapsibleElement' : ' > li',
+            'openedState' : 'active'
+        }).mage('opcOrderReview', $.extend({
+            'checkoutAgreements': '#checkout-agreements',
+            'checkoutProgressContainer': '#checkout-progress-wrapper',
+            'methodDescription': '.items'
+            },
+            <?php echo $this->helper('Magento\Core\Helper\Data')->jsonEncode($_paymentBlock->getOptions()); ?>
+        ));
+    });
+    
+});
+</script>
 </div>

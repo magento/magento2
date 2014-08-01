@@ -21,8 +21,12 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /*jshint browser:true jquery:true*/
+define([
+    "jquery",
+    "jquery/ui",
+    "jquery/jquery.parsequery"
+], function($){
 
-define(['jquery', 'jquery-ui', 'jquery.parsequery'], function($){
     $.widget('mage.configurable', {
         options: {
             superSelector: '.super-attribute-select',
@@ -245,7 +249,7 @@ define(['jquery', 'jquery-ui', 'jquery.parsequery'], function($){
             if (result.length !== 1) {
                 result = [baseImage];
             }
-            if (galleryElement.length && typeof galleryElement.gallery != 'undefined') {
+            if (galleryElement.length && galleryElement.data('mageGallery')) {
                 galleryElement.gallery('option', 'images', result);
             }
         },

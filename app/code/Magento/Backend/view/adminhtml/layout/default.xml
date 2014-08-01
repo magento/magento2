@@ -29,66 +29,6 @@
             <action method="setTitle">
                 <argument translate="true" name="title" xsi:type="string">Magento Admin</argument>
             </action>
-            <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-jquery-js">
-                <arguments>
-                    <argument name="file" xsi:type="string">jquery/jquery-1.8.2.js</argument>
-                </arguments>
-            </block>
-            <block class="Magento\Theme\Block\Html\Head\Script" name="magento-jquery-no-conflict-js">
-                <arguments>
-                    <argument name="file" xsi:type="string">mage/jquery-no-conflict.js</argument>
-                </arguments>
-            </block>
-            <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-jquery-ui-js">
-                <arguments>
-                    <argument name="file" xsi:type="string">jquery/jquery-ui-1.9.2.js</argument>
-                </arguments>
-            </block>
-            <block class="Magento\Theme\Block\Html\Head\Script" name="js-head-js">
-                <arguments>
-                    <argument name="file" xsi:type="string">headjs/head.min.js</argument>
-                </arguments>
-            </block>
-            <block class="Magento\Theme\Block\Html\Head\Script" name="underscore-js">
-                <arguments>
-                    <argument name="file" xsi:type="string">underscore.js</argument>
-                </arguments>
-            </block>
-            <block class="Magento\Theme\Block\Html\Head\Script" name="magento-magento-js">
-                <arguments>
-                    <argument name="file" xsi:type="string">mage/mage.js</argument>
-                </arguments>
-            </block>
-            <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-jquery-tmpl-min-js">
-                <arguments>
-                    <argument name="file" xsi:type="string">jquery/jquery.tmpl.min.js</argument>
-                </arguments>
-            </block>
-            <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-jquery-validate-js">
-                <arguments>
-                    <argument name="file" xsi:type="string">jquery/jquery.validate.js</argument>
-                </arguments>
-            </block>
-            <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-jquery-hoverintent-js">
-                <arguments>
-                    <argument name="file" xsi:type="string">jquery/jquery.hoverIntent.js</argument>
-                </arguments>
-            </block>
-            <block class="Magento\Theme\Block\Html\Head\Script" name="magento-translate-js">
-                <arguments>
-                    <argument name="file" xsi:type="string">mage/translate.js</argument>
-                </arguments>
-            </block>
-            <block class="Magento\Theme\Block\Html\Head\Script" name="magento-backend-bootstrap-js">
-                <arguments>
-                    <argument name="file" xsi:type="string">mage/backend/bootstrap.js</argument>
-                </arguments>
-            </block>
-            <block class="Magento\Theme\Block\Html\Head\Script" name="magento-backend-floating-header-js">
-                <arguments>
-                    <argument name="file" xsi:type="string">mage/backend/floating-header.js</argument>
-                </arguments>
-            </block>
             <block class="Magento\Theme\Block\Html\Head\Script" name="prototype-prototype-js">
                 <arguments>
                     <argument name="file" xsi:type="string">prototype/prototype.js</argument>
@@ -109,21 +49,6 @@
                     <argument name="file" xsi:type="string">scriptaculous/effects.js</argument>
                 </arguments>
             </block>
-            <block class="Magento\Theme\Block\Html\Head\Script" name="scriptaculous-dragdrop-js">
-                <arguments>
-                    <argument name="file" xsi:type="string">scriptaculous/dragdrop.js</argument>
-                </arguments>
-            </block>
-            <block class="Magento\Theme\Block\Html\Head\Script" name="scriptaculous-controls-js">
-                <arguments>
-                    <argument name="file" xsi:type="string">scriptaculous/controls.js</argument>
-                </arguments>
-            </block>
-            <block class="Magento\Theme\Block\Html\Head\Script" name="scriptaculous-slider-js">
-                <arguments>
-                    <argument name="file" xsi:type="string">scriptaculous/slider.js</argument>
-                </arguments>
-            </block>
             <block class="Magento\Theme\Block\Html\Head\Script" name="lib-ccard-js">
                 <arguments>
                     <argument name="file" xsi:type="string">lib/ccard.js</argument>
@@ -139,49 +64,14 @@
                     <argument name="file" xsi:type="string">varien/js.js</argument>
                 </arguments>
             </block>
-            <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-hash-js">
-                <arguments>
-                    <argument name="file" xsi:type="string">mage/adminhtml/hash.js</argument>
-                </arguments>
-            </block>
-            <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-events-js">
-                <arguments>
-                    <argument name="file" xsi:type="string">mage/adminhtml/events.js</argument>
-                </arguments>
-            </block>
             <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-varienloader-js">
                 <arguments>
                     <argument name="file" xsi:type="string">mage/adminhtml/varienLoader.js</argument>
                 </arguments>
             </block>
-            <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-grid-js">
-                <arguments>
-                    <argument name="file" xsi:type="string">mage/adminhtml/grid.js</argument>
-                </arguments>
-            </block>
-            <block class="Magento\Theme\Block\Html\Head\Script" name="magento-backend-tabs-js">
-                <arguments>
-                    <argument name="file" xsi:type="string">mage/backend/tabs.js</argument>
-                </arguments>
-            </block>
-            <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-form-js">
-                <arguments>
-                    <argument name="file" xsi:type="string">mage/adminhtml/form.js</argument>
-                </arguments>
-            </block>
-            <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-accordion-js">
-                <arguments>
-                    <argument name="file" xsi:type="string">mage/adminhtml/accordion.js</argument>
-                </arguments>
-            </block>
             <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-tools-js">
                 <arguments>
                     <argument name="file" xsi:type="string">mage/adminhtml/tools.js</argument>
-                </arguments>
-            </block>
-            <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-catalog-product-js">
-                <arguments>
-                    <argument name="file" xsi:type="string">Magento_Catalog::catalog/product.js</argument>
                 </arguments>
             </block>
             <block class="Magento\Theme\Block\Html\Head\Script" name="lib-ds-sleight-js">
@@ -201,16 +91,32 @@
                     </argument>
                 </arguments>
             </block>
-            <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-jquery-ui-timepicker-addon-js">
+
+            <block class="Magento\Theme\Block\Html\Head\Script" name="requirejs">
                 <arguments>
-                    <argument name="file" xsi:type="string">jquery/jquery-ui-timepicker-addon.js</argument>
+                    <argument name="file" xsi:type="string">requirejs/require.js</argument>
                 </arguments>
             </block>
-            <block class="Magento\Theme\Block\Html\Head\Script" name="magento-calendar-js">
+            <block class="Magento\Theme\Block\Html\Head\Script" name="app-config" after="jquery">
                 <arguments>
-                    <argument name="file" xsi:type="string">mage/calendar.js</argument>
+                    <argument name="file" xsi:type="string">app-config.js</argument>
                 </arguments>
             </block>
+            <!-- /**
+            TODO: remove jQuery. jQuery could be loaded through RequireJS. But only in case ALL MODULES ARE AMD MODULES.
+            Detail: http://requirejs.org/docs/jquery.html#noconflictmap
+            */ -->
+            <block class="Magento\Theme\Block\Html\Head\Script" name="jquery" after="requirejs">
+                <arguments>
+                    <argument name="file" xsi:type="string">jquery/jquery-1.8.2.js</argument>
+                </arguments>
+            </block>
+            <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-no-conflict" after="jquery">
+                <arguments>
+                    <argument name="file" xsi:type="string">mage/jquery-no-conflict.js</argument>
+                </arguments>
+            </block>
+
             <block class="Magento\Theme\Block\Html\Head\Script" name="extjs-ext-tree-js">
                 <arguments>
                     <argument name="file" xsi:type="string">extjs/ext-tree.js</argument>
@@ -258,16 +164,6 @@
                         <item name="attributes" xsi:type="string"/>
                         <item name="ie_condition" xsi:type="string"/>
                         <item name="flag_name" xsi:type="string">can_load_rules_js</item>
-                    </argument>
-                </arguments>
-            </block>
-            <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-wysiwyg-tiny-mce-setup-js">
-                <arguments>
-                    <argument name="file" xsi:type="string">mage/adminhtml/wysiwyg/tiny_mce/setup.js</argument>
-                    <argument name="properties" xsi:type="array">
-                        <item name="attributes" xsi:type="string"/>
-                        <item name="ie_condition" xsi:type="string"/>
-                        <item name="flag_name" xsi:type="string">can_load_tiny_mce</item>
                     </argument>
                 </arguments>
             </block>

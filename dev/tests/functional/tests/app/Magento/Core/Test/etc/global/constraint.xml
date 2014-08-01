@@ -39,9 +39,6 @@
     <assertCustomVariableInGrid module="Magento_Core">
         <severeness>low</severeness>
     </assertCustomVariableInGrid>
-    <assertCustomVariableInPageStoreview module="Magento_Core">
-        <severeness>low</severeness>
-    </assertCustomVariableInPageStoreview>
     <assertCustomVariableNotInCmsPageForm module="Magento_Core">
         <severeness>low</severeness>
     </assertCustomVariableNotInCmsPageForm>

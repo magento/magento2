@@ -49,6 +49,8 @@
         </div>
     </div>
     <script type="text/javascript">
+require(['jquery'], function(jQuery){
+
         // <![CDATA[
         (function($) {
             var test = 'test';
@@ -60,7 +62,9 @@
             }
         })(jQuery);
         // ]]>
-    </script>
+    
+});
+</script>
 <?php endif; ?>
 <?php if ($this->displayDemoNotice()): ?>
     <div class="message global demo">
@@ -84,16 +88,21 @@
         </div>
     </div>
     <script type="text/javascript">
-        // <![CDATA[
-        (function($) {
-            $('#notice-cookie-block').mage('cookieBlock', {
-                cookieAllowButtonSelector: '#btn-cookie-allow',
-                cookieName: '<?php echo \Magento\Store\Helper\Cookie::IS_USER_ALLOWED_SAVE_COOKIE ?>',
-                cookieValue: '<?php echo $this->helper('Magento\Store\Helper\Cookie')->getAcceptedSaveCookiesWebsiteIds() ?>',
-                cookieLifetime: <?php echo $this->helper('Magento\Store\Helper\Cookie')->getCookieRestrictionLifetime()?>,
-                noCookiesUrl: '<?php echo $this->getUrl('cms/index/noCookies') ?>'
-            });
-        })(jQuery);
-        // ]]>
-    </script>
+require([
+    "jquery",
+    "mage/mage"
+], function($){
+
+// <![CDATA[
+    $('#notice-cookie-block').mage('cookieBlock', {
+        cookieAllowButtonSelector: '#btn-cookie-allow',
+        cookieName: '<?php echo \Magento\Store\Helper\Cookie::IS_USER_ALLOWED_SAVE_COOKIE ?>',
+        cookieValue: '<?php echo $this->helper('Magento\Store\Helper\Cookie')->getAcceptedSaveCookiesWebsiteIds() ?>',
+        cookieLifetime: <?php echo $this->helper('Magento\Store\Helper\Cookie')->getCookieRestrictionLifetime()?>,
+        noCookiesUrl: '<?php echo $this->getUrl('cms/index/noCookies') ?>'
+    });
+// ]]>
+    
+});
+</script>
 <?php endif; ?>

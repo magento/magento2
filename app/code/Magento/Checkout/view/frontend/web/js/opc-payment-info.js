@@ -24,8 +24,15 @@
  */
 /*jshint browser:true jquery:true*/
 /*global alert*/
-(function($, window) {
-    'use strict';    
+define([
+    "jquery",
+    "jquery/ui",
+    "jquery/template",
+    "mage/translate",
+    "Magento_Checkout/js/opc-shipping-method"
+], function($){
+    'use strict';
+
     // Extension for mage.opcheckout - fifth section(Payment Information) in one page checkout accordion
     $.widget('mage.opcPaymentInfo', $.mage.opcShippingMethod, {
         options: {
@@ -37,7 +44,8 @@
                     tmpl: '<input id="hidden-free" type="hidden" name="payment[method]" value="free">',
                     selector: '#hidden-free'
                 }
-            }
+            },
+            hasRecurringItems: false
         },
 
         _create: function() {
@@ -155,4 +163,5 @@
             paymentForm.find(this.options.payment.freeInput.selector).remove();
         }
     });
-})(jQuery, window);
+
+});

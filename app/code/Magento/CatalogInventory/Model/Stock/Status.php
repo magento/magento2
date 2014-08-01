@@ -520,26 +520,6 @@ class Status extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Add stock status limitation to catalog product price index select object
-     *
-     * @param \Magento\Framework\DB\Select $select
-     * @param string|Zend_Db_Expr $entityField
-     * @param string|Zend_Db_Expr $websiteField
-     * @return $this
-     */
-    public function prepareCatalogProductIndexSelect(\Magento\Framework\DB\Select $select, $entityField, $websiteField)
-    {
-        if ($this->_catalogInventoryData->isShowOutOfStock()) {
-            return $this;
-        }
-
-        $resource = $this->_getResource();
-        $resource->prepareCatalogProductIndexSelect($select, $entityField, $websiteField);
-
-        return $this;
-    }
-
-    /**
      * Add only is in stock products filter to product collection
      *
      * @param \Magento\Catalog\Model\Resource\Product\Collection $collection

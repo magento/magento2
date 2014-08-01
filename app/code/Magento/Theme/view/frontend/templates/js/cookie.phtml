@@ -31,15 +31,20 @@
 ?>
 
 <script type="text/javascript">
-    //<![CDATA[
-    (function($) {
-        $.extend($.mage.cookies.defaults, {
-            expires: null,
-            path: '<?php echo $this->getPath()?>',
-            domain: '<?php echo $this->getDomain()?>',
-            secure: false
-        });
-        $.extend($.cookie.defaults, $.mage.cookies.defaults);
-    })(jQuery);
-    //]]>
+	require([
+		"jquery",
+		"jquery/jquery.cookie",
+		"mage/mage",
+		"mage/cookies"
+	], function($){
+	    
+	    $.extend($.mage.cookies.defaults, {
+	        expires: null,
+	        path: '<?php echo $this->getPath()?>',
+	        domain: '<?php echo $this->getDomain()?>',
+	        secure: false
+	    });
+	    
+	    $.extend($.cookie.defaults, $.mage.cookies.defaults);
+	});
 </script>

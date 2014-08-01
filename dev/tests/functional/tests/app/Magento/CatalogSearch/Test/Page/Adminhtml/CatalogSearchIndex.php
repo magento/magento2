@@ -49,7 +49,7 @@ class CatalogSearchIndex extends BackendPage
         'messagesBlock' => [
             'name' => 'messagesBlock',
             'class' => 'Magento\Core\Test\Block\Messages',
-            'locator' => '.page-main-actions',
+            'locator' => '#messages',
             'strategy' => 'css selector',
         ],
     ];

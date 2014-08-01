@@ -144,7 +144,8 @@ $thumbHeight =  $this->getVar("product_page_more_views:height") ? : $thumbWidth;
         <p class="notice" data-role="notice">${text}</p>
     </script>
     <script type="text/javascript">
-        (function($) {
+        require(["jquery", "mage/mage"], function($){
+
             $('[data-role=media-gallery]')
                 .mage('gallery', {
                     sizes: {
@@ -175,6 +176,7 @@ $thumbHeight =  $this->getVar("product_page_more_views:height") ? : $thumbWidth;
                     }
                 })
                 .mage('galleryFullScreen', {});
-        })(jQuery);
-    </script>
+            
+        });
+</script>
 <?php endif; ?>

@@ -49,12 +49,15 @@
     </div>
 </form>
 <script type="text/javascript">
+require([
+    "jquery",
+    "Magento_Install/js/install"
+], function($){
+
 //<![CDATA[
-(function($) {
-    head.js("<?php echo $this->getViewFileUrl('Magento_Install::js/install.js') ?>", head.ready(function () {
-        $.mage.install.begin('#agree', '#submitButton');
-    }));
-})(jQuery);
+    $.mage.install.begin('#agree', '#submitButton');
 //]]>
+
+});
 </script>
 <?php endif ?>

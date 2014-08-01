@@ -584,23 +584,6 @@ class Observer
     }
 
     /**
-     * Add stock status limitation to catalog product price index select object
-     *
-     * @param EventObserver $observer
-     * @return $this
-     */
-    public function prepareCatalogProductIndexSelect(EventObserver $observer)
-    {
-        $select = $observer->getEvent()->getSelect();
-        $entity = $observer->getEvent()->getEntityField();
-        $website = $observer->getEvent()->getWebsiteField();
-
-        $this->_stockStatus->prepareCatalogProductIndexSelect($select, $entity, $website);
-
-        return $this;
-    }
-
-    /**
      * Detects whether product status should be shown
      *
      * @param EventObserver $observer

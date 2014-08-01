@@ -40,7 +40,7 @@ $table = $installer->getConnection()->newTable(
 )->addColumn(
     'key',
     \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-    \Magento\Persistent\Model\Session::KEY_LENGTH,
+    50,
     array('nullable' => false),
     'Unique cookie key'
 )->addColumn(

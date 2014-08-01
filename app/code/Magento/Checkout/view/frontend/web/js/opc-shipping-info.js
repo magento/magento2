@@ -24,8 +24,14 @@
  */
 /*jshint browser:true jquery:true*/
 /*global alert*/
-(function($, window) {
-    'use strict';    
+define([
+    "jquery",
+    "jquery/ui",
+    "Magento_Checkout/js/opc-billing-info",
+    "mage/validation"
+], function($){
+    'use strict';
+
     // Extension for mage.opcheckout - third section(Shipping Information) in one page checkout accordion
     $.widget('mage.opcShippingInfo', $.mage.opcBillingInfo, {
         options: {
@@ -83,4 +89,5 @@
             $(this.options.shipping.copyBillingSelector).prop('checked', true);
         }
     });
-})(jQuery, window);
+
+});

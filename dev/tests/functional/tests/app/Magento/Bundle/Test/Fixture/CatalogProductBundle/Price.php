@@ -181,7 +181,10 @@ class Price implements FixtureInterface
                 'cart_price' => '80.00'
             ],
             'default_fixed' => [
-                'compare_price' => '755.00'
+                'compare_price' => [
+                    'price_from' => '755.00',
+                    'price_to' => '756.00'
+                ],
             ],
             'default_dynamic' => [
                 'compare_price' => [

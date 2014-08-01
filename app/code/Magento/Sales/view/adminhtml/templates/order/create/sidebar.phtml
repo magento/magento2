@@ -41,28 +41,36 @@
     </div>
 </div>
 <script>
-function addSidebarCompositeListType() {
-    productConfigure.addListType('sidebar', {
-        urlFetch: '<?php echo $this->getUrl('sales/order_create/configureProductToAdd') ?>',
-        urlConfirm: '<?php echo $this->getUrl('sales/order_create/addConfigured') ?>'
-    });
-    productConfigure.addListType('sidebar_wishlist', {
-        urlFetch: '<?php echo $this->getUrl('customer/wishlist_product_composite_wishlist/configure') ?>',
-        urlConfirm: '<?php echo $this->getUrl('sales/order_create/addConfigured') ?>'
-    });
-}
+require([
+    "prototype",
+    "Magento_Catalog/catalog/product/composite/configure"
+], function(){
 
-if (typeof(sidebarListTypeWorkedOn) == 'undefined') {
-    sidebarListTypeWorkedOn = false;
-}
-if (!sidebarListTypeWorkedOn) {
-    if (typeof(productConfigure) == 'undefined') {
-        Event.observe(window, 'load',  function(){
-            setTimeout(addSidebarCompositeListType, 10);
-        })
-    } else {
-        addSidebarCompositeListType();
+    function addSidebarCompositeListType() {
+        productConfigure.addListType('sidebar', {
+            urlFetch: '<?php echo $this->getUrl('sales/order_create/configureProductToAdd') ?>',
+            urlConfirm: '<?php echo $this->getUrl('sales/order_create/addConfigured') ?>'
+        });
+        productConfigure.addListType('sidebar_wishlist', {
+            urlFetch: '<?php echo $this->getUrl('customer/wishlist_product_composite_wishlist/configure') ?>',
+            urlConfirm: '<?php echo $this->getUrl('sales/order_create/addConfigured') ?>'
+        });
     }
-    sidebarListTypeWorkedOn = true;
-}
+
+    if (typeof(sidebarListTypeWorkedOn) == 'undefined') {
+        sidebarListTypeWorkedOn = false;
+    }
+    if (!sidebarListTypeWorkedOn) {
+        if (typeof(productConfigure) == 'undefined') {
+            Event.observe(window, 'load',  function(){
+                setTimeout(addSidebarCompositeListType, 10);
+            })
+        } else {
+            addSidebarCompositeListType();
+        }
+        sidebarListTypeWorkedOn = true;
+    }
+
+    window.addSidebarCompositeListType = addSidebarCompositeListType;
+});
 </script>

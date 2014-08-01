@@ -74,6 +74,10 @@
 </div>
 <?php if ($_giftMessage): ?>
     <script type="text/javascript">
-        jQuery('a.action.show').add('a.action.close').mage('giftMessage', {});
-    </script>
+require(['jquery', "mage/mage"], function(jQuery){
+
+    jQuery('a.action.show').add('a.action.close').mage('giftMessage', {});
+    
+});
+</script>
 <?php endif; ?>

@@ -21,7 +21,15 @@
  * @license    http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
-;(function($, document) {
+define([
+    "jquery",
+    "jquery/ui",
+    "jquery/hover-intent",
+    "jquery/jquery.details",
+    "jquery/jquery.tabs",
+    "mage/backend/floating-header",
+    "jquery/farbtastic"  // $(..).farbtastic()
+],function($) {
     'use strict';
 
     $.widget('mage.globalSearch', {
@@ -116,7 +124,7 @@
                      clearTimeout($(this).prop('hoverIntent_t'));
                     $(this).prop('hoverIntent_s', 0);
                     $(this).removeClass('recent hover');
-                })
+                });
 
             var targetSubmenu = $(e.target).closest('.submenu');
             if(targetSubmenu.length && targetSubmenu.is(':visible')) {
@@ -428,4 +436,4 @@
         $('details').details();
         switcherForIe8();
     });
-})(window.jQuery, document);
+});

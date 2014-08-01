@@ -83,6 +83,7 @@ class Region extends \Magento\Backend\Block\AbstractBlock implements
         $html .= '</select>';
 
         $html .= '<script type="text/javascript">' . "\n";
+        $html .= 'require(["prototype", "mage/adminhtml/form"], function(){';
         $html .= '$("' . $selectId . '").setAttribute("defaultValue", "' . $regionId . '");' . "\n";
         $html .= 'new regionUpdater("' .
             $country->getHtmlId() .
@@ -94,6 +95,8 @@ class Region extends \Magento\Backend\Block\AbstractBlock implements
             $this->_directoryHelper->getRegionJson() .
             ');' .
             "\n";
+
+        $html .= '});';
         $html .= '</script>' . "\n";
 
         $html .= '</div></div>' . "\n";

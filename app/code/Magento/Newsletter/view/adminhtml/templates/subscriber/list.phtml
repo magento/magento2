@@ -34,8 +34,10 @@
 </div>
 <?php endif ?>
 <script type="text/javascript">
+require(["prototype", "mage/adminhtml/events"], function(){
+
 <!--
-    var subscriberController = {
+    subscriberController = {
         checkCheckboxes: function(controlCheckbox) {
             var elements = $('subscriberGrid').getElementsByClassName('subscriberCheckbox');
             elements.each(function(obj){
@@ -68,4 +70,6 @@
 
     varienGlobalEvents.attachEventHandler('gridRowClick', subscriberController.rowClick.bind(subscriberController));
 //-->
+
+});
 </script>

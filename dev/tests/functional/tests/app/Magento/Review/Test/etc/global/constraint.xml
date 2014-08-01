@@ -57,4 +57,19 @@
     <assertProductRatingInProductPage module="Magento_Review">
         <severeness>middle</severeness>
     </assertProductRatingInProductPage>
+    <assertProductReviewMassActionSuccessMessage module="Magento_Review">
+        <severeness>high</severeness>
+        <require>
+            <reviewIndex class="Magento\Review\Test\Page\Adminhtml\ReviewIndex"/>
+        </require>
+    </assertProductReviewMassActionSuccessMessage>
+    <assertProductReviewMassActionSuccessDeleteMessage module="Magento_Review">
+        <severeness>high</severeness>
+        <require>
+            <reviewIndex class="Magento\Review\Test\Page\Adminhtml\ReviewIndex"/>
+        </require>
+    </assertProductReviewMassActionSuccessDeleteMessage>
+    <assertProductReviewBackendSuccessSaveMessage module="Magento_Review">
+        <severeness>middle</severeness>
+    </assertProductReviewBackendSuccessSaveMessage>
 </constraint>

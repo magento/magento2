@@ -23,6 +23,12 @@
  */
 ?>
 <script type="text/javascript">
+require([
+    "jquery",
+    "prototype",
+    "mage/adminhtml/events"
+], function(jQuery){
+
 //<![CDATA[
 
 Window.keepMultiModalWindow = true;
@@ -118,5 +124,8 @@ var catalogWysiwygEditor = {
     }
 };
 
+window.catalogWysiwygEditor = catalogWysiwygEditor;
 //]]>
+
+});
 </script>

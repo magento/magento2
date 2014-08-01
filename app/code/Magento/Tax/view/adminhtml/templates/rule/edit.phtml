@@ -25,7 +25,13 @@
 /** @var $this \Magento\Tax\Block\Adminhtml\Rule\Edit\Form */
 ?>
 <script type="text/javascript">
-(function ($) {
+require([
+    "jquery",
+    "jquery/ui",
+    "jquery/editableMultiselect/js/jquery.multiselect",
+    "mage/mage"
+], function($){
+
     $.widget("adminhtml.dialogRates", $.ui.dialog, {
         options: {
             itemRate: {},
@@ -254,5 +260,7 @@
             });
         }
     };
-})(jQuery);
+
+    window.TaxRateEditableMultiselect = TaxRateEditableMultiselect;
+});
 </script>

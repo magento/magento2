@@ -95,18 +95,23 @@
     </div>
 </form>
 <script>
-    (function($) {
-        $('#review-form').mage('validation', {
-            errorPlacement: function (error, element) {
-                if (element.parents('#product-review-table').length) {
-                    $('#product-review-table').siblings(this.errorElement + '.' + this.errorClass).remove();
-                    $('#product-review-table').after(error);
-                } else {
-                    element.after(error);
-                }
+require([
+    "jquery",
+    "mage/mage"
+], function($){
+
+    $('#review-form').mage('validation', {
+        errorPlacement: function (error, element) {
+            if (element.parents('#product-review-table').length) {
+                $('#product-review-table').siblings(this.errorElement + '.' + this.errorClass).remove();
+                $('#product-review-table').after(error);
+            } else {
+                element.after(error);
             }
-        });
-    })(jQuery);
+        }
+    });
+
+});
 </script>
 <?php else: ?>
     <div class="message info notlogged" id="review-form">

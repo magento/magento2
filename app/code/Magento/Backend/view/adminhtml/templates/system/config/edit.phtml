@@ -38,8 +38,14 @@
     </div>
 </form>
 <script type="text/javascript">
-(function($, window) {
-    $(function() {
+require([
+    "jquery",
+    "jquery/jquery.hashchange",
+    "mage/mage",
+    "prototype"
+], function(jQuery){
+
+    jQuery(function() {
         window.configForm = jQuery('#config-edit-form').mage('form').mage('validation', {
             submitHandler: function(form)
             {
@@ -339,8 +345,8 @@
             try {
                 var hashString = window.location.hash.replace('#', ''),
                     containerId = hashString.replace('-link', ''),
-                    state = $('#' + containerId + '-state'),
-                    head = $('#' + containerId + '-head');
+                    state = jQuery('#' + containerId + '-state'),
+                    head = jQuery('#' + containerId + '-head');
                 if (state.length) {
                     state.val(1);
                 }
@@ -351,10 +357,11 @@
             } catch(err) {
             }
             return false;
-        }
+        };
 
-        $(window).hashchange(handleHash);
+        jQuery(window).hashchange(handleHash);
         handleHash();
     });
-})(jQuery, window);
+
+});
 </script>

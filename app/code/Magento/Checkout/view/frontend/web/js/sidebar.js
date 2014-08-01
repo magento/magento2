@@ -22,7 +22,12 @@
  */
 /*jshint browser:true jquery:true*/
 /*global confirm:true*/
-(function ($) {
+define([
+    "jquery",
+    "jquery/ui",
+    "mage/decorate"
+], function($){
+
     $.widget('mage.sidebar', {
         options: {
             isRecursive: true
@@ -37,4 +42,5 @@
             }, this));
         }
     });
-})(jQuery);
+
+});

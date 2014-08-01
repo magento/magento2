@@ -42,11 +42,4 @@ $connection->addColumn(
     array('type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT, 'length' => '255', 'comment' => 'Tab Group Code')
 );
 
-/** @var $groups \Magento\Eav\Model\Resource\Entity\Attribute\Group\Collection*/
-$groups = $installer->getAttributeGroupCollectionFactory();
-foreach ($groups as $group) {
-    /** @var $group \Magento\Eav\Model\Entity\Attribute\Group*/
-    $group->save();
-}
-
 $installer->endSetup();

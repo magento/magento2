@@ -30,15 +30,20 @@
 <?php echo $this->getFormHtml(); ?>
 </div>
 <script type="text/javascript">
-    (function ($) {
-        $('#product_image_sizing_form').vdeImageSizing({
-            formId: '#product_image_sizing_form',
-            imageRatioClass: '.image-ratio',
-            imageWidthClass: '.image-width',
-            imageHeightClass: '.image-height',
-            formUrl: '<?php echo $this->getImageSizingUrl() ?>',
-            maxSizeValue: <?php echo \Magento\DesignEditor\Model\Editor\Tools\ImageSizing\Validator::MAX_SIZE_VALUE ?>,
-            messagesContainer: '#vde-tab-imagesizing-messages-placeholder'
-        });
-    })(jQuery);
+require([
+    "jquery",
+    "Magento_DesignEditor/js/image-sizing"
+], function($){
+
+    $('#product_image_sizing_form').vdeImageSizing({
+        formId: '#product_image_sizing_form',
+        imageRatioClass: '.image-ratio',
+        imageWidthClass: '.image-width',
+        imageHeightClass: '.image-height',
+        formUrl: '<?php echo $this->getImageSizingUrl() ?>',
+        maxSizeValue: <?php echo \Magento\DesignEditor\Model\Editor\Tools\ImageSizing\Validator::MAX_SIZE_VALUE ?>,
+        messagesContainer: '#vde-tab-imagesizing-messages-placeholder'
+    });
+
+});
 </script>

@@ -158,7 +158,7 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form implements
 HTML;
         if ($elementId === 'weight') {
             $html .= <<<HTML
-<script>jQuery(function($) {
+<script type="text/javascript">require(["jquery"],function($) {
     $('#weight_and_type_switcher, label[for=weight_and_type_switcher]').hide();
 });</script>
 HTML;

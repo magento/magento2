@@ -23,40 +23,18 @@
  */
 ?>
 <script type="text/javascript">
-    (function($) {
-        "use strict";
+    require([
+        "jquery",
+        "mage/mage"
+    ], function($){
+        'use strict';
+        
         /**
          * Declaration of resources needed for defined components
          */
         $.mage.component({
-            deletableItem: [
-                '<?php echo $this->getViewFileUrl('mage/deletable-item.js') ?>'
-            ],
-            itemTable: [
-                '<?php echo $this->getViewFileUrl('mage/item-table.js') ?>'
-            ],
-            validation: [
-                '<?php echo $this->getViewFileUrl('jquery/jquery.validate.js') ?>',
-                '<?php echo $this->getViewFileUrl('jquery/jquery.metadata.js') ?>',
-                '<?php echo $this->getViewFileUrl('mage/validation.js')?>',
-                '<?php echo $this->getViewFileUrl('mage/validation/validation.js') ?>'
-            ],
-            fieldsetControls: [
-                '<?php echo $this->getViewFileUrl('mage/fieldset-controls.js') ?>'
-            ],
-            fieldsetResetControl: [
-                '<?php echo $this->getViewFileUrl('mage/fieldset-controls.js') ?>'
-            ],
-            redirectUrl: [
-                '<?php echo $this->getViewFileUrl('mage/redirect-url.js') ?>'
-            ],
-            dropdownDialog: [
-                '<?php echo $this->getViewFileUrl('mage/dropdown.js') ?>'
-            ],
-            cookieBlock: [
-                '<?php echo $this->getViewFileUrl('Magento_Theme::js/notices.js') ?>'
-            ]
+            validation: 'mage/validation/validation'
         });
-    })(jQuery);
+    });
 </script>
 <?php echo $this->getChildHtml() ?>

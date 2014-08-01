@@ -20,8 +20,15 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
+define([
+    "jquery",
+    "jquery/ui",
+    "mage/translate",
+    "prototype"
+], function(jQuery){
 
-ProductConfigure = Class.create();
+window.ProductConfigure = Class.create();
+
 ProductConfigure.prototype = {
 
     listTypes:                  $H({}),
@@ -784,4 +791,6 @@ ProductConfigure.prototype = {
 
 jQuery(document).ready(function(){
     productConfigure = new ProductConfigure();
+});
+
 });

@@ -27,6 +27,12 @@
  */
 ?>
 <script type="text/javascript">
+require([
+    "jquery",
+    "jquery/ui",
+	"Magento_Integration/js/integration"
+], function($){
+
     window.integration = new Integration(
         '<?php echo $this->getUrl('*/*/permissionsDialog', ['id' => ':id', 'reauthorize' => ':isReauthorize']); ?>',
         '<?php echo $this->getUrl('*/*/tokensDialog', ['id' => ':id', 'reauthorize' => ':isReauthorize']); ?>',
@@ -34,6 +40,35 @@
         '<?php echo $this->getUrl('*/*'); ?>',
         '<?php echo $this->getUrl('*/*/loginSuccessCallback'); ?>'
     );
+
+    /**
+     * Confirm dialog for delete integration action
+     */
+    $(function () {
+        $('#integrationGrid_table').on('click', 'button#delete', function (e) {
+            $('#integration-delete-container').dialog({
+                modal: true,
+                autoOpen: true,
+                resizable: false,
+                minHeight: 200,
+                minWidth: 300,
+                dialogClass: "no-close",
+                position: {at: 'top'},
+                buttons: {
+                    Cancel: function () {
+                        $(this).dialog("close");
+                    },
+                    Delete: function () {
+                        $(this).dialog("close");
+                        window.location.href = $(e.target).data('url');
+                    }
+                }
+            });
+            e.stopPropagation();
+        });
+    });
+
+});
 </script>
 <div id="integration-popup-container" style="display:none;"></div>
 <div id="integration-delete-container" style="display:none;" title="<?php echo __('Are you sure ?'); ?>">

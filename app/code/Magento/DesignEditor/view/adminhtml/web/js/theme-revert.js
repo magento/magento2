@@ -21,7 +21,13 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 /*jshint jquery:true*/
-(function($) {
+define([
+    "jquery",
+    "jquery/ui",
+    "mage/translate",
+    "Magento_DesignEditor/js/dialog"
+], function($){
+
     'use strict';
     /**
      * VDE revert theme button widget
@@ -138,4 +144,5 @@
             return this.options.dialog;
         }
     });
-})(jQuery);
+
+});

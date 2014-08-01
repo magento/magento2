@@ -22,7 +22,7 @@
  */
 /*jshint browser:true, jquery:true*/
 /*global confirm:true*/
-(function($, window) {
+define(["jquery","jquery/ui","mage/translate"], function(jQuery){
     "use strict";
     $.widget('mage.address', {
         /**
@@ -68,4 +68,4 @@
             return false;
         }
     });
-})(jQuery, window);
+});
