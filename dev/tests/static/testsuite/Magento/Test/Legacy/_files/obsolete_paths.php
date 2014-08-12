@@ -71,11 +71,6 @@ return [
     ],
     ['/dev/tests/unit/testsuite/Magento/Session', '/dev/tests/unit/testsuite/Magento/Framework/Session'],
     ['/lib/Magento/Authorization', '/lib/Magento/Framework/Authorization'],
-    [
-        '/dev/tests/integration/testsuite/Magento/Authorization',
-        '/dev/tests/integration/testsuite/Magento/Framework/Authorization'
-    ],
-    ['/dev/tests/unit/testsuite/Magento/Authorization', '/dev/tests/unit/testsuite/Magento/Framework/Authorization'],
     ['/lib/Magento/Cache', '/lib/Magento/Framework/Cache'],
     ['/dev/tests/integration/testsuite/Magento/Cache', '/dev/tests/integration/testsuite/Magento/Framework/Cache'],
     ['/dev/tests/unit/testsuite/Magento/Cache', '/dev/tests/unit/testsuite/Magento/Framework/Cache'],

@@ -17,7 +17,7 @@ use Zend\Stdlib\ArrayUtils;
  * Validator which checks if the file already exists in the directory
  *
  * @category  Zend
- * @package   Zend_Validate
+ * @package   Zend_Validator
  */
 class IsCompressed extends MimeType
 {

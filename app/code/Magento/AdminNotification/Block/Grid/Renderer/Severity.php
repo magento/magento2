@@ -25,6 +25,8 @@
  */
 namespace Magento\AdminNotification\Block\Grid\Renderer;
 
+use \Magento\Framework\Notification\MessageInterface;
+
 class Severity extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer
 {
     /**
@@ -58,21 +60,21 @@ class Severity extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
         $value = '';
 
         switch ($row->getData($this->getColumn()->getIndex())) {
-            case \Magento\AdminNotification\Model\Inbox::SEVERITY_CRITICAL:
+            case MessageInterface::SEVERITY_CRITICAL:
                 $class = 'critical';
-                $value = $this->_notice->getSeverities(\Magento\AdminNotification\Model\Inbox::SEVERITY_CRITICAL);
+                $value = $this->_notice->getSeverities(MessageInterface::SEVERITY_CRITICAL);
                 break;
-            case \Magento\AdminNotification\Model\Inbox::SEVERITY_MAJOR:
+            case MessageInterface::SEVERITY_MAJOR:
                 $class = 'major';
-                $value = $this->_notice->getSeverities(\Magento\AdminNotification\Model\Inbox::SEVERITY_MAJOR);
+                $value = $this->_notice->getSeverities(MessageInterface::SEVERITY_MAJOR);
                 break;
-            case \Magento\AdminNotification\Model\Inbox::SEVERITY_MINOR:
+            case MessageInterface::SEVERITY_MINOR:
                 $class = 'minor';
-                $value = $this->_notice->getSeverities(\Magento\AdminNotification\Model\Inbox::SEVERITY_MINOR);
+                $value = $this->_notice->getSeverities(MessageInterface::SEVERITY_MINOR);
                 break;
-            case \Magento\AdminNotification\Model\Inbox::SEVERITY_NOTICE:
+            case MessageInterface::SEVERITY_NOTICE:
                 $class = 'notice';
-                $value = $this->_notice->getSeverities(\Magento\AdminNotification\Model\Inbox::SEVERITY_NOTICE);
+                $value = $this->_notice->getSeverities(MessageInterface::SEVERITY_NOTICE);
                 break;
         }
         return '<span class="grid-severity-' . $class . '"><span>' . $value . '</span></span>';

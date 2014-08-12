@@ -2,9 +2,9 @@
     "name": "magento/framework",
     "description": "N/A",
     "type": "magento2-library",
-    "version": "0.1.0-alpha89",
+    "version": "0.1.0-alpha90",
     "require": {
-        "php": "5.4.*|5.5.*",
+        "php": "~5.4.11|~5.5.0",
         "ext-spl": "*",
         "ext-dom": "*",
         "ext-simplexml": "*",
@@ -13,8 +13,7 @@
         "ext-curl": "*",
         "ext-iconv": "*",
         "ext-gd": "*",
-        "lib-libxml": "*",
-        "magento/magento-composer-installer": "*"
+        "lib-libxml": "*"
     },
     "suggest": {
         "ext-imagick": "Use Image Magick >=3.0.0 as an optional alternative image processing library"

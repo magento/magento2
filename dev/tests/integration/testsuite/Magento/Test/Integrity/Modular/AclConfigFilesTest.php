@@ -74,7 +74,7 @@ class AclConfigFilesTest extends \PHPUnit_Framework_TestCase
                 'Magento\Framework\App\Filesystem'
             )->getPath(
                 \Magento\Framework\App\Filesystem::APP_DIR
-            ) . '/*/*/*/etc/adminhtml/acl.xml'
+            ) . '/*/*/*/etc/acl.xml'
         );
         $dataProviderResult = array();
         foreach ($fileList as $file) {

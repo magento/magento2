@@ -69,20 +69,27 @@ if ($exist = $this->getRecentlyViewedProducts()) {
                                 <?php echo $this->helper('Magento\Catalog\Helper\Output')->productAttribute($_product, $_product->getName(), 'name') ?>
                             </a>
                         </strong>
-                        <?php echo $this->getPriceHtml($_product, true, '-widget-viewed-'.$suffix) ?>
+                        <?php echo $this->getProductPriceHtml(
+                            $_product,
+                            \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
+                            \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
+                            [
+                                'price_id_suffix' => '-widget-viewed-' . $suffix
+                            ]
+                        ) ?>
                         <div class="product actions">
                             <?php if($_product->isSaleable()): ?>
                             <div class="primary">
-                                <?php if ($_product->getTypeInstance()->hasRequiredOptions($_item)): ?>
+                                <?php if ($_product->getTypeInstance()->hasRequiredOptions($_product)): ?>
                                     <button class="action tocart"
-                                            data-mage-init='{"redirectUrl": {"url": "<?php echo $this->getAddToCartUrl($_item) ?>"}}'
+                                            data-mage-init='{"redirectUrl": {"url": "<?php echo $this->getAddToCartUrl($_product) ?>"}}'
                                             type="button" title="<?php echo __('Add to Cart') ?>">
                                         <span><?php echo __('Add to Cart') ?></span>
                                     </button>
                                 <?php else: ?>
                                     <?php
                                         $postDataHelper = $this->helper('Magento\Core\Helper\PostData');
-                                        $postData = $postDataHelper->getPostData($this->getAddToCartUrl($_item), ['product' => $_item->getEntityId()]);
+                                        $postData = $postDataHelper->getPostData($this->getAddToCartUrl($_product), ['product' => $_product->getEntityId()]);
                                     ?>
                                     <button type="button" class="action tocart" data-post='<?php echo $postData; ?>'>
                                         <span><?php echo __('Add to Cart') ?></span>

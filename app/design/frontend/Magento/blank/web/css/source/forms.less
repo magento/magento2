@@ -60,6 +60,13 @@
                 margin-bottom: 0;
             }
         }
+        &.date {
+            .control > input {
+                margin-right: 10px;
+                min-width: 80px;
+                width: 25%;
+            }
+        }
     }
     fieldset.field {
         border: 0;
@@ -71,8 +78,6 @@ div.mage-error[generated] {
     margin-top: 7px;
 }
 
-// TEMP
-
 .field .tooltip {
     .tooltip(right);
     .tooltip-content {
@@ -82,18 +87,21 @@ div.mage-error[generated] {
 }
 
 input:focus ~ .tooltip .tooltip-content,
-select:focus ~ .tooltip .tooltip-content { display: block; }
+select:focus ~ .tooltip .tooltip-content {
+    display: block;
+}
 
 //
 //    Desktop
 //--------------------------------------
-.responsive(@break) when (@break = @break-point-1) {
+.responsive(@break) when (@break = @screen-m) {
     .fieldset {
         .legend {
             &:extend(.margin-for-forms-desktop all);
         }
         > .field {
             .form-field-type-revert();
+            margin: 0 0 29px;
         }
     }
 }

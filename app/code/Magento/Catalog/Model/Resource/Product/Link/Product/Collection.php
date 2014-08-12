@@ -280,10 +280,8 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
         if (!$this->getLinkModel()) {
             return $this;
         }
-        $attributes = $this->getLinkModel()->getAttributes();
 
-        $attributesByType = array();
-        foreach ($attributes as $attribute) {
+        foreach ($this->getLinkAttributes() as $attribute) {
             $table = $this->getLinkModel()->getAttributeTypeTable($attribute['type']);
             $alias = sprintf('link_attribute_%s_%s', $attribute['code'], $attribute['type']);
 
@@ -318,5 +316,35 @@ class Collection extends \Magento\Catalog\Model\Resource\Product\Collection
             return $this->setAttributeSetIdOrder($dir);
         }
         return parent::setOrder($attribute, $dir);
+    }
+
+    /**
+     * Get attributes of specified link type
+     *
+     * @param int $type
+     * @return array
+     */
+    public function getLinkAttributes($type = null)
+    {
+        return $this->getLinkModel()->getAttributes($type);
+    }
+
+    /**
+     * Add link attribute to filter.
+     *
+     * @param string $code
+     * @param array $condition
+     * @return $this
+     */
+    public function addLinkAttributeToFilter($code, $condition)
+    {
+        foreach ($this->getLinkAttributes() as $attribute) {
+            if ($attribute['code'] == $code) {
+                $alias = sprintf('link_attribute_%s_%s', $code, $attribute['type']);
+                $whereCondition = $this->_getConditionSql($alias.'.`value`', $condition);
+                $this->getSelect()->where($whereCondition);
+            }
+        }
+        return $this;
     }
 }

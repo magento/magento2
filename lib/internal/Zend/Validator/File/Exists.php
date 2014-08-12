@@ -17,7 +17,7 @@ use Zend\Validator\Exception;
  * Validator which checks if the file already exists in the directory
  *
  * @category  Zend
- * @package   Zend_Validate
+ * @package   Zend_Validator
  */
 class Exists extends AbstractValidator
 {

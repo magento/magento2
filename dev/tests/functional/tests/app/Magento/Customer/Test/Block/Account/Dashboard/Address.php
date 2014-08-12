@@ -44,14 +44,14 @@ class Address extends Block
      *
      * @var string
      */
-    protected $shippingAddressBlock = '.shipping address';
+    protected $shippingAddressBlock = '.box-address-shipping';
 
     /**
      * Billing address block selector
      *
      * @var string
      */
-    protected $billingAddressBlock = '.billing address';
+    protected $billingAddressBlock = '.box-address-billing';
 
     /**
      * Edit Default Billing Address

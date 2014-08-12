@@ -50,8 +50,7 @@ class Provider implements ProviderInterface
      */
     public function getAclResources()
     {
-        // TODO: As soon as all acl.xml files are moved to global scope, default ('global') scope should be used
-        $aclResourceConfig = $this->_configReader->read('adminhtml');
+        $aclResourceConfig = $this->_configReader->read();
         if (!empty($aclResourceConfig['config']['acl']['resources'])) {
             return $this->_resourceTreeBuilder->build($aclResourceConfig['config']['acl']['resources']);
         }

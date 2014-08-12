@@ -12,7 +12,7 @@ namespace Zend\Validator\Exception;
 
 /**
  * @category   Zend
- * @package    Zend_Validate
+ * @package    Zend_Validator
  */
 interface ExceptionInterface
 {}

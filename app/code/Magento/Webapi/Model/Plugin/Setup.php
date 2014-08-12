@@ -23,9 +23,9 @@
  */
 namespace Magento\Webapi\Model\Plugin;
 
-use Magento\Authz\Model\UserIdentifier;
 use Magento\Integration\Model\Integration;
 use Magento\Webapi\Model\IntegrationConfig;
+use Magento\Integration\Service\V1\AuthorizationServiceInterface as IntegrationAuthorizationInterface;
 
 /**
  * Plugin for Magento\Framework\Module\Setup model to manage resource permissions of
@@ -48,37 +48,25 @@ class Setup
     protected $_integrationService;
 
     /**
-     * Authorization service
-     *
-     * @var \Magento\Authz\Service\AuthorizationV1
+     * @var IntegrationAuthorizationInterface
      */
-    protected $_authzService;
-
-    /**
-     * Factory to create UserIdentifier
-     *
-     * @var \Magento\Authz\Model\UserIdentifier\Factory
-     */
-    protected $_userIdentifierFactory;
+    protected $integrationAuthorizationService;
 
     /**
      * Construct Setup plugin instance
      *
      * @param IntegrationConfig $integrationConfig
-     * @param \Magento\Authz\Service\AuthorizationV1 $authzService
+     * @param IntegrationAuthorizationInterface $integrationAuthorizationService
      * @param \Magento\Integration\Service\V1\IntegrationInterface $integrationService
-     * @param \Magento\Authz\Model\UserIdentifier\Factory $userIdentifierFactory
      */
     public function __construct(
         IntegrationConfig $integrationConfig,
-        \Magento\Authz\Service\AuthorizationV1 $authzService,
-        \Magento\Integration\Service\V1\IntegrationInterface $integrationService,
-        \Magento\Authz\Model\UserIdentifier\Factory $userIdentifierFactory
+        IntegrationAuthorizationInterface $integrationAuthorizationService,
+        \Magento\Integration\Service\V1\IntegrationInterface $integrationService
     ) {
         $this->_integrationConfig = $integrationConfig;
-        $this->_authzService = $authzService;
+        $this->integrationAuthorizationService = $integrationAuthorizationService;
         $this->_integrationService = $integrationService;
-        $this->_userIdentifierFactory = $userIdentifierFactory;
     }
 
     /**
@@ -103,11 +91,10 @@ class Setup
             if (isset($integrations[$name])) {
                 $integration = $this->_integrationService->findByName($name);
                 if ($integration->getId()) {
-                    $userIdentifier = $this->_userIdentifierFactory->create(
-                        UserIdentifier::USER_TYPE_INTEGRATION,
-                        $integration->getId()
+                    $this->integrationAuthorizationService->grantPermissions(
+                        $integration->getId(),
+                        $integrations[$name]['resources']
                     );
-                    $this->_authzService->grantPermissions($userIdentifier, $integrations[$name]['resources']);
                 }
             }
         }

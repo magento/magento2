@@ -40,7 +40,7 @@
             <resource ref="Magento_Customer::customer_self" />
         </resources>
         <data>
-            <parameter name="id" force="true" source="session" method="getUserId">null</parameter>
+            <parameter name="id" force="true">%customer_id%</parameter>
         </data>
     </route>
     <route url="/V1/customers/me" method="PUT" secure="true">

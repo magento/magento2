@@ -23,6 +23,8 @@
  */
 namespace Magento\Integration\Model\Resource\Oauth;
 
+use Magento\Authorization\Model\UserContextInterface;
+
 /**
  * OAuth token resource model
  */
@@ -116,15 +118,59 @@ class Token extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function selectTokenByType($consumerId, $type)
     {
         $adapter = $this->_getReadAdapter();
-        $select = $adapter->select()->from(
-            $this->getMainTable()
-        )->where(
-            'consumer_id = ?',
-            $consumerId
-        )->where(
-            'type = ?',
-            $type
-        );
+        $select = $adapter->select()
+            ->from($this->getMainTable())
+            ->where('consumer_id = ?', $consumerId)
+            ->where('type = ?', $type);
+        return $adapter->fetchRow($select);
+    }
+
+    /**
+     * Select token for a given consumer and user type.
+     *
+     * @param int $consumerId
+     * @param int $userType
+     * @return array|boolean - Row data (array) or false if there is no corresponding row
+     */
+    public function selectTokenByConsumerIdAndUserType($consumerId, $userType)
+    {
+        $adapter = $this->_getReadAdapter();
+        $select = $adapter->select()
+            ->from($this->getMainTable())
+            ->where('consumer_id = ?', (int)$consumerId)
+            ->where('user_type = ?', (int)$userType);
+        return $adapter->fetchRow($select);
+    }
+
+    /**
+     * Select token for a given admin id.
+     *
+     * @param int $adminId
+     * @return array|boolean - Row data (array) or false if there is no corresponding row
+     */
+    public function selectTokenByAdminId($adminId)
+    {
+        $adapter = $this->_getReadAdapter();
+        $select = $adapter->select()
+            ->from($this->getMainTable())
+            ->where('admin_id = ?', $adminId)
+            ->where('user_type = ?', UserContextInterface::USER_TYPE_ADMIN);
+        return $adapter->fetchRow($select);
+    }
+
+    /**
+     * Select token for a given customer.
+     *
+     * @param int $customerId
+     * @return array|boolean - Row data (array) or false if there is no corresponding row
+     */
+    public function selectTokenByCustomerId($customerId)
+    {
+        $adapter = $this->_getReadAdapter();
+        $select = $adapter->select()
+            ->from($this->getMainTable())
+            ->where('customer_id = ?', $customerId)
+            ->where('user_type = ?', UserContextInterface::USER_TYPE_CUSTOMER);
         return $adapter->fetchRow($select);
     }
 }

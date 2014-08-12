@@ -12,7 +12,7 @@ namespace Zend\Validator;
 
 /**
  * @category   Zend
- * @package    Zend_Validate
+ * @package    Zend_Validator
  */
 class EmailAddress extends AbstractValidator
 {
@@ -486,7 +486,7 @@ class EmailAddress extends AbstractValidator
     }
 
     /**
-     * Defined by Zend_Validate_Interface
+     * Defined by Zend\Validator\ValidatorInterface
      *
      * Returns true if and only if $value is a valid email address
      * according to RFC2822

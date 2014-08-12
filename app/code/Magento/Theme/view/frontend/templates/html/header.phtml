@@ -28,7 +28,7 @@
 <?php switch($this->getShowPart()):
     case 'logo': ?>
         <?php $storeName = $this->getThemeName() ? $this->getThemeName() : $this->getLogoAlt();?>
-        <span data-action="toggle-nav" class="action toggle nav"><?php echo __('Toggle Nav') ?></span>
+        <span data-action="toggle-nav" class="action nav-toggle"><span><?php echo __('Toggle Nav') ?></span></span>
         <?php if ($this->isHomePage()):?>
         <strong class="logo">
             <img src="<?php echo $this->getLogoSrc() ?>" alt="<?php echo $this->getLogoAlt() ?>" />

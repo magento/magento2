@@ -30,7 +30,7 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive(@break) when (@break = @break-point-1) {
+.responsive(@break) when (@break = @screen-m) {
     .product.data.items {
         .data-tabs(
             @_tab-content-border-top-status: true
@@ -38,12 +38,11 @@
     }
 }
 
-@media only screen
-and (max-width : @break-point-1) {
+@media only screen and (max-width: @screen-m) {
     .product.data.items {
         .data-accordion();
         .data.item {
-        	display: block;
+            display: block;
         }
     }
 }

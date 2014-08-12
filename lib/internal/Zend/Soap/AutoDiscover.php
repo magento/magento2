@@ -13,7 +13,6 @@ namespace Zend\Soap;
 use Zend\Server\Reflection;
 use Zend\Server\Reflection\AbstractFunction;
 use Zend\Server\Reflection\Prototype;
-use Zend\Server\Reflection\ReflectionParameter;
 use Zend\Soap\AutoDiscover\DiscoveryStrategy\DiscoveryStrategyInterface as DiscoveryStrategy;
 use Zend\Soap\AutoDiscover\DiscoveryStrategy\ReflectionDiscovery;
 use Zend\Soap\Wsdl;
@@ -191,7 +190,7 @@ class AutoDiscover
                                          ->getShortName();
             } else {
                 throw new Exception\RuntimeException(
-                    "No service name given. Call Autodiscover#setServiceName()."
+                    "No service name given. Call Autodiscover::setServiceName()."
                 );
             }
         }
@@ -228,7 +227,7 @@ class AutoDiscover
     public function getUri()
     {
         if ($this->uri === null) {
-            throw new Exception\RuntimeException("Missing uri. You have to explicitly configure the Endpoint Uri by calling AutoDiscover#setUri().");
+            throw new Exception\RuntimeException("Missing uri. You have to explicitly configure the Endpoint Uri by calling AutoDiscover::setUri().");
         }
         if (is_string($this->uri)) {
             $this->uri = Uri\UriFactory::factory($this->uri);

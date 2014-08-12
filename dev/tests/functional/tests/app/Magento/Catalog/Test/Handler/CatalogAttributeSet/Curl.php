@@ -50,7 +50,7 @@ class Curl extends AbstractCurl implements CatalogAttributeSetInterface
      *
      * @var string
      */
-    protected $attributes = '#buildCategoryTree\(this.root,.*?(\[.*\}\]\}\])\);#s';
+    protected $attributes = '/buildCategoryTree\(this.root, ([^;]+\}\])\);/s';
 
     /**
      * Regex for finding attribute set name
@@ -176,12 +176,15 @@ class Curl extends AbstractCurl implements CatalogAttributeSetInterface
             $dataAttribute['groups'][$key][] = $parentAttributes['id'];
             $dataAttribute['groups'][$key][] = $parentAttributes['text'];
             $dataAttribute['groups'][$key][] = $key + 1;
-            foreach ($parentAttributes['children'] as $attribute) {
-                $dataAttribute['attributes'][$index][] = $attribute['id'];
-                $dataAttribute['attributes'][$index][] = $parentAttributes['id'];
-                $dataAttribute['attributes'][$index][] = $index;
-                $dataAttribute['attributes'][$index][] = $attribute['entity_id'];
-                $index++;
+
+            if (isset($parentAttributes['children'])) {
+                foreach ($parentAttributes['children'] as $attribute) {
+                    $dataAttribute['attributes'][$index][] = $attribute['id'];
+                    $dataAttribute['attributes'][$index][] = $parentAttributes['id'];
+                    $dataAttribute['attributes'][$index][] = $index;
+                    $dataAttribute['attributes'][$index][] = $attribute['entity_id'];
+                    $index++;
+                }
             }
         }
         $dataAttribute['not_attributes'] = [];

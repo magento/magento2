@@ -409,7 +409,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\Collection
      */
-    public function getConfigurableAttributeCollection($product)
+    public function getConfigurableAttributeCollection(\Magento\Catalog\Model\Product $product)
     {
         return $this->_attributeCollectionFactory->create()->setProductFilter($product);
     }
@@ -537,8 +537,9 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     /**
      * Save configurable product depended data
      *
-     * @param  \Magento\Catalog\Model\Product $product
+     * @param \Magento\Catalog\Model\Product $product
      * @return $this
+     * @throws \InvalidArgumentException
      */
     public function save($product)
     {
@@ -553,21 +554,26 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                 if (!$product->getIsDuplicate()) {
                     if (!empty($attributeData['id'])) {
                         $configurableAttribute->load($attributeData['id']);
-                    } else {
-                        $configurableAttribute->loadByProductAndAttribute(
-                            $product,
-                            $this->getAttributeById($attributeData['attribute_id'], $product)
+                        $attributeData['attribute_id'] = $configurableAttribute->getAttributeId();
+                    } elseif (!empty($attributeData['attribute_id'])) {
+                        $attribute = $this->_eavConfig->getAttribute(
+                            \Magento\Catalog\Model\Product::ENTITY, $attributeData['attribute_id']
                         );
+                        $attributeData['attribute_id'] = $attribute->getId();
+                        if (!$this->canUseAttribute($attribute)) {
+                            throw new \InvalidArgumentException(
+                                'Provided attribute can not be used with configurable product'
+                            );
+                        }
+                        $configurableAttribute->loadByProductAndAttribute($product, $attribute);
                     }
                 }
                 unset($attributeData['id']);
-                $configurableAttribute->addData(
-                    $attributeData
-                )->setStoreId(
-                    $product->getStoreId()
-                )->setProductId(
-                    $product->getId()
-                )->save();
+                $configurableAttribute
+                    ->addData($attributeData)
+                    ->setStoreId($product->getStoreId())
+                    ->setProductId($product->getId())
+                    ->save();
             }
             /** @var $configurableAttributesCollection \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\Collection  */
             $configurableAttributesCollection = $this->_attributeCollectionFactory->create();

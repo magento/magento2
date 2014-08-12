@@ -25,9 +25,9 @@
 namespace Magento\Customer\Test\TestCase;
 
 use Mtf\TestCase\Injectable;
+use Magento\Customer\Test\Fixture\CustomerInjectable;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
 use Magento\Customer\Test\Page\Adminhtml\CustomerIndexEdit;
-use Magento\Customer\Test\Fixture\CustomerInjectable;
 
 /**
  * Test creation for DeleteCustomerBackendEntity
@@ -65,10 +65,8 @@ class DeleteCustomerBackendEntityTest extends Injectable
      * @param CustomerIndexEdit $customerIndexEditPage
      * @return void
      */
-    public function __inject(
-        CustomerIndex $customerIndexPage,
-        CustomerIndexEdit $customerIndexEditPage
-    ) {
+    public function __inject(CustomerIndex $customerIndexPage, CustomerIndexEdit $customerIndexEditPage)
+    {
         $this->customerIndexPage = $customerIndexPage;
         $this->customerIndexEditPage = $customerIndexEditPage;
     }
@@ -76,7 +74,7 @@ class DeleteCustomerBackendEntityTest extends Injectable
     /**
      * Runs Delete Customer Backend Entity test
      *
-     * @param CustomerInjectable $initialCustomer
+     * @param CustomerInjectable $customer
      * @return void
      */
     public function testDeleteCustomerBackendEntity(CustomerInjectable $customer)

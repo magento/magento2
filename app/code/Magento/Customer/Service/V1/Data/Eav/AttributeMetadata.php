@@ -51,7 +51,7 @@ class AttributeMetadata extends \Magento\Framework\Service\Data\AbstractObject
 
     const DATA_MODEL = 'data_model';
 
-    const IS_USER_DEFINED = 'is_user_defined';
+    const USER_DEFINED = 'user_defined';
 
     const FRONTEND_CLASS = 'frontend_class';
 
@@ -59,7 +59,7 @@ class AttributeMetadata extends \Magento\Framework\Service\Data\AbstractObject
 
     const FRONTEND_LABEL = 'frontend_label';
 
-    const IS_SYSTEM = 'is_system';
+    const SYSTEM = 'system';
 
     const NOTE = 'note';
 
@@ -184,7 +184,7 @@ class AttributeMetadata extends \Magento\Framework\Service\Data\AbstractObject
      */
     public function isUserDefined()
     {
-        return $this->_get(self::IS_USER_DEFINED);
+        return $this->_get(self::USER_DEFINED);
     }
 
     /**
@@ -224,7 +224,7 @@ class AttributeMetadata extends \Magento\Framework\Service\Data\AbstractObject
      */
     public function isSystem()
     {
-        return $this->_get(self::IS_SYSTEM);
+        return $this->_get(self::SYSTEM);
     }
 
     /**

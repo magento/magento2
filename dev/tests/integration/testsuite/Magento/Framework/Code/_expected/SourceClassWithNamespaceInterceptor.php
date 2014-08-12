@@ -70,7 +70,7 @@ class Interceptor extends \Magento\Framework\Code\GeneratorTest\SourceClassWithN
     public function __sleep()
     {
         if (method_exists(get_parent_class($this), '__sleep')) {
-            return parent::__sleep();
+            return array_diff(parent::__sleep(), array('pluginLocator', 'pluginList', 'chain', 'subjectType'));
         } else {
             return array_keys(get_class_vars(get_parent_class($this)));
         }

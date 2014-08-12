@@ -89,7 +89,7 @@ class PayflowTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
-     * @magentoDataFixture Magento/Paypal/_files/quote_payment_payflow.php
+     * @magentoDataFixture Magento/Sales/_files/order.php
      * @magentoConfigFixture current_store payment/paypal_payflow/active 1
      * @magentoConfigFixture current_store paypal/general/business_account merchant_2012050718_biz@example.com
      */
@@ -104,7 +104,6 @@ class PayflowTest extends \Magento\TestFramework\TestCase\AbstractController
         $session->setQuoteId($quote->getId());
         $session->setPaypalStandardQuoteId($quote->getId())->setLastRealOrderId('100000001');
         $this->dispatch('paypal/payflow/cancelpayment');
-
         $order->load('100000001', 'increment_id');
         $this->assertEquals('canceled', $order->getState());
         $this->assertEquals($session->getQuote()->getGrandTotal(), $quote->getGrandTotal());

@@ -120,6 +120,14 @@ class AddressInjectable extends InjectableFixture
         'input' => 'text',
     ];
 
+    protected $email = [
+        'attribute_code' => 'email',
+        'backend_type' => 'varchar',
+        'is_required' => '1',
+        'default_value' => '',
+        'input' => 'text',
+    ];
+
     protected $middlename = [
         'attribute_code' => 'middlename',
         'backend_type' => 'varchar',
@@ -237,6 +245,11 @@ class AddressInjectable extends InjectableFixture
     public function getDefaultBilling()
     {
         return $this->getData('default_billing');
+    }
+
+    public function getEmail()
+    {
+        return $this->getData('email');
     }
 
     public function getCompany()

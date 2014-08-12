@@ -152,6 +152,25 @@ class TaxRateServiceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
+     * @expectedExceptionMessage id is not expected for this request.
+     * @magentoDbIsolation enabled
+     */
+    public function testCreateTaxRateWithId()
+    {
+        $invalidTaxData = [
+            'id' => 2,
+            'country_id' => 'US',
+            'region_id' => '8',
+            'percentage_rate' => '8.25',
+            'code' => 'US-CA-*-Rate' . rand(),
+            'zip_range' => ['from' => 78765, 'to' => 78780]
+        ];
+        $taxRate = $this->taxRateBuilder->populateWithArray($invalidTaxData)->create();
+        $this->taxRateService->createTaxRate($taxRate);
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\InputException
      * @expectedExceptionMessage Code already exists.
      * @magentoDbIsolation enabled
      */

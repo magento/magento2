@@ -23,11 +23,6 @@
  */
 ?>
 <?php if( $this->getCollection() && $this->count()): ?>
-    <?php if ($this->getToolbarHtml()): ?>
-        <div class="toolbar products-reviews-toolbar top">
-            <?php echo $this->getToolbarHtml() ?>
-        </div>
-    <?php endif; ?>
     <div class="table-wrapper reviews">
         <table class="data table table-reviews" id="my-reviews-table">
             <caption class="table caption"><?php echo __('Product Reviews') ?></caption>

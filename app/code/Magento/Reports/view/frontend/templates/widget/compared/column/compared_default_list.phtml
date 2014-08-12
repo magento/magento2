@@ -62,7 +62,14 @@ if ($exist = $this->getRecentlyComparedProducts()) {
                         <?php echo $this->helper('Magento\Catalog\Helper\Output')->productAttribute($_product, $_product->getName(), 'name') ?>
                     </a>
                 </strong>
-                <?php echo $this->getPriceHtml($_product, true, '-widget-compared-'.$suffix) ?>
+                <?php echo $this->getProductPriceHtml(
+                    $_product,
+                    \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
+                    \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
+                    [
+                        'price_id_suffix' => '-widget-compared-' . $suffix
+                    ]
+                ) ?>
                 <?php if($_product->isSaleable()): ?>
                     <div class="actions">
                         <?php if ($_product->getTypeInstance()->hasRequiredOptions($_product)): ?>

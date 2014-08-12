@@ -1,5 +1,0 @@
-"Error happened while granting permissions. Check exception log for details.","Error happened while granting permissions. Check exception log for details."
-"The role associated with the specified user cannot be found.","The role associated with the specified user cannot be found."
-"Error happened while getting a list of allowed resources. Check exception log for details.","Error happened while getting a list of allowed resources. Check exception log for details."
-"Error happened while deleting role and permissions. Check exception log for details.","Error happened while deleting role and permissions. Check exception log for details."
-"Role for user with ID ""%1"" and user type ""%2"" cannot be found.","Role for user with ID ""%1"" and user type ""%2"" cannot be found."

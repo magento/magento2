@@ -25,7 +25,6 @@
 //
 //    PayPal checkout button
 //--------------------------------------
-
 .paypal {
     &.after:after {
         content: "- " attr(data-label) " -";
@@ -39,6 +38,18 @@
         margin: 10px 5px;
         text-align: center;
         text-transform: uppercase;
+    }
+}
+
+.product-info-main,
+.block-minicart {
+     .paypal img {
+         display: block;
+     }
+}
+.product-info-main {
+    img {
+        margin: 0 auto;
     }
 }
 

@@ -94,9 +94,6 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->_integrationMock)
         );
 
-        $userIdentifierFactory = $this->getMockBuilder(
-            'Magento\Authz\Model\UserIdentifier\Factory'
-        )->disableOriginalConstructor()->getMock();
         $oauthConsumerHelper = $this->getMockBuilder(
             'Magento\Integration\Service\V1\Oauth'
         )->disableOriginalConstructor()->getMock();
@@ -111,10 +108,6 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($oauthConsumer)
         );
         $oauthConsumerHelper->expects($this->any())->method('loadConsumer')->will($this->returnValue($oauthConsumer));
-        $userIdentifier = $this->getMockBuilder(
-            'Magento\Authz\Model\UserIdentifier'
-        )->disableOriginalConstructor()->getMock();
-        $userIdentifierFactory->expects($this->any())->method('create')->will($this->returnValue($userIdentifier));
 
         $this->_service = new \Magento\Integration\Service\V1\Integration(
             $this->_integrationFactory,

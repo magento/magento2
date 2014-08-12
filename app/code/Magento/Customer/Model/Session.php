@@ -547,12 +547,11 @@ class Session extends \Magento\Framework\Session\SessionManager
     /**
      * Reset core session hosts after reseting session ID
      *
-     * @param bool $deleteOldSession
      * @return $this
      */
-    public function regenerateId($deleteOldSession = true)
+    public function regenerateId()
     {
-        parent::regenerateId($deleteOldSession);
+        parent::regenerateId();
         $this->_cleanHosts();
         return $this;
     }

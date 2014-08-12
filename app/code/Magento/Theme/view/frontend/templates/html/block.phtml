@@ -23,8 +23,8 @@
  */
 ?>
 <div class="block <?php echo $this->getBlockCss(); ?>">
-    <div class="title"><strong><?php echo $this->getBlockTitle(); ?></strong></div>
-    <div class="content">
+    <div class="block-title <?php echo $this->getBlockCss(); ?>-title"><strong><?php echo $this->getBlockTitle(); ?></strong></div>
+    <div class="block-content <?php echo $this->getBlockCss(); ?>-content">
         <?php echo $this->getChildHtml(); ?>
     </div>
 </div>

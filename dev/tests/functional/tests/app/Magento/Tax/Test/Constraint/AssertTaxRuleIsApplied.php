@@ -60,6 +60,7 @@ class AssertTaxRuleIsApplied extends AssertTaxRuleApplying
                     . "\nActual: " . $actualTax;
             }
         }
+
         if ($expectedGrandTotal !== $actualGrandTotal) {
             $errorMessages[] = 'Grand Total is not correct.'
                 . "\nExpected: " . $expectedGrandTotal

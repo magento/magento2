@@ -46,7 +46,28 @@ $recurringPayment->addData(
         'currency_code' => 'USD',
         'order_info' => array('base_currency_code' => 'USD'),
         'order_item_info' => serialize('item info'),
-        'billing_address_info' => serialize('billing address info')
+        'billing_address_info' => serialize([
+            'postcode' => '12345',
+            'lastname' => 'Co',
+            'street' => 'Street',
+            'city' => 'City',
+            'customer_email' => 'co@co.co',
+            'telephone' => 'Telephone',
+            'country_id' => 'Country',
+            'firstname' => 'Co',
+            'address_type' => 'billing'
+        ]),
+        'shipping_address_info' => serialize([
+            'postcode' => '12345',
+            'lastname' => 'Co',
+            'street' => 'Street',
+            'city' => 'City',
+            'customer_email' => 'co@co.co',
+            'telephone' => 'Telephone',
+            'country_id' => 'Country',
+            'firstname' => 'Co',
+            'address_type' => 'shipping'
+])
     )
 );
 $recurringPayment->save();

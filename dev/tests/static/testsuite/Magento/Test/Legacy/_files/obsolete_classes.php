@@ -31,9 +31,9 @@ return array(
     array('Mage_Admin_Model_Acl_Role'),
     array('Mage_Admin_Model_Acl_Resource', 'Magento\Framework\Acl\Resource'),
     array('Mage_Admin_Model_Acl_Role_Registry', 'Magento\Framework\Acl\Role\Registry'),
-    array('Mage_Admin_Model_Acl_Role_Generic', 'Magento\User\Model\Acl\Role\Generic'),
-    array('Mage_Admin_Model_Acl_Role_Group', 'Magento\User\Model\Acl\Role\Group'),
-    array('Mage_Admin_Model_Acl_Role_User', 'Magento\User\Model\Acl\Role\User'),
+    array('Mage_Admin_Model_Acl_Role_Generic', 'Magento\Authorization\Model\Acl\Role\Generic'),
+    array('Mage_Admin_Model_Acl_Role_Group', 'Magento\Authorization\Model\Acl\Role\Group'),
+    array('Mage_Admin_Model_Acl_Role_User', 'Magento\Authorization\Model\Acl\Role\User'),
     array('Mage_Admin_Model_Resource_Acl', 'Magento\User\Model\Resource\Acl'),
     array('Mage_Admin_Model_Observer'),
     array('Mage_Admin_Model_Session', 'Magento\Backend\Model\Auth\Session'),
@@ -43,17 +43,20 @@ return array(
     array('Mage_Admin_Model_Config'),
     array('Mage_Admin_Model_Resource_User', 'Magento\User\Model\Resource\User'),
     array('Mage_Admin_Model_Resource_User_Collection', 'Magento\User\Model\Resource\User\Collection'),
-    array('Mage_Admin_Model_Role', 'Magento\User\Model\Role'),
-    array('Mage_Admin_Model_Roles', 'Magento\User\Model\Roles'),
-    array('Mage_Admin_Model_Rules', 'Magento\User\Model\Rules'),
-    array('Mage_Admin_Model_Resource_Role', 'Magento\User\Model\Resource\Role'),
+    array('Mage_Admin_Model_Role', 'Magento\Authorization\Model\Role'),
+    array('Mage_Admin_Model_Roles', 'Magento\Authorization\Model\Roles'),
+    array('Mage_Admin_Model_Rules', 'Magento\Authorization\Model\Rules'),
+    array('Mage_Admin_Model_Resource_Role', 'Magento\Authorization\Model\Resource\Role'),
     array('Mage_Admin_Model_Resource_Roles', 'Magento\User\Model\Resource\Roles'),
-    array('Mage_Admin_Model_Resource_Rules', 'Magento\User\Model\Resource\Rules'),
-    array('Mage_Admin_Model_Resource_Role_Collection', 'Magento\User\Model\Resource\Role\Collection'),
+    array('Mage_Admin_Model_Resource_Rules', 'Magento\Authorization\Model\Resource\Rules'),
+    array('Mage_Admin_Model_Resource_Role_Collection', 'Magento\Authorization\Model\Resource\Role\Collection'),
     array('Mage_Admin_Model_Resource_Roles_Collection', 'Magento\User\Model\Resource\Roles\Collection'),
     array('Mage_Admin_Model_Resource_Roles_User_Collection', 'Magento\User\Model\Resource\Roles\User\Collection'),
-    array('Mage_Admin_Model_Resource_Rules_Collection', 'Magento\User\Model\Resource\Rules\Collection'),
-    array('Mage_Admin_Model_Resource_Permissions_Collection', 'Magento\User\Model\Resource\Permissions\Collection'),
+    array('Mage_Admin_Model_Resource_Rules_Collection', 'Magento\Authorization\Model\Resource\Rules\Collection'),
+    array(
+        'Mage_Admin_Model_Resource_Permissions_Collection',
+        'Magento\Authorization\Model\Resource\Permissions\Collection'
+    ),
     array('Mage_Adminhtml_Block_Abstract', 'Magento\Backend\Block\AbstractBlock'),
     array('Mage_Adminhtml_Block_Backup_Grid'),
     array('Mage_Adminhtml_Block_Cache_Grid'),
@@ -599,7 +602,8 @@ return array(
     array('Mage_Adminhtml_Model_System_Config_Source_Store', 'Magento\Backend\Model\Config\Source\Store'),
     array('Mage_Adminhtml_Model_System_Config_Source_Website', 'Magento\Backend\Model\Config\Source\Website'),
     array('Mage_Adminhtml_Model_System_Config_Source_Yesno', 'Magento\Backend\Model\Config\Source\Yesno'),
-    array('Mage_Adminhtml_Model_System_Config_Source_Yesnocustom',
+    array(
+        'Mage_Adminhtml_Model_System_Config_Source_Yesnocustom',
         'Magento\Backend\Model\Config\Source\Yesnocustom'
     ),
     array('Mage_Adminhtml_Model_System_Store', 'Magento\Store\Model\System\Store'),
@@ -696,7 +700,8 @@ return array(
         'Magento\ConfigurableProduct\Block\Product\View\Type\Configurable'
     ),
     array(
-        'Magento\Catalog\Block\Layer\Filter\AbstractFilter', 'Magento\LayeredNavigation\Block\Navigation\FilterRenderer'
+        'Magento\Catalog\Block\Layer\Filter\AbstractFilter',
+        'Magento\LayeredNavigation\Block\Navigation\FilterRenderer'
     ),
     array('Magento\Catalog\Block\Layer\Filter\Attribute', 'Magento\LayeredNavigation\Block\Navigation\FilterRenderer'),
     array('Magento\Catalog\Block\Layer\Filter\Category', 'Magento\LayeredNavigation\Block\Navigation\FilterRenderer'),
@@ -721,10 +726,12 @@ return array(
         'Magento\LayeredNavigation\Block\Navigation\FilterRenderer'
     ),
     array(
-        'Magento\Search\Block\Catalog\Layer\Filter\Decimal', 'Magento\LayeredNavigation\Block\Navigation\FilterRenderer'
+        'Magento\Search\Block\Catalog\Layer\Filter\Decimal',
+        'Magento\LayeredNavigation\Block\Navigation\FilterRenderer'
     ),
     array(
-        'Magento\Search\Block\Catalog\Layer\Filter\Price', 'Magento\LayeredNavigation\Block\Navigation\FilterRenderer'
+        'Magento\Search\Block\Catalog\Layer\Filter\Price',
+        'Magento\LayeredNavigation\Block\Navigation\FilterRenderer'
     ),
     array(
         'Magento\Search\Block\Catalogsearch\Layer\Filter\Attribute',
@@ -1427,12 +1434,15 @@ return array(
     ),
     array('Magento\Core\Model\Design\FileResolution\StrategyPool'),
     array('Magento\Framework\View\Design\FileResolution\StrategyPool'),
-    array('Magento\Core\Model\Layout\File','Magento\Framework\View\File'),
-    array('Magento\Core\Model\Layout\File\Factory','Magento\Framework\View\File\Factory'),
-    array('Magento\Core\Model\Layout\File\FileList\Factory','Magento\Framework\View\File\FileList\Factory'),
-    array('Magento\Core\Model\Layout\File\ListFile','Magento\Framework\View\File\FileList'),
-    array('Magento\Core\Model\Layout\File\Source\Aggregated','Magento\Framework\View\Layout\File\Collector\Aggregated'),
-    array('Magento\Core\Model\Layout\File\Source\Base','Magento\Framework\View\Layout\File\Source\Base'),
+    array('Magento\Core\Model\Layout\File', 'Magento\Framework\View\File'),
+    array('Magento\Core\Model\Layout\File\Factory', 'Magento\Framework\View\File\Factory'),
+    array('Magento\Core\Model\Layout\File\FileList\Factory', 'Magento\Framework\View\File\FileList\Factory'),
+    array('Magento\Core\Model\Layout\File\ListFile', 'Magento\Framework\View\File\FileList'),
+    array(
+        'Magento\Core\Model\Layout\File\Source\Aggregated',
+        'Magento\Framework\View\Layout\File\Collector\Aggregated'
+    ),
+    array('Magento\Core\Model\Layout\File\Source\Base', 'Magento\Framework\View\Layout\File\Source\Base'),
     array(
         'Magento\Core\Model\Layout\File\Source\Decorator\ModuleDependency',
         'Magento\Framework\View\File\Collector\Decorator\ModuleDependency'
@@ -2338,9 +2348,9 @@ return array(
     ['Magento\BaseScopeInterface', 'Magento\Framework\App\ScopeInterface'],
     ['Magento\BaseScopeResolverInterface', 'Magento\Framework\App\ScopeResolverInterface'],
     ['Magento\Framework\Locale\ScopeConfigInterface'],
-    ['Magento\Core\Model\Module\Output\Config','Magento\Framework\Module\Output\Config'],
-    ['Magento\Core\Model\Resource\Setup\Context','Magento\Framework\Module\Setup\Context'],
-    ['Magento\Core\Model\Resource\Setup\Migration','Magento\Framework\Module\Setup\Migration'],
+    ['Magento\Core\Model\Module\Output\Config', 'Magento\Framework\Module\Output\Config'],
+    ['Magento\Core\Model\Resource\Setup\Context', 'Magento\Framework\Module\Setup\Context'],
+    ['Magento\Core\Model\Resource\Setup\Migration', 'Magento\Framework\Module\Setup\Migration'],
     ['Magento\Core\Model\Resource\Setup\Generic'],
     ['Magento\Newsletter\Model\Resource\Setup'],
     ['Magento\SalesRule\Model\Resource\Setup'],
@@ -2441,8 +2451,6 @@ return array(
     ['Magento\AclFactory', 'Magento\Framework\AclFactory'],
     ['Magento\AppInterface', 'Magento\Framework\AppInterface'],
     ['Magento\Archive', 'Magento\Framework\Archive'],
-    ['Magento\Authorization', 'Magento\Framework\Authorization'],
-    ['Magento\AuthorizationInterface', 'Magento\Framework\AuthorizationInterface'],
     ['Magento\Event', 'Magento\Framework\Event'],
     ['Magento\EventFactory', 'Magento\Framework\EventFactory'],
     ['Magento\Exception', 'Magento\Framework\Exception'],
@@ -2573,7 +2581,10 @@ return array(
     ['Magento\Framework\View\Url', 'Magento\Framework\View\Asset\Repository'],
     ['Magento\Less\File\Source\Base', 'Magento\Framework\View\File\Collector\Base'],
     ['Magento\Less\File\Source\Theme', 'Magento\Framework\View\File\Collector\ThemeModular'],
-    ['Magento\Framework\View\Layout\File\FileList\CollateInterface', 'Magento\Framework\View\File\FileList\CollateInterface'],
+    [
+        'Magento\Framework\View\Layout\File\FileList\CollateInterface',
+        'Magento\Framework\View\File\FileList\CollateInterface'
+    ],
     ['Magento\Framework\View\Layout\File\FileList\Collator', 'Magento\Framework\View\File\FileList\Collator'],
     ['Magento\Framework\View\Layout\File\FileList\Factory', 'Magento\Framework\View\File\FileList\Factory'],
     [
@@ -2699,4 +2710,26 @@ return array(
     ['Magento\Catalog\Helper\Product\Price'],
     ['Magento\Tax\Model\Config\Source\TaxClass\Product', 'Magento\Tax\Model\TaxClass\Source\Product'],
     ['Magento\Tax\Model\Config\Source\TaxClass\Customer', 'Magento\Tax\Model\TaxClass\Source\Customer'],
+    ['Magento\AdminNotification\Model\System\MessageInterface', 'Magento\Framework\Notification\MessageInterface'],
+    ['Magento\AdminNotification\Model\System\MessageList', 'Magento\Framework\Notification\MessageList'],
+    [
+        'Magento\CatalogImportExport\Model\Import\Product\Type\Configurable',
+        'Magento\ConfigurableImportExport\Model\Import\Product\Type\Configurable'
+    ],
+    [
+        'Magento\CatalogImportExport\Model\Export\Product\Type\Configurable',
+        'Magento\ConfigurableImportExport\Model\Export\Product\Type\Configurable'
+    ],
+    [
+        'Magento\CatalogImportExport\Model\Export\RowCustomizer',
+        'Magento\ConfigurableImportExport\Model\Export\RowCustomizer'
+    ],
+    [
+        'Magento\CatalogImportExport\Model\Export\Product\Type\Grouped',
+        'Magento\GroupedImportExport\Model\Export\Product\Type\Grouped'
+    ],
+    [
+        'Magento\CatalogImportExport\Model\Import\Product\Type\Grouped',
+        'Magento\GroupedImportExport\Model\Import\Product\Type\Grouped'
+    ],
 );

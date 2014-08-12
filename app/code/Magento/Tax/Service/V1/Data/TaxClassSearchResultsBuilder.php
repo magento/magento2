@@ -40,14 +40,14 @@ class TaxClassSearchResultsBuilder extends AbstractSearchResultsBuilder
      *
      * @param ObjectFactory $objectFactory
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param TaxClassBuilder $taxClassObjectBuilder
+     * @param TaxClassBuilder $itemObjectBuilder
      */
     public function __construct(
         ObjectFactory $objectFactory,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        TaxClassBuilder $taxClassObjectBuilder
+        TaxClassBuilder $itemObjectBuilder
     ) {
-        parent::__construct($objectFactory, $searchCriteriaBuilder, $taxClassObjectBuilder);
+        parent::__construct($objectFactory, $searchCriteriaBuilder, $itemObjectBuilder);
     }
 
     /**

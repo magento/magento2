@@ -25,6 +25,7 @@
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
 use \Magento\Backend\App\Action;
+use \Magento\Sales\Model\Order\Email\Sender\ShipmentSender;
 
 class Save extends \Magento\Backend\App\Action
 {
@@ -39,17 +40,25 @@ class Save extends \Magento\Backend\App\Action
     protected $labelGenerator;
 
     /**
+     * @var ShipmentSender
+     */
+    protected $shipmentSender;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader
      * @param \Magento\Shipping\Model\Shipping\LabelGenerator $labelGenerator
+     * @param ShipmentSender $shipmentSender
      */
     public function __construct(
         Action\Context $context,
         \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader,
-        \Magento\Shipping\Model\Shipping\LabelGenerator $labelGenerator
+        \Magento\Shipping\Model\Shipping\LabelGenerator $labelGenerator,
+        ShipmentSender $shipmentSender
     ) {
         $this->shipmentLoader = $shipmentLoader;
         $this->labelGenerator = $labelGenerator;
+        $this->shipmentSender = $shipmentSender;
         parent::__construct($context);
     }
 
@@ -128,7 +137,7 @@ class Save extends \Magento\Backend\App\Action
 
             $this->_saveShipment($shipment);
 
-            $shipment->sendEmail(!empty($data['send_email']), $comment);
+            $this->shipmentSender->send($shipment, !empty($data['send_email']), $comment);
 
             $shipmentCreatedMessage = __('The shipment has been created.');
             $labelCreatedMessage = __('You created the shipping label.');

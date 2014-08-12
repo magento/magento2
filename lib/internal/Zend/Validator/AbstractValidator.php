@@ -18,7 +18,7 @@ use Zend\Validator\Exception\InvalidArgumentException;
 
 /**
  * @category   Zend
- * @package    Zend_Validate
+ * @package    Zend_Validator
  */
 abstract class AbstractValidator implements
     TranslatorAwareInterface,

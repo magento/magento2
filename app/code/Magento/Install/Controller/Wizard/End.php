@@ -42,7 +42,7 @@ class End extends \Magento\Install\Controller\Wizard
 
         $this->_getInstaller()->finish();
 
-        $this->_objectManager->get('Magento\AdminNotification\Model\Survey')->saveSurveyViewed(true);
+        $this->_objectManager->get('Magento\Install\Model\Survey')->saveSurveyViewed(true);
 
         $this->_prepareLayout();
         $this->_view->getLayout()->initMessages();

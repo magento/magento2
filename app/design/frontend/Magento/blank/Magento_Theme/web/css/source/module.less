@@ -38,6 +38,9 @@
 
 @header-bg-color: false;
 
+@addto-color: @text-color-muted;
+@addto-hover-color: @color-primary;
+
 body {
     .css(background-color, @page-bg-color);
 }
@@ -196,7 +199,7 @@ body {
 //
 //    Desktop
 //--------------------------------------
-.responsive(@break) when (@break = @break-point-1) {
+.responsive(@break) when (@break = @screen-m) {
     .header {
         &.panel {
             > .header.links {
@@ -252,14 +255,6 @@ body {
         img {
             max-height: inherit;
         }
-    }
-
-    .page-wrapper {
-        position: relative;
-        width: 100%;
-        float: right;
-        margin: 0;
-        .transition(margin .3s ease-out 0);
     }
 
     .footer {

@@ -32,6 +32,7 @@ use Magento\Customer\Service\V1\CustomerGroupServiceInterface;
 use Magento\Customer\Service\V1\Data\Customer as CustomerDataObject;
 use Magento\Customer\Model\Metadata\Form as CustomerForm;
 use Magento\Customer\Service\V1\Data\Address as CustomerAddressDataObject;
+use Magento\Sales\Model\Quote\Item;
 
 /**
  * Order create model
@@ -203,6 +204,11 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
     protected $quoteItemUpdater;
 
     /**
+     * @var \Magento\Framework\Object\Factory
+     */
+    protected $objectFactory;
+
+    /**
      * @param \Magento\Framework\ObjectManager $objectManager
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\Registry $coreRegistry
@@ -222,7 +228,8 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param EmailSender $emailSender
      * @param \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
-     * @param \Magento\Sales\Model\Quote\Item\Updater $quoteItemUpdater
+     * @param Item\Updater $quoteItemUpdater
+     * @param \Magento\Framework\Object\Factory $objectFactory
      * @param array $data
      */
     public function __construct(
@@ -246,6 +253,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
         \Magento\Sales\Model\AdminOrder\EmailSender $emailSender,
         \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService,
         \Magento\Sales\Model\Quote\Item\Updater $quoteItemUpdater,
+        \Magento\Framework\Object\Factory $objectFactory,
         array $data = array()
     ) {
         $this->_objectManager = $objectManager;
@@ -268,6 +276,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
         $this->emailSender = $emailSender;
         $this->stockItemService = $stockItemService;
         $this->quoteItemUpdater = $quoteItemUpdater;
+        $this->objectFactory = $objectFactory;
         parent::__construct($data);
     }
 
@@ -998,7 +1007,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
         try {
             foreach ($items as $itemId => $info) {
                 if (!empty($info['configured'])) {
-                    $item = $this->getQuote()->updateItem($itemId, $this->_objectManager->create($info));
+                    $item = $this->getQuote()->updateItem($itemId, $this->objectFactory->create($info));
                     $info['qty'] = (double)$item->getQty();
                 } else {
                     $item = $this->getQuote()->getItemById($itemId);
@@ -1007,7 +1016,7 @@ class Create extends \Magento\Framework\Object implements \Magento\Checkout\Mode
                     }
                     $info['qty'] = (double)$info['qty'];
                 }
-                $item = $this->quoteItemUpdater->update($item, $info);
+                $this->quoteItemUpdater->update($item, $info);
                 if ($item && !empty($info['action'])) {
                     $this->moveQuoteItem($item, $info['action'], $item->getQty());
                 }

@@ -41,21 +41,30 @@ class Address extends AbstractOrder
     protected $_salesResourceFactory;
 
     /**
+     * @var \Magento\Sales\Model\Order\Address\Validator
+     */
+    protected $_validator;
+
+    /**
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Eav\Model\Entity\TypeFactory $eavEntityTypeFactory
      * @param \Magento\Sales\Model\Resource\Factory $salesResourceFactory
+     * @param \Magento\Sales\Model\Order\Address\Validator $validator
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Eav\Model\Entity\TypeFactory $eavEntityTypeFactory,
-        \Magento\Sales\Model\Resource\Factory $salesResourceFactory
+        \Magento\Sales\Model\Resource\Factory $salesResourceFactory,
+        \Magento\Sales\Model\Order\Address\Validator $validator
     ) {
+        $this->_validator = $validator;
         parent::__construct($resource, $dateTime, $eventManager, $eavEntityTypeFactory);
         $this->_salesResourceFactory = $salesResourceFactory;
+
     }
 
     /**
@@ -89,6 +98,25 @@ class Address extends AbstractOrder
         );
         asort($attributes);
         return $attributes;
+    }
+
+    /**
+     * Performs validation before save
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return $this
+     * @throws \Magento\Framework\Model\Exception
+     */
+    protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
+    {
+        parent::_beforeSave($object);
+        $warnings = $this->_validator->validate($object);
+        if (!empty($warnings)) {
+            throw new \Magento\Framework\Model\Exception(
+                __("Cannot save address") . ":\n" . implode("\n", $warnings)
+            );
+        }
+        return $this;
     }
 
     /**

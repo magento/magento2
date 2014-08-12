@@ -521,6 +521,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
 
         $bundle->expects($this->once())->method('dropAllUnneededSelections')->with(3, array());
         $bundle->expects($this->once())->method('saveProductRelations')->with(3, array());
+        //Params come in lowercase to method
         $this->assertTrue($this->service->removeChild($productSku, $optionId, $childSku));
     }
 

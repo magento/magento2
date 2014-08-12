@@ -14,7 +14,7 @@ use Traversable;
 
 /**
  * @category   Zend
- * @package    Zend_Validate
+ * @package    Zend_Validator
  */
 class Step extends AbstractValidator
 {

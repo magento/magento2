@@ -29,6 +29,12 @@ use Magento\Framework\ObjectManager\Code\Generator\Factory;
 use Magento\Framework\ObjectManager\Code\Generator\Proxy;
 use Magento\Framework\Interception\Code\Generator\Interceptor;
 use Magento\Framework\Exception;
+use Magento\Framework\Service\Code\Generator\Builder;
+use Magento\Framework\Service\Code\Generator\Mapper;
+use Magento\Framework\ObjectManager\Code\Generator\Repository;
+use Magento\Framework\ObjectManager\Code\Generator\Converter;
+use Magento\Framework\Service\Code\Generator\SearchResults;
+use Magento\Framework\Service\Code\Generator\SearchResultsBuilder;
 
 require __DIR__ . '/../../../../../app/bootstrap.php';
 
@@ -87,12 +93,24 @@ $generator = new Generator(
     null,
     $io,
     [
+        SearchResultsBuilder::ENTITY_TYPE =>
+            'Magento\Framework\Service\Code\Generator\SearchResultsBuilder',
         Proxy::ENTITY_TYPE =>
             'Magento\Framework\ObjectManager\Code\Generator\Proxy',
         Factory::ENTITY_TYPE =>
             'Magento\Framework\ObjectManager\Code\Generator\Factory',
         Interceptor::ENTITY_TYPE =>
-            'Magento\Framework\Interception\Code\Generator\Interceptor'
+            'Magento\Framework\Interception\Code\Generator\Interceptor',
+        Builder::ENTITY_TYPE =>
+            'Magento\Framework\Service\Code\Generator\Builder',
+        Mapper::ENTITY_TYPE =>
+            'Magento\Framework\Service\Code\Generator\Mapper',
+        Repository::ENTITY_TYPE =>
+            'Magento\Framework\ObjectManager\Code\Generator\Repository',
+        Converter::ENTITY_TYPE =>
+            'Magento\Framework\ObjectManager\Code\Generator\Converter',
+        SearchResults::ENTITY_TYPE =>
+            'Magento\Framework\Service\Code\Generator\SearchResults',
     ]
 );
 

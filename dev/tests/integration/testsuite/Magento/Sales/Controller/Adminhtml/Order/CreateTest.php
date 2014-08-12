@@ -209,18 +209,3 @@ class CreateTest extends \Magento\Backend\Utility\Controller
         $this->assertEquals('403', $this->getResponse()->getHttpResponseCode());
     }
 }
-
-class AuthorizationMock extends \Magento\Framework\Authorization
-{
-    /**
-     * Check current user permission on resource and privilege
-     *
-     * @param   string $resource
-     * @param   string $privilege
-     * @return  boolean
-     */
-    public function isAllowed($resource, $privilege = null)
-    {
-        return $resource == 'Magento_Sales::create' ? false : parent::isAllowed($resource, $privilege);
-    }
-}

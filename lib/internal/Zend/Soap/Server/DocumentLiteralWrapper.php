@@ -10,7 +10,6 @@
 
 namespace Zend\Soap\Server;
 
-use ReflectionClass;
 use ReflectionObject;
 use Zend\Soap\Exception\BadMethodCallException;
 use Zend\Soap\Exception\UnexpectedValueException;

@@ -31,7 +31,19 @@
 .product-info-main,
 .block-bundle-summary {
     .action.towishlist {
-        &:extend(.abstract-action-addto all);
+        &:extend(.abstract-action-addto-product all);
+    }
+}
+
+.products.list.items,
+.table-comparison {
+    .action {
+        &.towishlist {
+            &:extend(.abstract-actions-addto-gridlist all);
+            .icon-font-symbol(
+                @icon-wishlist-empty
+            );
+        }
     }
 }
 

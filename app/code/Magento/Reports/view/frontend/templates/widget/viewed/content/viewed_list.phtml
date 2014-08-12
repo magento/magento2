@@ -71,7 +71,14 @@ if ($exist = $this->getRecentlyViewedProducts()) {
                                         <?php echo $this->escapeHtml($_item->getName()) ?>
                                     </a>
                                 </strong>
-                                <?php echo $this->getPriceHtml($_item, true, '-' . $type) ?>
+                                <?php echo $this->getProductPriceHtml(
+                                    $_item,
+                                    \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
+                                    \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
+                                    [
+                                        'price_id_suffix' => '-' . $type
+                                    ]
+                                ) ?>
                                 <?php if ($rating): ?>
                                     <?php echo $this->getReviewsSummaryHtml($_item, $rating) ?>
                                 <?php endif; ?>

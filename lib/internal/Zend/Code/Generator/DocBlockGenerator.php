@@ -69,8 +69,8 @@ class DocBlockGenerator extends AbstractGenerator
         if ($longDescription !== null) {
             $this->setLongDescription($longDescription);
         }
-        if (is_array($tags) && $tags) {
-            $this->setTags($tags);
+        if ($this->tags !== array()) {
+            $this->setTag($tags);
         }
 
     }

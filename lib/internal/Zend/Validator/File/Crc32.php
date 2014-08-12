@@ -14,7 +14,7 @@ namespace Zend\Validator\File;
  * Validator for the crc32 hash of given files
  *
  * @category  Zend
- * @package   Zend_Validate
+ * @package   Zend_Validator
  */
 class Crc32 extends Hash
 {

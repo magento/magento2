@@ -203,14 +203,6 @@ $pageContent = <<<EOD
             <td>A link to information about your cart and viewing history if you have asked the site.</td>
         </tr>
         <tr>
-            <th>POLL</th>
-            <td>The ID of any polls you have recently voted in.</td>
-        </tr>
-        <tr>
-            <th>POLLN</th>
-            <td>Information on what polls you have voted on.</td>
-        </tr>
-        <tr>
             <th>RECENTLYCOMPARED</th>
             <td>The items that you have recently compared.            </td>
         </tr>

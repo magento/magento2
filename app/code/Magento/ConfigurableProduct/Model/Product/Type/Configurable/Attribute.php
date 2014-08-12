@@ -25,6 +25,8 @@
  */
 namespace Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
+use Magento\Framework\Model\Context;
+
 /**
  * @method Attribute _getResource()
  * @method Attribute getResource()

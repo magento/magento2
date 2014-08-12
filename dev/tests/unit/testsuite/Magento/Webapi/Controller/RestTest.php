@@ -23,6 +23,7 @@
  */
 namespace Magento\Webapi\Controller;
 
+use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Exception\AuthorizationException;
 
 /**
@@ -59,8 +60,8 @@ class RestTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Oauth\OauthInterface */
     protected $_oauthServiceMock;
 
-    /** @var \Magento\Authz\Service\AuthorizationV1Interface */
-    protected $_authzServiceMock;
+    /** @var \Magento\Framework\AuthorizationInterface */
+    protected $_authorizationMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -76,6 +77,11 @@ class RestTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $areaMock;
+
+    /**
+     * @var \Magento\Authorization\Model\UserContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $userContextMock;
 
     const SERVICE_METHOD = 'testMethod';
 
@@ -100,8 +106,10 @@ class RestTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
         $this->_oauthServiceMock = $this->getMockBuilder('\Magento\Framework\Oauth\OauthInterface')
             ->setMethods(['validateAccessTokenRequest'])->getMockForAbstractClass();
-        $this->_authzServiceMock = $this->getMockBuilder('Magento\Authz\Service\AuthorizationV1Interface')
+        $this->_authorizationMock = $this->getMockBuilder('Magento\Framework\AuthorizationInterface')
             ->disableOriginalConstructor()->getMock();
+        $this->userContextMock = $this->getMockBuilder('Magento\Authorization\Model\UserContextInterface')
+            ->disableOriginalConstructor()->setMethods(['getUserId'])->getMockForAbstractClass();
     }
 
     protected function setUp()
@@ -129,10 +137,11 @@ class RestTest extends \PHPUnit_Framework_TestCase
                     'appState' => $this->_appStateMock,
                     'layout' => $layoutMock,
                     'oauthService' => $this->_oauthServiceMock,
-                    'authorizationService' => $this->_authzServiceMock,
+                    'authorization' => $this->_authorizationMock,
                     'serializer' => $this->serializerMock,
                     'errorProcessor' => $errorProcessorMock,
-                    'areaList' => $this->areaListMock
+                    'areaList' => $this->areaListMock,
+                    'userContext' => $this->userContextMock,
                 ]
             );
         // Set default expectations used by all tests
@@ -171,9 +180,10 @@ class RestTest extends \PHPUnit_Framework_TestCase
         $this->_serviceMock->expects($this->any())->method(self::SERVICE_METHOD)->will($this->returnValue([]));
         $this->_routeMock->expects($this->any())->method('isSecure')->will($this->returnValue($isSecureRoute));
         $this->_routeMock->expects($this->once())->method('getParameters')->will($this->returnValue([]));
+        $this->_routeMock->expects($this->any())->method('getAclResources')->will($this->returnValue(['1']));
         $this->_requestMock->expects($this->any())->method('getRequestData')->will($this->returnValue([]));
         $this->_requestMock->expects($this->any())->method('isSecure')->will($this->returnValue($isSecureRequest));
-        $this->_authzServiceMock->expects($this->once())->method('isAllowed')->will($this->returnValue(true));
+        $this->_authorizationMock->expects($this->once())->method('isAllowed')->will($this->returnValue(true));
         $this->serializerMock->expects($this->any())->method('getInputData')->will($this->returnValue([]));
         $this->_restController->dispatch($this->_requestMock);
         $this->assertFalse($this->_responseMock->isException());
@@ -198,8 +208,9 @@ class RestTest extends \PHPUnit_Framework_TestCase
         $this->_appStateMock->expects($this->any())->method('isInstalled')->will($this->returnValue(true));
         $this->_serviceMock->expects($this->any())->method(self::SERVICE_METHOD)->will($this->returnValue([]));
         $this->_routeMock->expects($this->any())->method('isSecure')->will($this->returnValue(true));
+        $this->_routeMock->expects($this->any())->method('getAclResources')->will($this->returnValue(['1']));
         $this->_requestMock->expects($this->any())->method('isSecure')->will($this->returnValue(false));
-        $this->_authzServiceMock->expects($this->once())->method('isAllowed')->will($this->returnValue(true));
+        $this->_authorizationMock->expects($this->once())->method('isAllowed')->will($this->returnValue(true));
 
         // Override default prepareResponse. It should never be called in this case
         $this->_responseMock->expects($this->never())->method('prepareResponse');
@@ -214,7 +225,7 @@ class RestTest extends \PHPUnit_Framework_TestCase
     public function testAuthorizationFailed()
     {
         $this->_appStateMock->expects($this->any())->method('isInstalled')->will($this->returnValue(true));
-        $this->_authzServiceMock->expects($this->once())->method('isAllowed')->will($this->returnValue(false));
+        $this->_authorizationMock->expects($this->once())->method('isAllowed')->will($this->returnValue(false));
         $this->_oauthServiceMock->expects(
             $this->any())->method('validateAccessTokenRequest')->will($this->returnValue('fred')
         );
@@ -233,15 +244,20 @@ class RestTest extends \PHPUnit_Framework_TestCase
      * @param array $requestData Data from the request
      * @param array $parameters Data from config about which parameters to override
      * @param array $expectedOverriddenParams Result of overriding $requestData when applying rules from $parameters
+     * @param int $userId The id of the user invoking the request
+     * @param int $userType The type of user invoking the request
      *
      * @dataProvider overrideParmasDataProvider
      */
-    public function testOverrideParams($requestData, $parameters, $expectedOverriddenParams)
+    public function testOverrideParams($requestData, $parameters, $expectedOverriddenParams, $userId, $userType)
     {
         $this->_routeMock->expects($this->once())->method('getParameters')->will($this->returnValue($parameters));
+        $this->_routeMock->expects($this->any())->method('getAclResources')->will($this->returnValue(['1']));
         $this->_appStateMock->expects($this->any())->method('isInstalled')->will($this->returnValue(true));
-        $this->_authzServiceMock->expects($this->once())->method('isAllowed')->will($this->returnValue(true));
+        $this->_authorizationMock->expects($this->once())->method('isAllowed')->will($this->returnValue(true));
         $this->_requestMock->expects($this->any())->method('getRequestData')->will($this->returnValue($requestData));
+        $this->userContextMock->expects($this->any())->method('getUserId')->will($this->returnValue($userId));
+        $this->userContextMock->expects($this->any())->method('getUserType')->will($this->returnValue($userType));
 
         // serializer should expect overridden params
         $this->serializerMock->expects($this->once())->method('getInputData')
@@ -264,21 +280,43 @@ class RestTest extends \PHPUnit_Framework_TestCase
                 ['Name1' => 'valueIn'],
                 ['Name1' => ['force' => false, 'value' => 'valueOverride']],
                 ['Name1' => 'valueIn'],
+                1,
+                UserContextInterface::USER_TYPE_INTEGRATION,
             ],
             'force true, value present' => [
                 ['Name1' => 'valueIn'],
                 ['Name1' => ['force' => true, 'value' => 'valueOverride']],
-                ['Name1' => 'valueOverride']
+                ['Name1' => 'valueOverride'],
+                1,
+                UserContextInterface::USER_TYPE_INTEGRATION,
             ],
             'force true, value not present' => [
                 ['Name1' => 'valueIn'],
                 ['Name2' => ['force' => true, 'value' => 'valueOverride']],
-                ['Name1' => 'valueIn', 'Name2' => 'valueOverride']
+                ['Name1' => 'valueIn', 'Name2' => 'valueOverride'],
+                1,
+                UserContextInterface::USER_TYPE_INTEGRATION,
             ],
             'force false, value not present' => [
                 ['Name1' => 'valueIn'],
                 ['Name2' => ['force' => false, 'value' => 'valueOverride']],
                 ['Name1' => 'valueIn', 'Name2' => 'valueOverride'],
+                1,
+                UserContextInterface::USER_TYPE_INTEGRATION,
+            ],
+            'force true, value present, override value is %customer_id%' => [
+                ['Name1' => 'valueIn'],
+                ['Name1' => ['force' => true, 'value' => '%customer_id%']],
+                ['Name1' => '1234'],
+                1234,
+                UserContextInterface::USER_TYPE_CUSTOMER,
+            ],
+            'force true, value present, override value is %customer_id%, not a customer' => [
+                ['Name1' => 'valueIn'],
+                ['Name1' => ['force' => true, 'value' => '%customer_id%']],
+                ['Name1' => '%customer_id%'],
+                1234,
+                UserContextInterface::USER_TYPE_INTEGRATION,
             ],
         ];
     }

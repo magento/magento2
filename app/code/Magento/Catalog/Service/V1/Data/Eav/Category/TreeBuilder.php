@@ -83,6 +83,17 @@ class TreeBuilder extends AbstractObjectBuilder
     }
 
     /**
+     * Set product count
+     *
+     * @param int $productCount
+     * @return int
+     */
+    public function setProductCount($productCount)
+    {
+        return $this->_set(Tree::PRODUCT_COUNT, $productCount);
+    }
+
+    /**
      * Set category level
      *
      * @param int $level

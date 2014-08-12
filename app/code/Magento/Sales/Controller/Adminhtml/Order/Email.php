@@ -38,7 +38,12 @@ class Email extends \Magento\Sales\Controller\Adminhtml\Order
         $order = $this->_initOrder();
         if ($order) {
             try {
-                $order->sendNewOrderEmail();
+                /** @var \Magento\Sales\Model\Order\Email\Sender\OrderSender $orderSender */
+                $orderSender = $this->_objectManager->create(
+                    'Magento\Sales\Model\Order\Email\Sender\OrderSender'
+                );
+                $orderSender->send($order);
+
                 $historyItem = $this->_objectManager->create(
                     'Magento\Sales\Model\Resource\Order\Status\History\Collection'
                 )->getUnnotifiedForInstance(

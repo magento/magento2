@@ -29,11 +29,11 @@ interface ReadServiceInterface
      * Generate variation based on same product
      *
      * @param \Magento\Catalog\Service\V1\Data\Product $product
-     * @param \Magento\ConfigurableProduct\Service\V1\Data\ConfigurableAttribute[] $configurableAttributes
+     * @param \Magento\ConfigurableProduct\Service\V1\Data\Option[] $options
      * @return \Magento\Catalog\Service\V1\Data\Product[]
      */
     public function generateVariation(
         \Magento\Catalog\Service\V1\Data\Product $product,
-        $configurableAttributes
+        $options
     );
 }

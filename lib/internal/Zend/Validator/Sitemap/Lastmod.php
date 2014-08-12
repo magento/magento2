@@ -19,7 +19,7 @@ use Zend\Validator\AbstractValidator;
  * @link       http://www.sitemaps.org/protocol.php Sitemaps XML format
  *
  * @category   Zend
- * @package    Zend_Validate
+ * @package    Zend_Validator
  * @subpackage Sitemap
  */
 class Lastmod extends AbstractValidator

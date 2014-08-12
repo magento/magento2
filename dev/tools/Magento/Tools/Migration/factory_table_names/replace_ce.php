@@ -30,8 +30,8 @@
 
 return array(
     'admin/assert' => 'admin_assert',
-    'admin/role' => 'admin_role',
-    'admin/rule' => 'admin_rule',
+    'admin/role' => 'authorization_role',
+    'admin/rule' => 'authorization_rule',
     'admin/user' => 'admin_user',
     'adminnotification/inbox' => 'adminnotification_inbox',
     'amazonpayments/api_debug' => 'amazonpayments_api_debug',

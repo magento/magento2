@@ -25,6 +25,7 @@
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
 use Magento\Backend\App\Action;
+use \Magento\Sales\Model\Order\Email\Sender\ShipmentSender;
 
 class AddComment extends \Magento\Backend\App\Action
 {
@@ -34,14 +35,22 @@ class AddComment extends \Magento\Backend\App\Action
     protected $shipmentLoader;
 
     /**
+     * @var ShipmentSender
+     */
+    protected $shipmentSender;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader
+     * @param ShipmentSender $shipmentSender
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader
+        \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader,
+        ShipmentSender $shipmentSender
     ) {
         $this->shipmentLoader = $shipmentLoader;
+        $this->shipmentSender = $shipmentSender;
         parent::__construct($context);
     }
 
@@ -73,7 +82,8 @@ class AddComment extends \Magento\Backend\App\Action
                 isset($data['is_customer_notified']),
                 isset($data['is_visible_on_front'])
             );
-            $shipment->sendUpdateEmail(!empty($data['is_customer_notified']), $data['comment']);
+
+            $this->shipmentSender->send($shipment, !empty($data['is_customer_notified']), $data['comment']);
             $shipment->save();
 
             $this->_view->loadLayout(false);

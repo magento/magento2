@@ -14,7 +14,7 @@ namespace Zend\Validator\Hostname;
  * Resource file for com and net idn validation
  *
  * @category   Zend
- * @package    Zend_Validate
+ * @package    Zend_Validator
  */
 return array(
     1  => '/^[\x{002d}0-9\x{0400}-\x{052f}]{1,63}$/iu',

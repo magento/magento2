@@ -168,6 +168,7 @@ class QuoteTest extends \PHPUnit_Framework_TestCase
     private function _prepareQuote($customerIsGuest)
     {
         $quoteFixture = $this->_prepareQuoteFixture($customerIsGuest);
+        $quoteFixture->setCustomerEmail('admin@example.com');
         $this->_serviceQuote = Bootstrap::getObjectManager()->create(
             'Magento\Sales\Model\Service\Quote',
             array('quote' => $quoteFixture)

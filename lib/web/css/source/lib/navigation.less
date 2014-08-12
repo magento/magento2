@@ -62,13 +62,6 @@
     .navigation {
         .css(background, @_nav-bg);
         .css(border, @_nav-border);
-        display: block;
-        left: -86%;
-        top: 180px;
-        overflow: auto;
-        position: absolute;
-        width: 86%;
-        padding: 10px 0px;
         .box-sizing();
         ul {
             margin: 0;
@@ -126,7 +119,7 @@
                 }
             }
             &.expanded {
-              display: block !important;        
+              display: block !important;
               top: 0 !important;
             }
             .active > a {
@@ -197,133 +190,136 @@
     @_submenu-item-color-active: @submenu-desktop-item-color-active,
     @_submenu-item-text-decoration-active: @submenu-desktop-item-text-decoration-active
 ) {
-    .responsive(@break) when (@break = @break-point-1) {
-        .navigation {
-            .css(background, @_nav-bg);
-            .css(border, @_nav-border);
-            .css(font-size, @_nav-font-size);
-            .css(font-weight, @_nav-font-weight);
-            height: inherit;
-            left: auto;
-            overflow: inherit;
-            position: relative;
-            top: 0;
-            width: 100%;
-            z-index: 3;
-            padding: 0;
-            &:empty {
-                display: none;
-            }
-            ul {
-                margin-top: 0;
-                margin-bottom: 0;
-                padding: 0;
-                position: relative;
-            }
-            li.level0 {
-                .css(border-top, none);
-            }
-            .level0 {
-                display: inline-block;
-                position: relative;
-                .css(margin, @_nav-level0-item-margin);
 
-                &:last-child {
-                    margin-right: 0;
-                    padding-right: 0;
+    .navigation {
+        .css(background, @_nav-bg);
+        .css(border, @_nav-border);
+        .css(font-size, @_nav-font-size);
+        .css(font-weight, @_nav-font-weight);
+        height: inherit;
+        left: auto;
+        overflow: inherit;
+        position: relative;
+        top: 0;
+        width: 100%;
+        z-index: 3;
+        padding: 0;
+        &:empty {
+            display: none;
+        }
+        ul {
+            margin-top: 0;
+            margin-bottom: 0;
+            padding: 0;
+            position: relative;
+        }
+        li.level0 {
+            .css(border-top, none);
+        }
+        .level0 {
+            display: inline-block;
+            position: relative;
+            .css(margin, @_nav-level0-item-margin);
+
+            &:last-child {
+                margin-right: 0;
+                padding-right: 0;
+            }
+            > .level-top {
+                .box-sizing();
+                .css(background, @_nav-level0-item-bg);
+                .css(border, @_nav-level0-item-border);
+                .css(color, @_nav-level0-item-color);
+                .css(line-height, @_nav-level0-item-line-height);
+                .css(padding, @_nav-level0-item-padding);
+                .css(text-decoration, @_nav-level0-item-text-decoration);
+                position: relative;
+                &:hover, &.ui-state-focus {
+                    .css(background, @_nav-level0-item-bg-hover);
+                    .css(border, @_nav-level0-item-border-hover);
+                    .css(color, @_nav-level0-item-color-hover);
+                    .css(text-decoration, @_nav-level0-item-text-decoration-hover);
                 }
+            }
+            &.active {
                 > .level-top {
-                    .box-sizing();
-                    .css(background, @_nav-level0-item-bg);
-                    .css(border, @_nav-level0-item-border);
-                    .css(color, @_nav-level0-item-color);
-                    .css(line-height, @_nav-level0-item-line-height);
-                    .css(padding, @_nav-level0-item-padding);
-                    .css(text-decoration, @_nav-level0-item-text-decoration);
-                    position: relative;
+                    .css(background, @_nav-level0-item-bg-active);
+                    .css(border, @_nav-level0-item-border-active);
+                    .css(color, @_nav-level0-item-color-active);
+                    .css(text-decoration, @_nav-level0-item-text-decoration-active);
+                }
+            }
+            &.parent:hover > .submenu {
+                overflow: visible !important;
+            }
+            .ui-menu {
+                .css(font-size, @_submenu-font-size);
+                .css(font-weight, @_submenu-font-weight);
+                left: 0;
+                .css(min-width, @_submenu-min-width);
+                position: absolute;
+                padding: 0;
+                margin: 0 !important;
+                top: 100%;
+                z-index: 1;
+                .css(background, @_submenu-bg);
+                .css(border, @_submenu-border-width @_submenu-border-style @_submenu-border-color);
+                .css(box-shadow, @_submenu-box-shadow);
+                .css(padding, @_submenu-padding);
+                ._submenu-arrow(
+                    @_submenu-arrow,
+                    @_bg: @_submenu-bg,
+                    @_border: @_submenu-border-color,
+                    @_size: @_submenu-arrow-size,
+                    @_left: @_submenu-arrow-left
+                );
+                a {
+                    display: block;
+                    line-height: inherit;
+                    .css(background, @_submenu-item-bg);
+                    .css(border, @_submenu-item-border);
+                    .css(color, @_submenu-item-color);
+                    .css(padding, @_submenu-item-padding);
+                    .css(text-decoration, @_submenu-item-text-decoration);
                     &:hover, &.ui-state-focus {
-                        .css(background, @_nav-level0-item-bg-hover);
-                        .css(border, @_nav-level0-item-border-hover);
-                        .css(color, @_nav-level0-item-color-hover);
-                        .css(text-decoration, @_nav-level0-item-text-decoration-hover);
+                        .css(background, @_submenu-item-bg-hover);
+                        .css(border, @_submenu-item-border-hover);
+                        .css(color, @_submenu-item-color-hover);
+                        .css(text-decoration, @_submenu-item-text-decoration-hover);
                     }
                 }
-                &.active {
-                    > .level-top {
-                        .css(background, @_nav-level0-item-bg-active);
-                        .css(border, @_nav-level0-item-border-active);
-                        .css(color, @_nav-level0-item-color-active);
-                        .css(text-decoration, @_nav-level0-item-text-decoration-active);
-                    }
+                .active > a {
+                    .css(background, @_submenu-item-bg-active);
+                    .css(border, @_submenu-item-border-active);
+                    .css(color, @_submenu-item-color-active);
+                    .css(text-decoration, @_submenu-item-text-decoration-active);
                 }
-                &.parent:hover > .submenu {
+                .ui-menu {
+                    top: 0 !important;
+                    left: 100%!important;
+                }
+            }
+            &.more {
+                position: relative;
+                .icon-font(
+                    @icon-pointer-down,
+                    @_icon-font-size: 26px,
+                    @_icon-font-position: after
+                );
+                &:before {
+                    display: none;
+                }
+                &:after {
+                    cursor: pointer;
+                    padding: 8px 12px;
+                    position: relative;
+                    z-index: 1;
+                }
+                &:hover > .submenu {
                     overflow: visible !important;
                 }
-                > .ui-menu {
-                    .css(font-size, @_submenu-font-size);
-                    .css(font-weight, @_submenu-font-weight);
-                    left: 0;
-                    .css(min-width, @_submenu-min-width);
-                    position: absolute;
-                    padding: 0;
-                    margin: 0 !important;
-                    top: 100%;
-                    z-index: 1;
-                    .css(background, @_submenu-bg);
-                    .css(border, @_submenu-border-width @_submenu-border-style @_submenu-border-color);
-                    .css(box-shadow, @_submenu-box-shadow);
-                    .css(padding, @_submenu-padding);
-                    ._submenu-arrow(
-                        @_submenu-arrow,
-                        @_bg: @_submenu-bg,
-                        @_border: @_submenu-border-color,
-                        @_size: @_submenu-arrow-size,
-                        @_left: @_submenu-arrow-left
-                    );
-                    a {
-                        display: block;
-                        line-height: inherit;
-                        .css(background, @_submenu-item-bg);
-                        .css(border, @_submenu-item-border);
-                        .css(color, @_submenu-item-color);
-                        .css(padding, @_submenu-item-padding);
-                        .css(text-decoration, @_submenu-item-text-decoration);
-                        &:hover, &.ui-state-focus {
-                            .css(background, @_submenu-item-bg-hover);
-                            .css(border, @_submenu-item-border-hover);
-                            .css(color, @_submenu-item-color-hover);
-                            .css(text-decoration, @_submenu-item-text-decoration-hover);
-                        }
-                    }
-                    .active > a {
-                        .css(background, @_submenu-item-bg-active);
-                        .css(border, @_submenu-item-border-active);
-                        .css(color, @_submenu-item-color-active);
-                        .css(text-decoration, @_submenu-item-text-decoration-active);
-                    }
-                }
-                &.more {
-                    position: relative;
-                    .icon-font(
-                        @icon-pointer-down,
-                        @_icon-font-size: 26px,
-                        @_icon-font-position: after
-                    );
-                    &:before {
-                        display: none;
-                    }
-                    &:after {
-                        cursor: pointer;
-                        padding: 8px 12px;
-                        position: relative;
-                        z-index: 1;
-                    }
-                    &:hover > .submenu {
-                        overflow: visible !important;
-                    }
-                    li {
-                        display: block;
-                    }
+                li {
+                    display: block;
                 }
             }
         }

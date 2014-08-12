@@ -32,9 +32,6 @@
 
     <?php $gridElements = $this->getGridElements(); ?>
     <?php if ($gridElements): ?>
-        <?php if ($this->getChildHtml('pager')): ?>
-            <div class="toolbar recurring-payments-toolbar top"><?php echo $this->getChildHtml('pager'); ?></div>
-        <?php endif; ?>
         <div class="table-wrapper recurring-payments">
             <table id="<?php echo $this->getGridHtmlId() ?>" class="data table table-recurring-payments">
                 <caption class="table caption"><?php echo __('Recurring Payments') ?></caption>

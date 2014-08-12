@@ -45,6 +45,11 @@ class EmailSenderTest extends \PHPUnit_Framework_TestCase
      */
     protected $emailSender;
 
+    /**
+     * @var \Magento\Sales\Model\Order\Email\Sender\OrderSender
+     */
+    protected $orderSenderMock;
+
     protected function setUp()
     {
         $this->messageManagerMock = $this->getMock(
@@ -68,20 +73,28 @@ class EmailSenderTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->emailSender = new EmailSender($this->messageManagerMock, $this->loggerMock);
+        $this->orderSenderMock = $this->getMock(
+            '\Magento\Sales\Model\Order\Email\Sender\OrderSender',
+            [],
+            [],
+            '',
+            false
+        );
+
+        $this->emailSender = new EmailSender($this->messageManagerMock, $this->loggerMock, $this->orderSenderMock);
     }
 
     public function testSendSuccess()
     {
-        $this->orderMock->expects($this->once())
-            ->method('sendNewOrderEmail');
+        $this->orderSenderMock->expects($this->once())
+            ->method('send');
         $this->assertTrue($this->emailSender->send($this->orderMock));
     }
 
     public function testSendFailure()
     {
-        $this->orderMock->expects($this->once())
-            ->method('sendNewOrderEmail')
+        $this->orderSenderMock->expects($this->once())
+            ->method('send')
             ->will($this->throwException(new \Magento\Framework\Mail\Exception('test message')));
         $this->messageManagerMock->expects($this->once())
             ->method('addWarning');

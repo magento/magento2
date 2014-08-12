@@ -41,7 +41,7 @@
     <type name="Magento\Framework\Code\Scanner\DirectoryScanner" shared="false" />
     <type name="Magento\Server\Reflection" shared="false" />
     <type name="Magento\Integration\Service\V1\Integration">
-        <plugin name="webapiIntegrationServiceV1" type="Magento\Webapi\Model\Plugin\IntegrationServiceV1"/>
+        <plugin name="webapiIntegrationServiceV1" type="Magento\Webapi\Model\Plugin\Service\V1\Integration"/>
     </type>
     <type name="Magento\Webapi\Controller\Rest\Request\Deserializer\Factory">
         <arguments>

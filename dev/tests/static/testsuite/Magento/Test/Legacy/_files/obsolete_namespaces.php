@@ -37,7 +37,6 @@ return [
     ['Magento\Acl', 'Magento\Framework\Acl'],
     ['Magento\Archive', 'Magento\Framework\Archive'],
     ['Magento\Session', 'Magento\Framework\Session'],
-    ['Magento\Authorization', 'Magento\Framework\Authorization'],
     ['Magento\Cache', 'Magento\Framework\Cache'],
     ['Magento\ObjectManager', 'Magento\Framework\ObjectManager'],
     ['Magento\Exception', 'Magento\Framework\Exception'],

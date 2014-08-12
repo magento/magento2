@@ -24,7 +24,6 @@
 
 namespace Magento\Bundle\Model\Plugin;
 
-
 use Magento\Bundle\Model\Product\Price;
 use Magento\Catalog\Model\Product\Type;
 use Magento\TestFramework\Helper\ObjectManager;

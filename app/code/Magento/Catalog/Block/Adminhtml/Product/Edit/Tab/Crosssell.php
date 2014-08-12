@@ -334,7 +334,8 @@ class Crosssell extends Extended
                 'editable' => !$this->isReadonly(),
                 'edit_only' => !$this->getProduct()->getId(),
                 'header_css_class' => 'col-position',
-                'column_css_class' => 'col-position'
+                'column_css_class' => 'col-position',
+                'filter_condition_callback' => array($this, 'filterProductPosition')
             )
         );
 
@@ -384,5 +385,18 @@ class Crosssell extends Extended
             $products[$product->getId()] = array('position' => $product->getPosition());
         }
         return $products;
+    }
+
+    /**
+     * Apply `position` filter to cross-sell grid.
+     *
+     * @param \Magento\Catalog\Model\Resource\Product\Link\Product\Collection $collection $collection
+     * @param \Magento\Backend\Block\Widget\Grid\Column\Extended $column
+     * @return $this
+     */
+    public function filterProductPosition($collection, $column)
+    {
+        $collection->addLinkAttributeToFilter($column->getIndex(), $column->getFilter()->getCondition());
+        return $this;
     }
 }

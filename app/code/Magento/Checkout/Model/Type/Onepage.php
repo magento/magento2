@@ -36,6 +36,7 @@ use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Customer\Service\V1\CustomerAddressServiceInterface;
 use Magento\Customer\Service\V1\CustomerMetadataServiceInterface as CustomerMetadata;
+use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 
 class Onepage
 {
@@ -149,6 +150,11 @@ class Onepage
     protected $_customerAccountService;
 
     /**
+     * @var OrderSender
+     */
+    protected $orderSender;
+
+    /**
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Checkout\Helper\Data $helper
      * @param \Magento\Customer\Helper\Data $customerData
@@ -171,6 +177,7 @@ class Onepage
      * @param \Magento\Framework\Math\Random $mathRandom
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param CustomerAddressServiceInterface $customerAddressService
+     * @param OrderSender $orderSender
      */
     public function __construct(
         \Magento\Framework\Event\ManagerInterface $eventManager,
@@ -194,7 +201,8 @@ class Onepage
         \Magento\Framework\Math\Random $mathRandom,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         CustomerAddressServiceInterface $customerAddressService,
-        CustomerAccountServiceInterface $accountService
+        CustomerAccountServiceInterface $accountService,
+        OrderSender $orderSender
     ) {
         $this->_eventManager = $eventManager;
         $this->_customerData = $customerData;
@@ -218,6 +226,7 @@ class Onepage
         $this->_encryptor = $encryptor;
         $this->_customerAddressService = $customerAddressService;
         $this->_customerAccountService = $accountService;
+        $this->orderSender = $orderSender;
     }
 
     /**
@@ -943,7 +952,7 @@ class Onepage
              */
             if (!$redirectUrl && $order->getCanSendNewEmailFlag()) {
                 try {
-                    $order->sendNewOrderEmail();
+                    $this->orderSender->send($order);
                 } catch (\Exception $e) {
                     $this->_logger->logException($e);
                 }

@@ -32,7 +32,7 @@ use Magento\Core\Test\Page\Adminhtml\SystemVariableNew;
 use Magento\Core\Test\Page\Adminhtml\SystemVariableIndex;
 
 /**
- * Test Creation for CreateCustomVariableEntity
+ * Test Creation for UpdateCustomVariableEntityTest
  *
  * Test Flow:
  * Preconditions:
@@ -51,7 +51,7 @@ use Magento\Core\Test\Page\Adminhtml\SystemVariableIndex;
  * 9. Perform all assertions.
  *
  * @group Variables_(PS)
- * @ZephyrId MAGETWO-26241
+ * @ZephyrId MAGETWO-26104
  */
 class UpdateCustomVariableEntityTest extends Injectable
 {

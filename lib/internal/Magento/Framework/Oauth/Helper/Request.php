@@ -93,7 +93,9 @@ class Request
     {
         $protocolParams = array();
 
-        $this->_processHeader($authHeaderValue, $protocolParams);
+        if (!$this->_processHeader($authHeaderValue, $protocolParams)) {
+            return [];
+        }
 
         if ($contentTypeHeader && 0 === strpos($contentTypeHeader, \Zend_Http_Client::ENC_URLENCODED)) {
             $protocolParamsNotSet = !$protocolParams;
@@ -155,7 +157,7 @@ class Request
      *
      * @param string $authHeaderValue
      * @param array &$protocolParams
-     * @return void
+     * @return bool true if parameters from oauth headers are processed correctly
      */
     protected function _processHeader($authHeaderValue, &$protocolParams)
     {
@@ -173,7 +175,9 @@ class Request
                     $protocolParams[rawurldecode($nameAndValue[0])] = rawurldecode(trim($nameAndValue[1], '"'));
                 }
             }
+            return true;
         }
+        return false;
     }
 
     /**

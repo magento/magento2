@@ -36,7 +36,7 @@
         <span class="counter qty<?php echo ($_cartQty > 0) ? '' : ' empty'; ?>"><?php echo ($_cartQty == 1) ? __('1 item') : __('%1 items',$_cartQty) ?></span>
     </a>
     <?php if ($this->getIsNeedToDisplaySideBar()): ?>
-        <div class="block minicart<?php echo ($_cartQty > 0) ? '' : ' empty'; ?>" <?php if ($this->getIsNeedToDisplaySideBar()): ?> data-mage-init='{"dropdownDialog":{"appendTo":"[data-block=minicart]", "triggerTarget":".showcart", "timeout": "2000", "triggerClass":"active", "parentClass":"active"}}'<?php endif ?>>
+        <div class="block block-minicart<?php echo ($_cartQty > 0) ? '' : ' empty'; ?>" <?php if ($this->getIsNeedToDisplaySideBar()): ?> data-mage-init='{"dropdownDialog":{"appendTo":"[data-block=minicart]", "triggerTarget":".showcart", "timeout": "2000", "triggerClass":"active", "parentClass":"active"}}'<?php endif ?>>
             <div class="title">
                 <strong>
                     <span class="text"><?php echo __('My Cart'); ?></span>

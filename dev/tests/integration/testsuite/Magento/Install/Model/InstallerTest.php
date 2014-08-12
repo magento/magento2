@@ -123,7 +123,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             $user->getPassword(),
             'Original password should not be stored/loaded as is for security reasons.'
         );
-        $this->assertInstanceOf('Magento\User\Model\Role', $user->getRole());
+        $this->assertInstanceOf('Magento\Authorization\Model\Role', $user->getRole());
         $this->assertEquals(1, $user->getRole()->getId(), 'User has to have admin privileges.');
     }
 

@@ -23,7 +23,6 @@
  */
 namespace Magento\Webapi\Model\Plugin;
 
-use Magento\Authz\Model\UserIdentifier;
 use Magento\Integration\Model\Integration;
 
 class SetupTest extends \PHPUnit_Framework_TestCase
@@ -45,16 +44,9 @@ class SetupTest extends \PHPUnit_Framework_TestCase
     /**
      * Authorization service mock
      *
-     * @var \Magento\Authz\Service\AuthorizationV1
+     * @var \Magento\Integration\Service\V1\AuthorizationService
      */
-    protected $authzServiceMock;
-
-    /**
-     * Mock for UserIdentifier Factory
-     *
-     * @var \Magento\Authz\Model\UserIdentifier\Factory
-     */
-    protected $userIdentifierFactoryMock;
+    protected $integrationAuthorizationServiceMock;
 
     /**
      * API setup plugin
@@ -82,24 +74,17 @@ class SetupTest extends \PHPUnit_Framework_TestCase
             array('findByName')
         )->getMock();
 
-        $this->authzServiceMock = $this->getMockBuilder(
-            '\Magento\Authz\Service\AuthorizationV1'
+        $this->integrationAuthorizationServiceMock = $this->getMockBuilder(
+            '\Magento\Integration\Service\V1\AuthorizationService'
         )->disableOriginalConstructor()->setMethods(
             array('grantPermissions')
-        )->getMock();
-
-        $this->userIdentifierFactoryMock = $this->getMockBuilder(
-            '\Magento\Authz\Model\UserIdentifier\Factory'
-        )->disableOriginalConstructor()->setMethods(
-            array('create')
         )->getMock();
 
         $this->subjectMock = $this->getMock('Magento\Integration\Model\Resource\Setup', array(), array(), '', false);
         $this->apiSetupPlugin = new \Magento\Webapi\Model\Plugin\Setup(
             $this->integrationConfigMock,
-            $this->authzServiceMock,
-            $this->integrationServiceMock,
-            $this->userIdentifierFactoryMock
+            $this->integrationAuthorizationServiceMock,
+            $this->integrationServiceMock
         );
     }
 
@@ -107,8 +92,6 @@ class SetupTest extends \PHPUnit_Framework_TestCase
     {
         $this->integrationConfigMock->expects($this->never())->method('getIntegrations');
         $this->integrationServiceMock->expects($this->never())->method('findByName');
-        $this->authzServiceMock->expects($this->never())->method('grantPermissions');
-        $this->userIdentifierFactoryMock->expects($this->never())->method('create');
         $this->apiSetupPlugin->afterInitIntegrationProcessing($this->subjectMock, array());
     }
 
@@ -137,10 +120,11 @@ class SetupTest extends \PHPUnit_Framework_TestCase
                 )
             )
         );
+        $firstInegrationId = 1;
 
         $integrationsData1 = new \Magento\Framework\Object(
             array(
-                'id' => 1,
+                'id' => $firstInegrationId,
                 Integration::NAME => 'TestIntegration1',
                 Integration::EMAIL => 'test-integration1@magento.com',
                 Integration::ENDPOINT => 'http://endpoint.com',
@@ -148,9 +132,10 @@ class SetupTest extends \PHPUnit_Framework_TestCase
             )
         );
 
+        $secondIntegrationId = 2;
         $integrationsData2 = new \Magento\Framework\Object(
             array(
-                'id' => 2,
+                'id' => $secondIntegrationId,
                 Integration::NAME => 'TestIntegration2',
                 Integration::EMAIL => 'test-integration2@magento.com',
                 Integration::SETUP_TYPE => 1
@@ -175,51 +160,6 @@ class SetupTest extends \PHPUnit_Framework_TestCase
             'TestIntegration2'
         )->will(
             $this->returnValue($integrationsData2)
-        );
-
-        $userIdentifierMock1 = $this->getMockBuilder(
-            '\Magento\Authz\Model\UserIdentifier'
-        )->disableOriginalConstructor()->getMock();
-        $this->userIdentifierFactoryMock->expects(
-            $this->at(0)
-        )->method(
-            'create'
-        )->with(
-            UserIdentifier::USER_TYPE_INTEGRATION,
-            1
-        )->will(
-            $this->returnValue($userIdentifierMock1)
-        );
-
-        $userIdentifierMock2 = $this->getMockBuilder(
-            '\Magento\Authz\Model\UserIdentifier'
-        )->disableOriginalConstructor()->getMock();
-        $this->userIdentifierFactoryMock->expects(
-            $this->at(1)
-        )->method(
-            'create'
-        )->with(
-            UserIdentifier::USER_TYPE_INTEGRATION,
-            2
-        )->will(
-            $this->returnValue($userIdentifierMock2)
-        );
-
-        $this->authzServiceMock->expects(
-            $this->at(0)
-        )->method(
-            'grantPermissions'
-        )->with(
-            $userIdentifierMock1,
-            $testIntegration1Resource
-        );
-        $this->authzServiceMock->expects(
-            $this->at(1)
-        )->method(
-            'grantPermissions'
-        )->with(
-            $userIdentifierMock2,
-            $testIntegration2Resource
         );
 
         $this->apiSetupPlugin->afterInitIntegrationProcessing(

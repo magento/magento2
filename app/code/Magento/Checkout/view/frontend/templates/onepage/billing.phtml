@@ -156,7 +156,7 @@
         <?php if ($customerAttributes): ?>
             <?php $customerAttributes->setEntityModelClass('Magento\Customer\Model\Customer')->setFieldIdFormat('billing:%1$s');?>
             <?php $customerAttributes->setFieldNameFormat('billing[%1$s]')->setShowContainer(false);?>
-            <?php echo $customerAttributes->setExcludeFileAttributes(true)->toHtml()?>
+            <?php echo $customerAttributes->toHtml()?>
         <?php endif;?>
         <div class="field password required">
             <label class="label" for="billing:customer_password"><span><?php echo __('Password') ?></span></label>

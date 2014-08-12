@@ -25,7 +25,7 @@
 @layout-column-main-sidebar-offset: 2%;
 @layout-column-additional-sidebar-offset: @layout-column-main-sidebar-offset;
 
-.navigation > ul,
+.navigation,
 .breadcrumbs,
 .page-header .header.panel,
 .header.content,
@@ -38,20 +38,6 @@
     padding-right: @layout-width-xs-indent;
 }
 
-.page-wrapper {
-    position: relative;
-    left: 0;
-    -webkit-transition: all .25s ease-out;
-    -moz-transition: all .25s ease-out;
-    transition: all .25s ease-out;
-}
-
-.page-wrapper.open{
-    left: 86%;
-    -webkit-transition: all .25s ease-on;
-    -moz-transition: all .25s ease-out;
-    transition: all .25s ease-out;
-}
 
 .columns {
     #layout-columns();
@@ -59,7 +45,6 @@
         &:extend(.add-box-sizing all);
         .mix-flex-flex(@_basis: 100%);
         .css(padding-bottom, @indent-xl-base);
-        min-height: 300px;
         .mix-flex-order(1);
     }
     .sidebar-main {
@@ -74,27 +59,12 @@
     }
 }
 
-.page-header {
-    .panel.wrapper {
-        position: absolute;
-        top: 0;
-        left: -86%;
-        background: #f5f5f5;
-        height: 100%;
-        width: 86%;
-        -webkit-box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
-        box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
-        .panel.header {
-            padding: 0;
-        }
-    }
-}
 
 //
 //    Desktop
 //--------------------------------------
-.responsive(@break) when (@break = @break-point-1) {
-    .navigation > ul,
+.responsive(@break) when (@break = @screen-m) {
+    .navigation,
     .breadcrumbs,
     .page-header .header.panel,
     .header.content,
@@ -116,6 +86,7 @@
     .column.main {
         #layout-columns > .main();
         &:extend(.add-box-sizing-desktop all);
+        min-height: 300px;
     }
 
     .sidebar-main {
@@ -145,19 +116,7 @@
         }
     }
 
-    .page-header {
-        .panel.wrapper {
-            position: relative;
-            top: 0;
-            left: 0;
-            background: none;
-            height: auto;
-            width: auto;
-            -webkit-box-shadow: none;
-            box-shadow: none;
-            .panel.header {
-                padding: 10px 20px;
-            }
-        }
+    .panel.header {
+        padding: 10px 20px;
     }
 }

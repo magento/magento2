@@ -40,7 +40,7 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Factory for user role model
      *
-     * @var \Magento\User\Model\RoleFactory
+     * @var \Magento\Authorization\Model\RoleFactory
      */
     protected $_roleFactory;
 
@@ -50,11 +50,17 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_jsonEncoder;
 
     /**
+     * @var \Magento\User\Model\Resource\Role\User\CollectionFactory
+     */
+    protected $_userRolesFactory;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\User\Model\RoleFactory $roleFactory
+     * @param \Magento\Authorization\Model\RoleFactory $roleFactory
+     * @param \Magento\User\Model\Resource\Role\User\CollectionFactory $userRolesFactory
      * @param array $data
      */
     public function __construct(
@@ -62,13 +68,15 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\User\Model\RoleFactory $roleFactory,
+        \Magento\Authorization\Model\RoleFactory $roleFactory,
+        \Magento\User\Model\Resource\Role\User\CollectionFactory $userRolesFactory,
         array $data = []
     ) {
         parent::__construct($context, $backendHelper, $data);
         $this->_jsonEncoder = $jsonEncoder;
         $this->_coreRegistry = $coreRegistry;
         $this->_roleFactory = $roleFactory;
+        $this->_userRolesFactory = $userRolesFactory;
     }
 
     /**
@@ -116,7 +124,7 @@ class User extends \Magento\Backend\Block\Widget\Grid\Extended
     {
         $roleId = $this->getRequest()->getParam('rid');
         $this->_coreRegistry->register('RID', $roleId);
-        $collection = $this->_roleFactory->create()->getUsersCollection();
+        $collection = $this->_userRolesFactory->create();
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }

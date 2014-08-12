@@ -23,7 +23,7 @@
  */
 namespace Magento\Catalog\Service\V1\Category\ProductLinks;
 
-use Magento\Catalog\Service\V1\Data\Eav\Category\ProductLink;
+use Magento\Catalog\Service\V1\Data\Category\ProductLink;
 
 interface WriteServiceInterface
 {
@@ -31,7 +31,7 @@ interface WriteServiceInterface
      * Assign a product to the required category
      *
      * @param int $categoryId
-     * @param \Magento\Catalog\Service\V1\Data\Eav\Category\ProductLink $productLink
+     * @param \Magento\Catalog\Service\V1\Data\Category\ProductLink $productLink
      * @return bool Will returned True if assigned
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
@@ -41,7 +41,7 @@ interface WriteServiceInterface
 
     /**
      * @param int $categoryId
-     * @param \Magento\Catalog\Service\V1\Data\Eav\Category\ProductLink $productLink
+     * @param \Magento\Catalog\Service\V1\Data\Category\ProductLink $productLink
      * @return bool Will returned True if updated
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      * @throws \Magento\Framework\Exception\NoSuchEntityException

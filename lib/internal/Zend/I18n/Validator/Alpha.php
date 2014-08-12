@@ -11,11 +11,11 @@
 namespace Zend\I18n\Validator;
 
 use Zend\I18n\Filter\Alpha as AlphaFilter;
-use Zend\Validator\AbstractValidator;
 
 /**
  * @category   Zend
- * @package    Zend_Validate
+ * @package    Zend_I18n
+ * @subpackage Validator
  */
 class Alpha extends Alnum
 {

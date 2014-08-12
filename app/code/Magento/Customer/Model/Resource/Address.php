@@ -25,6 +25,8 @@
  */
 namespace Magento\Customer\Model\Resource;
 
+use \Magento\Framework\Exception\InputException;
+
 class Address extends \Magento\Eav\Model\Entity\AbstractEntity
 {
     /**
@@ -140,7 +142,12 @@ class Address extends \Magento\Eav\Model\Entity\AbstractEntity
         $validator = $this->_validatorFactory->createValidator('customer_address', 'save');
 
         if (!$validator->isValid($address)) {
-            throw new \Magento\Framework\Validator\ValidatorException($validator->getMessages());
+            throw new \Magento\Framework\Validator\ValidatorException(
+                InputException::DEFAULT_MESSAGE,
+                [],
+                null,
+                $validator->getMessages()
+            );
         }
     }
 

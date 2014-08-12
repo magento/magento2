@@ -14,7 +14,8 @@ use Locale;
 
 /**
  * @category   Zend
- * @package    Zend_Filter
+ * @package    Zend_I18n
+ * @subpackage Filter
  */
 class Alpha extends Alnum
 {

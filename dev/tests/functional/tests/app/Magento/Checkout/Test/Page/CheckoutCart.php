@@ -31,9 +31,6 @@ use Mtf\Page\FrontendPage;
  */
 class CheckoutCart extends FrontendPage
 {
-    /**
-     * URL for checkout cart page
-     */
     const MCA = 'checkout/cart';
 
     protected $_blocks = [

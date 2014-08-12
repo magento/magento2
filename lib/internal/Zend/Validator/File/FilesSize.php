@@ -19,7 +19,7 @@ use Zend\Validator\Exception;
  * Validator for the size of all files which will be validated in sum
  *
  * @category  Zend
- * @package   Zend_Validate
+ * @package   Zend_Validator
  */
 class FilesSize extends Size
 {

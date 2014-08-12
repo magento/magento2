@@ -97,7 +97,8 @@
         }
         .product-addto-links {
             > .action {
-                &:extend(.abstract-action-addto all);
+                &:extend(.abstract-action-addto-product all);
+                vertical-align: top;
             }
         }
     }
@@ -109,7 +110,7 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive(@break) when (@break = @break-point-1) {
+.responsive(@break) when (@break = @screen-m) {
     .bundle-options-container {
         .legend.title {
             &:extend(.reset-left-margin all);

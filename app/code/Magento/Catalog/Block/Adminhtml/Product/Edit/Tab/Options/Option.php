@@ -340,7 +340,7 @@ class Option extends Widget
                             ) : '',
                             'price_type' => $showPrice ? $_value->getPriceType() : 0,
                             'sku' => $this->escapeHtml($_value->getSku()),
-                            'sort_order' => $_value->getSortOrder()
+                            'sort_order' => $_value->getSortOrder(),
                         );
 
                         if ($this->getProduct()->getStoreId() != '0') {
@@ -358,7 +358,8 @@ class Option extends Widget
                                     $_value->getOptionId(),
                                     'price',
                                     is_null($_value->getstorePrice()),
-                                    $_value->getOptionTypeId()
+                                    $_value->getOptionTypeId(),
+                                    ['$(this).up(1).previous()']
                                 );
                                 $value['optionValues'][$i]['scopePriceDisabled'] = is_null(
                                     $_value->getStorePrice()
@@ -404,9 +405,10 @@ class Option extends Widget
      * @param string $name
      * @param boolean $checked
      * @param string $select_id
+     * @param array $containers
      * @return string
      */
-    public function getCheckboxScopeHtml($id, $name, $checked = true, $select_id = '-1')
+    public function getCheckboxScopeHtml($id, $name, $checked = true, $select_id = '-1', array $containers = [])
     {
         $checkedHtml = '';
         if ($checked) {
@@ -418,14 +420,20 @@ class Option extends Widget
             $selectNameHtml = '[values][' . $select_id . ']';
             $selectIdHtml = 'select_' . $select_id . '_';
         }
+        $containers[] = '$(this).up(1)';
+        $containers = implode(',', $containers);
+        $localId = $this->getFieldId() . '_' . $id . '_' . $selectIdHtml . $name . '_use_default';
+        $localName = "options_use_default[" . $id . "]" . $selectNameHtml . "[" . $name . "]";
         $useDefault =
-            '<div class="field-service">' . '<label for="' . $this->getFieldId() . '_' . $id . '_' . $selectIdHtml
-            . $name . '" class="use-default">' . '<input value="1" type="checkbox" class="use-default-control"'
-            . 'name="' . $this->getFieldName() . '[' . $id . ']' . $selectNameHtml . '[scope][' . $name . ']"' . 'id="'
-            . $this->getFieldId() . '_' . $id . '_' . $selectIdHtml . $name . '_use_default"' . $checkedHtml
-            . ' /><span class="use-default-label">' . __(
-                'Use Default'
-            ) . '</span></label></div>';
+            '<div class="field-service">'
+            . '<input type="checkbox" class="use-default-control"'
+            . ' name="' . $localName . '"' . 'id="' . $localId . '"'
+            . ' value=""'
+            . $checkedHtml
+            . ' onchange="toggleSeveralValueElements(this, [' . $containers . ']);" '
+            . ' />'
+            . '<label for="' . $localId . '" class="use-default">'
+            . '<span class="use-default-label">' . __('Use Default') . '</span></label></div>';
 
         return $useDefault;
     }

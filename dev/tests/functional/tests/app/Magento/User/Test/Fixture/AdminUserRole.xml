@@ -26,7 +26,7 @@
 <fixture class="Magento\User\Test\Fixture\AdminUserRole">
     <module>Magento_User</module>
     <type>flat</type>
-    <entity_type>admin_role</entity_type>
+    <entity_type>authorization_role</entity_type>
     <collection>Magento\User\Model\Resource\Role\User\Collection</collection>
     <fields>
         <role_id>

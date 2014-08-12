@@ -34,7 +34,6 @@
     <div class="block filter">
         <div class="block-title filter-title">
             <strong><?php echo __('Shop By') ?></strong>
-            <span class="block-triger filter-trigger"><?php echo __('Filter') ?> <span class="qty counter"><?php echo count($this->getLayer()->getState()->getActiveFilters()) ?></span></span>
         </div>
 
         <div class="block-content filter-content">
@@ -45,17 +44,20 @@
                     <a href="<?php echo $this->getClearUrl() ?>" class="action clear filter-clear"><span><?php echo __('Clear All') ?></span></a>
                 </div>
             <?php endif; ?>
-
-            <strong class="block-subtitle filter-subtitle"><?php echo __('Shopping Options') ?></strong>
-
-            <dl class="filter-options" id="narrow-by-list">
-                <?php foreach ($this->getFilters() as $filter): ?>
+            <?php $wrapOptions = false; ?>
+            <?php foreach ($this->getFilters() as $filter): ?>
+                <?php if(!$wrapOptions): ?>
+                    <strong class="block-subtitle filter-subtitle"><?php echo __('Shopping Options') ?></strong>
+                    <dl class="filter-options" id="narrow-by-list">
+                <?php $wrapOptions = true; endif; ?>
                     <?php if ($filter->getItemsCount()): ?>
                         <dt class="filter-options-title"><?php echo $this->escapeHtml(__($filter->getName())) ?></dt>
                         <dd class="filter-options-content"><?php echo $this->getChildBlock('renderer')->render($filter); ?></dd>
                     <?php endif; ?>
-                <?php endforeach; ?>
-            </dl>
+            <?php endforeach; ?>
+            <?php if($wrapOptions): ?>
+                </dl>
+            <?php endif; ?>
         </div>
     </div>
 <?php endif; ?>

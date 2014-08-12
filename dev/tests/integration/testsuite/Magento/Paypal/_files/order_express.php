@@ -28,7 +28,6 @@ $billingAddress = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->c
     array('data' => $addressData)
 );
 $billingAddress->setAddressType('billing');
-
 $shippingAddress = clone $billingAddress;
 $shippingAddress->setId(null)->setAddressType('shipping');
 
@@ -36,7 +35,9 @@ $payment = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('
 $payment->setMethod(\Magento\Paypal\Model\Config::METHOD_WPP_EXPRESS);
 
 $order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Sales\Model\Order');
-$order->setIncrementId(
+$order
+    ->setCustomerEmail('co@co.co')
+    ->setIncrementId(
     '100000001'
 )->setSubtotal(
     100

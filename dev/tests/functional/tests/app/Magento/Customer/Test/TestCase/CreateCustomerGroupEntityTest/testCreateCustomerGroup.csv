@@ -1,4 +1,4 @@
 "customerGroup/data/tax_class_id/dataSet";"customerGroup/data/customer_group_code";"constraint"
 "Retail Customer";"GroupName%isolation%";"assertCustomerGroupSuccessSaveMessage, assertCustomerGroupInGrid, assertCustomerGroupOnCustomerForm"
-"Retail Customer";"General ";"assertCustomerGroupAlreadyExists, assertCustomerGroupNotInGrid"
+"Retail Customer";"General";"assertCustomerGroupAlreadyExists"
 "customer_tax_class";"GroupName%isolation%";"assertCustomerGroupSuccessSaveMessage, assertCustomerGroupInGrid, assertCustomerGroupOnCustomerForm"

@@ -39,7 +39,7 @@
                 </arguments>
             </block>
             <block class="Magento\Catalog\Block\Product\View" name="product.info.addtocart.bundle" as="addtocart" template="product/view/addtocart.phtml"/>
-            <block class="Magento\Catalog\Block\Product\View" name="product.info.addto.bundle" as="addto" template="product/view/addto.phtml"/>
+            <block class="Magento\Wishlist\Block\Item\Configure" name="product.info.addto.bundle" as="addto" template="item/configure/addto.phtml"/>
         </block>
     </referenceBlock>
     <referenceBlock name="product.info.options.wrapper">

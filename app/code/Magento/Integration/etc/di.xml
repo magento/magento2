@@ -25,10 +25,12 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
     <preference for="Magento\Integration\Service\V1\IntegrationInterface" type="Magento\Integration\Service\V1\Integration" />
+    <preference for="Magento\Integration\Service\V1\AuthorizationServiceInterface" type="Magento\Integration\Service\V1\AuthorizationService" />
     <preference for="Magento\Integration\Service\V1\OauthInterface" type="Magento\Integration\Service\V1\Oauth" />
     <preference for="Magento\Framework\Oauth\ConsumerInterface" type="Magento\Integration\Model\Oauth\Consumer"/>
     <preference for="Magento\Framework\Oauth\NonceGeneratorInterface" type="Magento\Integration\Model\Oauth\Nonce\Generator"/>
     <preference for="Magento\Framework\Oauth\TokenProviderInterface" type="Magento\Integration\Model\Oauth\Token\Provider"/>
+    <preference for="Magento\Integration\Service\V1\TokenServiceInterface" type="Magento\Integration\Service\V1\TokenService" />
     <type name="Magento\Integration\Model\Oauth\Nonce\Generator">
         <arguments>
             <argument name="date" xsi:type="object">Magento\Framework\Stdlib\DateTime\DateTime\Proxy</argument>

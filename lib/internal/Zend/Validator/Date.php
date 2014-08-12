@@ -15,7 +15,7 @@ use Traversable;
 
 /**
  * @category   Zend
- * @package    Zend_Validate
+ * @package    Zend_Validator
  */
 class Date extends AbstractValidator
 {
@@ -128,7 +128,11 @@ class Date extends AbstractValidator
             // and still return a DateTime object
             $errors = DateTime::getLastErrors();
 
-            if (false === $date || $errors['warning_count'] > 0) {
+            if ($errors['warning_count'] > 0) {
+                $this->error(self::INVALID_DATE);
+                return false;
+            }
+            if ($date === false) {
                 $this->error(self::INVALID_DATE);
                 return false;
             }

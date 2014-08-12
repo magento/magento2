@@ -12,7 +12,7 @@ namespace Zend\Validator\Barcode;
 
 /**
  * @category   Zend
- * @package    Zend_Validate
+ * @package    Zend_Validator
  */
 class Sscc extends AbstractAdapter
 {

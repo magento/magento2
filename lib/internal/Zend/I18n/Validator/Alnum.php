@@ -15,7 +15,8 @@ use Zend\Validator\AbstractValidator;
 
 /**
  * @category   Zend
- * @package    Zend_Validate
+ * @package    Zend_I18n
+ * @subpackage Validator
  */
 class Alnum extends AbstractValidator
 {

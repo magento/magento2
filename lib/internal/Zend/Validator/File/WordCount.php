@@ -14,7 +14,7 @@ namespace Zend\Validator\File;
  * Validator for counting all words in a file
  *
  * @category  Zend
- * @package   Zend_Validate
+ * @package   Zend_Validator
  */
 class WordCount extends Count
 {

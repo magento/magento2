@@ -72,7 +72,7 @@ $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Im
                                     . $this->stripTags($_product->getName(), null, true) . '">'
                                     . $_helper->productAttribute($_product, $_product->getName(), 'name')
                                     . '</a></strong>';
-                    $info['price'] = $this->getPriceHtml($_product, true);
+                    $info['price'] = $this->getProductPrice($_product);
                     $info['review'] = $this->getReviewsSummaryHtml($_product, $templateType);
 
                     if ($_product->isSaleable()) {

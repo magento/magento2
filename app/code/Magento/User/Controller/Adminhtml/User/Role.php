@@ -23,7 +23,7 @@
  */
 namespace Magento\User\Controller\Adminhtml\User;
 
-use Magento\User\Model\Acl\Role\Group as RoleGroup;
+use Magento\Authorization\Model\Acl\Role\Group as RoleGroup;
 
 class Role extends \Magento\Backend\App\AbstractAction
 {
@@ -37,7 +37,7 @@ class Role extends \Magento\Backend\App\AbstractAction
     /**
      * Factory for user role model
      *
-     * @var \Magento\User\Model\RoleFactory
+     * @var \Magento\Authorization\Model\RoleFactory
      */
     protected $_roleFactory;
 
@@ -51,7 +51,7 @@ class Role extends \Magento\Backend\App\AbstractAction
     /**
      * Rules model factory
      *
-     * @var \Magento\User\Model\RulesFactory
+     * @var \Magento\Authorization\Model\RulesFactory
      */
     protected $_rulesFactory;
 
@@ -65,17 +65,17 @@ class Role extends \Magento\Backend\App\AbstractAction
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\User\Model\RoleFactory $roleFactory
+     * @param \Magento\Authorization\Model\RoleFactory $roleFactory
      * @param \Magento\User\Model\UserFactory $userFactory
-     * @param \Magento\User\Model\RulesFactory $rulesFactory
+     * @param \Magento\Authorization\Model\RulesFactory $rulesFactory
      * @param \Magento\Backend\Model\Auth\Session $authSession
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Registry $coreRegistry,
-        \Magento\User\Model\RoleFactory $roleFactory,
+        \Magento\Authorization\Model\RoleFactory $roleFactory,
         \Magento\User\Model\UserFactory $userFactory,
-        \Magento\User\Model\RulesFactory $rulesFactory,
+        \Magento\Authorization\Model\RulesFactory $rulesFactory,
         \Magento\Backend\Model\Auth\Session $authSession
     ) {
         parent::__construct($context);
@@ -105,7 +105,7 @@ class Role extends \Magento\Backend\App\AbstractAction
      * Initialize role model by passed parameter in request
      *
      * @param string $requestVariable
-     * @return \Magento\User\Model\Role
+     * @return \Magento\Authorization\Model\Role
      */
     protected function _initRole($requestVariable = 'rid')
     {

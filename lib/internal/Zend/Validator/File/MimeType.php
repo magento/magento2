@@ -20,7 +20,7 @@ use Zend\Validator\Exception;
  * Validator for the mime type of a file
  *
  * @category  Zend
- * @package   Zend_Validate
+ * @package   Zend_Validator
  */
 class MimeType extends AbstractValidator
 {
@@ -339,7 +339,7 @@ class MimeType extends AbstractValidator
     }
 
     /**
-     * Defined by Zend_Validate_Interface
+     * Defined by Zend\Validator\ValidatorInterface
      *
      * Returns true if the mimetype of the file matches the given ones. Also parts
      * of mimetypes can be checked. If you give for example "image" all image

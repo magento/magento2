@@ -37,6 +37,8 @@ class SessionManagerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        ini_set('session.use_only_cookies', '0');
+
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var \Magento\Framework\Session\SidResolverInterface $sidResolver */
@@ -54,6 +56,13 @@ class SessionManagerTest extends \PHPUnit_Framework_TestCase
                 $objectManager->get('Magento\Framework\Session\StorageInterface')
             )
         );
+    }
+
+    public function testSessionUseOnlyCookies()
+    {
+        $expectedValue = '1';
+        $sessionUseOnlyCookies = ini_get('session.use_only_cookies');
+        $this->assertSame($expectedValue, $sessionUseOnlyCookies);
     }
 
     public function testGetData()

@@ -749,7 +749,7 @@
                         You get paid up front, even though customers have more time to pay. A pre-integrated payment button lets customers pay quickly with Bill Me Later&#174;.
                         <a href="https:/www.paypal.com/webapps/mpp/promotional-financing" target="_blank">Learn More</a>]]>
                         </comment>
-                        <config_path>payment/paypal_express_bml/active</config_path>
+                        <config_path>payment/payflow_express_bml/active</config_path>
                         <requires>
                             <field id="enable_express_checkout"/>
                         </requires>

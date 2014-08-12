@@ -173,9 +173,97 @@
 }
 
 //
+//    Mobile
+//--------------------------------------
+.responsive-smaller(@break) when (@break = @screen-s) {
+    .account {
+        .order-details-items {
+            .table-order-items {
+                tbody,
+                tfoot {
+                    > tr > td {
+                        border: none;
+                    }
+                }
+                tbody {
+                    tr {
+                        td:first-child {
+                            padding-top: 15px;
+                        }
+                        td:last-child {
+                            padding-bottom: 15px;
+                        }
+                    }
+                }
+                .col {
+                    &.price,
+                    &.subtotal {
+                        .tax,
+                        .incl.tax + .excl.tax,
+                        .weee {
+                            display: inline-block;
+                        }
+                    }
+                    &.name,
+                    &.sku,
+                    &.qty,
+                    &.price,
+                    &.subtotal {
+                        &:before {
+                            content: attr(data-th) ":";
+                            vertical-align: top;
+                        }
+                    }
+                    &.label {
+                        display: none;
+                    }
+                    .items-qty {
+                        display: inline-block;
+                    }
+                    .item.options {
+                        .font-size(12);
+                        margin: 10px 0 0;
+                    }
+                }
+                .options-label + .item-options,
+                .item-options + .item-options {
+                    &:before {
+                        content: attr(data-th) ":";
+                        display: block;
+                        font-weight: bold;
+                    }
+                    .col {
+                        .font-size(12);
+                        padding: 0;
+                        &:first-child {
+                            padding-top: 3px;
+                        }
+                        &:last-child {
+                            padding-bottom: 20px;
+                        }
+                    }
+                }
+            }
+            .action.print {
+                display: none;
+            }
+        }
+        .toolbar {
+            &:extend(.add-clearfix-desktop all);
+            .pages {
+                float: right;
+            }
+            .limiter {
+                clear: both;
+            }
+        }
+    }
+}
+
+//
 //    Desktop
 //--------------------------------------
-.responsive(@break) when (@break = @break-point-1) {
+.responsive(@break) when (@break = @screen-m) {
     .account {
         .page-title {
             .order-actions-toolbar {
@@ -195,24 +283,6 @@
             .mark,
             .amount {
                 text-align: right;
-            }
-        }
-    }
-}
-
-//
-//    Mobile
-//--------------------------------------
-.responsive-smaller(@break) when (@break = @break-point-0) {
-    .account {
-        .order-details-items {
-            .table-order-items {
-                tbody,
-                tfoot {
-                    > tr > td {
-                        border: none;
-                    }
-                }
             }
         }
     }

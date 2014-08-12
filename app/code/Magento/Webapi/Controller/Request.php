@@ -50,25 +50,4 @@ class Request extends \Zend_Controller_Request_Http implements \Magento\Framewor
         /** Remove GET parameters from path */
         $this->_pathInfo = preg_replace('#\?.*#', '', $this->_pathInfo);
     }
-
-    /**
-     * Set consumer ID.
-     *
-     * @param int $consumerId
-     * @return void
-     */
-    public function setConsumerId($consumerId)
-    {
-        $this->_consumerId = $consumerId;
-    }
-
-    /**
-     * Get consumer ID.
-     *
-     * @return int
-     */
-    public function getConsumerId()
-    {
-        return $this->_consumerId;
-    }
 }

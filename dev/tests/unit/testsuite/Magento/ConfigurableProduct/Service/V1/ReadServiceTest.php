@@ -117,8 +117,8 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
                                 'value' => '14',
                                 'label' => 'dd',
                                 'price' => [
-                                    'value_index' => 14,
-                                    'pricing_value' => 10,
+                                    'index' => 14,
+                                    'price' => 10,
                                 ],
                             ],
                         ],
@@ -134,7 +134,7 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(100));
 
         $configurableAttribute = $this->getMockBuilder(
-            'Magento\ConfigurableProduct\Service\V1\Data\ConfigurableAttribute'
+            'Magento\ConfigurableProduct\Service\V1\Data\Option'
         )
             ->disableOriginalConstructor()
             ->getMock();

@@ -2,15 +2,15 @@
     "name": "magento/module-translation",
     "description": "N/A",
     "require": {
-        "php": "5.4.*|5.5.*",
-        "magento/module-core": "0.1.0-alpha89",
-        "magento/module-store": "0.1.0-alpha89",
-        "magento/module-backend": "0.1.0-alpha89",
-        "magento/framework": "0.1.0-alpha89",
+        "php": "~5.4.11|~5.5.0",
+        "magento/module-core": "0.1.0-alpha90",
+        "magento/module-store": "0.1.0-alpha90",
+        "magento/module-backend": "0.1.0-alpha90",
+        "magento/framework": "0.1.0-alpha90",
         "magento/magento-composer-installer": "*"
     },
     "type": "magento2-module",
-    "version": "0.1.0-alpha89",
+    "version": "0.1.0-alpha90",
     "extra": {
         "map": [
             [

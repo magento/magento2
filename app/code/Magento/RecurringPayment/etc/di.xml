@@ -47,5 +47,7 @@
     <type name="Magento\Payment\Model\Checks\ZeroTotal">
         <plugin name="recurringpayment" type="Magento\RecurringPayment\Model\Plugin\ZeroTotal" />
     </type>
-
+    <type name="Magento\Catalog\Block\Adminhtml\Product\Edit\Tabs">
+        <plugin name="recurringpayment_product_tab" type="Magento\RecurringPayment\Model\Plugin\Tabs" />
+    </type>
 </config>

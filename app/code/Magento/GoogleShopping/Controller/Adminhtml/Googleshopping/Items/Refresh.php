@@ -68,9 +68,7 @@ class Refresh extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshoppin
             return;
         } catch (\Exception $e) {
             $flag->unlock();
-            $this->_objectManager->create(
-                'Magento\AdminNotification\Model\Inbox'
-            )->addMajor(
+            $this->notifier->addMajor(
                 __('An error has occurred while deleting products from google shopping account.'),
                 __(
                     'One or more products were not deleted from google shopping account. Refer to the log file for details.'

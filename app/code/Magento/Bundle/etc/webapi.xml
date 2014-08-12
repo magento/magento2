@@ -43,4 +43,40 @@
             <resource ref="Magento_Catalog::products"/>
         </resources>
     </route>
+    <route url="/V1/bundle-products/:productSku/option/all" method="GET">
+        <service class="Magento\Bundle\Service\V1\Product\Option\ReadServiceInterface" method="getList" />
+        <resources>
+            <resource ref="Magento_Catalog::products" />
+        </resources>
+    </route>
+    <route url="/V1/bundle-products/option/types" method="GET">
+        <service class="Magento\Bundle\Service\V1\Product\Option\Type\ReadServiceInterface" method="getTypes" />
+        <resources>
+            <resource ref="Magento_Catalog::products" />
+        </resources>
+    </route>
+    <route url="/V1/bundle-products/:productSku/option/:optionId" method="GET">
+        <service class="Magento\Bundle\Service\V1\Product\Option\ReadServiceInterface" method="get" />
+        <resources>
+            <resource ref="Magento_Catalog::products" />
+        </resources>
+    </route>
+    <route url="/V1/bundle-products/:productSku/option/add" method="POST">
+        <service class="Magento\Bundle\Service\V1\Product\Option\WriteServiceInterface" method="add" />
+        <resources>
+            <resource ref="Magento_Catalog::products" />
+        </resources>
+    </route>
+    <route url="/V1/bundle-products/:productSku/option/:optionId" method="PUT">
+        <service class="Magento\Bundle\Service\V1\Product\Option\WriteServiceInterface" method="update" />
+        <resources>
+            <resource ref="Magento_Catalog::products" />
+        </resources>
+    </route>
+    <route url="/V1/bundle-products/:productSku/option/:optionId" method="DELETE">
+        <service class="Magento\Bundle\Service\V1\Product\Option\WriteServiceInterface" method="remove" />
+        <resources>
+            <resource ref="Magento_Catalog::products" />
+        </resources>
+    </route>
 </routes>

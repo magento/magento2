@@ -24,12 +24,12 @@
 
 namespace Magento\Tax\Test\TestCase;
 
-use Magento\Customer\Test\Fixture\AddressInjectable;
 use Mtf\TestCase\Injectable;
 use Mtf\Fixture\FixtureFactory;
 use Magento\Tax\Test\Fixture\TaxRule;
 use Magento\Tax\Test\Page\Adminhtml\TaxRuleNew;
 use Magento\Tax\Test\Page\Adminhtml\TaxRuleIndex;
+use Magento\Customer\Test\Fixture\AddressInjectable;
 
 /**
  * Test Creation for Update TaxRuleEntity
@@ -74,7 +74,7 @@ class UpdateTaxRuleEntityTest extends Injectable
      */
     public function __prepare(FixtureFactory $fixtureFactory)
     {
-        $customer = $fixtureFactory->createByCode('customerInjectable', ['dataSet' => 'default']);
+        $customer = $fixtureFactory->createByCode('customerInjectable', ['dataSet' => 'johndoe_retailer']);
         $customer->persist();
 
         return ['customer' => $customer];
@@ -87,10 +87,8 @@ class UpdateTaxRuleEntityTest extends Injectable
      * @param TaxRuleNew $taxRuleNewPage
      * @return void
      */
-    public function __inject(
-        TaxRuleIndex $taxRuleIndexPage,
-        TaxRuleNew $taxRuleNewPage
-    ) {
+    public function __inject(TaxRuleIndex $taxRuleIndexPage, TaxRuleNew $taxRuleNewPage)
+    {
         $this->taxRuleIndexPage = $taxRuleIndexPage;
         $this->taxRuleNewPage = $taxRuleNewPage;
     }
@@ -116,11 +114,8 @@ class UpdateTaxRuleEntityTest extends Injectable
         $initialTaxRule->persist();
 
         // Steps
-        $filters = [
-            'code' => $initialTaxRule->getCode(),
-        ];
         $this->taxRuleIndexPage->open();
-        $this->taxRuleIndexPage->getTaxRuleGrid()->searchAndOpen($filters);
+        $this->taxRuleIndexPage->getTaxRuleGrid()->searchAndOpen(['code' => $initialTaxRule->getCode()]);
         $this->taxRuleNewPage->getTaxRuleForm()->fill($taxRule);
         $this->taxRuleNewPage->getFormPageActions()->save();
     }

@@ -98,7 +98,7 @@ class TokensDialogTest extends \Magento\Integration\Controller\Adminhtml\Integra
                 $this->returnValue($this->_getIntegrationModelMock())
             );
 
-        $this->_oauthSvcMock->expects($this->once())->method('deleteToken');
+        $this->_oauthSvcMock->expects($this->once())->method('deleteIntegrationToken');
         $this->_oauthSvcMock->expects($this->once())->method('postToConsumer');
 
         $this->_messageManager->expects($this->once())->method('addNotice');

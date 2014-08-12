@@ -35,7 +35,7 @@ define([
         return;
     }
 
-    config = $el.data('order-config'),
+    config = $el.data('order-config');
     baseUrl = $el.data('load-base-url');
 
     order = new AdminOrder(config);

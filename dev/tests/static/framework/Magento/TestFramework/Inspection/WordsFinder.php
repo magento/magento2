@@ -67,7 +67,7 @@ class WordsFinder
         if (!is_dir($baseDir)) {
             throw new \Magento\TestFramework\Inspection\Exception("Base directory {$baseDir} does not exist");
         }
-        $this->_baseDir = realpath($baseDir);
+        $this->_baseDir = str_replace('\\', '/', realpath($baseDir));
 
         // Load config files
         if (!is_array($configFiles)) {
@@ -81,7 +81,7 @@ class WordsFinder
         $basePath = $this->_baseDir . '/';
         $basePathLen = strlen($basePath);
         foreach ($configFiles as $configFile) {
-            $configFile = realpath($configFile);
+            $configFile = str_replace('\\', '/', realpath($configFile));
             if (strncmp($basePath, $configFile, $basePathLen) === 0) {
                 // File is inside base dir
                 $this->_whitelist[$this->_getRelPath($configFile)] = array();

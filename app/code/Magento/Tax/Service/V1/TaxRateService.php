@@ -42,6 +42,8 @@ use Magento\Tax\Service\V1\Data\TaxRateBuilder;
  */
 class TaxRateService implements TaxRateServiceInterface
 {
+    const MESSAGE_TAX_RATE_ID_IS_NOT_ALLOWED = 'id is not expected for this request.';
+
     /**
      * Tax rate model and tax rate data object converter
      *
@@ -101,6 +103,9 @@ class TaxRateService implements TaxRateServiceInterface
      */
     public function createTaxRate(TaxRateDataObject $taxRate)
     {
+        if ($taxRate->getId()) {
+            throw new InputException(self::MESSAGE_TAX_RATE_ID_IS_NOT_ALLOWED);
+        }
         $rateModel = $this->saveTaxRate($taxRate);
         return $this->converter->createTaxRateDataObjectFromModel($rateModel);
     }

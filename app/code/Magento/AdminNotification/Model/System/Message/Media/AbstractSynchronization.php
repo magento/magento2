@@ -23,7 +23,7 @@
  */
 namespace Magento\AdminNotification\Model\System\Message\Media;
 
-abstract class AbstractSynchronization implements \Magento\AdminNotification\Model\System\MessageInterface
+abstract class AbstractSynchronization implements \Magento\Framework\Notification\MessageInterface
 {
     /**
      * @var \Magento\Core\Model\File\Storage\Flag
@@ -94,6 +94,6 @@ abstract class AbstractSynchronization implements \Magento\AdminNotification\Mod
      */
     public function getSeverity()
     {
-        return \Magento\AdminNotification\Model\System\MessageInterface::SEVERITY_MAJOR;
+        return \Magento\Framework\Notification\MessageInterface::SEVERITY_MAJOR;
     }
 }

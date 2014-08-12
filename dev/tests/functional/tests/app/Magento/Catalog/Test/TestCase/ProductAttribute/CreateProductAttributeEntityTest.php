@@ -53,7 +53,7 @@ class CreateProductAttributeEntityTest extends Injectable
      * @param CatalogProductAttributeIndex $attributeIndex
      * @param CatalogProductAttributeNew $attributeNew
      * @param CatalogAttributeSet $productTemplate
-     * @return void
+     * @return array
      */
     public function testCreateProductAttribute(
         CatalogProductAttribute $productAttribute,
@@ -69,5 +69,6 @@ class CreateProductAttributeEntityTest extends Injectable
         $attributeIndex->getPageActionsBlock()->addNew();
         $attributeNew->getAttributeForm()->fill($productAttribute);
         $attributeNew->getPageActions()->save();
+        return ['attribute' => $productAttribute];
     }
 }

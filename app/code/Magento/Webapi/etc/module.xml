@@ -33,12 +33,11 @@
         </sequence>
         <depends>
             <module name="Magento_Store"/>
+            <module name="Magento_Authorization"/>
             <module name="Magento_Core"/>
             <module name="Magento_Integration"/>
             <module name="Magento_Backend"/>
-            <module name="Magento_User"/>
-            <module name="Magento_Authz"/>
-            <module name="Magento_Customer"/>
+            <module name="Magento_User" type="soft"/>
         </depends>
     </module>
 </config>

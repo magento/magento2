@@ -63,7 +63,7 @@ class AssertCustomerGroupOnCustomerForm extends AbstractConstraint
             'customerInjectable',
             [
                 'dataSet' => 'defaultBackend',
-                'data' => ['group_id' => $customerGroup->getCustomerGroupCode()]
+                'data' => ['group_id' => ['customerGroup' => $customerGroup]]
             ]
         );
         $filter = ['email' => $customer->getEmail()];

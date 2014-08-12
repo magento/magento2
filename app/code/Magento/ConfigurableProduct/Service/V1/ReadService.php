@@ -63,9 +63,9 @@ class ReadService implements ReadServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function generateVariation(Product $product, $configurableAttributes)
+    public function generateVariation(Product $product, $options)
     {
-        $attributes = $this->getAttributesForMatrix($configurableAttributes);
+        $attributes = $this->getAttributesForMatrix($options);
         $variations = $this->variationMatrix->getVariations($attributes);
         $products = $this->populateProductVariation($product, $variations, $attributes);
         return $products;
@@ -74,18 +74,18 @@ class ReadService implements ReadServiceInterface
     /**
      * Prepare attribute info for variation matrix generation
      *
-     * @param \Magento\ConfigurableProduct\Service\V1\Data\ConfigurableAttribute[] $configurableAttributes
+     * @param \Magento\ConfigurableProduct\Service\V1\Data\Option[] $options
      * @return array
      */
-    private function getAttributesForMatrix($configurableAttributes)
+    private function getAttributesForMatrix($options)
     {
         $attributes = [];
-        foreach ($configurableAttributes as $configurableAttribute) {
-            $configurable = $configurableAttribute->__toArray();
-            $attribute = $this->attributeReadService->info($configurableAttribute->getAttributeId());
+        foreach ($options as $option) {
+            $configurable = $option->__toArray();
+            $attribute = $this->attributeReadService->info($option->getAttributeId());
             $configurable['options'] = $attribute->__toArray()['options'];
             $configurable['attribute_code'] = $attribute->getAttributeCode();
-            $attributes[$configurableAttribute->getAttributeId()] = $configurable;
+            $attributes[$option->getAttributeId()] = $configurable;
         }
         return $attributes;
     }
@@ -113,7 +113,7 @@ class ReadService implements ReadServiceInterface
                 );
                 $priceInfo = $valueInfo['price'];
                 $price += (!empty($priceInfo['is_percent']) ? $product->getPrice() / 100.0 : 1.0)
-                    * $priceInfo['pricing_value'];
+                    * $priceInfo['price'];
             }
             $this->productBuilder->setPrice($price);
             $this->productBuilder->setName($product->getName() . $suffix);

@@ -24,10 +24,10 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
-    <event name="admin_roles_load_after">
+    <event name="authorization_roles_load_after">
         <observer name="observer_name" instance="Some_Test_Value" method="addDataAfterRoleLoad" disabled="false" shared="true"/>
     </event>
-    <event name="admin_roles_save_before">
+    <event name="authorization_roles_save_before">
         <observer name="second_name" instance="Some_Test_Value_Two" method="setDataBeforeRoleSave" />
     </event>
 </config>

@@ -14,7 +14,7 @@ namespace Zend\Validator\File;
  * Validator which checks if the destination file does not exist
  *
  * @category  Zend
- * @package   Zend_Validate
+ * @package   Zend_Validator
  */
 class NotExists extends Exists
 {

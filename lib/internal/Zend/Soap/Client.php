@@ -858,7 +858,7 @@ class Client implements ServerClient
         if ($userAgent === null) {
             $this->user_agent = null;
         } else {
-            $this->user_agent = (string)$userAgent;
+            $this->user_agent = (string) $userAgent;
         }
         return $this;
     }

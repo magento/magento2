@@ -20,7 +20,7 @@ use Zend\Validator\AbstractValidator;
  *
  * @see        Zend\Uri\Uri
  * @category   Zend
- * @package    Zend_Validate
+ * @package    Zend_Validator
  * @subpackage Sitemap
  */
 class Loc extends AbstractValidator

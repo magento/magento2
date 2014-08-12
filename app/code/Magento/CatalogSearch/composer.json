@@ -2,21 +2,21 @@
     "name": "magento/module-catalog-search",
     "description": "N/A",
     "require": {
-        "php": "5.4.*|5.5.*",
-        "magento/module-store": "0.1.0-alpha89",
-        "magento/module-catalog": "0.1.0-alpha89",
-        "magento/module-customer": "0.1.0-alpha89",
-        "magento/module-core": "0.1.0-alpha89",
-        "magento/module-directory": "0.1.0-alpha89",
-        "magento/module-index": "0.1.0-alpha89",
-        "magento/module-eav": "0.1.0-alpha89",
-        "magento/module-backend": "0.1.0-alpha89",
-        "magento/module-theme": "0.1.0-alpha89",
-        "magento/framework": "0.1.0-alpha89",
+        "php": "~5.4.11|~5.5.0",
+        "magento/module-store": "0.1.0-alpha90",
+        "magento/module-catalog": "0.1.0-alpha90",
+        "magento/module-customer": "0.1.0-alpha90",
+        "magento/module-core": "0.1.0-alpha90",
+        "magento/module-directory": "0.1.0-alpha90",
+        "magento/module-index": "0.1.0-alpha90",
+        "magento/module-eav": "0.1.0-alpha90",
+        "magento/module-backend": "0.1.0-alpha90",
+        "magento/module-theme": "0.1.0-alpha90",
+        "magento/framework": "0.1.0-alpha90",
         "magento/magento-composer-installer": "*"
     },
     "type": "magento2-module",
-    "version": "0.1.0-alpha89",
+    "version": "0.1.0-alpha90",
     "extra": {
         "map": [
             [

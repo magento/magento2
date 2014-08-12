@@ -59,11 +59,12 @@
         <td class="col-name select-opt-title">
             <input name="product[options][${id}][values][${select_id}][option_type_id]" type="hidden" value="${option_type_id}">
             <input id="product_option_${id}_select_${select_id}_is_delete" name="product[options][${id}][values][${select_id}][is_delete]" type="hidden" value="">
-            <input id="product_option_${id}_select_${select_id}_title" name="product[options][${id}][values][${select_id}][title]" class="required-entry input-text select-type-title" type="text" value="${title}" data-store-label="${title}">{{html checkboxScopeTitle}}
+            <input id="product_option_${id}_select_${select_id}_title" {{if typeof(scopeTitleDisabled) != 'undefined' && scopeTitleDisabled != null}} disabled="disabled" {{/if}} name="product[options][${id}][values][${select_id}][title]" class="required-entry input-text select-type-title {{if typeof(scopeTitleDisabled) != 'undefined' && scopeTitleDisabled != null}} disabled {{/if}}" type="text" value="${title}" data-store-label="${title}">{{html checkboxScopeTitle}}
         </td>
         <?php if ($this->getCanReadPrice() !== false) : ?>
         <td class="col-price select-opt-price">
             <input id="product_option_${id}_select_${select_id}_price"
+                   {{if typeof(scopePriceDisabled) != 'undefined' && scopePriceDisabled != null}} disabled="disabled" {{/if}}
                    name="product[options][${id}][values][${select_id}][price]"
                    class="input-text validate-number product-option-price"
                    type="text" value="${price}" data-store-label="${price}"
@@ -71,7 +72,7 @@
                    disabled="disabled"
                 <?php endif; ?>>
         </td>
-        <td class="col-price-type select-opt-price-type"><?php echo $this->getPriceTypeSelectHtml() ?>{{html checkboxScopePrice}}</td>
+        <td class="col-price-type select-opt-price-type"><?php echo $this->getPriceTypeSelectHtml('{{if typeof(scopePriceDisabled) != "undefined" && scopePriceDisabled != null}} disabled="disabled" {{/if}}') ?>{{html checkboxScopePrice}}</td>
         <?php else : ?>
         <input id="product_option_${id}_select_${select_id}_price" name="product[options][${id}][values][${select_id}][price]" type="hidden">
         <input id="product_option_${id}_select_${select_id}_price_type" name="product[options][${id}][values][${select_id}][price_type]" type="hidden">

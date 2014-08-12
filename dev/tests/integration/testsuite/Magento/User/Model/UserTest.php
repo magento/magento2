@@ -39,7 +39,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
     protected $_dateTime;
 
     /**
-     * @var \Magento\User\Model\Role
+     * @var \Magento\Authorization\Model\Role
      */
     protected static $_newRole;
 
@@ -112,7 +112,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
     public static function roleDataFixture()
     {
         self::$_newRole = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\User\Model\Role'
+            'Magento\Authorization\Model\Role'
         );
         self::$_newRole->setName('admin_role')->setRoleType('G')->setPid('1');
         self::$_newRole->save();
@@ -152,7 +152,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
     {
         $this->_model->loadByUsername(\Magento\TestFramework\Bootstrap::ADMIN_NAME);
         $role = $this->_model->getRole();
-        $this->assertInstanceOf('Magento\User\Model\Role', $role);
+        $this->assertInstanceOf('Magento\Authorization\Model\Role', $role);
         $this->assertEquals(1, $role->getId());
         $this->_model->setRoleId(self::$_newRole->getId())->save();
         $role = $this->_model->getRole();

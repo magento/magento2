@@ -24,7 +24,17 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <type name="Magento\Sales\Model\Resource\Report" shared="false" />
+    <preference for="Magento\Sales\Service\V1\OrderGetInterface" type="Magento\Sales\Service\V1\OrderGet"/>
+    <preference for="Magento\Sales\Service\V1\OrderCancelInterface" type="Magento\Sales\Service\V1\OrderCancel"/>
+    <preference for="Magento\Sales\Service\V1\OrderListInterface" type="Magento\Sales\Service\V1\OrderList"/>
+    <preference for="Magento\Sales\Service\V1\OrderGetStatusInterface" type="Magento\Sales\Service\V1\OrderGetStatus"/>
+    <preference for="Magento\Sales\Service\V1\OrderHoldInterface" type="Magento\Sales\Service\V1\OrderHold"/>
+    <preference for="Magento\Sales\Service\V1\OrderUnHoldInterface" type="Magento\Sales\Service\V1\OrderUnHold"/>
+    <preference for="Magento\Sales\Service\V1\OrderNotifyUserInterface" type="Magento\Sales\Service\V1\OrderNotifyUser"/>
+    <preference for="Magento\Sales\Service\V1\OrderStatusHistoryAddInterface" type="Magento\Sales\Service\V1\OrderStatusHistoryAdd"/>
+    <preference for="Magento\Sales\Service\V1\OrderCommentsListInterface" type="Magento\Sales\Service\V1\OrderCommentsList"/>
+    <preference for="Magento\Sales\Service\V1\OrderAddressUpdateInterface" type="Magento\Sales\Service\V1\OrderAddressUpdate"/>
+    <type name="Magento\Sales\Model\Resource\Report" shared="false"/>
     <type name="Magento\Sales\Model\Order\Pdf\Config\Reader">
         <arguments>
             <argument name="fileName" xsi:type="string">pdf.xml</argument>

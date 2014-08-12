@@ -21,6 +21,7 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
 namespace Magento\Integration\Model\Resource;
 
 /**
@@ -36,5 +37,21 @@ class Integration extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected function _construct()
     {
         $this->_init('integration', 'integration_id');
+    }
+
+    /**
+     * Select token for a given customer.
+     *
+     * @param int $consumerId
+     * @return array|boolean - Row data (array) or false if there is no corresponding row
+     */
+    public function selectActiveIntegrationByConsumerId($consumerId)
+    {
+        $adapter = $this->_getReadAdapter();
+        $select = $adapter->select()
+            ->from($this->getMainTable())
+            ->where('consumer_id = ?', $consumerId)
+            ->where('status = ?', \Magento\Integration\Model\Integration::STATUS_ACTIVE);
+        return $adapter->fetchRow($select);
     }
 }

@@ -99,10 +99,12 @@ class RecurringPayment extends \Magento\Framework\App\Action\Action
     {
         try {
             $payment = $this->_initPayment();
-            $this->_title->add(__('Recurring Billing Payments'));
-            $this->_title->add(__('Payment #%1', $payment->getReferenceId()));
             $this->_view->loadLayout();
             $this->_view->getLayout()->initMessages();
+
+            $title = __('Recurring Payment #%1', $payment->getReferenceId());
+            $this->_view->getLayout()->getBlock('head')->setTitle($title);
+
             $this->_view->renderLayout();
             return;
         } catch (\Magento\Framework\Model\Exception $e) {

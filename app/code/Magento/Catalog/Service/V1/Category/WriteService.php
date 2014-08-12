@@ -27,7 +27,9 @@ use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\CategoryFactory;
 use Magento\Catalog\Service\V1\Data\Category as CategoryDataObject;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\StateException;
 use Magento\Catalog\Service\V1\Data\Category\Mapper as CategoryMapper;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -94,13 +96,16 @@ class WriteService implements WriteServiceInterface
      */
     public function delete($categoryId)
     {
+        if (\Magento\Catalog\Model\Category::TREE_ROOT_ID == $categoryId) {
+            throw new InputException('Cannot remove the system category.');
+        }
         /** @var Category $category */
         $category = $this->loadCategory($categoryId);
 
         try {
             $category->delete();
         } catch (\Exception $e) {
-            throw new CouldNotSaveException('Cannot delete category with id %1', [$categoryId], $e);
+            throw new StateException('Cannot delete category with id %1', [$categoryId], $e);
         }
 
         return true;
@@ -131,10 +136,11 @@ class WriteService implements WriteServiceInterface
         $model = $this->loadCategory($categoryId);
         $parentCategory = $this->loadCategory($parentId);
 
-        if (is_null($afterId) && $parentCategory->hasChildren()) {
+        if ($parentCategory->hasChildren()) {
             $parentChildren = $parentCategory->getChildren();
             $categoryIds = explode(',', $parentChildren);
-            $afterId = array_pop($categoryIds);
+            $lastId = array_pop($categoryIds);
+            $afterId = (is_null($afterId) || $afterId > $lastId) ? $lastId : $afterId;
         }
 
         if (strpos($parentCategory->getPath(), $model->getPath()) === 0) {

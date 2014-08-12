@@ -8,7 +8,7 @@
     ],
     "autoload": {
         "psr-0": {
-            "Zend\\Escaper": ""
+            "Zend\\Escaper\\": ""
         }
     },
     "target-dir": "Zend/Escaper",

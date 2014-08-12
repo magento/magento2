@@ -30,6 +30,11 @@
     <collection>Magento\Customer\Model\Resource\Customer\Collection</collection>
     <identifier>email</identifier>
     <fields>
+        <address>
+            <attribute_code>address</attribute_code>
+            <backend_type>virtual</backend_type>
+            <source>Magento\Customer\Test\Fixture\CustomerInjectable\Address</source>
+        </address>
         <confirmation>
             <attribute_code>confirmation</attribute_code>
             <backend_type>varchar</backend_type>
@@ -118,6 +123,7 @@
             <default_value></default_value>
             <input>select</input>
             <group>account_information</group>
+            <source>Magento\Customer\Test\Fixture\CustomerInjectable\GroupId</source>
         </group_id>
         <lastname>
             <attribute_code>lastname</attribute_code>

@@ -25,10 +25,11 @@
 @import "cart.less";
 @import "minicart.less";
 
+@desctop-form-field-vertical-indent: 29px;
+
 //
 //    One Page Checkout
 //--------------------------------------
-
 .opc-wrapper {
     &:extend(.add-box-sizing all);
     .css(padding-bottom, @indent-xl-base);
@@ -39,9 +40,16 @@
         &.allow .step-title {
             cursor: pointer;
         }
-        &.active .step-title {
-            color: @color-primary-darker;
-            cursor: default;
+        &.active {
+            .step {
+                &-title {
+                    color: @color-primary-darker;
+                    cursor: default;
+                }
+                &-content {
+                    display: block;
+                }
+            }
         }
     }
     .step {
@@ -59,10 +67,11 @@
             border-bottom: @border-width-base solid @border-color-base;
         }
         &-content {
-            padding: 20px 25px 40px;
+            display: none;
+            padding: 20px 10px;
             position: relative;
             .addresses .control {
-                margin: 20px 0 30px;
+                margin: 20px 0;
             }
             .fieldset {
                 margin-bottom: 0;
@@ -71,6 +80,14 @@
                     &:after {
                         margin-top: 35px;
                         text-align: center;
+                    }
+                }
+                > .field {
+                    margin: @form-field-vertical-indent 0 0;
+                }
+                &.address {
+                    .field:first-of-type:not(.additional) {
+                        margin: 0;
                     }
                 }
             }
@@ -82,9 +99,15 @@
                 > .choice {
                     margin-top: @form-field-vertical-indent;
                 }
+                .field:not(:first-child) {
+                    margin: 20px 0 0;
+                }
+                > .field.choice {
+                    margin: @form-field-vertical-indent 0 0;
+                }
             }
             .actions {
-                margin-top: 40px;
+                margin-top: 20px;
             }
         }
     }
@@ -106,25 +129,45 @@
             &:extend(.abstract-shipping-methods-title all);
         }
         .item-content {
-            margin: 0 0 10px 20px;
+            margin: 0 0 20px;
+            .field.choice {
+                margin: 0 0 10px;
+            }
+            .price {
+                font-weight: @font-weight-bold;
+            }
         }
         .price.box {
             margin-left: 20px;
-            .regular .price {
+            .label + .price {
                 font-weight: @font-weight-bold;
             }
         }
     }
 
     .methods-payment {
-        .content {
+        .item-title {
+            font-weight: @font-weight-base;
+        }
+        .item-content {
             margin-bottom: 0;
             .fieldset {
                 padding: 15px 0;
+                .field:first-child,
+                .field.year {
+                    margin-top: 0;
+                }
             }
             .label {
                 font-weight: @font-weight-base;
             }
+        }
+    }
+
+    .opc-payment-additional {
+        margin: 0 0 5px;
+        + .opc-payment {
+            margin: 20px 0 0;
         }
     }
 
@@ -197,7 +240,6 @@
 //
 //    Checkout Progress
 //--------------------------------------
-
 .opc-block-progress {
     &:extend(.add-box-sizing all);
     margin-bottom: @indent-l-base;
@@ -255,7 +297,6 @@
 //
 //    Checkout Success
 //--------------------------------------
-
 .checkout-onepage-success {
     .page-title {
         .print {
@@ -270,11 +311,40 @@
     }
 }
 
+
+//
+//    Mobile
+//--------------------------------------
+.responsive-smaller(@break) when (@break = @screen-m) {
+    .opc-wrapper {
+        .data.table {
+            &:extend(.table-vertical-mobile all);
+            tbody tr {
+                &:first-child,
+                &:last-child {
+                    td {
+                        border: 0;
+                    }
+                }
+                td:last-child {
+                    border-bottom: @border-width-base solid @border-color-base;
+                }
+                .col {
+                    &.qty,
+                    &.price,
+                    &.subtotal {
+                        text-align: left;
+                    }
+                }
+            }
+        }
+    }
+}
+
 //
 //    Desktop
 //--------------------------------------
-.responsive(@break) when (@break = @break-point-1) {
-
+.responsive(@break) when (@break = @screen-m) {
     .checkout-onepage-index .column.main {
         &:extend(.add-clearfix-desktop all);
     }
@@ -283,17 +353,30 @@
         .layout-column(2, 2, @layout-column-checkout-main-width);
         &:extend(.add-box-sizing-desktop all);
         .step-content {
+            padding: 20px 18px 40px;
+            .addresses .control {
+                margin-bottom: @desctop-form-field-vertical-indent;
+            }
             .form {
                 &:after {
                     text-align: right;
                 }
-            }
-            .form:not(.login) .actions-toolbar {
-                &:extend(.reset-left-margin-desktop all);
+                &:not(.login) .actions-toolbar {
+                    &:extend(.reset-left-margin-desktop all);
+                }
+                > .field.choice,
+                .fieldset > .field {
+                    margin: @desctop-form-field-vertical-indent 0 0;
+                }
+                .fieldset.address {
+                    .field:first-of-type:not(.additional) {
+                        margin: 0;
+                    }
+                }
             }
             .fieldset.login {
                 &:after {
-                        &:extend(.margin-for-forms-desktop all);
+                    &:extend(.margin-for-forms-desktop all);
                     text-align: left;
                 }
             }
@@ -327,7 +410,6 @@
     .checkout-onepage-success {
         .page-title {
             .print {
-                display: none;
                 display: inline-block;
                 margin-left: 40px;
                 .font-size(14);

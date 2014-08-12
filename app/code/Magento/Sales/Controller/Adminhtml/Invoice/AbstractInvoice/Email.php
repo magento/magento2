@@ -24,6 +24,8 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice;
 
+use Magento\Sales\Model\Order\Email\Sender\InvoiceSender;
+
 abstract class Email extends \Magento\Backend\App\Action
 {
     /**
@@ -41,25 +43,33 @@ abstract class Email extends \Magento\Backend\App\Action
      */
     public function execute()
     {
-        if ($invoiceId = $this->getRequest()->getParam('invoice_id')) {
-            if ($invoice = $this->_objectManager->create('Magento\Sales\Model\Order\Invoice')->load($invoiceId)) {
-                $invoice->sendEmail();
-                $historyItem = $this->_objectManager->create(
-                    'Magento\Sales\Model\Resource\Order\Status\History\Collection'
-                )->getUnnotifiedForInstance(
-                    $invoice,
-                    \Magento\Sales\Model\Order\Invoice::HISTORY_ENTITY_NAME
-                );
-                if ($historyItem) {
-                    $historyItem->setIsCustomerNotified(1);
-                    $historyItem->save();
-                }
-                $this->messageManager->addSuccess(__('We sent the message.'));
-                $this->_redirect(
-                    'sales/invoice/view',
-                    array('order_id' => $invoice->getOrder()->getId(), 'invoice_id' => $invoiceId)
-                );
-            }
+        $invoiceId = $this->getRequest()->getParam('invoice_id');
+        if (!$invoiceId) {
+            return;
         }
+        $invoice = $this->_objectManager->create('Magento\Sales\Model\Order\Invoice')->load($invoiceId);
+        if (!$invoice) {
+            return;
+        }
+
+        /** @var InvoiceSender $invoiceSender */
+        $invoiceSender = $this->_objectManager->create('Magento\Sales\Model\Order\Email\Sender\InvoiceSender');
+        $invoiceSender->send($invoice);
+
+        $historyItem = $this->_objectManager->create(
+            'Magento\Sales\Model\Resource\Order\Status\History\Collection'
+        )->getUnnotifiedForInstance(
+            $invoice,
+            \Magento\Sales\Model\Order\Invoice::HISTORY_ENTITY_NAME
+        );
+        if ($historyItem) {
+            $historyItem->setIsCustomerNotified(1);
+            $historyItem->save();
+        }
+        $this->messageManager->addSuccess(__('We sent the message.'));
+        $this->_redirect(
+            'sales/invoice/view',
+            array('order_id' => $invoice->getOrder()->getId(), 'invoice_id' => $invoiceId)
+        );
     }
 }

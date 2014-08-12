@@ -43,7 +43,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
     /**
      * Rules collection factory
      *
-     * @var \Magento\User\Model\Resource\Rules\CollectionFactory
+     * @var \Magento\Authorization\Model\Resource\Rules\CollectionFactory
      */
     protected $_rulesCollectionFactory;
 
@@ -67,7 +67,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Framework\Acl\RootResource $rootResource
-     * @param \Magento\User\Model\Resource\Rules\CollectionFactory $rulesCollectionFactory
+     * @param \Magento\Authorization\Model\Resource\Rules\CollectionFactory $rulesCollectionFactory
      * @param \Magento\Framework\Acl\Resource\ProviderInterface $aclResourceProvider
      * @param \Magento\Webapi\Helper\Data $webapiData
      * @param \Magento\Integration\Helper\Data $integrationData
@@ -81,7 +81,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Framework\Acl\RootResource $rootResource,
-        \Magento\User\Model\Resource\Rules\CollectionFactory $rulesCollectionFactory,
+        \Magento\Authorization\Model\Resource\Rules\CollectionFactory $rulesCollectionFactory,
         \Magento\Framework\Acl\Resource\ProviderInterface $aclResourceProvider,
         \Magento\Webapi\Helper\Data $webapiData,
         \Magento\Integration\Helper\Data $integrationData,

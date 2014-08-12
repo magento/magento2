@@ -19,7 +19,8 @@ use Zend\Validator\Exception;
 
 /**
  * @category   Zend
- * @package    Zend_Validate
+ * @package    Zend_I18n
+ * @subpackage Validator
  */
 class Float extends AbstractValidator
 {

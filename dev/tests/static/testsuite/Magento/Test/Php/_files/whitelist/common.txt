@@ -35,6 +35,7 @@ app/code/Magento/Checkout/Block/Link.php
 app/code/Magento/Cms/Block/Adminhtml/Page/Edit/Tab/Design.php
 app/code/Magento/Cms/Controller/Router.php
 app/code/Magento/Cms/Model/Template/FilterProvider.php
+app/code/Magento/ConfigurableImportExport
 app/code/Magento/ConfigurableProduct
 app/code/Magento/Core/data
 app/code/Magento/Core/Model/Design.php
@@ -67,6 +68,7 @@ app/code/Magento/Eav/Model/Cache/Type.php
 app/code/Magento/GiftMessage/Model/Plugin
 app/code/Magento/GoogleShopping/Block/SiteVerification.php
 app/code/Magento/GoogleShopping/Model/AttributeFactory.php
+app/code/Magento/GroupedImportExport
 app/code/Magento/GroupedProduct/Service
 app/code/Magento/Eav/Model/Entity/Attribute/Config
 app/code/Magento/Eav/Model/Entity/Attribute/Config.php
@@ -141,4 +143,5 @@ lib/internal/Magento/Framework/Url/SecurityInfoInterface.php
 lib/internal/Magento/Framework/View
 lib/internal/Magento/Framework/App/AbstractShell.php
 lib/internal/Magento/Framework/Locale/Validator.php
+lib/internal/Magento/Framework/Notification
 lib/internal/Magento/Framework/App/Config

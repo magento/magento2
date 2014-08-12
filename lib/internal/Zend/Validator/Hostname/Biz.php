@@ -14,7 +14,7 @@ namespace Zend\Validator\Hostname;
  * Resource file for biz idn validation
  *
  * @category   Zend
- * @package    Zend_Validate
+ * @package    Zend_Validator
  */
 return array(
     1  => '/^[\x{002d}0-9a-zäåæéöøü]{1,63}$/iu',

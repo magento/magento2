@@ -17,7 +17,7 @@ use Zend\Validator\Exception;
  * Validator for the maximum size of a file up to a max of 2GB
  *
  * @category  Zend
- * @package   Zend_Validate
+ * @package   Zend_Validator
  */
 class Upload extends AbstractValidator
 {

@@ -53,6 +53,19 @@
     font-size: @sizeValue;
 }
 
+//  Rem line height
+.line-height(@heightValue) when not (@heightValue = false) and not (ispercentage(@heightValue)) {
+    @value: unit(@heightValue);
+    @remValue: (@value / @font-rem-ratio);
+    @pxValue: @value;
+    line-height: ~"@{pxValue}px";
+    line-height: ~"@{remValue}rem";
+}
+
+.line-height(@heightValue) when (ispercentage(@heightValue)) and not (@heightValue = false) {
+    line-height: @heightValue;
+}
+
 .wrap-words() {
     -ms-word-break: break-all;
     word-break: break-all;
@@ -163,7 +176,6 @@
         );
         .margin-vertical-rem(@@_margin-top, @@_margin-bottom);
 }
-
 
 //
 //  Base typography

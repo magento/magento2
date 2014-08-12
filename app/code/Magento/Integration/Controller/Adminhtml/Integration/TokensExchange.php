@@ -60,7 +60,7 @@ class TokensExchange extends \Magento\Integration\Controller\Adminhtml\Integrati
             $integration = $this->_integrationService->get($integrationId);
             if ($isReauthorize) {
                 /** Remove existing token associated with consumer before issuing a new one. */
-                $this->_oauthService->deleteToken($integration->getConsumerId());
+                $this->_oauthService->deleteIntegrationToken($integration->getConsumerId());
                 $integration->setStatus(IntegrationModel::STATUS_INACTIVE)->save();
             }
             //Integration chooses to use Oauth for token exchange

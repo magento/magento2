@@ -11,11 +11,10 @@
 namespace Zend\Validator;
 
 use Traversable;
-use Zend\Stdlib\ArrayUtils;
 
 /**
  * @category   Zend
- * @package    Zend_Validate
+ * @package    Zend_Validator
  */
 class Ip extends AbstractValidator
 {
@@ -184,7 +183,7 @@ class Ip extends AbstractValidator
          */
         static $regex = '/^v([[:xdigit:]]+)\.[[:alnum:]\-\._~!\$&\'\(\)\*\+,;=:]+$/';
 
-        $result = (bool)preg_match($regex, $value, $matches);
+        $result = (bool) preg_match($regex, $value, $matches);
 
         /*
          * "As such, implementations must not provide the version flag for the

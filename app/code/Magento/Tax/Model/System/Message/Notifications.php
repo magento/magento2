@@ -26,7 +26,7 @@ namespace Magento\Tax\Model\System\Message;
 /**
  * Notifications class
  */
-class Notifications implements \Magento\AdminNotification\Model\System\MessageInterface
+class Notifications implements \Magento\Framework\Notification\MessageInterface
 {
     /**
      * Store manager object
@@ -93,7 +93,7 @@ class Notifications implements \Magento\AdminNotification\Model\System\MessageIn
      *      Tax Calculation Method Based On 'Total' or 'Row'
      *      and at least one Price Display Settings has 'Including and Excluding Tax' value
      *
-     * @param null|int|bool|string|Store $store $store
+     * @param null|int|bool|string|\Magento\Store\Model\Store $store $store
      * @return bool
      */
     public function checkDisplaySettings($store = null)
@@ -118,7 +118,7 @@ class Notifications implements \Magento\AdminNotification\Model\System\MessageIn
      *      Before Discount / Excluding Tax
      *      Before Discount / Including Tax
      *
-     * @param null|int|bool|string|Store $store $store
+     * @param null|int|bool|string|\Magento\Store\Model\Store $store $store
      * @return bool
      */
     public function checkDiscountSettings($store = null)

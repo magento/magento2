@@ -130,14 +130,8 @@ class IntegrationTest extends \Magento\Backend\Utility\Controller
         $this->_integration = $factory->create()->setName(md5(rand()))->save();
 
         /** Grant permissions to integrations */
-        /** @var \Magento\Authz\Model\UserIdentifier\Factory $userIdentifierFactory */
-        $userIdentifierFactory = $objectManager->create('Magento\Authz\Model\UserIdentifier\Factory');
-        /** @var \Magento\Authz\Service\AuthorizationV1 $authzService */
-        $userIdentifier = $userIdentifierFactory->create(
-            \Magento\Authz\Model\UserIdentifier::USER_TYPE_INTEGRATION,
-            $this->_integration->getId()
-        );
-        $authzService = $objectManager->create('Magento\Authz\Service\AuthorizationV1');
-        $authzService->grantAllPermissions($userIdentifier);
+        /** @var \Magento\Integration\Service\V1\AuthorizationService $authorizationService */
+        $authorizationService = $objectManager->create('Magento\Integration\Service\V1\AuthorizationService');
+        $authorizationService->grantAllPermissions($this->_integration->getId());
     }
 }

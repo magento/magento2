@@ -16,7 +16,7 @@ use Zend\Stdlib\ErrorHandler;
 
 /**
  * @category   Zend
- * @package    Zend_Validate
+ * @package    Zend_Validator
  */
 class Regex extends AbstractValidator
 {

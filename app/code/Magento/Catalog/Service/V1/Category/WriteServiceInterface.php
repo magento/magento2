@@ -39,7 +39,8 @@ interface WriteServiceInterface
      *
      * @param int $categoryId category which will deleted
      * @return bool Will returned True if deleted
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\StateException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function delete($categoryId);

@@ -24,7 +24,8 @@
  */
 namespace Magento\User\Controller\Adminhtml\User\Role;
 
-use \Magento\User\Model\Acl\Role\Group as RoleGroup;
+use Magento\Authorization\Model\Acl\Role\Group as RoleGroup;
+use Magento\Authorization\Model\UserContextInterface;
 
 class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
 {
@@ -98,13 +99,10 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
         try {
             $roleName = $this->getRequest()->getParam('rolename', false);
 
-            $role->setName(
-                $roleName
-            )->setPid(
-                $this->getRequest()->getParam('parent_id', false)
-            )->setRoleType(
-                RoleGroup::ROLE_TYPE
-            );
+            $role->setName($roleName)
+                ->setPid($this->getRequest()->getParam('parent_id', false))
+                ->setRoleType(RoleGroup::ROLE_TYPE)
+                ->setUserType(UserContextInterface::USER_TYPE_ADMIN);
             $this->_eventManager->dispatch(
                 'admin_permissions_role_prepare_save',
                 array('object' => $role, 'request' => $this->getRequest())

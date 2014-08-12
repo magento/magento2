@@ -133,9 +133,6 @@ class AssertAdvancedSearchProductsResult extends AbstractConstraint
         $searchData = $searchBlock->getSearchSummaryItems();
         $productData = $this->prepareFixtureData($productSearch);
         foreach ($productData as $key => $data) {
-            if ($key === 'tax_class' && $data === ['All']) {
-                continue;
-            }
             if (!isset($searchData[$key])) {
                 $errors[] = '- "' . $key . '" not found on the page';
             } elseif ($searchData[$key] !== $data) {

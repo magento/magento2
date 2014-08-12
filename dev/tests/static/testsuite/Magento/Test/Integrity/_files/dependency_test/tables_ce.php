@@ -23,8 +23,8 @@
  */
 return array(
     'admin_assert' => 'Magento_Adminhtml',
-    'admin_role' => 'Magento_Adminhtml',
-    'admin_rule' => 'Magento_Adminhtml',
+    'authorization_role' => 'Magento_Authorization',
+    'authorization_rule' => 'Magento_Authorization',
     'admin_user' => 'Magento_Adminhtml',
     'adminnotification_inbox' => 'Magento_AdminNotification',
     'catalog_category_entity_datetime' => 'Magento_Catalog',

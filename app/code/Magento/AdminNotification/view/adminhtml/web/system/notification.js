@@ -55,18 +55,6 @@ define([
     });
 
     $(document).ready(function(){
-        $('body').on('surveyYes surveyNo', function(e, data) {
-            if (e.type == 'surveyYes') {
-                var win = window.open(data.surveyUrl, '', 'width=900,height=600,resizable=1,scrollbars=1');
-                win.focus();
-            }
-            $.ajax({
-                url: data.surveyAction,
-                type: 'post',
-                data: {decision: data.decision}
-            })
-        });
-
         $('#system_messages .message-system-short .error').on('click', function() {
             $('#message-system-all').systemMessageDialog('open', 1);
         });

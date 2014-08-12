@@ -25,6 +25,8 @@ namespace Magento\PayPalRecurringPayment\Model;
 
 use Exception;
 
+use Magento\Sales\Model\Order\Email\Sender\OrderSender;
+
 /**
  * PayPal Recurring Instant Payment Notification processor model
  */
@@ -43,10 +45,16 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements \Magento\Paypal\M
     protected $_recurringPaymentFactory;
 
     /**
+     * @var OrderSender
+     */
+    protected $orderSender;
+
+    /**
      * @param \Magento\Paypal\Model\ConfigFactory $configFactory
      * @param \Magento\Framework\Logger\AdapterFactory $logAdapterFactory
      * @param \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory
      * @param \Magento\RecurringPayment\Model\PaymentFactory $recurringPaymentFactory
+     * @param OrderSender $orderSender
      * @param array $data
      */
     public function __construct(
@@ -54,10 +62,12 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements \Magento\Paypal\M
         \Magento\Framework\Logger\AdapterFactory $logAdapterFactory,
         \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory,
         \Magento\RecurringPayment\Model\PaymentFactory $recurringPaymentFactory,
+        OrderSender $orderSender,
         array $data = array()
     ) {
         parent::__construct($configFactory, $logAdapterFactory, $curlFactory, $data);
         $this->_recurringPaymentFactory = $recurringPaymentFactory;
+        $this->orderSender = $orderSender;
     }
 
     /**
@@ -171,7 +181,8 @@ class Ipn extends \Magento\Paypal\Model\AbstractIpn implements \Magento\Paypal\M
             $invoice = $payment->getCreatedInvoice();
             if ($invoice) {
                 $message = __('You notified customer about invoice #%1.', $invoice->getIncrementId());
-                $order->sendNewOrderEmail()->addStatusHistoryComment($message)->setIsCustomerNotified(true)->save();
+                $this->orderSender->send($order);
+                $order->addStatusHistoryComment($message)->setIsCustomerNotified(true)->save();
             }
         } catch (\Magento\Framework\Model\Exception $e) {
             $comment = $this->_createIpnComment(__('Note: %1', $e->getMessage()), true);

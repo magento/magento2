@@ -23,7 +23,7 @@ use Zend\Validator\Exception;
  * Class for Database record validation
  *
  * @category   Zend
- * @package    Zend_Validate
+ * @package    Zend_Validator
  */
 abstract class AbstractDb extends AbstractValidator
 {

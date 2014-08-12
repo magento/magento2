@@ -44,7 +44,6 @@ class MassAdd extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshoppin
 
         $storeId = $this->_getStore()->getId();
         $productIds = $this->getRequest()->getParam('product', null);
-        $notifier = $this->_objectManager->create('Magento\AdminNotification\Model\Inbox');
 
         try {
             $flag->lock();
@@ -64,7 +63,7 @@ class MassAdd extends \Magento\GoogleShopping\Controller\Adminhtml\Googleshoppin
             return;
         } catch (\Exception $e) {
             $flag->unlock();
-            $notifier->addMajor(
+            $this->notifier->addMajor(
                 __('An error has occurred while adding products to google shopping account.'),
                 $e->getMessage()
             );

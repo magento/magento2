@@ -112,6 +112,8 @@ class OauthTest extends \PHPUnit_Framework_TestCase
                     'getConsumerId',
                     'convertToAccess',
                     'getRevoked',
+                    'getResource',
+                    'loadByConsumerIdAndUserType',
                     '__wakeup'
                 )
             )
@@ -139,7 +141,8 @@ class OauthTest extends \PHPUnit_Framework_TestCase
             $this->_consumerFactory,
             $this->_tokenFactory,
             $this->_dataHelperMock,
-            $this->_dateMock
+            $this->_dateMock,
+            $this->_tokenMock
         );
         $this->_oauth = new \Magento\Framework\Oauth\Oauth(
             $this->_oauthHelperMock,
@@ -401,6 +404,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
         $this->_tokenMock->expects($this->any())->method('getVerifier')->will($this->returnValue($verifier));
         $this->_tokenMock->expects($this->any())->method('convertToAccess')->will($this->returnSelf());
         $this->_tokenMock->expects($this->any())->method('getRevoked')->will($this->returnValue($isRevoked));
+        $this->_tokenMock->expects($this->any())->method('loadByConsumerIdAndUserType')->will($this->returnSelf());
     }
 
     /**

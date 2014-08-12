@@ -21,7 +21,7 @@
  *
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
- */
+*/
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../../../app/code/Magento/Core/etc/layout_single.xsd">
@@ -30,4 +30,42 @@
     </referenceContainer>
     <move element="header.panel" destination="header.panel.wrapper" />
     <move element="top.links" destination="header.panel" after="-" />
+
+    <move element="catalog.topnav" destination="store.menu" before="-" />
+
+    <referenceContainer name="page_top">
+        <block class="Magento\Framework\View\Element\Template" name="navigation.sections" before="-" template="Magento_Theme::html/sections.phtml">
+            <arguments>
+                <argument name="group_name" xsi:type="string">navigation-sections</argument>
+                <argument name="group_css" xsi:type="string">nav-sections</argument>
+            </arguments>
+            <block class="Magento\Framework\View\Element\Template" name="store.menu" group="navigation-sections" template="Magento_Theme::html/container.phtml">
+                <arguments>
+                    <argument name="title" translate="true" xsi:type="string">Menu</argument>
+                </arguments>
+            </block>
+            <block class="Magento\Framework\View\Element\Text" name="store.links" group="navigation-sections" output="1">
+                <arguments>
+                    <argument name="title" translate="true" xsi:type="string">Account</argument>
+                    <argument name="use_force" xsi:type="boolean">true</argument>
+                    <argument name="text" xsi:type="string"><![CDATA[<!-- Account links -->]]></argument>
+                </arguments>
+            </block>
+            <block class="Magento\Framework\View\Element\Template" name="store.settings" group="navigation-sections" template="Magento_Theme::html/container.phtml">
+                <arguments>
+                    <argument name="title" translate="true" xsi:type="string">Settings</argument>
+                </arguments>
+                <block class="Magento\Store\Block\Switcher" name="store.settings.language" template="switch/languages.phtml">
+                    <arguments>
+                        <argument name="id_modifier" xsi:type="string">nav</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Directory\Block\Currency" name="store.settings.currency" before="store_language" template="currency.phtml">
+                    <arguments>
+                        <argument name="id_modifier" xsi:type="string">nav</argument>
+                    </arguments>
+                </block>
+            </block>
+        </block>
+    </referenceContainer>
 </layout>

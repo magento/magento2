@@ -25,6 +25,7 @@
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
 use \Magento\Backend\App\Action;
+use \Magento\Sales\Model\Order\Email\Sender\ShipmentSender;
 
 class Email extends \Magento\Backend\App\Action
 {
@@ -34,14 +35,22 @@ class Email extends \Magento\Backend\App\Action
     protected $shipmentLoader;
 
     /**
+     * @var ShipmentSender
+     */
+    protected $shipmentSender;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader
+     * @param ShipmentSender $shipmentSender
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader
+        \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader $shipmentLoader,
+        ShipmentSender $shipmentSender
     ) {
         $this->shipmentLoader = $shipmentLoader;
+        $this->shipmentSender = $shipmentSender;
         parent::__construct($context);
     }
 
@@ -63,7 +72,9 @@ class Email extends \Magento\Backend\App\Action
         try {
             $shipment = $this->shipmentLoader->load($this->_request);
             if ($shipment) {
-                $shipment->sendEmail(true)->setEmailSent(true)->save();
+                $this->shipmentSender->send($shipment, true);
+                $shipment->save();
+
                 $historyItem = $this->_objectManager->create(
                     'Magento\Sales\Model\Resource\Order\Status\History\Collection'
                 )->getUnnotifiedForInstance(

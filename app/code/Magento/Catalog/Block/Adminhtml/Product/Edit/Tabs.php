@@ -123,6 +123,18 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
     }
 
     /**
+     * @param int $attributeSetId
+     * @return \Magento\Eav\Model\Resource\Entity\Attribute\Group\Collection
+     */
+    public function getGroupCollection($attributeSetId)
+    {
+        return $this->_collectionFactory->create()
+            ->setAttributeSetFilter($attributeSetId)
+            ->setSortOrder()
+            ->load();
+    }
+
+    /**
      * @return $this
      */
     protected function _prepareLayout()
@@ -134,16 +146,13 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
         }
 
         if ($setId) {
-            $groupCollection = $this->_collectionFactory->create()->setAttributeSetFilter(
-                $setId
-            )->setSortOrder()->load();
-
             $tabAttributesBlock = $this->getLayout()->createBlock(
                 $this->getAttributeTabBlock(),
                 $this->getNameInLayout() . '_attributes_tab'
             );
             $advancedGroups = array();
-            foreach ($groupCollection as $group) {
+
+            foreach ($this->getGroupCollection($setId) as $group) {
                 /** @var $group \Magento\Eav\Model\Entity\Attribute\Group*/
                 $attributes = $product->getAttributes($group->getId(), true);
 

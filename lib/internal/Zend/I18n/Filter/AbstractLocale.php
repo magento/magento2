@@ -15,7 +15,8 @@ use Zend\Filter\AbstractFilter;
 
 /**
  * @category   Zend
- * @package    Zend_Filter
+ * @package    Zend_I18n
+ * @subpackage Filter
  */
 abstract class AbstractLocale extends AbstractFilter
 {

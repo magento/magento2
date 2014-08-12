@@ -24,9 +24,8 @@
 namespace Magento\Catalog\Service\V1\Category\ProductLinks;
 
 use Magento\Catalog\Model\Category;
-use Magento\Catalog\Service\V1\Data\Eav\Category\ProductConverterFactory;
-use Magento\Catalog\Service\V1\Data\Eav\Category\ProductLink;
-use Magento\Catalog\Service\V1\Data\Eav\Category\ProductLinkBuilder;
+use Magento\Catalog\Service\V1\Data\Category\ProductLink;
+use Magento\Catalog\Service\V1\Data\Category\ProductLinkBuilder;
 use Magento\TestFramework\Helper\ObjectManager;
 
 class ReadServiceTest extends \PHPUnit_Framework_TestCase
@@ -68,12 +67,12 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
         $categoryFactory->expects($this->any())->method('create')
             ->will($this->returnValue($this->category));
 
-        $this->productLink = $this->getMockBuilder('Magento\Catalog\Service\V1\Data\Eav\Category\ProductLink')
+        $this->productLink = $this->getMockBuilder('Magento\Catalog\Service\V1\Data\Category\ProductLink')
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->productLinkBuilder = $this->getMockBuilder(
-            'Magento\Catalog\Service\V1\Data\Eav\Category\ProductLinkBuilder'
+            'Magento\Catalog\Service\V1\Data\Category\ProductLinkBuilder'
         )
             ->disableOriginalConstructor()
             ->getMock();
@@ -96,7 +95,7 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
         $productId = $categoryId + 6;
         $productSku = "sku{$productId}";
 
-        $productDto = $this->getMockBuilder('Magento\Catalog\Service\V1\Data\Eav\Category\ProductLink')
+        $productDto = $this->getMockBuilder('Magento\Catalog\Service\V1\Data\Category\ProductLink')
             ->disableOriginalConstructor()
             ->getMock();
 

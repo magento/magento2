@@ -8,13 +8,14 @@
     ],
     "autoload": {
         "psr-0": {
-            "Zend\\I18n": ""
+            "Zend\\I18n\\": ""
         }
     },
     "target-dir": "Zend/I18n",
     "require": {
         "php": ">=5.3.3",
         "ext-intl": "*",
+        "zendframework/zend-filter": "self.version",
         "zendframework/zend-stdlib": "self.version"
     }
 }

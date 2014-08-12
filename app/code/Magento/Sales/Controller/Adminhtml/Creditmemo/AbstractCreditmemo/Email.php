@@ -24,6 +24,8 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo;
 
+use Magento\Sales\Model\Order\Email\Sender\CreditmemoSender;
+
 class Email extends \Magento\Backend\App\Action
 {
     /**
@@ -45,7 +47,11 @@ class Email extends \Magento\Backend\App\Action
         if ($creditmemoId) {
             $creditmemo = $this->_objectManager->create('Magento\Sales\Model\Order\Creditmemo')->load($creditmemoId);
             if ($creditmemo) {
-                $creditmemo->sendEmail();
+                /** @var CreditmemoSender $creditmemoSender */
+                $creditmemoSender = $this->_objectManager
+                    ->create('Magento\Sales\Model\Order\Email\Sender\CreditmemoSender');
+                $creditmemoSender->send($creditmemo);
+
                 $historyItem = $this->_objectManager->create(
                     'Magento\Sales\Model\Resource\Order\Status\History\Collection'
                 )->getUnnotifiedForInstance(

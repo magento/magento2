@@ -16,7 +16,7 @@ use finfo;
  * Validator for the mime type of a file
  *
  * @category  Zend
- * @package   Zend_Validate
+ * @package   Zend_Validator
  */
 class ExcludeMimeType extends MimeType
 {

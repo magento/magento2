@@ -8,13 +8,14 @@
     ],
     "autoload": {
         "psr-0": {
-            "Zend\\Validator": ""
+            "Zend\\Validator\\": ""
         }
     },
     "target-dir": "Zend/Validator",
     "require": {
         "php": ">=5.3.3",
         "zendframework/zend-i18n": "self.version",
+        "zendframework/zend-servicemanager": "self.version",
         "zendframework/zend-stdlib": "self.version"
     },
     "require-dev": {

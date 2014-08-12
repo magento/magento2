@@ -17,7 +17,7 @@ use Zend\Validator\Exception\InvalidArgumentException;
 
 /**
  * @category   Zend
- * @package    Zend_Validate
+ * @package    Zend_Validator
  */
 class Uri extends AbstractValidator
 {

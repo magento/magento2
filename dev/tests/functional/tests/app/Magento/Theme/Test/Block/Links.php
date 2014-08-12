@@ -77,17 +77,14 @@ class Links extends Block
     /**
      * Get the number of products added to compare list
      *
-     * @return string|bool
+     * @return string
      */
     public function getQtyInCompareList()
     {
+        $this->waitForElementVisible($this->qtyCompareProducts);
         $compareProductLink = $this->_rootElement->find($this->qtyCompareProducts);
-        if ($compareProductLink->isVisible()) {
-            preg_match_all('/^\d+/', $compareProductLink->getText(), $matches);
-            return $matches[0][0];
-        } else {
-            return false;
-        }
+        preg_match_all('/^\d+/', $compareProductLink->getText(), $matches);
+        return $matches[0][0];
     }
 
     /**

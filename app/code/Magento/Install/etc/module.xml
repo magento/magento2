@@ -31,7 +31,6 @@
         </sequence>
         <depends>
             <module name="Magento_Store"/>
-            <module name="Magento_AdminNotification"/>
             <module name="Magento_Directory"/>
             <module name="Magento_User"/>
             <module name="Magento_Backend"/>

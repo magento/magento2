@@ -24,10 +24,33 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <preference for="Magento\Authz\Model\UserLocatorInterface" type="Magento\Webapi\Model\Authz\UserLocator"/>
-    <type name="Magento\Webapi\Model\Authz\UserLocator">
+    <preference for="Magento\Authorization\Model\UserContextInterface" type="Magento\Authorization\Model\CompositeUserContext"/>
+    <type name="Magento\Webapi\Model\Authorization\OauthUserContext">
         <arguments>
             <argument name="request" xsi:type="object">Magento\Webapi\Controller\Rest\Request</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Session\Generic">
+        <arguments>
+            <argument name="sessionName" xsi:type="string">frontend</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Authorization\Model\CompositeUserContext">
+        <arguments>
+            <argument name="userContexts" xsi:type="array">
+                <item name="tokenUserContext" xsi:type="array">
+                    <item name="type" xsi:type="object">Magento\Webapi\Model\Authorization\TokenUserContext</item>
+                    <item name="sortOrder" xsi:type="string">10</item>
+                </item>
+                <item name="oauthUserContext" xsi:type="array">
+                    <item name="type" xsi:type="object">Magento\Webapi\Model\Authorization\OauthUserContext</item>
+                    <item name="sortOrder" xsi:type="string">40</item>
+                </item>
+                <item name="guestUserContext" xsi:type="array">
+                    <item name="type" xsi:type="object">Magento\Webapi\Model\Authorization\GuestUserContext</item>
+                    <item name="sortOrder" xsi:type="string">100</item>
+                </item>
+            </argument>
         </arguments>
     </type>
     <preference for="Magento\Framework\App\FrontControllerInterface" type="Magento\Webapi\Controller\Rest" />
@@ -65,15 +88,10 @@
             <argument name="response" xsi:type="object">Magento\Webapi\Controller\Rest\Response\Proxy</argument>
             <argument name="router" xsi:type="object">Magento\Webapi\Controller\Rest\Router\Proxy</argument>
             <argument name="oauthHelper" xsi:type="object">Magento\Framework\Oauth\Helper\Request\Proxy</argument>
-            <argument name="authorizationService" xsi:type="object">Magento\Authz\Service\AuthorizationV1Interface\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Authz\Service\AuthorizationV1">
-        <plugin name="webapiRestAuthorizationV1" type="Magento\Webapi\Model\Plugin\AuthorizationServiceV1" />
-    </type>
-    <type name="Magento\Framework\Session\Generic">
-        <arguments>
-            <argument name="sessionName" xsi:type="string">frontend</argument>
-        </arguments>
+    <preference for="Magento\Framework\Authorization\RoleLocator" type="Magento\Webapi\Model\WebapiRoleLocator" />
+    <type name="Magento\Framework\Authorization">
+        <plugin name="guestAuthorization" type="Magento\Webapi\Model\Plugin\GuestAuthorization" />
     </type>
 </config>

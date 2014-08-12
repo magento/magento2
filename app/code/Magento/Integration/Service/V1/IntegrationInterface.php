@@ -65,6 +65,14 @@ interface IntegrationInterface
     public function findByConsumerId($consumerId);
 
     /**
+     * Get the details of an active Integration by consumer_id.
+     *
+     * @param int $consumerId
+     * @return IntegrationModel
+     */
+    public function findActiveIntegrationByConsumerId($consumerId);
+
+    /**
      * Update an Integration.
      *
      * @param array $integrationData

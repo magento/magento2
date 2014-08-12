@@ -28,19 +28,19 @@ class Totals extends \Magento\Framework\View\Element\Template
     /**
      * @var \Magento\Weee\Helper\Data
      */
-    protected $_weeeData;
+    protected $weeeData;
 
     /**
-     * @param \Magento\Weee\Helper\Data $_weeeData
      * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Magento\Weee\Helper\Data $weeeData
      * @param array $data
      */
     public function __construct(
-        \Magento\Weee\Helper\Data $_weeeData,
         \Magento\Framework\View\Element\Template\Context $context,
+        \Magento\Weee\Helper\Data $weeeData,
         array $data = array()
     ) {
-        $this->_weeeData = $_weeeData;
+        $this->weeeData = $weeeData;
         parent::__construct($context, $data);
     }
 
@@ -65,7 +65,7 @@ class Totals extends \Magento\Framework\View\Element\Template
         $items = $this->getSource()->getAllItems();
         $store = $this->getSource()->getStore();
 
-        $weeeTotal = $this->_weeeData->getTotalAmounts($items, $store);
+        $weeeTotal = $this->weeeData->getTotalAmounts($items, $store);
         if ($weeeTotal) {
             // Add our total information to the set of other totals
             $total = new \Magento\Framework\Object(

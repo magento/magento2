@@ -27,11 +27,11 @@
  * @see \Magento\RecurringPayment\Block\Catalog\Product\View\Payment
  */
 ?>
-<dl class="payment product schedule">
+<dl class="items payment-schedule">
 <?php foreach($this->getScheduleInfo() as $term => $definitions): ?>
-    <dt class="title"><?php echo $this->escapeHtml($term); ?></dt>
+    <dt class="item-title"><?php echo $this->escapeHtml($term); ?></dt>
     <?php foreach ($definitions as $definition):?>
-        <dd class="content"><?php echo $this->escapeHtml($definition)?></dd>
+        <dd class="item-content"><?php echo $this->escapeHtml($definition)?></dd>
     <?php endforeach;?>
 <?php endforeach;?>
 </dl>

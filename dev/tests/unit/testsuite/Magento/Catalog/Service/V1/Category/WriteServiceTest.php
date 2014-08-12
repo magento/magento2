@@ -138,9 +138,9 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
+     * @expectedException \Magento\Framework\Exception\StateException
      */
-    public function testDeleteCouldNotSaveException()
+    public function testDeleteStateException()
     {
         $id = 3;
         $this->category->expects($this->once())->method('getId')->will($this->returnValue($id));

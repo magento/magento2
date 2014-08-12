@@ -128,15 +128,16 @@
             }
         }
     }
-    .block.account-nav {
+    .sidebar .block-account-nav {
         .css(background, @sidebar-background);
-        padding: 15px 0;
+        margin: 0 0 40px;
+    }
+    .block-account-nav {
         .title {
-            padding: 0 18px;
-            margin-bottom: 25px;
-            strong {
-                .heading(h3);
-            }
+            display: none;
+        }
+        .content {
+            padding: 15px 0;
         }
         .nav.items {
             padding: 0;
@@ -149,8 +150,7 @@
                 a,
                 strong {
                     display: block;
-                    padding: 0 18px 0 15px;
-                    line-height: 30px;
+                    padding: 5px 18px 5px 15px;
                     border-left: 3px solid transparent;
                 }
                 a {
@@ -161,6 +161,7 @@
                     }
                 }
                 &.current {
+                    a,
                     strong {
                         .css(color, @account-nav-current-color);
                         .css(border-color, @account-nav-current-border-color);
@@ -214,21 +215,95 @@
     }
 }
 
-
 .control.captcha-image {
+    .css(margin-top, @indent-s-base);
     .captcha-img {
-        float: left;
-        margin: 0 20px 0 0;
+        vertical-align: middle;
     }
-    .action.reload {
-        margin: 10px 0 0;
+}
+
+.widget {
+    img {
+        max-width: 100%;
+    }
+}
+
+//
+//    Mobile
+//--------------------------------------
+.responsive-smaller(@break) when (@break = @screen-m) {
+    .account {
+        .data.table {
+            &:extend(.table-vertical-mobile all);
+            .col.actions {
+                padding-top: 9px;
+                padding-bottom: 15px;
+                &:before {
+                    &:extend(.visually-hidden-mobile all);
+                }
+            }
+        }
+        .toolbar {
+            .toolbar-amount,
+            .limiter,
+            .pages {
+                margin-bottom: 25px;
+            }
+        }
+        .block-account-nav {
+            margin-left: -@layout-width-xs-indent;
+            margin-right: -@layout-width-xs-indent;
+            margin-top: -(@indent-base + 1);
+            .title {
+                .icon-font(
+                    @_icon-font-content: @icon-down,
+                    @_icon-font-size: 30px,
+                    @_icon-font-position: after
+                );
+                border-top: @border-width-base solid @border-color-base;
+                border-bottom: @border-width-base solid @border-color-base;
+                cursor: pointer;
+                display: block;
+                font-weight: @font-weight-semibold;
+                margin-bottom: 0;
+                overflow: hidden;
+                padding: 7px 20px;
+                position: relative;
+                &:after {
+                    position: absolute;
+                    right: 0;
+                    top: -5px;
+                }
+                strong {
+                    margin: 0;
+                }
+                &.active {
+                    .icon-font-symbol(
+                        @_icon-font-content: @icon-prev,
+                        @_icon-font-position: after
+                    );
+                }
+            }
+            .content {
+                display: none;
+                &.active {
+                    display: block;
+                }
+            }
+        }
+    }
+    .control.captcha-image {
+        .captcha-img {
+            display: block;
+            .css(margin-bottom, @indent-s-base);
+        }
     }
 }
 
 //
 //    Desktop
 //--------------------------------------
-.responsive(@break) when (@break = @break-point-1) {
+.responsive(@break) when (@break = @screen-m) {
     .login.container {
         &:extend(.add-clearfix-desktop all);
         .block {
@@ -336,29 +411,11 @@
     .widget {
         clear: both;
     }
-}
 
-//
-//    Mobile
-//--------------------------------------
-.responsive-smaller(@break) when (@break = @break-point-0) {
-    .account {
-        .data.table {
-            &:extend(.table-vertical-mobile all);
-            .col.actions {
-                padding-top: 9px;
-                padding-bottom: 15px;
-                &:before {
-                    &:extend(.visually-hidden-mobile all);
-                }
-            }
-        }
-        .toolbar {
-            .toolbar-amount,
-            .limiter,
-            .pages {
-                margin-bottom: 25px;
-            }
+    .control.captcha-image {
+        white-space: nowrap;
+        .captcha-img {
+            margin: 0 10px 0 0;
         }
     }
 }

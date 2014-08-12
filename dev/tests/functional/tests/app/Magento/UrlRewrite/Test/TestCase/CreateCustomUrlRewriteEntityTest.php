@@ -49,7 +49,7 @@ use Magento\UrlRewrite\Test\Page\Adminhtml\UrlrewriteIndex;
  * 7. Perform all assertions
  *
  * @group URL_Rewrites_(PS)
- * @ZephyrId MTA-334
+ * @ZephyrId MAGETWO-25474
  */
 class CreateCustomUrlRewriteEntityTest extends Injectable
 {

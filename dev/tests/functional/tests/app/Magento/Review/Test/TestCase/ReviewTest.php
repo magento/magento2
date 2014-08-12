@@ -25,15 +25,14 @@
 namespace Magento\Review\Test\TestCase;
 
 use Mtf\Block\Form;
-use Magento\Review\Test\Block\Product\View\Summary;
-use Magento\Review\Test\Block\Product\View;
-use Magento\Review\Test\Fixture\Review;
 use Mtf\Factory\Factory;
 use Mtf\TestCase\Functional;
+use Magento\Review\Test\Fixture\Review;
+use Magento\Review\Test\Block\Product\View;
+use Magento\Review\Test\Block\Product\View\Summary;
 
 /**
  * Product reviews functionality
- *
  */
 class ReviewTest extends Functional
 {
@@ -68,7 +67,7 @@ class ReviewTest extends Functional
         $productPage->open();
         $this->verifyNoReviewOnPage($reviewsSummaryBlock);
         $reviewsSummaryBlock->getAddReviewLink()->click();
-        $this->assertFalse($reviewsBlock->getFirstReview()->isVisible(), 'No reviews below the form required');
+        $this->assertFalse($reviewsBlock->isVisibleReviewItem(), 'No reviews below the form required');
 
         $reviewForm->fill($reviewFixture);
         $reviewForm->submit();
@@ -82,7 +81,7 @@ class ReviewTest extends Functional
 
         Factory::getApp()->magentoBackendLoginUser();
         $backendReviewIndex->open();
-        $reviewGrid->searchAndOpen(array('title' => $reviewFixture->getTitle()));
+        $reviewGrid->searchAndOpen(['title' => $reviewFixture->getTitle()]);
         $this->assertEquals('Guest', $reviewBackendForm->getPostedBy(), 'Review is not posted by Guest');
         $this->assertEquals('Pending', $reviewBackendForm->getStatus(), 'Review is not in Pending status');
         $this->assertTrue(
@@ -114,7 +113,7 @@ class ReviewTest extends Functional
         $reviewsBlock = $productPage->getCustomerReviewBlock();
         $reviewsSummaryBlock->getViewReviewLink()->click();
         $this->assertContains(
-            sprintf('You\'re reviewing:%s', $productFixture->getName()),
+            sprintf("You're reviewing:\n%s", $productFixture->getName()),
             $reviewForm->getLegend()->getText()
         );
         $this->verifyReview($reviewsBlock, $reviewFixture);
@@ -154,12 +153,10 @@ class ReviewTest extends Functional
      */
     protected function verifyReview(View $reviewBlock, Review $fixture)
     {
-        $reviewItem = $reviewBlock->getFirstReview();
         foreach ($fixture->getData('fields') as $field => $data) {
-            $element = $reviewItem->find($reviewBlock->getFieldSelector($field));
             $this->assertEquals(
                 strtolower($data['value']),
-                strtolower(trim($element->getText())),
+                strtolower(trim($reviewBlock->getFieldValue($field))),
                 sprintf('Field "%s" is not equals submitted one.', $field)
             );
         }

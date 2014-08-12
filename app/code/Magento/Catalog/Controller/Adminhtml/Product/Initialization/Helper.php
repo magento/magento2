@@ -139,7 +139,12 @@ class Helper
          * Initialize product options
          */
         if (isset($productData['options']) && !$product->getOptionsReadonly()) {
-            $product->setProductOptions($productData['options']);
+            // mark custom options that should to fall back to default value
+            $options = $this->mergeProductOptions(
+                $productData['options'],
+                $this->request->getPost('options_use_default')
+            );
+            $product->setProductOptions($options);
         }
 
         $product->setCanSaveCustomOptions(
@@ -147,5 +152,31 @@ class Helper
         );
 
         return $product;
+    }
+
+    /**
+     * Merge product and default options for product
+     *
+     * @param array $productOptions product options
+     * @param array $overwriteOptions default value options
+     * @return array
+     */
+    public function mergeProductOptions($productOptions, $overwriteOptions)
+    {
+        if (!is_array($productOptions)) {
+            $productOptions = [];
+        }
+        if (is_array($overwriteOptions)) {
+            $options = array_replace_recursive($productOptions, $overwriteOptions);
+            array_walk_recursive($options, function (&$item) {
+                if ($item === "") {
+                    $item = null;
+                }
+            });
+        } else {
+            $options = $productOptions;
+        }
+
+        return $options;
     }
 }

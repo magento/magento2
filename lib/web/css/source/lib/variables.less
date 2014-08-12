@@ -25,7 +25,7 @@
 //    Typography
 //--------------------------------------
 
-//  Base
+// Base
 @font-family-sans-serif: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 @font-family-serif: Georgia, 'Times New Roman', Times, serif;
 @font-family-monospace: Menlo, Monaco, Consolas, 'Courier New', monospace;
@@ -34,10 +34,10 @@
 @icon-font-name: 'icons-blank-theme';
 
 @color-primary: #333;
-@color-primary-dark: darken(@color-primary, 35%);  // #000
+@color-primary-dark: darken(@color-primary, 35%);  //  #000
 @color-primary-darker: darken(@color-primary, 13.5%);  // #111
-@color-primary-lighter: lighten(@color-primary, 29%);  // #7d7d7d
-@color-primary-light: lighten(@color-primary, 45%);  // #a6a6a6
+@color-primary-lighter: lighten(@color-primary, 29%);  //  #7d7d7d
+@color-primary-light: lighten(@color-primary, 45%);  //  #a6a6a6
 @color-secondary: #e8e8e8;
 @color-secondary-light: lighten(@color-secondary, 5%);
 @page-bg-color: #fff;
@@ -55,7 +55,7 @@
 @font-size-base: unit((@font-size-root / 100) * 16 * @font-size-base-ratio, px); // Also used in: @loader-text-font-size
 @font-size-xl: ceil(1.5 * @font-size-base);
 @font-size-l: ceil(1.25 * @font-size-base);
-@font-size-s: ceil(0.85 * @font-size-base); // Also used in: Breadcrumbs and in Small button
+@font-size-s: ceil(0.85 * @font-size-base);  // Also used in: Breadcrumbs and in Small button
 @font-size-xs: floor(0.75 * @font-size-base);
 
 @font-weight-base: 400;
@@ -84,9 +84,7 @@
 @border-color-base: darken(@page-bg-color, 18%);
 @border-width-base: 1px;
 
-
-//Links
-
+// Links
 @link-color: #1979c3;
 @link-text-decoration: none;
 
@@ -100,8 +98,8 @@
 @link-text-decoration-active: underline;
 
 // Lists
-@list-color-base: ''; //@text-color
-@list-font-size-base: false; //@font-size-base
+@list-color-base: ''; // @text-color
+@list-font-size-base: false; // @font-size-base
 @list-margin-top: 0;
 @list-margin-bottom: @indent-m-base;
 @list-item-margin-top: 0;
@@ -119,12 +117,12 @@
 @p-margin-top: 0;
 @p-margin-bottom: @indent-s-base;
 
-//Headings
-@heading-font-family-base: false; //@font-family-base
+// Headings
+@heading-font-family-base: false; // @font-family-base
 @heading-font-weight-base: @font-weight-light;
 @heading-line-height-base: 1.1;
-@heading-color-base: false; //@text-color
-@heading-font-style-base: false; //@font-style-base
+@heading-color-base: false; // @text-color
+@heading-font-style-base: false; // @font-style-base
 @heading-margin-top-base: @indent-base;
 @heading-margin-bottom-base: @indent-base;
 
@@ -200,9 +198,7 @@
 @kbd-color: @color-primary-darker;
 @kbd-bg: @panel-bg;
 
-
 // Blockquote
-
 @blockquote-font-size: @font-size-base;
 @blockquote-font-style: @font-style-emphasis;
 @blockquote-border-color: @border-color-base;
@@ -215,7 +211,6 @@
 @cite-font-style: @font-style-base;
 
 // Misc
-
 @hr-border-color: @border-color-base;
 @hr-border-style: solid;
 @hr-border-width: 1px;
@@ -246,7 +241,7 @@
 @table-border-width: @border-width-base;
 @table-border-style: solid;
 
-@table-caption-hide: false; //Default value false, set true to hide caption
+@table-caption-hide: false; // Default value false, set true to hide caption
 @table-caption-font-size: @font-size-l;
 @table-caption-color: @text-color-intense;
 @table-caption-font-family: false;
@@ -310,25 +305,28 @@
 @layout-column-main-width-2-right: @layout-columns-width - @layout-column-right-width;
 @layout-column-main-width-3: @layout-columns-width - @layout-column-left-width - @layout-column-right-width;
 
-//  Checkout columns width
+// Checkout columns width
 @layout-column-checkout-left-width: 3;
 @layout-column-checkout-main-width: @layout-columns-width - @layout-column-checkout-left-width;
 
 //
 //    Responsive
 //--------------------------------------
+
 // Settings variables (TO DO: should be global)
 @use-flex: true; // Use flexbox [true|false]
 @responsive: true; // Theme is responsive [true|false]
 
-@break-point-0: 600px; // catalog products in a row: (width <= 599) - 2 columns, (600 <= width <= 768) - 3 columns, (768 < width ) - 4 columns
-@break-point-1: 768px; // main breakpoint
-@break-point-2: 800px; // checkout and catalog 3 columns layout breakpoint
+@screen-xxs: 320px;
+@screen-xs: 400px;
+@screen-s: 640px;
+@screen-m: 768px;
+@screen-l: 1000px;
+@screen-xl: 1440px;
 
 //
 //    Navigation variables
 //--------------------------------------
-
 @navigation-background: @color-secondary-light;
 @navigation-border: '';
 @navigation-level0-font-size: 16;
@@ -365,8 +363,8 @@
 @submenu-item-color-active: '';
 @submenu-item-text-decoration-active: '';
 
-//  Desktop navigation
-@navigation-desktop-background: @color-secondary;
+// Desktop navigation
+@navigation-desktop-background: @navigation-background;
 @navigation-desktop-border: '';
 @navigation-desktop-font-size: '';
 @navigation-desktop-font-weight: @font-weight-bold;
@@ -420,15 +418,13 @@
 @submenu-desktop-item-color-active: '';
 @submenu-desktop-item-text-decoration-active: '';
 
-
-
 //
 //    Sections variables
 //--------------------------------------
 
-//  Tabs
+// Tabs
 
-//  Tabs controls
+// Tabs controls
 @tab-control-font-size: @font-size-base;
 @tab-control-font-family: @font-family-base;
 @tab-control-font-weight: @font-weight-semibold;
@@ -476,7 +472,7 @@
 @tab-content-padding-left: @tab-content-padding-right;
 @tab-content-padding-bottom: @tab-content-padding-top;
 
-// Accordions  variables
+// Accordions variables
 @accordion-control-font-family: @tab-control-font-family;
 @accordion-control-font-size: @font-size-l;
 @accordion-control-font-style: @tab-control-font-style;
@@ -526,9 +522,9 @@
 @button-font-family: @font-family-base;
 @button-font-size: @font-size-base;
 @button-font-weight: @font-weight-bold;
-@button-height: 30px;
+@button-line-height: @font-size-base + 2;
 @button-margin: 0;
-@button-padding: 0 15px; // is set up to false when buttons don't depend of side paddings or have fixed width, Also used in @button-primary-padding
+@button-padding: 7px 15px; // is set up to false when buttons don't depend of side paddings or have fixed width, Also used in @button-primary-padding
 @button-width: ''; // is set up to false when buttons depend of side paddings or to fixed value when needed
 
 // Buttons display settings
@@ -557,7 +553,7 @@
 @button-gradient-end-color-active: false;
 
 // Primary button
-@button-primary-height: 30px;
+@button-primary-line-height: false;
 @button-primary-width: false;
 @button-primary-margin: false;
 @button-primary-padding: @button-padding;
@@ -592,7 +588,7 @@
 @button-font-content: @icon-settings;
 @button-icon-font: @icon-font; // Also used in: @popup-icon-font
 @button-icon-font-size: 22px; // Also used in: @popup-icon-font-size
-@button-icon-font-line-height: @icon-font-line-height; // Also used in: @popup-icon-font-line-height
+@button-icon-font-line-height: @button-icon-font-size; // Also used in: @popup-icon-font-line-height
 @button-icon-font-color: inherit; // Also used in: @popup-icon-font-color
 @button-icon-font-color-hover: inherit; // Also used in: @popup-icon-font-color-hover
 @button-icon-font-color-active: inherit; // Also used in: @popup-icon-font-color-active
@@ -603,12 +599,13 @@
 
 // Large button
 @button-l-font-size: @font-size-l;
-@button-l-padding: 0 17px;
-@button-l-height: 50px;
+@button-l-line-height: @font-size-l + 4;
+@button-l-padding: 14px 17px;
+
 // Small button
 @button-s-font-size: 11px;
-@button-s-padding: 0 8px;
-@button-s-height: 22px;
+@button-s-line-height: @button-s-font-size + 1;
+@button-s-padding: 5px 8px;
 
 //
 //    Icons variables
@@ -699,6 +696,10 @@
 @message-icon-inner-padding-left: 40px;
 @message-icon-lateral-width: 30px;
 @message-icon-lateral-arrow-size: 5px;
+@message-icon-top: 18px;
+@message-icon-right: false;
+@message-icon-bottom: false;
+@message-icon-left: 0;
 
 @message-border-width: false;
 @message-border-color: false;
@@ -716,6 +717,10 @@
 @message-info-icon-color-inner: #c07600;
 @message-info-icon-color-lateral: #fff;
 @message-info-icon-background: #6f4400;
+@message-info-icon-top: @message-icon-top;
+@message-info-icon-right: @message-icon-right;
+@message-info-icon-bottom: @message-icon-bottom;
+@message-info-icon-left: @message-icon-left;
 
 // Warning message
 @message-warning-color: @message-info-color;
@@ -728,6 +733,10 @@
 @message-warning-icon-color-inner: @message-info-icon-color-inner;
 @message-warning-icon-color-lateral: @message-info-icon-color-lateral;
 @message-warning-icon-background: @message-info-icon-background;
+@message-warning-icon-top: @message-icon-top;
+@message-warning-icon-right: @message-icon-right;
+@message-warning-icon-bottom: @message-icon-bottom;
+@message-warning-icon-left: @message-icon-left;
 
 // Error message
 @message-error-color: @color-error;
@@ -740,6 +749,10 @@
 @message-error-icon-color-inner: #b30000;
 @message-error-icon-color-lateral: #fff;
 @message-error-icon-background: #b30000;
+@message-error-icon-top: @message-icon-top;
+@message-error-icon-right: @message-icon-right;
+@message-error-icon-bottom: @message-icon-bottom;
+@message-error-icon-left: @message-icon-left;
 
 // Success message
 @message-success-color: #006400;
@@ -752,6 +765,10 @@
 @message-success-icon-color-inner: #006400;
 @message-success-icon-color-lateral: #fff;
 @message-success-icon-background: #006400;
+@message-success-icon-top: @message-icon-top;
+@message-success-icon-right: @message-icon-right;
+@message-success-icon-bottom: @message-icon-bottom;
+@message-success-icon-left: @message-icon-left;
 
 // Notice message
 @message-notice-color: @message-info-color;
@@ -764,6 +781,10 @@
 @message-notice-icon-color-inner: @message-info-icon-color-inner;
 @message-notice-icon-color-lateral: @message-info-icon-color-lateral;
 @message-notice-icon-background: @message-info-icon-background;
+@message-notice-icon-top: @message-icon-top;
+@message-notice-icon-right: @message-icon-right;
+@message-notice-icon-bottom: @message-icon-bottom;
+@message-notice-icon-left: @message-icon-left;
 
 //
 //    Tooltips variables
@@ -812,6 +833,7 @@
 //
 //    Forms variables
 //--------------------------------------
+
 // Form elements inputs default variables
 @form-element-input-type: ''; // input-text, select, textarea, input-radio, input-checkbox
 @form-element-input-background: #fff;
@@ -831,15 +853,18 @@
 @form-element-input-font-weight: false;
 @form-element-input-line-height: @line-height-base;
 @form-element-input-font-style: false;
+
 // Placeholder
 @form-element-input-placeholder-color: #c2c2c2;
 @form-element-input-placeholder-font-style: @form-element-input-font-style;
+
 // Disabled state
 @form-element-input-disabled-background: @form-element-input-background;
 @form-element-input-disabled-border: @form-element-input-border;
 @form-element-input-disabled-opacity: 0.5;
 @form-element-input-disabled-color: @form-element-input-color;
 @form-element-input-disabled-font-style: @form-element-input-font-style;
+
 // Focus state
 @form-element-input-focus-background: @form-element-input-background;
 @form-element-input-focus-border: @form-element-input-border;
@@ -869,15 +894,18 @@
 @input-text-font-weight: @form-element-input-font-weight;
 @input-text-line-height: @form-element-input-line-height;
 @input-text-font-style: @form-element-input-font-style;
+
 // Placeholder
 @input-text-placeholder-color: @form-element-input-placeholder-color;
 @input-text-placeholder-font-style: @form-element-input-placeholder-font-style;
+
 // Disabled state
 @input-text-disabled-background: @form-element-input-disabled-background;
 @input-text-disabled-border: @form-element-input-disabled-border;
 @input-text-disabled-opacity: @form-element-input-disabled-opacity;
 @input-text-disabled-color: @form-element-input-disabled-color;
 @input-text-disabled-font-style: @form-element-input-disabled-font-style;
+
 // Focus state
 @input-text-focus-background: @form-element-input-focus-background;
 @input-text-focus-border: @form-element-input-focus-border;
@@ -901,15 +929,18 @@
 @select-font-weight: @form-element-input-font-weight;
 @select-line-height: @form-element-input-line-height;
 @select-font-style: @form-element-input-font-style;
+
 // Placeholder
 @select-placeholder-color: false;
 @select-placeholder-font-style: false;
+
 // Disabled state
 @select-disabled-background: @form-element-input-disabled-background;
 @select-disabled-border: @form-element-input-disabled-border;
 @select-disabled-opacity: @form-element-input-disabled-opacity;
 @select-disabled-color: @form-element-input-disabled-color;
 @select-disabled-font-style: @form-element-input-disabled-font-style;
+
 // Focus state
 @select-focus-background: @form-element-input-focus-background;
 @select-focus-border: @form-element-input-focus-border;
@@ -933,16 +964,19 @@
 @textarea-font-weight: @form-element-input-font-weight;
 @textarea-line-height: @form-element-input-line-height;
 @textarea-font-style: @form-element-input-font-style;
-@textarea-resize: vertical; //none | both | horizontal | vertical | inherit
+@textarea-resize: vertical; // none | both | horizontal | vertical | inherit
+
 // Placeholder
 @textarea-placeholder-color: @form-element-input-placeholder-color;
 @textarea-placeholder-font-style: @form-element-input-placeholder-font-style;
+
 // Disabled state
 @textarea-disabled-background: @form-element-input-disabled-background;
 @textarea-disabled-border: @form-element-input-disabled-border;
 @textarea-disabled-opacity: @form-element-input-disabled-opacity;
 @textarea-disabled-color: @form-element-input-disabled-color;
 @textarea-disabled-font-style: @form-element-input-disabled-font-style;
+
 // Focus state
 @textarea-focus-background: @form-element-input-focus-background;
 @textarea-focus-border: @form-element-input-focus-border;
@@ -991,7 +1025,7 @@
 
 // Fieldset
 @form-fieldset-border: 0;
-@form-fieldset-margin: 0 0 40px; //30px 10px 30px 30px
+@form-fieldset-margin: 0 0 40px;
 @form-fieldset-padding: 0;
 @form-fieldset-legend-color: false;
 @form-fieldset-legend-font-size: 20px;
@@ -999,9 +1033,9 @@
 @form-fieldset-legend-font-weight: false;
 @form-fieldset-legend-font-style: false;
 @form-fieldset-legend-line-height: 1.2;
-@form-fieldset-legend-margin: 0 0 25px 0; //0 0 25px @form-field-type-inline-label-width
+@form-fieldset-legend-margin: 0 0 25px; // 0 0 25px @form-field-type-inline-label-width
 @form-fieldset-legend-padding: 0;
-@form-fieldset-legend-width: false; //@form-field-type-inline-control-width
+@form-fieldset-legend-width: false; // @form-field-type-inline-control-width
 
 // Field
 @form-field-type: block; //inline
@@ -1010,11 +1044,12 @@
 @form-field-column: false;
 @form-field-column-padding: 0 12px 0 0;
 @form-field-column-number: 2;
-@form-field-vertical-indent: 29px;
-@form-field-additional-vertical-indent: @form-field-vertical-indent;
+@form-field-vertical-indent: 20px;
+@form-field-additional-vertical-indent: @form-field-vertical-indent/2;
 @form-field-type-block-margin: 0 0 @form-field-vertical-indent;
 @form-field-type-inline-margin: 0 0 @form-field-vertical-indent;
-// form field label
+
+// Form field label
 @form-field-label-align: false;
 @form-field-label-color: false;
 @form-field-label-font-size: false;
@@ -1029,9 +1064,11 @@
 @form-field-type-block-label-margin: 0 0 5px;
 @form-field-type-block-label-padding: false;
 @form-field-type-block-label-align: @form-field-label-align;
-// form field control
+
+// Form field control
 @form-field-type-inline-control-width: 74.2%;
-// form field label asterisk
+
+// Form field label asterisk
 @form-field-label-asterisk-color: #e02b27; // also used in: @form-hasrequired-color
 @form-field-label-asterisk-font-size: @font-size-s;
 @form-field-label-asterisk-font-family: false;
@@ -1039,7 +1076,8 @@
 @form-field-label-asterisk-font-style: false;
 @form-field-label-asterisk-line-height: false;
 @form-field-label-asterisk-margin: 0 0 0 5px;
-// form field note
+
+// Form field note
 @form-field-note-color: false;
 @form-field-note-font-size: @font-size-s;
 @form-field-note-font-family: false;
@@ -1048,7 +1086,8 @@
 @form-field-note-font-style: false;
 @form-field-note-margin: 3px 0 0;
 @form-field-note-padding: 0;
-// form field note icon
+
+// Form field note icon
 @form-field-note-icon-font-content: @icon-pointer-up;
 @form-field-note-icon-font: @icon-font;
 @form-field-note-icon-font-size: @form-field-note-font-size * 2;
@@ -1194,6 +1233,7 @@
 //
 //    Dropdowns variables
 //--------------------------------------
+
 // Variables simple dropdown
 @dropdown-actions-padding: false;
 @dropdown-list-min-width: 100%; // Also used in: @dropdown-split-list-min-width
@@ -1232,7 +1272,7 @@
 
 // Variables split dropdown
 @dropdown-split-actions-padding: 0 5px;
-@dropdown-split-toggle-actions-padding: false;
+@dropdown-split-toggle-actions-padding: 4px 5px;
 @dropdown-split-button-actions-padding: false;
 @dropdown-split-toggle-position: right; // Also used in: @dropdown-split-list-pointer-position
 @dropdown-split-list-min-width: @dropdown-list-min-width;
@@ -1356,7 +1396,7 @@
 @breadcrumbs-link-gradient-end-color-active: false;
 
 //
-// Popups variables
+//    Popups variables
 //--------------------------------------
 @popup-width: auto;
 @popup-height: auto;
@@ -1396,7 +1436,7 @@
 @popup-button-close-position-bottom: '';
 @popup-button-close-position-left: '';
 
-//Actions toolbar variables
+// Actions toolbar variables
 @popup-actions-toolbar-actions-position: @actions-toolbar-actions-position;
 @popup-actions-toolbar-actions-reverse: @actions-toolbar-actions-reverse;
 @popup-actions-toolbar-margin: @actions-toolbar-margin;
@@ -1408,7 +1448,7 @@
 @popup-actions-toolbar-primary-actions-links-margin-top: @actions-toolbar-primary-actions-links-margin-top;
 @popup-actions-toolbar-secondary-actions-links-margin-top: @actions-toolbar-secondary-actions-links-margin-top;
 
-//  Popup Icons variables
+// Popup Icons variables
 @popup-icon-font-content: @icon-remove;
 @popup-icon-font: @button-icon-font;
 @popup-icon-font-size: @button-icon-font-size;
@@ -1421,7 +1461,7 @@
 @popup-icon-font-position: @button-icon-font-position;
 @popup-icon-font-text-hide: true;
 
-//  Window overlay variables
+// Window overlay variables
 @overlay-background: #000;
 @overlay-opacity: 0.5;
 @overlay-opacity-old: 50;

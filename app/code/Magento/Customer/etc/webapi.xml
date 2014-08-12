@@ -161,7 +161,7 @@
             <resource ref="self"/>
         </resources>
         <data>
-            <parameter name="customerId" force="true" source="session" method="getUserId">null</parameter>
+            <parameter name="customerId" force="true">%customer_id%</parameter>
         </data>
     </route>
     <route url="/V1/customerAccounts/:customerId/customer" method="GET">

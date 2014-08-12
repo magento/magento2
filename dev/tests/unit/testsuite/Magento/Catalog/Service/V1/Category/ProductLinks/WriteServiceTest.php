@@ -48,7 +48,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
     private $categoryLoader;
 
     /**
-     * @var \Magento\Catalog\Service\V1\Data\Eav\Category\ProductLink|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Service\V1\Data\Category\ProductLink|\PHPUnit_Framework_MockObject_MockObject
      */
     private $productLink;
 
@@ -56,7 +56,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManager($this);
 
-        $this->productLink = $this->getMockBuilder('Magento\Catalog\Service\V1\Data\Eav\Category\ProductLink')
+        $this->productLink = $this->getMockBuilder('Magento\Catalog\Service\V1\Data\Category\ProductLink')
             ->setMethods(['getSku', 'getPosition'])
             ->disableOriginalConstructor()
             ->getMock();

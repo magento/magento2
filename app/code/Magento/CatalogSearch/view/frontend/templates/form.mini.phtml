@@ -27,9 +27,9 @@
 /** @var $helper \Magento\CatalogSearch\Helper\Data */
 $helper = $this->helper('Magento\CatalogSearch\Helper\Data');
 ?>
-<div class="block search">
-    <div class="title"><strong><?php echo __('Search'); ?></strong></div>
-    <div class="content search">
+<div class="block block-search">
+    <div class="block block-title"><strong><?php echo __('Search'); ?></strong></div>
+    <div class="block block-content">
         <form class="form minisearch" id="search_mini_form" action="<?php echo $helper->getResultUrl() ?>" method="get">
             <div class="field search">
                 <label class="label" for="search"><span><?php echo __('Search'); ?></span></label>
@@ -46,7 +46,7 @@ $helper = $this->helper('Magento\CatalogSearch\Helper\Data');
                            placeholder="<?php echo __('Search entire store here...'); ?>"
                            class="input-text"
                            autocomplete="off"/>
-                    <div id="search_autocomplete" class="search autocomplete"></div>
+                    <div id="search_autocomplete" class="search-autocomplete"></div>
                     <div class="nested">
                         <a class="action advanced" href="<?php echo $helper->getAdvancedSearchUrl(); ?>">
                             <?php echo __('Advanced Search'); ?>

@@ -26,7 +26,7 @@
 $installer = $this;
 
 $connection = $installer->getConnection();
-$adminRuleTable = $installer->getTable('admin_rule');
+$adminRuleTable = $installer->getTable('authorization_rule');
 $aclRulesDelete = array(
     'Magento_Tax::classes_customer',
     'Magento_Tax::classes_product',

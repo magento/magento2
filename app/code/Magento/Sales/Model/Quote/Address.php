@@ -251,6 +251,11 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     protected $_customerAdressService;
 
     /**
+     * @var Address\Validator
+     */
+    protected $validator;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Directory\Helper\Data $directoryData
@@ -259,18 +264,19 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * @param \Magento\Directory\Model\RegionFactory $regionFactory
      * @param \Magento\Directory\Model\CountryFactory $countryFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Sales\Model\Quote\Address\ItemFactory $addressItemFactory
+     * @param Address\ItemFactory $addressItemFactory
      * @param \Magento\Sales\Model\Resource\Quote\Address\Item\CollectionFactory $itemCollectionFactory
-     * @param \Magento\Sales\Model\Quote\Address\RateFactory $addressRateFactory
-     * @param \Magento\Sales\Model\Quote\Address\RateCollectorInterfaceFactory $rateCollector
+     * @param Address\RateFactory $addressRateFactory
+     * @param Address\RateCollectorInterfaceFactory $rateCollector
      * @param \Magento\Sales\Model\Resource\Quote\Address\Rate\CollectionFactory $rateCollectionFactory
-     * @param \Magento\Sales\Model\Quote\Address\RateRequestFactory $rateRequestFactory
-     * @param \Magento\Sales\Model\Quote\Address\Total\CollectorFactory $totalCollectorFactory
-     * @param \Magento\Sales\Model\Quote\Address\TotalFactory $addressTotalFactory
+     * @param Address\RateRequestFactory $rateRequestFactory
+     * @param Address\Total\CollectorFactory $totalCollectorFactory
+     * @param Address\TotalFactory $addressTotalFactory
      * @param \Magento\Framework\Object\Copy $objectCopyService
-     * @param \Magento\Sales\Model\Quote\Address\CarrierFactoryInterface $carrierFactory
+     * @param Address\CarrierFactoryInterface $carrierFactory
      * @param CustomerAddressBuilder $customerAddressBuilder
      * @param CustomerAddressServiceInterface $customerAddressService
+     * @param Address\Validator $validator
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -296,6 +302,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
         \Magento\Sales\Model\Quote\Address\CarrierFactoryInterface $carrierFactory,
         CustomerAddressBuilder $customerAddressBuilder,
         CustomerAddressServiceInterface $customerAddressService,
+        Address\Validator $validator,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
@@ -313,6 +320,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
         $this->_carrierFactory = $carrierFactory;
         $this->_customerAddressBuilder = $customerAddressBuilder;
         $this->_customerAdressService = $customerAddressService;
+        $this->validator = $validator;
         parent::__construct(
             $context,
             $registry,
@@ -1389,5 +1397,13 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     public function getSubtotalWithDiscount()
     {
         return $this->getSubtotal() + $this->getDiscountAmount();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function _getValidationRulesBeforeSave()
+    {
+        return $this->validator;
     }
 }

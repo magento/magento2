@@ -12,11 +12,11 @@ namespace Zend\I18n\Filter;
 
 use Locale;
 use Traversable;
-use Zend\Stdlib\ArrayUtils;
 
 /**
  * @category   Zend
- * @package    Zend_Filter
+ * @package    Zend_I18n
+ * @subpackage Filter
  */
 class Alnum extends AbstractLocale
 {

@@ -259,8 +259,6 @@ abstract class EntityAbstract
         $resultClassName = $this->_getResultClassName();
         $resultFileName = $this->_ioObject->getResultFileName($resultClassName);
 
-        $autoloader = $this->_autoloader;
-
         // @todo the controller handling logic below must be removed when controllers become PSR-0 compliant
         $controllerSuffix = 'Controller';
         $pathParts = explode('_', $sourceClassName);
@@ -286,13 +284,13 @@ abstract class EntityAbstract
             $filePath = stream_resolve_include_path(str_replace('_', '/', $controllerPath) . '.php');
             $isSourceClassValid = !empty($filePath);
         } else {
-            $isSourceClassValid = $autoloader->getFile($sourceClassName);
+            $isSourceClassValid = $this->_autoloader->getFile($sourceClassName);
         }
 
         if (!$isSourceClassValid) {
             $this->_addError('Source class ' . $sourceClassName . ' doesn\'t exist.');
             return false;
-        } elseif ($autoloader->getFile($resultClassName)) {
+        } elseif ($this->_autoloader->getFile($resultClassName)) {
             $this->_addError('Result class ' . $resultClassName . ' already exists.');
             return false;
         } elseif (!$this->_ioObject->makeGenerationDirectory()) {

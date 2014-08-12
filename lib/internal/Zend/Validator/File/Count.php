@@ -17,7 +17,7 @@ use Zend\Validator\Exception;
  * Validator for counting all given files
  *
  * @category  Zend
- * @package   Zend_Validate
+ * @package   Zend_Validator
  */
 class Count extends AbstractValidator
 {

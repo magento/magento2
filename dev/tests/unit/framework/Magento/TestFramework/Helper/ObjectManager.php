@@ -236,7 +236,7 @@ class ObjectManager
             $argClassName = null;
             $defaultValue = null;
 
-            if (isset($arguments[$parameterName])) {
+            if (array_key_exists($parameterName, $arguments)) {
                 $constructArguments[$parameterName] = $arguments[$parameterName];
                 continue;
             }

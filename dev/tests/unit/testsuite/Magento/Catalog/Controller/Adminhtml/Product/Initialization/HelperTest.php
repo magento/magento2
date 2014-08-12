@@ -118,20 +118,26 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+    }
 
-        $this->websiteMock->expects($this->once())->method('getId')->will($this->returnValue($this->websiteId));
+    /**
+     * @covers Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper::initialize
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testInitialize()
+    {
+        $this->websiteMock->expects($this->once())
+            ->method('getId')
+            ->will($this->returnValue($this->websiteId));
 
-        $this->storeMock->expects($this->once())->method('getWebsite')->will($this->returnValue($this->websiteMock));
+        $this->storeMock->expects($this->once())
+            ->method('getWebsite')
+            ->will($this->returnValue($this->websiteMock));
 
-        $this->storeManagerMock->expects(
-            $this->once()
-        )->method(
-            'getStore'
-        )->with(
-            true
-        )->will(
-            $this->returnValue($this->storeMock)
-        );
+        $this->storeManagerMock->expects($this->once())
+            ->method('getStore')
+            ->with(true)
+            ->will($this->returnValue($this->storeMock));
 
         $this->jsHelperMock = $this->getMock('\Magento\Backend\Helper\Js', [], [], '', false);
         $this->helper = new Helper(
@@ -141,13 +147,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             $this->productLinksMock,
             $this->jsHelperMock
         );
-    }
 
-    /**
-     * @covers Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper::initialize
-     */
-    public function testInitialize()
-    {
         $productData = array(
             'stock_data' => array('stock_data'),
             'url_key_create_redirect' => true,
@@ -156,92 +156,142 @@ class HelperTest extends \PHPUnit_Framework_TestCase
 
         $useDefaults = array('attributeCode1', 'attributeCode2');
 
-        $this->requestMock->expects(
-            $this->at(0)
-        )->method(
-            'getPost'
-        )->with(
-            'product'
-        )->will(
-            $this->returnValue($productData)
-        );
+        $this->requestMock->expects($this->at(0))
+            ->method('getPost')
+            ->with('product')
+            ->will($this->returnValue($productData));
 
-        $this->requestMock->expects(
-            $this->at(1)
-        )->method(
-            'getPost'
-        )->with(
-            'use_default'
-        )->will(
-            $this->returnValue($useDefaults)
-        );
+        $this->requestMock->expects($this->at(1))
+            ->method('getPost')
+            ->with('use_default')
+            ->will($this->returnValue($useDefaults));
 
-        $this->requestMock->expects(
-            $this->at(3)
-        )->method(
-            'getPost'
-        )->with(
-            'affect_product_custom_options'
-        )->will(
-            $this->returnValue(true)
-        );
+        $this->requestMock->expects($this->at(3))
+            ->method('getPost')
+            ->with('options_use_default')
+            ->will($this->returnValue(true));
 
-        $this->stockFilterMock->expects(
-            $this->once()
-        )->method(
-            'filter'
-        )->with(
-            array('stock_data')
-        )->will(
-            $this->returnValue(array('stock_data'))
-        );
+        $this->requestMock->expects($this->at(4))
+            ->method('getPost')
+            ->with('affect_product_custom_options')
+            ->will($this->returnValue(true));
 
-        $this->storeManagerMock->expects($this->once())->method('hasSingleStore')->will($this->returnValue(true));
+        $this->stockFilterMock->expects($this->once())
+            ->method('filter')
+            ->with(array('stock_data'))
+            ->will($this->returnValue(array('stock_data')));
 
-        $this->productLinksMock->expects(
-            $this->once()
-        )->method(
-            'initializeLinks'
-        )->with(
-            $this->productMock
-        )->will(
-            $this->returnValue($this->productMock)
-        );
+        $this->storeManagerMock->expects($this->once())
+            ->method('hasSingleStore')
+            ->will($this->returnValue(true));
 
-        $this->productMock->expects(
-            $this->once()
-        )->method(
-            'isLockedAttribute'
-        )->with(
-            'media'
-        )->will(
-            $this->returnValue(true)
-        );
+        $this->productLinksMock->expects($this->once())
+            ->method('initializeLinks')
+            ->with($this->productMock)
+            ->will($this->returnValue($this->productMock));
 
-        $this->productMock->expects($this->once())->method('unlockAttribute')->with('media');
+        $this->productMock->expects($this->once())
+            ->method('isLockedAttribute')
+            ->with('media')
+            ->will($this->returnValue(true));
 
-        $this->productMock->expects($this->once())->method('lockAttribute')->with('media');
+        $this->productMock->expects($this->once())
+            ->method('unlockAttribute')
+            ->with('media');
+
+        $this->productMock->expects($this->once())
+            ->method('lockAttribute')
+            ->with('media');
 
         $productData['category_ids'] = array();
         $productData['website_ids'] = array();
-        $this->productMock->expects($this->once())->method('addData')->with($productData);
+        $this->productMock->expects($this->once())
+            ->method('addData')
+            ->with($productData);
 
-        $this->productMock->expects($this->once())->method('getId')->will($this->returnValue(true));
+        $this->productMock->expects($this->once())
+            ->method('getId')
+            ->will($this->returnValue(true));
 
-        $this->productMock->expects($this->once())->method('setWebsiteIds')->with(array($this->websiteId));
+        $this->productMock->expects($this->once())
+            ->method('setWebsiteIds')
+            ->with(array($this->websiteId));
 
-        $this->productMock->expects($this->at(6))->method('setData')->with('save_rewrites_history', true);
+        $this->productMock->expects($this->at(6))
+            ->method('setData')
+            ->with('save_rewrites_history', true);
 
-        $this->productMock->expects($this->at(7))->method('setData')->with('attributeCode1', false);
+        $this->productMock->expects($this->at(7))
+            ->method('setData')
+            ->with('attributeCode1', false);
 
-        $this->productMock->expects($this->at(8))->method('setData')->with('attributeCode2', false);
+        $this->productMock->expects($this->at(8))
+            ->method('setData')
+            ->with('attributeCode2', false);
 
-        $this->productMock->expects($this->any())->method('getOptionsReadOnly')->will($this->returnValue(false));
+        $this->productMock->expects($this->any())
+            ->method('getOptionsReadOnly')
+            ->will($this->returnValue(false));
 
-        $this->productMock->expects($this->once())->method('setProductOptions')->with($productData['options']);
+        $this->productMock->expects($this->once())
+            ->method('setProductOptions')
+            ->with($productData['options']);
 
-        $this->productMock->expects($this->once())->method('setCanSaveCustomOptions')->with(true);
+        $this->productMock->expects($this->once())
+            ->method('setCanSaveCustomOptions')
+            ->with(true);
 
         $this->assertEquals($this->productMock, $this->helper->initialize($this->productMock));
+    }
+
+    /**
+     * Data provider for testMergeProductOptions
+     *
+     * @return array
+     */
+    public function mergeProductOptionsDataProvider()
+    {
+        return [
+            [
+                null,
+                [],
+                [],
+            ],
+            [
+                ['key' => 'val'],
+                null,
+                ['key' => 'val'],
+            ],
+            [
+                ['key' => ['key' => 'val']],
+                ['key' => ['key' => 'val2' , 'key2' => 'val2']],
+                ['key' => ['key' => 'val2' , 'key2' => 'val2']],
+            ],
+            [
+                ['key' => ['key' => 'val', 'another_key' => 'another_value']],
+                ['key' => ['key' => 'val2' , 'key2' => 'val2']],
+                ['key' => ['key' => 'val2' , 'another_key' => 'another_value', 'key2' => 'val2', ]],
+            ],
+        ];
+    }
+
+    /**
+     * @param array $productOptions
+     * @param array $defaultOptions
+     * @param array $expectedResults
+     * @dataProvider mergeProductOptionsDataProvider
+     */
+    public function testMergeProductOptions($productOptions, $defaultOptions, $expectedResults)
+    {
+        $this->jsHelperMock = $this->getMock('\Magento\Backend\Helper\Js', [], [], '', false);
+        $this->helper = new Helper(
+            $this->requestMock,
+            $this->storeManagerMock,
+            $this->stockFilterMock,
+            $this->productLinksMock,
+            $this->jsHelperMock
+        );
+        $result = $this->helper->mergeProductOptions($productOptions, $defaultOptions);
+        $this->assertEquals($expectedResults, $result);
     }
 }

@@ -31,11 +31,4 @@
         <plugin name="invalidateStockIndexerOnImport" type="\Magento\CatalogImportExport\Model\Indexer\Stock\Plugin\Import" />
         <plugin name="invalidateEavIndexerOnImport" type="\Magento\CatalogImportExport\Model\Indexer\Product\Eav\Plugin\Import" />
     </type>
-    <type name="Magento\CatalogImportExport\Model\Export\RowCustomizer\Composite">
-        <arguments>
-            <argument name="customizers" xsi:type="array">
-                <item name="configurableProduct" xsi:type="string">Magento\CatalogImportExport\Model\Export\RowCustomizer</item>
-            </argument>
-        </arguments>
-    </type>
 </config>

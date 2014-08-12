@@ -31,8 +31,8 @@
 ?>
 <?php $_filters = $this->getActiveFilters() ?>
 <?php if(!empty($_filters)): ?>
-<div class="filter-current" data-count="<?php echo count($_filters); ?>">
-    <strong class="block-subtitle filter-current-subtitle"><?php echo __('Currently Shopping by') ?></strong>
+<div class="filter-current">
+    <strong class="block-subtitle filter-current-subtitle" data-count="<?php echo count($_filters); ?>"><?php echo __('Currently Shopping by') ?></strong>
     <ol class="items">
         <?php foreach ($_filters as $_filter): ?>
             <li class="item">

@@ -17,38 +17,40 @@
  * Do not edit or add to this file if you wish to upgrade Magento to newer
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
- * 
+ *
  * @copyright Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 $om = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 $mesasge = $om->create('Magento\AdminNotification\Model\Inbox');
 $mesasge->setSeverity(
-    \Magento\AdminNotification\Model\Inbox::SEVERITY_CRITICAL
+    \Magento\Framework\Notification\MessageInterface::SEVERITY_CRITICAL
 )->setTitle(
     'Unread Critical 1'
 )->save();
 
 $mesasge = $om->create('Magento\AdminNotification\Model\Inbox');
-$mesasge->setSeverity(\Magento\AdminNotification\Model\Inbox::SEVERITY_MAJOR)->setTitle('Unread Major 1')->save();
+$mesasge->setSeverity(\Magento\Framework\Notification\MessageInterface::SEVERITY_MAJOR)
+    ->setTitle('Unread Major 1')
+    ->save();
 
 $mesasge = $om->create('Magento\AdminNotification\Model\Inbox');
 $mesasge->setSeverity(
-    \Magento\AdminNotification\Model\Inbox::SEVERITY_CRITICAL
+    \Magento\Framework\Notification\MessageInterface::SEVERITY_CRITICAL
 )->setTitle(
     'Unread Critical 2'
 )->save();
 
 $mesasge = $om->create('Magento\AdminNotification\Model\Inbox');
 $mesasge->setSeverity(
-    \Magento\AdminNotification\Model\Inbox::SEVERITY_CRITICAL
+    \Magento\Framework\Notification\MessageInterface::SEVERITY_CRITICAL
 )->setTitle(
     'Unread Critical 3'
 )->save();
 
 $mesasge = $om->create('Magento\AdminNotification\Model\Inbox');
 $mesasge->setSeverity(
-    \Magento\AdminNotification\Model\Inbox::SEVERITY_CRITICAL
+    \Magento\Framework\Notification\MessageInterface::SEVERITY_CRITICAL
 )->setTitle(
     'Read Critical 1'
 )->setIsRead(
@@ -56,11 +58,13 @@ $mesasge->setSeverity(
 )->save();
 
 $mesasge = $om->create('Magento\AdminNotification\Model\Inbox');
-$mesasge->setSeverity(\Magento\AdminNotification\Model\Inbox::SEVERITY_MAJOR)->setTitle('Unread Major 2')->save();
+$mesasge->setSeverity(\Magento\Framework\Notification\MessageInterface::SEVERITY_MAJOR)
+    ->setTitle('Unread Major 2')
+    ->save();
 
 $mesasge = $om->create('Magento\AdminNotification\Model\Inbox');
 $mesasge->setSeverity(
-    \Magento\AdminNotification\Model\Inbox::SEVERITY_CRITICAL
+    \Magento\Framework\Notification\MessageInterface::SEVERITY_CRITICAL
 )->setTitle(
     'Removed Critical 1'
 )->setIsRemove(

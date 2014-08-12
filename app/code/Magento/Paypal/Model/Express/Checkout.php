@@ -27,6 +27,7 @@ use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
 use Magento\Sales\Model\Quote\Address;
 use Magento\Customer\Service\V1\Data\Customer as CustomerDataObject;
 use Magento\Paypal\Model\Config as PaypalConfig;
+use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 
 /**
  * Wrapper that performs Paypal Express and Checkout communication
@@ -281,6 +282,11 @@ class Checkout
     protected $_messageManager;
 
     /**
+     * @var OrderSender
+     */
+    protected $orderSender;
+
+    /**
      * Set config, session and quote instances
      *
      * @param \Magento\Framework\Logger $logger
@@ -307,6 +313,7 @@ class Checkout
      * @param \Magento\Customer\Service\V1\Data\CustomerDetailsBuilder $customerDetailsBuilder
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @param OrderSender $orderSender
      * @param array $params
      * @throws \Exception
      */
@@ -335,6 +342,7 @@ class Checkout
         \Magento\Customer\Service\V1\Data\CustomerDetailsBuilder $customerDetailsBuilder,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Framework\Message\ManagerInterface $messageManager,
+        OrderSender $orderSender,
         $params = array()
     ) {
         $this->_customerData = $customerData;
@@ -360,6 +368,7 @@ class Checkout
         $this->_customerDetailsBuilder = $customerDetailsBuilder;
         $this->_encryptor = $encryptor;
         $this->_messageManager = $messageManager;
+        $this->orderSender = $orderSender;
         $this->_customerSession = isset($params['session'])
             && $params['session'] instanceof \Magento\Customer\Model\Session ? $params['session'] : $customerSession;
 
@@ -842,7 +851,7 @@ class Checkout
             case \Magento\Sales\Model\Order::STATE_PROCESSING:
             case \Magento\Sales\Model\Order::STATE_COMPLETE:
             case \Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW:
-                $order->sendNewOrderEmail();
+                $this->orderSender->send($order);
                 break;
             default:
                 break;

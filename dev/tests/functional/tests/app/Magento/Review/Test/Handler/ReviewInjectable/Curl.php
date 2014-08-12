@@ -24,15 +24,15 @@
 
 namespace Magento\Review\Test\Handler\ReviewInjectable;
 
+use Mtf\System\Config;
+use Mtf\Fixture\FixtureInterface;
+use Mtf\Util\Protocol\CurlInterface;
+use Mtf\Util\Protocol\CurlTransport;
+use Magento\Review\Test\Fixture\Rating;
 use Magento\Backend\Test\Handler\Extractor;
 use Magento\Review\Test\Fixture\ReviewInjectable;
-use Magento\Review\Test\Fixture\Rating;
-use Mtf\Fixture\FixtureInterface;
-use Mtf\Handler\Curl as AbstractCurl;
-use Mtf\Util\Protocol\CurlInterface;
 use Mtf\Util\Protocol\CurlTransport\BackendDecorator;
-use Mtf\Util\Protocol\CurlTransport;
-use Mtf\System\Config;
+use Mtf\Handler\Curl as AbstractCurl;
 
 /**
  * Class Curl
@@ -51,7 +51,7 @@ class Curl extends AbstractCurl implements ReviewInjectableInterface
             'Pending' => 2,
             'Not Approved' => 3
         ],
-        'stores' => [
+        'select_stores' => [
             'Main Website/Main Website Store/Default Store View' => 1
         ]
     ];
@@ -93,23 +93,33 @@ class Curl extends AbstractCurl implements ReviewInjectableInterface
         $data = $review->getData();
 
         /* Prepare ratings */
-        $sourceRatings = $review->getDataFieldConfig('ratings')['source'];
-        $ratings = [];
-        foreach ($data['ratings'] as $rating) {
-            $ratings[$rating['title']] = $rating['rating'];
-        }
-        $data['ratings'] = [];
-        foreach ($sourceRatings->getRatings() as $ratingFixture) {
-            /** @var Rating $ratingFixture */
-            $ratingCode = $ratingFixture->getRatingCode();
-            if (isset($ratings[$ratingCode])) {
-                $ratingOptions = $ratingFixture->getOptions();
-                $vote = $ratings[$ratingCode];
-                $data['ratings'][$ratingFixture->getRatingId()] = $ratingOptions[$vote];
+        if ($review->hasData('ratings')) {
+            $sourceRatings = $review->getDataFieldConfig('ratings')['source'];
+            $ratings = [];
+            foreach ($data['ratings'] as $rating) {
+                $ratings[$rating['title']] = $rating['rating'];
+            }
+            $data['ratings'] = [];
+            foreach ($sourceRatings->getRatings() as $ratingFixture) {
+                /** @var Rating $ratingFixture */
+                $ratingCode = $ratingFixture->getRatingCode();
+                if (isset($ratings[$ratingCode])) {
+                    $ratingOptions = $ratingFixture->getOptions();
+                    $vote = $ratings[$ratingCode];
+                    $data['ratings'][$ratingFixture->getRatingId()] = $ratingOptions[$vote];
+                }
             }
         }
 
-        /* prepare product id */
+        if ($review->hasData('select_stores')) {
+            foreach (array_keys($data['select_stores']) as $key) {
+                if (isset($this->mappingData['select_stores'][$data['select_stores'][$key]])) {
+                    $data['select_stores'][$key] = $this->mappingData['select_stores'][$data['select_stores'][$key]];
+                }
+            }
+        }
+
+        /* Prepare product id */
         $data['product_id'] = $data['entity_id'];
         unset($data['entity_id']);
 
@@ -128,6 +138,6 @@ class Curl extends AbstractCurl implements ReviewInjectableInterface
         $extractor = new Extractor($url, $regex);
         $match = $extractor->getData();
 
-        return empty($match[1]) ? null : $match[1];
+        return empty($match[1]) ? null : (int)$match[1];
     }
 }

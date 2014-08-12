@@ -26,6 +26,7 @@ namespace Magento\Sales\Model\AdminOrder;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Logger;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Email\Sender\OrderSender;
 
 /**
  * Class EmailSender
@@ -33,23 +34,30 @@ use Magento\Sales\Model\Order;
 class EmailSender
 {
     /**
-     * @var \Magento\Framework\Message\ManagerInterface
+     * @var ManagerInterface
      */
     protected $messageManager;
 
     /**
-     * @var \Magento\Framework\Logger
+     * @var Logger
      */
     protected $logger;
 
     /**
+     * @var OrderSender
+     */
+    protected $orderSender;
+
+    /**
      * @param ManagerInterface $messageManager
      * @param Logger $logger
+     * @param OrderSender $orderSender
      */
-    public function __construct(ManagerInterface $messageManager, Logger $logger)
+    public function __construct(ManagerInterface $messageManager, Logger $logger, OrderSender $orderSender)
     {
         $this->messageManager = $messageManager;
         $this->logger = $logger;
+        $this->orderSender = $orderSender;
     }
 
     /**
@@ -62,7 +70,7 @@ class EmailSender
     public function send(Order $order)
     {
         try {
-            $order->sendNewOrderEmail();
+            $this->orderSender->send($order);
         } catch (\Magento\Framework\Mail\Exception $exception) {
             $this->logger->logException($exception);
             $this->messageManager->addWarning(

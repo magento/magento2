@@ -84,7 +84,8 @@ class ExpressTest extends \Magento\TestFramework\TestCase\AbstractController
      *
      * Note that test does not verify communication during remote calls to PayPal.
      *
-     * @magentoDataFixture Magento/Sales/_files/quote_with_customer.php
+     * @magentoDataFixture Magento/Sales/_files/quote.php
+     * @magentoDataFixture Magento/Customer/_files/customer.php
      */
     public function testStartActionCustomerToQuote()
     {

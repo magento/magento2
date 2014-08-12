@@ -30,6 +30,7 @@
             <module name="Magento_Directory"/>
             <module name="Magento_Payment"/>
             <module name="Magento_Paypal"/>
+            <module name="Magento_Sales"/>
             <module name="Magento_RecurringPayment"/>
         </depends>
     </module>

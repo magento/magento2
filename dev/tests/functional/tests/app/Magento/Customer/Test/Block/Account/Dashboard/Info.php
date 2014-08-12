@@ -37,7 +37,7 @@ class Info extends Block
      *
      * @var string
      */
-    protected $contactInfoEditLink = '.dashboard.info .information a.edit';
+    protected $contactInfoEditLink = '.block-dashboard-info .box-information .action.edit';
 
     /**
      * Click on Contact Information Edit Link

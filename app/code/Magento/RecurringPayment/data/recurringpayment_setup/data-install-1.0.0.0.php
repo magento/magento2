@@ -35,7 +35,7 @@ $this->addAttributeToGroup($entityTypeId, $attributeSetId, $groupName, 'is_recur
 $this->addAttributeToGroup($entityTypeId, $attributeSetId, $groupName, 'recurring_payment');
 
 $connection = $this->getConnection();
-$adminRuleTable = $this->getTable('admin_rule');
+$adminRuleTable = $this->getTable('authorization_rule');
 $connection->update(
     $adminRuleTable,
     array('resource_id' => 'Magento_RecurringPayment::recurring_payment'),

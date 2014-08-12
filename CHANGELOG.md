@@ -1,3 +1,58 @@
+0.1.0-alpha90
+=============
+ * Service layer implementation:
+   * Created the Admin Shopping Cart Service
+   * Created the Create Shopping Cart Items Service
+   * Created the Create Shopping Cart Shipping Address Service
+   * Created the Create Shopping Cart Billing Address Service
+   * Created the Service Layer for Orders
+   * Created CRUD service & APIs to manage options for configurable products
+   * Created CRUD service & APIs to manage options for bundle products
+ * Fixed bugs:
+   * Fixed an issue where adding a customer address with an invalid value of the custom address attribute caused a fatal error in SOAP
+   * Fixed an issue where the wrong FedEx rates were displayed
+   * Fixed an issue where the Bill Me Later option did not work in Payflow payment methods
+   * Fixed an issue where order comments were broken for orders placed with Authorize.net
+   * Fixed the naming of the My Account -> Recurring Payment page
+   * Fixed a UI elements issue in the disabled Magento_PayPalRecurringPayment and Magento_RecurringPayment modules
+   * Fixed an issue where it was impossible to save configuration of a configurable product when adding it to an order in the Admin panel
+   * Fixed an issue where the Select a store page was displayed during admin order creation when the Single Store mode was enabled
+   * Fixed an issue when an exception was thrown when attempting to open the Customer Account page if the Recently Viewed widget was configured for the store
+   * Updated the content of the Privacy Policy page
+   * Fixed an issue where it was possible to update a tax rate using the POST http method
+   * Fixed an issue where it was impossible to update Inventory Qty for a SKU using API
+   * Fixed a JavaScript syntax error on the Create New Customer page
+   * Fixed an issue where it was impossible to add new sample while creating a downloadable product
+   * Fixed a JavaScript which appeared when clicking the Add New Address button in the Address Book on the storefront
+   * Fixed an issue where it was possible to update Tax Rules using the PUT http method which is supposed to be used for create operation only
+   * Fixed an issue where it was possible to create a Tax Rule specifying a product tax class instead of a customer tax class and vice versa
+   * Fixed an issue with making websiteId a mandatory field when updating a customer using REST
+   * Fixed an issue where the default value was not applied after clicking the 'Use default' link for a product price field in the catalog in the Admin panel
+   * Fixed an issue where the price update mass action could not be performed
+   * Fixed a JS error in the cross-sells product settings in the Admin panel
+ * Added the following functional tests:
+   * Mass Delete Backend Customer
+   * Moderate Product Review
+ * Framework improvements:
+   * Added the ability to access admin functionality using admin user login for mobile
+   * Refactored and unified Access Control List (ACL) to make it more consistent
+   * Created a Cookie Manager (a cookie management class)
+ * Changes in functional tests:
+   * Enabled the CustomerMetadataService tests for SOAP
+ * Themes update:
+   * Fixed issues in the Blank theme
+   * Implemented improvements for the Blank theme, core templates and Storefront UI Library
+ * Modularity:
+   * Created the Notification library component and made it possible to disable the AdminNotification module
+   * Made it possible to disable the SendToFriend module
+   * Created an optional ConfigurableImportExport module to remove dependency between the CatalogImportExport and ConfigurableProduct modules
+   * Created an optional GroupedImportExport module to remove dependency between the CatalogImportExport and GroupedProduct modules
+ * Introduce search library:
+   * Created a Search request configuration
+   * Created a Query object structure from the XML declaration
+ * Composer Integration:
+   * Added support for using 3rd-party components as Composer packages
+
 0.1.0-alpha89
 =============
 * Fixed bugs:

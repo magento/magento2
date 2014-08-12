@@ -23,8 +23,9 @@
  */
 namespace Magento\User\Model\Resource;
 
-use Magento\User\Model\Acl\Role\Group as RoleGroup;
-use Magento\User\Model\Acl\Role\User as RoleUser;
+use Magento\Authorization\Model\Acl\Role\Group as RoleGroup;
+use Magento\Authorization\Model\Acl\Role\User as RoleUser;
+use Magento\Authorization\Model\UserContextInterface;
 use Magento\User\Model\User as ModelUser;
 
 /**
@@ -40,7 +41,7 @@ class User extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * Role model
      *
-     * @var \Magento\User\Model\RoleFactory
+     * @var \Magento\Authorization\Model\RoleFactory
      */
     protected $_roleFactory;
 
@@ -50,23 +51,31 @@ class User extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $dateTime;
 
     /**
+     * Users table
+     *
+     * @var string
+     */
+    protected $_usersTable;
+
+    /**
      * Construct
      *
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Framework\Acl\CacheInterface $aclCache
-     * @param \Magento\User\Model\RoleFactory $roleFactory
+     * @param \Magento\Authorization\Model\RoleFactory $roleFactory
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
         \Magento\Framework\Acl\CacheInterface $aclCache,
-        \Magento\User\Model\RoleFactory $roleFactory,
+        \Magento\Authorization\Model\RoleFactory $roleFactory,
         \Magento\Framework\Stdlib\DateTime $dateTime
     ) {
         parent::__construct($resource);
         $this->_aclCache = $aclCache;
         $this->_roleFactory = $roleFactory;
         $this->dateTime = $dateTime;
+        $this->_usersTable = $this->getTable('admin_user');
     }
 
     /**
@@ -149,7 +158,7 @@ class User extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $adapter = $this->_getReadAdapter();
 
             $select = $adapter->select();
-            $select->from($this->getTable('admin_role'))->where('parent_id > :parent_id')->where('user_id = :user_id');
+            $select->from($this->getTable('authorization_role'))->where('parent_id > :parent_id')->where('user_id = :user_id');
 
             $binds = array('parent_id' => 0, 'user_id' => $userId);
 
@@ -200,7 +209,7 @@ class User extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function _clearUserRoles(ModelUser $user)
     {
         $conditions = array('user_id = ?' => (int)$user->getId());
-        $this->_getWriteAdapter()->delete($this->getTable('admin_role'), $conditions);
+        $this->_getWriteAdapter()->delete($this->getTable('authorization_role'), $conditions);
     }
 
     /**
@@ -213,7 +222,7 @@ class User extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected function _createUserRole($parentId, ModelUser $user)
     {
         if ($parentId > 0) {
-            /** @var \Magento\User\Model\Role $parentRole */
+            /** @var \Magento\Authorization\Model\Role $parentRole */
             $parentRole = $this->_roleFactory->create()->load($parentId);
         } else {
             $role = new \Magento\Framework\Object();
@@ -228,12 +237,13 @@ class User extends \Magento\Framework\Model\Resource\Db\AbstractDb
                     'sort_order' => 0,
                     'role_type' => RoleUser::ROLE_TYPE,
                     'user_id' => $user->getId(),
+                    'user_type' => UserContextInterface::USER_TYPE_ADMIN,
                     'role_name' => $user->getFirstname()
                 )
             );
 
-            $insertData = $this->_prepareDataForTable($data, $this->getTable('admin_role'));
-            $this->_getWriteAdapter()->insert($this->getTable('admin_role'), $insertData);
+            $insertData = $this->_prepareDataForTable($data, $this->getTable('authorization_role'));
+            $this->_getWriteAdapter()->insert($this->getTable('authorization_role'), $insertData);
             $this->_aclCache->clean();
         }
     }
@@ -270,7 +280,7 @@ class User extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $conditions = array('user_id = ?' => $uid);
 
             $adapter->delete($this->getMainTable(), $conditions);
-            $adapter->delete($this->getTable('admin_role'), $conditions);
+            $adapter->delete($this->getTable('authorization_role'), $conditions);
         } catch (\Magento\Framework\Model\Exception $e) {
             throw $e;
             return false;
@@ -295,7 +305,7 @@ class User extends \Magento\Framework\Model\Resource\Db\AbstractDb
             return array();
         }
 
-        $table = $this->getTable('admin_role');
+        $table = $this->getTable('authorization_role');
         $adapter = $this->_getReadAdapter();
 
         $select = $adapter->select()->from(
@@ -339,7 +349,7 @@ class User extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
         $condition = array('user_id = ?' => (int)$user->getId(), 'parent_id = ?' => (int)$user->getRoleId());
 
-        $dbh->delete($this->getTable('admin_role'), $condition);
+        $dbh->delete($this->getTable('authorization_role'), $condition);
         return $this;
     }
 
@@ -352,7 +362,7 @@ class User extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function roleUserExists(\Magento\Framework\Model\AbstractModel $user)
     {
         if ($user->getUserId() > 0) {
-            $roleTable = $this->getTable('admin_role');
+            $roleTable = $this->getTable('authorization_role');
 
             $dbh = $this->_getReadAdapter();
 
@@ -453,5 +463,26 @@ class User extends \Magento\Framework\Model\Resource\Db\AbstractDb
         );
 
         return $userIdentity;
+    }
+
+    /**
+     * Update role users ACL
+     *
+     * @param \Magento\Authorization\Model\Role $role
+     * @return bool
+     */
+    public function updateRoleUsersAcl(\Magento\Authorization\Model\Role $role)
+    {
+        $write = $this->_getWriteAdapter();
+        $users = $role->getRoleUsers();
+        $rowsCount = 0;
+
+        if (sizeof($users) > 0) {
+            $bind = array('reload_acl_flag' => 1);
+            $where = array('user_id IN(?)' => $users);
+            $rowsCount = $write->update($this->_usersTable, $bind, $where);
+        }
+
+        return $rowsCount > 0;
     }
 }

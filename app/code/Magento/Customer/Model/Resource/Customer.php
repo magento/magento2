@@ -23,6 +23,8 @@
  */
 namespace Magento\Customer\Model\Resource;
 
+use \Magento\Framework\Exception\InputException;
+
 /**
  * Customer entity resource model
  */
@@ -174,7 +176,12 @@ class Customer extends \Magento\Eav\Model\Entity\AbstractEntity
         $validator = $this->_validatorFactory->createValidator('customer', 'save');
 
         if (!$validator->isValid($customer)) {
-            throw new \Magento\Framework\Validator\ValidatorException($validator->getMessages());
+            throw new \Magento\Framework\Validator\ValidatorException(
+                InputException::DEFAULT_MESSAGE,
+                [],
+                null,
+                $validator->getMessages()
+            );
         }
     }
 

@@ -25,12 +25,13 @@
 .opc-wrapper {
     .gift-message {
         > legend {
-            margin-left: 0;
-            padding: 0;
+            .font-size(14);
+            font-weight: @font-weight-bold;
+            margin: 20px 0 0;
         }
         .field.choice {
             font-weight: @font-weight-base;
-            margin: 0 0 20px 20px;
+            margin: 0 0 20px;
             &:before {
                 display: none;
             }
@@ -43,10 +44,11 @@
             background: @sidebar-background;
             display: block;
             margin: 20px 0 0;
-            padding: 20px 20px 20px 10px;
-            .order-title {
-                margin-top: 10px;
-                margin-bottom: 0;
+            padding: 20px;
+            .order-title:not(:first-child),
+            .extra-options-container {
+                font-weight: @font-weight-base;
+                margin: 20px 0 0;
             }
             .order-options {
                 margin: 0 0 20px 20px;
@@ -78,12 +80,9 @@
     }
 }
 
-.responsive(@break) when (@break = @break-point-1) {
+.responsive(@break) when (@break = @screen-m) {
     .opc-wrapper {
         .gift-message {
-            .options-items .order-options {
-                margin-left: 45px;
-            }
             .item {
                 border-bottom: @border-width-base solid @border-color-base;
                 margin-bottom: 20px;
@@ -107,12 +106,6 @@
             }
             .price.box > .price {
                 display: block;
-            }
-        }
-        .extra-options-container {
-            .price.box {
-                font-weight: normal;
-                margin-left: 45px;
             }
         }
     }

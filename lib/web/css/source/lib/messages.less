@@ -29,6 +29,10 @@
     @_message-link-color: "message-@{_message-type}-link-color";
     @_message-link-color-hover: "message-@{_message-type}-link-color-hover";
     @_message-link-color-active: "message-@{_message-type}-link-color-active";
+    @_message-icon-top: "message-@{_message-type}-icon-top";
+    @_message-icon-right: "message-@{_message-type}-icon-right";
+    @_message-icon-bottom: "message-@{_message-type}-icon-bottom";
+    @_message-icon-left: "message-@{_message-type}-icon-left";
     ._message();
     ._message-style(
         @_message-color: @@_message-color,
@@ -87,7 +91,7 @@
     @_message-border-style: @message-border-style
 ) when not (@_message-border-width = 0)
 and not (@_message-border-width = false)
-and not ( @_message-border-style = false) {
+and not (@_message-border-style = false) {
     .css(border, @_message-border-width @_message-border-style);
 }
 
@@ -99,12 +103,20 @@ and not ( @_message-border-style = false) {
     @_message-icon: "message-@{_message-type}-icon";
     @_message-icon-color: "message-@{_message-type}-icon-color-lateral";
     @_message-icon-background: "message-@{_message-type}-icon-background";
+    @_message-icon-top: "message-@{_message-type}-icon-top";
+    @_message-icon-right: "message-@{_message-type}-icon-right";
+    @_message-icon-bottom: "message-@{_message-type}-icon-bottom";
+    @_message-icon-left: "message-@{_message-type}-icon-left";
     ._message-icon-lateral(
-           @_message-icon-position,
-           @@_message-icon,
-           @@_message-icon-color,
-           @@_message-icon-background
-       );
+        @_message-icon-position,
+        @@_message-icon,
+        @@_message-icon-color,
+        @@_message-icon-background,
+        @@_message-icon-top,
+        @@_message-icon-left,
+        @@_message-icon-bottom,
+        @@_message-icon-right
+    );
 }
 
 // Messages with inner icon
@@ -114,10 +126,18 @@ and not ( @_message-border-style = false) {
     @_message-icon: "message-@{_message-type}-icon";
     @_message-icon-color: "message-@{_message-type}-icon-color-inner";
     @_message-icon-background: "message-@{_message-type}-icon-background";
+    @_message-icon-top: "message-@{_message-type}-icon-top";
+    @_message-icon-right: "message-@{_message-type}-icon-right";
+    @_message-icon-bottom: "message-@{_message-type}-icon-bottom";
+    @_message-icon-left: "message-@{_message-type}-icon-left";
     ._message-icon-inner(
         @@_message-icon,
         @@_message-icon-color,
-        @@_message-icon-background
+        @@_message-icon-background,
+        @@_message-icon-top,
+        @@_message-icon-left,
+        @@_message-icon-bottom,
+        @@_message-icon-right
     );
 }
 
@@ -126,7 +146,11 @@ and not ( @_message-border-style = false) {
     @_message-icon-position,
     @_message-icon,
     @_message-icon-color,
-    @_message-icon-background
+    @_message-icon-background,
+    @_message-icon-top,
+    @_message-icon-left,
+    @_message-icon-bottom,
+    @_message-icon-right
 ) {
     position: relative;
     &:before {
@@ -153,12 +177,15 @@ and not ( @_message-border-style = false) {
             @_icon-font: @icon-font,
             @_icon-font-size: @message-icon-font-size,
             @_icon-font-line-height: @message-icon-font-line-height,
-            @_icon-font-color:  @_message-icon-color,
+            @_icon-font-color: @_message-icon-color,
             @_icon-font-margin: -@message-icon-font-size/2 0 0,
             @_icon-font-vertical-align: @icon-font-vertical-align
         );
         position: absolute;
-        top: 50%;
+        .css(top, @_message-icon-top);
+        .css(right, @_message-icon-right);
+        .css(bottom, @_message-icon-bottom);
+        .css(left, @_message-icon-left);
         text-align: center;
         .css(width, @message-icon-lateral-width);
     }
@@ -205,13 +232,13 @@ and not ( @_message-border-style = false) {
 }
 
 ._message-icon-lateral-border-radius(
-    @_message-icon-position,
+    @_message-icon-position
 ) when (@_message-icon-position = left) and not (@message-border-radius = false) and not (@message-border-width = false) {
     border-radius: (@message-border-radius - @message-border-width) 0 0 (@message-border-radius - @message-border-width);
 }
 
 ._message-icon-lateral-border-radius(
-    @_message-icon-position,
+    @_message-icon-position
 ) when (@_message-icon-position = right) and not (@message-border-radius = false) and not (@message-border-width = false) {
     border-radius: 0 (@message-border-radius - @message-border-width) (@message-border-radius - @message-border-width) 0;
 }
@@ -219,7 +246,11 @@ and not ( @_message-border-style = false) {
 ._message-icon-inner(
     @_message-icon,
     @_message-icon-color,
-    @_message-icon-background
+    @_message-icon-background,
+    @_message-icon-top,
+    @_message-icon-left,
+    @_message-icon-bottom,
+    @_message-icon-right
 ) {
     position: relative;
     .css(padding-left, @message-icon-inner-padding-left);
@@ -234,8 +265,10 @@ and not ( @_message-border-style = false) {
             @_icon-font-vertical-align: @icon-font-vertical-align
         );
         position: absolute;
-        left: 0;
-        top: 50%;
+        .css(top, @_message-icon-top);
+        .css(right, @_message-icon-right);
+        .css(bottom, @_message-icon-bottom);
+        .css(left, @_message-icon-left);
         text-align: center;
         .css(width, @message-icon-inner-padding-left);
     }

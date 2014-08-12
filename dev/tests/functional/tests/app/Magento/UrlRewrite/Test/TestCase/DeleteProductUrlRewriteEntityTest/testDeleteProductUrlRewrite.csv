@@ -1,2 +1,2 @@
 "productRedirect/dataSet";"productRedirect/data/id_path/entity";"constraint"
-"default";"product/%catalogProductSimple::100_dollar_product%";"assertUrlRewriteDeletedMessage, assertUrlRewriteNotInGrid, assertPageByUrlRewriteIsNotFound"
+"default_without_target";"product/%catalogProductSimple::100_dollar_product%";"assertUrlRewriteDeletedMessage, assertUrlRewriteNotInGrid, assertPageByUrlRewriteIsNotFound"

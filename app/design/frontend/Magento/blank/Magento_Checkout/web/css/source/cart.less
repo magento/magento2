@@ -198,7 +198,7 @@
         }
         .item {
             &-actions td {
-                padding-bottom: 20px;
+                padding-bottom: 10px;
                 text-align: center;
                 white-space: normal;
             }
@@ -216,13 +216,18 @@
                 }
             }
         }
-        .action {
-            &:extend(button all);
-            .link-as-button();
-            margin-left: 10px;
-            &:first-child {
-                margin-left: 0;
+        .actions {
+            > .action {
+                &:extend(button all);
+                .link-as-button();
+                margin-left: 10px;
+                margin-bottom: 10px;
+                &:first-child {
+                    margin-left: 0;
+                }  
             }
+        }
+        .action {
             &.help.map {
                 &:extend(.abstract-action-button-as-link all);
                 font-weight: @font-weight-base;
@@ -247,12 +252,11 @@
             &-item-name {
                 display: inline-block;
                 font-weight: @font-weight-base;
-                max-width: 130px;
                 overflow: hidden;
                 text-overflow: ellipsis;
             }
         }
-        //  Product options
+        // Product options
         .cart-item-options {
             font-size: @font-size-s;
             margin-top: @indent-s-base;
@@ -273,10 +277,11 @@
                 &.continue {
                     .link-as-button();
                     .button(
-                        @_button-padding: 0 15px 0 5px,
+                        @_button-padding: 7px 15px 7px 0,
                         @_button-icon-use: true,
                         @_button-font-content: @icon-prev,
                         @_button-icon-font-size: 32px,
+                        @_button-icon-font-line-height: 16px,
                         @_button-icon-font-position: before
                     );
                     border-radius: 3px;
@@ -288,7 +293,8 @@
                 &.update {
                     .button-icon(
                         @icon-update,
-                        @_icon-font-size: 32px
+                        @_icon-font-size: 32px,
+                        @_icon-font-line-height: 16px
                     );
                     padding-left: 5px;
                 }
@@ -326,7 +332,7 @@
 //
 //    Mobile
 //--------------------------------------
-.responsive-smaller(@break) when (@break = @break-point-1) {
+.responsive-smaller(@break) when (@break = @screen-m) {
     .cart {
         &.table-wrapper {
             thead {
@@ -371,7 +377,7 @@
 //
 //    Desktop
 //--------------------------------------
-.responsive(@break) when (@break = @break-point-1) {
+.responsive(@break) when (@break = @screen-m) {
     .cart {
         &-container {
             &:extend(.add-clearfix-desktop all);

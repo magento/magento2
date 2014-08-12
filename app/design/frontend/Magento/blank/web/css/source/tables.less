@@ -23,8 +23,6 @@
 //  */
 
 .table-wrapper {
-    .table-overflow();
-    position: relative; // to hide unnecessary horizontal scrollbar in Safari
     > table {
         .table-caption(@_table-caption-hide: true);
     }
@@ -32,12 +30,20 @@
 }
 
 //
+//    Mobile
+//--------------------------------------
+.responsive-smaller(@break) when (@break = @screen-m) {
+    .table-wrapper {
+        .table-overflow();
+        position: relative; // to hide unnecessary horizontal scrollbar in Safari
+    }
+}
+
+//
 //    Desktop
 //--------------------------------------
-.responsive(@break) when (@break = @break-point-1) {
+.responsive(@break) when (@break = @screen-m) {
     .table-wrapper {
-        overflow-y: visible;
-        overflow-x: visible;
         > table {
             > thead,
             > tbody,

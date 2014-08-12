@@ -29,8 +29,8 @@ use Mtf\Block\Block;
 use Mtf\Client\Element;
 
 /**
+ * Class View
  * Reviews frontend block
- *
  */
 class View extends Block
 {
@@ -42,68 +42,38 @@ class View extends Block
     protected $itemSelector = '.review-items .review-item';
 
     /**
-     * Nickname selector
-     *
-     * @var string
-     */
-    protected $nicknameSelector = '.review-author .review-details-value';
-
-    /**
-     * Title selector
-     *
-     * @var string
-     */
-    protected $titleSelector = '.review-title';
-
-    /**
-     * Detail selector
-     *
-     * @var string
-     */
-    protected $detailSelector = '.review-content';
-
-    /**
      * Selectors mapping
      *
      * @var array
      */
-    protected $selectorsMapping;
+    protected $selectorsMapping = [
+        'nickname' => '.review-author .review-details-value',
+        'title' => '.review-title',
+        'detail' => '.review-content',
+    ];
 
     /**
-     * {@inheritdoc}
-     */
-    protected function _init()
-    {
-        parent::_init();
-        $this->selectorsMapping = array(
-            'nickname' => $this->nicknameSelector,
-            'title' => $this->titleSelector,
-            'detail' => $this->detailSelector,
-        );
-    }
-
-    /**
-     * Get first review item
+     * Is visible review item
      *
-     * @return Element
+     * @return bool
      */
-    public function getFirstReview()
+    public function isVisibleReviewItem()
     {
-        return $this->_rootElement->find($this->itemSelector);
+        return $this->_rootElement->find($this->itemSelector)->isVisible();
     }
 
     /**
-     * Get selector field for review on product view page
+     * Get field value for review on product view page
      *
      * @param string $field
-     * @return string
-     * @throws \Exception
+     * @return string|null
      */
-    public function getFieldSelector($field)
+    public function getFieldValue($field)
     {
-        if (!isset($this->selectorsMapping[$field])) {
-            throw new \Exception(sprintf('Selector of field "%s" is not defined', $field));
+        if (isset($this->selectorsMapping[$field])) {
+            return $this->_rootElement->find($this->selectorsMapping[$field])->getText();
         }
-        return $this->selectorsMapping[$field];
+
+        return null;
     }
 }

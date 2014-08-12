@@ -27,7 +27,7 @@ interface ReadServiceInterface
 {
     /**
      * @param int $categoryId
-     * @return \Magento\Catalog\Service\V1\Data\Eav\Category\ProductLink[]
+     * @return \Magento\Catalog\Service\V1\Data\Category\ProductLink[]
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function assignedProducts($categoryId);

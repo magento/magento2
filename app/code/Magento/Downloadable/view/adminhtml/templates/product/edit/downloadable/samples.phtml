@@ -251,6 +251,14 @@ sampleUploader = function (id) {
     })(jQuery, id);
 };
 
+if($('add_sample_item')){
+    Event.observe('add_sample_item', 'click', sampleItems.add.bind(sampleItems));
+}
+
+<?php foreach ($this->getSampleData() as $item): ?>
+    sampleItems.add(<?php echo $item->toJson() ?>);
+<?php endforeach; ?>
+
 });
 </script>
 

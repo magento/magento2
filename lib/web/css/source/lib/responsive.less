@@ -23,24 +23,28 @@
 //  */
 
 // Small screens only
-.responsive-smaller(@break-point-0) {}
+.responsive-smaller(@screen-s) {}
 
-@media all and (max-width: @break-point-0) {
-    .responsive-smaller(@break-point-0);
+@media all and (max-width: @screen-xs) {
+    .responsive-smaller(@screen-xs);
 }
 
-@media all and (max-width: @break-point-1) {
-    .responsive-smaller(@break-point-1);
+@media all and (max-width: @screen-s) {
+    .responsive-smaller(@screen-s);
 }
 
-@media all and (min-width: @break-point-0) {
-    .responsive(@break-point-0);
+@media all and (max-width: @screen-m) {
+    .responsive-smaller(@screen-m);
 }
 
-@media all and (min-width: @break-point-1) {
-    .responsive(@break-point-1);
+@media all and (min-width: @screen-s) {
+    .responsive(@screen-s);
 }
 
-@media all and (min-width: @break-point-2) {
-    .responsive(@break-point-2);
+@media all and (min-width: @screen-m) {
+    .responsive(@screen-m);
+}
+
+@media all and (min-width: @screen-l) {
+    .responsive(@screen-l);
 }

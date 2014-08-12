@@ -30,6 +30,7 @@ use Magento\Customer\Test\Page\Adminhtml\CustomerIndex;
 
 /**
  * Class AssertCustomerNotInGrid
+ * Check that customer is not in customer's grid
  */
 class AssertCustomerNotInGrid extends AbstractConstraint
 {
@@ -43,20 +44,18 @@ class AssertCustomerNotInGrid extends AbstractConstraint
     /**
      * Asserts that customer is not in customer's grid
      *
-     * @param CustomerInjectable $initialCustomer
-     * @param CustomerIndex $pageCustomerIndex
+     * @param CustomerInjectable $customer
+     * @param CustomerIndex $customerIndexPage
      * @return void
      */
-    public function processAssert(CustomerInjectable $customer, CustomerIndex $customerIndexPage)
-    {
-        $filter = [
-            'email' => $customer->getEmail()
-        ];
-
+    public function processAssert(
+        CustomerInjectable $customer,
+        CustomerIndex $customerIndexPage
+    ) {
         $customerIndexPage->open();
         \PHPUnit_Framework_Assert::assertFalse(
-            $customerIndexPage->getCustomerGridBlock()->isRowVisible($filter),
-            "Customer with email {$filter['email']} is present in Customer grid."
+            $customerIndexPage->getCustomerGridBlock()->isRowVisible(['email' => $customer->getEmail()]),
+            'Customer with email ' . $customer->getEmail() . 'is present in Customer grid.'
         );
     }
 

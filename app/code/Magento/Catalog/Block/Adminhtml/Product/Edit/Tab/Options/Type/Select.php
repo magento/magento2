@@ -94,9 +94,12 @@ class Select extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\T
     }
 
     /**
+     * Return select input for price type
+     *
+     * @param string $extraParams
      * @return string
      */
-    public function getPriceTypeSelectHtml()
+    public function getPriceTypeSelectHtml($extraParams = '')
     {
         $this->getChildBlock(
             'option_price_type'
@@ -105,7 +108,7 @@ class Select extends \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options\T
             'product_option_${id}_select_${select_id}_price_type'
         )->setName(
             'product[options][${id}][values][${select_id}][price_type]'
-        );
+        )->setExtraParams($extraParams);
 
         return parent::getPriceTypeSelectHtml();
     }

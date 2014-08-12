@@ -81,7 +81,7 @@ class PayflowadvancedTest extends \Magento\TestFramework\TestCase\AbstractContro
     }
 
     /**
-     * @magentoDataFixture Magento/Paypal/_files/quote_payment_payflow.php
+     * @magentoDataFixture Magento/Sales/_files/order.php
      * @magentoConfigFixture current_store payment/paypal_payflow/active 1
      * @magentoConfigFixture current_store paypal/general/business_account merchant_2012050718_biz@example.com
      */

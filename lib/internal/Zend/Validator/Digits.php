@@ -14,7 +14,7 @@ use Zend\Filter\Digits as DigitsFilter;
 
 /**
  * @category   Zend
- * @package    Zend_Validate
+ * @package    Zend_Validator
  */
 class Digits extends AbstractValidator
 {

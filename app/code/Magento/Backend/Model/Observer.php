@@ -85,27 +85,4 @@ class Observer
     {
         return $this;
     }
-
-    /**
-     * Set url class name for store 'admin'
-     *
-     * @param \Magento\Framework\Event\Observer $observer
-     * @return $this
-     */
-    public function setUrlClassName(\Magento\Framework\Event\Observer $observer)
-    {
-        /** @var $storeCollection \Magento\Store\Model\Resource\Store\Collection */
-        $storeCollection = $observer->getEvent()->getStoreCollection();
-        /** @var $store \Magento\Store\Model\Store */
-        foreach ($storeCollection as $store) {
-            if ($store->getId() == 0) {
-                $store->setUrlClassName('Magento\Backend\Model\UrlInterface');
-                break;
-            }
-        }
-        $this->cache->remove(
-            \Magento\AdminNotification\Model\System\Message\Security::VERIFICATION_RESULT_CACHE_KEY
-        );
-        return $this;
-    }
 }

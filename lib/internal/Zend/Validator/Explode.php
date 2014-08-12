@@ -12,7 +12,7 @@ namespace Zend\Validator;
 
 /**
  * @category   Zend
- * @package    Zend_Validate
+ * @package    Zend_Validator
  */
 class Explode extends AbstractValidator
 {
@@ -112,7 +112,7 @@ class Explode extends AbstractValidator
     }
 
     /**
-     * Defined by Zend_Validate_Interface
+     * Defined by Zend\Validator\ValidatorInterface
      *
      * Returns true if all values validate true
      *

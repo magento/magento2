@@ -14,7 +14,7 @@ namespace Zend\Validator\File;
  * Validator for the excluding file extensions
  *
  * @category  Zend
- * @package   Zend_Validate
+ * @package   Zend_Validator
  */
 class ExcludeExtension extends Extension
 {

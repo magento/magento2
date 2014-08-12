@@ -26,6 +26,7 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Creditmemo;
 
 use \Magento\Sales\Model\Order;
 use \Magento\Backend\App\Action;
+use Magento\Sales\Model\Order\Email\Sender\CreditmemoSender;
 
 class Save extends \Magento\Backend\App\Action
 {
@@ -35,14 +36,22 @@ class Save extends \Magento\Backend\App\Action
     protected $creditmemoLoader;
 
     /**
+     * @var CreditmemoSender
+     */
+    protected $creditmemoSender;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader
+     * @param CreditmemoSender $creditmemoSender
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader
+        \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader $creditmemoLoader,
+        CreditmemoSender $creditmemoSender
     ) {
         $this->creditmemoLoader = $creditmemoLoader;
+        $this->creditmemoSender = $creditmemoSender;
         parent::__construct($context);
     }
 
@@ -115,7 +124,8 @@ class Save extends \Magento\Backend\App\Action
                     $transactionSave->addObject($creditmemo->getInvoice());
                 }
                 $transactionSave->save();
-                $creditmemo->sendEmail(!empty($data['send_email']), $comment);
+                $this->creditmemoSender->send($creditmemo, !empty($data['send_email']), $comment);
+
                 $this->messageManager->addSuccess(__('You created the credit memo.'));
                 $this->_getSession()->getCommentText(true);
                 $this->_redirect('sales/order/view', array('order_id' => $creditmemo->getOrderId()));

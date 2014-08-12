@@ -13,7 +13,7 @@ namespace Zend\I18n\Exception;
 /**
  * @category   Zend
  * @package    Zend_I18n
- * @subpackage Translator
+ * @subpackage Exception
  */
 class InvalidArgumentException extends \InvalidArgumentException implements
     ExceptionInterface

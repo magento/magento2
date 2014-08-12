@@ -45,7 +45,14 @@ $rating = 'short';
                     <?php echo $this->escapeHtml($item->getName()) ?></a>
                 </strong>
 
-                <?php echo $this->getPriceHtml($item, true, '-' . $type) ?>
+                <?php echo $this->getProductPriceHtml(
+                    $item,
+                    \Magento\Catalog\Pricing\Price\FinalPrice::PRICE_CODE,
+                    \Magento\Framework\Pricing\Render::ZONE_ITEM_LIST,
+                    [
+                        'price_id_suffix' => '-' . $type
+                    ]
+                ) ?>
 
                 <?php if ($rating): ?>
                     <?php echo $this->getReviewsSummaryHtml($item, $rating) ?>

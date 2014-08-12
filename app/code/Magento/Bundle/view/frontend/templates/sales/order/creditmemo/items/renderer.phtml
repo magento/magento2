@@ -42,19 +42,19 @@
     <?php if ($_item->getOrderItem()->getParentItem()): ?>
         <?php $attributes = $this->getSelectionAttributes($_item) ?>
         <?php if ($_prevOptionId != $attributes['option_id']): ?>
-            <tr>
+            <tr class="options-label">
                 <td class="col label" colspan="7"><div class="option label"><?php echo $attributes['option_label'] ?></div></td>
             </tr>
             <?php $_prevOptionId = $attributes['option_id'] ?>
         <?php endif; ?>
     <?php endif; ?>
-<tr id="order-item-row-<?php echo $_item->getId() ?>" class="<?php if ($_item->getOrderItem()->getParentItem()): ?>item-options<?php else: ?>item-parent<?php endif; ?>">
+<tr id="order-item-row-<?php echo $_item->getId() ?>" class="<?php if ($_item->getOrderItem()->getParentItem()): ?>item-options<?php else: ?>item-parent<?php endif; ?>"<?php if ($_item->getParentItem()): ?> data-th="<?php echo $attributes['option_label'] ?>"<?php endif; ?>>
     <?php if (!$_item->getOrderItem()->getParentItem()): ?>
         <td class="col name" data-th="<?php echo $this->escapeHtml(__('Product Name')); ?>">
             <strong class="product name product-item-name"><?php echo $this->escapeHtml($_item->getName()) ?></strong>
         </td>
     <?php else: ?>
-        <td class="col value"><?php echo $this->getValueHtml($_item) ?></td>
+        <td class="col value" data-th="<?php echo $this->escapeHtml(__('Product Name')); ?>"><?php echo $this->getValueHtml($_item) ?></td>
     <?php endif; ?>
     <td class="col sku" data-th="<?php echo $this->escapeHtml(__('SKU')); ?>"><?php echo $this->escapeHtml($_item->getSku()) ?></td>
     <td class="col price" data-th="<?php echo $this->escapeHtml(__('Price')); ?>">

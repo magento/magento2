@@ -45,7 +45,7 @@ class FormPageActions extends AbstractFormPageActions
      *
      * @var string
      */
-    protected $storeViewButton = '.store-switcher [data-toggle="dropdown"]';
+    protected $storeViewButton = '[data-ui-id="language-switcher"] .toggle';
 
     /**
      * Store View locator
@@ -59,14 +59,19 @@ class FormPageActions extends AbstractFormPageActions
      *
      * @param string $storeName
      * @throws \Exception
-     * @return void
+     * @return void|bool
      */
     public function selectStoreView($storeName)
     {
-        $this->_rootElement->find($this->storeViewButton)->click();
+        $languageSwitcher = $this->_rootElement->find($this->storeViewButton);
+        if (!$languageSwitcher->isVisible()) {
+            return false;
+        }
+        $languageSwitcher->click();
         $selector = sprintf($this->storeView, $storeName);
-        if ($this->_rootElement->find($selector, Locator::SELECTOR_XPATH)->isVisible()) {
-            $this->_rootElement->find($selector, Locator::SELECTOR_XPATH)->click();
+        $storeView = $this->_rootElement->find($selector, Locator::SELECTOR_XPATH);
+        if ($storeView->isVisible()) {
+            $storeView->click();
         } else {
             throw new \Exception('Store View with name \'' . $storeName . '\' is not visible!');
         }

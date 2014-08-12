@@ -43,6 +43,7 @@ namespace Magento\Integration\Model;
  * @method Integration setCreatedAt(\string $createdAt)
  * @method \string getUpdatedAt()
  * @method Integration setUpdatedAt(\string $createdAt)
+ * @method \Magento\Integration\Model\Resource\Integration getResource()
  */
 class Integration extends \Magento\Framework\Model\AbstractModel
 {
@@ -145,6 +146,19 @@ class Integration extends \Magento\Framework\Model\AbstractModel
     public function loadByConsumerId($consumerId)
     {
         return $this->load($consumerId, self::CONSUMER_ID);
+    }
+
+    /**
+     * Load active integration by oAuth consumer ID.
+     *
+     * @param int $consumerId
+     * @return $this
+     */
+    public function loadActiveIntegrationByConsumerId($consumerId)
+    {
+        $integrationData = $this->getResource()->selectActiveIntegrationByConsumerId($consumerId);
+        $this->setData($integrationData ? $integrationData : []);
+        return $this;
     }
 
     /**

@@ -230,6 +230,7 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
             $filePath = preg_replace($patterns, $replacements, $file);
             $className = substr($filePath, 0, -4);
             if (class_exists($className)) {
+                $file = str_replace('\\', DIRECTORY_SEPARATOR, $file);
                 $classes[$file] = $className;
             }
         }
@@ -339,8 +340,20 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
             $autoloader,
             $generatorIo,
             array(
+                \Magento\Framework\Service\Code\Generator\SearchResultsBuilder::ENTITY_TYPE
+                    => 'Magento\Framework\Service\Code\Generator\SearchResultsBuilder',
                 \Magento\Framework\ObjectManager\Code\Generator\Factory::ENTITY_TYPE
-                => 'Magento\Framework\ObjectManager\Code\Generator\Factory'
+                    => 'Magento\Framework\ObjectManager\Code\Generator\Factory',
+                \Magento\Framework\ObjectManager\Code\Generator\Repository::ENTITY_TYPE
+                    => 'Magento\Framework\ObjectManager\Code\Generator\Repository',
+                \Magento\Framework\ObjectManager\Code\Generator\Converter::ENTITY_TYPE
+                    => 'Magento\Framework\ObjectManager\Code\Generator\Converter',
+                \Magento\Framework\Service\Code\Generator\Mapper::ENTITY_TYPE
+                    => 'Magento\Framework\Service\Code\Generator\Mapper',
+                \Magento\Framework\Service\Code\Generator\Builder::ENTITY_TYPE
+                    => 'Magento\Framework\Service\Code\Generator\Builder',
+                \Magento\Framework\Service\Code\Generator\SearchResults::ENTITY_TYPE
+                    => 'Magento\Framework\Service\Code\Generator\SearchResults'
             )
         );
         $autoloader = new \Magento\Framework\Code\Generator\Autoloader($generator);

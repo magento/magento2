@@ -25,9 +25,6 @@
 <?php $_orders = $this->getOrders(); ?>
 <?php echo $this->getChildHtml('info');?>
 <?php if($_orders->getSize()): ?>
-    <?php if ($this->getPagerHtml()): ?>
-        <div class="order-products-toolbar toolbar top"><?php echo $this->getPagerHtml(); ?></div>
-    <?php endif ?>
     <div class="table-wrapper orders-history">
         <table class="data table table-order-items history" id="my-orders-table">
             <caption class="table caption"><?php echo __('Orders') ?></caption>

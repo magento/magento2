@@ -8,7 +8,7 @@
     ],
     "autoload": {
         "psr-0": {
-            "Zend\\Soap": ""
+            "Zend\\Soap\\": ""
         }
     },
     "target-dir": "Zend/Soap",

@@ -188,7 +188,7 @@ class AttributeMetadataBuilder extends \Magento\Framework\Service\Data\AbstractO
      */
     public function setIsUserDefined($isUserDefined)
     {
-        return $this->_set(AttributeMetadata::IS_USER_DEFINED, $isUserDefined);
+        return $this->_set(AttributeMetadata::USER_DEFINED, $isUserDefined);
     }
 
     /**
@@ -221,7 +221,7 @@ class AttributeMetadataBuilder extends \Magento\Framework\Service\Data\AbstractO
      */
     public function setIsSystem($isSystem)
     {
-        return $this->_set(AttributeMetadata::IS_SYSTEM, $isSystem);
+        return $this->_set(AttributeMetadata::SYSTEM, $isSystem);
     }
 
     /**

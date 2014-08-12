@@ -86,7 +86,7 @@ class Cart extends Block
      *
      * @var string
      */
-    protected $productQty = './/input[@type="number" and @title="Qty"]';
+    protected $productQty = '//input[@type="number" and @title="Qty"]';
 
     /**
      * Cart item selector
@@ -167,7 +167,7 @@ class Cart extends Block
      */
     public function getCartItemOptionsNameByProductName($productName)
     {
-        $selector = '//tr[string(td/div/strong/a)="' . $productName . '"]//dl[@class="cart item options"]//dt';
+        $selector = '//tr[string(td/div/strong/a)="' . $productName . '"]//dl[@class="cart-item-options"]//dt';
 
         $optionsBlock = $this->_rootElement->find($selector, Locator::SELECTOR_XPATH);
         if (!$optionsBlock->isVisible()) {
@@ -184,7 +184,7 @@ class Cart extends Block
      */
     public function getCartItemOptionsValueByProductName($productName)
     {
-        $selector = '//tr[string(td/div/strong/a)="' . $productName . '"]//dl[@class="cart item options"]//dd';
+        $selector = '//tr[string(td/div/strong/a)="' . $productName . '"]//dl[@class="cart-item-options"]//dd';
 
         $optionsBlock = $this->_rootElement->find($selector, Locator::SELECTOR_XPATH);
         if (!$optionsBlock->isVisible()) {

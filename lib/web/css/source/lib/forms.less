@@ -780,24 +780,24 @@
         content: " ";
         height: 1px;
         float: left;
-        .css(width, @_type-inline-label-width);
         .css(padding, @_type-inline-label-padding);
+        .css(width, @_type-inline-label-width);
     }
     .description {
         .box-sizing();
         float: left;
+        .css(padding, @_type-inline-label-padding);
         .css(text-align, @_type-inline-label-align);
         .css(width, @_type-inline-label-width);
-        .css(padding, @_type-inline-label-padding);
     }
     &:not(.choice) {
         > .label {
             .box-sizing();
             float: left;
+            .css(margin, @_type-inline-label-margin);
+            .css(padding, @_type-inline-label-padding);
             .css(text-align, @_type-inline-label-align);
             .css(width, @_type-inline-label-width);
-            .css(padding, @_type-inline-label-padding);
-            .css(margin, @_type-inline-label-margin);
         }
         > .control {
             float: left;
@@ -818,8 +818,6 @@
         .css(text-align, @_type-block-label-align);
         .css(margin, @_type-block-label-margin);
         .css(padding, @_type-block-label-padding);
-    }
-    .control {
     }
 }
 
@@ -952,7 +950,7 @@
     @_type-block-label-padding: @form-field-type-block-label-padding,
     @_type-block-label-align: @form-field-type-block-label-align
 ) when (@_type = inline) and not (@_type = false) {
-   > .label {
+    > .label {
         ._revert-type-inline-label-margin(
             @_type-inline-label-margin
         );

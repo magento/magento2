@@ -1054,14 +1054,14 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
                             'parent_transaction_id' => $authTransactionId
                         ),
                         array(),
-                        $this->_authorizenetData->getExtendedTransactionMessage(
+                        $this->_authorizenetData->getTransactionMessage(
                             $payment,
                             self::REQUEST_TYPE_VOID,
                             null,
                             $card,
                             false,
                             false,
-                            __('Parent Authorize.Net transaction (ID %1) expired', $realAuthTransactionId)
+                            __('Parent Authorize.Net transaction (ID %1) expired.', $realAuthTransactionId)
                         )
                     );
                 }

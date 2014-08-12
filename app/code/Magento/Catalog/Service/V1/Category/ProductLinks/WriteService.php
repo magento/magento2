@@ -29,7 +29,7 @@ use Magento\Catalog\Model\Product as ProductModel;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Service\V1\Category\CategoryLoaderFactory;
 use Magento\Catalog\Service\V1\Data\Category;
-use Magento\Catalog\Service\V1\Data\Eav\Category\ProductLink;
+use Magento\Catalog\Service\V1\Data\Category\ProductLink;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\StateException;
 

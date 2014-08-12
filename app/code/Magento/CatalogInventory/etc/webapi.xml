@@ -31,7 +31,7 @@
             <resource ref="Magento_CatalogInventory::cataloginventory"/>
         </resources>
     </route>
-    <route url="/V1/stockItem/:productSku" method="POST">
+    <route url="/V1/stockItem/:productSku" method="PUT">
         <service class="Magento\CatalogInventory\Service\V1\StockItemServiceInterface" method="saveStockItemBySku"/>
         <resources>
             <resource ref="Magento_CatalogInventory::cataloginventory"/>
@@ -44,7 +44,7 @@
             <resource ref="Magento_CatalogInventory::cataloginventory"/>
         </resources>
     </route>
-    <route url="/V1/stockItem/lowStock/" method="PUT">
+    <route url="/V1/stockItem/lowStock/" method="GET">
         <service class="Magento\CatalogInventory\Service\V1\StockStatusServiceInterface" method="getLowStockItems"/>
         <resources>
             <resource ref="Magento_CatalogInventory::cataloginventory"/>

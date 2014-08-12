@@ -31,7 +31,7 @@
     </user>
     <adminUserRole module="Magento_User">
         <type>flat</type>
-        <entity_type>admin_role</entity_type>
+        <entity_type>authorization_role</entity_type>
         <collection>Magento\User\Model\Resource\Role\User\Collection</collection>
         <fields>
             <resource_access>

@@ -55,11 +55,11 @@ class Observer
     protected $_operationsFactory;
 
     /**
-     * Inbox factory
+     * Notifier
      *
-     * @var \Magento\AdminNotification\Model\InboxFactory
+     * @var \Magento\Framework\Notification\NotifierInterface
      */
-    protected $_inboxFactory;
+    protected $_notifier;
 
     /**
      * Collection factory
@@ -71,7 +71,7 @@ class Observer
     /**
      * @param \Magento\GoogleShopping\Model\Resource\Item\CollectionFactory $collectionFactory
      * @param \Magento\GoogleShopping\Model\MassOperationsFactory $operationsFactory
-     * @param \Magento\AdminNotification\Model\InboxFactory $inboxFactory
+     * @param \Magento\Framework\Notification\NotifierInterface $notifier
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\GoogleShopping\Model\Flag $flag
@@ -79,14 +79,14 @@ class Observer
     public function __construct(
         \Magento\GoogleShopping\Model\Resource\Item\CollectionFactory $collectionFactory,
         \Magento\GoogleShopping\Model\MassOperationsFactory $operationsFactory,
-        \Magento\AdminNotification\Model\InboxFactory $inboxFactory,
+        \Magento\Framework\Notification\NotifierInterface $notifier,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\GoogleShopping\Model\Flag $flag
     ) {
         $this->_collectionFactory = $collectionFactory;
         $this->_operationsFactory = $operationsFactory;
-        $this->_inboxFactory = $inboxFactory;
+        $this->_notifier = $notifier;
         $this->_scopeConfig = $scopeConfig;
         $this->messageManager = $messageManager;
         $this->_flag = $flag;
@@ -146,7 +146,12 @@ class Observer
         }
 
         foreach ($items as $item) {
-            if (!$this->_scopeConfig->isSetFlag('google/googleshopping/observed', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $item->getStoreId())) {
+            $flag = $this->_scopeConfig->isSetFlag(
+                'google/googleshopping/observed',
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                $item->getStoreId()
+            );
+            if (!$flag) {
                 $items->removeItemByKey($item->getId());
             }
         }
@@ -164,7 +169,7 @@ class Observer
     {
         $this->_flag->loadSelf();
         if ($this->_flag->isExpired()) {
-            $this->_inboxFactory->create()->addMajor(
+            $this->_notifier->addMajor(
                 __('Google Shopping operation has expired.'),
                 __('One or more google shopping synchronization operations failed because of timeout.')
             );

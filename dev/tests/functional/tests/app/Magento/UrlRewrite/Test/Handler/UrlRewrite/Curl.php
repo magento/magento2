@@ -43,7 +43,10 @@ class Curl extends AbstractCurl implements UrlRewriteInterface
      * @var array
      */
     protected $mappingData = [
-        'store_id' => ['Default Store View' => 1],
+        'store_id' => [
+            'Default Store View' => 1,
+            'Main Website/Main Website Store/Default Store View' => 1,
+        ],
         'options' => [
             'Temporary (302)' => 'R',
             'Permanent (301)' => 'RP',

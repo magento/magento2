@@ -26,9 +26,8 @@ namespace Magento\Catalog\Service\V1\Category\ProductLinks;
 use Magento\Catalog\Model\Category as CategoryModel;
 use Magento\Catalog\Model\CategoryFactory;
 use Magento\Catalog\Service\V1\Data\Category;
-use Magento\Catalog\Service\V1\Data\Eav\Category\ProductConverterFactory;
-use Magento\Catalog\Service\V1\Data\Eav\Category\ProductLink;
-use Magento\Catalog\Service\V1\Data\Eav\Category\ProductLinkBuilder;
+use Magento\Catalog\Service\V1\Data\Category\ProductLink;
+use Magento\Catalog\Service\V1\Data\Category\ProductLinkBuilder;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 

@@ -15,7 +15,7 @@ use Zend\Stdlib\ArrayUtils;
 
 /**
  * @category   Zend
- * @package    Zend_Validate
+ * @package    Zend_Validator
  */
 class Between extends AbstractValidator
 {

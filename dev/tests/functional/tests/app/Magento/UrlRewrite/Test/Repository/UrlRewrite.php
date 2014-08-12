@@ -48,6 +48,12 @@ class UrlRewrite extends AbstractRepository
             'id_path' =>  ["test%isolation%"]
         ];
 
+        $this->_data['default_without_target'] = [
+            'request_path' => 'test-test-test%isolation%.html',
+            'options' => 'Temporary (302)',
+            'store_id' => 'Main Website/Main Website Store/Default Store View',
+        ];
+
         $this->_data['custom_rewrite_wishlist'] = [
             'store_id' => 'Main Website/Main Website Store/Default Store View',
             'request_path' => 'wishlist/%isolation%',

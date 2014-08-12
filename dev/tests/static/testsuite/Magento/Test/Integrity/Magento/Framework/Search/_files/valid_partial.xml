@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<requests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <request query="sugested_search_container_1" index="product_1">
+        <queries>
+            <query xsi:type="boolQuery" name="sugested_search_container" boost="2">
+                <queryReference clause="must" ref="fulltext_search_query" />
+                <queryReference clause="should" ref="suggested_search_container_dd" />
+            </query>
+
+            <query xsi:type="boolQuery" name="suggested_search_container_dd" boost="2">
+                <queryReference clause="not" ref="fulltext_search_query" />
+            </query>
+
+            <query xsi:type="matchQuery" name="fulltext_search_query" boost="5">
+                <match field="title" value="%request.title%" boost="2" />
+                <match field="description" value="%request.description%" />
+            </query>
+
+            <query xsi:type="filteredQuery" name="promoted_documents_boost">
+                <queryReference ref="fulltext_search_query" />
+            </query>
+
+            <query xsi:type="filteredQuery" name="promoted_documents_boost2">
+                <filterReference ref="promoted_documents_filter" />
+            </query>
+        </queries>
+        <filters>
+            <filter xsi:type="termFilter" name="promoted_documents_filter" field="promoted" value="1" />
+            <filter xsi:type="rangeFilter" field="promoted" name="price_name" from="10" to="100" />
+            <filter xsi:type="boolFilter" name="price_name1">
+                <filterReference clause="must" ref="promoted_boost" />
+                <filterReference clause="must" ref="price" />
+                <filterReference clause="must" ref="promoted_documents_filter" />
+            </filter>
+            <filter xsi:type="termFilter" name="promoted_boost" field="promoted" value="1" />
+            <filter xsi:type="rangeFilter" field="promoted" name="price" from="10" to="100" />
+        </filters>
+        <aggregation>
+            <bucket xsi:type="termBucket" name="category_bucket" field="category">
+                <metrics>
+                    <metric type="sum" />
+                    <metric type="count" />
+                    <metric type="min" />
+                    <metric type="max" />
+                </metrics>
+            </bucket>
+            <bucket xsi:type="rangeBucket" name="price_bucket" field="price">
+                <metrics>
+                    <metric type="sum" />
+                    <metric type="count" />
+                    <metric type="min" />
+                    <metric type="max" />
+                </metrics>
+                <ranges>
+                    <range from="" to="50" />
+                    <range from="50" to="100" />
+                    <range from="100" to="" />
+                </ranges>
+            </bucket>
+        </aggregation>
+        <from>10</from>
+        <size>10</size>
+    </request>
+</requests>

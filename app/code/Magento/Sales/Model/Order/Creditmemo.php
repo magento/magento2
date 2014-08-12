@@ -128,30 +128,6 @@ class Creditmemo extends \Magento\Sales\Model\AbstractModel
 
     const STATE_CANCELED = 3;
 
-    const XML_PATH_EMAIL_TEMPLATE = 'sales_email/creditmemo/template';
-
-    const XML_PATH_EMAIL_GUEST_TEMPLATE = 'sales_email/creditmemo/guest_template';
-
-    const XML_PATH_EMAIL_IDENTITY = 'sales_email/creditmemo/identity';
-
-    const XML_PATH_EMAIL_COPY_TO = 'sales_email/creditmemo/copy_to';
-
-    const XML_PATH_EMAIL_COPY_METHOD = 'sales_email/creditmemo/copy_method';
-
-    const XML_PATH_EMAIL_ENABLED = 'sales_email/creditmemo/enabled';
-
-    const XML_PATH_UPDATE_EMAIL_TEMPLATE = 'sales_email/creditmemo_comment/template';
-
-    const XML_PATH_UPDATE_EMAIL_GUEST_TEMPLATE = 'sales_email/creditmemo_comment/guest_template';
-
-    const XML_PATH_UPDATE_EMAIL_IDENTITY = 'sales_email/creditmemo_comment/identity';
-
-    const XML_PATH_UPDATE_EMAIL_COPY_TO = 'sales_email/creditmemo_comment/copy_to';
-
-    const XML_PATH_UPDATE_EMAIL_COPY_METHOD = 'sales_email/creditmemo_comment/copy_method';
-
-    const XML_PATH_UPDATE_EMAIL_ENABLED = 'sales_email/creditmemo_comment/enabled';
-
     const REPORT_DATE_TYPE_ORDER_CREATED = 'order_created';
 
     const REPORT_DATE_TYPE_REFUND_CREATED = 'refund_created';
@@ -199,27 +175,6 @@ class Creditmemo extends \Magento\Sales\Model\AbstractModel
     protected $_eventObject = 'creditmemo';
 
     /**
-     * Sales data
-     *
-     * @var \Magento\Sales\Helper\Data
-     */
-    protected $_salesData;
-
-    /**
-     * Payment data
-     *
-     * @var \Magento\Payment\Helper\Data
-     */
-    protected $_paymentData;
-
-    /**
-     * Core store config
-     *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $_scopeConfig;
-
-    /**
      * @var \Magento\Sales\Model\Order\Creditmemo\Config
      */
     protected $_creditmemoConfig;
@@ -255,18 +210,10 @@ class Creditmemo extends \Magento\Sales\Model\AbstractModel
     protected $_commentCollectionFactory;
 
     /**
-     * @var \Magento\Framework\Mail\Template\TransportBuilder
-     */
-    protected $_transportBuilder;
-
-    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param \Magento\Payment\Helper\Data $paymentData
-     * @param \Magento\Sales\Helper\Data $salesData
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param Creditmemo\Config $creditmemoConfig
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Sales\Model\Resource\Order\Creditmemo\Item\CollectionFactory $cmItemCollectionFactory
@@ -274,7 +221,6 @@ class Creditmemo extends \Magento\Sales\Model\AbstractModel
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param Creditmemo\CommentFactory $commentFactory
      * @param \Magento\Sales\Model\Resource\Order\Creditmemo\Comment\CollectionFactory $commentCollectionFactory
-     * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -284,9 +230,6 @@ class Creditmemo extends \Magento\Sales\Model\AbstractModel
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Payment\Helper\Data $paymentData,
-        \Magento\Sales\Helper\Data $salesData,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Sales\Model\Order\Creditmemo\Config $creditmemoConfig,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Sales\Model\Resource\Order\Creditmemo\Item\CollectionFactory $cmItemCollectionFactory,
@@ -294,14 +237,10 @@ class Creditmemo extends \Magento\Sales\Model\AbstractModel
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Sales\Model\Order\Creditmemo\CommentFactory $commentFactory,
         \Magento\Sales\Model\Resource\Order\Creditmemo\Comment\CollectionFactory $commentCollectionFactory,
-        \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
-        $this->_paymentData = $paymentData;
-        $this->_salesData = $salesData;
-        $this->_scopeConfig = $scopeConfig;
         $this->_creditmemoConfig = $creditmemoConfig;
         $this->_orderFactory = $orderFactory;
         $this->_cmItemCollectionFactory = $cmItemCollectionFactory;
@@ -309,7 +248,6 @@ class Creditmemo extends \Magento\Sales\Model\AbstractModel
         $this->_storeManager = $storeManager;
         $this->_commentFactory = $commentFactory;
         $this->_commentCollectionFactory = $commentCollectionFactory;
-        $this->_transportBuilder = $transportBuilder;
         parent::__construct($context, $registry, $localeDate, $dateTime, $resource, $resourceCollection, $data);
     }
 
@@ -864,253 +802,6 @@ class Creditmemo extends \Magento\Sales\Model\AbstractModel
         return $this->_comments;
     }
 
-    /**
-     * Send email with creditmemo data
-     *
-     * @param boolean $notifyCustomer
-     * @param string $comment
-     * @return $this
-     */
-    public function sendEmail($notifyCustomer = true, $comment = '')
-    {
-        $order = $this->getOrder();
-        $storeId = $order->getStore()->getId();
-
-        if (!$this->_salesData->canSendNewCreditmemoEmail($storeId)) {
-            return $this;
-        }
-        // Get the destination email addresses to send copies to
-        $copyTo = $this->_getEmails(self::XML_PATH_EMAIL_COPY_TO);
-        $copyMethod = $this->_scopeConfig->getValue(
-            self::XML_PATH_EMAIL_COPY_METHOD,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $storeId
-        );
-        // Check if at least one recipient is found
-        if (!$notifyCustomer && !$copyTo) {
-            return $this;
-        }
-
-        $paymentBlockHtml = $this->_paymentData->getInfoBlockHtml($order->getPayment(), $storeId);
-
-        // Retrieve corresponding email template id and customer name
-        if ($order->getCustomerIsGuest()) {
-            $templateId = $this->_scopeConfig->getValue(
-                self::XML_PATH_EMAIL_GUEST_TEMPLATE,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                $storeId
-            );
-            $customerName = $order->getBillingAddress()->getName();
-        } else {
-            $templateId = $this->_scopeConfig->getValue(
-                self::XML_PATH_EMAIL_TEMPLATE,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                $storeId
-            );
-            $customerName = $order->getCustomerName();
-        }
-
-        if ($notifyCustomer) {
-            $this->_transportBuilder->setTemplateIdentifier(
-                $templateId
-            )->setTemplateOptions(
-                array('area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => $storeId)
-            )->setTemplateVars(
-                array(
-                    'order' => $order,
-                    'invoice' => $this,
-                    'comment' => $comment,
-                    'billing' => $order->getBillingAddress(),
-                    'payment_html' => $paymentBlockHtml,
-                    'store' => $this->getStore()
-                )
-            )->setFrom(
-                $this->_scopeConfig->getValue(
-                    self::XML_PATH_EMAIL_IDENTITY,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                    $storeId
-                )
-            )->addTo(
-                $order->getCustomerEmail(),
-                $customerName
-            );
-            if ($copyTo && $copyMethod == 'bcc') {
-                // Add bcc to customer email
-                foreach ($copyTo as $email) {
-                    $this->_transportBuilder->addBcc($email);
-                }
-            }
-            /** @var \Magento\Framework\Mail\TransportInterface $transport */
-            $transport = $this->_transportBuilder->getTransport();
-            $transport->sendMessage();
-        }
-
-        // Email copies are sent as separated emails if their copy method is 'copy' or a customer should not be notified
-        if ($copyTo && ($copyMethod == 'copy' || !$notifyCustomer)) {
-            foreach ($copyTo as $email) {
-                $this->_transportBuilder->setTemplateIdentifier(
-                    $templateId
-                )->setTemplateOptions(
-                    array('area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => $storeId)
-                )->setTemplateVars(
-                    array(
-                        'order' => $order,
-                        'invoice' => $this,
-                        'comment' => $comment,
-                        'billing' => $order->getBillingAddress(),
-                        'payment_html' => $paymentBlockHtml,
-                        'store' => $this->getStore()
-                    )
-                )->setFrom(
-                    $this->_scopeConfig->getValue(
-                        self::XML_PATH_EMAIL_IDENTITY,
-                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                        $storeId
-                    )
-                )->addTo(
-                    $email
-                )->getTransport()->sendMessage();
-            }
-        }
-
-        $this->setEmailSent(true);
-        $this->_getResource()->saveAttribute($this, 'email_sent');
-
-        return $this;
-    }
-
-    /**
-     * Send email with creditmemo update information
-     *
-     * @param boolean $notifyCustomer
-     * @param string $comment
-     * @return $this
-     */
-    public function sendUpdateEmail($notifyCustomer = true, $comment = '')
-    {
-        $order = $this->getOrder();
-        $storeId = $order->getStore()->getId();
-
-        if (!$this->_salesData->canSendCreditmemoCommentEmail($storeId)) {
-            return $this;
-        }
-        // Get the destination email addresses to send copies to
-        $copyTo = $this->_getEmails(self::XML_PATH_UPDATE_EMAIL_COPY_TO);
-        $copyMethod = $this->_scopeConfig->getValue(
-            self::XML_PATH_UPDATE_EMAIL_COPY_METHOD,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $storeId
-        );
-        // Check if at least one recipient is found
-        if (!$notifyCustomer && !$copyTo) {
-            return $this;
-        }
-
-        // Retrieve corresponding email template id and customer name
-        if ($order->getCustomerIsGuest()) {
-            $templateId = $this->_scopeConfig->getValue(
-                self::XML_PATH_UPDATE_EMAIL_GUEST_TEMPLATE,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                $storeId
-            );
-            $customerName = $order->getBillingAddress()->getName();
-        } else {
-            $templateId = $this->_scopeConfig->getValue(
-                self::XML_PATH_UPDATE_EMAIL_TEMPLATE,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                $storeId
-            );
-            $customerName = $order->getCustomerName();
-        }
-
-        if ($notifyCustomer) {
-            $this->_transportBuilder->setTemplateIdentifier(
-                $templateId
-            )->setTemplateOptions(
-                array('area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => $storeId)
-            )->setTemplateVars(
-                array(
-                    'order' => $order,
-                    'creditmemo' => $this,
-                    'comment' => $comment,
-                    'billing' => $order->getBillingAddress(),
-                    'store' => $this->getStore()
-                )
-            )->setFrom(
-                $this->_scopeConfig->getValue(
-                    self::XML_PATH_UPDATE_EMAIL_IDENTITY,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                    $storeId
-                )
-            )->addTo(
-                $order->getCustomerEmail(),
-                $customerName
-            );
-            if ($copyTo && $copyMethod == 'bcc') {
-                // Add bcc to customer email
-                foreach ($copyTo as $email) {
-                    $this->_transportBuilder->addBcc($email);
-                }
-            }
-            /** @var \Magento\Framework\Mail\TransportInterface $transport */
-            $transport = $this->_transportBuilder->getTransport();
-            $transport->sendMessage();
-        }
-
-        // Email copies are sent as separated emails if their copy method is 'copy' or a customer should not be notified
-        if ($copyTo && ($copyMethod == 'copy' || !$notifyCustomer)) {
-            foreach ($copyTo as $email) {
-                $this->_transportBuilder->setTemplateIdentifier(
-                    $templateId
-                )->setTemplateOptions(
-                    array('area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => $storeId)
-                )->setTemplateVars(
-                    array(
-                        'order' => $order,
-                        'creditmemo' => $this,
-                        'comment' => $comment,
-                        'billing' => $order->getBillingAddress(),
-                        'store' => $this->getStore()
-                    )
-                )->setFrom(
-                    $this->_scopeConfig->getValue(
-                        self::XML_PATH_UPDATE_EMAIL_IDENTITY,
-                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                        $storeId
-                    )
-                )->addTo(
-                    $email
-                )->getTransport()->sendMessage();
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param string $configPath
-     * @return array|bool
-     */
-    protected function _getEmails($configPath)
-    {
-        $data = $this->_scopeConfig->getValue(
-            $configPath,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $this->getStoreId()
-        );
-        if (!empty($data)) {
-            return explode(',', $data);
-        }
-        return false;
-    }
-
-    /**
-     * @return \Magento\Framework\Model\AbstractModel
-     */
-    protected function _beforeDelete()
-    {
-        return parent::_beforeDelete();
-    }
 
     /**
      * After save object manipulations

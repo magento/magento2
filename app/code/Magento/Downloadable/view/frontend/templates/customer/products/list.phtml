@@ -29,11 +29,6 @@
 ?>
 <?php $_items = $this->getItems(); ?>
 <?php if(count($_items)): ?>
-    <?php if ($this->getChildHtml('pager')): ?>
-        <div class="toolbar downloadable-products-toolbar top">
-            <?php echo $this->getChildHtml('pager'); ?>
-        </div>
-    <?php endif; ?>
     <div class="table-wrapper downloadable-products">
         <table id="my-downloadable-products-table" class="data table table-downloadable-products">
             <caption class="table caption"><?php echo __('Downloadable Products') ?></caption>

@@ -23,13 +23,13 @@
  */
 ?>
 <?php if($this->customerLoggedIn()): ?>
-    <li class="customer welcome">
+    <li class="customer welcome customer-welcome">
         <span class="customer name" data-toggle="dropdown">
             <span><?php echo $this->getCustomerName(); ?></span>
             <button type="button" class="action switch"><span><?php echo __('Change')?></span></button>
         </span>
         <?php if($this->getChildHtml()):?>
-        <div class="customer menu" data-target="dropdown">
+        <div class="customer menu customer-menu" data-target="dropdown">
             <?php echo $this->getChildHtml();?>
         </div>
         <?php endif; ?>

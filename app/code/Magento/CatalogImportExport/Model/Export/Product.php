@@ -660,10 +660,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                     '_crosssell_sku',
                     '_crosssell_position',
                     '_upsell_sku',
-                    '_upsell_position',
-                    '_associated_sku',
-                    '_associated_default_qty',
-                    '_associated_position'
+                    '_upsell_position'
                 ),
                 array('_tier_price_website', '_tier_price_customer_group', '_tier_price_qty', '_tier_price_price'),
                 array('_group_price_website', '_group_price_customer_group', '_group_price_price'),

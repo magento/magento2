@@ -43,6 +43,7 @@ Magento/CatalogImportExport/Model/Export
 Magento/CatalogImportExport/Model/Import
 Magento/CatalogRule/Block/Adminhtml/Promo/Catalog/Edit/Tab
 Magento/Checkout/Block/Onepage
+Magento/Checkout/Service/V1/Data/Cart
 Magento/Cms/Block/Adminhtml/Page/Edit
 Magento/Core/Model/Design/Backend
 Magento/Core/Model/Layout/File/Source/Override
@@ -123,3 +124,4 @@ Magento/Shipping/Model
 Magento/Catalog/Service/V1/Category
 Magento/UrlRedirect/Model
 setup
+Magento/Sales/Service/V1/Data

@@ -18,7 +18,7 @@ use Zend\Validator\Exception;
  * Validator for the image size of a image file
  *
  * @category  Zend
- * @package   Zend_Validate
+ * @package   Zend_Validator
  */
 class ImageSize extends AbstractValidator
 {

@@ -263,7 +263,7 @@ abstract class Grid extends Block
      * Perform selected massaction over checked items
      *
      * @param array $items
-     * @param array|string $action
+     * @param array|string $action [array -> key = value from first select; value => value from subselect]
      * @param bool $acceptAlert [optional]
      * @param string $massActionSelection [optional]
      * @return void

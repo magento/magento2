@@ -55,7 +55,8 @@ $orderItem->setProductId(
 );
 
 $order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Sales\Model\Order');
-$order->addItem(
+$order->setCustomerEmail('mail@to.co')
+    ->addItem(
     $orderItem
 )->setIncrementId(
     '100000001'

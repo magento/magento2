@@ -48,7 +48,7 @@ class AssertProductCompareItemsLinkIsAbsent extends AbstractConstraint
     public function processAssert(CmsIndex $cmsIndex)
     {
         \PHPUnit_Framework_Assert::assertFalse(
-            $cmsIndex->getLinksBlock()->getQtyInCompareList(),
+            $cmsIndex->getLinksBlock()->isLinkVisible("Compare Products"),
             'The link "Compare Products..." is visible at the top of page.'
         );
     }

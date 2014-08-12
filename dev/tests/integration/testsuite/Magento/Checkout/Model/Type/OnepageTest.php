@@ -401,8 +401,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         /** Execute SUT */
         $result = $this->_model->saveBilling($customerData, $customerAddressId);
         $validationErrors = array(
-            '"First Name" is a required value.',
-            '"First Name" length must be equal or greater than 1 characters.'
+            '"First Name" is a required value.'
         );
         $this->assertEquals(
             array('error' => 1, 'message' => $validationErrors),

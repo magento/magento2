@@ -29,7 +29,7 @@ $_item = $this->getItem();
 $_weeeHelper = $this->helper('Magento\Weee\Helper\Data');
 ?>
 <tr>
-    <td class="col item"><strong class="product name"><?php echo $this->escapeHtml($this->getProductName()) ?></strong>
+    <td class="col item" data-th="<?php echo $this->escapeHtml(__('Product Name'));?>"><strong class="product name"><?php echo $this->escapeHtml($this->getProductName()) ?></strong>
         <?php if ($_options = $this->getOptionList()):?>
         <dl class="review-item-options">
             <?php foreach ($_options as $_option) : ?>
@@ -54,7 +54,7 @@ $_weeeHelper = $this->helper('Magento\Weee\Helper\Data');
         <?php endif;?>
     </td>
     <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartPriceExclTax() || $this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices()): ?>
-    <td class="col price excl tax">
+    <td class="col price excl tax" data-th="<?php echo $this->escapeHtml(__('Price'));?>">
         <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(array(1, 4), 'sales') && $_item->getWeeeTaxAppliedAmount()): ?>
             <span class="cart tax total" data-tax-toggle='{"itemTaxId" : "#eunit-item-tax-details<?php echo $_item->getId(); ?>"}'>
         <?php else: ?>
@@ -138,9 +138,9 @@ $_weeeHelper = $this->helper('Magento\Weee\Helper\Data');
         <?php endif; ?>
     </td>
     <?php endif; ?>
-    <td class="col qty"><span class="qty"><?php echo $_item->getQty() ?></span></td>
+    <td class="col qty" data-th="<?php echo $this->escapeHtml(__('Qty'));?>"><span class="qty"><?php echo $_item->getQty() ?></span></td>
     <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartPriceExclTax() || $this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices()): ?>
-    <td class="col subtotal excl tax">
+    <td class="col subtotal excl tax" data-th="<?php echo $this->escapeHtml(__('Subtotal'));?>">
         <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(array(1, 4), 'sales') && $_item->getWeeeTaxAppliedAmount()): ?>
             <span class="cart tax total" data-tax-toggle='{"itemTaxId" : "#esubtotal-item-tax-details<?php echo $_item->getId(); ?>"}'>
         <?php else: ?>
