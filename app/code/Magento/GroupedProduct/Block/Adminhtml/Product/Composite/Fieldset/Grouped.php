@@ -36,11 +36,6 @@ use Magento\Customer\Service\V1\CustomerAccountServiceInterface as CustomerAccou
 class Grouped extends \Magento\GroupedProduct\Block\Product\View\Type\Grouped
 {
     /**
-     * @var string
-     */
-    protected $_priceBlockDefaultTemplate = 'catalog/product/price.phtml';
-
-    /**
      * @var \Magento\Core\Helper\Data
      */
     protected $_coreHelper;
@@ -83,7 +78,6 @@ class Grouped extends \Magento\GroupedProduct\Block\Product\View\Type\Grouped
     {
         parent::_construct();
 
-        $this->_block = 'Magento\Catalog\Block\Adminhtml\Product\Price';
         $this->_useLinkForAsLowAs = false;
     }
 

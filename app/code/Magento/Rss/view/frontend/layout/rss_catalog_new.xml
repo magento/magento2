@@ -24,7 +24,6 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
-    <update handle="catalog_product_rss_feed_renderer_list" />
     <block class="Magento\Rss\Block\Catalog\NewCatalog" output="1" name="rss.catalog.new" cacheable="false">
         <block class="Magento\Framework\Pricing\Render" name="product.price.render.default">
             <arguments>

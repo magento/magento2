@@ -49,7 +49,7 @@
                 <tr>
                     <th class="label"><label for="custom_${i}">Custom:</label></th>
                     <td class="value">
-                        <input name="translate[${i}][original]" type="hidden" value="${item.scope}::${escape(item.original)}"/>
+                        <input name="translate[${i}][original]" type="hidden" value="${escape(item.original)}"/>
                         <input id="custom_${i}" name="translate[${i}][custom]" class="input-text" value="${escape(item.translated)}" />
                     </td>
                 </tr>

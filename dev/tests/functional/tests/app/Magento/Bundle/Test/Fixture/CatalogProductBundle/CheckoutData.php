@@ -84,9 +84,52 @@ class CheckoutData extends AbstractCheckoutData
                 ],
                 'custom_options' => [
                     [
-                        'type' => 'Drop-down',
-                        'title' => 'custom option drop down',
-                        'value' => ['30 bucks'],
+                        'option' => 1,
+                        'value' => [1],
+                    ],
+                    [
+                        'option' => 2,
+                        'value' => [1],
+                    ],
+                    [
+                        'option' => 3,
+                        'value' => ['Field'],
+                    ],
+                    [
+                        'option' => 4,
+                        'value' => ['Field'],
+                    ],
+                    [
+                        'option' => 5,
+                        'value' => ['Area'],
+                    ],
+                    [
+                        'option' => 7,
+                        'value' => [1],
+                    ],
+                    [
+                        'option' => 8,
+                        'value' => [1],
+                    ],
+                    [
+                        'option' => 9,
+                        'value' => [1],
+                    ],
+                    [
+                        'option' => 10,
+                        'value' => [1],
+                    ],
+                    [
+                        'option' => 11,
+                        'value' => ['12/12/2014'],
+                    ],
+                    [
+                        'option' => 12,
+                        'value' => ['12/12/2014/12/30/AM'],
+                    ],
+                    [
+                        'option' => 13,
+                        'value' => ['12/12/AM'],
                     ],
                 ]
             ],
@@ -102,9 +145,8 @@ class CheckoutData extends AbstractCheckoutData
                 ],
                 'custom_options' => [
                     [
-                        'type' => 'Drop-down',
-                        'title' => 'custom option drop down',
-                        'value' => ['10 percent'],
+                        'option' => 1,
+                        'value' => [1],
                     ],
                 ]
             ],
@@ -141,49 +183,40 @@ class CheckoutData extends AbstractCheckoutData
                 ],
                 'custom_options' => [
                     [
-                        'type' => 'Field',
-                        'title' => 'custom option field',
+                        'option' => 1,
                         'value' => ['Field'],
                     ],
                     [
-                        'type' => 'Area',
-                        'title' => 'custom option Area',
+                        'option' => 2,
                         'value' => ['Area'],
                     ],
                     [
-                        'type' => 'Radio Buttons',
-                        'title' => 'custom option Radio Buttons',
-                        'value' => ['20 percent'],
+                        'option' => 4,
+                        'value' => [1],
                     ],
                     [
-                        'type' => 'Drop-down',
-                        'title' => 'custom option drop down',
-                        'value' => ['20 percent'],
+                        'option' => 5,
+                        'value' => [1],
                     ],
                     [
-                        'type' => 'Checkbox',
-                        'title' => 'custom option Checkbox',
-                        'value' => ['20 percent'],
+                        'option' => 6,
+                        'value' => [1],
                     ],
                     [
-                        'type' => 'Multiple Select',
-                        'title' => 'custom option Multiple Select',
-                        'value' => ['20 percent'],
+                        'option' => 7,
+                        'value' => [1],
                     ],
                     [
-                        'type' => 'Date',
-                        'title' => 'custom option Date',
+                        'option' => 8,
                         'value' => ['12/12/2014'],
                     ],
                     [
-                        'type' => 'Date & Time',
-                        'title' => 'custom option Date & Time',
+                        'option' => 9,
                         'value' => ['12/12/2014/12/30/AM'],
                     ],
                     [
-                        'type' => 'Time',
-                        'title' => 'custom option Time',
-                        'value' => ['12/12/2014/12/30/AM'],
+                        'option' => 10,
+                        'value' => ['12/12/AM'],
                     ],
                 ]
             ],

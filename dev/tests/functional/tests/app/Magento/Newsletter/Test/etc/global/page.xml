@@ -39,4 +39,14 @@
         <area>adminhtml</area>
         <class>Magento\Newsletter\Test\Page\Adminhtml\SubscriberIndex</class>
     </subscriberIndex>
+    <newsletterQueue>
+        <mca>newsletter/queue/edit</mca>
+        <area>adminhtml</area>
+        <class>Magento\Newsletter\Test\Page\Adminhtml\TemplateQueue</class>
+    </newsletterQueue>
+    <newsletterPreview>
+        <mca>newsletter/template/preview</mca>
+        <area>adminhtml</area>
+        <class>Magento\Newsletter\Test\Page\Adminhtml\TemplatePreview</class>
+    </newsletterPreview>
 </page>

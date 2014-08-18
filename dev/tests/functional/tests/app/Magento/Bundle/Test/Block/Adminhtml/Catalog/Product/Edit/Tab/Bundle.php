@@ -49,6 +49,13 @@ class Bundle extends Tab
     protected $openOption = '[data-target="#bundle_option_%d-content"]';
 
     /**
+     * Selector for 'Add Products to Option' button
+     *
+     * @var string
+     */
+    protected $optionContent = '#bundle_option_%d-content';
+
+    /**
      * Get bundle options block
      *
      * @param int $blockNumber
@@ -76,12 +83,13 @@ class Bundle extends Tab
         }
         foreach ($fields['bundle_selections']['value']['bundle_options'] as $key => $bundleOption) {
             $itemOption = $this->_rootElement->find(sprintf($this->openOption, $key));
-            if ($itemOption->isVisible()) {
+            $isContent = $this->_rootElement->find(sprintf($this->optionContent, $key))->isVisible();
+            if ($itemOption->isVisible() && !$isContent) {
                 $itemOption->click();
-            } else {
+            } elseif (!$itemOption->isVisible()) {
                 $this->_rootElement->find($this->addNewOption)->click();
             }
-            $this->getBundleOptionBlock($key)->fillBundleOption($bundleOption);
+            $this->getBundleOptionBlock($key)->fillOption($bundleOption);
         }
         return $this;
     }
@@ -101,12 +109,13 @@ class Bundle extends Tab
         }
         $index = 0;
         foreach ($fields['bundle_selections']['value']['bundle_options'] as $key => &$bundleOption) {
-            $this->_rootElement->find(sprintf($this->openOption, $index))->click();
+            if (!$this->_rootElement->find(sprintf($this->optionContent, $key))->isVisible()) {
+                $this->_rootElement->find(sprintf($this->openOption, $index))->click();
+            }
             foreach ($bundleOption['assigned_products'] as &$product) {
                 $product['data']['getProductName'] = $product['search_data']['name'];
             }
-            $newFields['bundle_selections'][$key] = $this->getBundleOptionBlock($key)
-                ->getBundleOptionData($bundleOption);
+            $newFields['bundle_selections'][$key] = $this->getBundleOptionBlock($key)->getOptionData($bundleOption);
             $index++;
         }
 

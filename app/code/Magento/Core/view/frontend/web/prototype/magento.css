@@ -25,6 +25,7 @@
     background: #fff;
     -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, .4);
     box-shadow: 0 3px 6px rgba(0, 0, 0, .4);
+    z-index: 1000;
 }
 
 .dialog.ui-dialog {
@@ -73,16 +74,21 @@
     width: 16px;
     z-index: 1000;
     text-decoration: none;
+    line-height: 90%;
 }
 
 .ui-dialog .ui-dialog-titlebar-close:before {
     color: #676056;
-    content: "\e012";
-    font-family: 'icons';
+    content: 'X';
+    font-family: sans-serif;
     font-style: normal;
     speak: none;
     font-weight: normal;
     -webkit-font-smoothing: antialiased;
+}
+
+.ui-dialog .ui-dialog-titlebar-close .ui-button-text {
+    display: none;
 }
 
 .ui-dialog .ui-dialog-titlebar-close .ui-icon {

@@ -115,4 +115,6 @@
             <input/>
         </modified_at>
     </fields>
+    <repository_class>Magento\Newsletter\Test\Repository\Template</repository_class>
+    <handler_interface>Magento\Newsletter\Test\Handler\Newsletter\TemplateInterface</handler_interface>
 </fixture>

@@ -77,18 +77,10 @@
                                 <span class="mark">
                                     <?php echo __('Cart Subtotal') ?>
                                 </span>
-                                <div class="amount">
-                                    <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($this->getSubtotal()) ?>
-                                    <?php if ($_subtotalInclTax = $this->getSubtotalInclTax()): ?>
-                                        <span class="amount incl tax">
-                                            <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($_subtotalInclTax) ?>
-                                            <?php echo $this->helper('Magento\Tax\Helper\Data')->getIncExcText(true) ?>
-                                        </span>
-                                    <?php endif; ?>
-                                </div>
-                            <?php endif; ?>
+                                <?php echo $this->getTotalsHtml() ?>
+                            <?php endif ?>
                         </div>
-                        <?php endif ?>
+                    <?php endif; ?>
                     <?php echo $this->getChildHtml('minicart_info') ?>
                     <div class="actions">
                         <div class="primary">

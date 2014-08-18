@@ -26,12 +26,10 @@
 namespace Magento\Backend\Test\Block;
 
 use Mtf\Block\Block;
-use Mtf\Client\Element\Locator;
 
 /**
  * Class Template
  * Backend abstract block
- *
  */
 class Template extends Block
 {
@@ -40,7 +38,7 @@ class Template extends Block
      *
      * @var string
      */
-    protected $loader = '[data-role=loader]';
+    protected $loader = '[data-role="loader"]';
 
     /**
      * Magento varienLoader.js loader
@@ -51,10 +49,12 @@ class Template extends Block
 
     /**
      * Wait until loader will be disappeared
+     *
+     * @return void
      */
     public function waitLoader()
     {
-        $this->waitForElementNotVisible($this->loader, Locator::SELECTOR_CSS);
-        $this->waitForElementNotVisible($this->loaderOld, Locator::SELECTOR_CSS);
+        $this->waitForElementNotVisible($this->loader);
+        $this->waitForElementNotVisible($this->loaderOld);
     }
 }

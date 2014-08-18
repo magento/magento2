@@ -54,13 +54,6 @@ class Options extends \Magento\Framework\View\Element\Template
     protected $_registry = null;
 
     /**
-     * Tax data
-     *
-     * @var \Magento\Tax\Helper\Data
-     */
-    protected $_taxData = null;
-
-    /**
      * Catalog product
      *
      * @var Product
@@ -78,10 +71,15 @@ class Options extends \Magento\Framework\View\Element\Template
     protected $_coreData;
 
     /**
+     * @var \Magento\Catalog\Helper\Data
+     */
+    protected $_catalogData;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
+     * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
-     * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Catalog\Model\Product\Option $option
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
@@ -90,18 +88,18 @@ class Options extends \Magento\Framework\View\Element\Template
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Core\Helper\Data $coreData,
+        \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
-        \Magento\Tax\Helper\Data $taxData,
         \Magento\Catalog\Model\Product\Option $option,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Stdlib\ArrayUtils $arrayUtils,
         array $data = array()
     ) {
         $this->_coreData = $coreData;
+        $this->_catalogData = $catalogData;
         $this->_jsonEncoder = $jsonEncoder;
         $this->_registry = $registry;
         $this->_option = $option;
-        $this->_taxData = $taxData;
         $this->arrayUtils = $arrayUtils;
         parent::__construct($context, $data);
     }
@@ -181,8 +179,8 @@ class Options extends \Magento\Framework\View\Element\Template
         $data['oldPrice'] = $this->_coreData->currency($option->getPrice(false), false, false);
         $data['priceValue'] = $option->getPrice(false);
         $data['type'] = $option->getPriceType();
-        $data['exclTaxPrice'] = $price = $this->_taxData->getPrice($option->getProduct(), $data['price'], false);
-        $data['inclTaxPrice'] = $price = $this->_taxData->getPrice($option->getProduct(), $data['price'], true);
+        $data['exclTaxPrice'] = $price = $this->_catalogData->getTaxPrice($option->getProduct(), $data['price']);
+        $data['inclTaxPrice'] = $price = $this->_catalogData->getTaxPrice($option->getProduct(), $data['price'], true);
         return $data;
     }
 

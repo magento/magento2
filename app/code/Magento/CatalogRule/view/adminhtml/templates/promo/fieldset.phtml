@@ -36,7 +36,7 @@
     </fieldset>
 </div>
 <script type="text/javascript">
-require(["prototype","Magento_Rule/rules"], function(jQuery){
+require(["jquery", "prototype","Magento_Rule/rules"], function(jQuery){
 
 var <?php echo $_element->getHtmlId() ?> = new VarienRulesForm('<?php echo $_element->getHtmlId() ?>', '<?php echo $this->getNewChildUrl() ?>');
 <?php if ($_element->getReadonly()): ?>

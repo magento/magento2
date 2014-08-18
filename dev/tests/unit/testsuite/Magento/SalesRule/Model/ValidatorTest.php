@@ -196,7 +196,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $taxData = $this->getMock('Magento\Tax\Helper\Data', [], [], '', false);
+        $catalogData = $this->getMock('Magento\Catalog\Helper\Data', [], [], '', false);
         $utility = $this->getMock('Magento\SalesRule\Model\Utility', [], [], '', false);
 
         /** @var \Magento\SalesRule\Model\Validator|\PHPUnit_Framework_MockObject_MockObject $validator */
@@ -207,7 +207,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
                 'context' => $context,
                 'registry' => $registry,
                 'collectionFactory' => $collectionFactory,
-                'taxData' => $taxData,
+                'catalogData' => $catalogData,
                 'utility' => $utility,
                 'rulesApplier' => $rulesApplier
             ],

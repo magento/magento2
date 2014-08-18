@@ -70,11 +70,11 @@ class Validator extends \Magento\Framework\Model\AbstractModel
     protected $_skipActionsValidation = false;
 
     /**
-     * Tax data
+     * Catalog data
      *
-     * @var \Magento\Tax\Helper\Data|null
+     * @var \Magento\Catalog\Helper\Data|null
      */
-    protected $_taxData = null;
+    protected $_catalogData = null;
 
     /**
      * @var \Magento\SalesRule\Model\Resource\Rule\CollectionFactory
@@ -95,7 +95,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param Resource\Rule\CollectionFactory $collectionFactory
-     * @param \Magento\Tax\Helper\Data $taxData
+     * @param \Magento\Catalog\Helper\Data $catalogData
      * @param Utility $utility
      * @param RulesApplier $rulesApplier
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
@@ -106,7 +106,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\SalesRule\Model\Resource\Rule\CollectionFactory $collectionFactory,
-        \Magento\Tax\Helper\Data $taxData,
+        \Magento\Catalog\Helper\Data $catalogData,
         \Magento\SalesRule\Model\Utility $utility,
         \Magento\SalesRule\Model\RulesApplier $rulesApplier,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
@@ -114,7 +114,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
         array $data = array()
     ) {
         $this->_collectionFactory = $collectionFactory;
-        $this->_taxData = $taxData;
+        $this->_catalogData = $catalogData;
         $this->validatorUtility = $utility;
         $this->rulesApplier = $rulesApplier;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
@@ -391,7 +391,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      */
     public function getItemOriginalPrice($item)
     {
-        return $this->_taxData->getPrice($item, $item->getOriginalPrice(), true);
+        return $this->_catalogData->getTaxPrice($item, $item->getOriginalPrice(), true);
     }
 
     /**
@@ -414,7 +414,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      */
     public function getItemBaseOriginalPrice($item)
     {
-        return $this->_taxData->getPrice($item, $item->getBaseOriginalPrice(), true);
+        return $this->_catalogData->getTaxPrice($item, $item->getBaseOriginalPrice(), true);
     }
 
     /**

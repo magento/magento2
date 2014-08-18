@@ -3,13 +3,13 @@
     "description": "N/A",
     "require": {
         "php": "~5.4.11|~5.5.0",
-        "magento/module-catalog": "0.1.0-alpha90",
-        "magento/module-backend": "0.1.0-alpha90",
-        "magento/framework": "0.1.0-alpha90",
+        "magento/module-catalog": "0.1.0-alpha91",
+        "magento/module-backend": "0.1.0-alpha91",
+        "magento/framework": "0.1.0-alpha91",
         "magento/magento-composer-installer": "*"
     },
     "type": "magento2-module",
-    "version": "0.1.0-alpha90",
+    "version": "0.1.0-alpha91",
     "extra": {
         "map": [
             [

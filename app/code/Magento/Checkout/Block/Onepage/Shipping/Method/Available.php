@@ -44,13 +44,6 @@ class Available extends \Magento\Checkout\Block\Onepage\AbstractOnepage
     protected $_address;
 
     /**
-     * Tax data
-     *
-     * @var \Magento\Tax\Helper\Data
-     */
-    protected $_taxData = null;
-
-    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
@@ -62,7 +55,6 @@ class Available extends \Magento\Checkout\Block\Onepage\AbstractOnepage
      * @param CustomerAddressService $customerAddressService
      * @param AddressConfig $addressConfig
      * @param \Magento\Framework\App\Http\Context $httpContext
-     * @param \Magento\Tax\Helper\Data $taxData
      * @param array $data
      */
     public function __construct(
@@ -77,10 +69,8 @@ class Available extends \Magento\Checkout\Block\Onepage\AbstractOnepage
         CustomerAddressService $customerAddressService,
         AddressConfig $addressConfig,
         \Magento\Framework\App\Http\Context $httpContext,
-        \Magento\Tax\Helper\Data $taxData,
         array $data = array()
     ) {
-        $this->_taxData = $taxData;
         parent::__construct(
             $context,
             $coreData,
@@ -144,18 +134,5 @@ class Available extends \Magento\Checkout\Block\Onepage\AbstractOnepage
     public function getAddressShippingMethod()
     {
         return $this->getAddress()->getShippingMethod();
-    }
-
-    /**
-     * @param float $price
-     * @param bool|null $flag
-     * @return float
-     */
-    public function getShippingPrice($price, $flag)
-    {
-        return $this->getQuote()->getStore()->convertPrice(
-            $this->_taxData->getShippingPrice($price, $flag, $this->getAddress()),
-            true
-        );
     }
 }

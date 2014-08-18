@@ -23,16 +23,17 @@
  */
 ?>
 
+<link rel="stylesheet" type="text/css" href="<?php echo $this->getViewFileUrl('prototype/windows/themes/default.css') ?>"/>
 <link rel="stylesheet" type="text/css" href="<?php echo $this->getViewFileUrl('Magento_Core::prototype/magento.css') ?>"/>
 <link rel="stylesheet" type="text/css" href="<?php echo $this->getViewFileUrl('mage/translate-inline.css') ?>"/>
 
 <script id="translate-inline-icon" type="text/x-jQuery-tmpl">
-    <span class="action translate"></span>
+    <img src="${img}" height="16" width="16" class="translate-edit-icon">
 </script>
 <script id="translate-form-template" type="text/x-jquery-tmpl">
     <form id="${id}">
         {{each(i, item) items}}
-            <div class="data table translate"><table cellspacing="0">
+            <div class="magento_table_container"><table cellspacing="0">
                 {{each item}}
                 <tr>
                     <th class="label" style="text-transform: capitalize;">${$index}:</th>
@@ -40,15 +41,16 @@
                 </tr>
                 {{/each}}
                 <tr>
-                    <th class="label"><label for="custom_${i}">Custom:</label></th>
+                    <th class="label"><label for="perstore_${i}">Store View Specific:</label></th>
                     <td class="value">
-                        <input name="translate[${i}][original]" type="hidden" value="${item.scope}::${escape(item.original)}"/>
-                        <input id="custom_${i}" name="translate[${i}][custom]" class="input-text" value="${escape(item.translated)}" />
+                        <input id="perstore_${i}" name="translate[${i}][perstore]" type="checkbox" value="1"/>
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2">
-                        <label for="perstore_${i}"><input id="perstore_${i}" name="translate[${i}][perstore]" type="checkbox" value="1"/> Store View Specific</label>
+                    <th class="label"><label for="custom_${i}">Custom:</label></th>
+                    <td class="value">
+                        <input name="translate[${i}][original]" type="hidden" value="${escape(item.original)}"/>
+                        <input id="custom_${i}" name="translate[${i}][custom]" class="input-text" value="${escape(item.translated)}" />
                     </td>
                 </tr>
             </table></div>
@@ -57,13 +59,15 @@
     {{if message}}<p class="a-center accent">${message}</p>{{/if}}
 </script>
 
-<div data-role="translate-dialog" data-mage-init='{"translateInline":{"ajaxUrl":"<?php echo $this->getAjaxUrl() ?>"}, "loader": {}}'></div>
+<div data-role="translate-dialog"
+     data-mage-init='{"translateInline":{"ajaxUrl":"<?php echo $this->getAjaxUrl() ?>"},"loader":{}}'></div>
 <script type="text/javascript">
     require([
         "jquery",
         "mage/edit-trigger",
         "mage/translate-inline"
     ], function($){
-        $('body').editTrigger({alwaysShown:true, singleElement:false}).addClass('trnslate-inline-area');
+        $('body').editTrigger({img: '<?php echo $this->getViewFileUrl('Magento_Core::fam_book_open.png') ?>', alwaysShown:true, singleElement:false});
+        $('body').addClass('trnslate-inline-area');
     });
 </script>

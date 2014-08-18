@@ -34,16 +34,25 @@ class CatalogProductView extends ParentCatalogProductView
 {
     const MCA = 'bundle/catalog/product/view';
 
-    protected $_blocks = [
-        'bundleViewBlock' => [
+    /**
+     * Custom constructor
+     *
+     * @return void
+     */
+    protected function _init()
+    {
+        $this->_blocks['bundleViewBlock'] = [
             'name' => 'bundleViewBlock',
             'class' => 'Magento\Bundle\Test\Block\Catalog\Product\View',
             'locator' => '.bundle-options-container',
             'strategy' => 'css selector',
-        ],
-    ];
+        ];
+        parent::_init();
+    }
 
     /**
+     * Bundle block on frontend
+     *
      * @return \Magento\Bundle\Test\Block\Catalog\Product\View
      */
     public function getBundleViewBlock()

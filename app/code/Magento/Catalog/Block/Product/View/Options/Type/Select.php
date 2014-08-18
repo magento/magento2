@@ -39,18 +39,18 @@ class Select extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Core\Helper\Data $coreHelper
+     * @param \Magento\Catalog\Helper\Data $catalogData
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Tax\Helper\Data $taxData,
         \Magento\Core\Helper\Data $coreHelper,
+        \Magento\Catalog\Helper\Data $catalogData,
         array $data = array()
     ) {
         $this->_coreHelper = $coreHelper;
-        parent::__construct($context, $taxData, $coreHelper, $data);
+        parent::__construct($context, $coreHelper, $catalogData, $data);
     }
 
     /**

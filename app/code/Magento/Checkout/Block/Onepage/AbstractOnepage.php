@@ -388,4 +388,18 @@ abstract class AbstractOnepage extends \Magento\Framework\View\Element\Template
     {
         return true;
     }
+
+    /**
+     * Return the html text for shipping price
+     *
+     * @param \Magento\Sales\Model\Quote\Address\Rate $rate
+     * @return string
+     */
+    public function getShippingPriceHtml(\Magento\Sales\Model\Quote\Address\Rate $rate)
+    {
+        /** @var \Magento\Checkout\Block\Shipping\Price $block */
+        $block = $this->getLayout()->getBlock('checkout.shipping.price');
+        $block->setShippingRate($rate);
+        return $block->toHtml();
+    }
 }

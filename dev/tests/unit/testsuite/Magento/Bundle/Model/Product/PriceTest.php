@@ -53,7 +53,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $taxHelperMock;
+    protected $catalogHelperMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -78,7 +78,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         $this->localeDateMock = $this->getMock('\Magento\Framework\Stdlib\DateTime\TimezoneInterface');
         $this->customerSessionMock = $this->getMock('\Magento\Customer\Model\Session', array(), array(), '', false);
         $this->eventManagerMock = $this->getMock('\Magento\Framework\Event\ManagerInterface');
-        $this->taxHelperMock = $this->getMock('\Magento\Tax\Helper\Data', array(), array(), '', false);
+        $this->catalogHelperMock = $this->getMock('\Magento\Catalog\Helper\Data', array(), array(), '', false);
         $this->storeMock = $this->getMock('\Magento\Store\Model\Store', array(), array(), '', false);
 
         $this->model = new \Magento\Bundle\Model\Product\Price(
@@ -87,7 +87,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             $this->localeDateMock,
             $this->customerSessionMock,
             $this->eventManagerMock,
-            $this->taxHelperMock
+            $this->catalogHelperMock
         );
     }
 

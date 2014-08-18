@@ -34,11 +34,11 @@
             <input>multiselect</input>
         </multipleselect>
         <checkbox>
-            <selector>//div[label[span[contains(text(), "%product_name%")]]]/input</selector>
+            <selector>//div[label[span[contains(text(), "%option_name%")]]]/input</selector>
             <input>checkbox</input>
         </checkbox>
         <radiobuttons>
-            <selector>//div[label[span[contains(text(), "%product_name%")]]]/input</selector>
+            <selector>//div[label[span[contains(text(), "%option_name%")]]]/input</selector>
             <input>checkbox</input>
         </radiobuttons>
         <date>

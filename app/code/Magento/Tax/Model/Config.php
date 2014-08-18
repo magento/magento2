@@ -117,6 +117,16 @@ class Config
     const DISPLAY_TYPE_BOTH = 3;
 
     /**
+     * Price conversion constant for positive
+     */
+    const PRICE_CONVERSION_PLUS = 1;
+
+    /**
+     * Price conversion constant for negative
+     */
+    const PRICE_CONVERSION_MINUS = 2;
+
+    /**
      * @var bool|null
      */
     protected $_priceIncludesTax = null;
@@ -800,5 +810,46 @@ class Config
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $store
         );
+    }
+
+    /**
+     * Check if necessary do product price conversion
+     * If it necessary will be returned conversion type (minus or plus)
+     *
+     * @param null|int|string|Store $store
+     * @return bool
+     */
+    public function needPriceConversion($store = null)
+    {
+        $res = false;
+        $priceIncludesTax = $this->priceIncludesTax($store) || $this->getNeedUseShippingExcludeTax();
+        if ($priceIncludesTax) {
+            switch ($this->getPriceDisplayType($store)) {
+                case self::DISPLAY_TYPE_EXCLUDING_TAX:
+                case self::DISPLAY_TYPE_BOTH:
+                    return self::PRICE_CONVERSION_MINUS;
+                case self::DISPLAY_TYPE_INCLUDING_TAX:
+                    $res = true;
+                    break;
+                default:
+                    break;
+            }
+        } else {
+            switch ($this->getPriceDisplayType($store)) {
+                case self::DISPLAY_TYPE_INCLUDING_TAX:
+                case self::DISPLAY_TYPE_BOTH:
+                    return self::PRICE_CONVERSION_PLUS;
+                case self::DISPLAY_TYPE_EXCLUDING_TAX:
+                    $res = false;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        if ($res === false) {
+            $res = $this->displayCartPricesBoth();
+        }
+        return $res;
     }
 }

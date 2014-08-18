@@ -2,7 +2,7 @@
     "require": {
         "magento/mtf": "dev-master",
         "php": ">=5.4.0",
-        "phpunit/phpunit": "3.7.*",
+        "phpunit/phpunit": "4.1.0",
         "phpunit/phpunit-selenium": ">=1.2",
         "netwing/selenium-server-standalone": ">=2.35"
     },

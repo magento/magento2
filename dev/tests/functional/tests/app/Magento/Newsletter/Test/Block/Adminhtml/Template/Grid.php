@@ -24,24 +24,40 @@
 
 namespace Magento\Newsletter\Test\Block\Adminhtml\Template;
 
-use Magento\Backend\Test\Block\Widget\Grid as AbstractGrid;
+use Mtf\Client\Element\Locator;
 
 /**
  * Class Grid
  * Newsletter templates grid block
- *
- * @package Magento\Newsletter\Test\Block\Aminhtml\Template
  */
-class Grid extends AbstractGrid
+class Grid extends \Magento\Backend\Test\Block\Widget\Grid
 {
     /**
      * Filters array mapping
      *
-     * @var array $filters
+     * @var array
      */
     protected $filters = [
         'code' => [
-            'selector' => '[data-ui-id="widget-grid-column-filter-text-1-filter-code"]'
+            'selector' => 'input[name="code"]'
         ]
     ];
+
+    /**
+     * Locator for "Action"
+     *
+     * @var string
+     */
+    protected $action = '.action-select';
+
+    /**
+     * Action for newsletter template
+     *
+     * @param string $action
+     * @return void
+     */
+    public function performAction($action)
+    {
+        $this->_rootElement->find($this->action, Locator::SELECTOR_CSS, 'select')->setValue($action);
+    }
 }

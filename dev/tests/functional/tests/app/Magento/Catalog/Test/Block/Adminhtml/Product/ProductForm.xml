@@ -166,7 +166,7 @@
             <type>
                 <selector>.field [id$='_type']</selector>
                 <strategy>css selector</strategy>
-                <input>select</input>
+                <input>strictselect</input>
             </type>
         </fields>
     </customer-options>

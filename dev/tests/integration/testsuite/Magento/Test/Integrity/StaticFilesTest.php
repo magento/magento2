@@ -127,6 +127,8 @@ class StaticFilesTest extends \PHPUnit_Framework_TestCase
                 return 'Magento/backend';
             case 'install':
                 return 'Magento/basic';
+            case 'doc':
+                return 'Magento/blank';
             default:
                 throw new \LogicException('Unable to determine theme path');
         }

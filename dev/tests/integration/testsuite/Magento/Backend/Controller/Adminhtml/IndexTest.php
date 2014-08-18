@@ -30,7 +30,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
 {
     /**
      * Check not logged state
-     * @covers \Magento\Backend\Controller\Adminhtml\Index::indexAction
+     * @covers \Magento\Backend\Controller\Adminhtml\Index\Index::execute
      */
     public function testNotLoggedIndexAction()
     {
@@ -45,7 +45,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
 
     /**
      * Check logged state
-     * @covers \Magento\Backend\Controller\Adminhtml\Index::indexAction
+     * @covers \Magento\Backend\Controller\Adminhtml\Index\Index::execute
      * @magentoDbIsolation enabled
      */
     public function testLoggedIndexAction()
@@ -55,7 +55,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
     }
 
     /**
-     * @covers \Magento\Backend\Controller\Adminhtml\Index::globalSearchAction
+     * @covers \Magento\Backend\Controller\Adminhtml\Index\GlobalSearch::execute
      */
     public function testGlobalSearchAction()
     {

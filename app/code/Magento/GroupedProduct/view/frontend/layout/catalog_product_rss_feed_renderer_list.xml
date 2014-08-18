@@ -24,9 +24,6 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
-    <referenceBlock name="catalog.product.rss.feed.renderer.list">
-        <block class="Magento\Catalog\Block\Product\Price" as="grouped" template="Magento_GroupedProduct::rss/product/price.phtml" />
-    </referenceBlock>
     <block class="Magento\Framework\Pricing\Render" name="product.price.render.grouped">
         <arguments>
             <argument name="price_render_handle" xsi:type="string">catalog_product_prices</argument>

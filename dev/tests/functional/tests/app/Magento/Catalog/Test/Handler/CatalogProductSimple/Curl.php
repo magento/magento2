@@ -47,6 +47,10 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
             'Yes' => 1,
             'No' => 0
         ],
+        'use_config_notify_stock_qty' => [
+            'Yes' => 1,
+            'No' => 0
+        ],
         'is_shareable' => [
             'Yes' => 1,
             'No' => 0,
@@ -91,6 +95,10 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
         'status' => [
             'Product offline' => 2,
             'Product online' => 1
+        ],
+        'is_require' => [
+            'Yes' => 1,
+            'No' => 0
         ]
     ];
 
@@ -114,6 +122,13 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
             ]
         ]
     ];
+
+    /**
+     * Select custom options
+     *
+     * @var array
+     */
+    protected $selectOptions = ['Drop-down', 'Radio Buttons', 'Checkbox', 'Multiple Select'];
 
     /**
      * Post request for creating simple product
@@ -158,14 +173,17 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
             }
             $fields['category_ids'] = $categoryIds;
         }
-        
+
         if (isset($fields['tier_price'])) {
             $fields['tier_price'] = $this->preparePriceData($fields['tier_price']);
         }
         if (isset($fields['group_price'])) {
             $fields['group_price'] = $this->preparePriceData($fields['group_price']);
         }
-        
+        if ($isCustomOptions = isset($fields['custom_options'])) {
+            $fields = $this->prepareCustomOptionsData($fields);
+        }
+
         if (!empty($fields['website_ids'])) {
             foreach ($fields['website_ids'] as &$value) {
                 $value = isset($this->mappingData['website_ids'][$value])
@@ -184,8 +202,56 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
         }
 
         $fields = $this->prepareStockData($fields);
+        $fields = $prefix ? [$prefix => $fields] : $fields;
+        if ($isCustomOptions) {
+            $fields['affect_product_custom_options'] = 1;
+        }
 
-        return $prefix ? [$prefix => $fields] : $fields;
+        return $fields;
+    }
+
+    /**
+     * Preparation of custom options data
+     *
+     * @param array $fields
+     * @return array
+     */
+    protected function prepareCustomOptionsData(array $fields)
+    {
+        $options = [];
+        foreach ($fields['custom_options'] as $key => $customOption) {
+            $options[$key] = ['option_id' => 0, 'is_delete' => ''];
+            foreach ($customOption['options'] as $index => $option) {
+                $customOption['options'][$index]['is_delete'] = '';
+                $customOption['options'][$index]['price_type'] = strtolower($option['price_type']);
+            }
+            $options[$key] += in_array($customOption['type'], $this->selectOptions)
+                ? ['values' => $customOption['options']]
+                : $customOption['options'][0];
+            unset($customOption['options']);
+            $options[$key] += $customOption;
+            $options[$key]['type'] = $this->optionNameConvert($customOption['type']);
+        }
+        $fields['options'] = $options;
+        unset($fields['custom_options']);
+
+        return $fields;
+    }
+
+    /**
+     * Convert option name
+     *
+     * @param string $optionName
+     * @return string
+     */
+    protected function optionNameConvert($optionName)
+    {
+        $optionName = str_replace(['-', ' & '], "_", trim($optionName));
+        $end = strpos($optionName, ' ');
+        if ($end !== false) {
+            $optionName = substr($optionName, 0, $end);
+        }
+        return strtolower($optionName);
     }
 
     /**
@@ -275,7 +341,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
     protected function createProduct(array $data, array $config)
     {
         $url = $this->getUrl($config);
-        $curl = new BackendDecorator(new CurlTransport(), new Config);
+        $curl = new BackendDecorator(new CurlTransport(), new Config());
         $curl->addOption(CURLOPT_HEADER, 1);
         $curl->write(CurlInterface::POST, $url, '1.0', [], $data);
         $response = $curl->read();

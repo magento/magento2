@@ -54,4 +54,7 @@
     <assertGroupedPriceOnBundleProductPage module="Magento_Bundle">
         <severeness>low</severeness>
     </assertGroupedPriceOnBundleProductPage>
+    <assertProductCustomOptionsOnBundleProductPage module="Magento_Bundle">
+        <severeness>low</severeness>
+    </assertProductCustomOptionsOnBundleProductPage>
 </constraint>

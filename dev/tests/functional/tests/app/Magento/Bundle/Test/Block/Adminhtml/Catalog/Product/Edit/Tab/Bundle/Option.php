@@ -106,7 +106,7 @@ class Option extends Form
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function fillBundleOption(array $fields)
+    public function fillOption(array $fields)
     {
         $mapping = $this->dataMapping($fields);
         $this->_fill($mapping);
@@ -131,7 +131,7 @@ class Option extends Form
      * @param array $fields
      * @return array
      */
-    public function getBundleOptionData(array $fields)
+    public function getOptionData(array $fields)
     {
         $mapping = $this->dataMapping($fields);
         $newField = $this->_getData($mapping);

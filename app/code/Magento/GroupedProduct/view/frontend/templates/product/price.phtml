@@ -31,6 +31,8 @@
 $_coreHelper = $this->helper('Magento\Core\Helper\Data');
 /* @var $taxHelper \Magento\Tax\Helper\Data */
 $taxHelper  = $this->helper('Magento\Tax\Helper\Data');
+/* @var $catalogHelper \Magento\Catalog\Helper\Data */
+$catalogHelper  = $this->helper('Magento\Catalog\Helper\Data');
 
 $_product = $this->getProduct();
 $_id = $_product->getId();
@@ -38,13 +40,13 @@ $_minimalPriceValue = $_product->getMinimalPrice();
 $showMinPrice = $this->getDisplayMinimalPrice();
 
 if ($showMinPrice && $_minimalPriceValue) {
-    $_exclTax = $taxHelper->getPrice($_product, $_minimalPriceValue);
-    $_inclTax = $taxHelper->getPrice($_product, $_minimalPriceValue, true);
+    $_exclTax = $catalogHelper->getTaxPrice($_product, $_minimalPriceValue);
+    $_inclTax = $catalogHelper->getTaxPrice($_product, $_minimalPriceValue, true);
     $price    = $showMinPrice ? $_minimalPriceValue : 0;
 } else {
     $price    = $_product->getFinalPrice();
-    $_exclTax = $taxHelper->getPrice($_product, $price);
-    $_inclTax = $taxHelper->getPrice($_product, $price, true);
+    $_exclTax = $catalogHelper->getTaxPrice($_product, $price);
+    $_inclTax = $catalogHelper->getTaxPrice($_product, $price, true);
 }
 ?>
 

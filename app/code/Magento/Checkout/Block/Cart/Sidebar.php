@@ -37,21 +37,9 @@ class Sidebar extends AbstractCart implements IdentityInterface
     const XML_PATH_CHECKOUT_SIDEBAR_COUNT = 'checkout/sidebar/count';
 
     /**
-     * Tax data
-     *
-     * @var \Magento\Tax\Helper\Data
-     */
-    protected $_taxData;
-
-    /**
      * @var \Magento\Catalog\Model\Resource\Url
      */
     protected $_catalogUrl;
-
-    /**
-     * @var \Magento\Tax\Model\Config
-     */
-    protected $_taxConfig;
 
     /**
      * @var \Magento\Checkout\Model\Cart
@@ -68,9 +56,7 @@ class Sidebar extends AbstractCart implements IdentityInterface
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Catalog\Model\Resource\Url $catalogUrl
-     * @param \Magento\Tax\Model\Config $taxConfig
      * @param \Magento\Checkout\Model\Cart $checkoutCart
      * @param \Magento\Checkout\Helper\Data $checkoutHelper
      * @param array $data
@@ -82,17 +68,13 @@ class Sidebar extends AbstractCart implements IdentityInterface
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Tax\Helper\Data $taxData,
         \Magento\Catalog\Model\Resource\Url $catalogUrl,
-        \Magento\Tax\Model\Config $taxConfig,
         \Magento\Checkout\Model\Cart $checkoutCart,
         \Magento\Checkout\Helper\Data $checkoutHelper,
         array $data = array()
     ) {
         $this->_checkoutHelper = $checkoutHelper;
-        $this->_taxData = $taxData;
         $this->_catalogUrl = $catalogUrl;
-        $this->_taxConfig = $taxConfig;
         $this->_checkoutCart = $checkoutCart;
         parent::__construct($context, $catalogData, $customerSession, $checkoutSession, $data);
         $this->_isScopePrivate = true;
@@ -159,77 +141,16 @@ class Sidebar extends AbstractCart implements IdentityInterface
     /**
      * Get shopping cart subtotal.
      *
-     * It will include tax, if required by config settings.
-     *
-     * @param   bool $skipTax flag for getting price with tax or not. Ignored in case when we display just subtotal incl.tax
-     * @return  float
+      * @return  float
      */
-    public function getSubtotal($skipTax = true)
+    public function getSubtotal()
     {
         $subtotal = 0;
         $totals = $this->getTotals();
         if (isset($totals['subtotal'])) {
-            if ($this->_taxConfig->displayCartSubtotalBoth()) {
-                if ($skipTax) {
-                    $subtotal = $totals['subtotal']->getValueExclTax();
-                } else {
-                    $subtotal = $totals['subtotal']->getValueInclTax();
-                }
-            } elseif ($this->_taxConfig->displayCartSubtotalInclTax()) {
-                $subtotal = $totals['subtotal']->getValueInclTax();
-            } else {
-                $subtotal = $totals['subtotal']->getValue();
-                if (!$skipTax && isset($totals['tax'])) {
-                    $subtotal += $totals['tax']->getValue();
-                }
-            }
+            $subtotal = $totals['subtotal']->getValue();
         }
         return $subtotal;
-    }
-
-    /**
-     * Get subtotal, including tax.
-     * Will return > 0 only if appropriate config settings are enabled.
-     *
-     * @return float
-     */
-    public function getSubtotalInclTax()
-    {
-        if (!$this->_taxConfig->displayCartSubtotalBoth()) {
-            return 0;
-        }
-        return $this->getSubtotal(false);
-    }
-
-    /**
-     * Add tax to amount
-     *
-     * @param float $price
-     * @param bool $exclShippingTax
-     * @return float
-     */
-    private function _addTax($price, $exclShippingTax = true)
-    {
-        $totals = $this->getTotals();
-        if (isset($totals['tax'])) {
-            if ($exclShippingTax) {
-                $price += $totals['tax']->getValue() - $this->_getShippingTaxAmount();
-            } else {
-                $price += $totals['tax']->getValue();
-            }
-        }
-        return $price;
-    }
-
-    /**
-     * Get shipping tax amount
-     *
-     * @return float
-     */
-    protected function _getShippingTaxAmount()
-    {
-        $quote = $this->getCustomQuote() ? $this->getCustomQuote() : $this->getQuote();
-        return $quote->getShippingAddress()->getShippingTaxAmount();
     }
 
     /**
@@ -243,18 +164,6 @@ class Sidebar extends AbstractCart implements IdentityInterface
             return $this->getData('summary_qty');
         }
         return $this->_checkoutCart->getSummaryQty();
-    }
-
-    /**
-     * Get incl/excl tax label
-     *
-     * @param bool $flag
-     * @return string
-     */
-    public function getIncExcTax($flag)
-    {
-        $text = $this->_taxData->getIncExcText($flag);
-        return $text ? ' (' . $text . ')' : '';
     }
 
     /**
@@ -389,5 +298,10 @@ class Sidebar extends AbstractCart implements IdentityInterface
             $identities = array_merge($identities, $item->getProduct()->getIdentities());
         }
         return $identities;
+    }
+
+    public function getTotalsHtml()
+    {
+        return $this->getLayout()->getBlock('checkout.cart.minicart.totals')->toHtml();
     }
 }

@@ -23,7 +23,7 @@
  */
 ?>
 <script type="text/javascript">
-require(["prototype"], function(){
+require(["jquery", "prototype"], function(jQuery){
 
 function hideShowSubproductOptions()
 {
@@ -39,8 +39,7 @@ function hideShowSubproductOptions()
 
     return true;
 }
-
-document.observe("dom:loaded", hideShowSubproductOptions);
+jQuery(document).ready(hideShowSubproductOptions);
 window.hideShowSubproductOptions = hideShowSubproductOptions;
 });
 </script>

@@ -50,11 +50,6 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
     protected $_directoryBlock;
 
     /**
-     * @var \Magento\Tax\Helper\Data
-     */
-    protected $_taxHelper;
-
-    /**
      * @var \Magento\Sales\Model\Quote\Address\CarrierFactoryInterface
      */
     protected $_carrierFactory;
@@ -65,7 +60,6 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Directory\Block\Data $directoryBlock
-     * @param \Magento\Tax\Helper\Data $taxHelper
      * @param \Magento\Sales\Model\Quote\Address\CarrierFactoryInterface $carrierFactory
      * @param array $data
      */
@@ -75,12 +69,10 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Directory\Block\Data $directoryBlock,
-        \Magento\Tax\Helper\Data $taxHelper,
         \Magento\Sales\Model\Quote\Address\CarrierFactoryInterface $carrierFactory,
         array $data = array()
     ) {
         $this->_directoryBlock = $directoryBlock;
-        $this->_taxHelper = $taxHelper;
         $this->_carrierFactory = $carrierFactory;
         parent::__construct($context, $catalogData, $customerSession, $checkoutSession, $data);
         $this->_isScopePrivate = true;
@@ -242,25 +234,6 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
     }
 
     /**
-     * Get Shipping Price
-     *
-     * @param float $price
-     * @param bool $flag
-     * @return float
-     */
-    public function getShippingPrice($price, $flag)
-    {
-        return $this->formatPrice(
-            $this->_taxHelper->getShippingPrice(
-                $price,
-                $flag,
-                $this->getAddress(),
-                $this->getQuote()->getCustomerTaxClassId()
-            )
-        );
-    }
-
-    /**
      * Obtain available carriers instances
      *
      * @return array
@@ -324,5 +297,19 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
             }
         }
         return false;
+    }
+
+    /**
+     * Get shipping price html
+     *
+     * @param \Magento\Sales\Model\Quote\Address\Rate $shippingRate
+     * @return string
+     */
+    public function getShippingPriceHtml(\Magento\Sales\Model\Quote\Address\Rate $shippingRate)
+    {
+        /** @var \Magento\Checkout\Block\Shipping\Price $block */
+        $block = $this->getLayout()->getBlock('checkout.shipping.price');
+        $block->setShippingRate($shippingRate);
+        return $block->toHtml();
     }
 }

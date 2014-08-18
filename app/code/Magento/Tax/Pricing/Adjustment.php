@@ -44,17 +44,26 @@ class Adjustment implements AdjustmentInterface
     protected $taxHelper;
 
     /**
+     * \Magento\Catalog\Helper\Data
+     *
+     * @var CatalogHelper
+     */
+    protected $catalogHelper;
+
+    /**
      * @var int|null
      */
     protected $sortOrder;
 
     /**
      * @param TaxHelper $taxHelper
-     * @param int $sortOrder
+     * @param \Magento\Catalog\Helper\Data $catalogHelper
+     * @param int|null $sortOrder
      */
-    public function __construct(TaxHelper $taxHelper, $sortOrder = null)
+    public function __construct(TaxHelper $taxHelper, \Magento\Catalog\Helper\Data $catalogHelper, $sortOrder = null)
     {
         $this->taxHelper = $taxHelper;
+        $this->catalogHelper = $catalogHelper;
         $this->sortOrder = $sortOrder;
     }
 
@@ -98,7 +107,17 @@ class Adjustment implements AdjustmentInterface
     public function extractAdjustment($amount, SaleableInterface $saleableItem)
     {
         if ($this->taxHelper->priceIncludesTax()) {
-            $adjustedAmount = $this->taxHelper->getPriceUnrounded($saleableItem, $amount);
+            $adjustedAmount = $this->catalogHelper->getTaxPrice(
+                $saleableItem,
+                $amount,
+                false,
+                null,
+                null,
+                null,
+                null,
+                null,
+                false
+            );
             $result = $amount - $adjustedAmount;
         } else {
             $result = 0.;
@@ -116,7 +135,17 @@ class Adjustment implements AdjustmentInterface
     public function applyAdjustment($amount, SaleableInterface $saleableItem)
     {
         $includingTax = !$this->taxHelper->priceIncludesTax();
-        return $this->taxHelper->getPriceUnrounded($saleableItem, $amount, $includingTax);
+        return $this->catalogHelper->getTaxPrice(
+            $saleableItem,
+            $amount,
+            $includingTax,
+            null,
+            null,
+            null,
+            null,
+            null,
+            false
+        );
     }
 
     /**

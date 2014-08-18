@@ -30,6 +30,12 @@
     <assertNewsletterInGrid module="Magento_Newsletter">
         <severeness>low</severeness>
     </assertNewsletterInGrid>
+    <assertNewsletterPreview module="Magento_Newsletter">
+        <severeness>low</severeness>
+    </assertNewsletterPreview>
+    <assertNewsletterQueue module="Magento_Newsletter">
+        <severeness>low</severeness>
+    </assertNewsletterQueue>
     <assertCustomerIsSubscribedToNewsletter module="Magento_Newsletter">
         <severeness>low</severeness>
         <require>

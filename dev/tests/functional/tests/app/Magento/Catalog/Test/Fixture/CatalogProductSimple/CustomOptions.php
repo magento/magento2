@@ -24,6 +24,7 @@
 
 namespace Magento\Catalog\Test\Fixture\CatalogProductSimple;
 
+use Mtf\Fixture\FixtureFactory;
 use Mtf\Fixture\FixtureInterface;
 
 /**
@@ -32,25 +33,80 @@ use Mtf\Fixture\FixtureInterface;
  *
  * Data keys:
  *  - preset (Custom options preset name)
- *  - products (comma separated sku identifiers)
+ *  - import_products (comma separated data set name)
  */
 class CustomOptions implements FixtureInterface
 {
     /**
-     * @var \Mtf\Fixture\FixtureFactory
+     * Prepared dataSet data
+     *
+     * @var array
      */
-    protected $fixtureFactory;
+    protected $data;
 
     /**
+     * Custom options data
+     *
+     * @var array
+     */
+    protected $customOptions;
+
+    /**
+     * Data set configuration settings
+     *
+     * @var array
+     */
+    protected $params;
+
+    /**
+     * @constructor
      * @param array $params
      * @param array $data
+     * @param FixtureFactory|null $fixtureFactory
      */
-    public function __construct(array $params, array $data = [])
+    public function __construct(array $params, array $data, FixtureFactory $fixtureFactory)
     {
         $this->params = $params;
         if (isset($data['preset'])) {
-            $this->data = $this->getPreset($data['preset']);
+            $this->data = $this->replaceData($this->getPreset($data['preset']), mt_rand());
+            $this->customOptions = $this->data;
         }
+        if (isset($data['import_products'])) {
+            $importData = explode(',', $data['import_products']);
+            $importCustomOptions = [];
+            $importProducts = [];
+            foreach ($importData as $item) {
+                list($fixture, $dataSet) = explode('::', $item);
+                $product = $fixtureFactory->createByCode($fixture, ['dataSet' => $dataSet]);
+                if ($product->hasData('id') !== null) {
+                    $product->persist();
+                }
+                $importCustomOptions = array_merge($importCustomOptions, $product->getCustomOptions());
+                $importProducts[] = $product->getSku();
+            }
+            $this->customOptions = array_merge($this->data, $importCustomOptions);
+            $this->data['import'] = ['options' => $importCustomOptions, 'products' => $importProducts];
+        }
+    }
+
+    /**
+     * Replace custom options data
+     *
+     * @param array $data
+     * @param int $replace
+     * @return array
+     */
+    protected function replaceData(array $data, $replace)
+    {
+        $result = [];
+        foreach ($data as $key => $value) {
+            if (is_array($value)) {
+                $value = $this->replaceData($value, $replace);
+            }
+            $result[$key] = str_replace('%isolation%', $replace, $value);
+        }
+
+        return $result;
     }
 
     /**
@@ -66,7 +122,7 @@ class CustomOptions implements FixtureInterface
     /**
      * Return prepared data set
      *
-     * @param $key [optional]
+     * @param string $key [optional]
      * @return mixed
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -74,6 +130,16 @@ class CustomOptions implements FixtureInterface
     public function getData($key = null)
     {
         return $this->data;
+    }
+
+    /**
+     * Return all custom options
+     *
+     * @return array
+     */
+    public function getCustomOptions()
+    {
+        return $this->customOptions;
     }
 
     /**
@@ -97,7 +163,7 @@ class CustomOptions implements FixtureInterface
         $presets = [
             'MAGETWO-23062' => [
                 [
-                    'title' => 'custom option drop down',
+                    'title' => 'custom option drop down %isolation%',
                     'is_require' => 'Yes',
                     'type' => 'Drop-down',
                     'options' => [
@@ -112,7 +178,7 @@ class CustomOptions implements FixtureInterface
             ],
             'MAGETWO-23063' => [
                 [
-                    'title' => 'custom option drop down',
+                    'title' => 'custom option drop down %isolation%',
                     'is_require' => 'Yes',
                     'type' => 'Drop-down',
                     'options' => [
@@ -127,7 +193,7 @@ class CustomOptions implements FixtureInterface
             ],
             'MAGETWO-23066' => [
                 [
-                    'title' => 'custom option drop down',
+                    'title' => 'custom option drop down %isolation%',
                     'is_require' => 'Yes',
                     'type' => 'Drop-down',
                     'options' => [
@@ -142,7 +208,7 @@ class CustomOptions implements FixtureInterface
             ],
             'MAGETWO-23069' => [
                 [
-                    'title' => 'custom option drop down',
+                    'title' => 'custom option drop down %isolation%',
                     'is_require' => 'Yes',
                     'type' => 'Drop-down',
                     'options' => [
@@ -223,7 +289,7 @@ class CustomOptions implements FixtureInterface
             ],
             'default' => [
                 [
-                    'title' => 'custom option drop down',
+                    'title' => 'custom option drop down %isolation%',
                     'is_require' => 'Yes',
                     'type' => 'Drop-down',
                     'options' => [
@@ -236,7 +302,7 @@ class CustomOptions implements FixtureInterface
                     ]
                 ],
                 [
-                    'title' => 'custom option drop down2',
+                    'title' => 'custom option drop down2 %isolation%',
                     'is_require' => 'Yes',
                     'type' => 'Drop-down',
                     'options' => [
@@ -251,7 +317,7 @@ class CustomOptions implements FixtureInterface
             ],
             'two_options' => [
                 [
-                    'title' => 'custom option drop down',
+                    'title' => 'custom option drop down %isolation%',
                     'is_require' => 'Yes',
                     'type' => 'Drop-down',
                     'options' => [
@@ -264,15 +330,15 @@ class CustomOptions implements FixtureInterface
                     ]
                 ],
                 [
-                    'title' => 'custom option drop down2',
+                    'title' => 'custom option field %isolation%',
                     'is_require' => 'Yes',
-                    'type' => 'Drop-down',
+                    'type' => 'Field',
                     'options' => [
                         [
-                            'title' => '20 percent',
-                            'price' => 20,
-                            'price_type' => 'Percent',
-                            'sku' => 'sku_drop_down_row_2'
+                            'price' => 10,
+                            'price_type' => 'Fixed',
+                            'sku' => 'sku_field_option_%isolation%',
+                            'max_characters' => 1024
                         ]
                     ]
                 ]
@@ -408,10 +474,9 @@ class CustomOptions implements FixtureInterface
                     ]
                 ],
                 [
-                    //TODO fixed setValue() for select type (contains => "=")
                     'title' => 'custom option Time %isolation%',
                     'is_require' => 'Yes',
-                    'type' => 'Date & Time',
+                    'type' => 'Time',
                     'options' => [
                         [
                             'price' => 20,

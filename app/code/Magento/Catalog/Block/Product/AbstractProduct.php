@@ -34,18 +34,6 @@ abstract class AbstractProduct extends \Magento\Framework\View\Element\Template
     protected $_priceBlock = array();
 
     /**
-     * Default price block
-     *
-     * @var string
-     */
-    protected $_block = 'Magento\Catalog\Block\Product\Price';
-
-    /**
-     * @var string
-     */
-    protected $_priceBlockDefaultTemplate = 'product/price.phtml';
-
-    /**
      * Flag which allow/disallow to use link for as low as price
      *
      * @var bool

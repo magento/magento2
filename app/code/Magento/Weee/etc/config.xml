@@ -28,6 +28,7 @@
         <sales>
             <totals_sort>
                 <weee>35</weee>
+                <weee_tax>35</weee_tax>
             </totals_sort>
         </sales>
         <tax>

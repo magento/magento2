@@ -45,7 +45,7 @@ class RoleTest extends \Magento\Backend\Utility\Controller
     }
 
     /**
-     * @covers \Magento\User\Controller\Adminhtml\User\Role::editrolegridAction
+     * @covers \Magento\User\Controller\Adminhtml\User\Role\Editrolegrid::execute
      */
     public function testEditrolegridAction()
     {
@@ -56,7 +56,7 @@ class RoleTest extends \Magento\Backend\Utility\Controller
     }
 
     /**
-     * @covers \Magento\User\Controller\Adminhtml\User\Role::roleGridAction
+     * @covers \Magento\User\Controller\Adminhtml\User\Role\RoleGrid::execute
      */
     public function testRoleGridAction()
     {

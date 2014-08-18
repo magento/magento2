@@ -31,7 +31,7 @@
     <form id="${id}" data-form="translate-inline-dialog-form">
         {{each(i, item) items}}
         <input id="perstore_${i}" name="translate[${i}][perstore]" type="hidden" value="0"/>
-        <input name="translate[${i}][original]" type="hidden" value="${item.scope}::${escape(item.original)}"/>
+        <input name="translate[${i}][original]" type="hidden" value="${escape(item.original)}"/>
         <textarea id="custom_${i}" name="translate[${i}][custom]" data-translate-input-index="${i}">${escape(item.translated)}</textarea>
         {{/each}}
     </form>

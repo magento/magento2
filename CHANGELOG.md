@@ -1,3 +1,28 @@
+0.1.0-alpha91
+=============
+ * Added the following functional tests:
+   * Action Newsletter Template
+   * Import Custom Options
+   * Low Stock Products Report
+   * Search Terms Report
+ * Catalog:
+   * Removed the unused old pricing .phtml templates
+   * Removed direct dependencies on the Weee and Tax modules
+ * Tax:
+   * Added new price renderers for the Weee and Tax modules
+ * Fixed the @covers annotation in Integration tests
+ * Fixed bugs:
+   * Fixed an issue with FPT total line on the Shopping Cart page
+   * Fixed the Inline translation functionality both in the backend and the storefront
+   * Fixed an issue with the Translation dialog layout on the storefront
+   * Fixed an issue where only the first Tier Price row was saved during simple product creation
+   * Fixed an issue where it was impossible to save more than one group price
+   * Fixed an issue where it was impossible to create a shipping label
+   * Fixed an issue where Google Items synchronization resulted in a blank page
+   * Fixed an issue where a Shopping Cart with a lot of entries did not fit the page
+   * Fixed an issue where a JavaScript error blocked the checkout with credit cards type “Other” in online payment methods
+   * Fixed JavaScript error on the Payment Methods tab in System Configuration
+
 0.1.0-alpha90
 =============
  * Service layer implementation:

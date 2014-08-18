@@ -146,15 +146,15 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form implements
         // Add name attribute to checkboxes that correspond to multiselect elements
         $nameAttributeHtml = $element->getExtType() === 'multiple' ? 'name="' . $element->getId() . '_checkbox"' : '';
         $elementId = $element->getId();
+        $dataAttribute = "data-disable='{$elementId}'";
         $checkboxLabel = __('Change');
         $html = <<<HTML
 <span class="attribute-change-checkbox">
     <label>
-        <input type="checkbox" $nameAttributeHtml onclick="toogleFieldEditMode(this, '{$elementId}')" />
+        <input type="checkbox" $nameAttributeHtml onclick="toogleFieldEditMode(this, '{$elementId}')" $dataAttribute />
         {$checkboxLabel}
     </label>
 </span>
-<script>initDisableFields("{$elementId}")</script>
 HTML;
         if ($elementId === 'weight') {
             $html .= <<<HTML

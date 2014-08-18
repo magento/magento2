@@ -26,6 +26,7 @@ namespace Magento\Bundle\Test\Block\Catalog\Product\View\Type;
 
 use Mtf\Block\Block;
 use Mtf\Client\Element\Locator;
+use Magento\Bundle\Test\Fixture\CatalogProductBundle;
 use Magento\Bundle\Test\Page\Product\CatalogProductView;
 use Magento\Bundle\Test\Block\Catalog\Product\View\Type\Option;
 
@@ -101,17 +102,18 @@ class Bundle extends Block
     /**
      * Fill bundle option on frontend add click "Add to cart" button
      *
-     * @param array $fillData
+     * @param CatalogProductBundle $product
      * @param CatalogProductView $catalogProductView
      * @return void
      */
-    public function addToCart(array $fillData, CatalogProductView $catalogProductView)
+    public function addToCart(CatalogProductBundle $product, CatalogProductView $catalogProductView)
     {
-        $this->fillBundleOptions($fillData['bundle_options']);
+        $fillData = $product->getDataFieldConfig('checkout_data')['source']->getPreset();
+        if (isset($fillData['bundle_options'])) {
+            $this->fillBundleOptions($fillData['bundle_options']);
+        }
         if (isset($fillData['custom_options'])) {
-            foreach ($fillData['custom_options'] as $option) {
-                $catalogProductView->getCustomOptionsBlock()->fillCustomOptions($option);
-            }
+            $catalogProductView->getCustomOptionsBlock()->fillCustomOptions($product, $fillData['custom_options']);
         }
         $catalogProductView->getViewBlock()->clickAddToCart();
     }

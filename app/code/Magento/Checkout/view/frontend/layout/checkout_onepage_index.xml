@@ -25,6 +25,7 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
     <update handle="page_one_column"/>
+    <update handle="checkout_shipping_price_renderer" />
     <referenceContainer name="content">
         <block class="Magento\Checkout\Block\Onepage" name="checkout.onepage" template="onepage.phtml">
             <block class="Magento\Checkout\Block\Onepage\Login" name="checkout.onepage.login" as="login" template="onepage/login.phtml" cacheable="false">

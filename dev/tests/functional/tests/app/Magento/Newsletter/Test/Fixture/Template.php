@@ -28,11 +28,20 @@ use Mtf\Fixture\InjectableFixture;
 
 /**
  * Class Template
- *
- * @package Magento\Newsletter\Test\Fixture
+ * Template fixture
  */
 class Template extends InjectableFixture
 {
+    /**
+     * @var string
+     */
+    protected $repositoryClass = 'Magento\Newsletter\Test\Repository\Template';
+
+    /**
+     * @var string
+     */
+    protected $handlerInterface = 'Magento\Newsletter\Test\Handler\Template\TemplateInterface';
+
     protected $defaultDataSet = [
         'code' => 'TemplateName%isolation%',
         'subject' => 'TemplateSubject%isolation%',

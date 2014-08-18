@@ -384,8 +384,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
                     'shown' => $matches[1][0],
                     'translated' => $matches[2][0],
                     'original' => $matches[3][0],
-                    'location' => call_user_func($locationCallback, $matches, $options),
-                    'scope' => $matches[4][0]
+                    'location' => call_user_func($locationCallback, $matches, $options)
                 )
             );
             $text = substr_replace($text, $matches[1][0], $matches[0][1], strlen($matches[0][0]));

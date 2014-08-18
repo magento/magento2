@@ -454,6 +454,11 @@
             <input>select</input>
             <group>autosettings</group>
         </is_returnable>
+        <stock_data>
+            <attribute_code>stock_data</attribute_code>
+            <backend_type>virtual</backend_type>
+            <group>advanced-inventory</group>
+        </stock_data>
     </fields>
     <data_set>
         <sku></sku>

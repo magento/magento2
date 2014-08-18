@@ -98,37 +98,17 @@ class ProgressTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param bool $inclTax
+     * Test getShippingRate method
      */
-    private function _prepareTestGetShippingPrice($inclTax)
+    public function testGetShippingRate()
     {
         $rate = $this->getMock('Magento\Sales\Model\Quote\Address\Rate', ['__wakeup'], [], '', false);
-        $rate->setPrice(self::SHIPPING_PRICE);
         $this->shippingAddress->setShippingMethod(self::SHIPPING_METHOD);
         $this->shippingAddress->expects($this->once())
             ->method('getShippingRateByCode')
             ->with(self::SHIPPING_METHOD)
             ->will($this->returnValue($rate));
-        $this->taxHelper->expects($this->once())
-            ->method('getShippingPrice')
-            ->with(self::SHIPPING_PRICE, $inclTax ? $this->isTrue() : $this->isFalse(), $this->shippingAddress)
-            ->will($this->returnValue(self::SHIPPING_PRICE_WITH_TAX));
-        $this->store->expects($this->once())
-            ->method('formatPrice')
-            ->with(self::SHIPPING_PRICE_WITH_TAX)
-            ->will($this->returnValue(self::SHIPPING_PRICE_FORMATTED));
-    }
 
-    public function testGetShippingPriceInclTax()
-    {
-        $this->_prepareTestGetShippingPrice(true);
-        $this->assertEquals(self::SHIPPING_PRICE_FORMATTED, $this->model->getShippingPriceInclTax());
-
-    }
-
-    public function testGetShippingPriceExclTax()
-    {
-        $this->_prepareTestGetShippingPrice(false);
-        $this->assertEquals(self::SHIPPING_PRICE_FORMATTED, $this->model->getShippingPriceExclTax());
+        $this->assertEquals($rate, $this->model->getShippingRate());
     }
 }

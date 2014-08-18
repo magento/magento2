@@ -47,13 +47,6 @@ class Price extends \Magento\Framework\View\Element\Template implements \Magento
     protected $_coreRegistry = null;
 
     /**
-     * Tax data
-     *
-     * @var \Magento\Tax\Helper\Data
-     */
-    protected $_taxData = null;
-
-    /**
      * Catalog data
      *
      * @var \Magento\Catalog\Helper\Data
@@ -84,7 +77,6 @@ class Price extends \Magento\Framework\View\Element\Template implements \Magento
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Catalog\Helper\Data $catalogData
-     * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Stdlib\String $string
      * @param \Magento\Framework\Math\Random $mathRandom
@@ -95,20 +87,18 @@ class Price extends \Magento\Framework\View\Element\Template implements \Magento
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Catalog\Helper\Data $catalogData,
-        \Magento\Tax\Helper\Data $taxData,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Stdlib\String $string,
         \Magento\Framework\Math\Random $mathRandom,
         \Magento\Checkout\Helper\Cart $cartHelper,
         array $data = array()
     ) {
-        $this->_cartHelper = $cartHelper;
         $this->_jsonEncoder = $jsonEncoder;
-        $this->_coreRegistry = $registry;
         $this->_catalogData = $catalogData;
-        $this->_taxData = $taxData;
+        $this->_coreRegistry = $registry;
         $this->string = $string;
         $this->mathRandom = $mathRandom;
+        $this->_cartHelper = $cartHelper;
         parent::__construct($context, $data);
     }
 
