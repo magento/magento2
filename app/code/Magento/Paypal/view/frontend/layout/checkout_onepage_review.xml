@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <referenceContainer name="checkout.onepage.review.info.items.after">
         <block class="Magento\Paypal\Block\Iframe" name="paypal.iframe" cacheable="false"/>
     </referenceContainer>
@@ -31,8 +31,7 @@
         <action method="setTemplate">
             <argument name="template" xsi:type="helper" helper="Magento\Paypal\Helper\Hss::getReviewButtonTemplate">
                 <param name="name">Magento_Paypal::hss/review/button.phtml</param>
-                <param name="block">checkout.onepage.review.button</param>
             </argument>
         </action>
     </referenceBlock>
-</layout>
+</page>

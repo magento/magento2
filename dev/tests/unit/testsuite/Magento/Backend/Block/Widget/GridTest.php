@@ -59,9 +59,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
 
         $urlBuilderMock->expects($this->any())->method('getUrl')->will($this->returnValue('some_url'));
 
-        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-
-        $block = $helper->getObject(
+        $block = $this->_objectManager->getObject(
             'Magento\Backend\Block\Widget\Grid',
             array('storeManager' => $storeManagerMock, 'urlModel' => $urlMock, 'urlBuilder' => $urlBuilderMock)
         );

@@ -116,10 +116,4 @@ class ProductBuilderTest extends \PHPUnit_Framework_TestCase
     {
         $this->_productBuilder->$method('');
     }
-
-    public function testGetCustomAttributes()
-    {
-        $expectedAttributesCodes = ['attribute_code_1', 'attribute_code_2'];
-        $this->assertEquals($expectedAttributesCodes, $this->_productBuilder->getCustomAttributesCodes());
-    }
 }

@@ -40,6 +40,9 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Service\V1\Data\SearchCriteriaBuilder */
     protected $searchCriteriaBuilder;
 
+    /** @var \Magento\Framework\Service\V1\Data\SortOrderBuilder */
+    protected $sortOrderBuilder;
+
     /** @var \Magento\Customer\Service\V1\Data\SearchResults */
     protected $searchResults;
 
@@ -60,6 +63,9 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\Service\V1\Data\SearchCriteriaBuilder',
             ['filterGroupBuilder' => $filterGroupBuilder]
         );
+        $this->sortOrderBuilder = $this->objectManager->getObject(
+            '\Magento\Framework\Service\V1\Data\SortOrderBuilder'
+        );
         $this->groupServiceMock = $this->getMockBuilder('\Magento\Customer\Service\V1\CustomerGroupServiceInterface')
             ->getMock();
         $this->searchResults = $this->objectManager->getObject('Magento\Customer\Service\V1\Data\SearchResultsBuilder')
@@ -78,11 +84,15 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSearchCriteriaImplicitEq()
     {
+        $sortOrder = $this->sortOrderBuilder
+            ->setField('name')
+            ->setDirection(SearchCriteria::SORT_ASC)
+            ->create();
         /** @var SearchCriteria $expectedSearchCriteria */
         $expectedSearchCriteria = $this->searchCriteriaBuilder
             ->setCurrentPage(1)
             ->setPageSize(0)
-            ->addSortOrder('name', SearchCriteria::SORT_ASC)
+            ->addSortOrder($sortOrder)
             ->addFilter([$this->filterBuilder->setField('name')->setConditionType('eq')
                     ->setValue('Magento')->create()])
             ->create();
@@ -104,13 +114,16 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
         $field = 'age';
         $conditionType = 'gt';
         $value = '35';
-
+        $sortOrder = $this->sortOrderBuilder
+            ->setField('name')
+            ->setDirection(SearchCriteria::SORT_ASC)
+            ->create();
         /** @var SearchCriteria $expectedSearchCriteria */
         $filter = $this->filterBuilder->setField($field)->setConditionType($conditionType)->setValue($value)->create();
         $expectedSearchCriteria = $this->searchCriteriaBuilder
             ->setCurrentPage(1)
             ->setPageSize(0)
-            ->addSortOrder('name', SearchCriteria::SORT_ASC)
+            ->addSortOrder($sortOrder)
             ->addFilter([$filter])
             ->create();
 
@@ -133,11 +146,15 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
         $fieldB = 'B';
         $value = 1;
 
+        $sortOrder = $this->sortOrderBuilder
+            ->setField('name')
+            ->setDirection(SearchCriteria::SORT_ASC)
+            ->create();
         /** @var SearchCriteria $expectedSearchCriteria */
         $expectedSearchCriteria = $this->searchCriteriaBuilder
             ->setCurrentPage(1)
             ->setPageSize(0)
-            ->addSortOrder('name', SearchCriteria::SORT_ASC)
+            ->addSortOrder($sortOrder)
             ->addFilter(
                 [
                     $this->filterBuilder->setField($fieldA)->setConditionType('eq')->setValue($value)->create(),
@@ -165,15 +182,27 @@ class ServiceCollectionTest extends \PHPUnit_Framework_TestCase
         $fieldB = 'B';
         $value = 1;
 
+        $sortOrder = $this->sortOrderBuilder
+            ->setField('name')
+            ->setDirection(SearchCriteria::SORT_ASC)
+            ->create();
         /** @var SearchCriteria $expectedSearchCriteria */
         $expectedSearchCriteria = $this->searchCriteriaBuilder
             ->setCurrentPage(1)
             ->setPageSize(0)
-            ->addSortOrder('name', SearchCriteria::SORT_ASC)
-            ->addFilter([$this->filterBuilder->setField($fieldA)->setConditionType('gt')
-                    ->setValue($value)->create()])
-            ->addFilter([$this->filterBuilder->setField($fieldB)->setConditionType('gt')
-                    ->setValue($value)->create()])
+            ->addSortOrder($sortOrder)
+            ->addFilter(
+                [
+                    $this->filterBuilder->setField($fieldA)->setConditionType('gt')
+                        ->setValue($value)->create()
+                ]
+            )
+            ->addFilter(
+                [
+                    $this->filterBuilder->setField($fieldB)->setConditionType('gt')
+                        ->setValue($value)->create()
+                ]
+            )
             ->create();
 
         // Verifies that the search criteria Data Object created by the serviceCollection matches expected

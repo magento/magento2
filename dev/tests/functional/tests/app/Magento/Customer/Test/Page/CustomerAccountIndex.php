@@ -18,7 +18,6 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
- * @spi
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -99,8 +98,6 @@ class CustomerAccountIndex extends FrontendPage
     }
 
     /**
-     * Get Account Menu Block
-     *
      * @return \Magento\Customer\Test\Block\Account\Links
      */
     public function getAccountMenuBlock()
@@ -109,8 +106,6 @@ class CustomerAccountIndex extends FrontendPage
     }
 
     /**
-     * Get Account Info Block
-     *
      * @return \Magento\Customer\Test\Block\Account\Dashboard\Info
      */
     public function getInfoBlock()
@@ -119,8 +114,6 @@ class CustomerAccountIndex extends FrontendPage
     }
 
     /**
-     * Get compare products block
-     *
      * @return \Magento\Catalog\Test\Block\Product\Compare\Sidebar
      */
     public function getCompareProductsBlock()

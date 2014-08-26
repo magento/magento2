@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <referenceBlock name="order_item_extra_info">
         <block class="Magento\GiftMessage\Block\Adminhtml\Sales\Order\Create\Giftoptions" name="gift_options_link" template="sales/order/create/giftoptions.phtml">
             <block class="Magento\GiftMessage\Block\Adminhtml\Sales\Order\Create\Items" name="gift_options_item_data" template="sales/order/create/items.phtml"/>
@@ -34,4 +34,4 @@
             <block class="Magento\GiftMessage\Block\Adminhtml\Sales\Order\Create\Form" name="gift_options_form" template="giftoptionsform.phtml"/>
         </block>
     </referenceBlock>
-</layout>
+</page>

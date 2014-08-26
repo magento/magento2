@@ -34,7 +34,7 @@ class LoadOptions extends \Magento\Backend\App\Action
     public function execute()
     {
         try {
-            $this->_view->loadLayout('empty');
+            $this->_view->loadLayout();
             if ($paramsJson = $this->getRequest()->getParam('widget')) {
                 $request = $this->_objectManager->get('Magento\Core\Helper\Data')->jsonDecode($paramsJson);
                 if (is_array($request)) {

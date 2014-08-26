@@ -31,13 +31,19 @@ use Mtf\Page\FrontendPage;
  */
 class WishlistIndex extends FrontendPage
 {
-    const MCA = 'wishlist/index/index';
+    const MCA = 'wishlist/index';
 
     protected $_blocks = [
         'messagesBlock' => [
             'name' => 'messagesBlock',
             'class' => 'Magento\Core\Test\Block\Messages',
             'locator' => '.messages',
+            'strategy' => 'css selector',
+        ],
+        'wishlistBlock' => [
+            'name' => 'wishlistBlock',
+            'class' => 'Magento\Wishlist\Test\Block\Customer\Wishlist',
+            'locator' => '#wishlist-view-form',
             'strategy' => 'css selector',
         ],
     ];
@@ -48,5 +54,13 @@ class WishlistIndex extends FrontendPage
     public function getMessagesBlock()
     {
         return $this->getBlockInstance('messagesBlock');
+    }
+
+    /**
+     * @return \Magento\Wishlist\Test\Block\Customer\Wishlist
+     */
+    public function getWishlistBlock()
+    {
+        return $this->getBlockInstance('wishlistBlock');
     }
 }

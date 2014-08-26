@@ -23,10 +23,10 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <referenceBlock name="messages">
         <action method="addNotice">
             <argument translate="true" name="message" xsi:type="string">This report uses timezone configuration data. Be sure to refresh lifetime statistics any time you change store timezone.</argument>
         </action>
     </referenceBlock>
-</layout>
+</page>

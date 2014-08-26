@@ -315,7 +315,7 @@ class Filter extends \Magento\Framework\Filter\Template
         $skipParams = array('handle', 'area');
 
         /** @var $layout \Magento\Framework\View\LayoutInterface */
-        $layout = $this->_layoutFactory->create();
+        $layout = $this->_layoutFactory->create(array('cacheable' => false));
         $layout->getUpdate()->addHandle($this->_directiveParams['handle'])->load();
 
         $layout->generateXml();

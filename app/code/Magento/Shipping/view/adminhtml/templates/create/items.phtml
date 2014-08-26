@@ -88,7 +88,10 @@
     </div>
 </div>
 <script type="text/javascript">
-require(["jquery", "prototype"], function(jQuery){
+require([
+    "jquery",
+    "prototype"
+], function(jQuery){
 
 //<![CDATA[
 var sendEmailCheckbox = $('send_email');
@@ -106,7 +109,7 @@ function bindSendEmail() {
         notifyCustomerCheckbox.disabled = true;
     }
 }
-function toggleCreateLabelCheckbox() {
+window.toggleCreateLabelCheckbox = function() {
     var checkbox = $('create_shipping_label');
     var submitButton = checkbox.up('.order-totals').select('.submit-button span')[0];
     if (checkbox.checked) {
@@ -115,7 +118,7 @@ function toggleCreateLabelCheckbox() {
         submitButton.innerText = submitButton.innerText.replace(/\.\.\.$/, '');
     }
 }
-function submitShipment(btn) {
+window.submitShipment = function(btn) {
     if (!validQtyItems()) {
         alert('<?php echo __('Invalid value(s) for Qty to Ship') ?>');
         return;
@@ -133,7 +136,7 @@ function submitShipment(btn) {
         jQuery('#edit_form').triggerHandler('save');
     }
 }
-function validQtyItems() {
+window.validQtyItems = function() {
     var valid = true;
     $$('.qty-item').each(function(item) {
         var val = parseFloat(item.value);
@@ -144,9 +147,6 @@ function validQtyItems() {
     return valid;
 }
 
-window.validQtyItems = validQtyItems;
-window.submitShipment = submitShipment;
-window.toggleCreateLabelCheckbox = toggleCreateLabelCheckbox;
 window.bindSendEmail = bindSendEmail;
 
 window.shipmentCommentText = shipmentCommentText;

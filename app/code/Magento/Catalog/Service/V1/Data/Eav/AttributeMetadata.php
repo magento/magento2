@@ -24,11 +24,12 @@
 namespace Magento\Catalog\Service\V1\Data\Eav;
 
 use \Magento\Framework\Service\Data\Eav\AbstractObject;
+use Magento\Framework\Service\Data\Eav\MetadataObjectInterface;
 
 /**
  * Class AttributeMetadata
  */
-class AttributeMetadata extends AbstractObject
+class AttributeMetadata extends AbstractObject implements MetadataObjectInterface
 {
     /**#@+
      * Constants used as keys into $_data

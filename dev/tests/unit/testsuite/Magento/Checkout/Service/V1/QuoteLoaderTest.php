@@ -46,7 +46,13 @@ class QuoteLoaderTest extends \PHPUnit_Framework_TestCase
     {
         $this->quoteFactoryMock = $this->getMock('\Magento\Sales\Model\QuoteFactory', ['create'], [], '', false);
         $this->quoteMock =
-            $this->getMock('\Magento\Sales\Model\Quote', ['setStoreId', 'load', 'getId', '__wakeup'], [], '', false);
+            $this->getMock(
+                '\Magento\Sales\Model\Quote',
+                ['setStoreId', 'load', 'getId', '__wakeup', 'getIsActive'],
+                [],
+                '',
+                false
+            );
         $this->quoteLoader = new QuoteLoader($this->quoteFactoryMock);
     }
 
@@ -59,6 +65,7 @@ class QuoteLoaderTest extends \PHPUnit_Framework_TestCase
             ->method('setStoreId')->with($storeId)->will($this->returnValue($this->quoteMock));
         $this->quoteMock->expects($this->once())->method('load')->with($cartId);
         $this->quoteMock->expects($this->once())->method('getId')->will($this->returnValue(33));
+        $this->quoteMock->expects($this->once())->method('getIsActive')->will($this->returnValue(true));
 
         $this->assertEquals($this->quoteMock, $this->quoteLoader->load($cartId, $storeId));
     }

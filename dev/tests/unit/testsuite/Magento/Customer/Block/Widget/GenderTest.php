@@ -66,7 +66,7 @@ class GenderTest extends \PHPUnit_Framework_TestCase
         $this->_attributeMetadata->expects(
             $this->any()
         )->method(
-            'getCustomerAttributeMetadata'
+            'getAttributeMetadata'
         )->with(
             self::GENDER_ATTRIBUTE_CODE
         )->will(

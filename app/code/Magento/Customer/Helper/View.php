@@ -56,21 +56,21 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
     public function getCustomerName(\Magento\Customer\Service\V1\Data\Customer $customerData)
     {
         $name = '';
-        $prefixMetadata = $this->_customerMetadataService->getAttributeMetadata('customer', 'prefix');
+        $prefixMetadata = $this->_customerMetadataService->getAttributeMetadata('prefix');
         if ($prefixMetadata->isVisible() && $customerData->getPrefix()) {
             $name .= $customerData->getPrefix() . ' ';
         }
 
         $name .= $customerData->getFirstname();
 
-        $middleNameMetadata = $this->_customerMetadataService->getAttributeMetadata('customer', 'middlename');
+        $middleNameMetadata = $this->_customerMetadataService->getAttributeMetadata('middlename');
         if ($middleNameMetadata->isVisible() && $customerData->getMiddlename()) {
             $name .= ' ' . $customerData->getMiddlename();
         }
 
         $name .= ' ' . $customerData->getLastname();
 
-        $suffixMetadata = $this->_customerMetadataService->getAttributeMetadata('customer', 'suffix');
+        $suffixMetadata = $this->_customerMetadataService->getAttributeMetadata('suffix');
         if ($suffixMetadata->isVisible() && $customerData->getSuffix()) {
             $name .= ' ' . $customerData->getSuffix();
         }

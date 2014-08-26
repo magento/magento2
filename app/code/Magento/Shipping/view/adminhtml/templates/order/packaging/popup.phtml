@@ -29,18 +29,17 @@ $sizeSource = $this->getSourceSizeModel()->toOptionArray();
 $girthEnabled = $this->isDisplayGirthValue() && $this->isGirthAllowed() ? 1 : 0;
 ?>
 <script type="text/javascript">
-require(["prototype", "Magento_Shipping/order/packaging"], function(){
+require([
+    "prototype",
+    "Magento_Shipping/order/packaging"
+], function(){
 
-    //<![CDATA[
-    document.observe("dom:loaded", function() {
-        packaging = new Packaging(<?php echo $this->getConfigDataJson() ?>);
-        packaging.changeContainerType($$('select[name=package_container]')[0]);
-        packaging.checkSizeAndGirthParameter(
-                $$('select[name=package_container]')[0],
-        <?php echo $girthEnabled; ?>
-        );
-    });
-    //]]>
+    packaging = new Packaging(<?php echo $this->getConfigDataJson() ?>);
+    packaging.changeContainerType($$('select[name=package_container]')[0]);
+    packaging.checkSizeAndGirthParameter(
+            $$('select[name=package_container]')[0],
+    <?php echo $girthEnabled; ?>
+    );
 
 });
 </script>

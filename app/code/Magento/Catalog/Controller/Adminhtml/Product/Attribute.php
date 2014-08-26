@@ -92,8 +92,9 @@ class Attribute extends \Magento\Backend\App\Action
             } else {
                 $this->_view->loadLayout(array('popup', 'catalog_product_attribute_edit_popup'));
             }
-
-            $this->_view->getLayout()->getBlock('root')->addBodyClass('attribute-popup');
+            /** @var \Magento\Framework\View\Page\Config $pageConfig */
+            $pageConfig = $this->_objectManager->get('Magento\Framework\View\Page\Config');
+            $pageConfig->addBodyClass('attribute-popup');
         } else {
             $this->_view->loadLayout();
             $this->_addBreadcrumb(

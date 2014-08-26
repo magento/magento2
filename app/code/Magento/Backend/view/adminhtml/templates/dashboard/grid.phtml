@@ -64,8 +64,6 @@ $numColumns = sizeof($this->getColumns());
 </div>
 <?php if($this->canDisplayContainer()): ?>
 <script type="text/javascript">
-var <?php echo $this->getJsObjectName() ?>;
-
 var deps = ['mage/adminhtml/grid'];
 
 <?php if (strpos($this->getRowClickCallback(), 'order.')!==false): ?>

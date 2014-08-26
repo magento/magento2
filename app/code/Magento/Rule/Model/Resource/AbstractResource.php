@@ -90,67 +90,77 @@ abstract class AbstractResource extends \Magento\Framework\Model\Resource\Db\Abs
      */
     public function bindRuleToEntity($ruleIds, $entityIds, $entityType)
     {
+        $this->_getWriteAdapter()->beginTransaction();
+
+        try {
+            $this->_multiplyBunchInsert($ruleIds, $entityIds, $entityType);
+        } catch (\Exception $e) {
+            $this->_getWriteAdapter()->rollback();
+            throw $e;
+        }
+
+        $this->_getWriteAdapter()->commit();
+
+        return $this;
+    }
+
+    /**
+     * Multiply rule ids by entity ids and insert
+     *
+     * @param int|[] $ruleIds
+     * @param int|[] $entityIds
+     * @param string $entityType
+     * @return $this
+     */
+    protected function _multiplyBunchInsert($ruleIds, $entityIds, $entityType)
+    {
         if (empty($ruleIds) || empty($entityIds)) {
             return $this;
         }
-        $adapter = $this->_getWriteAdapter();
-        $entityInfo = $this->_getAssociatedEntityInfo($entityType);
-
         if (!is_array($ruleIds)) {
             $ruleIds = array((int)$ruleIds);
         }
         if (!is_array($entityIds)) {
             $entityIds = array((int)$entityIds);
         }
-
         $data = array();
         $count = 0;
-
-        $adapter->beginTransaction();
-
-        try {
-            foreach ($ruleIds as $ruleId) {
-                foreach ($entityIds as $entityId) {
-                    $data[] = array(
-                        $entityInfo['entity_id_field'] => $entityId,
-                        $entityInfo['rule_id_field'] => $ruleId
+        $entityInfo = $this->_getAssociatedEntityInfo($entityType);
+        foreach ($ruleIds as $ruleId) {
+            foreach ($entityIds as $entityId) {
+                $data[] = array(
+                    $entityInfo['entity_id_field'] => $entityId,
+                    $entityInfo['rule_id_field'] => $ruleId
+                );
+                $count++;
+                if ($count % 1000 == 0) {
+                    $this->_getWriteAdapter()->insertOnDuplicate(
+                        $this->getTable($entityInfo['associations_table']),
+                        $data,
+                        array($entityInfo['rule_id_field'])
                     );
-                    $count++;
-                    if ($count % 1000 == 0) {
-                        $adapter->insertOnDuplicate(
-                            $this->getTable($entityInfo['associations_table']),
-                            $data,
-                            array($entityInfo['rule_id_field'])
-                        );
-                        $data = array();
-                    }
+                    $data = array();
                 }
             }
-            if (!empty($data)) {
-                $adapter->insertOnDuplicate(
-                    $this->getTable($entityInfo['associations_table']),
-                    $data,
-                    array($entityInfo['rule_id_field'])
-                );
-            }
-
-            $adapter->delete(
+        }
+        if (!empty($data)) {
+            $this->_getWriteAdapter()->insertOnDuplicate(
                 $this->getTable($entityInfo['associations_table']),
-                $adapter->quoteInto(
-                    $entityInfo['rule_id_field'] . ' IN (?) AND ',
-                    $ruleIds
-                ) . $adapter->quoteInto(
-                    $entityInfo['entity_id_field'] . ' NOT IN (?)',
-                    $entityIds
-                )
+                $data,
+                array($entityInfo['rule_id_field'])
             );
-        } catch (\Exception $e) {
-            $adapter->rollback();
-            throw $e;
         }
 
-        $adapter->commit();
-
+        $this->_getWriteAdapter()->delete(
+            $this->getTable($entityInfo['associations_table']),
+            $this->_getWriteAdapter()->quoteInto(
+                $entityInfo['rule_id_field'] . ' IN (?) AND ',
+                $ruleIds
+            ) . $this->_getWriteAdapter()->quoteInto(
+                $entityInfo['entity_id_field'] . ' NOT IN (?)',
+                $entityIds
+            )
+        );
         return $this;
     }
 

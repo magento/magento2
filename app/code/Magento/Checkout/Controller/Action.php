@@ -86,7 +86,7 @@ abstract class Action extends \Magento\Framework\App\Action\Action
         if (isset($customer)) {
             $validationResult = $this->_customerAccountService->validateCustomerData(
                 $customer,
-                $this->_customerMetadataService->getAllCustomerAttributeMetadata()
+                $this->_customerMetadataService->getAllAttributesMetadata()
             );
             if (!$validationResult->isValid()) {
                 if ($addErrors) {

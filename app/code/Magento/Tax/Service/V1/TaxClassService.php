@@ -39,6 +39,7 @@ use Magento\Tax\Service\V1\Data\TaxClassSearchResultsBuilder;
 use Magento\Tax\Service\V1\Data\TaxClass as TaxClassDataObject;
 use Magento\Tax\Service\V1\Data\TaxClassKey;
 use Magento\Framework\Exception\CouldNotDeleteException;
+use Magento\Framework\Service\V1\Data\SortOrder;
 
 /**
  * Tax class service.
@@ -247,9 +248,13 @@ class TaxClassService implements TaxClassServiceInterface
         }
         $this->searchResultsBuilder->setTotalCount($collection->getSize());
         $sortOrders = $searchCriteria->getSortOrders();
+        /** @var SortOrder $sortOrder */
         if ($sortOrders) {
-            foreach ($searchCriteria->getSortOrders() as $field => $direction) {
-                $collection->addOrder($field, $direction == SearchCriteria::SORT_ASC ? 'ASC' : 'DESC');
+            foreach ($searchCriteria->getSortOrders() as $sortOrder) {
+                $collection->addOrder(
+                    $sortOrder->getField(),
+                    ($sortOrder->getDirection() == SearchCriteria::SORT_ASC) ? 'ASC' : 'DESC'
+                );
             }
         }
         $collection->setCurPage($searchCriteria->getCurrentPage());

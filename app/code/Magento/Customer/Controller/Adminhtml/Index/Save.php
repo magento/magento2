@@ -28,6 +28,7 @@ use Magento\Customer\Controller\RegistryConstants;
 use Magento\Customer\Service\V1\Data\Customer;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Customer\Service\V1\CustomerMetadataServiceInterface as CustomerMetadata;
+use Magento\Customer\Service\V1\AddressMetadataServiceInterface as AddressMetadata;
 
 class Save extends \Magento\Customer\Controller\Adminhtml\Index
 {
@@ -87,7 +88,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                 $addressData = $customerHelper->extractCustomerData(
                     $this->getRequest(),
                     'adminhtml_customer_address',
-                    CustomerMetadata::ENTITY_TYPE_ADDRESS,
+                    AddressMetadata::ENTITY_TYPE_ADDRESS,
                     array(),
                     $scope
                 );

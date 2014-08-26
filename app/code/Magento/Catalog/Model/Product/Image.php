@@ -122,7 +122,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
     /**
      * @var int
      */
-    protected $_watermarkHeigth;
+    protected $_watermarkHeight;
 
     /**
      * @var int
@@ -212,7 +212,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
         $this->_coreFileStorageDatabase = $coreFileStorageDatabase;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->_mediaDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::MEDIA_DIR);
-        $this->_mediaDirectory->create($this->_catalogProductMediaConfig->getBaseMediaPath());
+        $result = $this->_mediaDirectory->create($this->_catalogProductMediaConfig->getBaseMediaPath());
         $this->_imageFactory = $imageFactory;
         $this->_assetRepo = $assetRepo;
         $this->_viewFileSystem = $viewFileSystem;
@@ -621,10 +621,10 @@ class Image extends \Magento\Framework\Model\AbstractModel
      *
      * @param string $file
      * @param string $position
-     * @param string $size
+     * @param array $size ['width' => int, 'height' => int]
      * @param int $width
-     * @param int $heigth
-     * @param int $imageOpacity
+     * @param int $height
+     * @param int $opacity
      * @return $this
      */
     public function setWatermark(
@@ -632,8 +632,8 @@ class Image extends \Magento\Framework\Model\AbstractModel
         $position = null,
         $size = null,
         $width = null,
-        $heigth = null,
-        $imageOpacity = null
+        $height = null,
+        $opacity = null
     ) {
         if ($this->_isBaseFilePlaceholder) {
             return $this;
@@ -654,11 +654,11 @@ class Image extends \Magento\Framework\Model\AbstractModel
         if ($width) {
             $this->setWatermarkWidth($width);
         }
-        if ($heigth) {
-            $this->setWatermarkHeight($heigth);
+        if ($height) {
+            $this->setWatermarkHeight($height);
         }
-        if ($imageOpacity) {
-            $this->setImageOpacity($imageOpacity);
+        if ($opacity) {
+            $this->setWatermarkImageOpacity($opacity);
         }
         $filePath = $this->_getWatermarkFilePath();
 
@@ -843,7 +843,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
     public function setWatermarkSize($size)
     {
         if (is_array($size)) {
-            $this->setWatermarkWidth($size['width'])->setWatermarkHeight($size['heigth']);
+            $this->setWatermarkWidth($size['width'])->setWatermarkHeight($size['height']);
         }
         return $this;
     }
@@ -878,7 +878,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      */
     public function setWatermarkHeight($height)
     {
-        $this->_watermarkHeigth = $height;
+        $this->_watermarkHeight = $height;
         return $this;
     }
 
@@ -889,7 +889,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      */
     public function getWatermarkHeight()
     {
-        return $this->_watermarkHeigth;
+        return $this->_watermarkHeight;
     }
 
     /**

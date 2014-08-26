@@ -95,7 +95,7 @@ class Base implements CollectorInterface
             $moduleFull = "{$matches['namespace']}_{$matches['module']}";
             $result[] = $this->fileFactory->create($filename, $moduleFull, null, true);
         }
-        $area = $theme->getArea();
+        $area = $theme->getData('area');
         $themeFiles = $this->modulesDirectory->search("{$namespace}/{$module}/view/{$area}/{$this->subDir}{$filePath}");
         $pattern = "#(?<namespace>[^/]+)/(?<module>[^/]+)/view/{$area}/{$this->subDir}" . $filePathPtn . "$#i";
         foreach ($themeFiles as $file) {

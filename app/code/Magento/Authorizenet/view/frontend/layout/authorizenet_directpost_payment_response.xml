@@ -23,6 +23,8 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
-    <block class="Magento\Authorizenet\Block\Directpost\Iframe" name="iframe" output="1" template="directpost/iframe.phtml"/>
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_generic.xsd">
+    <container name="root">
+        <block class="Magento\Authorizenet\Block\Directpost\Iframe" name="iframe" template="directpost/iframe.phtml"/>
+    </container>
 </layout>

@@ -25,7 +25,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <referenceBlock name="integration.activate.permissions.tabs">
         <block class="Magento\Webapi\Block\Adminhtml\Integration\Activate\Permissions\Tab\Webapi" name="integration_activate_permissions_tabs_webapi" template="integration/activate/permissions/tab/webapi.phtml"/>
         <action method="addTab">
@@ -33,4 +33,4 @@
             <argument name="block" xsi:type="string">integration_activate_permissions_tabs_webapi</argument>
         </action>
     </referenceBlock>
-</layout>
+</page>

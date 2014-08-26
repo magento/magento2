@@ -23,8 +23,8 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
-    <referenceBlock name="root">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
+    <referenceBlock name="backend.page">
         <action method="setTemplate">
             <argument name="file" xsi:type="string">Magento_DesignEditor::editor.phtml</argument>
         </action>
@@ -86,4 +86,4 @@
         </block>
         <block class="Magento\Backend\Block\Template" name="theme.dialog" template="Magento_DesignEditor::dialog.phtml"/>
     </referenceContainer>
-</layout>
+</page>

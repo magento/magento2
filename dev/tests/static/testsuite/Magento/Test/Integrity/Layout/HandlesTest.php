@@ -91,23 +91,4 @@ class HandlesTest extends \PHPUnit_Framework_TestCase
             \Magento\TestFramework\Utility\Files::init()->getLayoutFiles()
         );
     }
-
-    public function testLayoutFormat()
-    {
-        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
-        $invoker(
-            /**
-             * Test format of a layout file using XSD
-             *
-             * @param string $layoutFile
-             */
-            function ($layoutFile) {
-                $schemaFile = BP . '/app/code/Magento/Core/etc/layout_single.xsd';
-                $domLayout = new \Magento\Framework\Config\Dom(file_get_contents($layoutFile));
-                $result = $domLayout->validate($schemaFile, $errors);
-                $this->assertTrue($result, print_r($errors, true));
-            },
-            \Magento\TestFramework\Utility\Files::init()->getLayoutFiles()
-        );
-    }
 }

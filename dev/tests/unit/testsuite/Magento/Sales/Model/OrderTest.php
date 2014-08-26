@@ -91,17 +91,16 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['isDeleted', 'canReviewPayment', 'canFetchTransactionInfo'])
             ->getMock();
-        $paymentMock->expects($this->once())
+        $paymentMock->expects($this->any())
             ->method('canReviewPayment')
             ->will($this->returnValue(false));
-        $paymentMock->expects($this->once())
+        $paymentMock->expects($this->any())
             ->method('canFetchTransactionInfo')
             ->will($this->returnValue(true));
 
         $this->preparePaymentMock($paymentMock);
-
         $this->order->setActionFlag(\Magento\Sales\Model\Order::ACTION_FLAG_UNHOLD, false);
-        $this->order->setState(\Magento\Sales\Model\Order::STATE_NEW);
+        $this->order->setState(\Magento\Sales\Model\Order::STATE_PAYMENT_REVIEW);
         $this->assertFalse($this->order->canCancel());
     }
 
@@ -111,10 +110,10 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['isDeleted', 'canReviewPayment', 'canFetchTransactionInfo'])
             ->getMock();
-        $paymentMock->expects($this->once())
+        $paymentMock->expects($this->any())
             ->method('canReviewPayment')
             ->will($this->returnValue(false));
-        $paymentMock->expects($this->once())
+        $paymentMock->expects($this->any())
             ->method('canFetchTransactionInfo')
             ->will($this->returnValue(false));
 
@@ -133,10 +132,10 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['isDeleted', 'canReviewPayment', 'canFetchTransactionInfo'])
             ->getMock();
-        $paymentMock->expects($this->once())
+        $paymentMock->expects($this->any())
             ->method('canReviewPayment')
             ->will($this->returnValue(false));
-        $paymentMock->expects($this->once())
+        $paymentMock->expects($this->any())
             ->method('canFetchTransactionInfo')
             ->will($this->returnValue(false));
 
@@ -158,10 +157,10 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['isDeleted', 'canReviewPayment', 'canFetchTransactionInfo'])
             ->getMock();
-        $paymentMock->expects($this->once())
+        $paymentMock->expects($this->any())
             ->method('canReviewPayment')
             ->will($this->returnValue(false));
-        $paymentMock->expects($this->once())
+        $paymentMock->expects($this->any())
             ->method('canFetchTransactionInfo')
             ->will($this->returnValue(false));
 
@@ -210,7 +209,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         if ($canVoidOrder) {
             $expected = 'some value';
             $payment->expects(
-                $this->once()
+                $this->any()
             )->method(
                 'canVoid'
             )->with(
@@ -238,11 +237,11 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         $collectionMock->expects($this->any())
             ->method('getIterator')
             ->will($this->returnValue($iterator));
-        $collectionMock->expects($this->once())
+        $collectionMock->expects($this->any())
             ->method('setOrderFilter')
             ->will($this->returnSelf());
 
-        $this->paymentCollectionFactoryMock->expects($this->once())
+        $this->paymentCollectionFactoryMock->expects($this->any())
             ->method('create')
             ->will($this->returnValue($collectionMock));
     }
@@ -315,7 +314,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['isDeleted', 'filterByTypes', 'filterByParent', 'getQtyToInvoice'])
             ->getMock();
 
-        $itemMock->expects($this->once())
+        $itemMock->expects($this->any())
             ->method('getQtyToInvoice')
             ->will($this->returnValue($qtyInvoiced));
 
@@ -328,11 +327,11 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         $itemCollectionMock->expects($this->any())
             ->method('getIterator')
             ->will($this->returnValue($iterator));
-        $itemCollectionMock->expects($this->once())
+        $itemCollectionMock->expects($this->any())
             ->method('setOrderFilter')
             ->will($this->returnSelf());
 
-        $this->orderItemCollectionFactoryMock->expects($this->once())
+        $this->orderItemCollectionFactoryMock->expects($this->any())
             ->method('create')
             ->will($this->returnValue($itemCollectionMock));
     }

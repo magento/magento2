@@ -361,7 +361,7 @@ class Onepage
 
         $address = $this->getQuote()->getBillingAddress();
         $addressForm = $this->_formFactory->create(
-            \Magento\Customer\Service\V1\CustomerMetadataServiceInterface::ENTITY_TYPE_ADDRESS,
+            \Magento\Customer\Service\V1\AddressMetadataServiceInterface::ENTITY_TYPE_ADDRESS,
             'customer_address_edit',
             array(),
             $this->_request->isAjax(),

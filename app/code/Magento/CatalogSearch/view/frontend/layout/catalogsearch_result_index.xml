@@ -23,9 +23,8 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
-    <update handle="page_two_columns_left"/>
-    <referenceBlock name="root">
+<page layout="2columns-left" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
+    <referenceBlock name="body.class">
         <action method="addBodyClass">
             <argument name="class" xsi:type="string">page-products</argument>
         </action>
@@ -51,4 +50,4 @@
             <action method="setListCollection"/>
         </block>
     </referenceContainer>
-</layout>
+</page>

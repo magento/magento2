@@ -23,6 +23,6 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout>
+<page>
     <container name="product.info.extrahint" as="extrahint" label="Product View Extra Hint"/>
-</layout>
+</page>

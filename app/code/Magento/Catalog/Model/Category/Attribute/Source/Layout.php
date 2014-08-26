@@ -31,20 +31,16 @@ namespace Magento\Catalog\Model\Category\Attribute\Source;
 class Layout extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
     /**
-     * Page source layout
-     *
-     * @var \Magento\Theme\Model\Layout\Source\Layout
+     * @var \Magento\Core\Model\PageLayout\Config\Builder
      */
-    protected $_pageSourceLayout;
+    protected $pageLayoutBuilder;
 
     /**
-     * Construct
-     *
-     * @param \Magento\Theme\Model\Layout\Source\Layout $pageSourceLayout
+     * @param \Magento\Core\Model\PageLayout\Config\Builder $pageLayoutBuilder
      */
-    public function __construct(\Magento\Theme\Model\Layout\Source\Layout $pageSourceLayout)
+    public function __construct(\Magento\Core\Model\PageLayout\Config\Builder $pageLayoutBuilder)
     {
-        $this->_pageSourceLayout = $pageSourceLayout;
+        $this->pageLayoutBuilder = $pageLayoutBuilder;
     }
 
     /**
@@ -53,7 +49,7 @@ class Layout extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     public function getAllOptions()
     {
         if (!$this->_options) {
-            $this->_options = $this->_pageSourceLayout->toOptionArray();
+            $this->_options = $this->pageLayoutBuilder->getPageLayoutsConfig()->toOptionArray();
             array_unshift($this->_options, array('value' => '', 'label' => __('No layout updates')));
         }
         return $this->_options;

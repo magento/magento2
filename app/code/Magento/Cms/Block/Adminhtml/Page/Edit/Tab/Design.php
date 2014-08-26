@@ -40,11 +40,17 @@ class Design extends \Magento\Backend\Block\Widget\Form\Generic implements
     protected $_pageLayout;
 
     /**
+     * @var \Magento\Core\Model\PageLayout\Config\Builder
+     */
+    protected $pageLayoutBuilder;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Theme\Model\Layout\Source\Layout $pageLayout
      * @param \Magento\Framework\View\Design\Theme\LabelFactory $labelFactory
+     * @param \Magento\Core\Model\PageLayout\Config\Builder $pageLayoutBuilder
      * @param array $data
      */
     public function __construct(
@@ -53,8 +59,10 @@ class Design extends \Magento\Backend\Block\Widget\Form\Generic implements
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Theme\Model\Layout\Source\Layout $pageLayout,
         \Magento\Framework\View\Design\Theme\LabelFactory $labelFactory,
+        \Magento\Core\Model\PageLayout\Config\Builder $pageLayoutBuilder,
         array $data = array()
     ) {
+        $this->pageLayoutBuilder = $pageLayoutBuilder;
         $this->_labelFactory = $labelFactory;
         $this->_pageLayout = $pageLayout;
         parent::__construct($context, $registry, $formFactory, $data);
@@ -95,13 +103,13 @@ class Design extends \Magento\Backend\Block\Widget\Form\Generic implements
         );
 
         $layoutFieldset->addField(
-            'root_template',
+            'page_layout',
             'select',
             array(
-                'name' => 'root_template',
+                'name' => 'page_layout',
                 'label' => __('Layout'),
                 'required' => true,
-                'values' => $this->_pageLayout->toOptionArray(),
+                'values' => $this->pageLayoutBuilder->getPageLayoutsConfig()->toOptionArray(),
                 'disabled' => $isElementDisabled
             )
         );
@@ -168,12 +176,12 @@ class Design extends \Magento\Backend\Block\Widget\Form\Generic implements
         );
 
         $designFieldset->addField(
-            'custom_root_template',
+            'custom_page_layout',
             'select',
             array(
-                'name' => 'custom_root_template',
+                'name' => 'custom_page_layout',
                 'label' => __('Custom Layout'),
-                'values' => $this->_pageLayout->toOptionArray(true),
+                'values' => $this->pageLayoutBuilder->getPageLayoutsConfig()->toOptionArray(true),
                 'disabled' => $isElementDisabled
             )
         );

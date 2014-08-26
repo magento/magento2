@@ -41,4 +41,24 @@
             <argument name="layer" xsi:type="object">Magento\CatalogSearch\Model\Layer\Advanced</argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\Product">
+        <plugin name="catalogsearchFulltextProduct" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Product"/>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Action">
+        <plugin name="catalogsearchFulltextMassAction" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Product\Action"/>
+    </type>
+    <type name="Magento\Store\Model\Resource\Store">
+        <plugin name="catalogsearchFulltextIndexerStoreView" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Store\View" />
+    </type>
+    <type name="Magento\Store\Model\Resource\Group">
+        <plugin name="catalogsearchFulltextIndexerStoreGroup" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Store\Group"/>
+    </type>
+    <type name="Magento\Catalog\Model\Resource\Attribute">
+        <plugin name="catalogsearchFulltextIndexerAttribute" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Attribute"/>
+    </type>
+    <type name="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\AbstractPlugin">
+        <arguments>
+            <argument name="indexer" xsi:type="object" shared="false">Magento\Indexer\Model\IndexerInterface</argument>
+        </arguments>
+    </type>
 </config>

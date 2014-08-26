@@ -23,6 +23,8 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
-    <block class="Magento\Centinel\Block\Authentication\Start" name="root" output="1" template="authentication/start.phtml" cacheable="false"/>
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_generic.xsd">
+    <container name="root">
+        <block class="Magento\Centinel\Block\Authentication\Start" name="page.block" template="authentication/start.phtml" cacheable="false"/>
+    </container>
 </layout>

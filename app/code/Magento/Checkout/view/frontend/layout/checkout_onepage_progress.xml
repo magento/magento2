@@ -23,14 +23,16 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_generic.xsd">
     <update handle="checkout_shipping_price_renderer" />
-    <block class="Magento\Checkout\Block\Onepage\Progress" name="progress" output="1" template="onepage/progress.phtml">
-        <block class="Magento\Checkout\Block\Onepage\Payment\Info" name="payment_info" cacheable="false">
-            <action method="setInfoTemplate">
-                <argument name="method" xsi:type="string"/>
-                <argument name="template" xsi:type="string"/>
-            </action>
+    <container name="root">
+        <block class="Magento\Checkout\Block\Onepage\Progress" name="progress" template="onepage/progress.phtml">
+            <block class="Magento\Checkout\Block\Onepage\Payment\Info" name="payment_info" cacheable="false">
+                <action method="setInfoTemplate">
+                    <argument name="method" xsi:type="string"/>
+                    <argument name="template" xsi:type="string"/>
+                </action>
+            </block>
         </block>
-    </block>
+    </container>
 </layout>

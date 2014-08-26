@@ -25,7 +25,11 @@
 -->
 <page>
     <wishlistIndex>
-        <mca>wishlist/index/index</mca>
+        <mca>wishlist/index</mca>
         <class>Magento\Wishlist\Test\Page\WishlistIndex</class>
     </wishlistIndex>
+    <wishlistShare>
+        <mca>wishlist/index/share</mca>
+        <class>Magento\Wishlist\Test\Page\WishlistShare</class>
+    </wishlistShare>
 </page>

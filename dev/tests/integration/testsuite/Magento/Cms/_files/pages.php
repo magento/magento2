@@ -29,7 +29,7 @@ $page->setTitle('Cms Page 100')
     ->setStores(array(0))
     ->setIsActive(1)
     ->setContent('<h1>Cms Page 100 Title</h1>')
-    ->setRootTemplate('one_column')
+    ->setPageLayout('1column')
     ->save();
 
 $page = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Cms\Model\Page');
@@ -38,6 +38,6 @@ $page->setTitle('Cms Page Design Blank')
     ->setStores(array(0))
     ->setIsActive(1)
     ->setContent('<h1>Cms Page Design Blank Title</h1>')
-    ->setRootTemplate('one_column')
+    ->setPageLayout('1column')
     ->setCustomTheme('Magento/blank')
     ->save();

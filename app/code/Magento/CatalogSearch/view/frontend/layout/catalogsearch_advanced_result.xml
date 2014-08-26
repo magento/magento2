@@ -23,14 +23,13 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
-    <update handle="page_two_columns_left"/>
+<page layout="2columns-left" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <referenceBlock name="page.main.title">
         <action method="setPageTitle">
             <argument translate="true" name="title" xsi:type="string">Catalog Advanced Search</argument>
         </action>
     </referenceBlock>
-    <referenceBlock name="root">
+    <referenceBlock name="body.class">
         <action method="addBodyClass">
             <argument name="class" xsi:type="string">page-products</argument>
         </action>
@@ -50,4 +49,4 @@
             <action method="setListCollection"/>
         </block>
     </referenceContainer>
-</layout>
+</page>

@@ -29,6 +29,7 @@ use Magento\Customer\Service\V1\CustomerGroupServiceInterface;
 use Magento\Customer\Service\V1\Data\CustomerGroup;
 use Magento\Framework\Service\V1\Data\FilterBuilder;
 use Magento\Framework\Service\V1\Data\SearchCriteriaBuilder;
+use Magento\Framework\Service\V1\Data\SortOrderBuilder;
 
 /**
  * Customer group collection backed by services
@@ -45,14 +46,16 @@ class ServiceCollection extends AbstractServiceCollection
      * @param FilterBuilder $filterBuilder
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param CustomerGroupServiceInterface $groupService
+     * @param SortOrderBuilder $sortOrderBuilder
      */
     public function __construct(
         EntityFactory $entityFactory,
         FilterBuilder $filterBuilder,
         SearchCriteriaBuilder $searchCriteriaBuilder,
+        SortOrderBuilder $sortOrderBuilder,
         CustomerGroupServiceInterface $groupService
     ) {
-        parent::__construct($entityFactory, $filterBuilder, $searchCriteriaBuilder);
+        parent::__construct($entityFactory, $filterBuilder, $searchCriteriaBuilder, $sortOrderBuilder);
         $this->groupService = $groupService;
     }
 

@@ -23,9 +23,9 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <referenceBlock name="checkout.cart.item.renderers">
         <block class="Magento\ConfigurableProduct\Block\Cart\Item\Renderer\Configurable" as="configurable" template="Magento_Checkout::cart/item/default.phtml" cacheable="false"/>
     </referenceBlock>
-</layout>
+</page>
 

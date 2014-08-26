@@ -143,7 +143,7 @@ var linkTemplate = '<tr>'+
                 '</div>'+
             '</div>'+
             '<div class="row">'+
-                '<label for="downloadable_link_{{id}}_sample_url_type"><input type="radio" class="radio" id="downloadable_link_{{id}}_sample_url_type" name="downloadable[link][{{id}}][sample][type]" value="url"{{sample_url_checked}} /> URL:</label><input type="text" class="input-text validate-downloadable-url" name="downloadable[link][{{id}}][sample][url]" value="{{sample_url}}" />'+
+                '<label for="downloadable_link_{{id}}_sample_url_type"><input type="radio" class="radio" id="downloadable_link_{{id}}_sample_url_type" name="downloadable[link][{{id}}][sample][type]" value="url"{{sample_url_checked}} /> URL:</label><input type="text" class="input-text validate-downloadable-url validate-url" name="downloadable[link][{{id}}][sample][url]" value="{{sample_url}}" />'+
             '</div>'+
             '<div>'+
                 '<span id="downloadable_link_{{id}}_sample_container"></span>'+
@@ -171,7 +171,7 @@ var linkTemplate = '<tr>'+
                 '</div>'+
             '</div>'+
             '<div class="row">'+
-                '<label for="downloadable_link_{{id}}_url_type"><input type="radio" class="radio validate-one-required-by-name" id="downloadable_link_{{id}}_url_type" name="downloadable[link][{{id}}][type]" value="url"{{url_checked}} /> URL:</label><input type="text" class="validate-downloadable-url input-text" name="downloadable[link][{{id}}][link_url]" value="{{link_url}}" />'+
+                '<label for="downloadable_link_{{id}}_url_type"><input type="radio" class="radio validate-one-required-by-name" id="downloadable_link_{{id}}_url_type" name="downloadable[link][{{id}}][type]" value="url"{{url_checked}} /> URL:</label><input type="text" class="validate-downloadable-url validate-url input-text" name="downloadable[link][{{id}}][link_url]" value="{{link_url}}" />'+
             '</div>'+
             '<div>'+
                 '<span id="downloadable_link_{{id}}_link_container"></span>'+

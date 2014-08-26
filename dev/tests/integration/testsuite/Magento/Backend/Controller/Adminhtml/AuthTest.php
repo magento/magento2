@@ -157,6 +157,7 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractController
 
     /**
      * @covers \Magento\Backend\Controller\Adminhtml\Auth\DeniedJson::execute
+     * @covers \Magento\Backend\Controller\Adminhtml\Auth\DeniedJson::_getDeniedJson
      * @magentoDbIsolation enabled
      */
     public function testDeniedJsonAction()
@@ -176,6 +177,7 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractController
 
     /**
      * @covers \Magento\Backend\Controller\Adminhtml\Auth\DeniedIframe::execute
+     * @covers \Magento\Backend\Controller\Adminhtml\Auth\DeniedIframe::_getDeniedIframe
      * @magentoDbIsolation enabled
      */
     public function testDeniedIframeAction()

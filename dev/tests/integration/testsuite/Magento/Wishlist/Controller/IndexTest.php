@@ -130,6 +130,29 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
+     * @magentoConfigFixture current_store rss/wishlist/active 1
+     * @magentoDataFixture Magento/Wishlist/_files/wishlist.php
+     * @magentoAppIsolation enabled
+     */
+    public function testRssAction()
+    {
+        $wishlist = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Wishlist\Model\Wishlist'
+        );
+        $wishlist->load('fixture_unique_code', 'sharing_code');
+        $this->getRequest()->setParam('wishlist_id', $wishlist->getId())->setParam('data', base64_encode('1'));
+        $session = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Customer\Model\Session');
+        $service = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Customer\Service\V1\CustomerAccountService'
+        );
+        $customer = $service->authenticate('customer@example.com', 'password');
+        $session->setCustomerDataAsLoggedIn($customer);
+
+        $this->dispatch('wishlist/index/rss');
+        $this->assertContains('<![CDATA[Simple Product]]>', $this->getResponse()->getBody());
+    }
+
+    /**
      * @magentoDataFixture Magento/Wishlist/_files/wishlist.php
      */
     public function testSendAction()

@@ -21,46 +21,24 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
 namespace Magento\Catalog\Service\V1\Data;
 
-use Magento\Catalog\Service\V1\Product\MetadataServiceInterface;
 use Magento\Framework\Service\Data\Eav\AttributeValueBuilder;
 
 class ProductBuilder extends \Magento\Framework\Service\Data\Eav\AbstractObjectBuilder
 {
     /**
-     * @var MetadataServiceInterface
-     */
-    protected $metadataService;
-
-    /**
-     * Initialize dependencies.
-     *
      * @param \Magento\Framework\Service\Data\ObjectFactory $objectFactory
      * @param AttributeValueBuilder $valueBuilder
-     * @param MetadataServiceInterface $metadataService
+     * @param \Magento\Catalog\Service\V1\Product\MetadataServiceInterface $metadataService
      */
     public function __construct(
         \Magento\Framework\Service\Data\ObjectFactory $objectFactory,
         AttributeValueBuilder $valueBuilder,
-        MetadataServiceInterface $metadataService
+        \Magento\Catalog\Service\V1\Product\MetadataServiceInterface $metadataService
     ) {
-        parent::__construct($objectFactory, $valueBuilder);
-        $this->metadataService = $metadataService;
-    }
-
-    /**
-     * Template method used to configure the attribute codes for the product attributes
-     *
-     * @return string[]
-     */
-    public function getCustomAttributesCodes()
-    {
-        $attributeCodes = array();
-        foreach ($this->metadataService->getCustomAttributesMetadata() as $attribute) {
-            $attributeCodes[] = $attribute->getAttributeCode();
-        }
-        return $attributeCodes;
+        parent::__construct($objectFactory, $valueBuilder, $metadataService);
     }
 
     /**

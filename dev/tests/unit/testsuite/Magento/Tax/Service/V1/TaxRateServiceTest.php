@@ -29,6 +29,7 @@ use Magento\Tax\Service\V1\Data\TaxRate;
 use Magento\TestFramework\Helper\ObjectManager;
 use Magento\Framework\Service\V1\Data\SearchCriteriaBuilder;
 use Magento\Tax\Model\Calculation\RateFactory;
+use Magento\Framework\Service\V1\Data\SearchCriteria;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -84,6 +85,16 @@ class TaxRateServiceTest extends \PHPUnit_Framework_TestCase
      */
     private $taxRateBuilder;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Directory\Model\CountryFactory
+     */
+    private $countryFactoryMock;
+
+    /**
+     * @var  \PHPUnit_Framework_MockObject_MockObject | \Magento\Directory\Model\RegionFactory
+     */
+    private $regionFactoryMock;
+
     public function setUp()
     {
         $this->objectManager = new ObjectManager($this);
@@ -97,8 +108,8 @@ class TaxRateServiceTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->rateFactoryMock = $this->getMockBuilder('Magento\Tax\Model\Calculation\RateFactory')
-        ->disableOriginalConstructor()
-        ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->taxRateSearchResultsBuilder = $this->objectManager->getObject(
             'Magento\Tax\Service\V1\Data\TaxRateSearchResultsBuilder'
         );
@@ -109,6 +120,30 @@ class TaxRateServiceTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\Service\V1\Data\SearchCriteriaBuilder',
             ['filterGroupBuilder' => $filterGroupBuilder]
         );
+
+        $this->countryFactoryMock = $this->getMockBuilder('Magento\Directory\Model\CountryFactory')
+            ->disableOriginalConstructor()->setMethods(['create'])
+            ->getMock();
+        $countryMock = $this->getMockBuilder('Magento\Directory\Model\Country')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $countryMock->expects($this->any())->method('loadByCode')->will($this->returnValue($countryMock));
+        $countryMock->expects($this->any())->method('getId')->will($this->returnValue('valid'));
+        $this->countryFactoryMock->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($countryMock));
+
+        $this->regionFactoryMock = $this->getMockBuilder('Magento\Directory\Model\RegionFactory')
+            ->disableOriginalConstructor()->setMethods(['create'])
+            ->getMock();
+        $regionMock = $this->getMockBuilder('Magento\Directory\Model\Region')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $regionMock->expects($this->any())->method('load')->will($this->returnValue($regionMock));
+        $regionMock->expects($this->any())->method('getId')->will($this->returnValue('valid'));
+        $this->regionFactoryMock->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($regionMock));
 
         $zipRangeBuilder = $this->objectManager->getObject('Magento\Tax\Service\V1\Data\ZipRangeBuilder');
         $this->taxRateBuilder = $this->objectManager->getObject(
@@ -128,14 +163,14 @@ class TaxRateServiceTest extends \PHPUnit_Framework_TestCase
             'zip_range' => ['from' => 78765, 'to' => 78780]
         ];
 
-        $taxRateDataObject =   $this->taxRateBuilder->populateWithArray($taxData)->create();
+        $taxRateDataObject = $this->taxRateBuilder->populateWithArray($taxData)->create();
         $this->rateModelMock->expects($this->once())
             ->method('save')
             ->will($this->returnValue($this->rateModelMock));
         $this->converterMock->expects($this->once())
             ->method('createTaxRateModel')
             ->will($this->returnValue($this->rateModelMock));
-        $taxRate =   $this->taxRateBuilder->populate($taxRateDataObject)->setPostcode('78765-78780')->create();
+        $taxRate = $this->taxRateBuilder->populate($taxRateDataObject)->setPostcode('78765-78780')->create();
         $this->converterMock->expects($this->once())
             ->method('createTaxRateDataObjectFromModel')
             ->will($this->returnValue($taxRate));
@@ -183,6 +218,141 @@ class TaxRateServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException \Magento\Framework\Exception\InputException
+     * @expectedExceptionMessage Invalid value of "XX" provided for the country_id field.
+     */
+    public function testCreateTaxRateWithInputException_invalidCountry()
+    {
+        $taxData = [
+            'country_id' => 'XX',
+            'region_id' => '8',
+            'percentage_rate' => '8.25',
+            'code' => 'US-CA-*-Rate',
+            'zip_range' => ['from' => 78765, 'to' => 78780]
+        ];
+
+        // create mock country object with invalid country
+        $this->countryFactoryMock = $this->getMockBuilder('Magento\Directory\Model\CountryFactory')
+            ->disableOriginalConstructor()->setMethods(['create'])
+            ->getMock();
+        $countryMock = $this->getMockBuilder('Magento\Directory\Model\Country')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $countryMock->expects($this->any())
+            ->method('loadByCode')
+            ->will($this->returnValue($countryMock));
+        $countryMock->expects($this->any())
+            ->method('getId')
+            ->will($this->returnValue(null));
+        $this->countryFactoryMock->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($countryMock));
+
+        // recreate the service with new countryMock values
+        $this->createService();
+
+        $taxRateDataObject = $this->taxRateBuilder->populateWithArray($taxData)->create();
+        $this->taxRateService->createTaxRate($taxRateDataObject);
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\InputException
+     * @expectedExceptionMessage country_id is a required field.
+     */
+    public function testCreateTaxRateWithInputException_spaceCountry()
+    {
+        $taxData = [
+            'country_id' => ' ',
+            'region_id' => '8',
+            'percentage_rate' => '8.25',
+            'code' => 'US-CA-*-Rate',
+            'zip_range' => ['from' => 78765, 'to' => 78780]
+        ];
+
+        // create mock country object with invalid country
+        $this->countryFactoryMock = $this->getMockBuilder('Magento\Directory\Model\CountryFactory')
+            ->disableOriginalConstructor()->setMethods(['create'])
+            ->getMock();
+        $countryMock = $this->getMockBuilder('Magento\Directory\Model\Country')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $countryMock->expects($this->any())->method('loadByCode')->will($this->returnValue($countryMock));
+        $countryMock->expects($this->any())->method('getId')->will($this->returnValue(null));
+
+        // recreate the service with new countryMock values
+        $this->createService();
+
+        $taxRateDataObject = $this->taxRateBuilder->populateWithArray($taxData)->create();
+        $this->taxRateService->createTaxRate($taxRateDataObject);
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\InputException
+     * @expectedExceptionMessage Invalid value of "-" provided for the region_id field.
+     */
+    public function testCreateTaxRateWithInputException_invalidRegion()
+    {
+        $taxData = [
+            'country_id' => 'US',
+            'region_id' => '-',
+            'percentage_rate' => '8.25',
+            'code' => 'US-CA-*-Rate',
+            'zip_range' => ['from' => 78765, 'to' => 78780]
+        ];
+
+        // create mock country object with invalid region
+        $this->regionFactoryMock = $this->getMockBuilder('Magento\Directory\Model\RegionFactory')
+            ->disableOriginalConstructor()->setMethods(['create'])
+            ->getMock();
+        $regionMock = $this->getMockBuilder('Magento\Directory\Model\Region')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $regionMock->expects($this->any())
+            ->method('load')
+            ->will($this->returnValue($regionMock));
+        $regionMock->expects($this->any())
+            ->method('getId')
+            ->will($this->returnValue(null));
+        $this->regionFactoryMock->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($regionMock));
+
+        // recreate the service with new regionMock values
+        $this->createService();
+
+        $taxRateDataObject = $this->taxRateBuilder->populateWithArray($taxData)->create();
+        $this->taxRateService->createTaxRate($taxRateDataObject);
+    }
+
+    public function testCreateTaxRateWithInputException_spaceRegion()
+    {
+        $taxData = [
+            'country_id' => 'US',
+            'region_id' => ' ',
+            'percentage_rate' => '8.25',
+            'code' => 'US-CA-*-Rate',
+            'zip_range' => ['from' => 78765, 'to' => 78780]
+        ];
+
+        $taxRateDataObject =   $this->taxRateBuilder->populateWithArray($taxData)->create();
+        $this->rateModelMock->expects($this->once())
+            ->method('save')
+            ->will($this->returnValue($this->rateModelMock));
+        $this->converterMock->expects($this->once())
+            ->method('createTaxRateModel')
+            ->will($this->returnValue($this->rateModelMock));
+        $taxRate =   $this->taxRateBuilder->populate($taxRateDataObject)->setPostcode('78765-78780')->create();
+        $this->converterMock->expects($this->once())
+            ->method('createTaxRateDataObjectFromModel')
+            ->will($this->returnValue($taxRate));
+
+        $taxRateServiceData = $this->taxRateService->createTaxRate($taxRateDataObject);
+
+        //Assertion
+        $this->assertSame($taxRate, $taxRateServiceData);
+    }
+
+    /**
      * @expectedException \Magento\Framework\Model\Exception
      */
     public function testCreateTaxRateWithModelException()
@@ -195,7 +365,7 @@ class TaxRateServiceTest extends \PHPUnit_Framework_TestCase
             'zip_range' => ['from' => 78765, 'to' => 78780]
         ];
 
-        $taxRateDataObject =   $this->taxRateBuilder->populateWithArray($taxData)->create();
+        $taxRateDataObject = $this->taxRateBuilder->populateWithArray($taxData)->create();
         $this->rateModelMock->expects($this->once())
             ->method('save')
             ->will($this->throwException(new \Magento\Framework\Model\Exception()));
@@ -412,10 +582,14 @@ class TaxRateServiceTest extends \PHPUnit_Framework_TestCase
 
         $filterBuilder = $this->objectManager->getObject('\Magento\Framework\Service\V1\Data\FilterBuilder');
         $filter = $filterBuilder->setField(TaxRate::KEY_REGION_ID)->setValue(self::REGION_ID)->create();
+        $sortOrderBuilder = $this->objectManager->getObject('\Magento\Framework\Service\V1\Data\SortOrderBuilder');
+        $sortOrder = $sortOrderBuilder
+            ->setField(TaxRate::KEY_REGION_ID)
+            ->setDirection(SearchCriteria::SORT_ASC)
+            ->create();
         $this->searchCriteriaBuilder
             ->addFilter([$filter])
-            ->addSortOrder('id', \Magento\Framework\Service\V1\Data\SearchCriteria::SORT_ASC);
-
+            ->addSortOrder($sortOrder);
         $this->createService();
         $searchCriteria = $this->searchCriteriaBuilder->create();
         $searchResults = $this->taxRateService->searchTaxRates($searchCriteria);
@@ -450,7 +624,9 @@ class TaxRateServiceTest extends \PHPUnit_Framework_TestCase
                 'rateFactory' => $this->rateFactoryMock,
                 'rateRegistry' => $this->rateRegistryMock,
                 'converter' => $this->converterMock,
-                'taxRateSearchResultsBuilder' => $this->taxRateSearchResultsBuilder
+                'taxRateSearchResultsBuilder' => $this->taxRateSearchResultsBuilder,
+                'countryFactory' => $this->countryFactoryMock,
+                'regionFactory' => $this->regionFactoryMock
             ]
         );
     }

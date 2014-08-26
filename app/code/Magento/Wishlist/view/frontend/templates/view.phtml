@@ -25,7 +25,7 @@
 ?>
 
 <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isAllow()) : ?>
-    <?php if ($this->helper('Magento\Wishlist\Helper\Data')->isRssAllow() && $this->hasWishlistItems()): ?>
+    <?php if ($this->helper('Magento\Wishlist\Helper\Rss')->isRssAllow() && $this->hasWishlistItems()): ?>
         <a href="<?php echo $this->helper('Magento\Wishlist\Helper\Data')->getRssUrl($this->getWishlistInstance()->getId()); ?>" class="action rss wishlist">
             <span><?php echo __('RSS Feed') ?></span>
         </a>

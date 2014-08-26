@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
+<page layout="admin-2columns-left" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <remove name="footer"/>
     <remove name="head"/>
     <referenceContainer name="left">
@@ -34,4 +34,4 @@
             <block class="Magento\Theme\Block\Adminhtml\Wysiwyg\Files\Content\Uploader" name="wysiwyg_files.uploader" template="browser/content/uploader.phtml"/>
         </block>
     </referenceContainer>
-</layout>
+</page>

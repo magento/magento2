@@ -62,6 +62,11 @@ class Onepage extends Action
     protected $_formKeyValidator;
 
     /**
+     * @var \Magento\Framework\View\LayoutFactory
+     */
+    protected $layoutFactory;
+
+    /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param CustomerAccountService $customerAccountService
@@ -69,6 +74,7 @@ class Onepage extends Action
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\Translate\InlineInterface $translateInline
      * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
+     * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -77,11 +83,13 @@ class Onepage extends Action
         CustomerMetadataService $customerMetadataService,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\Translate\InlineInterface $translateInline,
-        \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
+        \Magento\Core\App\Action\FormKeyValidator $formKeyValidator,
+        \Magento\Framework\View\LayoutFactory $layoutFactory
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_translateInline = $translateInline;
         $this->_formKeyValidator = $formKeyValidator;
+        $this->layoutFactory = $layoutFactory;
         parent::__construct($context, $customerSession, $customerAccountService, $customerMetadataService);
     }
 
@@ -155,9 +163,8 @@ class Onepage extends Action
      */
     protected function _getHtmlByHandle($handle)
     {
-        $layout = $this->_view->getLayout();
-        $layout->getUpdate()->addPageHandles(array($handle));
-        $layout->getUpdate()->load();
+        $layout = $this->layoutFactory->create();
+        $layout->getUpdate()->load(array($handle));
         $layout->generateXml();
         $layout->generateElements();
         $output = $layout->getOutput();

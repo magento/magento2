@@ -228,6 +228,7 @@ require([
             }
         };
 
+
         $$('.shared').each(function(element){
             Event.observe(element, 'change', adminSystemConfig.onchangeSharedElement);
 
@@ -361,7 +362,9 @@ require([
 
         jQuery(window).hashchange(handleHash);
         handleHash();
-    });
 
+    });
+    
+    jQuery('body').trigger('adminConfigDefined');
 });
 </script>

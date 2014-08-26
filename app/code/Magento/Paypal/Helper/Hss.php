@@ -45,22 +45,16 @@ class Hss extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_checkoutSession;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface
-     */
-    protected $_layout;
-
-    /**
+     * Constructor
+     *
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Framework\View\LayoutInterface $layout
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Framework\View\LayoutInterface $layout
+        \Magento\Checkout\Model\Session $checkoutSession
     ) {
         $this->_checkoutSession = $checkoutSession;
-        $this->_layout = $layout;
         parent::__construct($context);
     }
 
@@ -68,10 +62,9 @@ class Hss extends \Magento\Framework\App\Helper\AbstractHelper
      * Get template for button in order review page if HSS method was selected
      *
      * @param string $name template name
-     * @param string $block buttons block name
      * @return string
      */
-    public function getReviewButtonTemplate($name, $block)
+    public function getReviewButtonTemplate($name)
     {
         $quote = $this->_checkoutSession->getQuote();
         if ($quote) {
@@ -80,12 +73,6 @@ class Hss extends \Magento\Framework\App\Helper\AbstractHelper
                 return $name;
             }
         }
-
-        $blockObject = $this->_layout->getBlock($block);
-        if ($blockObject) {
-            return $blockObject->getTemplate();
-        }
-
         return '';
     }
 

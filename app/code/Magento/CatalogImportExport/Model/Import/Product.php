@@ -475,9 +475,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $dateTime;
 
     /**
-     * @var \Magento\Indexer\Model\Indexer
+     * @var \Magento\Indexer\Model\IndexerFactory
      */
-    protected $newIndexer;
+    protected $indexerFactory;
 
     /**
      * @var \Magento\Framework\Logger
@@ -517,7 +517,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\Logger $logger
-     * @param \Magento\Indexer\Model\Indexer $newIndexer
+     * @param \Magento\Indexer\Model\IndexerFactory $indexerFactory
      * @param array $data
      */
     public function __construct(
@@ -548,7 +548,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Logger $logger,
-        \Magento\Indexer\Model\Indexer $newIndexer,
+        \Magento\Indexer\Model\IndexerFactory $indexerFactory,
         array $data = array()
     ) {
         $this->_eventManager = $eventManager;
@@ -569,7 +569,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->_stockResItemFac = $stockResItemFac;
         $this->_localeDate = $localeDate;
         $this->dateTime = $dateTime;
-        $this->newIndexer = $newIndexer;
+        $this->indexerFactory = $indexerFactory;
         $this->_logger = $logger;
         parent::__construct($coreData, $importExportData, $importData, $config, $resource, $resourceHelper, $string);
         $this->_optionEntity = isset(
@@ -1754,6 +1754,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected function _saveStockItem()
     {
+        $indexer = $this->indexerFactory->create()->load('catalog_product_category');
         /** @var $stockResource \Magento\CatalogInventory\Model\Resource\Stock\Item */
         $stockResource = $this->_stockResItemFac->create();
         $entityTable = $stockResource->getMainTable();
@@ -1811,7 +1812,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             }
 
             if ($productIdsToReindex) {
-                $this->newIndexer->load('catalog_product_category')->reindexList($productIdsToReindex);
+                $indexer->reindexList($productIdsToReindex);
             }
         }
         return $this;

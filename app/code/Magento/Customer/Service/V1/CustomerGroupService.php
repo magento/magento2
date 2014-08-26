@@ -38,6 +38,7 @@ use Magento\Framework\Exception\State\InvalidTransitionException;
 use Magento\Framework\Service\V1\Data\SearchCriteria;
 use Magento\Tax\Service\V1\Data\TaxClass;
 use Magento\Tax\Service\V1\TaxClassServiceInterface;
+use Magento\Framework\Service\V1\Data\SortOrder;
 
 /**
  * Customer service is responsible for customer business workflow encapsulation
@@ -153,10 +154,14 @@ class CustomerGroupService implements CustomerGroupServiceInterface
         }
         $this->_searchResultsBuilder->setTotalCount($collection->getSize());
         $sortOrders = $searchCriteria->getSortOrders();
+        /** @var SortOrder $sortOrder */
         if ($sortOrders) {
-            foreach ($searchCriteria->getSortOrders() as $field => $direction) {
-                $field = $this->translateField($field);
-                $collection->addOrder($field, $direction == SearchCriteria::SORT_ASC ? 'ASC' : 'DESC');
+            foreach ($searchCriteria->getSortOrders() as $sortOrder) {
+                $field = $this->translateField($sortOrder->getField());
+                $collection->addOrder(
+                    $field,
+                    ($sortOrder->getDirection() == SearchCriteria::SORT_ASC) ? 'ASC' : 'DESC'
+                );
             }
         }
         $collection->setCurPage($searchCriteria->getCurrentPage());

@@ -23,8 +23,8 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../app/code/Magento/Core/etc/layout_single.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../app/code/Magento/Core/etc/page.xsd">
     <move element="page.main.title" destination="product.info.main" before="-"/>
     <move element="product.info.media" destination="content" before="product.info.main" />
-</layout>
+</page>

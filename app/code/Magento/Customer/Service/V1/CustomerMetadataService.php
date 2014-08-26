@@ -21,98 +21,89 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
 namespace Magento\Customer\Service\V1;
 
+use Magento\Customer\Service\V1\Data\Eav\AttributeMetadataConverter;
+use Magento\Customer\Service\V1\Data\Eav\AttributeMetadataDataProvider;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Service\Config\MetadataConfig;
 
 /**
- * EAV attribute metadata service
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * Service to fetch customer related custom attributes
  */
 class CustomerMetadataService implements CustomerMetadataServiceInterface
 {
-    /**
-     * @var \Magento\Eav\Model\Config
-     */
-    private $_eavConfig;
-
-    /**
-     * @var \Magento\Customer\Model\Resource\Form\Attribute\CollectionFactory
-     */
-    private $_attrFormCollectionFactory;
-
-    /**
-     * @var \Magento\Store\Model\StoreManager
-     */
-    private $_storeManager;
-
-    /**
-     * @var Data\Eav\OptionBuilder
-     */
-    private $_optionBuilder;
-
-    /**
-     * @var Data\Eav\ValidationRuleBuilder
-     */
-    private $_validationRuleBuilder;
-
-    /**
-     * @var Data\Eav\AttributeMetadataBuilder
-     */
-    private $_attributeMetadataBuilder;
-
     /**
      * @var array
      */
     private $customerDataObjectMethods;
 
     /**
-     * @var array
+     * @var MetadataConfig
      */
-    private $addressDataObjectMethods;
+    private $metadataConfig;
 
     /**
-     * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Customer\Model\Resource\Form\Attribute\CollectionFactory $attrFormCollectionFactory
-     * @param \Magento\Store\Model\StoreManager $storeManager
-     * @param Data\Eav\OptionBuilder $optionBuilder
-     * @param Data\Eav\ValidationRuleBuilder $validationRuleBuilder
-     * @param Data\Eav\AttributeMetadataBuilder $attributeMetadataBuilder
+     * @var AttributeMetadataConverter
+     */
+    private $attributeMetadataConverter;
+
+    /**
+     * @var AttributeMetadataDataProvider
+     */
+    private $attributeMetadataDataProvider;
+
+    /**
+     * @param MetadataConfig $metadataConfig
+     * @param AttributeMetadataConverter $attributeMetadataConverter
+     * @param AttributeMetadataDataProvider $attributeMetadataDataProvider
      */
     public function __construct(
-        \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Customer\Model\Resource\Form\Attribute\CollectionFactory $attrFormCollectionFactory,
-        \Magento\Store\Model\StoreManager $storeManager,
-        Data\Eav\OptionBuilder $optionBuilder,
-        Data\Eav\ValidationRuleBuilder $validationRuleBuilder,
-        Data\Eav\AttributeMetadataBuilder $attributeMetadataBuilder
+        MetadataConfig $metadataConfig,
+        AttributeMetadataConverter $attributeMetadataConverter,
+        AttributeMetadataDataProvider $attributeMetadataDataProvider
     ) {
-        $this->_eavConfig = $eavConfig;
-        $this->_attrFormCollectionFactory = $attrFormCollectionFactory;
-        $this->_storeManager = $storeManager;
-        $this->_optionBuilder = $optionBuilder;
-        $this->_validationRuleBuilder = $validationRuleBuilder;
-        $this->_attributeMetadataBuilder = $attributeMetadataBuilder;
+        $this->metadataConfig = $metadataConfig;
+        $this->attributeMetadataConverter = $attributeMetadataConverter;
+        $this->attributeMetadataDataProvider = $attributeMetadataDataProvider;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getAttributeMetadata($entityType, $attributeCode)
+    public function getAttributes($formCode)
+    {
+        $attributes = [];
+        $attributesFormCollection = $this->attributeMetadataDataProvider->loadAttributesCollection(
+            self::ENTITY_TYPE_CUSTOMER,
+            $formCode
+        );
+        foreach ($attributesFormCollection as $attribute) {
+            /** @var $attribute \Magento\Customer\Model\Attribute */
+            $attributes[$attribute->getAttributeCode()] = $this->attributeMetadataConverter
+                ->createMetadataAttribute($attribute);
+        }
+        return $attributes;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAttributeMetadata($attributeCode)
     {
         /** @var AbstractAttribute $attribute */
-        $attribute = $this->_eavConfig->getAttribute($entityType, $attributeCode);
+        $attribute = $this->attributeMetadataDataProvider->getAttribute(self::ENTITY_TYPE_CUSTOMER, $attributeCode);
         if ($attribute) {
-            $attributeMetadata = $this->_createMetadataAttribute($attribute);
+            $attributeMetadata = $this->attributeMetadataConverter->createMetadataAttribute($attribute);
             return $attributeMetadata;
         } else {
             throw new NoSuchEntityException(
                 NoSuchEntityException::MESSAGE_DOUBLE_FIELDS,
                 [
                     'fieldName' => 'entityType',
-                    'fieldValue' => $entityType,
+                    'fieldValue' => self::ENTITY_TYPE_CUSTOMER,
                     'field2Name' => 'attributeCode',
                     'field2Value' => $attributeCode,
                 ]
@@ -123,147 +114,37 @@ class CustomerMetadataService implements CustomerMetadataServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function getAllAttributeSetMetadata($entityType, $attributeSetId = 0, $storeId = null)
+    public function getAllAttributesMetadata()
     {
-        if (null === $storeId) {
-            $storeId = $this->_storeManager->getStore()->getId();
-        }
-        $object = new \Magento\Framework\Object(
-            [
-                'store_id' => $storeId,
-                'attribute_set_id' => $attributeSetId,
-            ]
+        /** @var AbstractAttribute[] $attribute */
+        $attributeCodes = $this->attributeMetadataDataProvider->getAllAttributeCodes(
+            self::ENTITY_TYPE_CUSTOMER,
+            self::ATTRIBUTE_SET_ID_CUSTOMER
         );
-        $attributeCodes = $this->_eavConfig->getEntityAttributeCodes($entityType, $object);
 
         $attributesMetadata = [];
+
         foreach ($attributeCodes as $attributeCode) {
             try {
-                $attributesMetadata[] = $this->getAttributeMetadata($entityType, $attributeCode);
+                $attributesMetadata[] = $this->getAttributeMetadata($attributeCode);
             } catch (NoSuchEntityException $e) {
                 //If no such entity, skip
             }
         }
+
         return $attributesMetadata;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getAttributes($entityType, $formCode)
-    {
-        $attributes = [];
-        $attributesFormCollection = $this->_loadAttributesCollection($entityType, $formCode);
-        foreach ($attributesFormCollection as $attribute) {
-            $attributes[$attribute->getAttributeCode()] = $this->_createMetadataAttribute($attribute);
-        }
-        return $attributes;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getCustomerAttributeMetadata($attributeCode)
-    {
-        return $this->getAttributeMetadata(self::ENTITY_TYPE_CUSTOMER, $attributeCode);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getAllCustomerAttributeMetadata()
-    {
-        return $this->getAllAttributeSetMetadata(self::ENTITY_TYPE_CUSTOMER, self::ATTRIBUTE_SET_ID_CUSTOMER);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getAddressAttributeMetadata($attributeCode)
-    {
-        return $this->getAttributeMetadata(self::ENTITY_TYPE_ADDRESS, $attributeCode);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getAllAddressAttributeMetadata()
-    {
-        return $this->getAllAttributeSetMetadata(self::ENTITY_TYPE_ADDRESS, self::ATTRIBUTE_SET_ID_ADDRESS);
-    }
-
-    /**
-     * Load collection with filters applied
-     *
-     * @param string $entityType
-     * @param string $formCode
-     * @return \Magento\Customer\Model\Resource\Form\Attribute\Collection
-     */
-    private function _loadAttributesCollection($entityType, $formCode)
-    {
-        $attributesFormCollection = $this->_attrFormCollectionFactory->create();
-        $attributesFormCollection->setStore($this->_storeManager->getStore())
-            ->setEntityType($entityType)
-            ->addFormCodeFilter($formCode)
-            ->setSortOrder();
-
-        return $attributesFormCollection;
-    }
-
-    /**
-     * @param \Magento\Customer\Model\Attribute $attribute
-     * @return Data\Eav\AttributeMetadata
-     */
-    private function _createMetadataAttribute($attribute)
-    {
-        $options = [];
-        if ($attribute->usesSource()) {
-            foreach ($attribute->getSource()->getAllOptions() as $option) {
-                $options[] = $this->_optionBuilder->setLabel($option['label'])
-                    ->setValue($option['value'])
-                    ->create();
-            }
-        }
-        $validationRules = [];
-        foreach ($attribute->getValidateRules() as $name => $value) {
-            $validationRules[] = $this->_validationRuleBuilder->setName($name)
-                ->setValue($value)
-                ->create();
-        }
-
-        $this->_attributeMetadataBuilder->setAttributeCode($attribute->getAttributeCode())
-            ->setFrontendInput($attribute->getFrontendInput())
-            ->setInputFilter($attribute->getInputFilter())
-            ->setStoreLabel($attribute->getStoreLabel())
-            ->setValidationRules($validationRules)
-            ->setVisible($attribute->getIsVisible())
-            ->setRequired($attribute->getIsRequired())
-            ->setMultilineCount($attribute->getMultilineCount())
-            ->setDataModel($attribute->getDataModel())
-            ->setOptions($options)
-            ->setFrontendClass($attribute->getFrontend()->getClass())
-            ->setFrontendLabel($attribute->getFrontendLabel())
-            ->setBackendType($attribute->getBackendType())
-            ->setNote($attribute->getNote())
-            ->setIsSystem($attribute->getIsSystem())
-            ->setIsUserDefined($attribute->getIsUserDefined())
-            ->setSortOrder($attribute->getSortOrder());
-
-        return $this->_attributeMetadataBuilder->create();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getCustomCustomerAttributeMetadata()
+    public function getCustomAttributesMetadata($dataObjectClassName = self::DATA_OBJECT_CLASS_NAME)
     {
         $customAttributes = [];
         if (!$this->customerDataObjectMethods) {
-            $this->customerDataObjectMethods = array_flip(
-                get_class_methods('Magento\Customer\Service\V1\Data\Customer')
-            );
+            $this->customerDataObjectMethods = array_flip(get_class_methods($dataObjectClassName));
         }
-        foreach ($this->getAllCustomerAttributeMetadata() as $attributeMetadata) {
+        foreach ($this->getAllAttributesMetadata() as $attributeMetadata) {
             $attributeCode = $attributeMetadata->getAttributeCode();
             $camelCaseKey = \Magento\Framework\Service\DataObjectConverter::snakeCaseToCamelCase($attributeCode);
             $isDataObjectMethod = isset($this->customerDataObjectMethods['get' . $camelCaseKey])
@@ -276,30 +157,6 @@ class CustomerMetadataService implements CustomerMetadataServiceInterface
                 $customAttributes[] = $attributeMetadata;
             }
         }
-        return $customAttributes;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getCustomAddressAttributeMetadata()
-    {
-        $customAttributes = [];
-        if (!$this->addressDataObjectMethods) {
-            $this->addressDataObjectMethods = array_flip(
-                get_class_methods('Magento\Customer\Service\V1\Data\Address')
-            );
-        }
-        foreach ($this->getAllAddressAttributeMetadata() as $attributeMetadata) {
-            $attributeCode = $attributeMetadata->getAttributeCode();
-            $camelCaseKey = \Magento\Framework\Service\DataObjectConverter::snakeCaseToCamelCase($attributeCode);
-            $isDataObjectMethod = isset($this->addressDataObjectMethods['get' . $camelCaseKey])
-                || isset($this->addressDataObjectMethods['is' . $camelCaseKey]);
-
-            if (!$isDataObjectMethod && !$attributeMetadata->isSystem()) {
-                $customAttributes[] = $attributeMetadata;
-            }
-        }
-        return $customAttributes;
+        return array_merge($customAttributes, $this->metadataConfig->getCustomAttributesMetadata($dataObjectClassName));
     }
 }

@@ -45,7 +45,7 @@
                 <textarea id="message" name="message" cols="60" rows="5"><?php echo $this->getEnteredData('message') ?></textarea>
             </div>
         </div>
-        <?php if($this->helper('Magento\Wishlist\Helper\Data')->isRssAllow()): ?>
+        <?php if($this->helper('Magento\Wishlist\Helper\Rss')->isRssAllow()): ?>
             <div class="field choice rss">
                 <input type="checkbox" name="rss_url" id="rss_url" value="1" title="<?php echo __('Check this checkbox if you want to add a link to an rss feed to your wishlist.') ?>" class="checkbox">
                 <label class="label" for="rss_url">

@@ -23,11 +23,17 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page mca="wishlist/index/index" >
+<page mca="wishlist/index" >
     <block>
         <name>messagesBlock</name>
         <class>Magento\Core\Test\Block\Messages</class>
         <locator>.messages</locator>
+        <strategy>css selector</strategy>
+    </block>
+    <block>
+        <name>wishlistBlock</name>
+        <class>Magento\Wishlist\Test\Block\Customer\Wishlist</class>
+        <locator>#wishlist-view-form</locator>
         <strategy>css selector</strategy>
     </block>
 </page>

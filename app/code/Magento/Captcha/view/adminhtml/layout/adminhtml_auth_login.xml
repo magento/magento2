@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <referenceContainer name="form.additional.info">
         <block class="Magento\Captcha\Block\Captcha" name="captcha">
             <action method="setFormId">
@@ -37,4 +37,4 @@
             </action>
         </block>
     </referenceContainer>
-</layout>
+</page>

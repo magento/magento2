@@ -23,10 +23,12 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
-    <update handle="checkout_onepage_review_item_renderers" />
-    <block class="Magento\Paypal\Block\Express\Review\Details" output="1" name="root" template="express/review/details.phtml">
-        <block class="Magento\Framework\View\Element\RendererList" name="checkout.onepage.review.item.renderers" as="renderer.list"/>
-        <block class="Magento\Checkout\Block\Cart\Totals" name="paypal.express.review.details.totals" as="totals" template="onepage/review/totals.phtml"/>
-    </block>
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_generic.xsd">
+    <update handle="checkout_onepage_review_item_renderers"/>
+    <container name="root">
+        <block class="Magento\Paypal\Block\Express\Review\Details" name="page.block" template="express/review/details.phtml">
+            <block class="Magento\Framework\View\Element\RendererList" name="checkout.onepage.review.item.renderers" as="renderer.list"/>
+            <block class="Magento\Checkout\Block\Cart\Totals" name="paypal.express.review.details.totals" as="totals" template="onepage/review/totals.phtml"/>
+        </block>
+    </container>
 </layout>

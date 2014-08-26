@@ -34,11 +34,5 @@
        onclick="this.target='_blank';">
         <span><?php echo __('Print Order') ?></span>
     </a>
-    <?php if($this->helper('Magento\Rss\Helper\Order')->isStatusNotificationAllow()): ?>
-        <a href="<?php echo $this->helper('Magento\Rss\Helper\Order')->getStatusHistoryRssUrl($_order) ?>"
-           class="action rss">
-            <span><?php echo __('Subscribe to Order Status') ?></span>
-        </a>
-    <?php endif; ?>
     <?php echo $this->getChildHtml(); ?>
 </div>

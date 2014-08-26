@@ -58,7 +58,7 @@ class GroupTest extends \PHPUnit_Framework_TestCase
         $metadataService = Bootstrap::getObjectManager()->get(
             'Magento\Customer\Service\V1\CustomerMetadataServiceInterface'
         );
-        $autoGroupAttribute = $metadataService->getCustomerAttributeMetadata('disable_auto_group_change');
+        $autoGroupAttribute = $metadataService->getAttributeMetadata('disable_auto_group_change');
         $this->groupRenderer->setDisableAutoGroupChangeAttribute($autoGroupAttribute);
 
         $html = $this->groupRenderer->render($this->groupElement);

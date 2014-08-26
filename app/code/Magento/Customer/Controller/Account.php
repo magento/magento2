@@ -153,6 +153,7 @@ class Account extends \Magento\Framework\App\Action\Action
         } else {
             $this->_getSession()->setNoReferer(true);
         }
+        $this->_view->getPage()->getConfig()->addBodyClass('account');
         $result = parent::dispatch($request);
         $this->_getSession()->unsNoReferer(false);
         return $result;

@@ -62,7 +62,7 @@ class TaxvatTest extends \PHPUnit_Framework_TestCase
         $this->_attributeMetadata->expects(
             $this->any()
         )->method(
-            'getCustomerAttributeMetadata'
+            'getAttributeMetadata'
         )->with(
             self::TAXVAT_ATTRIBUTE_CODE
         )->will(

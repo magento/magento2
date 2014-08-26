@@ -62,7 +62,7 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Order
 
                 $orderCommentSender->send($order, $notify, $comment);
 
-                $this->_view->loadLayout('empty');
+                $this->_view->loadLayout();
                 $this->_view->renderLayout();
             } catch (\Magento\Framework\Model\Exception $e) {
                 $response = array('error' => true, 'message' => $e->getMessage());

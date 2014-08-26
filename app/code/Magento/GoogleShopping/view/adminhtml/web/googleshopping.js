@@ -112,33 +112,40 @@ if (typeof Mage.GoogleShopping == 'undefined') {
 }
 
 
-Event.observe(document, 'dom:loaded', function() {
-    Mage.GoogleShopping.itemForm = items_massactionJsObject.form;
-    items_massactionJsObject.prepareForm = items_massactionJsObject.prepareForm.wrap(function (proceed) {
-        Mage.GoogleShopping.itemForm = proceed();
-        Mage.GoogleShopping.itemForm.submit = function(){ Mage.GoogleShopping.startAction(this); };
-        return Mage.GoogleShopping.itemForm;
-    });
+    jQuery(function(){
+        
+        setTimeout(function(){
+            Mage.GoogleShopping.itemForm = items_massactionJsObject.form;
+            
+            items_massactionJsObject.prepareForm = items_massactionJsObject.prepareForm.wrap(function (proceed) {
+                Mage.GoogleShopping.itemForm = proceed();
+                Mage.GoogleShopping.itemForm.submit = function(){ Mage.GoogleShopping.startAction(this); };
+                return Mage.GoogleShopping.itemForm;
+            });
 
-    Mage.GoogleShopping.productForm = googleshopping_selection_search_grid__massactionJsObject.form;
-    googleshopping_selection_search_grid__massactionJsObject.prepareForm = googleshopping_selection_search_grid__massactionJsObject.prepareForm.wrap(function (proceed) {
-        Mage.GoogleShopping.productForm = proceed();
-        Mage.GoogleShopping.productForm.submit = function() { Mage.GoogleShopping.startAction(this) };
-        return Mage.GoogleShopping.productForm;
-    });
+            Mage.GoogleShopping.productForm = googleshopping_selection_search_grid__massactionJsObject.form;
+           
+            googleshopping_selection_search_grid__massactionJsObject.prepareForm = googleshopping_selection_search_grid__massactionJsObject.prepareForm.wrap(function (proceed) {
+                Mage.GoogleShopping.productForm = proceed();
+                Mage.GoogleShopping.productForm.submit = function() { Mage.GoogleShopping.startAction(this) };
+                return Mage.GoogleShopping.productForm;
+            });
 
-    Mage.GoogleShopping.itemForm.submit = function(){ Mage.GoogleShopping.startAction(this); };
-    Mage.GoogleShopping.productForm.submit = function() { Mage.GoogleShopping.startAction(this) };
-    if (Mage.GoogleShopping.isProcessRunning) {
-        Mage.GoogleShopping.lock();
-        Mage.GoogleShopping.poller.onSuccess = function(isRunning){
-            if (!isRunning) {
-                this.stop()
-                Mage.GoogleShopping.onSuccess();
+            Mage.GoogleShopping.itemForm.submit = function(){ Mage.GoogleShopping.startAction(this); };
+            Mage.GoogleShopping.productForm.submit = function() { Mage.GoogleShopping.startAction(this) };
+            
+            if (Mage.GoogleShopping.isProcessRunning) {
+                Mage.GoogleShopping.lock();
+                Mage.GoogleShopping.poller.onSuccess = function(isRunning){
+                    if (!isRunning) {
+                        this.stop()
+                        Mage.GoogleShopping.onSuccess();
+                    }
+                }
+                Mage.GoogleShopping.poller.start(Mage.GoogleShopping.statusUrl);
             }
-        }
-        Mage.GoogleShopping.poller.start(Mage.GoogleShopping.statusUrl);
-    }
-});
+
+        }, 1500);
+    });
 
 });

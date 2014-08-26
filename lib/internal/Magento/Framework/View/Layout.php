@@ -325,6 +325,7 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
         $this->_scheduledStructure->flushScheduledStructure();
 
         $this->_readStructure($this->getNode());
+        $this->_addToOutputRootContainers($this->getNode());
 
         while (false === $this->_scheduledStructure->isStructureEmpty()) {
             $this->_scheduleElement(key($this->_scheduledStructure->getStructure()));
@@ -347,9 +348,6 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
             list($type, $node, $actions, $args, $attributes) = current($this->_scheduledStructure->getElements());
             $elementName = key($this->_scheduledStructure->getElements());
 
-            if (isset($node['output'])) {
-                $this->addOutputElement($elementName);
-            }
             if ($type == Element::TYPE_BLOCK) {
                 $this->_generateBlock($elementName);
             } else {
@@ -359,6 +357,23 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
         }
         \Magento\Framework\Profiler::stop('generate_elements');
         \Magento\Framework\Profiler::stop(__CLASS__ . '::' . __METHOD__);
+    }
+
+    /**
+     * Add parent containers to output
+     *
+     * @param Element $nodeList
+     * @return $this
+     */
+    protected function _addToOutputRootContainers(Element $nodeList)
+    {
+        /** @var $node Element */
+        foreach ($nodeList as $node) {
+            if ($node->getName() === Element::TYPE_CONTAINER) {
+                $this->addOutputElement($node->getElementName());
+            }
+        }
+        return $this;
     }
 
     /**

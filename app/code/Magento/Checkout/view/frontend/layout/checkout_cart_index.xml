@@ -23,8 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
-    <update handle="page_one_column"/>
+<page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <update handle="checkout_cart_item_renderers" />
     <update handle="checkout_shipping_price_renderer" />
     <referenceContainer name="content">
@@ -57,4 +56,4 @@
         </block>
     </referenceContainer>
     <block class="Magento\Checkout\Block\Cart\Additional\Info" name="additional.product.info" template="cart/additional/info.phtml"/>
-</layout>
+</page>

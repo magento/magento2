@@ -23,7 +23,9 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
-    <update handle="catalog_product_grouped" />
-    <block class="Magento\Backend\Block\Widget\Grid\Container" name="catalog.product.edit.tab.super.grid.popup.container" template="Magento_Backend::widget/grid/container/empty.phtml" output="1"/>
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_generic.xsd">
+    <update handle="catalog_product_grouped"/>
+    <container name="root">
+        <block class="Magento\Backend\Block\Widget\Grid\Container" name="catalog.product.edit.tab.super.grid.popup.container" template="Magento_Backend::widget/grid/container/empty.phtml"/>
+    </container>
 </layout>

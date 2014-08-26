@@ -23,8 +23,8 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
 <referenceBlock name="invoice_items">
     <block class="Magento\GroupedProduct\Block\Adminhtml\Items\Column\Name\Grouped" name="column_name_grouped" template="Magento_Sales::items/column/name.phtml" group="column"/>
 </referenceBlock>
-</layout>
+</page>

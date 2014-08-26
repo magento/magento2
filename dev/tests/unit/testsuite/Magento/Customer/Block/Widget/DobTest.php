@@ -110,7 +110,7 @@ class DobTest extends \PHPUnit_Framework_TestCase
         $this->_metadataService->expects(
             $this->any()
         )->method(
-                'getCustomerAttributeMetadata'
+                'getAttributeMetadata'
             )->will(
                 $this->returnValue($this->_attribute)
             );

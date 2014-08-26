@@ -28,7 +28,7 @@ class AbstractWidget extends \Magento\Framework\View\Element\Template
     /**
      * @var \Magento\Customer\Service\V1\CustomerMetadataServiceInterface
      */
-    protected $_attributeMetadata;
+    protected $customerMetadataService;
 
     /**
      * @var \Magento\Customer\Helper\Address
@@ -38,17 +38,17 @@ class AbstractWidget extends \Magento\Framework\View\Element\Template
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Helper\Address $addressHelper
-     * @param \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $attributeMetadata
+     * @param \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $customerMetadataService
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Customer\Helper\Address $addressHelper,
-        \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $attributeMetadata,
+        \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $customerMetadataService,
         array $data = array()
     ) {
         $this->_addressHelper = $addressHelper;
-        $this->_attributeMetadata = $attributeMetadata;
+        $this->customerMetadataService = $customerMetadataService;
         parent::__construct($context, $data);
         $this->_isScopePrivate = true;
     }
@@ -111,7 +111,7 @@ class AbstractWidget extends \Magento\Framework\View\Element\Template
     protected function _getAttribute($attributeCode)
     {
         try {
-            return $this->_attributeMetadata->getCustomerAttributeMetadata($attributeCode);
+            return $this->customerMetadataService->getAttributeMetadata($attributeCode);
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             return null;
         }

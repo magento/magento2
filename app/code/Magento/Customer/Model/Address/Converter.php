@@ -25,12 +25,12 @@
 namespace Magento\Customer\Model\Address;
 
 use Magento\Customer\Model\AddressFactory;
+use Magento\Customer\Service\V1\AddressMetadataServiceInterface;
 use Magento\Customer\Service\V1\Data\Address;
 use Magento\Customer\Service\V1\Data\AddressBuilder;
 use Magento\Customer\Model\Address as AddressModel;
 use Magento\Customer\Model\Address\AbstractAddress;
 use Magento\Customer\Service\V1\Data\Region;
-use Magento\Customer\Service\V1\CustomerMetadataServiceInterface;
 use Magento\Customer\Service\V1\Data\AddressConverter;
 
 /**
@@ -56,23 +56,23 @@ class Converter
     /**
      * Customer metadata service
      *
-     * @var \Magento\Customer\Service\V1\CustomerMetadataServiceInterface
+     * @var AddressMetadataServiceInterface
      */
-    protected $_metadataService;
+    protected $_addressMetadataService;
 
     /**
      * @param AddressBuilder $addressBuilder
      * @param AddressFactory $addressFactory
-     * @param CustomerMetadataServiceInterface $metadataService
+     * @param AddressMetadataServiceInterface $addressMetadataService
      */
     public function __construct(
         AddressBuilder $addressBuilder,
         AddressFactory $addressFactory,
-        CustomerMetadataServiceInterface $metadataService
+        AddressMetadataServiceInterface $addressMetadataService
     ) {
         $this->_addressBuilder = $addressBuilder;
         $this->_addressFactory = $addressFactory;
-        $this->_metadataService = $metadataService;
+        $this->_addressMetadataService = $addressMetadataService;
     }
 
     /**
@@ -115,7 +115,7 @@ class Converter
         $addressModel->setIsDefaultShipping($address->isDefaultShipping());
         // Need to use attribute set or future updates can cause data loss
         if (!$addressModel->getAttributeSetId()) {
-            $addressModel->setAttributeSetId(CustomerMetadataServiceInterface::ATTRIBUTE_SET_ID_ADDRESS);
+            $addressModel->setAttributeSetId(AddressMetadataServiceInterface::ATTRIBUTE_SET_ID_ADDRESS);
         }
     }
 
@@ -131,7 +131,7 @@ class Converter
     {
         $addressId = $addressModel->getId();
 
-        $attributes = $this->_metadataService->getAllAddressAttributeMetadata();
+        $attributes = $this->_addressMetadataService->getAllAttributesMetadata();
         $addressData = array();
         foreach ($attributes as $attribute) {
             $code = $attribute->getAttributeCode();

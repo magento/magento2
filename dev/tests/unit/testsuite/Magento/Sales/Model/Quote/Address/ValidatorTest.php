@@ -24,6 +24,8 @@
 
 namespace Magento\Sales\Model\Quote\Address;
 
+use Magento\TestFramework\Helper\ObjectManager;
+
 class ValidatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -34,7 +36,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $factoryMock;
+    protected $countryFactoryMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -48,7 +50,8 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->factoryMock = $this->getMock('\Magento\Directory\Model\CountryFactory', [], [], '', false);
+        $objectManager = new ObjectManager($this);
+        $this->countryFactoryMock = $this->getMock('\Magento\Directory\Model\CountryFactory', [], [], '', false);
         $this->countryMock = $this->getMock('\Magento\Directory\Model\Country', [], [], '', false);
         $this->itemMock = $this->getMock(
             '\Magento\Sales\Model\Quote\Address',
@@ -57,8 +60,16 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->factoryMock->expects($this->any())->method('create')->will($this->returnValue($this->countryMock));
-        $this->model = new Validator($this->factoryMock);
+        $this->countryFactoryMock
+            ->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($this->countryMock));
+        $this->model = $objectManager->getObject(
+            '\Magento\Sales\Model\Quote\Address\Validator',
+            [
+                'countryFactory' => $this->countryFactoryMock,
+            ]
+        );
     }
 
     public function testValidateWithEmptyObject()

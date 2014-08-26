@@ -24,6 +24,7 @@
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab;
 
 use Magento\Customer\Controller\RegistryConstants;
+use Magento\Customer\Service\V1\AddressMetadataServiceInterface;
 use Magento\Customer\Service\V1\Data\Eav\AttributeMetadataBuilder;
 use Magento\Customer\Service\V1\Data\Address;
 use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
@@ -74,8 +75,8 @@ class Addresses extends GenericMetadata
     /** @var  CustomerAccountServiceInterface */
     protected $_customerAccountService;
 
-    /** @var  CustomerMetadataServiceInterface */
-    protected $_metadataService;
+    /** @var  AddressMetadataServiceInterface */
+    protected $_addressMetadataService;
 
     /** @var  AddressBuilder */
     protected $_addressBuilder;
@@ -98,7 +99,7 @@ class Addresses extends GenericMetadata
      * @param \Magento\Customer\Helper\Data $customerHelper
      * @param \Magento\Customer\Helper\Address $addressHelper
      * @param \Magento\Customer\Service\V1\CustomerAccountServiceInterface $customerAccountService
-     * @param CustomerMetadataServiceInterface $metadataService
+     * @param AddressMetadataServiceInterface $addressMetadataService
      * @param AddressBuilder $addressBuilder
      * @param CustomerBuilder $customerBuilder
      * @param AttributeMetadataBuilder $attributeMetadataBuilder
@@ -119,7 +120,7 @@ class Addresses extends GenericMetadata
         \Magento\Customer\Helper\Data $customerHelper,
         \Magento\Customer\Helper\Address $addressHelper,
         CustomerAccountServiceInterface $customerAccountService,
-        CustomerMetadataServiceInterface $metadataService,
+        AddressMetadataServiceInterface $addressMetadataService,
         AddressBuilder $addressBuilder,
         CustomerBuilder $customerBuilder,
         AttributeMetadataBuilder $attributeMetadataBuilder,
@@ -134,7 +135,7 @@ class Addresses extends GenericMetadata
         $this->_metadataFormFactory = $metadataFormFactory;
         $this->_systemStore = $systemStore;
         $this->_customerAccountService = $customerAccountService;
-        $this->_metadataService = $metadataService;
+        $this->_addressMetadataService = $addressMetadataService;
         $this->_addressBuilder = $addressBuilder;
         $this->_customerBuilder = $customerBuilder;
         $this->_attributeMetadataBuilder = $attributeMetadataBuilder;
@@ -294,7 +295,7 @@ class Addresses extends GenericMetadata
         }
 
         if ($this->isReadonly()) {
-            foreach ($this->_metadataService->getAllAddressAttributeMetadata() as $attribute) {
+            foreach ($this->_addressMetadataService->getAllAttributesMetadata() as $attribute) {
                 $element = $form->getElement($attribute->getAttributeCode());
                 if ($element) {
                     $element->setReadonly(true, true);

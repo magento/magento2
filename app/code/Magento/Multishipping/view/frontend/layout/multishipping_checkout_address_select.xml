@@ -23,9 +23,9 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd" label="Multishipping Checkout Shipping Address Selection" design_abstraction="custom">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd" label="Multishipping Checkout Shipping Address Selection" design_abstraction="custom">
     <update handle="multishipping_checkout"/>
     <referenceContainer name="content">
         <block class="Magento\Multishipping\Block\Checkout\Address\Select" name="checkout_address_select" template="checkout/address/select.phtml" cacheable="false"/>
     </referenceContainer>
-</layout>
+</page>

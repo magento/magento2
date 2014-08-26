@@ -127,26 +127,4 @@ class ProductTest extends \Magento\Backend\Utility\Controller
             '"Save & Duplicate" button isn\'t present on Edit Product page'
         );
     }
-
-    /**
-     * Assure that no DDL operations, like table truncation, are executed in transaction during search results reset.
-     *
-     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
-     */
-    public function testMassStatusAction()
-    {
-        $this->dispatch(
-            '/backend/catalog/product/massStatus/store/0/?product=1&massaction_prepare_key=product&status=0'
-        );
-        /** @var $objectManager \Magento\TestFramework\ObjectManager */
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var $processCollection \Magento\Index\Model\Resource\Process\Collection */
-        $processCollection = $objectManager->get('Magento\Index\Model\Resource\Process\Collection');
-        $processCollection = $processCollection->addEventsStats()->addFilter('indexer_code', 'catalogsearch_fulltext');
-        $process = $processCollection->getLastItem();
-        /** @var $eventCollection \Magento\Index\Model\Resource\Event\Collection */
-        $eventCollection = $objectManager->get('Magento\Index\Model\Resource\Event\Collection');
-        $eventCollection->addProcessFilter($process);
-        $this->assertNull($eventCollection->getLastItem()->getData('process_event_status'));
-    }
 }

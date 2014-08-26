@@ -107,4 +107,14 @@ abstract class AbstractProcessor
     {
         $this->getIndexer()->invalidate();
     }
+
+    /**
+     * Get processor indexer ID
+     *
+     * @return string
+     */
+    public function getIndexerId()
+    {
+        return static::INDEXER_ID;
+    }
 }

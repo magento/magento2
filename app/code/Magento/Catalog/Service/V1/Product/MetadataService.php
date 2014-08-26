@@ -24,13 +24,14 @@
 namespace Magento\Catalog\Service\V1\Product;
 
 use Magento\Catalog\Service\V1\Data\Eav\AttributeMetadata;
+use Magento\Framework\Service\Config\MetadataConfig;
 
 /**
  * Class AttributeMetadataService
  */
 class MetadataService implements MetadataServiceInterface
 {
-    /** @var  \Magento\Catalog\Service\V1\MetadataService */
+    /** @var \Magento\Catalog\Service\V1\MetadataService */
     protected $metadataService;
 
     /**
@@ -44,33 +45,40 @@ class MetadataService implements MetadataServiceInterface
     private $filterBuilder;
 
     /**
-     * @param \Magento\Catalog\Service\V1\MetadataService $metadataService
+     * @var MetadataConfig
+     */
+    private $metadataConfig;
+
+    /**
+     * Initialize dependencies.
+     *
+     * @param \Magento\Catalog\Service\V1\MetadataServiceInterface $metadataService
      * @param \Magento\Framework\Service\V1\Data\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Framework\Service\V1\Data\FilterBuilder $filterBuilder
+     * @param MetadataConfig $metadataConfig
      */
     public function __construct(
-        \Magento\Catalog\Service\V1\MetadataService $metadataService,
+        \Magento\Catalog\Service\V1\MetadataServiceInterface $metadataService,
         \Magento\Framework\Service\V1\Data\SearchCriteriaBuilder $searchCriteriaBuilder,
-        \Magento\Framework\Service\V1\Data\FilterBuilder $filterBuilder
+        \Magento\Framework\Service\V1\Data\FilterBuilder $filterBuilder,
+        MetadataConfig $metadataConfig
     ) {
         $this->metadataService = $metadataService;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->filterBuilder = $filterBuilder;
+        $this->metadataConfig = $metadataConfig;
     }
 
     /**
-     * Retrieve custom EAV attribute metadata of product
-     *
-     * @param int $attributeSetId
-     * @return AttributeMetadata[]
+     * {@inheritdoc}
      */
-    public function getCustomAttributesMetadata($attributeSetId = self::DEFAULT_ATTRIBUTE_SET_ID)
+    public function getCustomAttributesMetadata($dataObjectClassName = self::DATA_OBJECT_CLASS_NAME)
     {
         $customAttributes = [];
-        foreach ($this->getProductAttributesMetadata($attributeSetId) as $attributeMetadata) {
+        foreach ($this->getProductAttributesMetadata(self::DEFAULT_ATTRIBUTE_SET_ID) as $attributeMetadata) {
             $customAttributes[] = $attributeMetadata;
         }
-        return $customAttributes;
+        return array_merge($customAttributes, $this->metadataConfig->getCustomAttributesMetadata($dataObjectClassName));
     }
 
     /**

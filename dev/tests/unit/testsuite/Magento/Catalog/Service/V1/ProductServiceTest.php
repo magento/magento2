@@ -24,8 +24,8 @@
 
 namespace Magento\Catalog\Service\V1;
 
+use Magento\Framework\Service\V1\Data\SearchCriteria;
 use Magento\Framework\Service\V1\Data\SearchCriteriaBuilder;
-use Magento\Framework\Service\V1\Data\FilterBuilder;
 
 /**
  * Test for \Magento\Catalog\Service\V1\ProductService
@@ -239,7 +239,12 @@ class ProductServiceTest extends \PHPUnit_Framework_TestCase
         $filterBuilder = $helper->getObject('\Magento\Framework\Service\V1\Data\FilterBuilder');
         $filter = $filterBuilder->setField('price')->setValue('10.000')->setConditionType('eq')->create();
         $this->_searchBuilder->addFilter([$filter]);
-        $this->_searchBuilder->addSortOrder('price', \Magento\Framework\Service\V1\Data\SearchCriteria::SORT_ASC);
+        $sortOrderBuilder = $helper->getObject('\Magento\Framework\Service\V1\Data\SortOrderBuilder');
+        $sortOrder = $sortOrderBuilder
+            ->setField('price')
+            ->setDirection(SearchCriteria::SORT_ASC)
+            ->create();
+        $this->_searchBuilder->addSortOrder($sortOrder);
         $this->_searchBuilder->setCurrentPage(1);
         $this->_searchBuilder->setPageSize(10);
         $productService->search($this->_searchBuilder->create());

@@ -44,14 +44,16 @@ class MetadataBuilder extends \Magento\Framework\Service\Data\Eav\AbstractObject
     /**
      * @param \Magento\Framework\Service\Data\ObjectFactory $objectFactory
      * @param AttributeValueBuilder $valueBuilder
+     * @param \Magento\Framework\Service\Config\MetadataConfig $metadataService
      * @param array $customAttributeCodes
      */
     public function __construct(
         \Magento\Framework\Service\Data\ObjectFactory $objectFactory,
         AttributeValueBuilder $valueBuilder,
+        \Magento\Framework\Service\Config\MetadataConfig $metadataService,
         array $customAttributeCodes = array()
     ) {
-        parent::__construct($objectFactory, $valueBuilder);
+        parent::__construct($objectFactory, $valueBuilder, $metadataService);
         $this->customAttributeCodes = array_merge($this->customAttributeCodes, $customAttributeCodes);
     }
 

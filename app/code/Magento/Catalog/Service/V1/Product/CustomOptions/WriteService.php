@@ -28,6 +28,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Catalog\Service\V1\Product\CustomOptions\Data\OptionBuilder;
 use Magento\Catalog\Service\V1\Product\CustomOptions\Data\Option\Metadata;
+use Magento\Framework\Exception\InputException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -86,6 +87,9 @@ class WriteService implements WriteServiceInterface
     public function add($productSku, \Magento\Catalog\Service\V1\Product\CustomOptions\Data\Option $option)
     {
         $product = $this->productRepository->get($productSku);
+        if ($option->getOptionId()) {
+            throw new InputException('Unable to save option. Please, check input data.');
+        }
         $optionData = $this->optionConverter->convert($option);
 
         $product->setCanSaveCustomOptions(true);

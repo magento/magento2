@@ -21,7 +21,10 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
 namespace Magento\Customer\Helper;
+
+use Magento\Customer\Service\V1\AddressMetadataServiceInterface;
 
 class AddressTest extends \PHPUnit_Framework_TestCase
 {
@@ -46,6 +49,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Model\Address\Config|\PHPUnit_Framework_MockObject_MockObject */
     protected $addressConfig;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject|AddressMetadataServiceInterface */
+    private $addressMetadataService;
+
     protected function setUp()
     {
         $this->context = $this->getMockBuilder('Magento\Framework\App\Helper\Context')
@@ -67,12 +73,17 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             'Magento\Customer\Model\Address\Config'
         )->disableOriginalConstructor()->getMock();
 
+        $this->addressMetadataService = $this->getMockBuilder('Magento\Customer\Service\V1\AddressMetadataService')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->helper = new \Magento\Customer\Helper\Address(
             $this->context,
             $this->blockFactory,
             $this->storeManager,
             $this->scopeConfig,
             $this->customerMetadataService,
+            $this->addressMetadataService,
             $this->addressConfig
         );
     }
@@ -89,13 +100,10 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         )->disableOriginalConstructor()->getMock();
         $attributeMock->expects($this->any())->method('getMultilineCount')->will($this->returnValue($numLines));
 
-        $this->customerMetadataService->expects(
-            $this->any()
-        )->method(
-            'getAttributeMetadata'
-        )->will(
-            $this->returnValue($attributeMock)
-        );
+        $this->addressMetadataService
+            ->expects($this->any())
+            ->method('getAttributeMetadata')
+            ->will($this->returnValue($attributeMock));
 
         $store = $this->getMockBuilder('Magento\Store\Model\Store')->disableOriginalConstructor()->getMock();
         $this->storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
@@ -131,6 +139,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             $this->storeManager,
             $this->scopeConfig,
             $this->customerMetadataService,
+            $this->addressMetadataService,
             $this->addressConfig
         );
         $this->assertEquals($result, $this->helper->getRenderer($renderer));
@@ -195,12 +204,11 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
         $this->customerMetadataService->expects($this->any())
             ->method('getAttributeMetadata')
-            ->will($this->returnValueMap(
-                array(
-                    array('customer_address', $attrCode, $attributeMock),
-                    array('customer', $attrCode, $customAttrMock),
-                )
-            ));
+            ->will($this->returnValue($customAttrMock));
+
+        $this->addressMetadataService->expects($this->any())
+            ->method('getAttributeMetadata')
+            ->will($this->returnValue($attributeMock));
 
         $this->assertEquals($result, $this->helper->getAttributeValidationClass($attrCode));
     }

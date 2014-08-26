@@ -23,8 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
-    <update handle="page_one_column"/>
+<page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <referenceBlock name="head">
         <action method="setTitle">
             <argument translate="true" name="title" xsi:type="string">Advanced Search</argument>
@@ -35,4 +34,4 @@
         <block class="Magento\CatalogSearch\Block\Advanced\Form" name="catalogsearch_advanced_form" template="advanced/form.phtml"/>
         <block class="Magento\Framework\View\Element\Html\Calendar" name="html_calendar" as="html_calendar" template="Magento_Theme::js/calendar.phtml"/>
     </referenceContainer>
-</layout>
+</page>

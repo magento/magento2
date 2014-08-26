@@ -74,7 +74,7 @@ abstract class AbstractConfigFiles extends \PHPUnit_Framework_TestCase
             );
 
             $filesystem = $this->_objectManager->get('Magento\Framework\App\Filesystem');
-            $modulesDir = $filesystem->getPath(\Magento\Framework\App\Filesystem::MODULES_DIR);
+            $modulesDir = $filesystem->getPath($this->getDirectoryConstant());
             $this->_schemaFile = $modulesDir . $this->_getXsdPath();
         }
     }
@@ -109,13 +109,10 @@ abstract class AbstractConfigFiles extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('There are no xml files in the system for this test.');
         }
         // have the file resolver return all relevant xml files
-        $this->_fileResolverMock->expects(
-            $this->any()
-        )->method(
-            'get'
-        )->will(
-            $this->returnValue($this->getXmlConfigFiles())
-        );
+        $this->_fileResolverMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValue($this->getXmlConfigFiles()));
+
         try {
             // this will merge all xml files and validate them
             $this->_reader->read('global');
@@ -150,17 +147,21 @@ abstract class AbstractConfigFiles extends \PHPUnit_Framework_TestCase
     public function getXmlConfigFiles()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $directory = $objectManager->get(
-            'Magento\Framework\App\Filesystem'
-        )->getDirectoryRead(
-            \Magento\Framework\App\Filesystem::MODULES_DIR
-        );
-        return $objectManager->get(
-            '\Magento\Framework\Config\FileIteratorFactory'
-        )->create(
-            $directory,
-            $directory->search($this->_getConfigFilePathGlob())
-        );
+        $directory = $objectManager->get('Magento\Framework\App\Filesystem')
+            ->getDirectoryRead(\Magento\Framework\App\Filesystem::MODULES_DIR);
+
+        return $objectManager->get('\Magento\Framework\Config\FileIteratorFactory')
+            ->create($directory, $directory->search($this->_getConfigFilePathGlob()));
+    }
+
+    /**
+     * Returns directory (modules, library internal stc.) constant which contains XSD file
+     *
+     * @return string
+     */
+    protected function getDirectoryConstant()
+    {
+        return \Magento\Framework\App\Filesystem::MODULES_DIR;
     }
 
     /**

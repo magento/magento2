@@ -25,8 +25,6 @@ namespace Magento\Reports\Block\Product\Widget;
 
 /**
  * Reports Recently Compared Products Widget
- *
- * @author     Magento Core Team <core@magentocommerce.com>
  */
 class Compared extends \Magento\Reports\Block\Product\Compared implements \Magento\Widget\Block\BlockInterface
 {
@@ -38,18 +36,9 @@ class Compared extends \Magento\Reports\Block\Product\Compared implements \Magen
     protected function _construct()
     {
         parent::_construct();
-        $this->addColumnCountLayoutDepend(
-            'one_column',
-            5
-        )->addColumnCountLayoutDepend(
-            'two_columns_left',
-            4
-        )->addColumnCountLayoutDepend(
-            'two_columns_right',
-            4
-        )->addColumnCountLayoutDepend(
-            'three_columns',
-            3
-        );
+        $this->addColumnCountLayoutDepend('1column', 5)
+            ->addColumnCountLayoutDepend('2columns-left', 4)
+            ->addColumnCountLayoutDepend('2columns-right', 4)
+            ->addColumnCountLayoutDepend('2columns', 3);
     }
 }

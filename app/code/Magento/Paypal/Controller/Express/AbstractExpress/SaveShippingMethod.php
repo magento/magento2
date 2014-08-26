@@ -40,7 +40,7 @@ class SaveShippingMethod extends \Magento\Paypal\Controller\Express\AbstractExpr
             if ($isAjax) {
                 $this->_view->loadLayout('paypal_express_review_details');
                 $this->getResponse()->setBody(
-                    $this->_view->getLayout()->getBlock('root')->setQuote($this->_getQuote())->toHtml()
+                    $this->_view->getLayout()->getBlock('root_block')->setQuote($this->_getQuote())->toHtml()
                 );
                 return;
             }

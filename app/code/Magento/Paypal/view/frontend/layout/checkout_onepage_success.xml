@@ -23,8 +23,8 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <referenceContainer name="order.success.additional.info">
         <block class="Magento\Paypal\Block\Checkout\Onepage\Success\BillingAgreement" name="onepage.success.billing_agreement" template="checkout/onepage/success/billing_agreement.phtml"/>
     </referenceContainer>
-</layout>
+</page>

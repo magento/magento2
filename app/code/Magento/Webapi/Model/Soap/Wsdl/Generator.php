@@ -378,7 +378,9 @@ class Generator
             $direction = ($direction == 'in') ? 'requiredInput' : 'returned';
             foreach ($interfaceData['parameters'] as $parameterData) {
                 $parameterType = $parameterData['type'];
-                if (!$this->_typeProcessor->isTypeSimple($parameterType)) {
+                if (!$this->_typeProcessor->isTypeSimple($parameterType)
+                    && !$this->_typeProcessor->isTypeAny($parameterType)
+                ) {
                     $operation = $this->getOperationName($serviceName, $methodName);
                     if ($parameterData['required']) {
                         $condition = ($direction == 'requiredInput') ? 'yes' : 'always';

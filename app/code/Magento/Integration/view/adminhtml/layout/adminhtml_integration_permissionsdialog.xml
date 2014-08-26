@@ -25,8 +25,10 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
-    <block class="Magento\Backend\Block\Template" name="integration.activate.permissions" template="Magento_Integration::integration/activate/permissions.phtml" output="1">
-        <block class="Magento\Integration\Block\Adminhtml\Integration\Activate\Permissions\Tabs" name="integration.activate.permissions.tabs" as="tabs" />
-    </block>
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_generic.xsd">
+    <container name="root">
+        <block class="Magento\Backend\Block\Template" name="integration.activate.permissions" template="Magento_Integration::integration/activate/permissions.phtml">
+            <block class="Magento\Integration\Block\Adminhtml\Integration\Activate\Permissions\Tabs" name="integration.activate.permissions.tabs" as="tabs"/>
+        </block>
+    </container>
 </layout>

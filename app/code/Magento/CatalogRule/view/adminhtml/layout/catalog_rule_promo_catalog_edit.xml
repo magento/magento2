@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
+<page layout="admin-2columns-left" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <referenceBlock name="head">
         <action method="setCanLoadExtJs">
             <argument name="flag" xsi:type="string">1</argument>
@@ -57,4 +57,4 @@
     <referenceContainer name="js">
         <block class="Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Js" template="promo/js.phtml"/>
     </referenceContainer>
-</layout>
+</page>

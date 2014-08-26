@@ -1,3 +1,33 @@
+0.1.0-alpha92
+=============
+ * Implemented API services:
+   * Shopping Cart Payment
+   * Shopping Cart Shipping
+   * Shopping Cart Coupon
+   * Shopping Cart License Agreements
+ * Indexer for Fulltext Search
+ * RSS Module become removable
+ * Framework Improvements:
+   * Ability to drop/regenerate access for native mobile apps
+   * Ability to support extensible service data objects
+   * No Code Duplication in Root Templates (MAGETWO-26278)
+ * Fixed bugs:
+   * Persistance session application. Loggin out the customer
+   * Placing the order with two terms and conditions
+   * Saving of custom option by service catalogProductCustomOptionsWriteServiceV1
+   * Placing the order on frontend if enter in the street address line 1 and 2 255 symbols
+   * Using  @357.farm domain emails in registration form
+   * Validation for country_id/region_id and percentage_rate during Tax Rate creation
+   * Declaration of getSortOrders in Magento\Framework\Service\V1\Data\SearchCriteria
+   * Order cancellation for online payment methods
+   * Order online processing  for   Authorize.net Direct Post
+   * Backend grids while search
+   * Adding of downlodable sample block on product page
+   * Variations on duplicated configurable product
+ * Added functional tests:
+   * Product Review Report
+   * Share Wishlist
+
 0.1.0-alpha91
 =============
  * Added the following functional tests:

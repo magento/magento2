@@ -23,13 +23,8 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
+<page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <update handle="checkout_onepage_review_item_renderers" />
-    <referenceBlock name="root">
-        <action method="setTemplate">
-            <argument name="template" xsi:type="string">1column.phtml</argument>
-        </action>
-    </referenceBlock>
     <referenceContainer name="content">
         <block class="Magento\Paypal\Block\Express\Review" name="paypal.express.review"
                template="express/review.phtml">
@@ -49,4 +44,4 @@
     <referenceBlock name="head">
         <block class="Magento\Framework\View\Element\Js\Components" name="head.components" as="components" template="Magento_Paypal::js/components.phtml"/>
     </referenceBlock>
-</layout>
+</page>

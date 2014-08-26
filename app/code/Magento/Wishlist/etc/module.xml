@@ -39,6 +39,7 @@
             <module name="Magento_CatalogInventory"/>
             <module name="Magento_Backend"/>
             <module name="Magento_Bundle" type="soft"/>
+            <module name="Magento_Rss"/>
             <module name="Magento_Sales"/>
             <module name="Magento_GroupedProduct"/>
             <module name="Magento_ConfigurableProduct" type="soft"/>

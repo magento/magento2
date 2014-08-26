@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <referenceBlock name="root">
         <action method="setTemplate">
             <argument name="template" xsi:type="string">popup.phtml</argument>
@@ -32,4 +32,4 @@
     <referenceContainer name="content">
         <block class="Magento\Catalog\Block\Product\Gallery" name="catalog_product_gallery" template="product/gallery.phtml"/>
     </referenceContainer>
-</layout>
+</page>

@@ -370,7 +370,7 @@ class Account extends GenericMetadata
         $confirmationStatus = $this->_customerAccountService->getConfirmationStatus($customerData->getId());
         $confirmationKey = $customerData->getConfirmation();
         if ($confirmationStatus != CustomerAccountServiceInterface::ACCOUNT_CONFIRMED) {
-            $confirmationAttr = $this->_customerMetadataService->getCustomerAttributeMetadata('confirmation');
+            $confirmationAttr = $this->_customerMetadataService->getAttributeMetadata('confirmation');
             if (!$confirmationKey) {
                 $confirmationKey = $this->_getRandomConfirmationKey();
             }

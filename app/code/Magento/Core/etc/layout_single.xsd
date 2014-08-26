@@ -27,10 +27,6 @@
     <xs:include schemaLocation="layouts.xsd"/>
 
     <xs:element name="layout" type="layoutType">
-        <xs:unique name="blockKey">
-            <xs:selector xpath=".//block"/>
-            <xs:field xpath="@name"/>
-        </xs:unique>
         <xs:unique name="containerKey">
             <xs:selector xpath=".//container"/>
             <xs:field xpath="@name"/>

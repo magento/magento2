@@ -80,9 +80,16 @@ interface ProcessorInterface
      * Return whether any page handles have been added or not.
      *
      * @param array $handlesToTry
-     * @return ProcessorInterface
+     * @return bool
      */
     public function addPageHandles(array $handlesToTry);
+
+    /**
+     * Get declared page layout for current handles
+     *
+     * @return null|string
+     */
+    public function getPageLayout();
 
     /**
      * Retrieve all design abstractions that exist in the system.

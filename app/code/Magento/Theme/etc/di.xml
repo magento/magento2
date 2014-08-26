@@ -40,7 +40,7 @@
     </type>
     <type name="Magento\Theme\Model\Layout\Config\Reader">
         <arguments>
-            <argument name="fileName" xsi:type="string">page_layouts.xml</argument>
+            <argument name="fileName" xsi:type="string">layouts.xml</argument>
             <argument name="converter" xsi:type="object">Magento\Theme\Model\Layout\Config\Converter</argument>
             <argument name="schemaLocator" xsi:type="object">Magento\Theme\Model\Layout\Config\SchemaLocator</argument>
         </arguments>

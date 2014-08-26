@@ -29,10 +29,14 @@ use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Integration\Model\Oauth\Token\Factory as TokenModelFactory;
+use Magento\Integration\Model\Oauth\Token as Token;
 use Magento\User\Model\User as UserModel;
+use Magento\Integration\Model\Resource\Oauth\Token\CollectionFactory as TokenCollectionFactory;
 
 /**
  * Class to handle token generation for Admins and Customers
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TokenService implements TokenServiceInterface
 {
@@ -58,20 +62,30 @@ class TokenService implements TokenServiceInterface
     private $customerAccountService;
 
     /**
+     * Token Collection Factory
+     *
+     * @var TokenCollectionFactory
+     */
+    public $tokenModelCollectionFactory;
+
+    /**
      * Initialize service
      *
      * @param TokenModelFactory $tokenModelFactory
      * @param UserModel $userModel
      * @param CustomerAccountService $customerAccountService
+     * @param TokenCollectionFactory $tokenModelCollectionFactory
      */
     public function __construct(
         TokenModelFactory $tokenModelFactory,
         UserModel $userModel,
-        CustomerAccountService $customerAccountService
+        CustomerAccountService $customerAccountService,
+        TokenCollectionFactory $tokenModelCollectionFactory
     ) {
         $this->tokenModelFactory = $tokenModelFactory;
         $this->userModel = $userModel;
         $this->customerAccountService = $customerAccountService;
+        $this->tokenModelCollectionFactory = $tokenModelCollectionFactory;
     }
 
     /**
@@ -99,6 +113,29 @@ class TokenService implements TokenServiceInterface
     }
 
     /**
+     * Revoke token by admin id.
+     *
+     * @param int $adminId
+     * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function revokeAdminAccessToken($adminId)
+    {
+        $tokenCollection = $this->tokenModelCollectionFactory->create()->addFilterByAdminId($adminId);
+        if ($tokenCollection->getSize() == 0) {
+            throw new LocalizedException("This user has no tokens.");
+        }
+        try {
+            foreach ($tokenCollection as $token) {
+                $token->setRevoked(1)->save();
+            }
+        } catch (\Exception $e) {
+            throw new LocalizedException("The tokens could not be revoked.");
+        }
+        return true;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function createCustomerAccessToken($username, $password)
@@ -106,6 +143,29 @@ class TokenService implements TokenServiceInterface
         $this->validateCredentials($username, $password);
         $customerDataObject = $this->customerAccountService->authenticate($username, $password);
         return $this->tokenModelFactory->create()->createCustomerToken($customerDataObject->getId())->getToken();
+    }
+
+    /**
+     * Revoke token by customer id.
+     *
+     * @param int $customerId
+     * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function revokeCustomerAccessToken($customerId)
+    {
+        $tokenCollection = $this->tokenModelCollectionFactory->create()->addFilterByCustomerId($customerId);
+        if ($tokenCollection->getSize() == 0) {
+            throw new LocalizedException("This customer has no tokens.");
+        }
+        try {
+            foreach ($tokenCollection as $token) {
+                $token->setRevoked(1)->save();
+            }
+        } catch (\Exception $e) {
+            throw new LocalizedException("The tokens could not be revoked.");
+        }
+        return true;
     }
 
     /**

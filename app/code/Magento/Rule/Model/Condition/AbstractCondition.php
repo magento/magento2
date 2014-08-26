@@ -178,6 +178,36 @@ abstract class AbstractCondition extends \Magento\Framework\Object implements Co
     }
 
     /**
+     * Get tables to join
+     *
+     * @return array
+     */
+    public function getTablesToJoin()
+    {
+        return [];
+    }
+
+    /**
+     * Get value to bind
+     *
+     * @return array|float|int|mixed|string
+     */
+    public function getBindArgumentValue()
+    {
+        return $this->getValueParsed();
+    }
+
+    /**
+     * Get field by attribute
+     *
+     * @return string
+     */
+    public function getMappedSqlField()
+    {
+        return $this->getAttribute();
+    }
+
+    /**
      * @return string
      */
     public function asXml()

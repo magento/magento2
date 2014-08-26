@@ -23,11 +23,11 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <update handle="formkey"/>
     <update handle="adminhtml_cache_block"/>
     <referenceContainer name="content">
         <block class="Magento\Backend\Block\Cache" name="adminhtml.cache.container"/>
         <block class="Magento\Backend\Block\Cache\Additional" name="cache.additional" template="Magento_Backend::system/cache/additional.phtml"/>
     </referenceContainer>
-</layout>
+</page>

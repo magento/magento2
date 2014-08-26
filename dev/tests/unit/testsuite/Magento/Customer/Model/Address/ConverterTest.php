@@ -17,7 +17,7 @@
  * Do not edit or add to this file if you wish to upgrade Magento to newer
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
- *   
+ *
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
@@ -49,9 +49,9 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
 
     /**
      *
-     * @var \Magento\Customer\Service\V1\CustomerMetadataServiceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Service\V1\AddressMetadataServiceInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $metadataServiceMock;
+    protected $addressMetadataServiceMock;
 
     protected function setUp()
     {
@@ -79,9 +79,9 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->metadataServiceMock = $this->getMock(
-            'Magento\Customer\Service\V1\CustomerMetadataService',
-            array('getAllAddressAttributeMetadata'),
+        $this->addressMetadataServiceMock = $this->getMock(
+            'Magento\Customer\Service\V1\AddressMetadataService',
+            array('getAllAttributesMetadata'),
             array(),
             '',
             false
@@ -90,7 +90,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         $this->model = new Converter(
             $this->addressBuilderMock,
             $this->addressFactoryMock,
-            $this->metadataServiceMock
+            $this->addressMetadataServiceMock
         );
     }
 
@@ -103,7 +103,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
         $addressModelMock->expects($this->once())
             ->method('setAttributeSetId')
             ->with($this->equalTo(
-                \Magento\Customer\Service\V1\CustomerMetadataServiceInterface::ATTRIBUTE_SET_ID_ADDRESS
+                \Magento\Customer\Service\V1\AddressMetadataServiceInterface::ATTRIBUTE_SET_ID_ADDRESS
             ));
 
         $addressMock = $this->getMock('Magento\Customer\Service\V1\Data\Address', array(), array(), '', false);
@@ -189,8 +189,8 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
             ->method('getParentId');
 
         $addressMock = $this->getMock('Magento\Customer\Service\V1\Data\Address', array(), array(), '', false);
-        $this->metadataServiceMock->expects($this->once())
-            ->method('getAllAddressAttributeMetadata')
+        $this->addressMetadataServiceMock->expects($this->once())
+            ->method('getAllAttributesMetadata')
             ->will($this->returnValue(array()));
         $this->addressBuilderMock->expects($this->once())
             ->method('create')
@@ -253,8 +253,8 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
 
 
         $addressMock = $this->getMock('Magento\Customer\Service\V1\Data\Address', array(), array(), '', false);
-        $this->metadataServiceMock->expects($this->once())
-            ->method('getAllAddressAttributeMetadata')
+        $this->addressMetadataServiceMock->expects($this->once())
+            ->method('getAllAttributesMetadata')
             ->will($this->returnValue(array($attributeMock)));
         $this->addressBuilderMock->expects($this->once())
             ->method('create')

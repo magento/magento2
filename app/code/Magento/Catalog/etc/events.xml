@@ -24,9 +24,6 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
-    <event name="catalog_category_save_commit_after">
-        <observer name="fulltext_reindex" instance="Magento\Catalog\Model\Observer\Reindex" method="fulltextReindex" />
-    </event>
     <event name="page_block_html_topmenu_gethtml_before">
         <observer name="catalog_add_topmenu_items" instance="Magento\Catalog\Model\Observer" method="addCatalogToTopmenuItems" />
     </event>

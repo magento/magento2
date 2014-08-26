@@ -31,9 +31,9 @@ class Index extends \Magento\Framework\App\Action\Action
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Rss\Helper\WishlistRss
+     * @var \Magento\Rss\Helper\Data
      */
-    protected $_wishlistHelper;
+    protected $_rssHelper;
 
     /**
      * @var \Magento\Customer\Model\Session
@@ -43,17 +43,17 @@ class Index extends \Magento\Framework\App\Action\Action
     /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Rss\Helper\WishlistRss $wishlistHelper
+     * @param \Magento\Rss\Helper\Data $rssHelper
      * @param \Magento\Customer\Model\Session $customerSession
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Rss\Helper\WishlistRss $wishlistHelper,
+        \Magento\Rss\Helper\Data $rssHelper,
         \Magento\Customer\Model\Session $customerSession
     ) {
         $this->_scopeConfig = $scopeConfig;
-        $this->_wishlistHelper = $wishlistHelper;
+        $this->_rssHelper = $rssHelper;
         $this->_customerSession = $customerSession;
         parent::__construct($context);
     }

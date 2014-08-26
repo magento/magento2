@@ -83,6 +83,13 @@ interface ViewInterface
     public function generateLayoutBlocks();
 
     /**
+     * Retrieve current page object
+     *
+     * @return \Magento\Framework\View\Result\Page
+     */
+    public function getPage();
+
+    /**
      * Retrieve current layout object
      *
      * @return \Magento\Framework\View\LayoutInterface

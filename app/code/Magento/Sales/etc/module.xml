@@ -48,7 +48,6 @@
             <module name="Magento_GiftMessage"/>
             <module name="Magento_Reports"/>
             <module name="Magento_Weee"/>
-            <module name="Magento_Rss"/>
             <module name="Magento_CatalogInventory"/>
             <module name="Magento_Wishlist"/>
             <module name="Magento_Email"/>

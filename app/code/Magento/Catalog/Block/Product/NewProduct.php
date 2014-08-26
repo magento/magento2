@@ -94,23 +94,11 @@ class NewProduct extends \Magento\Catalog\Block\Product\AbstractProduct implemen
     protected function _construct()
     {
         parent::_construct();
-
-        $this->addColumnCountLayoutDepend(
-            'empty',
-            6
-        )->addColumnCountLayoutDepend(
-            'one_column',
-            5
-        )->addColumnCountLayoutDepend(
-            'two_columns_left',
-            4
-        )->addColumnCountLayoutDepend(
-            'two_columns_right',
-            4
-        )->addColumnCountLayoutDepend(
-            'three_columns',
-            3
-        );
+        $this->addColumnCountLayoutDepend('empty', 6)
+            ->addColumnCountLayoutDepend('1column', 5)
+            ->addColumnCountLayoutDepend('2columns-left', 4)
+            ->addColumnCountLayoutDepend('2columns-right', 4)
+            ->addColumnCountLayoutDepend('3columns', 3);
 
         $this->addData(
             array('cache_lifetime' => 86400, 'cache_tags' => array(\Magento\Catalog\Model\Product::CACHE_TAG))

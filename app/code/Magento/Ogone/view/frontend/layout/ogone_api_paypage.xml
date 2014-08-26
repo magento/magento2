@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
+<page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <remove name="catalog.topnav"/>
     <referenceContainer name="header-wrapper">
         <remove name="top.links"/>
@@ -36,12 +36,7 @@
         <remove name="footer_links"/>
         <remove name="store_switcher"/>
     </referenceBlock>
-    <referenceBlock name="root">
-        <action method="setTemplate">
-            <argument name="template" xsi:type="string">1column.phtml</argument>
-        </action>
-    </referenceBlock>
     <referenceContainer name="content">
         <block class="Magento\Ogone\Block\Paypage" name="ogone_paypage" template="paypage.phtml"/>
     </referenceContainer>
-</layout>
+</page>

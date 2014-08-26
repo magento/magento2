@@ -57,8 +57,21 @@ class BaseTest extends \PHPUnit_Framework_TestCase
             ->with('Magento\Framework\View\File', $this->anything())
             ->will($this->returnCallback(array($this, 'createFileCallback')));
         $fileFactory = new \Magento\Framework\View\File\Factory($objectManager);
-        $theme = $this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface');
-        $theme->expects($this->once())->method('getArea')->will($this->returnValue('frontend'));
+        $theme = $this->getMock(
+            'Magento\Framework\View\Design\ThemeInterface',
+            [
+                'getArea',
+                'getThemePath',
+                'getFullPath',
+                'getParentTheme',
+                'getCode',
+                'isPhysical',
+                'getInheritedThemes',
+                'getId',
+                'getData'
+            ]
+        );
+        $theme->expects($this->once())->method('getData')->with('area')->will($this->returnValue('frontend'));
         $model = new Base($filesystem, $fileFactory, 'layout');
         $result = $model->getFiles($theme, '*.xml');
 

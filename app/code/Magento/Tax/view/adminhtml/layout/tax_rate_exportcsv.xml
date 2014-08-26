@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <update handle="tax_rate_block"/>
     <block class="Magento\Backend\Block\Widget\Grid\Container" name="adminhtml.tax.rate.container" template="Magento_Backend::widget/grid/container/empty.phtml"/>
-</layout>
+</page>

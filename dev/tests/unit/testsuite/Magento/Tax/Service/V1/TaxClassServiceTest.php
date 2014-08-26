@@ -28,6 +28,7 @@ use Magento\Framework\Exception\InputException;
 use Magento\Tax\Service\V1\Data\TaxClass;
 use Magento\Tax\Service\V1\Data\TaxClassBuilder;
 use Magento\Tax\Service\V1\Data\TaxClassKey;
+use Magento\Framework\Service\V1\Data\SearchCriteria;
 
 /**
  * Test for \Magento\Tax\Service\V1\TaxClassService
@@ -83,6 +84,11 @@ class TaxClassServiceTest extends \PHPUnit_Framework_TestCase
      */
     private $objectManager;
 
+    /**
+     * @var \Magento\Framework\Service\V1\Data\SortOrderBuilder;
+     */
+    private $sortOrderBuilder;
+
     public function setUp()
     {
         $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
@@ -104,6 +110,10 @@ class TaxClassServiceTest extends \PHPUnit_Framework_TestCase
         $this->taxClassBuilder = $this->objectManager->getObject('Magento\Tax\Service\V1\Data\TaxClassBuilder');
 
         $this->taxClassService = $this->createService();
+
+        $this->sortOrderBuilder = $this->objectManager->getObject(
+            'Magento\Framework\Service\V1\Data\SortOrderBuilder'
+        );
     }
 
     public function testCreateTaxClass()
@@ -432,7 +442,7 @@ class TaxClassServiceTest extends \PHPUnit_Framework_TestCase
             $this->searchCriteriaBuilderMock->expects($this->exactly(2))
                 ->method('addFilter')
                 ->will($this->returnValue($this->searchCriteriaBuilderMock));
-            /** @var \Magento\Framework\Service\V1\Data\SearchCriteria $searchCriteria*/
+            /** @var \Magento\Framework\Service\V1\Data\SearchCriteria $searchCriteria */
             $searchCriteria = $this->createSearchCriteria();
             $this->searchCriteriaBuilderMock->expects($this->once())
                 ->method('create')
@@ -592,10 +602,16 @@ class TaxClassServiceTest extends \PHPUnit_Framework_TestCase
          */
         $searchCriteriaBuilder->addFilter([$filter1, $filter2]);
         $searchCriteriaBuilder->addFilter([$filter3, $filter4]);
+        /**@var \Magento\Framework\Service\V1\Data\SortOrderBuilder $sortOrderBuilder */
+        $sortOrderBuilder = $this->objectManager->getObject(
+            'Magento\Framework\Service\V1\Data\SortOrderBuilder'
+        );
+        /** @var \Magento\Framework\Service\V1\Data\SortOrder $sortOrder */
+        $sortOrder = $sortOrderBuilder->setField('class_name')->setDirection(SearchCriteria::SORT_ASC)->create();
         $searchCriteria = $searchCriteriaBuilder
             ->setCurrentPage(1)
             ->setPageSize(10)
-            ->setSortOrders(['class_name' => 1])
+            ->setSortOrders([$sortOrder])
             ->create();
         return $searchCriteria;
     }

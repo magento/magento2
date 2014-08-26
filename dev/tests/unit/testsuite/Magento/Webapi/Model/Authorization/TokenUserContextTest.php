@@ -143,6 +143,37 @@ class TokenUserContextTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->tokenUserContext->getUserId());
     }
 
+    public function testRevokedToken()
+    {
+        $bearerToken = 'bearer1234';
+
+        $this->request->expects($this->once())
+            ->method('getHeader')
+            ->with('Authorization')
+            ->will($this->returnValue("Bearer {$bearerToken}"));
+
+        $token = $this->getMockBuilder('Magento\Integration\Model\Oauth\Token')
+            ->disableOriginalConstructor()
+            ->setMethods(['loadByToken', 'getId', 'getRevoked', '__wakeup'])
+            ->getMock();
+        $this->tokenFactory->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($token));
+        $token->expects($this->once())
+            ->method('loadByToken')
+            ->with($bearerToken)
+            ->will($this->returnSelf());
+        $token->expects($this->once())
+            ->method('getId')
+            ->will($this->returnValue(1));
+        $token->expects($this->once())
+            ->method('getRevoked')
+            ->will($this->returnValue(1));
+
+        $this->assertNull($this->tokenUserContext->getUserType());
+        $this->assertNull($this->tokenUserContext->getUserId());
+    }
+
     /**
      * @dataProvider getValidTokenData
      */

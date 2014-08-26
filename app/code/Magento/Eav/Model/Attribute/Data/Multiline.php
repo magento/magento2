@@ -59,43 +59,49 @@ class Multiline extends \Magento\Eav\Model\Attribute\Data\Text
     public function validateValue($value)
     {
         $errors = array();
+        $lines = $this->processValue($value);
         $attribute = $this->getAttribute();
+        $attributeLabel = __($attribute->getStoreLabel());
+        if ($attribute->getIsRequired() && empty($lines)) {
+            $errors[] = __('"%1" is a required value.', $attributeLabel);
+        }
 
+        $maxAllowedLineCount = $attribute->getMultilineCount();
+        if (count($lines) > $maxAllowedLineCount) {
+            $errors[] = __('"%1" cannot contain more than %2 lines.', $attributeLabel, $maxAllowedLineCount);
+        }
+
+        foreach ($lines as $lineIndex => $line) {
+            // First line must be always validated
+            if ($lineIndex == 0 || !empty($line)) {
+                $result = parent::validateValue($line);
+                if ($result !== true) {
+                    $errors = array_merge($errors, $result);
+                }
+            }
+        }
+
+        return (count($errors) == 0) ? true : $errors;
+    }
+
+    /**
+     * Process value before validation
+     *
+     * @param bool|string|array $value
+     * @return array list of lines represented by given value
+     */
+    protected function processValue($value)
+    {
         if ($value === false) {
             // try to load original value and validate it
-            $value = $this->getEntity()->getDataUsingMethod($attribute->getAttributeCode());
-            if (!is_array($value)) {
-                $value = explode("\n", $value);
-            }
+            $attribute = $this->getAttribute();
+            $entity = $this->getEntity();
+            $value = $entity->getDataUsingMethod($attribute->getAttributeCode());
         }
-
         if (!is_array($value)) {
-            $value = array($value);
+            $value = explode("\n", $value);
         }
-        for ($i = 0; $i < $attribute->getMultilineCount(); $i++) {
-            if (!isset($value[$i])) {
-                $value[$i] = null;
-            }
-            // validate first line
-            if ($i == 0) {
-                $result = parent::validateValue($value[$i]);
-                if ($result !== true) {
-                    $errors = $result;
-                }
-            } else {
-                if (!empty($value[$i])) {
-                    $result = parent::validateValue($value[$i]);
-                    if ($result !== true) {
-                        $errors = array_merge($errors, $result);
-                    }
-                }
-            }
-        }
-
-        if (count($errors) == 0) {
-            return true;
-        }
-        return $errors;
+        return $value;
     }
 
     /**

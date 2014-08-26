@@ -27,6 +27,7 @@ namespace Magento\Checkout\Service\V1\Address;
 use \Magento\Checkout\Service\V1\Data\Cart\Address;
 use \Magento\Checkout\Service\V1\Data\Cart\AddressBuilder;
 use \Magento\Checkout\Service\V1\Data\Cart\Address\Region;
+use Magento\Customer\Service\V1\CustomerMetadataServiceInterface;
 use \Magento\Framework\Service\Data\Eav\AttributeValue;
 
 class Converter
@@ -37,11 +38,18 @@ class Converter
     protected $addressBuilder;
 
     /**
-     * @param AddressBuilder $addressBuilder
+     * @var CustomerMetadataServiceInterface
      */
-    public function __construct(AddressBuilder $addressBuilder)
+    protected $metadataService;
+
+    /**
+     * @param AddressBuilder $addressBuilder
+     * @param CustomerMetadataServiceInterface $metadataService
+     */
+    public function __construct(AddressBuilder $addressBuilder, CustomerMetadataServiceInterface $metadataService)
     {
         $this->addressBuilder = $addressBuilder;
+        $this->metadataService = $metadataService;
     }
 
     /**
@@ -74,7 +82,8 @@ class Converter
             Address::KEY_VAT_ID => $address->getVatId()
         ];
 
-        foreach ($this->addressBuilder->getCustomAttributesCodes() as $attributeCode) {
+        foreach ($this->metadataService->getCustomAttributesMetadata() as $attributeMetadata) {
+            $attributeCode = $attributeMetadata->getAttributeCode();
             $method = 'get' . \Magento\Framework\Service\DataObjectConverter::snakeCaseToCamelCase($attributeCode);
             $data[Address::CUSTOM_ATTRIBUTES_KEY][] =
                 [AttributeValue::ATTRIBUTE_CODE => $attributeCode, AttributeValue::VALUE => $address->$method()];

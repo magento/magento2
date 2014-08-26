@@ -26,7 +26,7 @@ namespace Magento\Catalog\Service\V1\Product;
 /**
  * Class Product MetadataServiceInterface
  */
-interface MetadataServiceInterface
+interface MetadataServiceInterface extends \Magento\Framework\Service\Data\Eav\MetadataServiceInterface
 {
     /**#@+
      * Predefined constants
@@ -34,15 +34,9 @@ interface MetadataServiceInterface
     const ENTITY_TYPE = 'catalog_product';
 
     const DEFAULT_ATTRIBUTE_SET_ID = 4;
-    /**#@-*/
 
-    /**
-     * Retrieve custom EAV attribute metadata of product
-     *
-     * @param int $attributeSetId
-     * @return \Magento\Catalog\Service\V1\Data\Eav\AttributeMetadata[]
-     */
-    public function getCustomAttributesMetadata($attributeSetId = self::DEFAULT_ATTRIBUTE_SET_ID);
+    const DATA_OBJECT_CLASS_NAME = 'Magento\Catalog\Service\V1\Data\Product';
+    /**#@-*/
 
     /**
      * Retrieve EAV attribute metadata of product
@@ -51,4 +45,9 @@ interface MetadataServiceInterface
      * @return \Magento\Catalog\Service\V1\Data\Eav\AttributeMetadata[]
      */
     public function getProductAttributesMetadata($attributeSetId = self::DEFAULT_ATTRIBUTE_SET_ID);
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCustomAttributesMetadata($dataObjectClassName = self::DATA_OBJECT_CLASS_NAME);
 }

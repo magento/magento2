@@ -748,8 +748,10 @@ class Order extends \Magento\Sales\Model\AbstractModel
         if (!$this->_canVoidOrder()) {
             return false;
         }
-
-        if (!$this->getPayment()->canReviewPayment() && $this->getPayment()->canFetchTransactionInfo()) {
+        if ($this->canUnhold()) {
+            return false;
+        }
+        if (!$this->canReviewPayment() && $this->canFetchPaymentReviewUpdate()) {
             return false;
         }
 

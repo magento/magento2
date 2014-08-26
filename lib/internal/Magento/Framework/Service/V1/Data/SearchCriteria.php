@@ -55,7 +55,7 @@ class SearchCriteria extends AbstractObject
     /**
      * Get sort order
      *
-     * @return string[]|null
+     * @return \Magento\Framework\Service\V1\Data\SortOrder[]|null
      */
     public function getSortOrders()
     {

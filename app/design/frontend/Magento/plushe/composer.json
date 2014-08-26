@@ -3,12 +3,12 @@
     "description": "N/A",
     "require": {
         "php": "~5.4.11|~5.5.0",
-        "magento/theme-frontend-blank": "0.1.0-alpha91",
-        "magento/framework": "0.1.0-alpha91",
+        "magento/theme-frontend-blank": "0.1.0-alpha92",
+        "magento/framework": "0.1.0-alpha92",
         "magento/magento-composer-installer": "*"
     },
     "type": "magento2-theme",
-    "version": "0.1.0-alpha91",
+    "version": "0.1.0-alpha92",
     "extra": {
         "map": [
             [

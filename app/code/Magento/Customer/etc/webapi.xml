@@ -25,6 +25,7 @@
 -->
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="../../../../../app/code/Magento/Webapi/etc/webapi.xsd">
+    <!-- Customer Group Service-->
     <route url="/V1/customerGroup/:groupId" method="GET">
         <service class="Magento\Customer\Service\V1\CustomerGroupServiceInterface" method="getGroup"/>
         <resources>
@@ -67,60 +68,60 @@
             <resource ref="Magento_Customer::group"/>
         </resources>
     </route>
-    <route url="/V1/customerMetadata/:entityType/entity/:attributeCode/attribute" method="GET">
+
+    <!-- Customer Metadata Service-->
+    <route url="/V1/customerAttributeMetadata/:attributeCode" method="GET">
         <service class="Magento\Customer\Service\V1\CustomerMetadataServiceInterface" method="getAttributeMetadata"/>
         <resources>
             <resource ref="Magento_Customer::customer"/>
         </resources>
     </route>
-    <route url="/V1/customerMetadata/:entityType/entity/:attributeSetId/attributeSet/:storeId/store" method="GET">
-        <service class="Magento\Customer\Service\V1\CustomerMetadataServiceInterface" method="getAllAttributeSetMetadata"/>
-        <resources>
-            <resource ref="Magento_Customer::customer"/>
-        </resources>
-    </route>
-    <route url="/V1/customerMetadata/:entityType/entity/:formCode/form" method="GET">
+    <route url="/V1/customerAttributeMetadata/form/:formCode" method="GET">
         <service class="Magento\Customer\Service\V1\CustomerMetadataServiceInterface" method="getAttributes"/>
         <resources>
             <resource ref="Magento_Customer::customer"/>
         </resources>
     </route>
-    <route url="/V1/customerMetadata/customer/:attributeCode/attribute" method="GET">
-        <service class="Magento\Customer\Service\V1\CustomerMetadataServiceInterface" method="getCustomerAttributeMetadata"/>
+    <route url="/V1/customerAttributeMetadata" method="GET">
+        <service class="Magento\Customer\Service\V1\CustomerMetadataServiceInterface" method="getAllAttributesMetadata"/>
         <resources>
             <resource ref="Magento_Customer::customer"/>
         </resources>
     </route>
-    <route url="/V1/customerMetadata/customer/all" method="GET">
-        <service class="Magento\Customer\Service\V1\CustomerMetadataServiceInterface" method="getAllCustomerAttributeMetadata"/>
+    <route url="/V1/customerAttributeMetadata/custom" method="GET">
+        <service class="Magento\Customer\Service\V1\CustomerMetadataServiceInterface" method="getCustomAttributesMetadata"/>
         <resources>
             <resource ref="Magento_Customer::customer"/>
         </resources>
     </route>
-    <route url="/V1/customerMetadata/customer/custom" method="GET">
-        <service class="Magento\Customer\Service\V1\CustomerMetadataServiceInterface" method="getCustomCustomerAttributeMetadata"/>
+
+    <!-- Customer Address Metadata Service-->
+    <route url="/V1/addressAttributeMetadata/:attributeCode" method="GET">
+        <service class="Magento\Customer\Service\V1\AddressMetadataServiceInterface" method="getAttributeMetadata"/>
         <resources>
             <resource ref="Magento_Customer::customer"/>
         </resources>
     </route>
-    <route url="/V1/customerMetadata/address/:attributeCode/attribute" method="GET">
-        <service class="Magento\Customer\Service\V1\CustomerMetadataServiceInterface" method="getAddressAttributeMetadata"/>
+    <route url="/V1/addressAttributeMetadata/form/:formCode" method="GET">
+        <service class="Magento\Customer\Service\V1\AddressMetadataServiceInterface" method="getAttributes"/>
         <resources>
             <resource ref="Magento_Customer::customer"/>
         </resources>
     </route>
-    <route url="/V1/customerMetadata/address/all" method="GET">
-        <service class="Magento\Customer\Service\V1\CustomerMetadataServiceInterface" method="getAllAddressAttributeMetadata"/>
+    <route url="/V1/addressAttributeMetadata" method="GET">
+        <service class="Magento\Customer\Service\V1\AddressMetadataServiceInterface" method="getAllAttributesMetadata"/>
         <resources>
             <resource ref="Magento_Customer::customer"/>
         </resources>
     </route>
-    <route url="/V1/customerMetadata/address/custom" method="GET">
-        <service class="Magento\Customer\Service\V1\CustomerMetadataServiceInterface" method="getCustomAddressAttributeMetadata"/>
+    <route url="/V1/addressAttributeMetadata/custom" method="GET">
+        <service class="Magento\Customer\Service\V1\AddressMetadataServiceInterface" method="getCustomAttributesMetadata"/>
         <resources>
             <resource ref="Magento_Customer::customer"/>
         </resources>
     </route>
+
+    <!-- Customer Account Service-->
     <route url="/V1/customerAccounts/details" method="GET">
         <service class="Magento\Customer\Service\V1\CustomerAccountServiceInterface" method="getCustomerDetailsByEmail"/>
         <resources>

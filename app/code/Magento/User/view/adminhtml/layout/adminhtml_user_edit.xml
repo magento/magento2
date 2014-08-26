@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
+<page layout="admin-2columns-left" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <referenceContainer name="left">
         <block class="Magento\User\Block\User\Edit\Tabs" name="adminhtml.user.edit.tabs"/>
     </referenceContainer>
@@ -33,4 +33,4 @@
     <referenceContainer name="js">
         <block class="Magento\Backend\Block\Template" name="adminhtml.user.roles.grid.js" template="Magento_User::user/roles_grid_js.phtml"/>
     </referenceContainer>
-</layout>
+</page>

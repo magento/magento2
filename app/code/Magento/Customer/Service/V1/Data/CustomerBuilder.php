@@ -21,12 +21,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
 namespace Magento\Customer\Service\V1\Data;
 
-use Magento\Customer\Service\V1\CustomerMetadataServiceInterface;
 use Magento\Framework\Service\Data\Eav\AbstractObject;
 use Magento\Framework\Service\Data\Eav\AbstractObjectBuilder;
 use Magento\Framework\Service\Data\Eav\AttributeValueBuilder;
+use Magento\Customer\Service\V1\CustomerMetadataServiceInterface;
 
 /**
  * Builder for the Customer Service Data Object
@@ -38,11 +39,6 @@ use Magento\Framework\Service\Data\Eav\AttributeValueBuilder;
 class CustomerBuilder extends AbstractObjectBuilder
 {
     /**
-     * @var CustomerMetadataServiceInterface
-     */
-    protected $_metadataService;
-
-    /**
      * @param \Magento\Framework\Service\Data\ObjectFactory $objectFactory
      * @param AttributeValueBuilder $valueBuilder
      * @param CustomerMetadataServiceInterface $metadataService
@@ -52,22 +48,7 @@ class CustomerBuilder extends AbstractObjectBuilder
         AttributeValueBuilder $valueBuilder,
         CustomerMetadataServiceInterface $metadataService
     ) {
-        parent::__construct($objectFactory, $valueBuilder);
-        $this->_metadataService = $metadataService;
-    }
-
-    /**
-     * Template method used to configure the attribute codes for the custom attributes
-     *
-     * @return string[]
-     */
-    public function getCustomAttributesCodes()
-    {
-        $attributeCodes = array();
-        foreach ($this->_metadataService->getCustomCustomerAttributeMetadata() as $attribute) {
-            $attributeCodes[] = $attribute->getAttributeCode();
-        }
-        return $attributeCodes;
+        parent::__construct($objectFactory, $valueBuilder, $metadataService);
     }
 
     /**

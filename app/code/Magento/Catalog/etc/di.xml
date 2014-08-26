@@ -459,9 +459,25 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="Magento\Catalog\Service\Config\ProductMetadataConfig" type="Magento\Framework\Service\Config\MetadataConfig">
+        <arguments>
+            <argument name="attributeMetadataBuilder" xsi:type="object">Magento\Catalog\Service\V1\Data\Eav\AttributeMetadataBuilder</argument>
+        </arguments>
+    </virtualType>
     <type name="Magento\Catalog\Service\V1\Product\MetadataService">
         <arguments>
             <argument name="metadataService" xsi:type="object">Magento\Catalog\Service\V1\MetadataService\Proxy</argument>
+            <argument name="metadataConfig" xsi:type="object">Magento\Catalog\Service\Config\ProductMetadataConfig</argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Catalog\Service\Config\CategoryMetadataConfig" type="Magento\Framework\Service\Config\MetadataConfig">
+        <arguments>
+            <argument name="attributeMetadataBuilder" xsi:type="object">Magento\Catalog\Service\V1\Data\Eav\AttributeMetadataBuilder</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Catalog\Service\V1\Category\MetadataService">
+        <arguments>
+            <argument name="metadataConfig" xsi:type="object">Magento\Catalog\Service\Config\CategoryMetadataConfig</argument>
         </arguments>
     </type>
     <type name="Magento\Catalog\Service\V1\ProductService">

@@ -42,6 +42,8 @@ interface WriteServiceInterface
      * @param string $productSku
      * @param \Magento\Catalog\Service\V1\Product\CustomOptions\Data\Option $option
      * @return \Magento\Catalog\Service\V1\Product\CustomOptions\Data\Option
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
     public function add($productSku, \Magento\Catalog\Service\V1\Product\CustomOptions\Data\Option $option);
 

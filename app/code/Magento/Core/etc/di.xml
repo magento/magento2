@@ -201,6 +201,71 @@
         </arguments>
     </type>
 
+    <virtualType name="pageFileSourceBase" type="Magento\Framework\View\File\Collector\Base"/>
+    <virtualType name="pageFileSourceBaseFiltered" type="Magento\Framework\View\File\Collector\Decorator\ModuleOutput">
+        <arguments>
+            <argument name="subject" xsi:type="object">pageFileSourceBase</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="pageFileSourceBaseSorted" type="Magento\Framework\View\File\Collector\Decorator\ModuleDependency">
+        <arguments>
+            <argument name="subject" xsi:type="object">pageFileSourceBaseFiltered</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="pageFileSourceTheme" type="Magento\Framework\View\File\Collector\ThemeModular"/>
+    <virtualType name="pageFileSourceThemeFiltered" type="Magento\Framework\View\File\Collector\Decorator\ModuleOutput">
+        <arguments>
+            <argument name="subject" xsi:type="object">pageFileSourceTheme</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="pageFileSourceThemeSorted" type="Magento\Framework\View\File\Collector\Decorator\ModuleDependency">
+        <arguments>
+            <argument name="subject" xsi:type="object">pageFileSourceThemeFiltered</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="pageFileSourceOverrideBase" type="Magento\Framework\View\File\Collector\Override\Base">
+        <arguments>
+            <argument name="subDir" xsi:type="string">page/override</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="pageFileSourceOverrideBaseFiltered" type="Magento\Framework\View\File\Collector\Decorator\ModuleOutput">
+        <arguments>
+            <argument name="subject" xsi:type="object">pageFileSourceOverrideBase</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="pageFileSourceOverrideBaseSorted" type="Magento\Framework\View\File\Collector\Decorator\ModuleDependency">
+        <arguments>
+            <argument name="subject" xsi:type="object">pageFileSourceOverrideBaseFiltered</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="pageFileSourceOverrideTheme" type="Magento\Framework\View\File\Collector\Override\ThemeModular">
+        <arguments>
+            <argument name="subDir" xsi:type="string">override/theme</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="pageFileSourceOverrideThemeFiltered" type="Magento\Framework\View\File\Collector\Decorator\ModuleOutput">
+        <arguments>
+            <argument name="subject" xsi:type="object">pageFileSourceOverrideTheme</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="pageFileSourceOverrideThemeSorted" type="Magento\Framework\View\File\Collector\Decorator\ModuleDependency">
+        <arguments>
+            <argument name="subject" xsi:type="object">pageFileSourceOverrideThemeFiltered</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Magento\Framework\View\PageLayout\File\Collector\Aggregated">
+        <arguments>
+            <argument name="baseFiles" xsi:type="object">pageFileSourceBaseSorted</argument>
+            <argument name="themeFiles" xsi:type="object">pageFileSourceThemeSorted</argument>
+            <argument name="overrideBaseFiles" xsi:type="object">pageFileSourceOverrideBaseSorted</argument>
+            <argument name="overrideThemeFiles" xsi:type="object">pageFileSourceOverrideThemeSorted</argument>
+        </arguments>
+    </type>
+
     <type name="Magento\Framework\View\Design\Theme\Image">
         <arguments>
             <argument name="uploader" xsi:type="object">Magento\Framework\View\Design\Theme\Image\Uploader\Proxy</argument>

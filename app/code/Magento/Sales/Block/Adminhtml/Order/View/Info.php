@@ -182,7 +182,7 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
         $accountData = array();
         $entityType = 'customer';
 
-        foreach ($this->_customerMetadataService->getAllCustomerAttributeMetadata($entityType) as $attribute) {
+        foreach ($this->_customerMetadataService->getAllAttributesMetadata($entityType) as $attribute) {
             /* @var $attribute \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata */
             if (!$attribute->isVisible() || $attribute->isSystem()) {
                 continue;

@@ -34,4 +34,9 @@
         <area>adminhtml</area>
         <class>Magento\Reports\Test\Page\Adminhtml\ProductLowStock</class>
     </productLowStock>
+    <productReportReview>
+        <mca>reports/report_review/product</mca>
+        <area>adminhtml</area>
+        <class>Magento\Reports\Test\Page\Adminhtml\ProductReportReview</class>
+    </productReportReview>
 </page>

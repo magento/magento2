@@ -23,13 +23,14 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
-    <remove name="root"/>
-    <block class="Magento\Review\Block\Product\View\ListView" name="product.info.product_additional_data" as="product_additional_data" template="product/view/list.phtml" output="1"/>
-    <block class="Magento\Theme\Block\Html\Pager" name="product_review_list.toolbar" output="1">
-        <arguments>
-            <argument name="show_per_page" xsi:type="boolean">false</argument>
-            <argument name="show_amounts" xsi:type="boolean">false</argument>
-        </arguments>
-    </block>
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_generic.xsd">
+    <container name="root">
+        <block class="Magento\Review\Block\Product\View\ListView" name="product.info.product_additional_data" as="product_additional_data" template="product/view/list.phtml"/>
+        <block class="Magento\Theme\Block\Html\Pager" name="product_review_list.toolbar">
+            <arguments>
+                <argument name="show_per_page" xsi:type="boolean">false</argument>
+                <argument name="show_amounts" xsi:type="boolean">false</argument>
+            </arguments>
+        </block>
+    </container>
 </layout>

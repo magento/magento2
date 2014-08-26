@@ -101,7 +101,7 @@ var sampleTemplate = '<tr>'+
                                     '</div>'+
                                 '</div>'+
                                 '<div class="row">'+
-                                    '<label for="downloadable_sample_{{id}}_url_type"><input type="radio" class="radio validate-one-required-by-name" id="downloadable_sample_{{id}}_url_type" name="downloadable[sample][{{id}}][type]" value="url"{{url_checked}} /> URL:</label> <input type="text" class="validate-downloadable-url input-text" name="downloadable[sample][{{id}}][sample_url]" value="{{sample_url}}" />'+
+                                    '<label for="downloadable_sample_{{id}}_url_type"><input type="radio" class="radio validate-one-required-by-name" id="downloadable_sample_{{id}}_url_type" name="downloadable[sample][{{id}}][type]" value="url"{{url_checked}} /> URL:</label> <input type="text" class="validate-downloadable-url validate-url input-text" name="downloadable[sample][{{id}}][sample_url]" value="{{sample_url}}" />'+
                                 '</div>'+
                                 '<div>'+
                                     '<span id="downloadable_sample_{{id}}_container"></span>'+

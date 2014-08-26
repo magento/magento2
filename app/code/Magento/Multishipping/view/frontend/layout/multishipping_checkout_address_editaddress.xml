@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <update handle="multishipping_checkout"/>
     <update handle="multishipping_checkout_customer_address"/>
     <referenceBlock name="page.main.title">
@@ -31,4 +31,4 @@
             <argument translate="true" name="label" xsi:type="string">Edit Address</argument>
         </action>
     </referenceBlock>
-</layout>
+</page>

@@ -23,6 +23,9 @@
  */
 namespace Magento\Customer\Model\Metadata;
 
+use Magento\Customer\Service\V1\AddressMetadataServiceInterface;
+use Magento\Customer\Service\V1\CustomerMetadataServiceInterface;
+
 class Form
 {
     /**#@+
@@ -35,9 +38,14 @@ class Form
     /**#@-*/
 
     /**
-     * @var \Magento\Customer\Service\V1\CustomerMetadataServiceInterface
+     * @var CustomerMetadataServiceInterface
      */
-    protected $_eavMetadataService;
+    protected $_customerMetadataService;
+
+    /**
+     * @var AddressMetadataServiceInterface
+     */
+    protected $_addressMetadataService;
 
     /**
      * @var ElementFactory
@@ -102,7 +110,8 @@ class Form
     protected $_attributes;
 
     /**
-     * @param \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $eavMetadataService
+     * @param CustomerMetadataServiceInterface $customerMetadataService
+     * @param AddressMetadataServiceInterface $addressMetadataService
      * @param ElementFactory $elementFactory
      * @param \Magento\Framework\App\RequestInterface $httpRequest
      * @param \Magento\Framework\Module\Dir\Reader $modulesReader
@@ -117,7 +126,8 @@ class Form
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $eavMetadataService,
+        CustomerMetadataServiceInterface $customerMetadataService,
+        AddressMetadataServiceInterface $addressMetadataService,
         ElementFactory $elementFactory,
         \Magento\Framework\App\RequestInterface $httpRequest,
         \Magento\Framework\Module\Dir\Reader $modulesReader,
@@ -129,7 +139,8 @@ class Form
         $filterAttributes = array(),
         $isAjax = false
     ) {
-        $this->_eavMetadataService = $eavMetadataService;
+        $this->_customerMetadataService = $customerMetadataService;
+        $this->_addressMetadataService = $addressMetadataService;
         $this->_elementFactory = $elementFactory;
         $this->_attributeValues = $attributeValues;
         $this->_entityType = $entityType;
@@ -146,11 +157,18 @@ class Form
      * Retrieve attributes metadata for the form
      *
      * @return \Magento\Customer\Service\V1\Data\Eav\AttributeMetadata[]
+     * @throws \LogicException For undefined entity type
      */
     public function getAttributes()
     {
         if (!isset($this->_attributes)) {
-            $this->_attributes = $this->_eavMetadataService->getAttributes($this->_entityType, $this->_formCode);
+            if ($this->_entityType === CustomerMetadataServiceInterface::ENTITY_TYPE_CUSTOMER) {
+                $this->_attributes = $this->_customerMetadataService->getAttributes($this->_formCode);
+            } else if ($this->_entityType === AddressMetadataServiceInterface::ENTITY_TYPE_ADDRESS) {
+                $this->_attributes = $this->_addressMetadataService->getAttributes($this->_formCode);
+            } else {
+                throw new \LogicException('Undefined entity type: ' . $this->_entityType);
+            }
         }
         return $this->_attributes;
     }

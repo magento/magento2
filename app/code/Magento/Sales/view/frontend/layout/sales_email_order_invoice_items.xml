@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd" label="Email Invoice Items List" design_abstraction="custom">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd" label="Email Invoice Items List" design_abstraction="custom">
     <update handle="sales_email_order_invoice_renderers" />
     <block class="Magento\Sales\Block\Order\Email\Invoice\Items" name="items" template="email/invoice/items.phtml">
         <block class="Magento\Framework\View\Element\RendererList" name="sales.email.order.invoice.renderers" as="renderer.list" />
@@ -36,4 +36,4 @@
         </block>
     </block>
     <block class="Magento\Framework\View\Element\Template" name="additional.product.info" template="Magento_Core::template.phtml"/>
-</layout>
+</page>

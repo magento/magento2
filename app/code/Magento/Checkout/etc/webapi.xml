@@ -97,4 +97,58 @@
             <resource ref="Magento_Sales::sales" />
         </resources>
     </route>
+    <route url="/V1/carts/:cartId/selected-shipping-method" method="PUT">
+        <service class="Magento\Checkout\Service\V1\ShippingMethod\WriteServiceInterface" method="setMethod"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/selected-shipping-method" method="GET">
+        <service class="Magento\Checkout\Service\V1\ShippingMethod\ReadServiceInterface" method="getMethod"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/shipping-methods" method="GET">
+        <service class="Magento\Checkout\Service\V1\ShippingMethod\ReadServiceInterface" method="getList"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/coupons" method="GET">
+        <service class="Magento\Checkout\Service\V1\Coupon\ReadServiceInterface" method="get"/>
+        <resources>
+            <resource ref="Magento_SalesRule::quote" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/coupons" method="PUT">
+        <service class="Magento\Checkout\Service\V1\Coupon\WriteServiceInterface" method="set"/>
+        <resources>
+            <resource ref="Magento_SalesRule::quote" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/coupons" method="DELETE">
+        <service class="Magento\Checkout\Service\V1\Coupon\WriteServiceInterface" method="delete"/>
+        <resources>
+            <resource ref="Magento_SalesRule::quote" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/selected-payment-methods" method="GET">
+        <service class="Magento\Checkout\Service\V1\PaymentMethod\ReadServiceInterface" method="getPayment"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/selected-payment-methods" method="PUT">
+        <service class="Magento\Checkout\Service\V1\PaymentMethod\WriteServiceInterface" method="set"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/payment-methods" method="GET">
+        <service class="Magento\Checkout\Service\V1\PaymentMethod\ReadServiceInterface" method="getList"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
 </routes>

@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <update handle="catalog_product_view"/>
     <referenceContainer name="product.info.main">
         <block class="Magento\Wishlist\Block\Item\Configure" name="product.info.addto" as="addto" template="Magento_Wishlist::item/configure/addto.phtml"/>
@@ -36,4 +36,4 @@
             <argument name="element" xsi:type="string">product.info.addtocart.additional</argument>
         </action>
     </referenceBlock>
-</layout>
+</page>

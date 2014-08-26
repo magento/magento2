@@ -112,6 +112,11 @@ class ViewTest extends \PHPUnit_Framework_TestCase
      */
     protected $action;
 
+    /**
+     * @var \Magento\Framework\View\Page\Config
+     */
+    protected $pageConfig;
+
     public function setUp()
     {
         $this->request = $this->getMock('Magento\Framework\App\RequestInterface');
@@ -124,8 +129,18 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $this->update = $this->getMock('Magento\Framework\View\Layout\ProcessorInterface');
         $this->layout = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
         $this->layout->expects($this->any())->method('getUpdate')->will($this->returnValue($this->update));
+
+        $this->pageConfig = $this->getMockBuilder('Magento\Framework\View\Page\Config')
+            ->disableOriginalConstructor()->getMock();
+        $this->pageConfig->expects($this->any())->method('addBodyClass')->will($this->returnSelf());
+
+        $this->page = $this->getMockBuilder('Magento\Framework\View\Page')
+            ->setMethods(['getConfig', 'initLayout'])->disableOriginalConstructor()->getMock();
+        $this->page->expects($this->any())->method('getConfig')->will($this->returnValue($this->pageConfig));
+
         $this->view = $this->getMock('Magento\Framework\App\ViewInterface');
         $this->view->expects($this->any())->method('getLayout')->will($this->returnValue($this->layout));
+        $this->view->expects($this->any())->method('getPage')->will($this->returnValue($this->page));
 
         $this->context = $this->getMock('Magento\Backend\App\Action\Context', [], [], '', false);
         $this->context->expects($this->any())->method('getRequest')->will($this->returnValue($this->request));
@@ -178,8 +193,6 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $settings->expects($this->atLeastOnce())->method('getPageLayout')->will($this->returnValue($pageLayout));
 
         $this->catalogDesign->expects($this->any())->method('getDesignSettings')->will($this->returnValue($settings));
-
-        $this->layoutHelper->expects($this->once())->method('applyHandle')->with($pageLayout);
 
         $this->action->execute();
     }

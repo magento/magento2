@@ -23,8 +23,8 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
-    <container name="root" label="Root" output="1">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_generic.xsd">
+    <container name="root" label="Root">
         <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config" template="Magento_ConfigurableProduct::catalog/product/edit/super/generator.phtml" name="product-variations-generator" as="generator">
             <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config" template="Magento_ConfigurableProduct::catalog/product/edit/super/attribute-js-template.phtml" as="template"/>
             <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Attribute" template="Magento_ConfigurableProduct::catalog/product/edit/super/attribute-template.phtml" as="attribute-renderer"/>

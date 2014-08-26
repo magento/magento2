@@ -22,13 +22,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Catalog category helper
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\Catalog\Helper\Product;
 
+/**
+ * Catalog category helper
+ */
 class View extends \Magento\Framework\App\Helper\AbstractHelper
 {
     // List of exceptions throwable during prepareAndRender() method
@@ -56,13 +54,6 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
      * @var \Magento\Catalog\Helper\Product
      */
     protected $_catalogProduct = null;
-
-    /**
-     * Catalog product
-     *
-     * @var \Magento\Theme\Helper\Layout
-     */
-    protected $_pageLayout = null;
 
     /**
      * Catalog design
@@ -93,7 +84,6 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Catalog\Model\Session $catalogSession
      * @param \Magento\Catalog\Model\Design $catalogDesign
      * @param \Magento\Catalog\Helper\Product $catalogProduct
-     * @param \Magento\Theme\Helper\Layout $pageLayout
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\App\ViewInterface $view
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
@@ -104,7 +94,6 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Catalog\Model\Session $catalogSession,
         \Magento\Catalog\Model\Design $catalogDesign,
         \Magento\Catalog\Helper\Product $catalogProduct,
-        \Magento\Theme\Helper\Layout $pageLayout,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\App\ViewInterface $view,
         \Magento\Framework\Message\ManagerInterface $messageManager,
@@ -113,7 +102,6 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_catalogSession = $catalogSession;
         $this->_catalogDesign = $catalogDesign;
         $this->_catalogProduct = $catalogProduct;
-        $this->_pageLayout = $pageLayout;
         $this->_coreRegistry = $coreRegistry;
         $this->_view = $view;
         $this->messageGroups = $messageGroups;
@@ -133,13 +121,20 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
     public function initProductLayout($product, $controller, $params = null)
     {
         $settings = $this->_catalogDesign->getDesignSettings($product);
+        $pageConfig = $this->_view->getPage()->getConfig();
 
         if ($settings->getCustomDesign()) {
             $this->_catalogDesign->applyCustomDesign($settings->getCustomDesign());
         }
 
+        // Apply custom page layout
+        if ($settings->getPageLayout()) {
+            $pageConfig->setPageLayout($settings->getPageLayout());
+        }
+
+        // Load default page handles and page configurations
+        $this->_view->getPage()->initLayout();
         $update = $this->_view->getLayout()->getUpdate();
-        $update->addHandle('default');
 
         if ($params && $params->getBeforeHandles()) {
             foreach ($params->getBeforeHandles() as $handle) {
@@ -162,7 +157,6 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
                 );
             }
         }
-
         $this->_view->loadLayoutUpdates();
         // Apply custom layout update once layout is loaded
         $layoutUpdates = $settings->getLayoutUpdates();
@@ -177,26 +171,16 @@ class View extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_view->generateLayoutXml();
         $this->_view->generateLayoutBlocks();
 
-        // Apply custom layout (page) template once the blocks are generated
-        if ($settings->getPageLayout()) {
-            $this->_pageLayout->applyTemplate($settings->getPageLayout());
-        }
-
         $currentCategory = $this->_coreRegistry->registry('current_category');
-        $root = $this->_view->getLayout()->getBlock('root');
-        if ($root) {
-            $controllerClass = $this->_request->getFullActionName();
-            if ($controllerClass != 'catalog-product-view') {
-                $root->addBodyClass('catalog-product-view');
-            }
-            $root->addBodyClass('product-' . $product->getUrlKey());
-            if ($currentCategory instanceof \Magento\Catalog\Model\Category) {
-                $root->addBodyClass(
-                    'categorypath-' . $currentCategory->getUrlPath()
-                )->addBodyClass(
-                    'category-' . $currentCategory->getUrlKey()
-                );
-            }
+
+        $controllerClass = $this->_request->getFullActionName();
+        if ($controllerClass != 'catalog-product-view') {
+            $pageConfig->addBodyClass('catalog-product-view');
+        }
+        $pageConfig->addBodyClass('product-' . $product->getUrlKey());
+        if ($currentCategory instanceof \Magento\Catalog\Model\Category) {
+            $pageConfig->addBodyClass('categorypath-' . $currentCategory->getUrlPath())
+                ->addBodyClass('category-' . $currentCategory->getUrlKey());
         }
 
         return $this;

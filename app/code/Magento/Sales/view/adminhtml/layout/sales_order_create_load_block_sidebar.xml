@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <referenceContainer name="content">
         <block class="Magento\Sales\Block\Adminhtml\Order\Create\Sidebar" template="order/create/sidebar.phtml" name="sidebar">
             <block class="Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Cart" template="order/create/sidebar/items.phtml" name="cart"/>
@@ -35,4 +35,4 @@
             <block class="Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Pviewed" template="order/create/sidebar/items.phtml" name="pviewed"/>
         </block>
     </referenceContainer>
-</layout>
+</page>

@@ -31,6 +31,7 @@ use Magento\Framework\Service\V1\Data\SearchCriteriaBuilder;
 use Magento\Tax\Model\Calculation\Rate\Converter;
 use Magento\Tax\Service\V1\TaxRateServiceInterface;
 use Magento\Tax\Service\V1\Data\TaxRate;
+use Magento\Framework\Service\V1\Data\SortOrderBuilder;
 
 /**
  * Tax rate collection for a grid backed by Services
@@ -55,15 +56,17 @@ class TaxRateCollection extends AbstractServiceCollection
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param TaxRateServiceInterface $rateService
      * @param Converter $rateConverter
+     * @param SortOrderBuilder $sortOrderBuilder
      */
     public function __construct(
         EntityFactory $entityFactory,
         FilterBuilder $filterBuilder,
         SearchCriteriaBuilder $searchCriteriaBuilder,
+        SortOrderBuilder $sortOrderBuilder,
         TaxRateServiceInterface $rateService,
         Converter $rateConverter
     ) {
-        parent::__construct($entityFactory, $filterBuilder, $searchCriteriaBuilder);
+        parent::__construct($entityFactory, $filterBuilder, $searchCriteriaBuilder, $sortOrderBuilder);
         $this->rateService = $rateService;
         $this->rateConverter = $rateConverter;
     }

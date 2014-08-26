@@ -30,6 +30,7 @@ use Magento\Catalog\Service\V1\Data\Product as ProductData;
 use Magento\Framework\Service\V1\Data\Search\FilterGroup;
 use Magento\Catalog\Model\Resource\Product\Collection;
 use Magento\Catalog\Service\V1\Product\MetadataServiceInterface as ProductMetadataServiceInterface;
+use Magento\Framework\Service\V1\Data\SortOrder;
 
 /**
  * Class ProductService
@@ -209,9 +210,10 @@ class ProductService implements ProductServiceInterface
         foreach ($searchCriteria->getFilterGroups() as $group) {
             $this->addFilterGroupToCollection($group, $collection);
         }
-        foreach ((array)$searchCriteria->getSortOrders() as $field => $direction) {
-            $field = $this->translateField($field);
-            $collection->addOrder($field, $direction == SearchCriteria::SORT_ASC ? 'ASC' : 'DESC');
+        /** @var SortOrder $sortOrder*/
+        foreach ((array)$searchCriteria->getSortOrders() as $sortOrder) {
+            $field = $this->translateField($sortOrder->getField());
+            $collection->addOrder($field, ($sortOrder->getDirection() == SearchCriteria::SORT_ASC) ? 'ASC' : 'DESC');
         }
         $collection->setCurPage($searchCriteria->getCurrentPage());
         $collection->setPageSize($searchCriteria->getPageSize());

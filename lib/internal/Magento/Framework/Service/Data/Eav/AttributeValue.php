@@ -48,7 +48,7 @@ class AttributeValue extends \Magento\Framework\Service\Data\AbstractObject
     /**
      * Get attribute value
      *
-     * @return string the attribute value
+     * @return mixed the attribute value
      */
     public function getValue()
     {

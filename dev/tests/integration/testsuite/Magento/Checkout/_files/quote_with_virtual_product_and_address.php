@@ -40,7 +40,7 @@ $quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Ma
 $quote->setStoreId(
         1
     )->setIsActive(
-        false
+        true
     )->setIsMultiShipping(
         false
     )->assignCustomerWithAddressChange(

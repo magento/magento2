@@ -399,4 +399,17 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
         $this->productMock->expects($this->once())->method('save')->will($this->throwException(new \Exception()));
         $this->writeService->add(self::PRODUCT_SKU, $optionData);
     }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\InputException
+     */
+    public function testAddWithOptionId()
+    {
+        $optionData = $this->getMock('Magento\Catalog\Service\V1\Product\CustomOptions\Data\Option', [], [], '', false);
+        $optionData->expects($this->once())->method('getOptionId')->will($this->returnValue(10));
+        $this->optionConverterMock
+            ->expects($this->never())
+            ->method('convert');
+        $this->writeService->add(self::PRODUCT_SKU, $optionData);
+    }
 }

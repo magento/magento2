@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <referenceBlock name="head.components">
         <block class="Magento\Framework\View\Element\Js\Components" name="paypal_opcheckout_head_components" template="Magento_Paypal::js/components.phtml"/>
     </referenceBlock>
@@ -38,4 +38,4 @@
             </arguments>
         </block>
     </referenceContainer>
-</layout>
+</page>

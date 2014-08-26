@@ -464,16 +464,14 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
     protected function _prepareCollection()
     {
         if ($this->getCollection()) {
+            if ($this->getCollection()->isLoaded()) {
+                $this->getCollection()->clear();
+            }
+
             parent::_prepareCollection();
 
             if (!$this->_isExport) {
-                $filter   = $this->getParam($this->getVarNameFilter(), null);
-                if (is_string($filter)) {
-                    $this->getCollection()->removeAllItems();
-                    $this->getCollection()->loadWithFilter();
-                } else {
-                    $this->getCollection()->load();
-                }
+                $this->getCollection()->load();
                 $this->_afterLoadCollection();
             }
         }

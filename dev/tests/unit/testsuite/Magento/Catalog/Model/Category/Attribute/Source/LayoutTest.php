@@ -46,24 +46,30 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
         $this->model = $helper->getObject(
             '\Magento\Catalog\Model\Category\Attribute\Source\Layout',
             [
-                'pageSourceLayout' => $this->getMockedLayout()
+                'pageLayoutBuilder' => $this->getMockedPageLayoutBuilder()
             ]
         );
     }
 
     /**
-     * @return \Magento\Theme\Model\Layout\Source\Layout
+     * @return \Magento\Core\Model\PageLayout\Config\Builder
      */
-    private function getMockedLayout()
+    private function getMockedPageLayoutBuilder()
     {
-        $mockBuilder = $this->getMockBuilder('\Magento\Theme\Model\Layout\Source\Layout');
-        $mockBuilder->disableOriginalConstructor();
-        $mock = $mockBuilder->getMock();
-
-        $mock->expects($this->any())
+        $mockPageLayoutConfig = $this->getMockBuilder('Magento\Framework\View\PageLayout\Config')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $mockPageLayoutConfig->expects($this->any())
             ->method('toOptionArray')
             ->will($this->returnValue($this->testArray));
 
-        return $mock;
+        $mockPageLayoutBuilder = $this->getMockBuilder('Magento\Core\Model\PageLayout\Config\Builder')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $mockPageLayoutBuilder->expects($this->once())
+            ->method('getPageLayoutsConfig')
+            ->will($this->returnValue($mockPageLayoutConfig));
+
+        return $mockPageLayoutBuilder;
     }
 }

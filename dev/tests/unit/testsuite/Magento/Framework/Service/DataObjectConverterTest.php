@@ -143,7 +143,7 @@ class DataObjectConverterTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $metadataService->expects($this->any())
-            ->method('getCustomCustomerAttributeMetadata')
+            ->method('getCustomAttributesMetadata')
             ->will($this->returnValue([]));
         /** @var \Magento\Customer\Service\V1\Data\CustomerBuilder $customerBuilder */
         $customerBuilder = $objectManager->getObject(

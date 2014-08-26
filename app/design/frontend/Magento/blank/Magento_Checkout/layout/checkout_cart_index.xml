@@ -23,9 +23,8 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../app/code/Magento/Core/etc/layout_single.xsd">
-    <update handle="page_one_column" />
+<page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../../../app/code/Magento/Core/etc/page.xsd">
     <referenceContainer name="checkout.cart.items">
         <container name="checkout.cart.container" label="invisible" htmlTag="div" htmlClass="cart-container" before="-">
             <container name="cart.summary" label="Cart Summary Container" htmlTag="div" htmlClass="cart-summary" after="-">
@@ -49,4 +48,4 @@
     <move element="checkout.cart.coupon" destination="cart.summary" />
     <move element="checkout.cart.totals" destination="cart.summary"/>
     <move element="checkout.cart.methods.bottom" destination="cart.summary"/>
-</layout>
+</page>

@@ -81,7 +81,7 @@ $product->setTypeId(
 )->setStatus(
     \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
 )->setTaxClassId(
-    0
+    2
 )->save();
 
 $stockItem = $this->getObjectManager()->create('Magento\CatalogInventory\Model\Stock\Item');

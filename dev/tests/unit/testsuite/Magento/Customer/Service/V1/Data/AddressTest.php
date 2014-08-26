@@ -108,14 +108,14 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $regionBuilder = $this->objectManagerHelper->getObject('Magento\Customer\Service\V1\Data\RegionBuilder');
         /** @var \Magento\Customer\Service\V1\CustomerMetadataService $customerMetadataService */
         $this->_customerMetadataService = $this->getMockBuilder(
-            'Magento\Customer\Service\V1\CustomerMetadataService'
+            'Magento\Customer\Service\V1\AddressMetadataService'
         )->setMethods(
-            array('getCustomAddressAttributeMetadata')
+            array('getCustomAttributesMetadata')
         )->disableOriginalConstructor()->getMock();
         $this->_customerMetadataService->expects(
             $this->any()
         )->method(
-            'getCustomAddressAttributeMetadata'
+            'getCustomAttributesMetadata'
         )->will(
             $this->returnValue(
                 array(

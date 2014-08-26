@@ -1,7 +1,5 @@
 <?php
 /**
- * Page layout config model
- * 
  * Magento
  *
  * NOTICE OF LICENSE
@@ -25,6 +23,9 @@
  */
 namespace Magento\Theme\Model\Layout;
 
+/**
+ * Page layout config model
+ */
 class Config
 {
     /**
@@ -32,7 +33,7 @@ class Config
      *
      * @var array
      */
-    protected $_pageLayouts = null;
+    protected $_pageLayouts;
 
     /** @var  \Magento\Framework\Config\DataInterface */
     protected $_dataStorage;
@@ -102,7 +103,7 @@ class Config
         $handles = array();
 
         foreach ($this->getPageLayouts() as $layout) {
-            $handles[$layout->getCode()] = $layout->getLayoutHandle();
+            $handles[$layout->getCode()] = $layout->getCode();
         }
 
         return $handles;

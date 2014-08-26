@@ -23,7 +23,8 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
-    <remove name="root"/>
-    <block class="Magento\RecurringPayment\Block\Adminhtml\Payment\View\Tab\Orders" name="sales.recurring.payment.tab.orders" output="1"/>
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_generic.xsd">
+    <container name="root">
+        <block class="Magento\RecurringPayment\Block\Adminhtml\Payment\View\Tab\Orders" name="sales.recurring.payment.tab.orders"/>
+    </container>
 </layout>

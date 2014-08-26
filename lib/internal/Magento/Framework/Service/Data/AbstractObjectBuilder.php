@@ -64,16 +64,6 @@ abstract class AbstractObjectBuilder
     }
 
     /**
-     * Template method used to configure the attribute codes for the custom attributes
-     *
-     * @return array
-     */
-    public function getCustomAttributesCodes()
-    {
-        return array();
-    }
-
-    /**
      * Populates the fields with data from the array.
      *
      * Keys for the map are snake_case attribute/field names.

@@ -34,26 +34,20 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Theme\Model\Layout\Source\Layout|\PHPUnit_Framework_MockObject_MockObject */
-    protected $layoutSourceModel;
+    /** @var \Magento\Core\Model\PageLayout\Config\Builder|\PHPUnit_Framework_MockObject_MockObject */
+    protected $pageLayoutBuilder;
 
     protected function setUp()
     {
-        $this->layoutSourceModel = $this->getMock(
-            'Magento\Theme\Model\Layout\Source\Layout',
-            array(
-                'toOptionArray'
-            ),
-            array(),
-            '',
-            false
-        );
+        $this->pageLayoutBuilder = $this->getMockBuilder('Magento\Core\Model\PageLayout\Config\Builder')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->layoutModel = $this->objectManagerHelper->getObject(
             'Magento\Catalog\Model\Product\Attribute\Source\Layout',
             array(
-                'pageSourceLayout' => $this->layoutSourceModel
+                'pageLayoutBuilder' => $this->pageLayoutBuilder
             )
         );
     }
@@ -64,8 +58,17 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
             '0' => array('value' => '', 'label' => 'No layout updates'),
             '1' => array('value' => 'option_value', 'label' => 'option_label')
         );
-        $this->layoutSourceModel->expects($this->once())->method('toOptionArray')
-            ->will($this->returnValue(array('0' => $expectedOptions['1'])));
+        $mockPageLayoutConfig = $this->getMockBuilder('Magento\Framework\View\PageLayout\Config')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $mockPageLayoutConfig->expects($this->any())
+            ->method('toOptionArray')
+            ->will($this->returnValue(['0' => $expectedOptions['1']]));
+
+        $this->pageLayoutBuilder->expects($this->once())
+            ->method('getPageLayoutsConfig')
+            ->will($this->returnValue($mockPageLayoutConfig));
+
         $layoutOptions = $this->layoutModel->getAllOptions();
         $this->assertEquals($expectedOptions, $layoutOptions);
     }

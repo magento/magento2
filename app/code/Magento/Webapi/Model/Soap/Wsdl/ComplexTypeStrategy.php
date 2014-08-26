@@ -157,7 +157,7 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
         $element->setAttribute('minOccurs', $isRequired ? 1 : 0);
         $maxOccurs = isset($parameterData['isArray']) && $parameterData['isArray'] ? 'unbounded' : 1;
         $element->setAttribute('maxOccurs', $maxOccurs);
-        if ($this->_typeProcessor->isTypeSimple($parameterType)) {
+        if ($this->_typeProcessor->isTypeSimple($parameterType) || $this->_typeProcessor->isTypeAny($parameterType)) {
             $typeNs = Wsdl::XSD_NS;
         } else {
             $typeNs = Wsdl::TYPES_NS;
@@ -177,7 +177,7 @@ class ComplexTypeStrategy extends AbstractComplexTypeStrategy
     {
         $arrayItemType = $this->_typeProcessor->getArrayItemType($type);
         $arrayTypeName = $this->_typeProcessor->translateArrayTypeName($type);
-        if (!$this->_typeProcessor->isTypeSimple($arrayItemType)) {
+        if (!$this->_typeProcessor->isTypeSimple($arrayItemType) && !$this->_typeProcessor->isTypeAny($arrayItemType)) {
             $this->addComplexType($arrayItemType, $callInfo);
         }
         $arrayTypeParameters = array(

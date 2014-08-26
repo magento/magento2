@@ -23,8 +23,8 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <referenceBlock name="sales.order.invoice.renderers">
         <block class="Magento\Bundle\Block\Sales\Order\Items\Renderer" as="bundle" template="sales/order/invoice/items/renderer.phtml"/>
     </referenceBlock>
-</layout>
+</page>

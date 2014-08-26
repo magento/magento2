@@ -43,34 +43,34 @@ class ViewTest extends \PHPUnit_Framework_TestCase
      */
     protected $_layout;
 
+    /**
+     * @var \Magento\TestFramework\Helper\Bootstrap
+     */
+    protected $objectManager;
+
     protected function setUp()
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
-        $objectManager->get('Magento\Framework\App\Http\Context')
+        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        $this->objectManager->get('Magento\Framework\App\State')->setAreaCode('frontend');
+        $this->objectManager->get('Magento\Framework\App\Http\Context')
             ->setValue(\Magento\Customer\Helper\Data::CONTEXT_AUTH, false, false);
-        $objectManager->get('Magento\Framework\View\DesignInterface')
+        $this->objectManager->get('Magento\Framework\View\DesignInterface')
             ->setDefaultDesignTheme();
-        $this->_helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Catalog\Helper\Product\View');
-        $request = $objectManager->get('Magento\TestFramework\Request');
+        $this->_helper = $this->objectManager->get('Magento\Catalog\Helper\Product\View');
+        $request = $this->objectManager->get('Magento\TestFramework\Request');
         $request->setRouteName('catalog')->setControllerName('product')->setActionName('view');
         $arguments = array(
             'request' => $request,
-            'response' => \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\TestFramework\Response'
-            )
+            'response' => $this->objectManager->get('Magento\TestFramework\Response')
         );
-        $context = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\App\Action\Context',
-            $arguments
-        );
-        $this->_controller = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+        $context = $this->objectManager->create('Magento\Framework\App\Action\Context', $arguments);
+        $this->_controller = $this->objectManager->create(
             'Magento\Catalog\Controller\Product',
             array('context' => $context)
         );
 
-        $this->_layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+        $this->_layout = $this->objectManager->get(
             'Magento\Framework\View\LayoutInterface'
         );
     }
@@ -80,9 +80,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
      */
     protected function tearDown()
     {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Catalog\Model\Session'
-        )->unsLastViewedProductId();
+        $this->objectManager->get('Magento\Catalog\Model\Session')->unsLastViewedProductId();
         $this->_controller = null;
         $this->_helper = null;
     }
@@ -95,18 +93,23 @@ class ViewTest extends \PHPUnit_Framework_TestCase
     {
         $uniqid = uniqid();
         /** @var $product \Magento\Catalog\Model\Product */
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+        $product = $this->objectManager->create(
             'Magento\Catalog\Model\Product'
         );
         $product->setTypeId(\Magento\Catalog\Model\Product\Type::DEFAULT_TYPE)->setId(99)->setUrlKey($uniqid);
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $objectManager = $this->objectManager;
         $objectManager->get('Magento\Framework\Registry')->register('product', $product);
 
         $this->_helper->initProductLayout($product, $this->_controller);
-        $rootBlock = $this->_layout->getBlock('root');
-        $this->assertInstanceOf('Magento\Theme\Block\Html', $rootBlock);
-        $this->assertContains("product-{$uniqid}", $rootBlock->getBodyClass());
+
+        /** @var \Magento\Framework\View\Page\Config $pageConfig */
+        $pageConfig = $this->objectManager->get('Magento\Framework\View\Page\Config');
+        $bodyClass = $pageConfig->getElementAttribute(
+            \Magento\Framework\View\Page\Config::ELEMENT_TYPE_BODY,
+            'classes'
+        );
+        $this->assertContains("product-{$uniqid}", $bodyClass);
         $handles = $this->_layout->getUpdate()->getHandles();
         $this->assertContains('catalog_product_view_type_simple', $handles);
     }
@@ -122,7 +125,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEmpty($this->_controller->getResponse()->getBody());
         $this->assertEquals(
             10,
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            $this->objectManager->get(
                 'Magento\Catalog\Model\Session'
             )->getLastViewedProductId()
         );
@@ -134,7 +137,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepareAndRenderWrongController()
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $objectManager = $this->objectManager;
         $controller = $objectManager->create('Magento\Catalog\Controller\Product');
         $this->_helper->prepareAndRender(10, $controller);
     }

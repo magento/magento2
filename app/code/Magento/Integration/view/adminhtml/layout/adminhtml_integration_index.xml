@@ -25,7 +25,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <referenceBlock name="head">
         <block class="Magento\Theme\Block\Html\Head\Css" name="magento-integration-styles-css">
             <arguments>
@@ -38,4 +38,4 @@
         <block class="Magento\Backend\Block\Template" name="integration.popup.container" template="Magento_Integration::integration/popup_container.phtml" before="-"/>
         <block class="Magento\Integration\Block\Adminhtml\Integration" name="integration.grid.container"/>
     </referenceBlock>
-</layout>
+</page>

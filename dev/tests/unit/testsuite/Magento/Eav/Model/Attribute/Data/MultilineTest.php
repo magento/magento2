@@ -130,11 +130,12 @@ class MultilineTest extends \PHPUnit_Framework_TestCase
      * @covers \Magento\Eav\Model\Attribute\Data\Text::validateValue
      *
      * @param mixed $value
+     * @param bool $isAttributeRequired
      * @param array $rules
      * @param array $expectedResult
      * @dataProvider validateValueDataProvider
      */
-    public function testValidateValue($value, $rules, $expectedResult)
+    public function testValidateValue($value, $isAttributeRequired, $rules, $expectedResult)
     {
         $entityMock = $this->getMock('\Magento\Framework\Model\AbstractModel', [], [], '', false);
         $entityMock->expects($this->any())->method('getDataUsingMethod')->will($this->returnValue("value1\nvalue2"));
@@ -143,6 +144,7 @@ class MultilineTest extends \PHPUnit_Framework_TestCase
         $attributeMock->expects($this->any())->method('getMultilineCount')->will($this->returnValue(2));
         $attributeMock->expects($this->any())->method('getValidateRules')->will($this->returnValue($rules));
         $attributeMock->expects($this->any())->method('getStoreLabel')->will($this->returnValue('Label'));
+        $attributeMock->expects($this->any())->method('getIsRequired')->will($this->returnValue($isAttributeRequired));
 
         $this->stringMock->expects($this->any())->method('strlen')->will($this->returnValue(5));
 
@@ -159,29 +161,58 @@ class MultilineTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 'value' => false,
+                'isAttributeRequired' => false,
                 'rules' => [],
                 'expectedResult' => true,
             ],
             [
                 'value' => 'value',
+                'isAttributeRequired' => false,
                 'rules' => [],
                 'expectedResult' => true,
             ],
             [
                 'value' => ['value1',  'value2'],
+                'isAttributeRequired' => false,
                 'rules' => [],
                 'expectedResult' => true,
             ],
             [
                 'value' => 'value',
+                'isAttributeRequired' => false,
                 'rules' => ['max_text_length' => 3],
                 'expectedResult' => ['"Label" length must be equal or less than 3 characters.'],
             ],
             [
                 'value' => 'value',
+                'isAttributeRequired' => false,
                 'rules' => ['min_text_length' => 10],
                 'expectedResult' => ['"Label" length must be equal or greater than 10 characters.'],
-            ]
+            ],
+            [
+                'value' => "value1\nvalue2\nvalue3",
+                'isAttributeRequired' => false,
+                'rules' => [],
+                'expectedResult' => ['"Label" cannot contain more than 2 lines.'],
+            ],
+            [
+                'value' => ['value1', 'value2', 'value3'],
+                'isAttributeRequired' => false,
+                'rules' => [],
+                'expectedResult' => ['"Label" cannot contain more than 2 lines.'],
+            ],
+            [
+                'value' => [],
+                'isAttributeRequired' => true,
+                'rules' => [],
+                'expectedResult' => ['"Label" is a required value.'],
+            ],
+            [
+                'value' => '',
+                'isAttributeRequired' => true,
+                'rules' => [],
+                'expectedResult' => ['"Label" is a required value.'],
+            ],
         ];
     }
 }

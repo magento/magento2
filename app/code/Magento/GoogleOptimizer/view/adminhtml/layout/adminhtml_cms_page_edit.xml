@@ -23,11 +23,11 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
+<page layout="admin-2columns-left" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <referenceBlock name="cms_page_edit_tabs">
         <action method="addTab">
             <argument name="name" xsi:type="string">google-experiment</argument>
             <argument name="block" xsi:type="string">Magento\GoogleOptimizer\Block\Adminhtml\Cms\Page\Edit\Tab\Googleoptimizer</argument>
         </action>
     </referenceBlock>
-</layout>
+</page>

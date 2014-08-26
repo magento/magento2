@@ -66,16 +66,28 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $this->_layoutMock = $this->getMock('Magento\Framework\View\Layout', array(), array(), '', false);
         $this->_requestMock = $this->getMock('Magento\Framework\App\Request\Http', array(), array(), '', false);
         $this->_configScopeMock = $this->getMock('Magento\Framework\Config\ScopeInterface');
-        $this->_layoutProcessor = $this->getMock('Magento\Framework\View\Layout\ProcessorInterface');
-        $this->_layoutMock->expects(
-            $this->any()
-        )->method(
-            'getUpdate'
-        )->will(
-            $this->returnValue($this->_layoutProcessor)
-        );
+        $this->_layoutProcessor = $this->getMock('Magento\Core\Model\Layout\Merge', [], [], '', false);
+        $this->_layoutMock->expects($this->any())->method('getUpdate')
+            ->will($this->returnValue($this->_layoutProcessor));
         $this->_actionFlagMock = $this->getMock('Magento\Framework\App\ActionFlag', array(), array(), '', false);
         $this->_eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface');
+        $resultPage = $this->getMockBuilder('Magento\Framework\View\Result\Page')
+            ->setConstructorArgs(
+                $helper->getConstructArguments('Magento\Framework\View\Result\Page', ['request' => $this->_requestMock])
+            )
+            ->setMethods(['getLayout'])
+            ->getMock();
+        $resultPage->expects($this->any())
+            ->method('getLayout')
+            ->will($this->returnValue($this->_layoutMock));
+        $pageFactory = $this->getMockBuilder('Magento\Framework\View\Result\PageFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $pageFactory->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($resultPage));
+
         $this->_view = $helper->getObject(
             'Magento\Framework\App\View',
             array(
@@ -84,7 +96,8 @@ class ViewTest extends \PHPUnit_Framework_TestCase
                 'response' => $this->getMock('Magento\Framework\App\Response\Http', array(), array(), '', false),
                 'configScope' => $this->_configScopeMock,
                 'eventManager' => $this->_eventManagerMock,
-                'actionFlag' => $this->_actionFlagMock
+                'actionFlag' => $this->_actionFlagMock,
+                'pageFactory' => $pageFactory
             )
         );
     }
@@ -148,13 +161,10 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
     public function testGetDefaultLayoutHandle()
     {
-        $this->_requestMock->expects(
-            $this->once()
-        )->method(
-            'getFullActionName'
-        )->will(
-            $this->returnValue('ExpectedValue')
-        );
+        $this->_requestMock->expects($this->once())
+            ->method('getFullActionName')
+            ->will($this->returnValue('ExpectedValue'));
+
         $this->assertEquals('expectedvalue', $this->_view->getDefaultLayoutHandle());
     }
 

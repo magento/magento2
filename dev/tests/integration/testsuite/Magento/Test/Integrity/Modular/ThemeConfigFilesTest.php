@@ -28,6 +28,16 @@ namespace Magento\Test\Integrity\Modular;
 class ThemeConfigFilesTest extends \Magento\TestFramework\TestCase\AbstractConfigFiles
 {
     /**
+     * Returns directory (modules, library internal stc.) constant which contains XSD file
+     *
+     * @return string
+     */
+    protected function getDirectoryConstant()
+    {
+        return \Magento\Framework\App\Filesystem::LIB_INTERNAL;
+    }
+
+    /**
      * Returns the reader class name that will be instantiated via ObjectManager
      *
      * @return string reader class name
@@ -46,16 +56,16 @@ class ThemeConfigFilesTest extends \Magento\TestFramework\TestCase\AbstractConfi
      */
     protected function _getConfigFilePathGlob()
     {
-        return '/*/*/etc/page_layouts.xml';
+        return '/*/*/view/*/layouts.xml';
     }
 
     /**
-     * Returns a path to the per file XSD file, relative to the modules directory.
+     * Returns a path to the per file XSD file, relative to the library directory.
      *
      * @return string
      */
     protected function _getXsdPath()
     {
-        return '/Magento/Theme/etc/page_layouts_file.xsd';
+        return '/Magento/Framework/View/PageLayout/etc/layouts.xsd';
     }
 }

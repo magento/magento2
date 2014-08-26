@@ -72,7 +72,7 @@ class Container extends \Magento\Framework\View\Element\Template
         foreach ($this->getMethods() as $method) {
             $this->setChild(
                 'payment.method.' . $method->getCode(),
-                $this->_paymentHelper->getMethodFormBlock($method)
+                $this->_paymentHelper->getMethodFormBlock($method, $this->_layout)
             );
         }
 

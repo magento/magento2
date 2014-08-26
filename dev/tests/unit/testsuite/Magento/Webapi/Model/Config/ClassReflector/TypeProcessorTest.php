@@ -89,8 +89,9 @@ class TypeProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals('blah', $this->_typeProcessor->normalizeType('blah'));
         $this->assertEquals('string', $this->_typeProcessor->normalizeType('str'));
-        //$this->assertEquals('integer', $this->_typeProcessor->normalizeType('int'));
+        $this->assertEquals('int', $this->_typeProcessor->normalizeType('integer'));
         $this->assertEquals('boolean', $this->_typeProcessor->normalizeType('bool'));
+        $this->assertEquals('anyType', $this->_typeProcessor->normalizeType('mixed'));
     }
 
     public function testIsTypeSimple()
@@ -102,6 +103,14 @@ class TypeProcessorTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->_typeProcessor->isTypeSimple('double'));
         $this->assertTrue($this->_typeProcessor->isTypeSimple('boolean'));
         $this->assertFalse($this->_typeProcessor->isTypeSimple('blah'));
+    }
+
+    public function testIsTypeAny()
+    {
+        $this->assertTrue($this->_typeProcessor->isTypeAny('mixed'));
+        $this->assertTrue($this->_typeProcessor->isTypeAny('mixed[]'));
+        $this->assertFalse($this->_typeProcessor->isTypeAny('int'));
+        $this->assertFalse($this->_typeProcessor->isTypeAny('int[]'));
     }
 
     public function testIsArrayType()
@@ -116,6 +125,7 @@ class TypeProcessorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('string', $this->_typeProcessor->getArrayItemType('string[]'));
         $this->assertEquals('integer', $this->_typeProcessor->getArrayItemType('int[]'));
         $this->assertEquals('boolean', $this->_typeProcessor->getArrayItemType('bool[]'));
+        $this->assertEquals('any', $this->_typeProcessor->getArrayItemType('mixed[]'));
     }
 
     public function testTranslateTypeName()
@@ -142,5 +152,51 @@ class TypeProcessorTest extends \PHPUnit_Framework_TestCase
     public function testTranslateArrayTypeName()
     {
         $this->assertEquals('ArrayOfComplexType', $this->_typeProcessor->translateArrayTypeName('complexType'));
+    }
+
+    public function testProcessSimpleTypeIntToString()
+    {
+        $value = 1;
+        $type = 'string';
+        $this->assertSame('1', $this->_typeProcessor->processSimpleAndAnyType($value, $type));
+    }
+
+    public function testProcessSimpleTypeStringToInt()
+    {
+        $value = '1';
+        $type = 'int';
+        $this->assertSame(1, $this->_typeProcessor->processSimpleAndAnyType($value, $type));
+    }
+
+    public function testProcessSimpleTypeMixed()
+    {
+        $value = 1;
+        $type = 'mixed';
+        $this->assertSame(1, $this->_typeProcessor->processSimpleAndAnyType($value, $type));
+    }
+
+    public function testProcessSimpleTypeIntArrayToStringArray()
+    {
+        $value = [1, 2, 3, 4, 5];
+        $type = 'string[]';
+        $this->assertSame(['1', '2', '3', '4', '5'], $this->_typeProcessor->processSimpleAndAnyType($value, $type));
+    }
+
+    public function testProcessSimpleTypeStringArrayToIntArray()
+    {
+        $value = ['1', '2', '3', '4', '5'];
+        $type = 'int[]';
+        $this->assertSame([1, 2, 3, 4, 5], $this->_typeProcessor->processSimpleAndAnyType($value, $type));
+    }
+
+    /**
+     * @expectedException \Magento\Webapi\Exception
+     * @expectedExceptionMessage Invalid type for value :"1". Expected Type: "int[]".
+     */
+    public function testProcessSimpleTypeInvalidType()
+    {
+        $value = 1;
+        $type = 'int[]';
+        $this->_typeProcessor->processSimpleAndAnyType($value, $type);
     }
 }

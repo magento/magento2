@@ -36,9 +36,12 @@
     </fieldset>
 </div>
 <script type="text/javascript">
-require(["jquery", "prototype","Magento_Rule/rules"], function(jQuery){
+require([
+    "prototype",
+    "Magento_Rule/rules"
+], function(){
 
-var <?php echo $_element->getHtmlId() ?> = new VarienRulesForm('<?php echo $_element->getHtmlId() ?>', '<?php echo $this->getNewChildUrl() ?>');
+window.<?php echo $_element->getHtmlId() ?> = new VarienRulesForm('<?php echo $_element->getHtmlId() ?>', '<?php echo $this->getNewChildUrl() ?>');
 <?php if ($_element->getReadonly()): ?>
     <?php echo $_element->getHtmlId() ?>.setReadonly(true);
 <?php endif; ?>

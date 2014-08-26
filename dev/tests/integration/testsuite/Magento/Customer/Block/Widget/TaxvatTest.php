@@ -30,6 +30,9 @@ namespace Magento\Customer\Block\Widget;
  */
 class TaxvatTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @magentoAppIsolation enabled
+     */
     public function testToHtml()
     {
         /** @var \Magento\Customer\Block\Widget\Taxvat $block */
@@ -42,6 +45,7 @@ class TaxvatTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
      */
     public function testToHtmlRequired()

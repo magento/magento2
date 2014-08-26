@@ -64,7 +64,7 @@ class RateTest extends \Magento\Backend\Utility\Controller
 
     public function ajaxSaveActionDataProvider()
     {
-        $postData = array('rate' => '10', 'tax_country_id' => 'US', 'tax_region_id' => '0');
+        $postData = array('rate' => '10', 'tax_country_id' => 'US', 'tax_region_id' => '1');
         return array(
             array(
                 $postData + array(

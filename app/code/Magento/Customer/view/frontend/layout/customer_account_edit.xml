@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <update handle="customer_account"/>
     <referenceBlock name="head.components">
         <block class="Magento\Framework\View\Element\Js\Components" name="customer_account_edit_head_components" template="Magento_Customer::js/components.phtml"/>
@@ -36,4 +36,4 @@
     <referenceContainer name="content">
         <block class="Magento\Customer\Block\Form\Edit" name="customer_edit" template="form/edit.phtml" cacheable="false"/>
     </referenceContainer>
-</layout>
+</page>

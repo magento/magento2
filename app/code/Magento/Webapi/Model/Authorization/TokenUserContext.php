@@ -132,7 +132,7 @@ class TokenUserContext implements UserContextInterface
         $bearerToken = $headerPieces[1];
         $token = $this->tokenFactory->create()->loadByToken($bearerToken);
 
-        if (!$token->getId()) {
+        if (!$token->getId() || $token->getRevoked()) {
             $this->isRequestProcessed = true;
             return;
         }

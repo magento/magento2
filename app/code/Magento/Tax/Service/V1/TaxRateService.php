@@ -24,6 +24,8 @@
 
 namespace Magento\Tax\Service\V1;
 
+use Magento\Directory\Model\CountryFactory;
+use Magento\Directory\Model\RegionFactory;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Model\Exception as ModelException;
 use Magento\Framework\Service\V1\Data\Search\FilterGroup;
@@ -35,6 +37,7 @@ use Magento\Tax\Model\Calculation\RateRegistry;
 use Magento\Tax\Model\Resource\Calculation\Rate\Collection;
 use Magento\Tax\Service\V1\Data\TaxRate as TaxRateDataObject;
 use Magento\Tax\Service\V1\Data\TaxRateBuilder;
+use Magento\Framework\Service\V1\Data\SortOrder;
 
 /**
  * Handles tax rate CRUD operations
@@ -76,6 +79,16 @@ class TaxRateService implements TaxRateServiceInterface
     private $rateFactory;
 
     /**
+     * @var \Magento\Directory\Model\CountryFactory
+     */
+    protected $countryFactory;
+
+    /**
+     * @var \Magento\Directory\Model\RegionFactory
+     */
+    protected $regionFactory;
+
+    /**
      * Constructor
      *
      * @param TaxRateBuilder $rateBuilder
@@ -83,19 +96,25 @@ class TaxRateService implements TaxRateServiceInterface
      * @param RateRegistry $rateRegistry
      * @param Data\TaxRateSearchResultsBuilder $taxRateSearchResultsBuilder
      * @param RateFactory $rateFactory
+     * @param CountryFactory $countryFactory
+     * @param RegionFactory $regionFactory
      */
     public function __construct(
         TaxRateBuilder $rateBuilder,
         Converter $converter,
         RateRegistry $rateRegistry,
         Data\TaxRateSearchResultsBuilder $taxRateSearchResultsBuilder,
-        RateFactory $rateFactory
+        RateFactory $rateFactory,
+        CountryFactory $countryFactory,
+        RegionFactory $regionFactory
     ) {
         $this->rateBuilder = $rateBuilder;
         $this->converter = $converter;
         $this->rateRegistry = $rateRegistry;
         $this->taxRateSearchResultsBuilder = $taxRateSearchResultsBuilder;
         $this->rateFactory = $rateFactory;
+        $this->countryFactory = $countryFactory;
+        $this->regionFactory = $regionFactory;
     }
 
     /**
@@ -158,11 +177,12 @@ class TaxRateService implements TaxRateServiceInterface
         }
 
         $sortOrders = $searchCriteria->getSortOrders();
+        /** @var SortOrder $sortOrder */
         if ($sortOrders) {
-            foreach ($sortOrders as $field => $direction) {
+            foreach ($sortOrders as $sortOrder) {
                 $collection->addOrder(
-                    $this->translateField($field),
-                    $direction == SearchCriteria::SORT_ASC ? 'ASC' : 'DESC'
+                    $this->translateField($sortOrder->getField()),
+                    ($sortOrder->getDirection() == SearchCriteria::SORT_ASC) ? 'ASC' : 'DESC'
                 );
             }
         }
@@ -267,12 +287,24 @@ class TaxRateService implements TaxRateServiceInterface
     private function validate(TaxRateDataObject $taxRate)
     {
         $exception = new InputException();
-        if (!\Zend_Validate::is(trim($taxRate->getCountryId()), 'NotEmpty')) {
+
+        $countryCode = $taxRate->getCountryId();
+        if (!\Zend_Validate::is($countryCode, 'NotEmpty')) {
             $exception->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'country_id']);
+        } else if (!\Zend_Validate::is($this->countryFactory->create()->loadByCode($countryCode)->getId(), 'NotEmpty')) {
+            $exception->addError(InputException::INVALID_FIELD_VALUE, ['fieldName' => 'country_id', 'value' => $countryCode]);
         }
-        if (!\Zend_Validate::is(trim($taxRate->getPercentageRate()), 'NotEmpty')) {
+
+        $regionCode = $taxRate->getRegionId();
+        if (\Zend_Validate::is($regionCode, 'NotEmpty') &&
+            !\Zend_Validate::is($this->regionFactory->create()->load($regionCode)->getId(), 'NotEmpty')) {
+            $exception->addError(InputException::INVALID_FIELD_VALUE, ['fieldName' => 'region_id', 'value' => $regionCode]);
+        }
+
+        if (!\Zend_Validate::is($taxRate->getPercentageRate(), 'NotEmpty')) {
             $exception->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'percentage_rate']);
         }
+
         if (!\Zend_Validate::is(trim($taxRate->getCode()), 'NotEmpty')) {
             $exception->addError(InputException::REQUIRED_FIELD, ['fieldName' => 'code']);
         }

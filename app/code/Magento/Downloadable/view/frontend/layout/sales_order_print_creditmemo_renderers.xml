@@ -23,8 +23,8 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <referenceBlock name="sales.order.print.creditmemo.renderers">
         <block class="Magento\Downloadable\Block\Sales\Order\Item\Renderer\Downloadable" as="downloadable" template="sales/order/creditmemo/items/renderer/downloadable.phtml"/>
     </referenceBlock>
-</layout>
+</page>

@@ -23,7 +23,7 @@
  */
 namespace Magento\Customer\Service\V1\Data;
 
-use Magento\Customer\Service\V1\CustomerMetadataService;
+use Magento\Customer\Service\V1\AddressMetadataService;
 use Magento\Framework\Service\Data\Eav\AttributeValue;
 
 class AddressConverterTest extends \PHPUnit_Framework_TestCase
@@ -31,30 +31,42 @@ class AddressConverterTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\TestFramework\Helper\ObjectManager */
     protected $_objectManager;
 
-    /** @var CustomerMetadataService */
-    protected $_customerMetadataService;
+    /** @var AddressMetadataService */
+    protected $addressMetadataService;
 
     protected function setUp()
     {
         $this->_objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        /** @var CustomerMetadataService $customerMetadataService */
-        $this->_customerMetadataService = $this->getMockBuilder(
-            'Magento\Customer\Service\V1\CustomerMetadataService'
-        )->setMethods(
-            array('getCustomAddressAttributeMetadata')
-        )->disableOriginalConstructor()->getMock();
-        $this->_customerMetadataService->expects(
-            $this->any()
-        )->method(
-            'getCustomAddressAttributeMetadata'
-        )->will(
-            $this->returnValue(
-                array(
-                    new \Magento\Framework\Object(array('attribute_code' => 'warehouse_zip')),
-                    new \Magento\Framework\Object(array('attribute_code' => 'warehouse_alternate'))
-                )
-            )
-        );
+        $this->addressMetadataService = $this->getMockBuilder('Magento\Customer\Service\V1\AddressMetadataService')
+            ->setMethods(array('getAttributeMetadata', 'getCustomAttributesMetadata'))
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $customAttributeMetadata1 = $this->getMockBuilder('Magento\Customer\Service\V1\Data\Eav\AttributeMetadata')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $customAttributeMetadata1
+            ->expects($this->any())
+            ->method('getAttributeCode')
+            ->will($this->returnValue('warehouse_zip'));
+
+        $customAttributeMetadata2 = $this->getMockBuilder('Magento\Customer\Service\V1\Data\Eav\AttributeMetadata')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $customAttributeMetadata2
+            ->expects($this->any())
+            ->method('getAttributeCode')
+            ->will($this->returnValue('warehouse_alternate'));
+
+        $attributesMetadata = array($customAttributeMetadata1, $customAttributeMetadata2);
+        $this->addressMetadataService
+            ->expects($this->any())
+            ->method('getAttributeMetadata')
+            ->will($this->returnValue($attributesMetadata));
+        $this->addressMetadataService
+            ->expects($this->any())
+            ->method('getCustomAttributesMetadata')
+            ->will($this->returnValue($attributesMetadata));
     }
 
     public function testToFlatArray()
@@ -122,7 +134,7 @@ class AddressConverterTest extends \PHPUnit_Framework_TestCase
             [
                 'valueBuilder' => $valueBuilder,
                 'regionBuilder' => $this->_objectManager->getObject('\Magento\Customer\Service\V1\Data\RegionBuilder'),
-                'metadataService' => $this->_customerMetadataService
+                'metadataService' => $this->addressMetadataService
             ]
         );
         $addressData = $addressDataBuilder->mergeDataObjectWithArray($addressData, $updatedAddressData);
@@ -145,7 +157,7 @@ class AddressConverterTest extends \PHPUnit_Framework_TestCase
             [
                 'valueBuilder' => $valueBuilder,
                 'regionBuilder' => $regionBuilder,
-                'metadataService' => $this->_customerMetadataService
+                'metadataService' => $this->addressMetadataService
             ]
         )->setId(
                 '1'

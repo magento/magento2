@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <referenceBlock name="sales_order.grid.container">
         <block class="Magento\Sales\Block\Adminhtml\Order\Grid" name="sales.order.grid" as="grid">
             <arguments>
@@ -35,12 +35,6 @@
                 <argument name="save_parameters_in_session" xsi:type="string">1</argument>
                 <argument name="grid_url" xsi:type="url" path="*/*/grid">
                     <param name="_current">1</param>
-                </argument>
-                <argument name="rssList" xsi:type="array">
-                    <item name="orders" xsi:type="array">
-                        <item name="url" xsi:type="string">rss/order/new</item>
-                        <item name="label" xsi:type="string" translate="true">New Order RSS</item>
-                    </item>
                 </argument>
             </arguments>
             <block class="Magento\Backend\Block\Widget\Grid\Massaction" name="sales.order.grid.massaction" as="grid.massaction">
@@ -222,4 +216,4 @@
             </block>
         </block>
     </referenceBlock>
-</layout>
+</page>

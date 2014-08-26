@@ -23,7 +23,9 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_generic.xsd">
     <update handle="sales_order_transactions_grid_block"/>
-    <block class="Magento\Sales\Block\Adminhtml\Order\View\Tab\Transactions" name="sales_transactions.grid.container" output="1"/>
+    <container name="root">
+        <block class="Magento\Sales\Block\Adminhtml\Order\View\Tab\Transactions" name="sales_transactions.grid.container"/>
+    </container>
 </layout>

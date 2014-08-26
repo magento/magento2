@@ -116,18 +116,5 @@ namespace Magento\Framework\Session {
             $this->objectManager->getObject('Magento\Framework\Session\SessionManager');
             $this->assertTrue(SessionManagerTest::$isIniSetInvoked);
         }
-
-        /**
-         * @runInSeparateProcess
-         */
-        public function testRegenerateId()
-        {
-            require_once __DIR__ . '/../../_files/session_backend_mock.php';
-
-            $this->mockSessionConfig->expects($this->once())
-                ->method('getUseCookies')
-                ->will($this->returnValue(false));
-            $this->assertSame($this->sessionManager, $this->sessionManager->regenerateId());
-        }
     }
 }

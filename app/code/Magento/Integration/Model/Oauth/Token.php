@@ -380,7 +380,7 @@ class Token extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Get token by admin id
+     * Get token by customer id
      *
      * @param int $customerId
      * @return $this

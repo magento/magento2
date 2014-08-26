@@ -37,20 +37,18 @@ class ListAction extends \Magento\Review\Controller\Product
      */
     protected function _initProductLayout($product)
     {
+        $this->_view->getPage()->initLayout();
+        if ($product->getPageLayout()) {
+            /** @var \Magento\Framework\View\Page\Config $pageConfig */
+            $pageConfig = $this->_objectManager->get('Magento\Framework\View\Page\Config');
+            $pageConfig->setPageLayout($product->getPageLayout());
+        }
         $update = $this->_view->getLayout()->getUpdate();
-        $update->addHandle('default');
         $this->_view->addPageLayoutHandles(
             array('id' => $product->getId(), 'sku' => $product->getSku(), 'type' => $product->getTypeId())
         );
 
-        if ($product->getPageLayout()) {
-            $this->_objectManager->get('Magento\Theme\Helper\Layout')->applyHandle($product->getPageLayout());
-        }
         $this->_view->loadLayoutUpdates();
-
-        if ($product->getPageLayout()) {
-            $this->_objectManager->get('Magento\Theme\Helper\Layout')->applyTemplate($product->getPageLayout());
-        }
         $update->addUpdate($product->getCustomLayoutUpdate());
         $this->_view->generateLayoutXml();
         $this->_view->generateLayoutBlocks();

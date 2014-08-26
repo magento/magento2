@@ -100,45 +100,6 @@ class Fulltext extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Regenerate all Stores index
-     *
-     * Examples:
-     * (null, null) => Regenerate index for all stores
-     * (1, null)    => Regenerate index for store Id=1
-     * (1, 2)       => Regenerate index for product Id=2 and its store view Id=1
-     * (null, 2)    => Regenerate index for all store views of product Id=2
-     *
-     * @param int|null $storeId Store View Id
-     * @param int|array|null $productIds Product Entity Id
-     *
-     * @return $this
-     */
-    public function rebuildIndex($storeId = null, $productIds = null)
-    {
-        $this->getResource()->rebuildIndex($storeId, $productIds);
-        return $this;
-    }
-
-    /**
-     * Delete index data
-     *
-     * Examples:
-     * (null, null) => Clean index of all stores
-     * (1, null)    => Clean index of store Id=1
-     * (1, 2)       => Clean index of product Id=2 and its store view Id=1
-     * (null, 2)    => Clean index of all store views of product Id=2
-     *
-     * @param int $storeId Store View Id
-     * @param int $productId Product Entity Id
-     * @return $this
-     */
-    public function cleanIndex($storeId = null, $productId = null)
-    {
-        $this->getResource()->cleanIndex($storeId, $productId);
-        return $this;
-    }
-
-    /**
      * Reset search results cache
      *
      * @return $this
@@ -181,37 +142,5 @@ class Fulltext extends \Magento\Framework\Model\AbstractModel
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $storeId
         );
-    }
-
-    // Deprecated methods
-
-    /**
-     * Set whether table changes are allowed
-     *
-     * @deprecated after 1.6.1.0
-     *
-     * @param bool $value
-     * @return $this
-     */
-    public function setAllowTableChanges($value = true)
-    {
-        $this->_allowTableChanges = $value;
-        return $this;
-    }
-
-    /**
-     * Update category products indexes
-     *
-     * @deprecated after 1.6.2.0
-     *
-     * @param array $productIds
-     * @param array $categoryIds
-     *
-     * @return $this
-     */
-    public function updateCategoryIndex($productIds, $categoryIds)
-    {
-        $this->getResource()->updateCategoryIndex($productIds, $categoryIds);
-        return $this;
     }
 }

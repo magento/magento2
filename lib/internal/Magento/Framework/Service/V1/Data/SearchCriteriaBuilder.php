@@ -26,6 +26,7 @@ namespace Magento\Framework\Service\V1\Data;
 
 use Magento\Framework\Service\Data\AbstractObjectBuilder;
 use Magento\Framework\Service\V1\Data\Search\FilterGroupBuilder;
+use Magento\Framework\Service\V1\Data\SortOrder;
 
 /**
  * Builder for SearchCriteria Service Data Object
@@ -89,24 +90,22 @@ class SearchCriteriaBuilder extends AbstractObjectBuilder
     /**
      * Add sort order
      *
-     * @param string $field
-     * @param int $direction
+     * @param SortOrder $sortOrder
      * @return $this
      */
-    public function addSortOrder($field, $direction)
+    public function addSortOrder($sortOrder)
     {
         if (!isset($this->_data[SearchCriteria::SORT_ORDERS])) {
-            $this->_data[SearchCriteria::SORT_ORDERS] = array();
+            $this->_data[SearchCriteria::SORT_ORDERS] = [];
         }
-
-        $this->_data[SearchCriteria::SORT_ORDERS][$field] = $direction;
+        $this->_data[SearchCriteria::SORT_ORDERS][] = $sortOrder;
         return $this;
     }
 
     /**
      * Set sort orders
      *
-     * @param array $sortOrders
+     * @param SortOrder[] $sortOrders
      * @return $this
      */
     public function setSortOrders(array $sortOrders)

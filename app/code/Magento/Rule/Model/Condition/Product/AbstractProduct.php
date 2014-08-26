@@ -69,9 +69,9 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     protected $_config;
 
     /**
-     * @var \Magento\Catalog\Model\Product
+     * @var \Magento\Catalog\Model\ProductFactory
      */
-    protected $_product;
+    protected $_productFactory;
 
     /**
      * @var \Magento\Catalog\Model\Resource\Product
@@ -92,7 +92,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      * @param \Magento\Rule\Model\Condition\Context $context
      * @param \Magento\Backend\Helper\Data $backendData
      * @param \Magento\Eav\Model\Config $config
-     * @param \Magento\Catalog\Model\Product $product
+     * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Model\Resource\Product $productResource
      * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection $attrSetCollection
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
@@ -102,7 +102,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
         \Magento\Rule\Model\Condition\Context $context,
         \Magento\Backend\Helper\Data $backendData,
         \Magento\Eav\Model\Config $config,
-        \Magento\Catalog\Model\Product $product,
+        \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Model\Resource\Product $productResource,
         \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection $attrSetCollection,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
@@ -110,7 +110,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     ) {
         $this->_backendData = $backendData;
         $this->_config = $config;
-        $this->_product = $product;
+        $this->_productFactory = $productFactory;
         $this->_productResource = $productResource;
         $this->_attrSetCollection = $attrSetCollection;
         $this->_localeFormat = $localeFormat;
@@ -146,7 +146,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
             $obj = $this->_config->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $this->getAttribute());
         } catch (\Exception $e) {
             $obj = new \Magento\Framework\Object();
-            $obj->setEntity($this->_product)->setFrontendInput('text');
+            $obj->setEntity($this->_productFactory->create())->setFrontendInput('text');
         }
         return $obj;
     }
@@ -580,6 +580,107 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
 
             return (bool)$result;
         }
+    }
+
+    /**
+     * Get argument value to bind
+     *
+     * @return array|float|int|mixed|string|\Zend_Db_Expr
+     */
+    public function getBindArgumentValue()
+    {
+        if ($this->getAttribute() == 'category_ids') {
+            return new \Zend_Db_Expr(
+                $this->_productResource->getReadConnection()
+                ->select()
+                ->from(
+                    $this->_productResource->getTable('catalog_category_product'),
+                    array('product_id')
+                )->where(
+                    'category_id IN (?)',
+                    $this->getValueParsed()
+                )->__toString()
+            );
+
+        }
+        return parent::getBindArgumentValue();
+    }
+
+    /**
+     * Get field by attribute
+     *
+     * @return string
+     */
+    public function getMappedSqlField()
+    {
+
+        return ($this->getAttribute() == 'category_ids') ? 'e.entity_id' : parent::getMappedSqlField();
+    }
+
+    /**
+     * Validate product by entity ID
+     *
+     * @param int $productId
+     * @return bool
+     */
+    public function validateByEntityId($productId)
+    {
+        if ('category_ids' == $this->getAttribute()) {
+            $result = $this->validateAttribute($this->_getAvailableInCategories($productId));
+        } elseif ('attribute_set_id' == $this->getAttribute()) {
+            $result = $this->validateAttribute($this->_getAttributeSetId($productId));
+        } else {
+            $product = $this->_productFactory->create()->load($productId);
+            $result = $this->validate($product);
+            unset($product);
+        }
+        return $result;
+    }
+
+    /**
+     * Retrieve category ids where product is available
+     *
+     * @param int $productId
+     * @return array
+     */
+    protected function _getAvailableInCategories($productId)
+    {
+        return $this->_productResource->getReadConnection()
+            ->fetchCol(
+                $this->_productResource->getReadConnection()
+                    ->select()
+                    ->distinct()
+                    ->from(
+                        $this->_productResource->getTable('catalog_category_product'),
+                        array('category_id')
+                    )->where(
+                        'product_id = ?',
+                        $productId
+                    )
+            );
+    }
+
+    /**
+     * Get attribute set id for product
+     *
+     * @param int $productId
+     * @return string
+     */
+    protected function _getAttributeSetId($productId)
+    {
+        return $this->_productResource->getReadConnection()
+            ->fetchOne(
+                $this->_productResource->getReadConnection()
+                    ->select()
+                    ->distinct()
+                    ->from(
+                        $this->_productResource->getTable('catalog_product_entity'),
+                        array('attribute_set_id')
+                    )->where(
+                        'entity_id = ?',
+                        $productId
+                    )
+            );
     }
 
     /**

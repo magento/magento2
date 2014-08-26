@@ -28,7 +28,6 @@ namespace Magento\Customer\Service\V1;
 use Magento\Customer\Service\V1;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Service\V1\Data\FilterBuilder;
 use Magento\Framework\Service\V1\Data\SearchCriteria;
 use Magento\TestFramework\Helper\Bootstrap;
 
@@ -1274,9 +1273,13 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
             ->setValue('First%')
             ->create();
         $searchBuilder->addFilter([$firstnameFilter]);
-
         // Search ascending order
-        $searchBuilder->addSortOrder('lastname', SearchCriteria::SORT_ASC);
+        $sortOrderBuilder = $this->_objectManager->create('\Magento\Framework\Service\V1\Data\SortOrderBuilder');
+        $sortOrder = $sortOrderBuilder
+            ->setField('lastname')
+            ->setDirection(SearchCriteria::SORT_ASC)
+            ->create();
+        $searchBuilder->addSortOrder($sortOrder);
         $searchResults = $this->_customerAccountService->searchCustomers($searchBuilder->create());
         $this->assertEquals(3, $searchResults->getTotalCount());
         $this->assertEquals('Lastname', $searchResults->getItems()[0]->getCustomer()->getLastname());
@@ -1284,7 +1287,11 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Lastname3', $searchResults->getItems()[2]->getCustomer()->getLastname());
 
         // Search descending order
-        $searchBuilder->addSortOrder('lastname', SearchCriteria::SORT_DESC);
+        $sortOrder = $sortOrderBuilder
+            ->setField('lastname')
+            ->setDirection(SearchCriteria::SORT_DESC)
+            ->create();
+        $searchBuilder->addSortOrder($sortOrder);
         $searchResults = $this->_customerAccountService->searchCustomers($searchBuilder->create());
         $this->assertEquals('Lastname3', $searchResults->getItems()[0]->getCustomer()->getLastname());
         $this->assertEquals('Lastname2', $searchResults->getItems()[1]->getCustomer()->getLastname());

@@ -23,6 +23,7 @@
  */
 namespace Magento\Customer\Block\Widget;
 
+use Magento\Customer\Service\V1\AddressMetadataServiceInterface;
 use Magento\Customer\Service\V1\CustomerMetadataServiceInterface;
 use Magento\Customer\Service\V1\Data\Customer;
 use Magento\Framework\View\Element\Template\Context;
@@ -38,6 +39,11 @@ use Magento\Customer\Helper\Data as CustomerHelper;
 class Name extends AbstractWidget
 {
     /**
+     * @var \Magento\Customer\Service\V1\AddressMetadataServiceInterface
+     */
+    protected $_addressMetadataService;
+
+    /**
      * @var CustomerHelper
      */
     protected $_customerHelper;
@@ -45,19 +51,22 @@ class Name extends AbstractWidget
     /**
      * @param Context $context
      * @param AddressHelper $addressHelper
-     * @param CustomerMetadataServiceInterface $attributeMetadata
+     * @param CustomerMetadataServiceInterface $customerMetadataService
+     * @param AddressMetadataServiceInterface $addressMetadataService
      * @param CustomerHelper $customerHelper
      * @param array $data
      */
     public function __construct(
         Context $context,
         AddressHelper $addressHelper,
-        CustomerMetadataServiceInterface $attributeMetadata,
+        CustomerMetadataServiceInterface $customerMetadataService,
+        AddressMetadataServiceInterface $addressMetadataService,
         CustomerHelper $customerHelper,
         array $data = array()
     ) {
         $this->_customerHelper = $customerHelper;
-        parent::__construct($context, $addressHelper, $attributeMetadata, $data);
+        parent::__construct($context, $addressHelper, $customerMetadataService, $data);
+        $this->_addressMetadataService = $addressMetadataService;
         $this->_isScopePrivate = true;
     }
 
@@ -216,7 +225,7 @@ class Name extends AbstractWidget
         }
 
         try {
-            $attribute = $this->_attributeMetadata->getAddressAttributeMetadata($attributeCode);
+            $attribute = $this->_addressMetadataService->getAttributeMetadata($attributeCode);
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
             return null;
         }

@@ -23,16 +23,17 @@
  */
 namespace Magento\Checkout\Service\V1\Data\Cart;
 
+use Magento\Checkout\Service\V1\Data\Cart\Address\Region;
+use Magento\Checkout\Service\V1\Data\Cart\Address\RegionBuilder;
+use Magento\Customer\Service\V1\CustomerMetadataServiceInterface;
 use Magento\Framework\Service\Data\Eav\AbstractObjectBuilder;
 use Magento\Framework\Service\Data\Eav\AttributeValueBuilder;
-use \Magento\Checkout\Service\V1\Data\Cart\Address\RegionBuilder;
-use \Magento\Checkout\Service\V1\Data\Cart\Address\Region;
 
 /**
  * Quote address data object builder
  *
  * @codeCoverageIgnore
-  */
+ */
 class AddressBuilder extends AbstractObjectBuilder
 {
     /**
@@ -43,24 +44,18 @@ class AddressBuilder extends AbstractObjectBuilder
     protected $_regionBuilder;
 
     /**
-     * @var \Magento\Customer\Service\V1\CustomerMetadataServiceInterface
-     */
-    protected $metadataService;
-
-    /**
      * @param \Magento\Framework\Service\Data\ObjectFactory $objectFactory
      * @param AttributeValueBuilder $valueBuilder
+     * @param CustomerMetadataServiceInterface $metadataService
      * @param RegionBuilder $regionBuilder
-     * @param \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $metadataService
      */
     public function __construct(
         \Magento\Framework\Service\Data\ObjectFactory $objectFactory,
         AttributeValueBuilder $valueBuilder,
-        RegionBuilder $regionBuilder,
-        \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $metadataService
+        CustomerMetadataServiceInterface $metadataService,
+        RegionBuilder $regionBuilder
     ) {
-        parent::__construct($objectFactory, $valueBuilder);
-        $this->metadataService = $metadataService;
+        parent::__construct($objectFactory, $valueBuilder, $metadataService);
         $this->_regionBuilder = $regionBuilder;
         $this->_data[Address::KEY_REGION] = $regionBuilder->create();
     }
@@ -106,18 +101,6 @@ class AddressBuilder extends AbstractObjectBuilder
             $data[Address::KEY_REGION] = $this->_regionBuilder->populateWithArray($regionData)->create();
         }
         return parent::_setDataValues($data);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCustomAttributesCodes()
-    {
-        $attributeCodes = array();
-        foreach ($this->metadataService->getCustomAddressAttributeMetadata() as $attribute) {
-            $attributeCodes[] = $attribute->getAttributeCode();
-        }
-        return $attributeCodes;
     }
 
     /**

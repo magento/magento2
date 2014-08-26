@@ -39,6 +39,7 @@ use Magento\Tax\Model\Calculation\TaxRuleRegistry;
 use Magento\Tax\Model\Resource\Calculation\Rule\Collection;
 use Magento\Tax\Service\V1\Data\TaxRule;
 use Magento\Tax\Service\V1\Data\TaxRuleBuilder;
+use Magento\Framework\Service\V1\Data\SortOrder;
 
 /**
  * TaxRuleService implementation.
@@ -196,10 +197,13 @@ class TaxRuleService implements TaxRuleServiceInterface
 
         $this->taxRuleSearchResultsBuilder->setTotalCount($collection->getSize());
         $sortOrders = $searchCriteria->getSortOrders();
+        /** @var SortOrder $sortOrder */
         if ($sortOrders) {
-            foreach ($sortOrders as $sortField => $direction) {
-                $sortField = $this->translateField($sortField);
-                $collection->addOrder($sortField, $direction == SearchCriteria::SORT_ASC ? 'ASC' : 'DESC');
+            foreach ($sortOrders as $sortOrder) {
+                $collection->addOrder(
+                    $this->translateField($sortOrder->getField()),
+                    ($sortOrder->getDirection() == SearchCriteria::SORT_ASC) ? 'ASC' : 'DESC'
+                );
             }
         }
         $collection->setCurPage($searchCriteria->getCurrentPage());

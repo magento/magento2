@@ -23,8 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
-    <update handle="page_one_column"/>
+<page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <referenceBlock name="page.main.title">
         <action method="setPageTitle">
             <argument name="title" translate="true" xsi:type="string">Email to a Friend</argument>
@@ -33,4 +32,4 @@
     <referenceContainer name="content">
         <block class="Magento\Sendfriend\Block\Send" name="sendfriend.send" template="send.phtml"/>
     </referenceContainer>
-</layout>
+</page>

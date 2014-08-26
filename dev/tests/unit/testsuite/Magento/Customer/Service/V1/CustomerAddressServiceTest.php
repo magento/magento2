@@ -235,37 +235,40 @@ class CustomerAddressServiceTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $regionBuilder = $this->objectManagerHelper->getObject('Magento\Customer\Service\V1\Data\RegionBuilder');
 
-        $metadataService = $this->getMockForAbstractClass(
+        $customerMetadataService = $this->getMockForAbstractClass(
             'Magento\Customer\Service\V1\CustomerMetadataServiceInterface',
             array(),
             '',
             false
         );
 
-        $metadataService->expects(
-            $this->any()
-        )->method(
-            'getCustomAddressAttributeMetadata'
-        )->will(
-            $this->returnValue(array())
+        $addressMetadataService = $this->getMockForAbstractClass(
+            'Magento\Customer\Service\V1\AddressMetadataServiceInterface',
+            array(),
+            '',
+            false
         );
 
-        $metadataService->expects(
+        $addressMetadataService->expects($this->any())
+            ->method('getCustomAttributesMetadata')
+            ->will($this->returnValue(array()));
+
+        $customerMetadataService->expects(
             $this->any()
         )->method(
-            'getCustomCustomerAttributeMetadata'
+            'getCustomAttributesMetadata'
         )->will(
             $this->returnValue(array())
         );
 
         $this->_addressBuilder = $this->objectManagerHelper->getObject(
             'Magento\Customer\Service\V1\Data\AddressBuilder',
-            array('regionBuilder' => $regionBuilder, 'metadataService' => $metadataService)
+            array('regionBuilder' => $regionBuilder, 'metadataService' => $addressMetadataService)
         );
 
         $customerBuilder = $this->objectManagerHelper->getObject(
             'Magento\Customer\Service\V1\Data\CustomerBuilder',
-            ['metadataService' => $metadataService]
+            ['metadataService' => $customerMetadataService]
         );
 
         $this->_customerConverter = new \Magento\Customer\Model\Converter(

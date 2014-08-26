@@ -59,16 +59,10 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             'empty' => array(
                 'label' => 'Empty',
                 'code' => 'empty',
-                'template' => 'empty.phtml',
-                'layout_handle' => 'page_empty',
-                'is_default' => '0'
             ),
-            'one_column' => array(
+            '1column' => array(
                 'label' => '1 column',
-                'code' => 'one_column',
-                'template' => '1column.phtml',
-                'layout_handle' => 'page_one_column',
-                'is_default' => '1'
+                'code' => '1column',
             )
         );
         $this->assertEquals($expected, $result);
@@ -87,23 +81,14 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             'empty' => array(
                 'label' => 'Empty',
                 'code' => 'empty',
-                'template' => 'empty.phtml',
-                'layout_handle' => 'page_empty',
-                'is_default' => '0'
             ),
-            'one_column' => array(
+            '1column' => array(
                 'label' => '1 column modified',
-                'code' => 'one_column',
-                'template' => '1column.phtml',
-                'layout_handle' => 'page_one_column',
-                'is_default' => '1'
+                'code' => '1column',
             ),
-            'two_columns_left' => array(
+            '2columns-left' => array(
                 'label' => '2 columns with left bar',
-                'code' => 'two_columns_left',
-                'template' => '2columns-left.phtml',
-                'layout_handle' => 'page_two_columns_left',
-                'is_default' => '0'
+                'code' => '2columns-left',
             )
         );
         $this->assertEquals($expected, $result);

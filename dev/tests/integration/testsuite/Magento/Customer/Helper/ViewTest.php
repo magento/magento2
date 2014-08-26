@@ -86,9 +86,9 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValueMap(
                 array(
-                    array('customer', 'prefix', $isPrefixAllowed ? $visibleAttribute : $invisibleAttribute),
-                    array('customer', 'middlename', $isMiddleNameAllowed ? $visibleAttribute : $invisibleAttribute),
-                    array('customer', 'suffix', $isSuffixAllowed ? $visibleAttribute : $invisibleAttribute)
+                    array('prefix', $isPrefixAllowed ? $visibleAttribute : $invisibleAttribute),
+                    array('middlename', $isMiddleNameAllowed ? $visibleAttribute : $invisibleAttribute),
+                    array('suffix', $isSuffixAllowed ? $visibleAttribute : $invisibleAttribute)
                 )
             )
         );

@@ -82,23 +82,12 @@
             </xs:documentation>
         </xs:annotation>
         <xs:sequence minOccurs="0" maxOccurs="unbounded">
-            <xs:element ref="referenceBlock" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element ref="referenceContainer" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element ref="container" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element ref="block" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element ref="update" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element ref="remove" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element ref="move" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
-        <xs:attribute type="xs:string" name="label"/>
-        <xs:attribute name="design_abstraction">
-            <xs:simpleType>
-                <xs:restriction base="xs:string">
-                    <xs:enumeration value="custom"/>
-                    <xs:enumeration value="page_layout"/>
-                </xs:restriction>
-            </xs:simpleType>
-        </xs:attribute>
     </xs:complexType>
 
     <xs:complexType name="updaterType">
@@ -191,7 +180,7 @@
 
     <xs:simpleType name="htmlIdentifierType">
         <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z][a-zA-Z\d\-_]*"/>
+            <xs:pattern value="[a-zA-Z][a-zA-Z\d\-_:]*"/>
         </xs:restriction>
     </xs:simpleType>
 

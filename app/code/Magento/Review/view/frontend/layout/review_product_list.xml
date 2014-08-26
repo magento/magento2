@@ -23,8 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
-    <update handle="page_one_column"/>
+<page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <update handle="catalog_product_view"/>
     <referenceContainer name="product.info.main">
         <block class="Magento\Review\Block\Product\View\Other" name="product.info.other" as="other" template="Magento_Review::product/view/other.phtml" before="product.info.addto"/>
@@ -38,4 +37,4 @@
             <block class="Magento\Theme\Block\Html\Pager" name="product_review_list.toolbar"/>
         </container>
     </referenceContainer>
-</layout>
+</page>

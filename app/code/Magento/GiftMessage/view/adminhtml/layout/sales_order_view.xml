@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <referenceBlock name="head">
         <block class="Magento\Theme\Block\Html\Head\Css" name="magento-core-prototype-magento-css">
             <arguments>
@@ -41,4 +41,4 @@
             <block class="Magento\GiftMessage\Block\Adminhtml\Sales\Order\View\Form" name="gift_options_form" template="giftoptionsform.phtml"/>
         </block>
     </referenceBlock>
-</layout>
+</page>

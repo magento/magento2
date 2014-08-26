@@ -232,13 +232,17 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
      */
     public function getLabels()
     {
-        $this->_reset()->clear();
-        $labels = $this->setOrder(
-            'theme_title',
-            \Magento\Framework\Data\Collection::SORT_ORDER_ASC
-        )->filterVisibleThemes()->addAreaFilter(
-            \Magento\Framework\App\Area::AREA_FRONTEND
-        );
+        $labels = $this->loadRegisteredThemes();
         return $labels->toOptionArray();
+    }
+
+    /**
+     * @return $this
+     */
+    public function loadRegisteredThemes()
+    {
+        $this->_reset()->clear();
+        return $this->setOrder('theme_title', \Magento\Framework\Data\Collection::SORT_ORDER_ASC)
+            ->filterVisibleThemes()->addAreaFilter(\Magento\Framework\App\Area::AREA_FRONTEND);
     }
 }

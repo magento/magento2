@@ -22,44 +22,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<!doctype html>
-<html lang="en">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title><?php echo __('Log into Magento Admin Page') ?></title>
-
-    <link rel="icon" href="<?php echo $this->getViewFileUrl('Magento_Theme::favicon.ico') ?>" type="image/x-icon" />
-    <link rel="shortcut icon" href="<?php echo $this->getViewFileUrl('Magento_Theme::favicon.ico') ?>" type="image/x-icon" />
-
-    <script type="text/javascript">
-        var require = {
-            "baseUrl": "<?php echo $this->getViewFileUrl('/') ?>",
-            "paths": {
-                "jquery/ui": "jquery/jquery-ui-1.9.2",
-                "mage/components": "mage/backend/components"
-            }
-        };
-    </script>
-
-    <link rel="stylesheet" href="<?php echo $this->getViewFileUrl('mui/reset.css') ?>" media="all" />
-    <link rel="stylesheet" href="<?php echo $this->getViewFileUrl('mui/base.css') ?>" media="all" />
-    <link rel="stylesheet" href="<?php echo $this->getViewFileUrl('mui/elements.css') ?>" media="all" />
-    <link rel="stylesheet" href="<?php echo $this->getViewFileUrl('mui/form.css') ?>" media="all" />
-    <link rel="stylesheet" href="<?php echo $this->getViewFileUrl('css/admin.css') ?>" media="all" />
-    <link rel="stylesheet" href="<?php echo $this->getViewFileUrl('css/pages.css') ?>" media="all" />
-    <link rel="stylesheet" href="<?php echo $this->getViewFileUrl('mui/utils.css') ?>" media="all" />
-
-    <script src="<?php echo $this->getViewFileUrl('prototype/prototype.js') ?>"></script>
-    <script src="<?php echo $this->getViewFileUrl('scriptaculous/effects.js') ?>"></script>
-    <script src="<?php echo $this->getViewFileUrl('mage/captcha.js') ?>"></script>
-    <script src="<?php echo $this->getViewFileUrl('modernizr/modernizr.js') ?>"></script>
-
-    <script src="<?php echo $this->getViewFileUrl('requirejs/require.js') ?>"></script>
-    <script src="<?php echo $this->getViewFileUrl('jquery/jquery-1.8.2.js') ?>"></script>
-    <script src="<?php echo $this->getViewFileUrl('mage/jquery-no-conflict.js') ?>"></script>
-    <script src="<?php echo $this->getViewFileUrl('app-config.js') ?>"></script>
-</head>
-<body id="page-login" class="page-login" onload="document.forms['login-form'].username.focus();">
+<div id="page-login" class="page-login">
     <div class="wrapper">
         <div class="wrapper-inner">
             <div class="form-login form-inline">
@@ -101,6 +64,9 @@
                     ], function(jQuery){
                         jQuery('#login-form').form().validation();
                     });
+                    jQuery(window).load(function(){
+                        jQuery('#username').focus();
+                    });
                 </script>
             </div>
         </div>
@@ -110,5 +76,4 @@
             <div class="footer-copyright"><?php echo $this->getChildHtml('copyright');?></div>
         </div>
     </footer>
-</body>
-</html>
+</div>

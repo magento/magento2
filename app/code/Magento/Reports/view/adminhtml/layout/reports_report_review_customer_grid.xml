@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <referenceBlock name="adminhtml.report.grid.container">
         <block class="Magento\Backend\Block\Widget\Grid" name="adminhtml.block.report.review.customer.grid" as="grid">
             <arguments>
@@ -92,4 +92,4 @@
             </block>
         </block>
     </referenceBlock>
-</layout>
+</page>

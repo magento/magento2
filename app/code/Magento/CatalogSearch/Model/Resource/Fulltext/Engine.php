@@ -23,13 +23,15 @@
  */
 namespace Magento\CatalogSearch\Model\Resource\Fulltext;
 
+use Magento\CatalogSearch\Model\Resource\EngineInterface;
+use Magento\Framework\Model\Resource\Db\AbstractDb;
+
 /**
  * CatalogSearch Fulltext Index Engine resource model
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Engine extends \Magento\Framework\Model\Resource\Db\AbstractDb implements
-    \Magento\CatalogSearch\Model\Resource\EngineInterface
+class Engine extends AbstractDb implements EngineInterface
 {
     /**
      * Catalog product visibility
@@ -198,10 +200,7 @@ class Engine extends \Magento\Framework\Model\Resource\Db\AbstractDb implements
             $where[] = $this->_getWriteAdapter()->quoteInto('product_id IN (?)', $entityId);
         }
 
-        // Delete locks reading queries and causes performance issues
-        // Insert into index goes with ON_DUPLICATE options.
-        // Insert into catalogsearch_result goes with catalog_product_entity inner join
-        //$this->_getWriteAdapter()->delete($this->getMainTable(), $where);
+        $this->_getWriteAdapter()->delete($this->getMainTable(), $where);
 
         return $this;
     }

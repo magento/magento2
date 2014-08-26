@@ -1,7 +1,5 @@
 <?php
 /**
- * Page layout config reader
- * 
  * Magento
  *
  * NOTICE OF LICENSE
@@ -25,6 +23,9 @@
  */
 namespace Magento\Theme\Model\Layout\Config;
 
+/**
+ * Page layout config reader
+ */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {
     /**
@@ -32,5 +33,5 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
      *
      * @var array
      */
-    protected $_idAttributes = array('/page_layouts/layouts/layout' => 'id');
+    protected $_idAttributes = array('/page_layouts/layout' => 'id');
 }

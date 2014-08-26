@@ -52,7 +52,7 @@ abstract class AbstractHelper
     /**
      * @var \Magento\Framework\Module\Manager
      */
-    private $_moduleManager;
+    protected $_moduleManager;
 
     /**
      * @var \Magento\Framework\Logger

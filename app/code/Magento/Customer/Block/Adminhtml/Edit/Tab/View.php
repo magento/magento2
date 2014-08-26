@@ -218,7 +218,7 @@ class View extends \Magento\Backend\Block\Template implements \Magento\Backend\B
     {
         $date = $this->_localeDate->scopeDate(
             $this->getCustomer()->getStoreId(),
-            $this->getCustomer()->getCreatedAt(),
+            $this->dateTime->toTimestamp($this->getCustomer()->getCreatedAt()),
             true
         );
         return $this->formatDate($date, TimezoneInterface::FORMAT_TYPE_MEDIUM, true);

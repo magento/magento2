@@ -36,8 +36,9 @@ class Validator extends \Magento\Framework\Validator\AbstractValidator
     /**
      * @param \Magento\Directory\Model\CountryFactory $countryFactory
      */
-    public function __construct(\Magento\Directory\Model\CountryFactory $countryFactory)
-    {
+    public function __construct(
+        \Magento\Directory\Model\CountryFactory $countryFactory
+    ) {
         $this->countryFactory = $countryFactory;
     }
 

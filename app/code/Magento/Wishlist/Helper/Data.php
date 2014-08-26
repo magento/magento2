@@ -503,17 +503,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         if ($wishlistId) {
             $params['wishlist_id'] = $wishlistId;
         }
-        return $this->_getUrl('rss/index/wishlist', $params);
-    }
-
-    /**
-     * Is allow RSS
-     *
-     * @return bool
-     */
-    public function isRssAllow()
-    {
-        return $this->_scopeConfig->isSetFlag('rss/wishlist/active', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->_getUrl('wishlist/index/rss', $params);
     }
 
     /**

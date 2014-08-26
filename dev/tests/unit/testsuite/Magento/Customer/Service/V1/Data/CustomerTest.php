@@ -88,7 +88,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         $customerMetadataService->expects(
             $this->any()
         )->method(
-            'getCustomCustomerAttributeMetadata'
+            'getCustomAttributesMetadata'
         )->will(
             $this->returnValue([
                 new \Magento\Framework\Object(['attribute_code' => 'zip']),

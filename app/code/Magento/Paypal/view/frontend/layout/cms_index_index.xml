@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <referenceContainer name="sidebar.additional">
         <block class="Magento\Paypal\Block\Logo" name="paypal.partner.right.logo" template="partner/logo.phtml"/>
         <block class="Magento\Paypal\Block\Bml\Banners" name="bml.right.logo" template="bml.phtml">
@@ -41,4 +41,4 @@
             </arguments>
         </block>
     </referenceContainer>
-</layout>
+</page>

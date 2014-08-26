@@ -23,9 +23,9 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <referenceBlock name="product.composite.fieldset">
         <block class="Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped" name="product.composite.fieldset.grouped" before="product.composite.fieldset.options" template="catalog/product/composite/fieldset/grouped.phtml"/>
         <remove name="product.composite.fieldset.qty"/>
     </referenceBlock>
-</layout>
+</page>

@@ -23,10 +23,10 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <update handle="formkey"/>
     <update handle="adminhtml_system_design_theme_block"/>
     <referenceContainer name="content">
         <block class="Magento\Theme\Block\Adminhtml\System\Design\Theme" name="design_theme"/>
     </referenceContainer>
-</layout>
+</page>

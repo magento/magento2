@@ -23,14 +23,13 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <update handle="customer_account"/>
     <referenceContainer name="page.main.title">
         <block class="Magento\Sales\Block\Order\Info" name="order.status" template="order/order_status.phtml" />
         <block class="Magento\Sales\Block\Order\Info" name="order.date" template="order/order_date.phtml" />
         <container name="order.actions.container" htmlTag="div" htmlClass="actions-toolbar order-actions-toolbar">
             <block class="Magento\Sales\Block\Order\Info\Buttons" as="buttons" name="sales.order.info.buttons" cacheable="false"/>
-            <block class="Magento\Sales\Block\Order\Info" name="order.rss" template="order/order_rss.phtml" />
         </container>
     </referenceContainer>
     <referenceContainer name="content">
@@ -38,4 +37,4 @@
     </referenceContainer>
     <update handle="sales_order_info_links"/>
     <block class="Magento\Framework\View\Element\Template" name="additional.product.info" template="Magento_Core::template.phtml"/>
-</layout>
+</page>

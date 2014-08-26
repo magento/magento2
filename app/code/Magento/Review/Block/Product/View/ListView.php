@@ -56,7 +56,8 @@ class ListView extends \Magento\Review\Block\Product\View
     {
         parent::_prepareLayout();
 
-        if ($toolbar = $this->getLayout()->getBlock('product_review_list.toolbar')) {
+        $toolbar = $this->getLayout()->getBlock('product_review_list.toolbar');
+        if ($toolbar) {
             $toolbar->setCollection($this->getReviewsCollection());
             $this->setChild('toolbar', $toolbar);
         }

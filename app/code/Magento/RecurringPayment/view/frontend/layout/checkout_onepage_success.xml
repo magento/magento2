@@ -23,8 +23,8 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../app/code/Magento/Core/etc/layout_single.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../app/code/Magento/Core/etc/page.xsd">
     <referenceContainer name="order.success.additional.info">
         <block class="Magento\RecurringPayment\Block\Checkout\Onepage\Success" name="onepage-success-recurring-payment" template="checkout/onepage/success.phtml"/>
     </referenceContainer>
-</layout>
+</page>
