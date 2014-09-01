@@ -43,24 +43,34 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $this->_apiConfigMock = $this->getMockBuilder(
             'Magento\Webapi\Model\Rest\Config'
         )->disableOriginalConstructor()->getMock();
-        $deserializerFactory = $this->getMockBuilder(
-            'Magento\Webapi\Controller\Rest\Request\Deserializer\Factory'
-        )->disableOriginalConstructor()->getMock();
+
         $this->_routeMock = $this->getMockBuilder(
             'Magento\Webapi\Controller\Rest\Router\Route'
         )->disableOriginalConstructor()->setMethods(
             array('match')
         )->getMock();
-        $areaListMock = $this->getMock('Magento\Framework\App\AreaList', array(), array(), '', false);
-        $configScopeMock = $this->getMock('Magento\Framework\Config\ScopeInterface');
-        $areaListMock->expects($this->once())->method('getFrontName')->will($this->returnValue('rest'));
-        $this->_request = new \Magento\Webapi\Controller\Rest\Request(
-            $areaListMock,
-            $configScopeMock,
-            $deserializerFactory
+
+        $areaListMock = $this->getMock('Magento\Framework\App\AreaList', [], [], '', false);
+
+        $areaListMock->expects($this->once())
+            ->method('getFrontName')
+            ->will($this->returnValue('rest'));
+
+        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->_request = $objectManager->getObject(
+            'Magento\Webapi\Controller\Rest\Request',
+            [
+                'areaList' => $areaListMock,
+            ]
         );
+
         /** Initialize SUT. */
-        $this->_router = new \Magento\Webapi\Controller\Rest\Router($this->_apiConfigMock);
+        $this->_router = $objectManager->getObject(
+            'Magento\Webapi\Controller\Rest\Router',
+            [
+                'apiConfig' => $this->_apiConfigMock
+            ]
+        );
     }
 
     protected function tearDown()

@@ -60,17 +60,18 @@ class Cancel extends \Magento\Backend\App\Action
      */
     public function execute()
     {
-        $creditmemo = $this->creditmemoLoader->load($this->_request);
+        $this->creditmemoLoader->setOrderId($this->getRequest()->getParam('order_id'));
+        $this->creditmemoLoader->setCreditmemoId($this->getRequest()->getParam('creditmemo_id'));
+        $this->creditmemoLoader->setCreditmemo($this->getRequest()->getParam('creditmemo'));
+        $this->creditmemoLoader->setInvoiceId($this->getRequest()->getParam('invoice_id'));
+        $creditmemo = $this->creditmemoLoader->load();
         if ($creditmemo) {
             try {
                 $creditmemo->cancel();
-                $transactionSave = $this->_objectManager->create(
-                    'Magento\Framework\DB\Transaction'
-                )->addObject(
-                    $creditmemo
-                )->addObject(
-                    $creditmemo->getOrder()
-                );
+                $transactionSave = $this->_objectManager->create('Magento\Framework\DB\Transaction');
+                $transactionSave->addObject($creditmemo);
+                $transactionSave->addObject($creditmemo->getOrder());
+
                 if ($creditmemo->getInvoice()) {
                     $transactionSave->addObject($creditmemo->getInvoice());
                 }

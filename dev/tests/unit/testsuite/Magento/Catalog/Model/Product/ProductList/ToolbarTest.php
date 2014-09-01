@@ -24,6 +24,8 @@
 
 namespace Magento\Catalog\Model\Product\ProductList;
 
+use Magento\TestFramework\Helper\ObjectManager;
+
 class ToolbarTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -32,23 +34,33 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
     protected $toolbarModel;
 
     /**
-     * @var \Magento\Framework\Stdlib\Cookie |\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\CookieManager |\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $cookie;
+    protected $cookieManagerMock;
 
     /**
      * @var \Magento\Framework\App\Request\Http |\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $request;
+    protected $requestMock;
 
     /**
      * Set up
      */
     public function setUp()
     {
-        $this->cookie = $this->getMock('Magento\Framework\Stdlib\Cookie', array('get'), array(), '', false);
-        $this->request = $this->getMock('Magento\Framework\App\Request\Http', array('getParam'), array(), '', false);
-        $this->toolbarModel = new Toolbar($this->cookie, $this->request);
+        $this->cookieManagerMock = $this->getMockBuilder('Magento\Framework\Stdlib\CookieManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->toolbarModel = (new ObjectManager($this))->getObject(
+            'Magento\Catalog\Model\Product\ProductList\Toolbar',
+            [
+                'cookieManager' => $this->cookieManagerMock,
+                'request' => $this->requestMock,
+            ]
+        );
     }
 
     /**
@@ -57,8 +69,8 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetOrder($param)
     {
-        $this->cookie->expects($this->once())
-            ->method('get')
+        $this->cookieManagerMock->expects($this->once())
+            ->method('getCookie')
             ->with(Toolbar::ORDER_COOKIE_NAME)
             ->will($this->returnValue($param));
         $this->assertEquals($param, $this->toolbarModel->getOrder());
@@ -70,8 +82,8 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetDirection($param)
     {
-        $this->cookie->expects($this->once())
-            ->method('get')
+        $this->cookieManagerMock->expects($this->once())
+            ->method('getCookie')
             ->with(Toolbar::DIRECTION_COOKIE_NAME)
             ->will($this->returnValue($param));
         $this->assertEquals($param, $this->toolbarModel->getDirection());
@@ -83,8 +95,8 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetMode($param)
     {
-        $this->cookie->expects($this->once())
-            ->method('get')
+        $this->cookieManagerMock->expects($this->once())
+            ->method('getCookie')
             ->with(Toolbar::MODE_COOKIE_NAME)
             ->will($this->returnValue($param));
         $this->assertEquals($param, $this->toolbarModel->getMode());
@@ -96,8 +108,8 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetLimit($param)
     {
-        $this->cookie->expects($this->once())
-            ->method('get')
+        $this->cookieManagerMock->expects($this->once())
+            ->method('getCookie')
             ->with(Toolbar::LIMIT_COOKIE_NAME)
             ->will($this->returnValue($param));
         $this->assertEquals($param, $this->toolbarModel->getLimit());
@@ -109,7 +121,7 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCurrentPage($param)
     {
-        $this->request->expects($this->once())
+        $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with(Toolbar::PAGE_PARM_NAME)
             ->will($this->returnValue($param));
@@ -118,7 +130,7 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCurrentPageNoParam()
     {
-        $this->request->expects($this->once())
+        $this->requestMock->expects($this->once())
             ->method('getParam')
             ->with(Toolbar::PAGE_PARM_NAME)
             ->will($this->returnValue(false));
@@ -127,17 +139,17 @@ class ToolbarTest extends \PHPUnit_Framework_TestCase
 
     public function stringParamProvider()
     {
-        return array(
-            array('stringParam')
-        );
+        return [
+            ['stringParam']
+        ];
     }
 
     public function intParamProvider()
     {
-        return array(
-            array('2'),
-            array(3)
-        );
+        return [
+            ['2'],
+            [3]
+        ];
     }
 }
 

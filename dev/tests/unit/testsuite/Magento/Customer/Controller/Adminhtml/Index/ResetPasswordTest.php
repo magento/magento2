@@ -99,7 +99,7 @@ class ResetPasswordTest extends \PHPUnit_Framework_TestCase
         $this->_response = $this->getMockBuilder(
             'Magento\Framework\App\Response\Http'
         )->disableOriginalConstructor()->setMethods(
-            array('setRedirect', 'getHeader')
+            ['setRedirect', 'getHeader', '__wakeup']
         )->getMock();
 
         $this->_response->expects(

@@ -123,8 +123,11 @@ class Save extends \Magento\Backend\App\Action
         }
 
         try {
+            $invoiceId = $this->getRequest()->getParam('invoice_id');
+            $invoiceData = $this->getRequest()->getParam('invoice', []);
+            $invoiceData = isset($invoiceData['items']) ? $invoiceData['items'] : [];
             /** @var Invoice $invoice */
-            $invoice = $this->invoiceLoader->load($this->_request);
+            $invoice = $this->invoiceLoader->load($orderId, $invoiceId, $invoiceData);
             if ($invoice) {
 
                 if (!empty($data['capture_case'])) {

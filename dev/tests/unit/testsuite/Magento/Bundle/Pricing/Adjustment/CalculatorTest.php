@@ -23,8 +23,9 @@
  */
 namespace Magento\Bundle\Pricing\Adjustment;
 
-use Magento\Bundle\Pricing\Price;
 use Magento\Bundle\Model\Product\Price as ProductPrice;
+use Magento\Bundle\Pricing\Price;
+use Magento\TestFramework\Helper\ObjectManager;
 
 /**
  * Test for \Magento\Bundle\Pricing\Adjustment\Calculator
@@ -78,12 +79,16 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $priceInfo = $this->getMock('Magento\Framework\Pricing\PriceInfo\Base', [], [], '', false);
-        $priceInfo->expects($this->any())->method('getPrice')->will($this->returnCallback(function ($type) {
-            if (!isset($this->priceMocks[$type])) {
-                throw new \PHPUnit_Framework_ExpectationFailedException('Unexpected type of price model');
-            }
-            return $this->priceMocks[$type];
-        }));
+        $priceInfo->expects($this->any())->method('getPrice')->will(
+            $this->returnCallback(
+                function ($type) {
+                    if (!isset($this->priceMocks[$type])) {
+                        throw new \PHPUnit_Framework_ExpectationFailedException('Unexpected type of price model');
+                    }
+                    return $this->priceMocks[$type];
+                }
+            )
+        );
         $this->saleableItem->expects($this->any())->method('getPriceInfo')->will($this->returnValue($priceInfo));
 
         $store = $this->getMockBuilder('Magento\Store\Model\Store')
@@ -99,33 +104,33 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $factoryCallback = $this->returnCallback(function () {
-            list(, $selectionMock) = func_get_args();
-            $bundlePrice = $this->getMockBuilder('Magento\Bundle\Pricing\Price\BundleSelectionPrice')
-                ->setMethods(['getAmount'])
-                ->disableOriginalConstructor()
-                ->getMock();
-            $bundlePrice->expects($this->any())->method('getAmount')
-                ->will($this->returnValue($selectionMock->getAmountMock()));
-            return $bundlePrice;
-        });
+        $factoryCallback = $this->returnCallback(
+            function () {
+                list(, $selectionMock) = func_get_args();
+                $bundlePrice = $this->getMockBuilder('Magento\Bundle\Pricing\Price\BundleSelectionPrice')
+                    ->setMethods(['getAmount'])
+                    ->disableOriginalConstructor()
+                    ->getMock();
+                $bundlePrice->expects($this->any())->method('getAmount')
+                    ->will($this->returnValue($selectionMock->getAmountMock()));
+                return $bundlePrice;
+            }
+        );
         $this->selectionFactory->expects($this->any())->method('create')->will($factoryCallback);
 
         $this->taxData = $this->getMockBuilder('Magento\Tax\Helper\Data')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->model = new Calculator(
-            $this->baseCalculator,
-            $this->amountFactory,
-            $this->selectionFactory,
-            $this->taxData
+        $this->model = (new ObjectManager($this))->getObject(
+            'Magento\Bundle\Pricing\Adjustment\Calculator',
+            [
+                'calculator' => $this->baseCalculator,
+                'amountFactory' => $this->amountFactory,
+                'bundleSelectionFactory' => $this->selectionFactory,
+                'taxHelper' => $this->taxData
+            ]
         );
-    }
-
-    protected function tearDown()
-    {
-        $this->priceMocks = [];
     }
 
     public function testEmptySelectionPriceList()
@@ -155,9 +160,11 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
         $this->priceMocks[Price\BundleOptionPrice::PRICE_CODE] = $price;
 
         // Price type of saleable items
-        $this->saleableItem->expects($this->any())->method('getPriceType')->will($this->returnValue(
-            ProductPrice::PRICE_TYPE_DYNAMIC
-        ));
+        $this->saleableItem->expects($this->any())->method('getPriceType')->will(
+            $this->returnValue(
+                ProductPrice::PRICE_TYPE_DYNAMIC
+            )
+        );
 
         $this->amountFactory->expects($this->atLeastOnce())->method('create')
             ->with($expectedResult['fullAmount'], $expectedResult['adjustments']);
@@ -166,6 +173,28 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
         } else {
             $this->model->getMaxAmount($this->baseAmount, $this->saleableItem);
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderForGetterAmount()
+    {
+        return [
+            // first case with minimal amount
+            'case with getting minimal amount' => $this->getCaseWithMinAmount(),
+            // second case with maximum amount
+            'case with getting maximum amount' => $this->getCaseWithMaxAmount(),
+            // third case without saleable items
+            'case without saleable items' => $this->getCaseWithoutSaleableItems(),
+            // fourth case without require options
+            'case without required options' => $this->getCaseMinAmountWithoutRequiredOptions(),
+        ];
+    }
+
+    protected function tearDown()
+    {
+        $this->priceMocks = [];
     }
 
     /**
@@ -228,26 +257,6 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return array
-     */
-    public function dataProviderForGetterAmount()
-    {
-        return [
-            // first case with minimal amount
-            'case with getting minimal amount' => $this->getCaseWithMinAmount(),
-
-            // second case with maximum amount
-            'case with getting maximum amount' => $this->getCaseWithMaxAmount(),
-
-            // third case without saleable items
-            'case without saleable items' => $this->getCaseWithoutSaleableItems(),
-
-            // fourth case without require options
-            'case without required options' => $this->getCaseMinAmountWithoutRequiredOptions(),
-        ];
-    }
-
-    /**
      * Array for data provider dataProviderForGetterAmount for case 'case with getting minimal amount'
      *
      * @return array
@@ -264,30 +273,30 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
                 [
                     'isMultiSelection' => false,
                     'data' => [
-                        'title'         => 'test option 1',
+                        'title' => 'test option 1',
                         'default_title' => 'test option 1',
-                        'type'          => 'select',
-                        'option_id'     => '1',
-                        'position'      => '0',
-                        'required'      => '1',
+                        'type' => 'select',
+                        'option_id' => '1',
+                        'position' => '0',
+                        'required' => '1',
                     ],
                     'selections' => [
-                        'first product selection'  => [
-                            'data'   => ['price' => 70.],
+                        'first product selection' => [
+                            'data' => ['price' => 70.],
                             'amount' => [
                                 'adjustmentsAmounts' => ['tax' => 8, 'weee' => 10],
                                 'amount' => 18
                             ]
                         ],
                         'second product selection' => [
-                            'data'   => ['price' => 80.],
+                            'data' => ['price' => 80.],
                             'amount' => [
                                 'adjustmentsAmounts' => ['tax' => 18],
                                 'amount' => 28
                             ]
                         ],
-                        'third product selection with the lowest price'  => [
-                            'data'   => ['price' => 50.],
+                        'third product selection with the lowest price' => [
+                            'data' => ['price' => 50.],
                             'amount' => [
                                 'adjustmentsAmounts' => ['tax' => 8, 'weee' => 10],
                                 'amount' => 8
@@ -298,7 +307,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
             ],
             'expectedResult' => [
                 'isMinAmount' => true,
-                'fullAmount'  => 790.,
+                'fullAmount' => 790.,
                 'adjustments' => ['tax' => 110, 'weee' => 10]
             ]
         ];
@@ -321,23 +330,23 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
                 [
                     'isMultiSelection' => false,
                     'data' => [
-                        'title'         => 'test option 1',
+                        'title' => 'test option 1',
                         'default_title' => 'test option 1',
-                        'type'          => 'select',
-                        'option_id'     => '1',
-                        'position'      => '0',
-                        'required'      => '1',
+                        'type' => 'select',
+                        'option_id' => '1',
+                        'position' => '0',
+                        'required' => '1',
                     ],
                     'selections' => [
-                        'first product selection'  => [
-                            'data'   => ['price' => 50.],
+                        'first product selection' => [
+                            'data' => ['price' => 50.],
                             'amount' => [
                                 'adjustmentsAmounts' => ['tax' => 8, 'weee' => 10],
                                 'amount' => 8
                             ]
                         ],
                         'second product selection' => [
-                            'data'   => ['price' => 80.],
+                            'data' => ['price' => 80.],
                             'amount' => [
                                 'adjustmentsAmounts' => ['tax' => 18],
                                 'amount' => 8
@@ -349,30 +358,30 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
                 [
                     'isMultiSelection' => true,
                     'data' => [
-                        'title'         => 'test option 2',
+                        'title' => 'test option 2',
                         'default_title' => 'test option 2',
-                        'type'          => 'select',
-                        'option_id'     => '2',
-                        'position'      => '1',
-                        'required'      => '1',
+                        'type' => 'select',
+                        'option_id' => '2',
+                        'position' => '1',
+                        'required' => '1',
                     ],
                     'selections' => [
-                        'first product selection'  => [
-                            'data'   => ['price' => 20.],
+                        'first product selection' => [
+                            'data' => ['price' => 20.],
                             'amount' => [
                                 'adjustmentsAmounts' => ['tax' => 8],
                                 'amount' => 8
                             ]
                         ],
                         'second product selection' => [
-                            'data'   => ['price' => 110.],
+                            'data' => ['price' => 110.],
                             'amount' => [
                                 'adjustmentsAmounts' => ['tax' => 28],
                                 'amount' => 28
                             ]
                         ],
                         'third product selection' => [
-                            'data'   => ['price' => 50.],
+                            'data' => ['price' => 50.],
                             'amount' => [
                                 'adjustmentsAmounts' => ['tax' => 18],
                                 'amount' => 18
@@ -383,7 +392,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
             ],
             'expectedResult' => [
                 'isMinAmount' => false,
-                'fullAmount'  => 844.,
+                'fullAmount' => 844.,
                 'adjustments' => ['tax' => 164, 'weee' => 10]
             ]
         ];
@@ -406,19 +415,19 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
                 [
                     'isMultiSelection' => false,
                     'data' => [
-                        'title'         => 'test option 1',
+                        'title' => 'test option 1',
                         'default_title' => 'test option 1',
-                        'type'          => 'select',
-                        'option_id'     => '1',
-                        'position'      => '0',
-                        'required'      => '1',
+                        'type' => 'select',
+                        'option_id' => '1',
+                        'position' => '0',
+                        'required' => '1',
                     ],
                     'selections' => []
                 ],
             ],
             'expectedResult' => [
                 'isMinAmount' => true,
-                'fullAmount'  => 782.,
+                'fullAmount' => 782.,
                 'adjustments' => ['tax' => 102]
             ]
         ];
@@ -441,23 +450,23 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
                 [
                     'isMultiSelection' => false,
                     'data' => [
-                        'title'         => 'test option 1',
+                        'title' => 'test option 1',
                         'default_title' => 'test option 1',
-                        'type'          => 'select',
-                        'option_id'     => '1',
-                        'position'      => '0',
-                        'required'      => '0',
+                        'type' => 'select',
+                        'option_id' => '1',
+                        'position' => '0',
+                        'required' => '0',
                     ],
                     'selections' => [
-                        'first product selection'  => [
-                            'data'   => ['price' => 20.],
+                        'first product selection' => [
+                            'data' => ['price' => 20.],
                             'amount' => [
                                 'adjustmentsAmounts' => ['tax' => 8],
                                 'amount' => 8
                             ]
                         ],
-                        'second product selection'  => [
-                            'data'   => ['price' => 30.],
+                        'second product selection' => [
+                            'data' => ['price' => 30.],
                             'amount' => [
                                 'adjustmentsAmounts' => ['tax' => 10],
                                 'amount' => 12
@@ -469,23 +478,23 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
                 [
                     'isMultiSelection' => false,
                     'data' => [
-                        'title'         => 'test option 2',
+                        'title' => 'test option 2',
                         'default_title' => 'test option 2',
-                        'type'          => 'select',
-                        'option_id'     => '2',
-                        'position'      => '1',
-                        'required'      => '0',
+                        'type' => 'select',
+                        'option_id' => '2',
+                        'position' => '1',
+                        'required' => '0',
                     ],
                     'selections' => [
-                        'first product selection'  => [
-                            'data'   => ['price' => 25.],
+                        'first product selection' => [
+                            'data' => ['price' => 25.],
                             'amount' => [
                                 'adjustmentsAmounts' => ['tax' => 8],
                                 'amount' => 9
                             ]
                         ],
-                        'second product selection'  => [
-                            'data'   => ['price' => 35.],
+                        'second product selection' => [
+                            'data' => ['price' => 35.],
                             'amount' => [
                                 'adjustmentsAmounts' => ['tax' => 10],
                                 'amount' => 10
@@ -496,7 +505,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
             ],
             'expectedResult' => [
                 'isMinAmount' => true,
-                'fullAmount'  => 8.,
+                'fullAmount' => 8.,
                 'adjustments' => ['tax' => 8]
             ]
         ];

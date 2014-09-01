@@ -75,7 +75,6 @@ class Invoice extends DataObject
     const BASE_TOTAL_REFUNDED = 'base_total_refunded';
     const DISCOUNT_DESCRIPTION = 'discount_description';
     const ITEMS = 'items';
-    const COMMENTS = 'comments';
 
     /**
      * Returns base_currency_code
@@ -520,20 +519,10 @@ class Invoice extends DataObject
     /**
      * Returns invoice items
      *
-     * @return InvoiceItem[]
+     * @return \Magento\Sales\Service\V1\Data\InvoiceItem[]
      */
     public function getItems()
     {
-        return $this->_get(self::ITEMS);
-    }
-
-    /**
-     * Return invoice comments
-     *
-     * @return Comment[]
-     */
-    public function getComments()
-    {
-        return $this->_get(self::COMMENTS);
+        return (array)$this->_get(self::ITEMS);
     }
 }

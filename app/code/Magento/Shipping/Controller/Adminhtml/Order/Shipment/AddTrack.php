@@ -72,7 +72,11 @@ class AddTrack extends \Magento\Backend\App\Action
                 throw new \Magento\Framework\Model\Exception(__('Please enter a tracking number.'));
             }
             $this->_title->add(__('Shipments'));
-            $shipment = $this->shipmentLoader->load($this->_request);
+            $this->shipmentLoader->setOrderId($this->getRequest()->getParam('order_id'));
+            $this->shipmentLoader->setShipmentId($this->getRequest()->getParam('shipment_id'));
+            $this->shipmentLoader->setShipment($this->getRequest()->getParam('shipment'));
+            $this->shipmentLoader->setTracking($this->getRequest()->getParam('tracking'));
+            $shipment = $this->shipmentLoader->load();
             if ($shipment) {
                 $track = $this->_objectManager->create(
                     'Magento\Sales\Model\Order\Shipment\Track'

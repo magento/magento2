@@ -22,7 +22,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 require([
-    "jquery/file-uploader",
+    "jquery/fileUploader/jquery.fileupload-ui",
     "mage/adminhtml/browser",
     "Magento_Theme/js/form",
     "Magento_Theme/js/sortable"

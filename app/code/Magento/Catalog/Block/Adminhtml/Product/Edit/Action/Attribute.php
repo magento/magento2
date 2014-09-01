@@ -61,7 +61,7 @@ class Attribute extends \Magento\Backend\Block\Widget
      */
     protected function _prepareLayout()
     {
-        $this->addChild(
+        $this->getToolbar()->addChild(
             'back_button',
             'Magento\Backend\Block\Widget\Button',
             array(
@@ -74,7 +74,7 @@ class Attribute extends \Magento\Backend\Block\Widget
             )
         );
 
-        $this->addChild(
+        $this->getToolbar()->addChild(
             'reset_button',
             'Magento\Backend\Block\Widget\Button',
             array(
@@ -84,12 +84,12 @@ class Attribute extends \Magento\Backend\Block\Widget
             )
         );
 
-        $this->addChild(
+        $this->getToolbar()->addChild(
             'save_button',
             'Magento\Backend\Block\Widget\Button',
             array(
                 'label' => __('Save'),
-                'class' => 'save',
+                'class' => 'save primary',
                 'data_attribute' => array(
                     'mage-init' => array('button' => array('event' => 'save', 'target' => '#attributes-edit-form'))
                 )

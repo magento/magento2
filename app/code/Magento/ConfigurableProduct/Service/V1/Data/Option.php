@@ -23,6 +23,9 @@
  */
 namespace Magento\ConfigurableProduct\Service\V1\Data;
 
+/**
+ * @codeCoverageIgnore
+ */
 class Option extends \Magento\Framework\Service\Data\AbstractObject
 {
     /**#@+

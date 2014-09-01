@@ -28,7 +28,7 @@ use Magento\Sales\Model\Order\Item;
 /**
  * Adminhtml sales order item renderer
  */
-class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
+class DefaultRenderer extends \Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRenderer
 {
     /**
      * Message helper

@@ -34,6 +34,11 @@ class RequestTest extends \PHPUnit_Framework_TestCase
      */
     protected $_request;
 
+    /**
+     * @var \Magento\Framework\Stdlib\CookieManager
+     */
+    protected $_cookieManagerMock;
+
     /** @var \Magento\Webapi\Controller\Rest\Request\Deserializer\Factory */
     protected $_deserializerFactory;
 
@@ -50,11 +55,13 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $areaListMock->expects($this->once())->method('getFrontName')->will($this->returnValue('rest'));
         /** Instantiate request. */
         // TODO: Get rid of SUT mocks.
+        $this->_cookieManagerMock = $this->getMock('\Magento\Framework\Stdlib\CookieManager');
         $this->_request = $this->getMock(
             'Magento\Webapi\Controller\Rest\Request',
             array('getHeader', 'getMethod', 'isGet', 'isPost', 'isPut', 'isDelete', 'getRawBody'),
-            array($areaListMock, $configScopeMock, $this->_deserializerFactory)
+            array($areaListMock, $configScopeMock,$this->_cookieManagerMock, $this->_deserializerFactory,)
         );
+
         parent::setUp();
     }
 

@@ -78,8 +78,12 @@ class AddComment extends \Magento\Backend\App\Action
                 throw new Exception(__('The Comment Text field cannot be empty.'));
             }
             $this->_title->add(__('Invoices'));
+            $orderId = $this->getRequest()->getParam('order_id');
+            $invoiceId = $this->getRequest()->getParam('invoice_id');
+            $invoiceData = $this->getRequest()->getParam('invoice', []);
+            $invoiceData = isset($invoiceData['items']) ? $invoiceData['items'] : [];
             /** @var Invoice $invoice */
-            $invoice = $this->invoiceLoader->load($this->_request);
+            $invoice = $this->invoiceLoader->load($orderId, $invoiceId, $invoiceData);
             $invoice->addComment(
                 $data['comment'],
                 isset($data['is_customer_notified']),

@@ -23,35 +23,65 @@
  */
 namespace Magento\Framework\App\Action;
 
+use Magento\TestFramework\Helper\ObjectManager;
+
+/**
+ * Test Forward
+ *
+ * getRequest,getResponse of AbstractAction class is also tested
+ */
 class ForwardTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Framework\App\Action\Forward
      */
-    protected $_actionAbstract;
+    protected $actionAbstract;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\RequestInterface
      */
-    protected $_request;
+    protected $request;
 
     /**
      * @var \Magento\Framework\App\ResponseInterface
      */
-    protected $_response;
+    protected $response;
 
     protected function setUp()
     {
-        $this->_request = $this->getMock('Magento\Framework\App\Request\Http', array(), array(), '', false);
-        $this->_response = $this->getMock('\Magento\Framework\App\Response\Http', array(), array(), '', false);
+        $objectManager = new ObjectManager($this);
+        $cookieMetadataFactoryMock = $this->getMockBuilder(
+            'Magento\Framework\Stdlib\Cookie\CookieMetadataFactory'
+        )->disableOriginalConstructor()->getMock();
+        $cookieManagerMock = $this->getMockBuilder('Magento\Framework\Stdlib\CookieManager')
+            ->disableOriginalConstructor()->getMock();
+        $contextMock = $this->getMockBuilder('Magento\Framework\App\Http\Context')->disableOriginalConstructor()
+            ->getMock();
+        $this->response = $objectManager->getObject(
+            'Magento\Framework\App\Response\Http',
+            [
+                'cookieManager' => $cookieManagerMock,
+                'cookieMetadataFactory' => $cookieMetadataFactoryMock,
+                'context' => $contextMock
+            ]
+        );
 
-        $this->_actionAbstract = new \Magento\Framework\App\Action\Forward($this->_request, $this->_response);
+        $this->request = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+            ->disableOriginalConstructor()->getMock();
+
+        $this->actionAbstract = $objectManager->getObject(
+            'Magento\Framework\App\Action\Forward',
+            [
+                'request' => $this->request,
+                'response' => $this->response
+            ]
+        );
     }
 
     public function testDispatch()
     {
-        $this->_request->expects($this->once())->method('setDispatched')->with(false);
-        $this->_actionAbstract->dispatch($this->_request);
+        $this->request->expects($this->once())->method('setDispatched')->with(false);
+        $this->actionAbstract->dispatch($this->request);
     }
 
     /**
@@ -62,7 +92,7 @@ class ForwardTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetRequest()
     {
-        $this->assertEquals($this->_request, $this->_actionAbstract->getRequest());
+        $this->assertSame($this->request, $this->actionAbstract->getRequest());
     }
 
     /**
@@ -73,7 +103,7 @@ class ForwardTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetResponse()
     {
-        $this->assertEquals($this->_response, $this->_actionAbstract->getResponse());
+        $this->assertSame($this->response, $this->actionAbstract->getResponse());
     }
 
     /**
@@ -84,15 +114,6 @@ class ForwardTest extends \PHPUnit_Framework_TestCase
      */
     public function testResponseHeaders()
     {
-        $infoProcessorMock = $this->getMock('Magento\Framework\App\Request\PathInfoProcessorInterface');
-        $routerListMock = $this->getMock('Magento\Framework\App\Route\ConfigInterface');
-        $cookieMock = $this->getMock('Magento\Framework\Stdlib\Cookie', array(), array(), '', false);
-        $contextMock = $this->getMock('Magento\Framework\App\Http\Context', array(), array(), '', false);
-        $request = new \Magento\Framework\App\Request\Http($routerListMock, $infoProcessorMock);
-        $response = new \Magento\Framework\App\Response\Http($cookieMock, $contextMock);
-        $response->headersSentThrowsException = false;
-        $action = new \Magento\Framework\App\Action\Forward($request, $response);
-
-        $this->assertEquals(array(), $action->getResponse()->getHeaders());
+        $this->assertEmpty($this->actionAbstract->getResponse()->getHeaders());
     }
 }

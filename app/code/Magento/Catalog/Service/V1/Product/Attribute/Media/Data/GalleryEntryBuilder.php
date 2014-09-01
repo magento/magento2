@@ -27,6 +27,9 @@ namespace Magento\Catalog\Service\V1\Product\Attribute\Media\Data;
 
 use Magento\Framework\Service\Data\AbstractObjectBuilder;
 
+/**
+ * @codeCoverageIgnore
+ */
 class GalleryEntryBuilder extends AbstractObjectBuilder
 {
     /**

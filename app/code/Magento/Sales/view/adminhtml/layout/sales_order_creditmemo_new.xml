@@ -24,6 +24,7 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
+    <update handle="sales_order_item_price"/>
     <referenceContainer name="content">
         <block class="Magento\Sales\Block\Adminhtml\Order\Creditmemo\Create" name="sales_creditmemo_create">
             <block class="Magento\Sales\Block\Adminhtml\Order\Creditmemo\Create\Form" name="form" template="order/creditmemo/create/form.phtml">

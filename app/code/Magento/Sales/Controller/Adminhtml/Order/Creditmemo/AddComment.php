@@ -76,7 +76,11 @@ class AddComment extends \Magento\Backend\App\Action
                 throw new \Magento\Framework\Model\Exception(__('The Comment Text field cannot be empty.'));
             }
             $this->_title->add(__('Credit Memos'));
-            $creditmemo = $this->creditmemoLoader->load($this->_request);
+            $this->creditmemoLoader->setOrderId($this->getRequest()->getParam('order_id'));
+            $this->creditmemoLoader->setCreditmemoId($this->getRequest()->getParam('creditmemo_id'));
+            $this->creditmemoLoader->setCreditmemo($this->getRequest()->getParam('creditmemo'));
+            $this->creditmemoLoader->setInvoiceId($this->getRequest()->getParam('invoice_id'));
+            $creditmemo = $this->creditmemoLoader->load();
             $comment = $creditmemo->addComment(
                 $data['comment'],
                 isset($data['is_customer_notified']),

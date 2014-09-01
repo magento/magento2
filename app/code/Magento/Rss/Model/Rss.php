@@ -38,6 +38,7 @@ class Rss
     /**
      * @param array $data
      * @return $this
+     * @codeCoverageIgnore
      */
     public function _addHeader($data = array())
     {
@@ -48,6 +49,7 @@ class Rss
     /**
      * @param array $entries
      * @return $this
+     * @codeCoverageIgnore
      */
     public function _addEntries($entries)
     {
@@ -58,6 +60,7 @@ class Rss
     /**
      * @param array $entry
      * @return $this
+     * @codeCoverageIgnore
      */
     public function _addEntry($entry)
     {
@@ -67,6 +70,7 @@ class Rss
 
     /**
      * @return array
+     * @codeCoverageIgnore
      */
     public function getFeedArray()
     {

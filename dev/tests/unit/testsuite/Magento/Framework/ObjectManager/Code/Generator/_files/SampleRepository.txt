@@ -46,15 +46,20 @@ class SampleRepository
      *
      * @param int $id
      * @return \Magento\Framework\ObjectManager\Code\Generator\Sample
+     * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function get($id)
     {
         if (!$id) {
-            throw new \Magento\Framework\Exception\NoSuchEntityException('Requested product doesn\'t exist');
+            throw new \Magento\Framework\Exception\InputException('ID required');
         }
         if (!isset($this->registry[$id])) {
-            $this->registry[$id] = $this->sampleFactory->create()->load($id);
+            $entity = $this->sampleFactory->create()->load($id);
+            if (!$entity->getId()) {
+                throw new \Magento\Framework\Exception\NoSuchEntityException('Requested entity doesn\'t exist');
+            }
+            $this->registry[$id] = $entity;
         }
         return $this->registry[$id];
     }
@@ -89,6 +94,8 @@ class SampleRepository
                 $collection->addFieldToFilter($filter->getField(), [$condition => $filter->getValue()]);
             }
         }
+        $collection->setCurPage($criteria->getCurrentPage());
+        $collection->setPageSize($criteria->getPageSize());
         foreach ($collection as $object) {
             $this->register($object);
         }

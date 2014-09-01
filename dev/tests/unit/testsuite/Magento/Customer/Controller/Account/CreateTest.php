@@ -65,8 +65,8 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         $this->response = $this->getMock('Magento\Framework\App\ResponseInterface');
         $this->request = $this->getMock(
             'Magento\Framework\App\RequestInterface',
-            array('isPost', 'getModuleName', 'setModuleName', 'getActionName', 'setActionName', 'getParam'),
-            array(),
+            ['isPost', 'getModuleName', 'setModuleName', 'getActionName', 'setActionName', 'getParam', 'getCookie'],
+            [],
             '',
             false
         );
@@ -98,7 +98,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
 
         $this->redirectMock->expects($this->once())
             ->method('redirect')
-            ->with($this->response, '*/*', array())
+            ->with($this->response, '*/*', [])
             ->will($this->returnValue(false));
 
         $this->viewMock->expects($this->never())
@@ -129,8 +129,8 @@ class CreateTest extends \PHPUnit_Framework_TestCase
 
         $layoutMock = $this->getMock(
             'Magento\Framework\View\Layout',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );

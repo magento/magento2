@@ -113,7 +113,7 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue([$productId => $productObject]));
 
         $this->category->expects($this->once())->method('load')->with($this->equalTo($categoryId));
-        $this->category->expects($this->once())->method('getId')->will($this->returnValue(true));
+        $this->category->expects($this->once())->method('getId')->will($this->returnValue(333));
         $this->category->expects($this->once())->method('getProductsPosition')
             ->will($this->returnValue([$productId => $productPosition]));
         $this->category->expects($this->once())->method('getProductCollection')
@@ -129,5 +129,31 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
         )->will($this->returnValue($this->productLinkBuilder));
 
         $this->assertEquals([$productDto], $this->model->assignedProducts($categoryId));
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function testGetCategoryNoSuchEntityException()
+    {
+        $categoryId = 3;
+        $productId = $categoryId + 6;
+
+        /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $productObject */
+        $productObject = $this->getMockBuilder('Magento\Catalog\Model\Product')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        /** @var \Magento\Framework\Data\Collection\Db|\PHPUnit_Framework_MockObject_MockObject $productCollection */
+        $productCollection = $this->getMockBuilder('Magento\Framework\Data\Collection\Db')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $productCollection->expects($this->any())->method('getItems')
+            ->will($this->returnValue([$productId => $productObject]));
+
+        $this->category->expects($this->once())->method('load')->with($this->equalTo($categoryId));
+        $this->category->expects($this->once())->method('getId')->will($this->returnValue(0));
+
+        $this->model->assignedProducts($categoryId);
     }
 }

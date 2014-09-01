@@ -31,6 +31,11 @@ namespace Magento\Tax\Model\Resource;
 class Calculation extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
+     * Store ISO 3166-1 alpha-2 USA country code
+     */
+    const USA_COUNTRY_CODE = 'US';
+
+    /**
      * Rates cache
      *
      * @var array
@@ -187,14 +192,15 @@ class Calculation extends \Magento\Framework\Model\Resource\Db\AbstractDb
             }
             $row['rates'][] = $oneRate;
 
+            $ruleId = null;
             if (isset($rates[$i + 1]['tax_calculation_rule_id'])) {
-                $rule = $rate['tax_calculation_rule_id'];
+                $ruleId = $rate['tax_calculation_rule_id'];
             }
             $priority = $rate['priority'];
             $ids[] = $rate['code'];
 
             if (isset($rates[$i + 1]['tax_calculation_rule_id'])) {
-                while (isset($rates[$i + 1]) && $rates[$i + 1]['tax_calculation_rule_id'] == $rule) {
+                while (isset($rates[$i + 1]) && $rates[$i + 1]['tax_calculation_rule_id'] == $ruleId) {
                     $i++;
                 }
             }
@@ -214,7 +220,7 @@ class Calculation extends \Magento\Framework\Model\Resource\Db\AbstractDb
                     $row['percent'] = $this->_collectPercent($totalPercent, $currentRate);
                     $totalPercent += $row['percent'];
                 }
-                $row['id'] = implode($ids);
+                $row['id'] = implode('', $ids);
                 $result[] = $row;
                 $row = array();
                 $ids = array();
@@ -242,22 +248,28 @@ class Calculation extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * Create search templates for postcode
      *
      * @param string $postcode
+     * @param string|null $exactPostcode
      * @return string[]
      */
-    protected function _createSearchPostCodeTemplates($postcode)
+    protected function _createSearchPostCodeTemplates($postcode, $exactPostcode = null)
     {
+        // as needed, reduce the postcode to the correct length
         $len = $this->_taxData->getPostCodeSubStringLength();
-        $strlen = strlen($postcode);
-        if ($strlen > $len) {
-            $postcode = substr($postcode, 0, $len);
-            $strlen = $len;
+        $postcode = substr($postcode, 0, $len);
+
+        // begin creating the search template array
+        $strArr = [$postcode, $postcode . '*'];
+
+        // if supplied, use the exact postcode as the basis for the search templates
+        if ($exactPostcode) {
+            $postcode = substr($exactPostcode, 0, $len);
+            $strArr[] = $postcode;
         }
 
-        $strArr = array((string)$postcode, $postcode . '*');
-        if ($strlen > 1) {
-            for ($i = 1; $i < $strlen; $i++) {
-                $strArr[] = sprintf('%s*', substr($postcode, 0, -$i));
-            }
+        // finish building out the search template array
+        $strlen = strlen($postcode);
+        for ($i = 1; $i < $strlen; $i++) {
+            $strArr[] = sprintf('%s*', substr($postcode, 0, -$i));
         }
 
         return $strArr;
@@ -347,10 +359,18 @@ class Calculation extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 array(0, (int)$regionId)
             );
             $postcodeIsNumeric = is_numeric($postcode);
-            $postcodeIsRange = is_string($postcode) && preg_match('/^(.+)-(.+)$/', $postcode, $matches);
-            if ($postcodeIsRange) {
-                $zipFrom = $matches[1];
-                $zipTo = $matches[2];
+            $postcodeIsRange = false;
+            $originalPostcode = null;
+            if (is_string($postcode) && preg_match('/^(.+)-(.+)$/', $postcode, $matches)) {
+                if ($countryId == self::USA_COUNTRY_CODE && is_numeric($matches[2]) && strlen($matches[2]) == 4) {
+                    $postcodeIsNumeric = true;
+                    $originalPostcode = $postcode;
+                    $postcode = $matches[1];
+                } else {
+                    $postcodeIsRange = true;
+                    $zipFrom = $matches[1];
+                    $zipTo = $matches[2];
+                }
             }
 
             if ($postcodeIsNumeric || $postcodeIsRange) {
@@ -362,7 +382,7 @@ class Calculation extends \Magento\Framework\Model\Resource\Db\AbstractDb
             if ($postcode != '*' || $postcodeIsRange) {
                 $select->where(
                     "rate.tax_postcode IS NULL OR rate.tax_postcode IN('*', '', ?)",
-                    $postcodeIsRange ? $postcode : $this->_createSearchPostCodeTemplates($postcode)
+                    $postcodeIsRange ? $postcode : $this->_createSearchPostCodeTemplates($postcode, $originalPostcode)
                 );
                 if ($postcodeIsNumeric) {
                     $selectClone->where('? BETWEEN rate.zip_from AND rate.zip_to', $postcode);

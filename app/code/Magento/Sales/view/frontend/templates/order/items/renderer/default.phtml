@@ -22,9 +22,8 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 
+/** @var  $this \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer */
 $_item = $this->getItem();
-/** @var $_weeeHelper \Magento\Weee\Helper\Data */
-$_weeeHelper = $this->helper('Magento\Weee\Helper\Data');
 ?>
 <tr id="order-item-row-<?php echo $_item->getId() ?>">
     <td class="col name" data-th="<?php echo $this->escapeHtml(__('Product Name')); ?>">
@@ -71,87 +70,8 @@ $_weeeHelper = $this->helper('Magento\Weee\Helper\Data');
     </td>
     <td class="col sku" data-th="<?php echo $this->escapeHtml(__('SKU')); ?>"><?php echo $this->prepareSku($this->getSku()) ?></td>
     <td class="col price" data-th="<?php echo $this->escapeHtml(__('Price')); ?>">
-        <?php if ($this->helper('Magento\Tax\Helper\Data')->displaySalesBothPrices() || $this->helper('Magento\Tax\Helper\Data')->displaySalesPriceInclTax()): ?>
-            <span class="incl tax" data-th="<?php echo $this->escapeHtml(__('Incl. Tax')); ?>">
-                <?php $_incl = $this->helper('Magento\Checkout\Helper\Data')->getPriceInclTax($this->getItem()); ?>
-                <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(array(1, 4), 'sales') && (float)$this->getItem()->getWeeeTaxAppliedAmount()): ?>
-                    <span class="cart-tax-total" data-tax-toggle='{"itemTaxId" : "#unit-item-tax-details<?php echo $this->getItem()->getId(); ?>"}'>
-                <?php else: ?>
-                    <span class="cart-price">
-                <?php endif; ?>
-                <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(array(0, 1, 4), 'sales') && (float)$this->getItem()->getWeeeTaxAppliedAmount()): ?>
-                    <?php echo $this->getOrder()->formatPrice($_incl+$_weeeHelper->getWeeeTaxInclTax($this->getItem())); ?>
-                <?php else: ?>
-                    <?php echo $this->getOrder()->formatPrice($_incl-$this->getItem()->getWeeeTaxDisposition()) ?>
-                <?php endif; ?>
-                    </span>
 
-                <?php if ($this->helper('Magento\Weee\Helper\Data')->getApplied($this->getItem())): ?>
-                    <span class="cart-tax-info" id="unit-item-tax-details<?php echo $this->getItem()->getId(); ?>" style="display: none;">
-                        <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(1, 'sales') && (float)$this->getItem()->getWeeeTaxAppliedAmount()): ?>
-                            <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($this->getItem()) as $tax): ?>
-                                <span class="weee" data-th="<?php echo $tax['title']; ?>"><?php echo $this->getOrder()->formatPrice($tax['amount_incl_tax']); ?></span>
-                            <?php endforeach; ?>
-                        <?php elseif ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(2, 'sales') && (float)$this->getItem()->getWeeeTaxAppliedAmount()): ?>
-                            <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($this->getItem()) as $tax): ?>
-                                <span class="weee" data-th="<?php echo $tax['title']; ?>"><?php echo $this->getOrder()->formatPrice($tax['amount_incl_tax']); ?></span>
-                            <?php endforeach; ?>
-                        <?php elseif ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(4, 'sales') && (float)$this->getItem()->getWeeeTaxAppliedAmount()): ?>
-                            <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($this->getItem()) as $tax): ?>
-                                <span class="weee" data-th="<?php echo $tax['title']; ?>"><?php echo $this->getOrder()->formatPrice($tax['amount_incl_tax']); ?></span>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
-                    </span>
-
-                    <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(2, 'sales') && (float)$this->getItem()->getWeeeTaxAppliedAmount()): ?>
-                        <span class="cart-tax-total" data-tax-toggle='{"itemTaxId" : "#unit-item-tax-details<?php echo $this->getItem()->getId(); ?>"}'
-                            <span class="weee" data-th="<?php echo $this->escapeHtml(__('Total incl. tax')); ?>"><?php echo $this->getOrder()->formatPrice($_incl+$_weeeHelper->getWeeeTaxInclTax($this->getItem())); ?></span>
-                        </span>
-                    <?php endif; ?>
-                <?php endif; ?>
-            </span>
-        <?php endif; ?>
-
-        <?php if ($this->helper('Magento\Tax\Helper\Data')->displaySalesBothPrices() || $this->helper('Magento\Tax\Helper\Data')->displaySalesPriceExclTax()): ?>
-            <span class="excl tax" data-th="<?php echo $this->escapeHtml(__('Excl. Tax')); ?>">
-            <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(array(1, 4), 'sales') && (float)$this->getItem()->getWeeeTaxAppliedAmount()): ?>
-                <span class="cart-tax-total" data-tax-toggle='{"itemTaxId" : "#eunit-item-tax-details<?php echo $this->getItem()->getId(); ?>"}'>
-            <?php else: ?>
-                <span class="cart-price">
-            <?php endif; ?>
-
-            <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(array(0, 1, 4), 'sales') && (float)$this->getItem()->getWeeeTaxAppliedAmount()): ?>
-                <?php echo $this->getOrder()->formatPrice($this->getItem()->getPrice()+$this->getItem()->getWeeeTaxAppliedAmount()+$this->getItem()->getWeeeTaxDisposition()); ?>
-            <?php else: ?>
-                <?php echo $this->getOrder()->formatPrice($this->getItem()->getPrice()) ?>
-            <?php endif; ?>
-                </span>
-
-            <?php if ($this->helper('Magento\Weee\Helper\Data')->getApplied($this->getItem())): ?>
-                <span class="cart-tax-info" id="eunit-item-tax-details<?php echo $this->getItem()->getId(); ?>" style="display: none;">
-                    <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(1, 'sales') && (float)$this->getItem()->getWeeeTaxAppliedAmount()): ?>
-                        <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($this->getItem()) as $tax): ?>
-                            <span class="weee" data-th="<?php echo $tax['title']; ?>"><?php echo $this->getOrder()->formatPrice($tax['amount']); ?></span>
-                        <?php endforeach; ?>
-                    <?php elseif ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(2, 'sales') && (float)$this->getItem()->getWeeeTaxAppliedAmount()): ?>
-                        <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($this->getItem()) as $tax): ?>
-                            <span class="weee" data-th="<?php echo $tax['title']; ?>"><?php echo $this->getOrder()->formatPrice($tax['amount']); ?></span>
-                        <?php endforeach; ?>
-                    <?php elseif ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(4, 'sales') && (float)$this->getItem()->getWeeeTaxAppliedAmount()): ?>
-                    <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($this->getItem()) as $tax): ?>
-                        <span class="weee" data-th="<?php echo $tax['title']; ?>"><?php echo $this->getOrder()->formatPrice($tax['amount']); ?></span>
-                    <?php endforeach; ?>
-            <?php endif; ?>
-                </span>
-
-            <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(2, 'sales') && (float)$this->getItem()->getWeeeTaxAppliedAmount()): ?>
-                <span class="cart-tax-total" data-tax-toggle='{"itemTaxId" : "#eunit-item-tax-details<?php echo $this->getItem()->getId(); ?>"}'
-                    <span class="weee" data-th="<?php echo $this->escapeHtml(__('Total')); ?>"><?php echo $this->getOrder()->formatPrice($this->getItem()->getPrice()+$this->getItem()->getWeeeTaxAppliedAmount()+$this->getItem()->getWeeeTaxDisposition()); ?></span>
-                </span>
-            <?php endif; ?>
-        <?php endif; ?>
-        </span>
-        <?php endif; ?>
+        <?php echo $this->getItemPriceHtml(); ?>
     </td>
     <td class="col qty" data-th="<?php echo $this->escapeHtml(__('Qty')); ?>">
         <ul class="items-qty">
@@ -182,85 +102,7 @@ $_weeeHelper = $this->helper('Magento\Weee\Helper\Data');
         </ul>
     </td>
     <td class="col subtotal" data-th="<?php echo $this->escapeHtml(__('Subtotal')); ?>">
-        <?php if ($this->helper('Magento\Tax\Helper\Data')->displaySalesBothPrices() || $this->helper('Magento\Tax\Helper\Data')->displaySalesPriceInclTax()): ?>
-            <span class="incl tax" data-th="<?php echo $this->escapeHtml(__('Incl. Tax')); ?>">
-                <?php $_incl = $this->helper('Magento\Checkout\Helper\Data')->getSubtotalInclTax($this->getItem()); ?>
-                <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(array(1, 4), 'sales') && (float)$this->getItem()->getWeeeTaxAppliedAmount()): ?>
-                    <span class="cart-tax-total" data-tax-toggle='{"itemTaxId" : "#subtotal-item-tax-details<?php echo $this->getItem()->getId(); ?>"}'>
-                <?php else: ?>
-                    <span class="cart-price">
-                <?php endif; ?>
-                    <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(array(0, 1, 4), 'sales') && (float)$this->getItem()->getWeeeTaxAppliedAmount()): ?>
-                        <?php echo $this->getOrder()->formatPrice($_incl+$_weeeHelper->getRowWeeeTaxInclTax($this->getItem())); ?>
-                    <?php else: ?>
-                        <?php echo $this->getOrder()->formatPrice($_incl-$this->getItem()->getWeeeTaxRowDisposition()) ?>
-                    <?php endif; ?>
-                    </span>
-                <?php if ($this->helper('Magento\Weee\Helper\Data')->getApplied($this->getItem())): ?>
-                    <span class="cart-tax-info" id="subtotal-item-tax-details<?php echo $this->getItem()->getId(); ?>" style="display: none;">
-                        <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(1, 'sales') && (float)$this->getItem()->getWeeeTaxAppliedAmount()): ?>
-                            <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($this->getItem()) as $tax): ?>
-                                <span class="weee" data-th="<?php echo $tax['title']; ?>"><?php echo $this->getOrder()->formatPrice($tax['row_amount_incl_tax']); ?></span>
-                            <?php endforeach; ?>
-                        <?php elseif ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(2, 'sales') && (float)$this->getItem()->getWeeeTaxAppliedAmount()): ?>
-                            <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($this->getItem()) as $tax): ?>
-                                <span class="weee" data-th="<?php echo $tax['title']; ?>"><?php echo $this->getOrder()->formatPrice($tax['row_amount_incl_tax']); ?></span>
-                            <?php endforeach; ?>
-                        <?php elseif ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(4, 'sales') && (float)$this->getItem()->getWeeeTaxAppliedAmount()): ?>
-                            <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($this->getItem()) as $tax): ?>
-                                <span class="weee" data-th="<?php echo $tax['title']; ?>"><?php echo $this->getOrder()->formatPrice($tax['row_amount_incl_tax']); ?></span>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
-                    </span>
-
-                    <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(2, 'sales') && (float)$this->getItem()->getWeeeTaxAppliedAmount()): ?>
-                        <span class="cart-tax-total" data-tax-toggle='{"itemTaxId" : "#subtotal-item-tax-details<?php echo $this->getItem()->getId(); ?>"}'>
-                            <span class="weee" data-th="<?php echo $this->escapeHtml(__('Total incl. tax')); ?>"><?php echo $this->getOrder()->formatPrice($_incl+$_weeeHelper->getRowWeeeTaxInclTax($this->getItem())); ?></span>
-                        </span>
-                    <?php endif; ?>
-                <?php endif; ?>
-            </span>
-        <?php endif; ?>
-
-        <?php if ($this->helper('Magento\Tax\Helper\Data')->displaySalesBothPrices() || $this->helper('Magento\Tax\Helper\Data')->displaySalesPriceExclTax()): ?>
-            <span class="excl tax" data-th="<?php echo $this->escapeHtml(__('Excl. Tax')); ?>">
-                <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(array(1, 4), 'sales') && (float)$this->getItem()->getWeeeTaxAppliedAmount()): ?>
-                <span class="cart-tax-total" data-tax-toggle='{"itemTaxId" : "#esubtotal-item-tax-details<?php echo $this->getItem()->getId(); ?>"}'>
-            <?php else: ?>
-                <span class="cart-price">
-            <?php endif; ?>
-                <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(array(0, 1, 4), 'sales') && (float)$this->getItem()->getWeeeTaxAppliedAmount()): ?>
-                    <?php echo $this->getOrder()->formatPrice($this->getItem()->getRowTotal()+$this->getItem()->getWeeeTaxAppliedRowAmount()+$this->getItem()->getWeeeTaxRowDisposition()); ?>
-                <?php else: ?>
-                    <?php echo $this->getOrder()->formatPrice($this->getItem()->getRowTotal()) ?>
-                <?php endif; ?>
-                </span>
-
-            <?php if ($this->helper('Magento\Weee\Helper\Data')->getApplied($this->getItem())): ?>
-                <span class="cart-tax-info" id="esubtotal-item-tax-details<?php echo $this->getItem()->getId(); ?>" style="display: none;">
-                <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(1, 'sales') && (float)$this->getItem()->getWeeeTaxAppliedAmount()): ?>
-                    <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($this->getItem()) as $tax): ?>
-                        <span class="weee" data-th="<?php echo $tax['title']; ?>"><?php echo $this->getOrder()->formatPrice($tax['row_amount']); ?></span>
-                    <?php endforeach; ?>
-                <?php elseif ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(2, 'sales') && (float)$this->getItem()->getWeeeTaxAppliedAmount()): ?>
-                    <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($this->getItem()) as $tax): ?>
-                        <span class="weee" data-th="<?php echo $tax['title']; ?>"><?php echo $this->getOrder()->formatPrice($tax['row_amount']); ?></span>
-                    <?php endforeach; ?>
-                <?php elseif ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(4, 'sales') && (float)$this->getItem()->getWeeeTaxAppliedAmount()): ?>
-                    <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($this->getItem()) as $tax): ?>
-                        <span class="weee" data-th="<?php echo $tax['title']; ?>"><?php echo $this->getOrder()->formatPrice($tax['row_amount']); ?></span>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-                </span>
-
-                <?php if ($this->helper('Magento\Weee\Helper\Data')->typeOfDisplay(2, 'sales') && (float)$this->getItem()->getWeeeTaxAppliedAmount()): ?>
-                    <span class="cart-tax-total" data-tax-toggle='{"itemTaxId" : "#esubtotal-item-tax-details<?php echo $this->getItem()->getId(); ?>"}'>
-                        <span class="weee" data-th="<?php echo $this->escapeHtml(__('Total')); ?>"><?php echo $this->getOrder()->formatPrice($this->getItem()->getRowTotal()+$this->getItem()->getWeeeTaxAppliedRowAmount()+$this->getItem()->getWeeeTaxRowDisposition()); ?></span>
-                    </span>
-                <?php endif; ?>
-            <?php endif; ?>
-            </span>
-        <?php endif; ?>
+        <?php echo $this->getItemRowTotalHtml(); ?>
     </td>
 
     <?php /* if ($this->helper('Magento\Tax\Helper\Data')->displaySalesBothPrices() || $this->helper('Magento\Tax\Helper\Data')->displaySalesPriceExclTax()): ?>

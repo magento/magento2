@@ -61,12 +61,41 @@ class Editablemultiselect extends \Magento\Framework\Data\Form\Element\Multisele
 
         $selectConfigJson = \Zend_Json::encode($selectConfig);
         $jsObjectName = $this->getJsObjectName();
-        $html .= '<script type="text/javascript">' .
-            'require(["jquery","jquery/ui"], function($) {'.
-            'setTimeout(function () { ' .
-            "var {$jsObjectName} = new {$elementJsClass}({$selectConfigJson}); " .
-            "{$jsObjectName}.init(); }); }, 1000);" .
-            '</script>';
+
+        // TODO: TaxRateEditableMultiselect should be moved to a static .js module.
+        $html .= "
+                <script type='text/javascript'>
+                require([
+                    'jquery',
+                    'jquery/ui'
+                ], function( $ ){
+
+                    function isResolved(){
+                        return typeof window['{$elementJsClass}'] !== 'undefined'; 
+                    }
+
+                    function init(){
+                        var {$jsObjectName} = new {$elementJsClass}({$selectConfigJson});
+                        
+                        {$jsObjectName}.init();
+                    }
+
+                    function check( tries, delay ){
+                        if( isResolved() ){
+                            init();
+                        }
+                        else if( tries-- ){
+                            setTimeout( check.bind(this, tries, delay), delay);
+                        }
+                        else{
+                            console.warn( 'Unable to resolve dependency: {$elementJsClass}' );
+                        }
+                    }
+
+                   check(8, 500);
+
+                });
+                </script>";
         return $html;
     }
 

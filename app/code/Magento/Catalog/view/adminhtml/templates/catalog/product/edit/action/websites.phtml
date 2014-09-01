@@ -24,72 +24,72 @@
 ?>
 
 <div class="fieldset-wrapper" id="add-products-to-website-wrapper">
-    <div class="fieldset-wrapper-title">
-        <strong class="title">
+    <fieldset class="fieldset" id="grop_fields">
+        <legend class="legend">
             <span><?php echo __('Add Product To Websites') ?></span>
-        </strong>
-    </div>
-    <div class="fieldset-wrapper-content" id="add-products-to-website-content">
-        <fieldset class="fieldset" id="grop_fields">
-            <?php foreach ($this->getWebsiteCollection() as $_website): ?>
-                <div class="website-name">
-                    <input name="add_website_ids[]" value="<?php echo $_website->getId() ?>" <?php if($this->getWebsitesReadonly()): ?>disabled="disabled"<?php endif;?> class="checkbox website-checkbox" id="add_product_website_<?php echo $_website->getId() ?>" type="checkbox" />
-                    <strong><label for="add_product_website_<?php echo $_website->getId() ?>"><?php echo $this->escapeHtml($_website->getName()) ?></label></strong>
-                </div>
-                <div class="webiste-groups" id="add_product_website_<?php echo $_website->getId() ?>_data">
-                    <?php foreach ($this->getGroupCollection($_website) as $_group): ?>
-                        <h4><?php echo $this->escapeHtml($_group->getName()) ?></h4>
-                        <div class="group-stores">
-                            <table class="data-table">
+        </legend>
+        <br>
+        <div class="store-scope">
+            <div class="store-tree" id="add-products-to-website-content">
+                <?php foreach ($this->getWebsiteCollection() as $_website): ?>
+                    <div class="website-name">
+                        <input name="add_website_ids[]" value="<?php echo $_website->getId() ?>" <?php if($this->getWebsitesReadonly()): ?>disabled="disabled"<?php endif;?> class="checkbox website-checkbox" id="add_product_website_<?php echo $_website->getId() ?>" type="checkbox" />
+                        <label for="add_product_website_<?php echo $_website->getId() ?>"><?php echo $this->escapeHtml($_website->getName()) ?></label>
+                    </div>
+                    <dl class="webiste-groups" id="add_product_website_<?php echo $_website->getId() ?>_data">
+                        <?php foreach ($this->getGroupCollection($_website) as $_group): ?>
+                            <dt><?php echo $this->escapeHtml($_group->getName()) ?></dt>
+                            <dd class="group-stores">
+                                <ul>
                                 <?php foreach ($this->getStoreCollection($_group) as $_store): ?>
-                                    <tr>
-                                        <td><?php echo $this->escapeHtml($_store->getName()) ?></td>
-                                        <td>&nbsp;</td>
-                                    </tr>
+                                    <li>
+                                        <?php echo $this->escapeHtml($_store->getName()) ?>
+                                    </li>
                                 <?php endforeach; ?>
-                            </table>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-            <?php endforeach; ?>
-        </fieldset>
-    </div>
+                                </ul>
+                            </dd>
+                        <?php endforeach; ?>
+                    </dl>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </fieldset>
 </div>
 
 <div class="fieldset-wrapper" id="remove-products-to-website-wrapper">
-    <div class="fieldset-wrapper-title">
-        <strong class="title">
+    <fieldset class="fieldset" id="grop_fields">
+        <legend class="legend">
             <span><?php echo __('Remove Product From Websites') ?></span>
-        </strong>
-    </div>
-    <div class="fieldset-wrapper-content" id="remove-products-to-website-content">
-        <fieldset class="fieldset" id="grop_fields">
-            <div class="message info">
-                <div><?php echo __("Items that you do not want to show in the catalog or search results should have status 'Disabled' in the desired store.") ?></div>
-            </div>
-            <?php foreach ($this->getWebsiteCollection() as $_website): ?>
-                <div class="website-name">
-                    <input name="remove_website_ids[]" value="<?php echo $_website->getId() ?>" <?php if($this->getWebsitesReadonly()): ?>disabled="disabled"<?php endif;?> class="checkbox website-checkbox" id="remove_product_website_<?php echo $_website->getId() ?>" type="checkbox"/>
-                    <strong><label for="remove_product_website_<?php echo $_website->getId() ?>"><?php echo $this->escapeHtml($_website->getName()) ?></label></strong>
-                </div>
-                <div class="webiste-groups" id="remove_product_website_<?php echo $_website->getId() ?>_data">
-                    <?php foreach ($this->getGroupCollection($_website) as $_group): ?>
-                        <h4><?php echo $this->escapeHtml($_group->getName()) ?></h4>
-                        <div class="group-stores">
-                            <table class="data-table">
+        </legend>
+        <br>
+        <div class="message info">
+            <div><?php echo __("Items that you do not want to show in the catalog or search results should have status 'Disabled' in the desired store.") ?></div>
+        </div>
+        <div class="store-scope">
+            <div class="store-tree" id="remove-products-to-website-content">
+                <?php foreach ($this->getWebsiteCollection() as $_website): ?>
+                    <div class="website-name">
+                        <input name="remove_website_ids[]" value="<?php echo $_website->getId() ?>" <?php if($this->getWebsitesReadonly()): ?>disabled="disabled"<?php endif;?> class="checkbox website-checkbox" id="remove_product_website_<?php echo $_website->getId() ?>" type="checkbox" />
+                        <label for="remove_product_website_<?php echo $_website->getId() ?>"><?php echo $this->escapeHtml($_website->getName()) ?></label>
+                    </div>
+                    <dl class="webiste-groups" id="remove_product_website_<?php echo $_website->getId() ?>_data">
+                        <?php foreach ($this->getGroupCollection($_website) as $_group): ?>
+                            <dt><?php echo $this->escapeHtml($_group->getName()) ?></dt>
+                            <dd class="group-stores">
+                                <ul>
                                 <?php foreach ($this->getStoreCollection($_group) as $_store): ?>
-                                    <tr>
-                                        <td><?php echo $this->escapeHtml($_store->getName()) ?></td>
-                                        <td>&nbsp;</td>
-                                    </tr>
+                                    <li>
+                                        <?php echo $this->escapeHtml($_store->getName()) ?>
+                                    </li>
                                 <?php endforeach; ?>
-                            </table>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-            <?php endforeach; ?>
-        </fieldset>
-    </div>
+                                </ul>
+                            </dd>
+                        <?php endforeach; ?>
+                    </dl>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </fieldset>
 </div>
 
 <script type="text/javascript">

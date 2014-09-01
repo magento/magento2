@@ -40,11 +40,11 @@ class Version
     const COOKIE_PERIOD = 315360000;
 
     /**
-     * Cookie
+     * Cookie Manager
      *
-     * @var \Magento\Framework\Stdlib\Cookie
+     * @var \Magento\Framework\Stdlib\CookieManager
      */
-    protected $cookie;
+    protected $cookieManager;
 
     /**
      * Request
@@ -54,13 +54,23 @@ class Version
     protected $request;
 
     /**
-     * @param \Magento\Framework\Stdlib\Cookie $cookie
+     * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
+     */
+    protected $cookieMetadataFactory;
+
+    /**
+     * @param \Magento\Framework\Stdlib\CookieManager $cookieManager
+     * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
      * @param \Magento\Framework\App\Request\Http $request
      */
-    public function __construct(\Magento\Framework\Stdlib\Cookie $cookie, \Magento\Framework\App\Request\Http $request)
-    {
-        $this->cookie = $cookie;
+    public function __construct(
+        \Magento\Framework\Stdlib\CookieManager $cookieManager,
+        \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
+        \Magento\Framework\App\Request\Http $request
+    ) {
+        $this->cookieManager = $cookieManager;
         $this->request = $request;
+        $this->cookieMetadataFactory = $cookieMetadataFactory;
     }
 
     /**
@@ -84,7 +94,10 @@ class Version
     public function process()
     {
         if ($this->request->isPost()) {
-            $this->cookie->set(self::COOKIE_NAME, $this->generateValue(), self::COOKIE_PERIOD, '/');
+            $publicCookieMetadata = $this->cookieMetadataFactory->createPublicCookieMetadata()
+                ->setDuration(self::COOKIE_PERIOD)
+                ->setPath('/');
+            $this->cookieManager->setPublicCookie(self::COOKIE_NAME, $this->generateValue(), $publicCookieMetadata);
         }
     }
 }

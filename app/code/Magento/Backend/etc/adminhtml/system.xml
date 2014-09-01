@@ -595,6 +595,7 @@
                 </field>
                 <field id="cookie_domain" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Cookie Domain</label>
+                    <backend_model>Magento\Backend\Model\Config\Backend\Domain</backend_model>
                 </field>
                 <field id="cookie_httponly" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Use HTTP Only</label>

@@ -24,6 +24,9 @@
 
 namespace Magento\Catalog\Service\V1\Product\CustomOptions\Data;
 
+/**
+ * @codeCoverageIgnore
+ */
 class OptionType extends \Magento\Framework\Service\Data\AbstractObject
 {
     const LABEL = 'label';

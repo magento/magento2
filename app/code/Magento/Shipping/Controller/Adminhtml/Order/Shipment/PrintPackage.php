@@ -69,9 +69,14 @@ class PrintPackage extends \Magento\Backend\App\Action
      */
     public function execute()
     {
-        $shipment = $this->shipmentLoader->load($this->_request);
+        $this->shipmentLoader->setOrderId($this->getRequest()->getParam('order_id'));
+        $this->shipmentLoader->setShipmentId($this->getRequest()->getParam('shipment_id'));
+        $this->shipmentLoader->setShipment($this->getRequest()->getParam('shipment'));
+        $this->shipmentLoader->setTracking($this->getRequest()->getParam('tracking'));
+        $shipment = $this->shipmentLoader->load();
 
         if ($shipment) {
+            /** @var \Zend_Pdf $pdf */
             $pdf = $this->_objectManager->create('Magento\Shipping\Model\Order\Pdf\Packaging')->getPdf($shipment);
             return $this->_fileFactory->create(
                 'packingslip' . $this->_objectManager->get(

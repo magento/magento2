@@ -25,6 +25,8 @@
 -->
 <requests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <request query="sugested_search_container" index="product">
+        <dimensions>
+        </dimensions>
         <queries>
             <query xsi:type="boolQuery" name="sugested_search_container" boost="2">
                 <queryReference clause="not" ref="fulltext_search_query" />

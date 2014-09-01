@@ -37,6 +37,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
      * No Such Entity Exception
      */
     const NO_SUCH_ENTITY_EXCEPTION = '\\Magento\Framework\Exception\NoSuchEntityException';
+    const INPUT_EXCEPTION = '\\Magento\Framework\Exception\InputException';
     const SEARCH_CRITERIA = '\\Magento\Framework\Service\V1\Data\SearchCriteria';
 
     /**
@@ -181,12 +182,14 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
     protected function _getGetMethod()
     {
         $body = "if (!\$id) {\n"
-            . "    throw new " . self::NO_SUCH_ENTITY_EXCEPTION . "('Requested product doesn\\'t exist');\n"
+            . "    throw new " . self::INPUT_EXCEPTION . "('ID required');\n"
             . "}\n"
             . "if (!isset(\$this->registry[\$id])) {\n"
-            . "    \$this->registry[\$id] = \$this->"
-            . $this->_getSourceFactoryPropertyName()
-            . "->create()->load(\$id);\n"
+            . "    \$entity = \$this->" . $this->_getSourceFactoryPropertyName() . "->create()->load(\$id);\n"
+            . "    if (!\$entity->getId()) {\n"
+            . "        throw new " . self::NO_SUCH_ENTITY_EXCEPTION . "('Requested entity doesn\\'t exist');\n"
+            . "    }\n"
+            . "    \$this->registry[\$id] = \$entity;\n"
             . "}\n"
             . "return \$this->registry[\$id];";
         return [
@@ -208,6 +211,10 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
                     [
                         'name' => 'return',
                         'description' => $this->_getFullyQualifiedClassName($this->_getSourceClassName()),
+                    ],
+                    [
+                        'name' => 'throws',
+                        'description' => self::INPUT_EXCEPTION,
                     ],
                     [
                         'name' => 'throws',
@@ -255,7 +262,7 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
     }
 
     /**
-     * Returns get() method
+     * Returns find() method
      *
      * @return string
      */
@@ -268,6 +275,8 @@ class Repository extends \Magento\Framework\Code\Generator\EntityAbstract
         . "        \$collection->addFieldToFilter(\$filter->getField(), [\$condition => \$filter->getValue()]);\n"
         . "    }\n"
         . "}\n"
+        . "\$collection->setCurPage(\$criteria->getCurrentPage());\n"
+        . "\$collection->setPageSize(\$criteria->getPageSize());\n"
         . "foreach (\$collection as \$object) {\n"
         . "    \$this->register(\$object);\n"
         . "}\n"

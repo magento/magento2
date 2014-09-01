@@ -47,6 +47,8 @@ class Name extends \Magento\Sales\Block\Adminhtml\Items\Column\Name
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Model\Product\OptionFactory $optionFactory
      * @param \Magento\Downloadable\Model\Link\PurchasedFactory $purchasedFactory
      * @param \Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory $itemsFactory
@@ -54,6 +56,8 @@ class Name extends \Magento\Sales\Block\Adminhtml\Items\Column\Name
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
+        \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService,
+        \Magento\Framework\Registry $registry,
         \Magento\Catalog\Model\Product\OptionFactory $optionFactory,
         \Magento\Downloadable\Model\Link\PurchasedFactory $purchasedFactory,
         \Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory $itemsFactory,
@@ -61,7 +65,7 @@ class Name extends \Magento\Sales\Block\Adminhtml\Items\Column\Name
     ) {
         $this->_purchasedFactory = $purchasedFactory;
         $this->_itemsFactory = $itemsFactory;
-        parent::__construct($context, $optionFactory, $data);
+        parent::__construct($context, $stockItemService, $registry, $optionFactory, $data);
     }
 
     /**

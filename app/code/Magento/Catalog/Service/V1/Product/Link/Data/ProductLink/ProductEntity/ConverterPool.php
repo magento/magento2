@@ -24,6 +24,9 @@
 
 namespace Magento\Catalog\Service\V1\Product\Link\Data\ProductLink\ProductEntity;
 
+/**
+ * @codeCoverageIgnore
+ */
 class ConverterPool
 {
     /**

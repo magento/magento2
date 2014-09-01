@@ -61,7 +61,12 @@ class NewAction extends \Magento\Backend\App\Action
     public function execute()
     {
         $this->_title->add(__('Credit Memos'));
-        if ($creditmemo = $this->creditmemoLoader->load($this->_request)) {
+        $this->creditmemoLoader->setOrderId($this->getRequest()->getParam('order_id'));
+        $this->creditmemoLoader->setCreditmemoId($this->getRequest()->getParam('creditmemo_id'));
+        $this->creditmemoLoader->setCreditmemo($this->getRequest()->getParam('creditmemo'));
+        $this->creditmemoLoader->setInvoiceId($this->getRequest()->getParam('invoice_id'));
+        $creditmemo = $this->creditmemoLoader->load();
+        if ($creditmemo) {
             if ($creditmemo->getInvoice()) {
                 $this->_title->add(__("New Memo for #%1", $creditmemo->getInvoice()->getIncrementId()));
             } else {

@@ -114,12 +114,13 @@
 //
 //    Simple Dropdown
 //--------------------------------------
-.dropdown-simple {
-    line-height: normal;
-    .dropdown();
-    ul.items.dropdown {
-        min-width: 155px;
-    }
+.abstract-dropdown-simple {
+    .dropdown(
+        @_dropdown-list-item-padding: 5px 5px 5px 23px,
+        @_dropdown-list-min-width: 200px,
+        @_icon-font-margin: 0 0 0 5px,
+        @_icon-font-vertical-align: middle
+    );
 }
 
 //
@@ -497,5 +498,88 @@
             @_icon-font-content: @icon-up,
             @_icon-font-position: after
         );
+    }
+}
+
+//
+//    Add colon
+//--------------------------------------
+.abstract-colon {
+    &:after {
+        content: ": ";
+    }
+}
+
+//
+//    Icon - create add
+//--------------------------------------
+.abstract-icon-add {
+    .icon-font(
+        @_icon-font-content: @icon-expand,
+        @_icon-font-size: 10px,
+        @_icon-font-line-height: 10px,
+        @_icon-font-vertical-align: middle
+    ); 
+}
+.responsive-smaller(@break) when (@break = @screen-m) {
+    .abstract-icon-add-mobile {
+        .icon-font(
+            @_icon-font-content: @icon-expand,
+            @_icon-font-size: 10px,
+            @_icon-font-line-height: 10px,
+            @_icon-font-vertical-align: middle,
+            @_icon-font-margin: 0 5px 0 0,
+            @_icon-font-display: block
+        ); 
+    }
+}
+
+//
+//    Dropdown items - create new
+//--------------------------------------
+.abstract-dropdown-items-new {
+    .items .item:last-child {
+        &:hover {
+            background: @dropdown-list-item-hover;
+        }
+    }
+    .action.new {
+        &:extend(.abstract-icon-add all);
+        &:before {
+            margin-left: -17px;
+            margin-right: 5px;
+        }
+    }
+}
+
+//
+//    Abstract toggle title block
+//--------------------------------------
+.responsive-smaller(@break) when (@break = @screen-m) {
+    .abstract-toggling-title-mobile {
+        border-top: @border-width-base solid @border-color-base;
+        border-bottom: @border-width-base solid @border-color-base;
+        cursor: pointer;
+        margin-bottom: 0;
+        padding: 10px 40px 10px 20px;
+        position: relative;
+        .icon-font(
+            @_icon-font-content: @icon-down,
+            @_icon-font-size: 28px,
+            @_icon-font-text-hide: false,
+            @_icon-font-position: after,
+            @_icon-font-display: block
+        );
+        &:after {
+            position: absolute;
+            right: 10px;
+            top: 0;
+        }
+        &.active {
+            .icon-font-symbol(
+                @_icon-font-content: @icon-up,
+                @_icon-font-position: after
+            );
+        }
     }
 }

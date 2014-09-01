@@ -24,9 +24,22 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
-use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Object;
 
-class CreditmemoLoader
+/**
+ * Class CreditmemoLoader
+ *
+ * @package Magento\Sales\Controller\Adminhtml\Order
+ * @method CreditmemoLoader setCreditmemoId
+ * @method CreditmemoLoader setCreditmemo
+ * @method CreditmemoLoader setInvoiceId
+ * @method CreditmemoLoader setOrderId
+ * @method int getCreditmemoId
+ * @method string getCreditmemo
+ * @method int getInvoiceId
+ * @method int getOrderId
+ */
+class CreditmemoLoader extends Object
 {
     /**
      * @var \Magento\Sales\Model\Order\CreditmemoFactory
@@ -83,6 +96,7 @@ class CreditmemoLoader
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\CatalogInventory\Helper\Data $inventoryHelper
+     * @param array $data
      */
     public function __construct(
         \Magento\Sales\Model\Order\CreditmemoFactory $creditmemoFactory,
@@ -93,7 +107,8 @@ class CreditmemoLoader
         \Magento\Backend\Model\Session $backendSession,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Framework\Registry $registry,
-        \Magento\CatalogInventory\Helper\Data $inventoryHelper
+        \Magento\CatalogInventory\Helper\Data $inventoryHelper,
+        array $data = []
     ) {
         $this->creditmemoFactory = $creditmemoFactory;
         $this->orderFactory = $orderFactory;
@@ -104,17 +119,17 @@ class CreditmemoLoader
         $this->messageManager = $messageManager;
         $this->registry = $registry;
         $this->inventoryHelper = $inventoryHelper;
+        parent::__construct($data);
     }
 
     /**
      * Get requested items qtys and return to stock flags
      *
-     * @param RequestInterface $request
      * @return array
      */
-    protected function _getItemData(RequestInterface $request)
+    protected function _getItemData()
     {
-        $data = $request->getParam('creditmemo');
+        $data = $this->getCreditmemo();
         if (!$data) {
             $data = $this->backendSession->getFormData(true);
         }
@@ -153,13 +168,12 @@ class CreditmemoLoader
     }
 
     /**
-     * @param RequestInterface $request
      * @param \Magento\Sales\Model\Order $order
      * @return $this|bool
      */
-    protected function _initInvoice(RequestInterface $request, $order)
+    protected function _initInvoice($order)
     {
-        $invoiceId = $request->getParam('invoice_id');
+        $invoiceId = $this->getInvoiceId();
         if ($invoiceId) {
             $invoice = $this->invoiceFactory->create()->load(
                 $invoiceId
@@ -176,27 +190,25 @@ class CreditmemoLoader
     /**
      * Initialize creditmemo model instance
      *
-     * @param RequestInterface $request
-     * @param bool $update
      * @return \Magento\Sales\Model\Order\Creditmemo|false
      */
-    public function load(RequestInterface $request, $update = false)
+    public function load()
     {
         $creditmemo = false;
-        $creditmemoId = $request->getParam('creditmemo_id');
-        $orderId = $request->getParam('order_id');
+        $creditmemoId = $this->getCreditmemoId();
+        $orderId = $this->getOrderId();
         if ($creditmemoId) {
             $creditmemo = $this->creditmemoFactory->create()->load($creditmemoId);
         } elseif ($orderId) {
-            $data = $request->getParam('creditmemo');
+            $data = $this->getCreditmemo();
             $order = $this->orderFactory->create()->load($orderId);
-            $invoice = $this->_initInvoice($request, $order);
+            $invoice = $this->_initInvoice($order);
 
             if (!$this->_canCreditmemo($order)) {
                 return false;
             }
 
-            $savedData = $this->_getItemData($request);
+            $savedData = $this->_getItemData();
 
             $qtys = array();
             $backToStock = array();
@@ -239,7 +251,7 @@ class CreditmemoLoader
 
         $this->eventManager->dispatch(
             'adminhtml_sales_order_creditmemo_register_before',
-            array('creditmemo' => $creditmemo, 'request' => $request)
+            array('creditmemo' => $creditmemo, 'input' => $this->getCreditmemo())
         );
 
         $this->registry->register('current_creditmemo', $creditmemo);

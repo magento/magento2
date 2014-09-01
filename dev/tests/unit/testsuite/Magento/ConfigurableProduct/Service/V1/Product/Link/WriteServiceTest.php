@@ -186,4 +186,41 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue(true, $this->service->addChild($productSku, $childSku));
     }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\StateException
+     * @expectedExceptionMessage Product has been already attached
+     */
+    public function testAddChildStateException()
+    {
+        $productSku = 'configurable-sku';
+        $childSku = 'simple-sku';
+
+        $configurable = $this->getMockBuilder('Magento\Catalog\Model\Product')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $configurable->expects($this->any())->method('getId')->will($this->returnValue(666));
+
+        $simplee = $this->getMockBuilder('Magento\Catalog\Model\Product')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $simplee->expects($this->any())->method('getId')->will($this->returnValue(1));
+
+        $this->productRepository->expects($this->at(0))->method('get')->with($productSku)->will(
+            $this->returnValue($configurable)
+        );
+
+        $this->productRepository->expects($this->at(1))->method('get')->with($childSku)->will(
+            $this->returnValue($simplee)
+        );
+
+        $this->configurableType->expects($this->once())->method('getChildrenIds')->with(666)
+            ->will(
+                $this->returnValue([0 => [1, 2, 3]])
+            );
+
+        $this->assertTrue(true, $this->service->addChild($productSku, $childSku));
+    }
 }

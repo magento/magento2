@@ -25,6 +25,8 @@ namespace Magento\CatalogInventory\Service\V1\Data;
 
 /**
  * Low stock search result builder object
+ *
+ * @codeCoverageIgnore
  */
 class LowStockResultBuilder extends \Magento\Framework\Service\Data\AbstractObjectBuilder
 {

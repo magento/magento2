@@ -33,6 +33,7 @@ use Magento\Catalog\Service\V1\Data\ProductBuilder;
  * Builder for the SearchResults Service Data Object
  *
  * @method \Magento\Catalog\Service\V1\Data\Product\SearchResults create()
+ * @codeCoverageIgnore
  */
 class SearchResultsBuilder extends AbstractSearchResultsBuilder
 {

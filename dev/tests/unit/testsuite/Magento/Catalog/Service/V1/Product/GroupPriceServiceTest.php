@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -76,20 +75,36 @@ class GroupPriceServiceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->repositoryMock = $this->getMock(
-            '\Magento\Catalog\Model\ProductRepository', array(), array(), '', false
+            '\Magento\Catalog\Model\ProductRepository',
+            array(),
+            array(),
+            '',
+            false
         );
         $this->priceBuilderMock = $this->getMock(
-            'Magento\Catalog\Service\V1\Data\Product\GroupPriceBuilder', array(), array(), '', false
+            'Magento\Catalog\Service\V1\Data\Product\GroupPriceBuilder',
+            array(),
+            array(),
+            '',
+            false
         );
-        $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
+        $this->storeManagerMock = $this->getMockBuilder('\Magento\Store\Model\StoreManagerInterface')
+            ->setMethods(['getWebsite'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->groupServiceMock = $this->getMock('\Magento\Customer\Service\V1\CustomerGroupServiceInterface');
 
         $this->priceModifierMock =
             $this->getMock('Magento\Catalog\Model\Product\PriceModifier', array(), array(), '', false);
         $this->websiteMock =
             $this->getMock('Magento\Store\Model\Website', array('getId', '__wakeup'), array(), '', false);
-        $this->productMock = $this->getMock('Magento\Catalog\Model\Product',
-            array('getData', 'setData', 'validate', 'save', 'getIdBySku', 'load', '__wakeup'), array(), '', false);
+        $this->productMock = $this->getMock(
+            'Magento\Catalog\Model\Product',
+            array('getData', 'setData', 'validate', 'save', 'getIdBySku', 'load', '__wakeup'),
+            array(),
+            '',
+            false
+        );
         $this->repositoryMock->expects($this->any())->method('get')->with('product_sku')
             ->will($this->returnValue($this->productMock));
         $this->configMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
@@ -105,7 +120,7 @@ class GroupPriceServiceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $configValue
-     * @param array  $groupData
+     * @param array $groupData
      * @param array $expected
      * @dataProvider getListDataProvider
      */
@@ -202,15 +217,27 @@ class GroupPriceServiceTest extends \PHPUnit_Framework_TestCase
     public function testSetNewPriceWithGlobalPriceScope()
     {
         $priceBuilder = $this->getMock(
-            '\Magento\Catalog\Service\V1\Data\Product\GroupPriceBuilder', array(), array(), '', false
+            '\Magento\Catalog\Service\V1\Data\Product\GroupPriceBuilder',
+            array(),
+            array(),
+            '',
+            false
         );
-        $priceBuilder->expects($this->any())->method('getData')->will($this->returnValue(array(
-            'customer_group_id' => 1,
-            'value' => 100
-        )));
+        $priceBuilder->expects($this->any())->method('getData')->will(
+            $this->returnValue(
+                array(
+                    'customer_group_id' => 1,
+                    'value' => 100
+                )
+            )
+        );
         $price = new \Magento\Catalog\Service\V1\Data\Product\GroupPrice($priceBuilder);
         $groupBuilder = $this->getMock(
-            '\Magento\Customer\Service\V1\Data\CustomerGroupBuilder', array(), array(), '', false
+            '\Magento\Customer\Service\V1\Data\CustomerGroupBuilder',
+            array(),
+            array(),
+            '',
+            false
         );
         $groupBuilder->expects($this->any())->method('getData')->will($this->returnValue(array('id' => 1)));
         $group = new \Magento\Customer\Service\V1\Data\CustomerGroup($groupBuilder);
@@ -224,6 +251,10 @@ class GroupPriceServiceTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('getValue')
             ->with('catalog/price/scope', \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE)
+            ->will($this->returnValue(1));
+        $this->storeManagerMock->expects($this->once())->method('getWebsite')
+            ->will($this->returnValue($this->websiteMock));
+        $this->websiteMock->expects($this->once())->method('getId')
             ->will($this->returnValue(0));
 
         $this->productMock->expects($this->once())->method('setData')->with(
@@ -240,15 +271,27 @@ class GroupPriceServiceTest extends \PHPUnit_Framework_TestCase
     public function testSetUpdatedPriceWithGlobalPriceScope()
     {
         $priceBuilder = $this->getMock(
-            '\Magento\Catalog\Service\V1\Data\Product\GroupPriceBuilder', array(), array(), '', false
+            '\Magento\Catalog\Service\V1\Data\Product\GroupPriceBuilder',
+            array(),
+            array(),
+            '',
+            false
         );
-        $priceBuilder->expects($this->any())->method('getData')->will($this->returnValue(array(
-            'customer_group_id' => 2,
-            'value' => 100
-        )));
+        $priceBuilder->expects($this->any())->method('getData')->will(
+            $this->returnValue(
+                array(
+                    'customer_group_id' => 2,
+                    'value' => 100
+                )
+            )
+        );
         $price = new \Magento\Catalog\Service\V1\Data\Product\GroupPrice($priceBuilder);
         $groupBuilder = $this->getMock(
-            '\Magento\Customer\Service\V1\Data\CustomerGroupBuilder', array(), array(), '', false
+            '\Magento\Customer\Service\V1\Data\CustomerGroupBuilder',
+            array(),
+            array(),
+            '',
+            false
         );
         $groupBuilder->expects($this->any())->method('getData')->will($this->returnValue(array('id' => 1)));
         $group = new \Magento\Customer\Service\V1\Data\CustomerGroup($groupBuilder);
@@ -281,15 +324,27 @@ class GroupPriceServiceTest extends \PHPUnit_Framework_TestCase
     public function testSetThrowsExceptionIfDoesntValidate()
     {
         $priceBuilder = $this->getMock(
-            '\Magento\Catalog\Service\V1\Data\Product\GroupPriceBuilder', array(), array(), '', false
+            '\Magento\Catalog\Service\V1\Data\Product\GroupPriceBuilder',
+            array(),
+            array(),
+            '',
+            false
         );
-        $priceBuilder->expects($this->any())->method('getData')->will($this->returnValue(array(
+        $priceBuilder->expects($this->any())->method('getData')->will(
+            $this->returnValue(
+                array(
                     'customer_group_id' => 2,
                     'value' => 100
-                )));
+                )
+            )
+        );
         $price = new \Magento\Catalog\Service\V1\Data\Product\GroupPrice($priceBuilder);
         $groupBuilder = $this->getMock(
-            '\Magento\Customer\Service\V1\Data\CustomerGroupBuilder', array(), array(), '', false
+            '\Magento\Customer\Service\V1\Data\CustomerGroupBuilder',
+            array(),
+            array(),
+            '',
+            false
         );
         $groupBuilder->expects($this->any())->method('getData')->will($this->returnValue(array('id' => 1)));
         $group = new \Magento\Customer\Service\V1\Data\CustomerGroup($groupBuilder);
@@ -300,9 +355,11 @@ class GroupPriceServiceTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(array()));
 
         $this->groupServiceMock->expects($this->once())->method('getGroup')->will($this->returnValue($group));
-        $this->productMock->expects($this->once())->method('validate')->will($this->returnValue(
-            array('attr1' => '', 'attr2' => '')
-        ));
+        $this->productMock->expects($this->once())->method('validate')->will(
+            $this->returnValue(
+                array('attr1' => '', 'attr2' => '')
+            )
+        );
         $this->productMock->expects($this->never())->method('save');
         $this->service->set('product_sku', $price);
     }
@@ -313,15 +370,27 @@ class GroupPriceServiceTest extends \PHPUnit_Framework_TestCase
     public function testSetThrowsExceptionIfCantSave()
     {
         $priceBuilder = $this->getMock(
-            '\Magento\Catalog\Service\V1\Data\Product\GroupPriceBuilder', array(), array(), '', false
+            '\Magento\Catalog\Service\V1\Data\Product\GroupPriceBuilder',
+            array(),
+            array(),
+            '',
+            false
         );
-        $priceBuilder->expects($this->any())->method('getData')->will($this->returnValue(array(
-            'customer_group_id' => 2,
-            'value' => 100
-        )));
+        $priceBuilder->expects($this->any())->method('getData')->will(
+            $this->returnValue(
+                array(
+                    'customer_group_id' => 2,
+                    'value' => 100
+                )
+            )
+        );
         $price = new \Magento\Catalog\Service\V1\Data\Product\GroupPrice($priceBuilder);
         $groupBuilder = $this->getMock(
-            '\Magento\Customer\Service\V1\Data\CustomerGroupBuilder', array(), array(), '', false
+            '\Magento\Customer\Service\V1\Data\CustomerGroupBuilder',
+            array(),
+            array(),
+            '',
+            false
         );
         $groupBuilder->expects($this->any())->method('getData')->will($this->returnValue(array('id' => 1)));
         $group = new \Magento\Customer\Service\V1\Data\CustomerGroup($groupBuilder);

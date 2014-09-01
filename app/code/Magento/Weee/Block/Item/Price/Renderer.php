@@ -24,7 +24,9 @@
 namespace Magento\Weee\Block\Item\Price;
 
 use Magento\Weee\Model\Tax as WeeeDisplayConfig;
-use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Sales\Model\Order\Item as OrderItem;
+use Magento\Sales\Model\Order\Invoice\Item as InvoiceItem;
+use Magento\Sales\Model\Order\CreditMemo\Item as CreditMemoItem;
 
 /**
  * Item price render block
@@ -39,26 +41,18 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
     protected $weeeHelper;
 
     /**
-     * @var \Magento\Framework\Pricing\PriceCurrencyInterface
-     */
-    protected $priceCurrency;
-
-    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Tax\Helper\Data $taxHelper
      * @param \Magento\Weee\Helper\Data $weeeHelper
-     * @param PriceCurrencyInterface $priceCurrency
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Tax\Helper\Data $taxHelper,
         \Magento\Weee\Helper\Data $weeeHelper,
-        PriceCurrencyInterface $priceCurrency,
         array $data = array()
     ) {
         $this->weeeHelper = $weeeHelper;
-        $this->priceCurrency = $priceCurrency;
         parent::__construct($context, $taxHelper, $data);
         $this->_isScopePrivate = true;
     }
@@ -74,7 +68,12 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
             return false;
         }
 
-        if (!$this->weeeHelper->typeOfDisplay([WeeeDisplayConfig::DISPLAY_INCL_DESCR], 'sales')) {
+        $displayWeeeDetails = $this->weeeHelper->typeOfDisplay(
+            [WeeeDisplayConfig::DISPLAY_INCL_DESCR, WeeeDisplayConfig::DISPLAY_EXCL_DESCR_INCL],
+            $this->getZone(),
+            $this->getStoreId()
+        );
+        if (!$displayWeeeDetails) {
             return false;
         }
 
@@ -83,6 +82,21 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
         }
 
         return true;
+    }
+
+    /**
+     * Return the flag whether to include weee in the price
+     *
+     * @return bool|int
+     */
+    public function getIncludeWeeeFlag()
+    {
+        $includeWeee = $this->weeeHelper->typeOfDisplay(
+            [WeeeDisplayConfig::DISPLAY_INCL_DESCR, WeeeDisplayConfig::DISPLAY_INCL],
+            $this->getZone(),
+            $this->getStoreId()
+        );
+        return $includeWeee;
     }
 
     /**
@@ -99,12 +113,32 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
             return $priceInclTax;
         }
 
-        if ($this->weeeHelper
-            ->typeOfDisplay([WeeeDisplayConfig::DISPLAY_INCL_DESCR, WeeeDisplayConfig::DISPLAY_INCL], 'sales')) {
+        if ($this->getIncludeWeeeFlag()) {
             return $priceInclTax + $this->weeeHelper->getWeeeTaxInclTax($this->getItem());
         }
 
         return $priceInclTax;
+    }
+
+    /**
+     * Get base price for unit price including tax. The Weee amount will be added to unit price including tax
+     * depending on Weee display setting
+     *
+     * @return float
+     */
+    public function getBaseUnitDisplayPriceInclTax()
+    {
+        $basePriceInclTax = $this->getItem()->getBasePriceInclTax();
+
+        if (!$this->weeeHelper->isEnabled()) {
+            return $basePriceInclTax;
+        }
+
+        if ($this->getIncludeWeeeFlag()) {
+            return $basePriceInclTax + $this->weeeHelper->getBaseWeeeTaxInclTax($this->getItem());
+        }
+
+        return $basePriceInclTax;
     }
 
     /**
@@ -121,12 +155,32 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
             return $rowTotalInclTax;
         }
 
-        if ($this->weeeHelper->
-            typeOfDisplay([WeeeDisplayConfig::DISPLAY_INCL_DESCR, WeeeDisplayConfig::DISPLAY_INCL], 'sales')) {
+        if ($this->getIncludeWeeeFlag()) {
             return $rowTotalInclTax + $this->weeeHelper->getRowWeeeTaxInclTax($this->getItem());
         }
 
         return $rowTotalInclTax;
+    }
+
+    /**
+     * Get base price for row total including tax. The Weee amount will be added to row total including tax
+     * depending on Weee display setting
+     *
+     * @return float
+     */
+    public function getBaseRowDisplayPriceInclTax()
+    {
+        $baseRowTotalInclTax = $this->getItem()->getBaseRowTotalInclTax();
+
+        if (!$this->weeeHelper->isEnabled()) {
+            return $baseRowTotalInclTax;
+        }
+
+        if ($this->getIncludeWeeeFlag()) {
+            return $baseRowTotalInclTax + $this->weeeHelper->getBaseRowWeeeTaxInclTax($this->getItem());
+        }
+
+        return $baseRowTotalInclTax;
     }
 
     /**
@@ -137,18 +191,38 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
      */
     public function getUnitDisplayPriceExclTax()
     {
-        $priceExclTax = $this->getItem()->getCalculationPrice();
+        $priceExclTax = $this->getItemDisplayPriceExclTax();
 
         if (!$this->weeeHelper->isEnabled()) {
             return $priceExclTax;
         }
 
-        if ($this->weeeHelper
-            ->typeOfDisplay([WeeeDisplayConfig::DISPLAY_INCL_DESCR, WeeeDisplayConfig::DISPLAY_INCL], 'sales')) {
+        if ($this->getIncludeWeeeFlag()) {
             return $priceExclTax + $this->getItem()->getWeeeTaxAppliedAmount();
         }
 
         return $priceExclTax;
+    }
+
+    /**
+     * Get base price for unit price excluding tax. The Weee amount will be added to unit price
+     * depending on Weee display setting
+     *
+     * @return float
+     */
+    public function getBaseUnitDisplayPriceExclTax()
+    {
+        $basePriceExclTax = $this->getItem()->getBasePrice();
+
+        if (!$this->weeeHelper->isEnabled()) {
+            return $basePriceExclTax;
+        }
+
+        if ($this->getIncludeWeeeFlag()) {
+            return $basePriceExclTax + $this->getItem()->getBaseWeeeTaxAppliedAmount();
+        }
+
+        return $basePriceExclTax;
     }
 
     /**
@@ -165,12 +239,32 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
             return $rowTotalExclTax;
         }
 
-        if ($this->weeeHelper
-            ->typeOfDisplay([WeeeDisplayConfig::DISPLAY_INCL_DESCR, WeeeDisplayConfig::DISPLAY_INCL], 'sales')) {
+        if ($this->getIncludeWeeeFlag()) {
             return $rowTotalExclTax + $this->getItem()->getWeeeTaxAppliedRowAmount();
         }
 
         return $rowTotalExclTax;
+    }
+
+    /**
+     * Get base price for row total excluding tax. The Weee amount will be added to row total
+     * depending on Weee display setting
+     *
+     * @return float
+     */
+    public function getBaseRowDisplayPriceExclTax()
+    {
+        $baseRowTotalExclTax = $this->getItem()->getBaseRowTotal();
+
+        if (!$this->weeeHelper->isEnabled()) {
+            return $baseRowTotalExclTax;
+        }
+
+        if ($this->getIncludeWeeeFlag()) {
+            return $baseRowTotalExclTax + $this->getItem()->getBaseWeeeTaxAppliedRowAmnt();
+        }
+
+        return $baseRowTotalExclTax;
     }
 
     /**
@@ -190,6 +284,22 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
     }
 
     /**
+     * Get base final unit display price including tax, this will add Weee amount to unit price include tax
+     *
+     * @return float
+     */
+    public function getBaseFinalUnitDisplayPriceInclTax()
+    {
+        $basePriceInclTax = $this->getItem()->getBasePriceInclTax();
+
+        if (!$this->weeeHelper->isEnabled()) {
+            return $basePriceInclTax;
+        }
+
+        return $basePriceInclTax + $this->weeeHelper->getBaseWeeeTaxInclTax($this->getItem());
+    }
+
+    /**
      * Get final row display price including tax, this will add weee amount to rowTotalInclTax
      *
      * @return float
@@ -206,19 +316,51 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
     }
 
     /**
+     * Get base final row display price including tax, this will add weee amount to rowTotalInclTax
+     *
+     * @return float
+     */
+    public function getBaseFinalRowDisplayPriceInclTax()
+    {
+        $baseRowTotalInclTax = $this->getItem()->getBaseRowTotalInclTax();
+
+        if (!$this->weeeHelper->isEnabled()) {
+            return $baseRowTotalInclTax;
+        }
+
+        return $baseRowTotalInclTax + $this->weeeHelper->getBaseRowWeeeTaxInclTax($this->getItem());
+    }
+
+    /**
      * Get final unit display price excluding tax
      *
      * @return float
      */
     public function getFinalUnitDisplayPriceExclTax()
     {
-        $priceExclTax = $this->getItem()->getCalculationPrice();
+        $priceExclTax = $this->getItemDisplayPriceExclTax();
 
         if (!$this->weeeHelper->isEnabled()) {
             return $priceExclTax;
         }
 
         return $priceExclTax + $this->getItem()->getWeeeTaxAppliedAmount();
+    }
+
+    /**
+     * Get base final unit display price excluding tax
+     *
+     * @return float
+     */
+    public function getBaseFinalUnitDisplayPriceExclTax()
+    {
+        $basePriceExclTax = $this->getItem()->getBasePrice();
+
+        if (!$this->weeeHelper->isEnabled()) {
+            return $basePriceExclTax;
+        }
+
+        return $basePriceExclTax + $this->getItem()->getBaseWeeeTaxAppliedAmount();
     }
 
     /**
@@ -238,13 +380,35 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
     }
 
     /**
+     * Get base final row display price excluding tax, this will add Weee amount to rowTotal
+     *
+     * @return float
+     */
+    public function getBaseFinalRowDisplayPriceExclTax()
+    {
+        $baseRowTotalExclTax = $this->getItem()->getBaseRowTotal();
+
+        if (!$this->weeeHelper->isEnabled()) {
+            return $baseRowTotalExclTax;
+        }
+
+        return $baseRowTotalExclTax + $this->getItem()->getBaseWeeeTaxAppliedRowAmnt();
+    }
+
+    /**
      * Whether to display final price that include Weee amounts
      *
      * @return bool
      */
     public function displayFinalPrice()
     {
-        if (!$this->weeeHelper->typeOfDisplay(WeeeDisplayConfig::DISPLAY_EXCL_DESCR_INCL, 'sales')) {
+        $flag = $this->weeeHelper->typeOfDisplay(
+            WeeeDisplayConfig::DISPLAY_EXCL_DESCR_INCL,
+            $this->getZone(),
+            $this->getStoreId()
+        );
+
+        if (!$flag) {
             return false;
         }
 
@@ -255,13 +419,36 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
     }
 
     /**
-     * Format price
+     * Return the total amount minus discount
      *
-     * @param float $price
-     * @return string
+     * @param OrderItem|InvoiceItem|CreditMemoItem $item
+     * @return mixed
      */
-    public function formatPrice($price)
+    public function getTotalAmount($item)
     {
-        return $this->priceCurrency->format($price);
+        $totalAmount = $item->getRowTotal()
+            - $item->getDiscountAmount()
+            + $item->getTaxAmount()
+            + $item->getHiddenTaxAmount()
+            + $this->weeeHelper->getRowWeeeTaxInclTax($item);
+
+        return $totalAmount;
+    }
+
+    /**
+     * Return the total amount minus discount
+     *
+     * @param OrderItem|InvoiceItem|CreditMemoItem $item
+     * @return mixed
+     */
+    public function getBaseTotalAmount($item)
+    {
+        $totalAmount = $item->getBaseRowTotal()
+            - $item->getBaseDiscountAmount()
+            + $item->getBaseTaxAmount()
+            + $item->getBaseHiddenTaxAmount()
+            + $this->weeeHelper->getBaseRowWeeeTaxInclTax($item);
+
+        return $totalAmount;
     }
 }

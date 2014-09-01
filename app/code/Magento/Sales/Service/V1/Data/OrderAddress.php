@@ -30,134 +30,31 @@ use Magento\Framework\Service\Data\AbstractObject as DataObject;
  */
 class OrderAddress extends DataObject
 {
-    /**
-     * int
-     */
     const ENTITY_ID = 'entity_id';
-
-    /**
-     * int
-     */
     const PARENT_ID = 'parent_id';
-
-    /**
-     * int
-     */
     const CUSTOMER_ADDRESS_ID = 'customer_address_id';
-
-    /**
-     * int
-     */
     const QUOTE_ADDRESS_ID = 'quote_address_id';
-
-    /**
-     * int
-     */
     const REGION_ID = 'region_id';
-
-    /**
-     * int
-     */
     const CUSTOMER_ID = 'customer_id';
-
-    /**
-     * string
-     */
     const FAX = 'fax';
-
-    /**
-     * string
-     */
     const REGION = 'region';
-
-    /**
-     * string
-     */
     const POSTCODE = 'postcode';
-
-    /**
-     * string
-     */
     const LASTNAME = 'lastname';
-
-    /**
-     * string
-     */
     const STREET = 'street';
-
-    /**
-     * string
-     */
     const CITY = 'city';
-
-    /**
-     * string
-     */
     const EMAIL = 'email';
-
-    /**
-     * string
-     */
     const TELEPHONE = 'telephone';
-
-    /**
-     * string
-     */
     const COUNTRY_ID = 'country_id';
-
-    /**
-     * string
-     */
     const FIRSTNAME = 'firstname';
-
-    /**
-     * string
-     */
     const ADDRESS_TYPE = 'address_type';
-
-    /**
-     * string
-     */
     const PREFIX = 'prefix';
-
-    /**
-     * string
-     */
     const MIDDLENAME = 'middlename';
-
-    /**
-     * string
-     */
     const SUFFIX = 'suffix';
-
-    /**
-     * string
-     */
     const COMPANY = 'company';
-
-    /**
-     * string
-     */
     const VAT_ID = 'vat_id';
-
-    /**
-     * int
-     */
     const VAT_IS_VALID = 'vat_is_valid';
-
-    /**
-     * string
-     */
     const VAT_REQUEST_ID = 'vat_request_id';
-
-    /**
-     * string
-     */
     const VAT_REQUEST_DATE = 'vat_request_date';
-
-    /**
-     * int
-     */
     const VAT_REQUEST_SUCCESS = 'vat_request_success';
 
     /**

@@ -61,7 +61,11 @@ class UpdateQty extends \Magento\Backend\App\Action
     public function execute()
     {
         try {
-            $creditmemo = $this->creditmemoLoader->load($this->_request, true);
+            $this->creditmemoLoader->setOrderId($this->getRequest()->getParam('order_id'));
+            $this->creditmemoLoader->setCreditmemoId($this->getRequest()->getParam('creditmemo_id'));
+            $this->creditmemoLoader->setCreditmemo($this->getRequest()->getParam('creditmemo'));
+            $this->creditmemoLoader->setInvoiceId($this->getRequest()->getParam('invoice_id'));
+            $this->creditmemoLoader->load();
             $this->_view->loadLayout();
             $response = $this->_view->getLayout()->getBlock('order_items')->toHtml();
         } catch (\Magento\Framework\Model\Exception $e) {

@@ -26,10 +26,13 @@
 /** @var \Magento\Catalog\Pricing\Render\FinalPriceBox $this */
 /** @var \Magento\Catalog\Pricing\Price\ConfiguredPrice $configuredPrice */
 $configuredPrice = $this->getPrice();
+$priceLabel = ($this->getPriceLabel() !== null) 
+	? $this->getPriceLabel()
+	: __('Price as configured:');
 ?>
 <p class="price-as-configured">
     <?php echo $this->renderAmount($configuredPrice->getAmount(), [
-        'display_label'     => __('Price as configured:'),
+        'display_label'     => $priceLabel,
         'price_id'          => $this->getPriceId('product-price-'),
         'include_container' => false
     ]); ?>

@@ -78,7 +78,11 @@ class PrintLabel extends \Magento\Backend\App\Action
     public function execute()
     {
         try {
-            $shipment = $this->shipmentLoader->load($this->_request);
+            $this->shipmentLoader->setOrderId($this->getRequest()->getParam('order_id'));
+            $this->shipmentLoader->setShipmentId($this->getRequest()->getParam('shipment_id'));
+            $this->shipmentLoader->setShipment($this->getRequest()->getParam('shipment'));
+            $this->shipmentLoader->setTracking($this->getRequest()->getParam('tracking'));
+            $shipment = $this->shipmentLoader->load();
             $labelContent = $shipment->getShippingLabel();
             if ($labelContent) {
                 $pdfContent = null;
@@ -114,7 +118,7 @@ class PrintLabel extends \Magento\Backend\App\Action
         }
         $this->_redirect(
             'adminhtml/order_shipment/view',
-            array('shipment_id' => $this->getRequest()->getParam('shipment_id'))
+            ['shipment_id' => $this->getRequest()->getParam('shipment_id')]
         );
     }
 }

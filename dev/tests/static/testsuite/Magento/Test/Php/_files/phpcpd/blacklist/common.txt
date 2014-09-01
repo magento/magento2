@@ -124,4 +124,5 @@ Magento/Shipping/Model
 Magento/Catalog/Service/V1/Category
 Magento/UrlRedirect/Model
 setup
-Magento/Sales/Service/V1/Data
+Magento/Sales/Service/V1
+Magento/Shipping/Controller/Adminhtml/Order/Shipment

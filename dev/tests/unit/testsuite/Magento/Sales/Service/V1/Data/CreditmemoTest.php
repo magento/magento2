@@ -798,4 +798,20 @@ class CreditmemoTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('test_value_updated_at', $object->getUpdatedAt());
     }
+
+    public function testGetItems()
+    {
+        $data = ['items' => 'test_value_items'];
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractObjectBuilder')
+            ->setMethods(['getData'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $abstractBuilderMock->expects($this->once())
+            ->method('getData')
+            ->will($this->returnValue($data));
+
+        $object = new \Magento\Sales\Service\V1\Data\Creditmemo($abstractBuilderMock);
+
+        $this->assertEquals('test_value_items', $object->getItems());
+    }
 }

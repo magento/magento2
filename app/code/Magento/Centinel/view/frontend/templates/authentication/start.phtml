@@ -30,12 +30,10 @@
     </fieldset>
 </form>
 <script type="text/javascript">
-require(['jquery'], function(jQuery){
 
     window.onload = function () {
         parent.jQuery('[data-container="body"]').trigger("paymentAuthentication", {state: "start"});
         document.getElementById('validation-form').submit();
     }
 
-});
 </script>

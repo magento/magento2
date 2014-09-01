@@ -23,6 +23,9 @@
  */
 namespace Magento\Catalog\Service\V1\Data\Eav\Category;
 
+/**
+ * @codeCoverageIgnore
+ */
 class Tree extends \Magento\Framework\Service\Data\AbstractObject
 {
     const ID = 'id';

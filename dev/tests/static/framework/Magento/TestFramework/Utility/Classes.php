@@ -177,7 +177,7 @@ class Classes
      */
     public static function collectLayoutClasses(\SimpleXMLElement $xml)
     {
-        $classes = self::getXmlAttributeValues($xml, '/layout//block[@type]', 'type');
+        $classes = self::getXmlAttributeValues($xml, '/layout//block[@class]', 'class');
         $classes = array_merge(
             $classes,
             self::getXmlNodeValues(

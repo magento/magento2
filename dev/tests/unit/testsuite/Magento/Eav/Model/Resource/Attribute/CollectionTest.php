@@ -205,7 +205,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         return array(
             'main_table_expression' => array(
                 'col2', '1',
-                'SELECT COUNT(*) FROM "some_main_table" AS "main_table"' . "\n"
+                'SELECT COUNT(DISTINCT main_table.attribute_id) FROM "some_main_table" AS "main_table"' . "\n"
                 . ' INNER JOIN "some_extra_table" AS "additional_table"'
                 . ' ON additional_table.attribute_id = main_table.attribute_id' . "\n"
                 . ' LEFT JOIN "some_extra_table" AS "scope_table"'
@@ -216,7 +216,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ),
             'additional_table_expression' => array(
                 'col3', '2',
-                'SELECT COUNT(*) FROM "some_main_table" AS "main_table"' . "\n"
+                'SELECT COUNT(DISTINCT main_table.attribute_id) FROM "some_main_table" AS "main_table"' . "\n"
                 . ' INNER JOIN "some_extra_table" AS "additional_table"'
                 . ' ON additional_table.attribute_id = main_table.attribute_id'. "\n"
                 . ' LEFT JOIN "some_extra_table" AS "scope_table"'

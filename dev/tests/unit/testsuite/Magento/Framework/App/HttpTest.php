@@ -99,11 +99,10 @@ class HttpTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['configure', 'get', 'create'])
             ->getMock();
         $objectManagerMock->expects($this->once())->method('configure')->with($areaConfig);
-        $this->_responseMock = $this->getMockBuilder(
-            'Magento\Framework\App\Response\Http'
-        )->disableOriginalConstructor()->setMethods(
-            ['setHttpResponseCode', 'setBody']
-        )->getMock();
+        $this->_responseMock = $this->getMockBuilder('Magento\Framework\App\Response\Http')
+            ->disableOriginalConstructor()
+            ->setMethods(['setHttpResponseCode', 'setBody', '__wakeup'])
+            ->getMock();
         $this->_frontControllerMock = $this->getMockBuilder(
             'Magento\Framework\App\FrontControllerInterface'
         )->disableOriginalConstructor()->setMethods(['dispatch'])->getMock();

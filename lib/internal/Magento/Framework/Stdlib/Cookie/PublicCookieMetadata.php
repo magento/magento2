@@ -52,6 +52,16 @@ class PublicCookieMetadata extends CookieMetadata
     }
 
     /**
+     * Set the cookie duration to one year
+     *
+     * @return $this
+     */
+    public function setDurationOneYear()
+    {
+        return $this->setDuration(3600 * 24 * 365);
+    }
+
+    /**
      * Get the number of seconds until the cookie expires
      *
      * The cookie duration can be translated into an expiration date at the time the cookie is sent.

@@ -116,7 +116,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
         $this->requestMock = $this->getMock(
             'Magento\Framework\App\RequestInterface',
-            ['isAjax', 'getModuleName', 'setModuleName', 'getActionName', 'setActionName', 'getParam']
+            ['isAjax', 'getModuleName', 'setModuleName', 'getActionName', 'setActionName', 'getParam', 'getCookie']
         );
         $this->addressFactoryMock = $this->getMock('Magento\Customer\Model\AddressFactory');
         $this->formFactoryMock = $this->getMock('Magento\Customer\Model\FormFactory');

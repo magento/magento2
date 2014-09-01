@@ -26,6 +26,9 @@ namespace Magento\Downloadable\Service\V1\DownloadableSample\Data;
 
 use \Magento\Framework\Service\Data\AbstractObject;
 
+/**
+ * @codeCoverageIgnore
+ */
 class DownloadableSampleContent extends AbstractObject
 {
     const TITLE = 'title';

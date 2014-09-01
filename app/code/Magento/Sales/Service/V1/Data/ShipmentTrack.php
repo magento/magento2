@@ -31,59 +31,16 @@ use Magento\Framework\Service\Data\AbstractObject as DataObject;
 class ShipmentTrack extends DataObject
 {
 
-    /**
-     * int
-     */
     const ENTITY_ID = 'entity_id';
-
-    /**
-     * int
-     */
     const PARENT_ID = 'parent_id';
-
-    /**
-     * float
-     */
     const WEIGHT = 'weight';
-
-    /**
-     * float
-     */
     const QTY = 'qty';
-
-    /**
-     * int
-     */
     const ORDER_ID = 'order_id';
-
-    /**
-     * string
-     */
     const TRACK_NUMBER = 'track_number';
-
-    /**
-     * string
-     */
     const DESCRIPTION = 'description';
-
-    /**
-     * string
-     */
     const TITLE = 'title';
-
-    /**
-     * string
-     */
     const CARRIER_CODE = 'carrier_code';
-
-    /**
-     * string
-     */
     const CREATED_AT = 'created_at';
-
-    /**
-     * string
-     */
     const UPDATED_AT = 'updated_at';
 
     /**

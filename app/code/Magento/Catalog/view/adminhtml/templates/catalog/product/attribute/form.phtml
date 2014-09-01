@@ -29,7 +29,7 @@
 ?>
 <?php echo $this->getFormInitScripts() ?>
 <form id="edit_form" action="<?php echo $this->escapeHtml($this->getSaveUrl()) ?>" method="post">
-    <input name="form_key" type="hidden"  value="<?php echo $this->escapeHtml($this->getFormKey()) ?>" />
+    <input name="form_key" type="hidden" value="<?php echo $this->escapeHtml($this->getFormKey()) ?>" />
     <?php echo $this->getChildHtml('form') ?>
 </form>
 <div class="page-actions" <?php echo $this->getUiId('content-header') ?>>

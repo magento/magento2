@@ -24,7 +24,9 @@
 
 namespace Magento\Bundle\Service\V1\Data\Product\Option;
 
-
+/**
+ * @codeCoverageIgnore
+ */
 class TypeConverter
 {
     /**

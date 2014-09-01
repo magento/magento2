@@ -52,8 +52,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Sales\Model\Order\Address\Validator|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $validatorMock;
+
     /**
-     *
+     * Set up
      */
     public function setUp()
     {
@@ -103,7 +104,6 @@ class AddressTest extends \PHPUnit_Framework_TestCase
                 'validator' => $this->validatorMock
             ]
         );
-
     }
 
     /**

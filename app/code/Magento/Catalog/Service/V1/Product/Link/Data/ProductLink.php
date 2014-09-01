@@ -26,6 +26,8 @@ namespace Magento\Catalog\Service\V1\Product\Link\Data;
 
 /**
  * ProductLink Service Data Object
+ *
+ * @codeCoverageIgnore
  */
 class ProductLink extends \Magento\Framework\Service\Data\Eav\AbstractObject
 {

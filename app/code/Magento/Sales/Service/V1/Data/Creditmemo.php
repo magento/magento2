@@ -30,245 +30,55 @@ use Magento\Framework\Service\Data\AbstractObject as DataObject;
  */
 class Creditmemo extends DataObject
 {
-    /**
-     * int
-     */
     const ENTITY_ID = 'entity_id';
-
-    /**
-     * int
-     */
     const STORE_ID = 'store_id';
-
-    /**
-     * float
-     */
     const ADJUSTMENT_POSITIVE = 'adjustment_positive';
-
-    /**
-     * float
-     */
     const BASE_SHIPPING_TAX_AMOUNT = 'base_shipping_tax_amount';
-
-    /**
-     * float
-     */
     const STORE_TO_ORDER_RATE = 'store_to_order_rate';
-
-    /**
-     * float
-     */
     const BASE_DISCOUNT_AMOUNT = 'base_discount_amount';
-
-    /**
-     * float
-     */
     const BASE_TO_ORDER_RATE = 'base_to_order_rate';
-
-    /**
-     * float
-     */
     const GRAND_TOTAL = 'grand_total';
-
-    /**
-     * float
-     */
     const BASE_ADJUSTMENT_NEGATIVE = 'base_adjustment_negative';
-
-    /**
-     * float
-     */
     const BASE_SUBTOTAL_INCL_TAX = 'base_subtotal_incl_tax';
-
-    /**
-     * float
-     */
     const SHIPPING_AMOUNT = 'shipping_amount';
-
-    /**
-     * float
-     */
     const SUBTOTAL_INCL_TAX = 'subtotal_incl_tax';
-
-    /**
-     * float
-     */
     const ADJUSTMENT_NEGATIVE = 'adjustment_negative';
-
-    /**
-     * float
-     */
     const BASE_SHIPPING_AMOUNT = 'base_shipping_amount';
-
-    /**
-     * float
-     */
     const STORE_TO_BASE_RATE = 'store_to_base_rate';
-
-    /**
-     * float
-     */
     const BASE_TO_GLOBAL_RATE = 'base_to_global_rate';
-
-    /**
-     * float
-     */
     const BASE_ADJUSTMENT = 'base_adjustment';
-
-    /**
-     * float
-     */
     const BASE_SUBTOTAL = 'base_subtotal';
-
-    /**
-     * float
-     */
     const DISCOUNT_AMOUNT = 'discount_amount';
-
-    /**
-     * float
-     */
     const SUBTOTAL = 'subtotal';
-
-    /**
-     * float
-     */
     const ADJUSTMENT = 'adjustment';
-
-    /**
-     * float
-     */
     const BASE_GRAND_TOTAL = 'base_grand_total';
-
-    /**
-     * float
-     */
     const BASE_ADJUSTMENT_POSITIVE = 'base_adjustment_positive';
-
-    /**
-     * float
-     */
     const BASE_TAX_AMOUNT = 'base_tax_amount';
-
-    /**
-     * float
-     */
     const SHIPPING_TAX_AMOUNT = 'shipping_tax_amount';
-
-    /**
-     * float
-     */
     const TAX_AMOUNT = 'tax_amount';
-
-    /**
-     * int
-     */
     const ORDER_ID = 'order_id';
-
-    /**
-     * int
-     */
     const EMAIL_SENT = 'email_sent';
-
-    /**
-     * int
-     */
     const CREDITMEMO_STATUS = 'creditmemo_status';
-
-    /**
-     * int
-     */
     const STATE = 'state';
-
-    /**
-     * int
-     */
     const SHIPPING_ADDRESS_ID = 'shipping_address_id';
-
-    /**
-     * int
-     */
     const BILLING_ADDRESS_ID = 'billing_address_id';
-
-    /**
-     * int
-     */
     const INVOICE_ID = 'invoice_id';
-
-    /**
-     * string
-     */
     const STORE_CURRENCY_CODE = 'store_currency_code';
-
-    /**
-     * string
-     */
     const ORDER_CURRENCY_CODE = 'order_currency_code';
-
-    /**
-     * string
-     */
     const BASE_CURRENCY_CODE = 'base_currency_code';
-
-    /**
-     * string
-     */
     const GLOBAL_CURRENCY_CODE = 'global_currency_code';
-
-    /**
-     * string
-     */
     const TRANSACTION_ID = 'transaction_id';
-
-    /**
-     * string
-     */
     const INCREMENT_ID = 'increment_id';
-
-    /**
-     * string
-     */
     const CREATED_AT = 'created_at';
-
-    /**
-     * string
-     */
     const UPDATED_AT = 'updated_at';
-
-    /**
-     * float
-     */
     const HIDDEN_TAX_AMOUNT = 'hidden_tax_amount';
-
-    /**
-     * float
-     */
     const BASE_HIDDEN_TAX_AMOUNT = 'base_hidden_tax_amount';
-
-    /**
-     * float
-     */
     const SHIPPING_HIDDEN_TAX_AMOUNT = 'shipping_hidden_tax_amount';
-
-    /**
-     * float
-     */
     const BASE_SHIPPING_HIDDEN_TAX_AMNT = 'base_shipping_hidden_tax_amnt';
-
-    /**
-     * float
-     */
     const SHIPPING_INCL_TAX = 'shipping_incl_tax';
-
-    /**
-     * float
-     */
     const BASE_SHIPPING_INCL_TAX = 'base_shipping_incl_tax';
-
-    /**
-     * string
-     */
     const DISCOUNT_DESCRIPTION = 'discount_description';
+    const ITEMS = 'items';
 
     /**
      * Returns adjustment
@@ -749,5 +559,15 @@ class Creditmemo extends DataObject
     public function getUpdatedAt()
     {
         return $this->_get(self::UPDATED_AT);
+    }
+
+    /**
+     * Return creditmemo items
+     *
+     * @return \Magento\Sales\Service\V1\Data\CreditmemoItem[]
+     */
+    public function getItems()
+    {
+        return $this->_get(self::ITEMS);
     }
 }

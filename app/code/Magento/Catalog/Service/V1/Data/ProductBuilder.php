@@ -26,6 +26,9 @@ namespace Magento\Catalog\Service\V1\Data;
 
 use Magento\Framework\Service\Data\Eav\AttributeValueBuilder;
 
+/**
+ * @codeCoverageIgnore
+ */
 class ProductBuilder extends \Magento\Framework\Service\Data\Eav\AbstractObjectBuilder
 {
     /**
@@ -109,7 +112,6 @@ class ProductBuilder extends \Magento\Framework\Service\Data\Eav\AbstractObjectB
 
     /**
      * Set created time
-     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
      * @param string|null $value
@@ -125,7 +127,6 @@ class ProductBuilder extends \Magento\Framework\Service\Data\Eav\AbstractObjectB
 
     /**
      * Set updated time
-     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
      * @param string|null $value

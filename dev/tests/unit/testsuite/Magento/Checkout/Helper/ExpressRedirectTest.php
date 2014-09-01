@@ -156,7 +156,7 @@ class ExpressRedirectTest extends \PHPUnit_Framework_TestCase
         $responseMock = $this->getMockBuilder(
             'Magento\Framework\App\Response\Http'
         )->disableOriginalConstructor()->setMethods(
-            array('setRedirect')
+            ['setRedirect', '__wakeup']
         )->getMock();
         $responseMock->expects($this->once())->method('setRedirect')->with($expectedLoginUrl);
 

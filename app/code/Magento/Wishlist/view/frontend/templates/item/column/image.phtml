@@ -27,6 +27,6 @@ $item = $this->getItem();
 $product = $item->getProduct();
 $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
 ?>
-<a class="product photo" href="<?php echo $this->getProductUrl($item) ?>" title="<?php echo $this->escapeHtml($product->getName()) ?>">
+<a class="product-item-photo" href="<?php echo $this->getProductUrl($item) ?>" title="<?php echo $this->escapeHtml($product->getName()) ?>">
     <?php echo $imageBlock->init($product, 'wishlist_thumbnail')->toHtml() ?>
 </a>

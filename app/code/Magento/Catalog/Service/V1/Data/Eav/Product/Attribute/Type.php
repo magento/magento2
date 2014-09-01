@@ -25,7 +25,9 @@ namespace Magento\Catalog\Service\V1\Data\Eav\Product\Attribute;
 
 /**
  * Class Type
+ *
  * @package Magento\Catalog\Service\V1\Data\Eav\Product\Attribute
+ * @codeCoverageIgnore
  */
 class Type extends \Magento\Framework\Service\Data\AbstractObject
 {

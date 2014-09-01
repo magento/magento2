@@ -23,6 +23,8 @@
  */
 namespace Magento\Framework\App\PageCache;
 
+use Magento\TestFramework\ObjectManager;
+
 class VersionTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -33,11 +35,18 @@ class VersionTest extends \PHPUnit_Framework_TestCase
     protected $version;
 
     /**
-     * Cookie mock
+     * Cookie manager mock
      *
-     * @var \Magento\Framework\Stdlib\Cookie|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\CookieManager|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $cookieMock;
+    protected $cookieManagerMock;
+
+    /**
+     * Cookie manager mock
+     *
+     * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $cookieMetadataFactoryMock;
 
     /**
      * Request mock
@@ -51,9 +60,23 @@ class VersionTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->cookieMock = $this->getMock('Magento\Framework\Stdlib\Cookie', array('set'), array(), '', false);
-        $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', array('isPost'), array(), '', false);
-        $this->version = new Version($this->cookieMock, $this->requestMock);
+        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->cookieManagerMock = $this->getMockBuilder('Magento\Framework\Stdlib\CookieManager')
+            ->disableOriginalConstructor()->getMock();
+        $this->requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+            ->disableOriginalConstructor()->getMock();
+        $this->cookieMetadataFactoryMock = $this->getMockBuilder(
+            'Magento\Framework\Stdlib\Cookie\CookieMetadataFactory'
+        )
+            ->disableOriginalConstructor()->getMock();
+        $this->version = $objectManager->getObject(
+            'Magento\Framework\App\PageCache\Version',
+            [
+                'cookieManager' => $this->cookieManagerMock,
+                'cookieMetadataFactory' => $this->cookieMetadataFactoryMock,
+                'request' => $this->requestMock
+            ]
+        );
     }
 
     /**
@@ -70,17 +93,40 @@ class VersionTest extends \PHPUnit_Framework_TestCase
     {
         $this->requestMock->expects($this->once())->method('isPost')->will($this->returnValue($isPost));
         if ($isPost) {
-            $this->cookieMock->expects($this->once())->method('set');
+            $publicCookieMetadataMock = $this->getMock('Magento\Framework\Stdlib\Cookie\PublicCookieMetadata');
+            $publicCookieMetadataMock->expects($this->once())
+                ->method('setPath')
+                ->with('/')
+                ->will($this->returnSelf());
+
+            $publicCookieMetadataMock->expects($this->once())
+                ->method('setDuration')
+                ->with(Version::COOKIE_PERIOD)
+                ->will($this->returnSelf());
+
+            $this->cookieMetadataFactoryMock->expects($this->once())
+                ->method('createPublicCookieMetadata')
+                ->with()
+                ->will(
+                    $this->returnValue($publicCookieMetadataMock)
+                );
+
+            $this->cookieManagerMock->expects($this->once())
+                ->method('setPublicCookie');
         }
         $this->version->process();
     }
 
     /**
      * Data provider for testProcess
+     *
      * @return array
      */
     public function processProvider()
     {
-        return array(array(true), array(false));
+        return [
+            "post" => [true],
+            "notPost" => [false]
+        ];
     }
 }

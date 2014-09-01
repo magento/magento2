@@ -23,6 +23,10 @@
  */
 namespace Magento\Sales\Block\Order\Item\Renderer;
 
+use Magento\Sales\Model\Order\Item as OrderItem;
+use Magento\Sales\Model\Order\Invoice\Item as InvoiceItem;
+use Magento\Sales\Model\Order\CreditMemo\Item as CreditMemoItem;
+
 /**
  * Order item render block
  */
@@ -219,5 +223,70 @@ class DefaultRenderer extends \Magento\Framework\View\Element\Template
     public function prepareSku($sku)
     {
         return $this->escapeHtml($this->string->splitInjection($sku));
+    }
+
+    /**
+     * Return item unit price html
+     *
+     * @param OrderItem|InvoiceItem|CreditmemoItem $item child item in case of bundle product
+     * @return string
+     */
+    public function getItemPriceHtml($item = null)
+    {
+        $block = $this->getLayout()->getBlock('item_unit_price');
+        if (!$item) {
+            $item = $this->getItem();
+        }
+        $block->setItem($item);
+        return $block->toHtml();
+    }
+
+    /**
+     * Return item row total html
+     *
+     * @param OrderItem|InvoiceItem|CreditmemoItem $item child item in case of bundle product
+     * @return string
+     */
+    public function getItemRowTotalHtml($item = null)
+    {
+        $block = $this->getLayout()->getBlock('item_row_total');
+        if (!$item) {
+            $item = $this->getItem();
+        }
+        $block->setItem($item);
+        return $block->toHtml();
+    }
+
+    /**
+     * Return the total amount minus discount
+     *
+     * @param OrderItem|InvoiceItem|CreditmemoItem $item
+     * @return mixed
+     */
+    public function getTotalAmount($item)
+    {
+        $totalAmount = $item->getRowTotal()
+            + $item->getTaxAmount()
+            + $item->getHiddenTaxAmount()
+            + $item->getWeeeTaxAppliedRowAmount()
+            - $item->getDiscountAmount();
+
+        return $totalAmount;
+    }
+
+    /**
+     * Return HTML for item total after discount
+     *
+     * @param OrderItem|InvoiceItem|CreditmemoItem $item child item in case of bundle product
+     * @return string
+     */
+    public function getItemRowTotalAfterDiscountHtml($item = null)
+    {
+        $block = $this->getLayout()->getBlock('item_row_total_after_discount');
+        if (!$item) {
+            $item = $this->getItem();
+        }
+        $block->setItem($item);
+        return $block->toHtml();
     }
 }

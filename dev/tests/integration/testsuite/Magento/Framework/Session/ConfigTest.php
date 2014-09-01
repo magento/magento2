@@ -46,7 +46,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         /** @var $sessionManager \Magento\Framework\Session\SessionManager */
         $sessionManager = $this->_objectManager->get('Magento\Framework\Session\SessionManager');
         if ($sessionManager->isSessionExists()) {
-            $sessionManager->destroy();
+            $sessionManager->writeClose();
         }
         $this->_model = $this->_objectManager->create(
             'Magento\Framework\Session\Config',
@@ -81,7 +81,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('localhost', $this->_model->getCookieDomain());
         $this->assertEquals(false, $this->_model->getCookieSecure());
         $this->assertEquals(true, $this->_model->getCookieHttpOnly());
-        $this->assertEquals($this->_model->getOption('save_path'), ini_get('session.save_path'));
+        $this->assertEquals($this->_model->getSavePath(), $this->_model->getOption('save_path'));
     }
 
     /**
@@ -90,5 +90,15 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testGetSessionSaveMethod()
     {
         $this->assertEquals('files', $this->_model->getSaveHandler());
+    }
+
+    /**
+     * Unable to add integration tests for testGetLifetimePathNonDefault
+     *
+     * Error: Cannot modify header information - headers already sent
+     */
+    public function testGetLifetimePathNonDefault()
+    {
+
     }
 }

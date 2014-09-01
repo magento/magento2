@@ -53,7 +53,11 @@ class View extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\V
     public function execute()
     {
         $this->_title->add(__('Invoices'));
-        $invoice = $this->invoiceLoader->load($this->_request);
+        $orderId = $this->getRequest()->getParam('order_id');
+        $invoiceId = $this->getRequest()->getParam('invoice_id');
+        $invoiceData = $this->getRequest()->getParam('invoice', []);
+        $invoiceData = isset($invoiceData['items']) ? $invoiceData['items'] : [];
+        $invoice = $this->invoiceLoader->load($orderId, $invoiceId, $invoiceData);
         if ($invoice) {
             $this->_title->add(sprintf("#%s", $invoice->getIncrementId()));
 

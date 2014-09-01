@@ -46,6 +46,7 @@ class Render extends AbstractBlock
     const ZONE_ITEM_OPTION = 'item_option';
     const ZONE_SALES     = 'sales';
     const ZONE_EMAIL     = 'email';
+    const ZONE_CART      = 'cart';
     const ZONE_DEFAULT   = null;
     /**@#-*/
 

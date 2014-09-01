@@ -25,6 +25,7 @@
 namespace Magento\Framework\Search;
 
 use Magento\Framework\Search\Request\BucketInterface;
+use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Search\Request\QueryInterface;
 
 /**
@@ -65,11 +66,17 @@ class Request implements RequestInterface
     protected $size;
 
     /**
+     * @var Dimension[]
+     */
+    protected $dimensions;
+
+    /**
      * @param string $name
      * @param string $indexName
      * @param QueryInterface $query
      * @param int|null $from
      * @param int|null $size
+     * @param Dimension[] $dimensions
      * @param BucketInterface[] $buckets
      */
     public function __construct(
@@ -78,14 +85,16 @@ class Request implements RequestInterface
         QueryInterface $query,
         $from = null,
         $size = null,
+        array $dimensions = null,
         array $buckets = null
     ) {
         $this->name = $name;
         $this->index = $indexName;
-        $this->buckets = $buckets;
         $this->query = $query;
         $this->from = $from;
         $this->size = $size;
+        $this->buckets = $buckets;
+        $this->dimensions = $dimensions;
     }
 
     /**
@@ -102,6 +111,14 @@ class Request implements RequestInterface
     public function getIndex()
     {
         return $this->index;
+    }
+
+    /**
+     * @return Dimension[]
+     */
+    public function getDimensions()
+    {
+        $this->dimensions;
     }
 
     /**

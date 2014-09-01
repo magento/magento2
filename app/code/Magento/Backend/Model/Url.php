@@ -129,7 +129,7 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Store\Model\StoreFactory $storeFactory,
         \Magento\Framework\Data\Form\FormKey $formKey,
-        array $data = array()
+        array $data = []
     ) {
         $this->_encryptor = $encryptor;
         parent::__construct(
@@ -207,11 +207,11 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
         $controllerName = $this->_getControllerName(self::DEFAULT_CONTROLLER_NAME);
         $actionName = $this->_getActionName(self::DEFAULT_ACTION_NAME);
         if ($cacheSecretKey) {
-            $secret = array(self::SECRET_KEY_PARAM_NAME => "\${$routeName}/{$controllerName}/{$actionName}\$");
+            $secret = [self::SECRET_KEY_PARAM_NAME => "\${$routeName}/{$controllerName}/{$actionName}\$"];
         } else {
-            $secret = array(
+            $secret = [
                 self::SECRET_KEY_PARAM_NAME => $this->getSecretKey($routeName, $controllerName, $actionName)
-            );
+            ];
         }
         if (is_array($routeParams)) {
             $routeParams = array_merge($secret, $routeParams);
@@ -300,7 +300,7 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
      */
     public function renewSecretUrls()
     {
-        $this->_cache->clean(array(\Magento\Backend\Block\Menu::CACHE_TAGS));
+        $this->_cache->clean([\Magento\Backend\Block\Menu::CACHE_TAGS]);
     }
 
     /**
@@ -416,10 +416,10 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
     {
         if (!$this->_scope) {
             $this->_scope = $this->_storeFactory->create(
-                array(
+                [
                     'url' => $this,
-                    'data' => array('code' => 'admin', 'force_disable_rewrites' => true, 'disable_store_in_url' => true)
-                )
+                    'data' => ['code' => 'admin', 'force_disable_rewrites' => false, 'disable_store_in_url' => true]
+                ]
             );
         }
         return $this->_scope;

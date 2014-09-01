@@ -76,9 +76,13 @@ class Save extends \Magento\Backend\App\Action
             $this->_getSession()->setCommentText($data['comment_text']);
         }
         try {
-            $creditmemo = $this->creditmemoLoader->load($this->_request);
+            $this->creditmemoLoader->setOrderId($this->getRequest()->getParam('order_id'));
+            $this->creditmemoLoader->setCreditmemoId($this->getRequest()->getParam('creditmemo_id'));
+            $this->creditmemoLoader->setCreditmemo($this->getRequest()->getParam('creditmemo'));
+            $this->creditmemoLoader->setInvoiceId($this->getRequest()->getParam('invoice_id'));
+            $creditmemo = $this->creditmemoLoader->load();
             if ($creditmemo) {
-                if ($creditmemo->getGrandTotal() <= 0 && !$creditmemo->getAllowZeroGrandTotal()) {
+                if (!$creditmemo->isValidGrandTotal()) {
                     throw new \Magento\Framework\Model\Exception(__('Credit memo\'s total must be positive.'));
                 }
 

@@ -38,7 +38,8 @@ class MapperTest extends \PHPUnit_Framework_TestCase
     public function testToModel()
     {
         $categoryFactory = $this->getMock('Magento\Catalog\Model\CategoryFactory', ['create'], [], '', false);
-        $categoryMapper = $this->objectManagerHelper->getObject('Magento\Catalog\Service\V1\Data\Category\Mapper',
+        $categoryMapper = $this->objectManagerHelper->getObject(
+            'Magento\Catalog\Service\V1\Data\Category\Mapper',
             [
                 'categoryFactory' => $categoryFactory
             ]
@@ -46,18 +47,23 @@ class MapperTest extends \PHPUnit_Framework_TestCase
 
         $categoryModel = $this->getMock(
             'Magento\Catalog\Model\Category',
-            ['setPath', 'getDefaultAttributeSetId', '__sleep', '__wakeup'], [], '', false
+            ['setPath', 'getDefaultAttributeSetId', '__sleep', '__wakeup'],
+            [],
+            '',
+            false
         );
 
         $categoryFactory->expects($this->at(0))->method('create')->will($this->returnValue($categoryModel));
 
         $categoryObj = $this->getMock('Magento\Catalog\Service\V1\Data\Category', [], [], '', false);
         $categoryObj->expects($this->any())->method('__toArray')
-            ->will($this->returnValue(
-                [
-                    'test_code' => 'test_value',
-                ]
-            ));
+            ->will(
+                $this->returnValue(
+                    [
+                        'test_code' => 'test_value',
+                    ]
+                )
+            );
 
         $this->assertEquals($categoryModel, $categoryMapper->toModel($categoryObj));
     }

@@ -35,19 +35,19 @@ class FormKey
     const COOKIE_NAME = 'form_key';
 
     /**
-     * Cookie
+     * CookieManager
      *
-     * @var \Magento\Framework\Stdlib\Cookie
+     * @var \Magento\Framework\Stdlib\CookieManager
      */
-    protected $cookie;
+    protected $cookieManager;
 
     /**
-     * @param \Magento\Framework\Stdlib\Cookie $cookie
+     * @param \Magento\Framework\Stdlib\CookieManager $cookieManager
      */
     public function __construct(
-        \Magento\Framework\Stdlib\Cookie $cookie
+        \Magento\Framework\Stdlib\CookieManager $cookieManager
     ) {
-        $this->cookie = $cookie;
+        $this->cookieManager = $cookieManager;
     }
 
     /**
@@ -57,6 +57,6 @@ class FormKey
      */
     public function get()
     {
-        return $this->cookie->get(self::COOKIE_NAME);
+        return $this->cookieManager->getCookie(self::COOKIE_NAME);
     }
 }

@@ -63,11 +63,9 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection\Abstract
      * \Magento\Sales\Model\Order\Creditmemo, \Magento\Sales\Model\Order\Invoice, \Magento\Sales\Model\Order\Shipment
      *
      * @param AbstractModel $instance
-     * @param string $historyEntityName
-     *
      * @return \Magento\Sales\Model\Order\Status\History|null
      */
-    public function getUnnotifiedForInstance($instance, $historyEntityName = Order::HISTORY_ENTITY_NAME)
+    public function getUnnotifiedForInstance($instance)
     {
         if (!$instance instanceof Order) {
             $instance = $instance->getOrder();
@@ -79,14 +77,14 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection\Abstract
             'desc'
         )->addFieldToFilter(
             'entity_name',
-            $historyEntityName
+            $instance->getEntityType()
         )->addFieldToFilter(
             'is_customer_notified',
             0
         )->setPageSize(
             1
         );
-        foreach ($this as $historyItem) {
+        foreach ($this->getItems() as $historyItem) {
             return $historyItem;
         }
         return null;

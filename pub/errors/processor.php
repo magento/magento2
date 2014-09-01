@@ -139,7 +139,7 @@ class Processor
     /**
      * Http response
      *
-     * @var Magento\Framework\App\Response\Http
+     * @var \Magento\Framework\App\Response\Http
      */
     protected $_response;
 

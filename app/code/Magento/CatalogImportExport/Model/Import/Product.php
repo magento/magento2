@@ -311,7 +311,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         'use_config_enable_qty_inc' => 1,
         'qty_increments' => 0,
         'use_config_qty_increments' => 1,
-        'is_in_stock' => 0,
+        'is_in_stock' => 1,
         'low_stock_date' => null,
         'stock_status_changed_auto' => 0,
         'is_decimal_divided' => 0
@@ -1786,9 +1786,8 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     $row
                 );
 
-                $row = $this->stockItemService->processIsInStock($row);
-
                 if ($this->stockItemService->isQty($this->_newSku[$rowData[self::COL_SKU]]['type_id'])) {
+                    $row = $this->stockItemService->processIsInStock($row);
                     if ($this->stockItemService->verifyNotification($row['product_id'])) {
                         $row['low_stock_date'] = $this->_localeDate->date(
                             null,

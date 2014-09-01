@@ -55,7 +55,11 @@ class PrintAction extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractIn
      */
     public function execute()
     {
-        $this->invoiceLoader->load($this->_request);
+        $orderId = $this->getRequest()->getParam('order_id');
+        $invoiceId = $this->getRequest()->getParam('invoice_id');
+        $invoiceData = $this->getRequest()->getParam('invoice', []);
+        $invoiceData = isset($invoiceData['items']) ? $invoiceData['items'] : [];
+        $this->invoiceLoader->load($orderId, $invoiceId, $invoiceData);
         parent::execute();
     }
 }

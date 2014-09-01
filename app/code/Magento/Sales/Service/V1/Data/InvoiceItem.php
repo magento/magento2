@@ -30,124 +30,29 @@ use Magento\Framework\Service\Data\AbstractObject as DataObject;
  */
 class InvoiceItem extends DataObject
 {
-    /**
-     * int
-     */
     const ENTITY_ID = 'entity_id';
-
-    /**
-     * int
-     */
     const PARENT_ID = 'parent_id';
-
-    /**
-     * float
-     */
     const BASE_PRICE = 'base_price';
-
-    /**
-     * float
-     */
     const TAX_AMOUNT = 'tax_amount';
-
-    /**
-     * float
-     */
     const BASE_ROW_TOTAL = 'base_row_total';
-
-    /**
-     * float
-     */
     const DISCOUNT_AMOUNT = 'discount_amount';
-
-    /**
-     * float
-     */
     const ROW_TOTAL = 'row_total';
-
-    /**
-     * float
-     */
     const BASE_DISCOUNT_AMOUNT = 'base_discount_amount';
-
-    /**
-     * float
-     */
     const PRICE_INCL_TAX = 'price_incl_tax';
-
-    /**
-     * float
-     */
     const BASE_TAX_AMOUNT = 'base_tax_amount';
-
-    /**
-     * float
-     */
     const BASE_PRICE_INCL_TAX = 'base_price_incl_tax';
-
-    /**
-     * float
-     */
     const QTY = 'qty';
-
-    /**
-     * float
-     */
     const BASE_COST = 'base_cost';
-
-    /**
-     * float
-     */
     const PRICE = 'price';
-
-    /**
-     * float
-     */
     const BASE_ROW_TOTAL_INCL_TAX = 'base_row_total_incl_tax';
-
-    /**
-     * float
-     */
     const ROW_TOTAL_INCL_TAX = 'row_total_incl_tax';
-
-    /**
-     * int
-     */
     const PRODUCT_ID = 'product_id';
-
-    /**
-     * int
-     */
     const ORDER_ITEM_ID = 'order_item_id';
-
-    /**
-     * string
-     */
     const ADDITIONAL_DATA = 'additional_data';
-
-    /**
-     * string
-     */
     const DESCRIPTION = 'description';
-
-    /**
-     * string
-     */
     const SKU = 'sku';
-
-    /**
-     * string
-     */
     const NAME = 'name';
-
-    /**
-     * float
-     */
     const HIDDEN_TAX_AMOUNT = 'hidden_tax_amount';
-
-    /**
-     * float
-     */
     const BASE_HIDDEN_TAX_AMOUNT = 'base_hidden_tax_amount';
 
     /**

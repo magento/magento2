@@ -179,7 +179,7 @@ class Options extends \Magento\Framework\View\Element\Template
         $data['oldPrice'] = $this->_coreData->currency($option->getPrice(false), false, false);
         $data['priceValue'] = $option->getPrice(false);
         $data['type'] = $option->getPriceType();
-        $data['exclTaxPrice'] = $price = $this->_catalogData->getTaxPrice($option->getProduct(), $data['price']);
+        $data['exclTaxPrice'] = $price = $this->_catalogData->getTaxPrice($option->getProduct(), $data['price'], false);
         $data['inclTaxPrice'] = $price = $this->_catalogData->getTaxPrice($option->getProduct(), $data['price'], true);
         return $data;
     }

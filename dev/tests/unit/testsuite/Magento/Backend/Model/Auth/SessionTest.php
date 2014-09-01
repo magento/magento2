@@ -26,7 +26,7 @@ namespace Magento\Backend\Model\Auth;
 use Magento\TestFramework\Helper\ObjectManager;
 
 /**
- * Class SessionTest
+ * Class SessionTest tests Magento\Backend\Model\Auth\Session
  */
 class SessionTest extends \PHPUnit_Framework_TestCase
 {
@@ -41,9 +41,14 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     protected $sessionConfig;
 
     /**
-     * @var \Magento\Framework\Stdlib\Cookie | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\CookieManager | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $cookie;
+    protected $cookieManager;
+
+    /**
+     * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $cookieMetadataFactory;
 
     /**
      * @var \Magento\Framework\Session\Storage | \PHPUnit_Framework_MockObject_MockObject
@@ -57,8 +62,22 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $this->cookieMetadataFactory = $this->getMock(
+            'Magento\Framework\Stdlib\Cookie\CookieMetadataFactory',
+            ['createPublicCookieMetadata'],
+            [],
+            '',
+            false
+        );
+
         $this->config = $this->getMock('Magento\Backend\App\Config', ['getValue'], [], '', false);
-        $this->cookie = $this->getMock('Magento\Framework\Stdlib\Cookie', ['get', 'set'], [], '', false);
+        $this->cookieManager = $this->getMock(
+            'Magento\Framework\Stdlib\Cookie\PhpCookieManager',
+            ['getCookie', 'setPublicCookie'],
+            [],
+            '',
+            false
+        );
         $this->storage = $this->getMock('Magento\Framework\Session\Storage', ['getUser'], [], '', false);
         $this->sessionConfig = $this->getMock(
             'Magento\Framework\Session\Config',
@@ -73,7 +92,8 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             [
                 'config' => $this->config,
                 'sessionConfig' => $this->sessionConfig,
-                'cookie' => $this->cookie,
+                'cookieManager' => $this->cookieManager,
+                'cookieMetadataFactory' => $this->cookieMetadataFactory,
                 'storage' => $this->storage
             ]
         );
@@ -118,13 +138,39 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $secure = true;
         $httpOnly = true;
 
-        $this->cookie->expects($this->once())
-            ->method('get')
+        $cookieMetadata = $this->getMock('Magento\Framework\Stdlib\Cookie\PublicCookieMetadata');
+        $cookieMetadata->expects($this->once())
+            ->method('setDuration')
+            ->with($lifetime)
+            ->will($this->returnSelf());
+        $cookieMetadata->expects($this->once())
+            ->method('setPath')
+            ->with($path)
+            ->will($this->returnSelf());
+        $cookieMetadata->expects($this->once())
+            ->method('setDomain')
+            ->with($domain)
+            ->will($this->returnSelf());
+        $cookieMetadata->expects($this->once())
+            ->method('setSecure')
+            ->with($secure)
+            ->will($this->returnSelf());
+        $cookieMetadata->expects($this->once())
+            ->method('setHttpOnly')
+            ->with($httpOnly)
+            ->will($this->returnSelf());
+
+        $this->cookieMetadataFactory->expects($this->once())
+            ->method('createPublicCookieMetadata')
+            ->will($this->returnValue($cookieMetadata));
+
+        $this->cookieManager->expects($this->once())
+            ->method('getCookie')
             ->with($name)
             ->will($this->returnValue($cookie));
-        $this->cookie->expects($this->once())
-            ->method('set')
-            ->with($name, $cookie, $lifetime, $path, $domain, $secure, $httpOnly);
+        $this->cookieManager->expects($this->once())
+            ->method('setPublicCookie')
+            ->with($name, $cookie, $cookieMetadata);
 
         $this->config->expects($this->once())
             ->method('getValue')

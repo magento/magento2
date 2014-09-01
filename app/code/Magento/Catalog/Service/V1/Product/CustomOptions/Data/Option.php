@@ -24,6 +24,9 @@
 
 namespace Magento\Catalog\Service\V1\Product\CustomOptions\Data;
 
+/**
+ * @codeCoverageIgnore
+ */
 class Option extends \Magento\Framework\Service\Data\AbstractObject
 {
     const OPTION_ID = 'option_id';

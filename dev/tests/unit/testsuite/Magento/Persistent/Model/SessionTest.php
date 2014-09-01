@@ -28,53 +28,80 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Persistent\Model\Session
      */
-    protected $_model;
+    protected $session;
 
     /**
      * @var \Magento\Framework\Session\Config\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_configMock;
+    protected $configMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\Cookie|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\CookieManager |\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_cookieMock;
+    protected $cookieManagerMock;
+
+    /**
+     * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory |\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $cookieMetadataFactoryMock;
 
     protected function setUp()
     {
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_configMock = $this->getMock('Magento\Framework\Session\Config\ConfigInterface');
-        $this->_cookieMock = $this->getMock('Magento\Framework\Stdlib\Cookie', array(), array(), '', false);
-        $resourceMock = $this->getMockForAbstractClass('Magento\Framework\Model\Resource\Db\AbstractDb',
-            array(), '', false, false, true,
-            array('__wakeup', 'getIdFieldName', 'getConnection', 'beginTransaction', 'delete', 'commit', 'rollBack'));
+        $this->configMock = $this->getMock('Magento\Framework\Session\Config\ConfigInterface');
+        $this->cookieManagerMock = $this->getMockBuilder('Magento\Framework\Stdlib\CookieManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->cookieMetadataFactoryMock = $this->getMockBuilder(
+            'Magento\Framework\Stdlib\Cookie\CookieMetadataFactory'
+        )->disableOriginalConstructor()
+            ->getMock();
 
-        $appStateMock = $this->getMock('Magento\Framework\App\State', array(), array(), '', false);
-        $eventDispatcherMock = $this->getMock(
-            'Magento\Framework\Event\ManagerInterface',
-            array(),
-            array(),
+        $resourceMock = $this->getMockForAbstractClass(
+            'Magento\Framework\Model\Resource\Db\AbstractDb',
+            [],
             '',
             false,
-            false
+            false,
+            true,
+            ['__wakeup', 'getIdFieldName', 'getConnection', 'beginTransaction', 'delete', 'commit', 'rollBack']
         );
-        $cacheManagerMock = $this->getMock('Magento\Framework\App\CacheInterface', array(), array(), '', false, false);
-        $loggerMock = $this->getMock('Magento\Framework\Logger', array(), array(), '', false);
+
         $actionValidatorMock = $this->getMock(
-            '\Magento\Framework\Model\ActionValidator\RemoveAction', array(), array(), '', false
+            'Magento\Framework\Model\ActionValidator\RemoveAction',
+            [],
+            [],
+            '',
+            false
         );
         $actionValidatorMock->expects($this->any())->method('isAllowed')->will($this->returnValue(true));
 
-        $context = new \Magento\Framework\Model\Context(
-            $loggerMock, $eventDispatcherMock, $cacheManagerMock, $appStateMock, $actionValidatorMock
+        $context = $helper->getObject(
+            'Magento\Framework\Model\Context',
+            [
+                'actionValidator' => $actionValidatorMock,
+            ]
         );
 
-        $this->_model = $helper->getObject('Magento\Persistent\Model\Session', array(
-            'sessionConfig' => $this->_configMock,
-            'cookie'        => $this->_cookieMock,
-            'resource'      => $resourceMock,
-            'context'       => $context
-        ));
+        $this->session = $helper->getObject(
+            'Magento\Persistent\Model\Session',
+            [
+                'sessionConfig' => $this->configMock,
+                'cookieManager' => $this->cookieManagerMock,
+                'context'       => $context,
+                'cookieMetadataFactory' => $this->cookieMetadataFactoryMock,
+                'resource' => $resourceMock,
+            ]
+        );
+    }
+
+    public function testLoadByCookieKeyWithNull()
+    {
+        $this->cookieManagerMock->expects($this->once())
+            ->method('getCookie')
+            ->with(\Magento\Persistent\Model\Session::COOKIE_NAME)
+            ->will($this->returnValue(null));
+        $this->session->loadByCookieKey(null);
     }
 
     /**
@@ -84,17 +111,112 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     public function testAfterDeleteCommit()
     {
         $cookiePath = 'some_path';
-        $this->_configMock->expects($this->once())->method('getCookiePath')->will($this->returnValue($cookiePath));
-        $this->_cookieMock->expects(
+        $this->configMock->expects($this->once())->method('getCookiePath')->will($this->returnValue($cookiePath));
+        $cookieMetadataMock = $this->getMockBuilder('Magento\Framework\Stdlib\Cookie\CookieMetadata')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $cookieMetadataMock->expects($this->once())
+            ->method('setPath')
+            ->with($cookiePath)
+            ->will($this->returnSelf());
+        $this->cookieMetadataFactoryMock->expects($this->once())
+            ->method('createCookieMetadata')
+            ->will($this->returnValue($cookieMetadataMock));
+        $this->cookieManagerMock->expects(
             $this->once()
         )->method(
-            'set'
+            'deleteCookie'
         )->with(
             \Magento\Persistent\Model\Session::COOKIE_NAME,
-            $this->anything(),
-            $this->anything(),
-            $cookiePath
+            $cookieMetadataMock
         );
-        $this->_model->delete();
+        $this->session->delete();
+    }
+
+    public function testSetPersistentCookie()
+    {
+        $cookiePath = 'some_path';
+        $duration = 1000;
+        $key = 'sessionKey';
+        $this->session->setKey($key);
+        $cookieMetadataMock = $this->getMockBuilder('Magento\Framework\Stdlib\Cookie\PublicCookieMetadata')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $cookieMetadataMock->expects($this->once())
+            ->method('setPath')
+            ->with($cookiePath)
+            ->will($this->returnSelf());
+        $cookieMetadataMock->expects($this->once())
+            ->method('setDuration')
+            ->with($duration)
+            ->will($this->returnSelf());
+        $this->cookieMetadataFactoryMock->expects($this->once())
+            ->method('createPublicCookieMetadata')
+            ->will($this->returnValue($cookieMetadataMock));
+        $this->cookieManagerMock->expects($this->once())
+            ->method('setPublicCookie')
+            ->with(
+                \Magento\Persistent\Model\Session::COOKIE_NAME,
+                $key,
+                $cookieMetadataMock
+            );
+        $this->session->setPersistentCookie($duration, $cookiePath);
+    }
+
+    /**
+     * @param $numGetCookieCalls
+     * @param $numCalls
+     * @param int $cookieDuration
+     * @param string $cookieValue
+     * @param string $cookiePath
+     * @dataProvider renewPersistentCookieDataProvider
+     */
+    public function testRenewPersistentCookie(
+        $numGetCookieCalls,
+        $numCalls,
+        $cookieDuration = 1000,
+        $cookieValue = 'cookieValue',
+        $cookiePath = 'cookiePath'
+    ) {
+        $cookieMetadataMock = $this->getMockBuilder('Magento\Framework\Stdlib\Cookie\PublicCookieMetadata')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $cookieMetadataMock->expects($this->exactly($numCalls))
+            ->method('setPath')
+            ->with($cookiePath)
+            ->will($this->returnSelf());
+        $cookieMetadataMock->expects($this->exactly($numCalls))
+            ->method('setDuration')
+            ->with($cookieDuration)
+            ->will($this->returnSelf());
+        $this->cookieMetadataFactoryMock->expects($this->exactly($numCalls))
+            ->method('createPublicCookieMetadata')
+            ->will($this->returnValue($cookieMetadataMock));
+        $this->cookieManagerMock->expects($this->exactly($numGetCookieCalls))
+            ->method('getCookie')
+            ->with(\Magento\Persistent\Model\Session::COOKIE_NAME)
+            ->will($this->returnValue($cookieValue));
+        $this->cookieManagerMock->expects($this->exactly($numCalls))
+            ->method('setPublicCookie')
+            ->with(
+                \Magento\Persistent\Model\Session::COOKIE_NAME,
+                $cookieValue,
+                $cookieMetadataMock
+            );
+        $this->session->renewPersistentCookie($cookieDuration, $cookiePath);
+    }
+
+    /**
+     * Data provider for testRenewPersistentCookie
+     *
+     * @return array
+     */
+    public function renewPersistentCookieDataProvider()
+    {
+        return [
+            'no duration' => [0, 0, null ],
+            'no cookie' => [1, 0, 1000, null],
+            'all' => [1, 1, ],
+        ];
     }
 }

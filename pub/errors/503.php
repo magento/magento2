@@ -22,14 +22,9 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-require_once __DIR__ . '/../../app/bootstrap.php';
-require_once 'processor.php';
+require_once 'processorFactory.php';
 
-$processor = new \Magento\Framework\Error\Processor(
-    new \Magento\Framework\App\Response\Http(
-        new \Magento\Framework\Stdlib\Cookie(),
-        new \Magento\Framework\App\Http\Context()
-    )
-);
+$processorFactory = new \Magento\Framework\Error\ProcessorFactory();
+$processor = $processorFactory->createProcessor();
 $response = $processor->process503();
 $response->sendResponse();

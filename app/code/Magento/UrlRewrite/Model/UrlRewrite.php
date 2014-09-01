@@ -62,6 +62,11 @@ class UrlRewrite extends \Magento\Framework\Model\AbstractModel
     const TYPE_CUSTOM = 3;
 
     /**
+     * Field name for loading path
+     */
+    const PATH_FIELD = 'id_path';
+
+    /**
      * Cache tag for clear cache in after save and after delete
      *
      * @var array|string|boolean
@@ -76,9 +81,14 @@ class UrlRewrite extends \Magento\Framework\Model\AbstractModel
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Framework\Stdlib\Cookie
+     * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
      */
-    protected $_cookie;
+    protected $_cookieMetadataFactory;
+
+    /**
+     * @var \Magento\Framework\Stdlib\CookieManager
+     */
+    protected $_cookieManager;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -94,7 +104,8 @@ class UrlRewrite extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\Stdlib\Cookie $cookie
+     * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
+     * @param \Magento\Framework\Stdlib\CookieManager $cookieManager,
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
@@ -105,7 +116,8 @@ class UrlRewrite extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Stdlib\Cookie $cookie,
+        \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
+        \Magento\Framework\Stdlib\CookieManager $cookieManager,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
@@ -114,7 +126,8 @@ class UrlRewrite extends \Magento\Framework\Model\AbstractModel
     ) {
         $this->_scopeConfig = $scopeConfig;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
-        $this->_cookie = $cookie;
+        $this->_cookieManager = $cookieManager;
+        $this->_cookieMetadataFactory = $cookieMetadataFactory;
         $this->_storeManager = $storeManager;
         $this->_httpContext = $httpContext;
     }
@@ -171,39 +184,7 @@ class UrlRewrite extends \Magento\Framework\Model\AbstractModel
      */
     public function loadByIdPath($path)
     {
-        $this->setId(null)->load($path, 'id_path');
-        return $this;
-    }
-
-    /**
-     * @param mixed $tags
-     * @return $this
-     */
-    public function loadByTags($tags)
-    {
-        $this->setId(null);
-
-        $loadTags = is_array($tags) ? $tags : explode(',', $tags);
-
-        $search = $this->getResourceCollection();
-        foreach ($loadTags as $key => $tag) {
-            if (!is_numeric($key)) {
-                $tag = $key . '=' . $tag;
-            }
-            $search->addTagsFilter($tag);
-        }
-        if (!is_null($this->getStoreId())) {
-            $search->addStoreFilter($this->getStoreId());
-        }
-
-        $search->setPageSize(1)->load();
-
-        if ($search->getSize() > 0) {
-            foreach ($search as $rewrite) {
-                $this->setData($rewrite->getData());
-            }
-        }
-
+        $this->setId(null)->load($path, self::PATH_FIELD);
         return $this;
     }
 
@@ -216,56 +197,6 @@ class UrlRewrite extends \Magento\Framework\Model\AbstractModel
         $optArr = explode(',', $this->getOptions());
 
         return array_search($key, $optArr) !== false;
-    }
-
-    /**
-     * @param mixed $tags
-     * @return $this
-     */
-    public function addTag($tags)
-    {
-        $curTags = $this->getTags();
-
-        $addTags = is_array($tags) ? $tags : explode(',', $tags);
-
-        foreach ($addTags as $key => $tag) {
-            if (!is_numeric($key)) {
-                $tag = $key . '=' . $tag;
-            }
-            if (!in_array($tag, $curTags)) {
-                $curTags[] = $tag;
-            }
-        }
-
-        $this->setTags($curTags);
-
-        return $this;
-    }
-
-    /**
-     * @param mixed $tags
-     * @return $this
-     */
-    public function removeTag($tags)
-    {
-        $curTags = $this->getTags();
-
-        $removeTags = is_array($tags) ? $tags : explode(',', $tags);
-
-        foreach ($removeTags as $key => $tag) {
-            if (!is_numeric($key)) {
-                $tag = $key . '=' . $tag;
-            }
-
-            $tagKey = array_search($tag, $curTags);
-            if ($tagKey) {
-                unset($curTags[$tagKey]);
-            }
-        }
-
-        $this->setTags(',', $curTags);
-
-        return $this;
     }
 
     /**
@@ -308,6 +239,7 @@ class UrlRewrite extends \Magento\Framework\Model\AbstractModel
 
         $this->loadByRequestPath($requestCases);
 
+        $targetUrl = $request->getBaseUrl();
         /**
          * Try to find rewrite by request path at first, if no luck - try to find by id_path
          */
@@ -325,8 +257,14 @@ class UrlRewrite extends \Magento\Framework\Model\AbstractModel
             $currentStore = $this->_storeManager->getStore();
             $this->setStoreId($currentStore->getId())->loadByIdPath($this->getIdPath());
 
-            $this->_cookie->set(\Magento\Store\Model\Store::COOKIE_NAME, $currentStore->getCode(), true);
-            $targetUrl = $request->getBaseUrl() . '/' . $this->getRequestPath();
+            $cookieMetadata = $this->_cookieMetadataFactory->createPublicCookieMetadata()
+                ->setDurationOneYear();
+            $this->_cookieManager->setPublicCookie(
+                \Magento\Store\Model\Store::COOKIE_NAME,
+                $currentStore->getCode(),
+                $cookieMetadata
+            );
+            $targetUrl .= '/' . $this->getRequestPath();
 
             $this->_sendRedirectHeaders($targetUrl, true);
         }
@@ -341,10 +279,18 @@ class UrlRewrite extends \Magento\Framework\Model\AbstractModel
         $isPermanentRedirectOption = $this->hasOption('RP');
         if ($external === 'http:/' || $external === 'https:') {
             $destinationStoreCode = $this->_storeManager->getStore($this->getStoreId())->getCode();
-            $this->_cookie->set(\Magento\Store\Model\Store::COOKIE_NAME, $destinationStoreCode, true);
+
+            $cookieMetadata = $this->_cookieMetadataFactory->createPublicCookieMetadata()
+                ->setDurationOneYear();
+            $this->_cookieManager->setPublicCookie(
+                \Magento\Store\Model\Store::COOKIE_NAME,
+                $destinationStoreCode,
+                $cookieMetadata
+            );
+
             $this->_sendRedirectHeaders($this->getTargetPath(), $isPermanentRedirectOption);
         } else {
-            $targetUrl = $request->getBaseUrl() . '/' . $this->getTargetPath();
+            $targetUrl .= '/' . $this->getTargetPath();
         }
         $isRedirectOption = $this->hasOption('R');
         $isStoreInUrl = $this->_scopeConfig->getValue(
@@ -353,20 +299,23 @@ class UrlRewrite extends \Magento\Framework\Model\AbstractModel
         );
         if ($isRedirectOption || $isPermanentRedirectOption) {
             if ($isStoreInUrl && ($storeCode = $this->_storeManager->getStore()->getCode())) {
-                $targetUrl = $request->getBaseUrl() . '/' . $storeCode . '/' . $this->getTargetPath();
+                $targetUrl .= '/' . $storeCode . '/' . $this->getTargetPath();
             }
 
             $this->_sendRedirectHeaders($targetUrl, $isPermanentRedirectOption);
         }
 
         if ($isStoreInUrl && ($storeCode = $this->_storeManager->getStore()->getCode())) {
-            $targetUrl = $request->getBaseUrl() . '/' . $storeCode . '/' . $this->getTargetPath();
+            $targetUrl .= '/' . $storeCode . '/' . $this->getTargetPath();
         }
 
         $queryString = $this->_getQueryString();
         if ($queryString) {
+
+
             $targetUrl .= '?' . $queryString;
         }
+
 
         $request->setRequestUri($targetUrl);
         $request->setPathInfo($this->getTargetPath());

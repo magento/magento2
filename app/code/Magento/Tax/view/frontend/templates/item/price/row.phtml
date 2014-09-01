@@ -29,7 +29,7 @@ $_item = $this->getItem();
 <?php if (($this->displayPriceInclTax() || $this->displayBothPrices()) && !$_item->getNoSubtotal()): ?>
     <span class="incl tax" data-th="<?php echo $this->escapeHtml(__('Incl. Tax'));?>">
         <span class="cart price">
-            <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($_item->getRowTotalInclTax()) ?>
+            <?php echo $this->formatPrice($_item->getRowTotalInclTax()) ?>
         </span>
     </span>
 <?php endif; ?>
@@ -37,7 +37,7 @@ $_item = $this->getItem();
 <?php if (($this->displayPriceExclTax() || $this->displayBothPrices()) && !$_item->getNoSubtotal()): ?>
     <span class="excl tax" data-th="<?php echo $this->escapeHtml(__('Excl. Tax'));?>">
         <span class="cart price">
-            <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($_item->getRowTotal()) ?>
+            <?php echo $this->formatPrice($_item->getRowTotal()) ?>
         </span>
     </span>
 <?php endif; ?>

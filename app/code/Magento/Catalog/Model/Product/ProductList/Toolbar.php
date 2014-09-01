@@ -23,6 +23,8 @@
  */
 namespace Magento\Catalog\Model\Product\ProductList;
 
+use Magento\Framework\Stdlib\CookieManager;
+
 /**
  * Class Toolbar
  */
@@ -54,11 +56,11 @@ class Toolbar
     const LIMIT_COOKIE_NAME = 'product_list_limit';
 
     /**
-     * Cookie
+     * Cookie manager
      *
-     * @var \Magento\Framework\Stdlib\Cookie
+     * @var CookieManager
      */
-    protected $cookie;
+    protected $cookieManager;
 
     /**
      * Request
@@ -68,14 +70,14 @@ class Toolbar
     protected $request;
 
     /**
-     * @param \Magento\Framework\Stdlib\Cookie $cookie
+     * @param CookieManager $cookieManager
      * @param \Magento\Framework\App\Request\Http $request
      */
     public function __construct(
-        \Magento\Framework\Stdlib\Cookie $cookie,
+        CookieManager $cookieManager,
         \Magento\Framework\App\Request\Http $request
     ) {
-        $this->cookie = $cookie;
+        $this->cookieManager = $cookieManager;
         $this->request = $request;
     }
 
@@ -86,7 +88,7 @@ class Toolbar
      */
     public function getOrder()
     {
-        return $this->cookie->get(self::ORDER_COOKIE_NAME);
+        return $this->cookieManager->getCookie(self::ORDER_COOKIE_NAME);
     }
 
     /**
@@ -96,7 +98,7 @@ class Toolbar
      */
     public function getDirection()
     {
-        return $this->cookie->get(self::DIRECTION_COOKIE_NAME);
+        return $this->cookieManager->getCookie(self::DIRECTION_COOKIE_NAME);
     }
 
     /**
@@ -106,7 +108,7 @@ class Toolbar
      */
     public function getMode()
     {
-        return $this->cookie->get(self::MODE_COOKIE_NAME);
+        return $this->cookieManager->getCookie(self::MODE_COOKIE_NAME);
     }
 
     /**
@@ -116,7 +118,7 @@ class Toolbar
      */
     public function getLimit()
     {
-        return $this->cookie->get(self::LIMIT_COOKIE_NAME);
+        return $this->cookieManager->getCookie(self::LIMIT_COOKIE_NAME);
     }
     /**
      * Return current page from request

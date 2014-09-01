@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -26,6 +25,11 @@ namespace Magento\Sales\Controller\Adminhtml\Order;
 
 use \Magento\Backend\App\Action;
 
+/**
+ * Class Email
+ *
+ * @package Magento\Sales\Controller\Adminhtml\Order
+ */
 class Email extends \Magento\Sales\Controller\Adminhtml\Order
 {
     /**
@@ -38,22 +42,8 @@ class Email extends \Magento\Sales\Controller\Adminhtml\Order
         $order = $this->_initOrder();
         if ($order) {
             try {
-                /** @var \Magento\Sales\Model\Order\Email\Sender\OrderSender $orderSender */
-                $orderSender = $this->_objectManager->create(
-                    'Magento\Sales\Model\Order\Email\Sender\OrderSender'
-                );
-                $orderSender->send($order);
-
-                $historyItem = $this->_objectManager->create(
-                    'Magento\Sales\Model\Resource\Order\Status\History\Collection'
-                )->getUnnotifiedForInstance(
-                    $order,
-                    \Magento\Sales\Model\Order::HISTORY_ENTITY_NAME
-                );
-                if ($historyItem) {
-                    $historyItem->setIsCustomerNotified(1);
-                    $historyItem->save();
-                }
+                $this->_objectManager->create('Magento\Sales\Model\OrderNotifier')
+                    ->notify($order);
                 $this->messageManager->addSuccess(__('You sent the order email.'));
             } catch (\Magento\Framework\Model\Exception $e) {
                 $this->messageManager->addError($e->getMessage());
@@ -61,7 +51,7 @@ class Email extends \Magento\Sales\Controller\Adminhtml\Order
                 $this->messageManager->addError(__('We couldn\'t send the email order.'));
                 $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
             }
+            $this->_redirect('sales/order/view', array('order_id' => $order->getId()));
         }
-        $this->_redirect('sales/order/view', array('order_id' => $order->getId()));
     }
 }

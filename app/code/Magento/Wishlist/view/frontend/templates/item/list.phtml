@@ -26,33 +26,26 @@
 /** @var \Magento\Wishlist\Block\Customer\Wishlist\Items $this */
 $columns = $this->getColumns();
 ?>
-<div class="wishlist table-wrapper">
-    <table class="table data wishlist" id="wishlist-table">
-        <caption class="table caption"><?php echo __('Wish List') ?></caption>
-        <thead>
-            <tr>
+
+<div class="products-grid wishlist">
+    <?php $iterator = 1; ?>
+    <?php if (count($this->getItems())): ?>
+    <ol class="product-items">
+        <?php foreach ($this->getItems() as $item): ?>
+        <?php echo ($iterator++==1) ? '<li class="product-item" id="item_<?php echo $item->getId();?>">' : '</li><li class="product-item" id="item_<?php echo $item->getId();?>">' ?>
+            <div class="product-item-info">
                 <?php foreach ($columns as $column): ?>
-                    <th class="col <?php echo $column->getColClass(); ?>"><?php echo $column->getTitle();?></th>
+                    <?php $column->setItem($item); echo $column->toHtml($item);?>
                 <?php endforeach; ?>
-            </tr>
-        </thead>
-        <tbody>
-        <?php if (count($this->getItems())): ?>
-            <?php foreach ($this->getItems() as $item): ?>
-                <tr id="item_<?php echo $item->getId();?>">
-                    <?php foreach ($columns as $column): ?>
-                        <td class="col <?php echo $column->getColClass(); ?>">
-                            <?php $column->setItem($item); echo $column->toHtml($item);?>
-                        </td>
-                    <?php endforeach; ?>
-                </tr>
-            <?php endforeach ?>
-        <?php else: ?>
-            <td colspan="<?php echo count($columns);?>" class="col empty"><?php echo __('This Wish List has no Items');?></td>
-        <?php endif; ?>
-        </tbody>
-    </table>
+            </div>
+        <?php echo ($iterator==count($this->getItems())+1) ? '</li>' : '' ?>
+        <?php endforeach; ?>
+    </ol>
+    <?php else: ?>
+        <div class="message info empty"><span><?php echo __('This Wish List has no Items');?></span></div>
+    <?php endif; ?>
 </div>
+
 <?php foreach ($columns as $column): ?>
     <?php echo $column->getAdditionalHtml();?>
 <?php endforeach; ?>

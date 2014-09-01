@@ -111,22 +111,22 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
     {
         $this->request = $this->getMock(
             'Magento\Framework\App\RequestInterface',
-            array('isPost', 'getModuleName', 'setModuleName', 'getActionName', 'setActionName', 'getParam'),
-            array(),
+            ['isPost', 'getModuleName', 'setModuleName', 'getActionName', 'setActionName', 'getParam', 'getCookie'],
+            [],
             '',
             false
         );
         $this->response = $this->getMock(
             'Magento\Framework\App\ResponseInterface',
             array('setRedirect', 'sendResponse'),
-            array(),
+            [],
             '',
             false
         );
         $this->customerSession = $this->getMock(
             '\Magento\Customer\Model\Session',
             array('isLoggedIn', 'getLastCustomerId', 'getBeforeAuthUrl', 'setBeforeAuthUrl'),
-            array(),
+            [],
             '',
             false
         );
@@ -134,28 +134,28 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = $this->getMock(
             '\Magento\Framework\ObjectManager\ObjectManager',
             array('get'),
-            array(),
+            [],
             '',
             false
         );
         $this->_formKeyValidator = $this->getMock(
             'Magento\Core\App\Action\FormKeyValidator',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
         $this->customerHelperMock = $this->getMock(
             'Magento\Customer\Helper\Data',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
         $this->formFactoryMock = $this->getMock(
             'Magento\Customer\Model\Metadata\FormFactory',
-            array(),
-            array(),
+            [],
+            [],
             '',
             false
         );
@@ -214,7 +214,7 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
                     ),
                     array(
                         'Magento\Core\Helper\Data',
-                        $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false)
+                        $this->getMock('Magento\Core\Helper\Data', [], [], '', false)
                     )
                 )
             )

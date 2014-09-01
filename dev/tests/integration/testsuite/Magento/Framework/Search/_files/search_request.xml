@@ -25,14 +25,13 @@
 -->
 <requests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <request query="suggested_search_container" index="product">
+        <dimensions>
+            <dimension name="scope" value="default" />
+        </dimensions>
         <queries>
             <query xsi:type="boolQuery" name="suggested_search_container" boost="2">
                 <queryReference clause="must" ref="fulltext_search_query" />
                 <queryReference clause="should" ref="fulltext_search_query2" />
-            </query>
-
-            <query xsi:type="filteredQuery" name="fulltext_search_query1">
-                <queryReference ref="fulltext_search_query" />
             </query>
 
             <query xsi:type="matchQuery" name="fulltext_search_query" boost="5">
@@ -52,6 +51,29 @@
             <filter xsi:type="rangeFilter" field="promoted_boost" name="price_name" from="10" to="100" />
             <filter xsi:type="termFilter" name="price_name1" field="price_name" value="$name" />
         </filters>
+        <aggregation>
+            <bucket xsi:type="termBucket" name="category_bucket" field="category">
+                <metrics>
+                    <metric type="sum" />
+                    <metric type="count" />
+                    <metric type="min" />
+                    <metric type="max" />
+                </metrics>
+            </bucket>
+            <bucket xsi:type="rangeBucket" name="price_bucket" field="price">
+                <metrics>
+                    <metric type="sum" />
+                    <metric type="count" />
+                    <metric type="min" />
+                    <metric type="max" />
+                </metrics>
+                <ranges>
+                    <range from="" to="50" />
+                    <range from="50" to="100" />
+                    <range from="100" to=""/>
+                </ranges>
+            </bucket>
+        </aggregation>
         <from>10</from>
         <size>10</size>
     </request>

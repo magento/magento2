@@ -27,6 +27,9 @@ namespace Magento\Catalog\Service\V1\Data;
 
 use \Magento\Framework\Service\Data\AbstractObject;
 
+/**
+ * @codeCoverageIgnore
+ */
 class ProductType extends AbstractObject
 {
     const NAME = 'name';

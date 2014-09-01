@@ -23,69 +23,120 @@
  */
 namespace Magento\Framework\App\Response;
 
+use Magento\Framework\Stdlib\Cookie\PublicCookieMetadata;
+use Magento\Framework\Stdlib\Cookie\CookieMetadata;
+
 class HttpTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Framework\App\Response\Http
      */
-    protected $_model;
+    protected $model;
 
     /**
-     * @var \Magento\Framework\Stdlib\Cookie|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Stdlib\CookieManager
      */
-    protected $_cookieMock;
+    protected $cookieManagerMock;
 
     /**
-     * @var \Magento\Framework\App\Http\Context
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
      */
-    protected $_context;
+    protected $cookieMetadataFactoryMock;
+
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Http\Context
+     */
+    protected $contextMock;
 
     protected function setUp()
     {
-        $this->_cookieMock = $this->getMock('Magento\Framework\Stdlib\Cookie', array(), array(), '', false);
-        $this->_context = new \Magento\Framework\App\Http\Context();
-        $this->_model = new Http($this->_cookieMock, $this->_context);
-        $this->_model->headersSentThrowsException = false;
-        $this->_model->setHeader('name', 'value');
+        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->cookieMetadataFactoryMock = $this->getMockBuilder(
+            'Magento\Framework\Stdlib\Cookie\CookieMetadataFactory'
+        )->disableOriginalConstructor()->getMock();
+        $this->cookieManagerMock = $this->getMockBuilder('Magento\Framework\Stdlib\CookieManager')
+            ->disableOriginalConstructor()->getMock();
+        $this->contextMock = $this->getMockBuilder('Magento\Framework\App\Http\Context')->disableOriginalConstructor()
+            ->getMock();
+        $this->model = $objectManager->getObject(
+            'Magento\Framework\App\Response\Http',
+            [
+                'cookieManager' => $this->cookieManagerMock,
+                'cookieMetadataFactory' => $this->cookieMetadataFactoryMock,
+                'context' => $this->contextMock
+            ]
+        );
+        $this->model->headersSentThrowsException = false;
+        $this->model->setHeader('name', 'value');
     }
 
     protected function tearDown()
     {
-        unset($this->_model);
+        unset($this->model);
     }
 
     public function testGetHeaderWhenHeaderNameIsEqualsName()
     {
         $expected = array('name' => 'Name', 'value' => 'value', 'replace' => false);
-        $actual = $this->_model->getHeader('Name');
+        $actual = $this->model->getHeader('Name');
         $this->assertEquals($expected, $actual);
     }
 
     public function testGetHeaderWhenHeaderNameIsNotEqualsName()
     {
-        $this->assertFalse($this->_model->getHeader('Test'));
+        $this->assertFalse($this->model->getHeader('Test'));
     }
 
     public function testSendVary()
     {
-        $vary = array('some-vary-key' => 'some-vary-value');
-        $expected = sha1(serialize($vary));
+        $data = ['some-vary-key' => 'some-vary-value'];
+        $expectedCookieName = Http::COOKIE_VARY_STRING;
+        $expectedCookieValue = sha1(serialize($data));
+        $publicCookieMetadataMock = $this->getMock('Magento\Framework\Stdlib\Cookie\PublicCookieMetadata');
+        $publicCookieMetadataMock->expects($this->once())
+            ->method('setPath')
+            ->with('/')
+            ->will($this->returnSelf());
 
-        $this->_context->setValue('some-vary-key', 'some-vary-value', 'default');
-        $this->_cookieMock
-            ->expects($this->once())
-            ->method('set')
-            ->with(Http::COOKIE_VARY_STRING, $expected);
-        $this->_model->sendVary();
+        $this->contextMock->expects($this->once())
+            ->method('getData')
+            ->with()
+            ->will(
+                $this->returnValue($data)
+            );
+
+        $this->cookieMetadataFactoryMock->expects($this->once())
+            ->method('createPublicCookieMetadata')
+            ->with()
+            ->will(
+                $this->returnValue($publicCookieMetadataMock)
+            );
+
+        $this->cookieManagerMock->expects($this->once())
+            ->method('setPublicCookie')
+            ->with($expectedCookieName, $expectedCookieValue, $publicCookieMetadataMock);
+        $this->model->sendVary();
     }
 
     public function testSendVaryEmptyData()
     {
-        $this->_cookieMock
-            ->expects($this->once())
-            ->method('set')
-            ->with(Http::COOKIE_VARY_STRING, null, -1, '/');
-        $this->_model->sendVary();
+        $expectedCookieName = Http::COOKIE_VARY_STRING;
+        $cookieMetadataMock = $this->getMock('Magento\Framework\Stdlib\Cookie\CookieMetadata');
+        $cookieMetadataMock->expects($this->once())
+            ->method('setPath')
+            ->with('/')
+            ->will($this->returnSelf());
+
+        $this->cookieMetadataFactoryMock->expects($this->once())
+            ->method('createCookieMetadata')
+            ->with()
+            ->will($this->returnValue($cookieMetadataMock));
+
+        $this->cookieManagerMock->expects($this->once())
+            ->method('deleteCookie')
+            ->with($expectedCookieName, $cookieMetadataMock);
+        $this->model->sendVary();
     }
 
     /**
@@ -98,10 +149,10 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $cacheControl = 'public, max-age=' . $ttl . ', s-maxage=' . $ttl;
         $between = 1000;
 
-        $this->_model->setPublicHeaders($ttl);
-        $this->assertEquals($pragma, $this->_model->getHeader('Pragma')['value']);
-        $this->assertEquals($cacheControl, $this->_model->getHeader('Cache-Control')['value']);
-        $expiresResult = time($this->_model->getHeader('Expires')['value']);
+        $this->model->setPublicHeaders($ttl);
+        $this->assertEquals($pragma, $this->model->getHeader('Pragma')['value']);
+        $this->assertEquals($cacheControl, $this->model->getHeader('Cache-Control')['value']);
+        $expiresResult = time($this->model->getHeader('Expires')['value']);
         $this->assertTrue($expiresResult > $between || $expiresResult < $between);
     }
 
@@ -114,7 +165,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
             'InvalidArgumentException',
             'Time to live is a mandatory parameter for set public headers'
         );
-        $this->_model->setPublicHeaders(null);
+        $this->model->setPublicHeaders(null);
     }
 
     /**
@@ -127,10 +178,10 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $cacheControl = 'private, max-age=' . $ttl;
         $expires = gmdate('D, d M Y H:i:s T', strtotime('+' . $ttl . ' seconds'));
 
-        $this->_model->setPrivateHeaders($ttl);
-        $this->assertEquals($pragma, $this->_model->getHeader('Pragma')['value']);
-        $this->assertEquals($cacheControl, $this->_model->getHeader('Cache-Control')['value']);
-        $this->assertEquals($expires, $this->_model->getHeader('Expires')['value']);
+        $this->model->setPrivateHeaders($ttl);
+        $this->assertEquals($pragma, $this->model->getHeader('Pragma')['value']);
+        $this->assertEquals($cacheControl, $this->model->getHeader('Cache-Control')['value']);
+        $this->assertEquals($expires, $this->model->getHeader('Expires')['value']);
     }
 
     /**
@@ -142,7 +193,7 @@ class HttpTest extends \PHPUnit_Framework_TestCase
             'InvalidArgumentException',
             'Time to live is a mandatory parameter for set private headers'
         );
-        $this->_model->setPrivateHeaders(null);
+        $this->model->setPrivateHeaders(null);
     }
 
     /**
@@ -154,10 +205,10 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $cacheControl = 'no-store, no-cache, must-revalidate, max-age=0';
         $expires = gmdate('D, d M Y H:i:s T', strtotime('-1 year'));
 
-        $this->_model->setNoCacheHeaders();
-        $this->assertEquals($pragma, $this->_model->getHeader('Pragma')['value']);
-        $this->assertEquals($cacheControl, $this->_model->getHeader('Cache-Control')['value']);
-        $this->assertEquals($expires, $this->_model->getHeader('Expires')['value']);
+        $this->model->setNoCacheHeaders();
+        $this->assertEquals($pragma, $this->model->getHeader('Pragma')['value']);
+        $this->assertEquals($cacheControl, $this->model->getHeader('Cache-Control')['value']);
+        $this->assertEquals($expires, $this->model->getHeader('Expires')['value']);
     }
 
     /**
@@ -165,9 +216,80 @@ class HttpTest extends \PHPUnit_Framework_TestCase
      */
     public function testRepresentJson()
     {
-        $this->_model->setHeader('Content-Type', 'text/javascript');
-        $this->_model->representJson('json_string');
-        $this->assertEquals('application/json', $this->_model->getHeader('Content-Type')['value']);
-        $this->assertEquals('json_string', $this->_model->getBody('default'));
+        $this->model->setHeader('Content-Type', 'text/javascript');
+        $this->model->representJson('json_string');
+        $this->assertEquals('application/json', $this->model->getHeader('Content-Type')['value']);
+        $this->assertEquals('json_string', $this->model->getBody('default'));
+    }
+
+    /**
+     * Test for getHeader method
+     *
+     * @dataProvider headersDataProvider
+     * @covers       \Magento\Framework\App\Response\Http::getHeader
+     * @param string $header
+     */
+    public function testGetHeaderExists($header)
+    {
+        $this->model->setHeader($header['name'], $header['value'], $header['replace']);
+        $this->assertEquals($header, $this->model->getHeader($header['name']));
+    }
+
+    /**
+     * Data provider for testGetHeader
+     *
+     * @return array
+     */
+    public function headersDataProvider()
+    {
+        return [
+            [['name' => 'X-Frame-Options', 'value' => 'SAMEORIGIN', 'replace' => true]],
+            [['name' => 'Test2', 'value' => 'Test2', 'replace' => false]]
+        ];
+    }
+
+    /**
+     * Test for getHeader method. Validation for attempt to get not existing header
+     *
+     * @covers \Magento\Framework\App\Response\Http::getHeader
+     */
+    public function testGetHeaderNotExists()
+    {
+        $this->model->setHeader('Name', 'value', true);
+        $this->assertFalse($this->model->getHeader('Wrong name'));
+    }
+
+    /**
+     *
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage ObjectManager isn't initialized
+     */
+    public function testWakeUpWithException()
+    {
+        $this->model->__wakeup();
+        $this->assertNull($this->cookieMetadataFactoryMock);
+        $this->assertNull($this->cookieManagerMock);
+    }
+
+    /**
+     * Test for the magic method __wakeup
+     *
+     * @covers \Magento\Framework\App\Response\Http::__wakeup
+     */
+    public function testWakeUpWith()
+    {
+        $objectManagerMock = $this->getMock('Magento\Framework\App\ObjectManager', [], [], '', false);
+        $objectManagerMock->expects($this->once())
+            ->method('create')
+            ->with('Magento\Framework\Stdlib\CookieManager')
+            ->will($this->returnValue($this->cookieManagerMock));
+
+        $objectManagerMock->expects($this->once())
+            ->method('get')
+            ->with('Magento\Framework\Stdlib\Cookie\CookieMetadataFactory')
+            ->will($this->returnValue($this->cookieMetadataFactoryMock));
+
+        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
+        $this->model->__wakeup();
     }
 }

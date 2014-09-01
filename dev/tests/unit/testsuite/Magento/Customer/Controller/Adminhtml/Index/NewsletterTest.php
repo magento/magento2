@@ -92,11 +92,10 @@ class NewsletterTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->_response = $this->getMockBuilder(
-            'Magento\Framework\App\Response\Http'
-        )->disableOriginalConstructor()->setMethods(
-                array('setRedirect', 'getHeader')
-            )->getMock();
+        $this->_response = $this->getMockBuilder('Magento\Framework\App\Response\Http')
+            ->disableOriginalConstructor()
+            ->setMethods(['setRedirect', 'getHeader', '__wakeup'])
+            ->getMock();
 
         $this->_response->expects(
             $this->any()

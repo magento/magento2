@@ -24,6 +24,7 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
+    <update handle="sales_order_create_item_price"/>
     <referenceContainer name="content">
         <block class="Magento\Sales\Block\Adminhtml\Order\Create\Data" template="order/create/data.phtml" name="data">
             <block class="Magento\Sales\Block\Adminhtml\Order\Create\Sidebar" template="order/create/sidebar.phtml" name="sidebar">

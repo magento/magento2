@@ -323,57 +323,6 @@ class AbstractItems extends \Magento\Backend\Block\Template
     }
 
     /**
-     * Retrieve include tax html formatted content
-     *
-     * @param \Magento\Framework\Object $item
-     * @return string
-     */
-    public function displayPriceInclTax(\Magento\Framework\Object $item)
-    {
-        $qty = $item->getQtyOrdered() ? $item->getQtyOrdered() : ($item->getQty() ? $item->getQty() : 1);
-
-        $baseTax = $item->getTaxBeforeDiscount()
-            ? $item->getTaxBeforeDiscount()
-            : ($item->getTaxAmount() ? $item->getTaxAmount() : 0);
-
-        $tax = $item->getBaseTaxBeforeDiscount()
-            ? $item->getBaseTaxBeforeDiscount()
-            : ($item->getBaseTaxAmount() ? $item->getBaseTaxAmount() : 0);
-
-        $basePriceTax = 0;
-        $priceTax = 0;
-
-        if (floatval($qty)) {
-            $basePriceTax = $item->getBasePrice() + $baseTax / $qty;
-            $priceTax = $item->getPrice() + $tax / $qty;
-        }
-
-        return $this->displayPrices(
-            $this->getOrder()->getStore()->roundPrice($basePriceTax),
-            $this->getOrder()->getStore()->roundPrice($priceTax)
-        );
-    }
-
-    /**
-     * Retrieve subtotal price include tax html formated content
-     *
-     * @param \Magento\Framework\Object $item
-     * @return string
-     */
-    public function displaySubtotalInclTax($item)
-    {
-        $baseTax = $item->getTaxBeforeDiscount()
-            ? $item->getTaxBeforeDiscount()
-            : ($item->getTaxAmount() ? $item->getTaxAmount() : 0);
-
-        $tax = $item->getBaseTaxBeforeDiscount()
-            ? $item->getBaseTaxBeforeDiscount()
-            : ($item->getBaseTaxAmount() ? $item->getBaseTaxAmount() : 0);
-
-        return $this->displayPrices($item->getBaseRowTotal() + $baseTax, $item->getRowTotal() + $tax);
-    }
-
-    /**
      * Retrieve tax calculation html content
      *
      * @param \Magento\Framework\Object $item

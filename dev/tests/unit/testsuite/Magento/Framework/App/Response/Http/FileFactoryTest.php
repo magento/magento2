@@ -76,8 +76,8 @@ class FileFactoryTest extends \PHPUnit_Framework_TestCase
         );
         $this->_responseMock = $this->getMock(
             'Magento\Framework\App\Response\Http',
-            array('setHeader', 'sendHeaders'),
-            array(),
+            ['setHeader', 'sendHeaders', '__wakeup'],
+            [],
             '',
             false
         );

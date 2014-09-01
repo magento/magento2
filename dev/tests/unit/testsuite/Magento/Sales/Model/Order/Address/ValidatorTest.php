@@ -54,7 +54,11 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Run test validate
+     *
      * @param $addressData
+     * @param $email
+     * @param $addressType
      * @param $expectedWarnings
      * @dataProvider providerAddressData
      */

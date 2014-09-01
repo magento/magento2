@@ -82,13 +82,45 @@ require([
         unconvertedText: '',
         typeChange: false,
         variables: null,
+        
+        events: {
+            'click [data-role=template-save]' : 'save',
+            'click [data-role=template-preview]' : 'preview',
+            'click [data-role=template-unstrip]' : 'unStripTags',
+            'click [data-role=template-strip]' : 'stripTags',
+            'click [data-role=template-delete]': 'deleteTemplate',
+            'click [data-role=template-load]': 'load'
+        },
+
         init: function () {
             if ($('convert_button_back')) {
                 $('convert_button_back').hide();
             }
+            
+            this.bindEvents();
+
             this.renderPaths(<?php echo $this->getUsedDefaultForPaths(); ?>, 'used_default_for');
             this.renderPaths(<?php echo $this->getUsedCurrentlyForPaths(); ?>, 'used_currently_for');
         },
+        
+        bindEvents: function(){
+            var events = this.events,
+                eventName,
+                selector,
+                callback,
+                key;
+
+            for( key in events ){
+                callback    = this[events[key]];
+                key         = key.split(' ');
+
+                eventName   = key[0];
+                selector    = key.slice(1).join(' ');
+                
+                jQuery(selector).on(eventName, jQuery.proxy(callback, this) );
+            }
+        },
+
         stripTags: function () {
             if(!window.confirm("<?php echo __('Are you sure that you want to strip tags?') ?>")) {
                 return false;

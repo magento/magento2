@@ -25,6 +25,8 @@ namespace Magento\Catalog\Service\V1\Data\Eav;
 
 /**
  * Contains basic attribute set data
+ *
+ * @codeCoverageIgnore
  */
 class AttributeSet extends \Magento\Framework\Service\Data\AbstractObject
 {

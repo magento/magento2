@@ -26,6 +26,8 @@ namespace Magento\Catalog\Service\V1\Product\Link\Data;
 
 /**
  * LinkType Service Data Object
+ *
+ * @codeCoverageIgnore
  */
 class LinkType extends \Magento\Framework\Service\Data\AbstractObject
 {

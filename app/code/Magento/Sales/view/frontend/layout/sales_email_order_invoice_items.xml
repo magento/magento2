@@ -25,6 +25,7 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd" label="Email Invoice Items List" design_abstraction="custom">
     <update handle="sales_email_order_invoice_renderers" />
+    <update handle="sales_email_item_price" />
     <block class="Magento\Sales\Block\Order\Email\Invoice\Items" name="items" template="email/invoice/items.phtml">
         <block class="Magento\Framework\View\Element\RendererList" name="sales.email.order.invoice.renderers" as="renderer.list" />
         <block class="Magento\Sales\Block\Order\Invoice\Totals" name="invoice_totals" template="order/totals.phtml" cacheable="false">

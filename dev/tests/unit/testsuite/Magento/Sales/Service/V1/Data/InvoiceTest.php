@@ -748,22 +748,6 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
 
         $object = new \Magento\Sales\Service\V1\Data\Invoice($abstractBuilderMock);
 
-        $this->assertEquals('test_value_items', $object->getItems());
-    }
-
-    public function testGetComments()
-    {
-        $data = ['comments' => 'test_value_comments'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractObjectBuilder')
-            ->setMethods(['getData'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $abstractBuilderMock->expects($this->once())
-            ->method('getData')
-            ->will($this->returnValue($data));
-
-        $object = new \Magento\Sales\Service\V1\Data\Invoice($abstractBuilderMock);
-
-        $this->assertEquals('test_value_comments', $object->getComments());
+        $this->assertEquals(['test_value_items'], $object->getItems());
     }
 }

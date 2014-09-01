@@ -27,6 +27,8 @@ use Magento\Framework\Service\Data\AbstractObject;
 
 /**
  * Low stock search result data object
+ *
+ * @codeCoverageIgnore
  */
 class LowStockResult extends AbstractObject
 {

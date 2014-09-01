@@ -150,9 +150,9 @@
         <var name="customer_shared_wishlist:height">113</var>
 
         <var name="wishlist_thumbnail:type">small_image</var>
-        <var name="wishlist_thumbnail:width">113</var>
+        <var name="wishlist_thumbnail:width">200</var>
         <var name="wishlist_thumbnail:ratio">1</var>
-        <var name="wishlist_thumbnail:height">113</var>
+        <var name="wishlist_thumbnail:height">200</var>
 
         <var name="wishlist_sidebar_block:type">thumbnail</var>
         <var name="wishlist_sidebar_block:width">50</var>

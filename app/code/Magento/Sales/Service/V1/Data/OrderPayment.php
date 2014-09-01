@@ -30,274 +30,59 @@ use Magento\Framework\Service\Data\AbstractObject as DataObject;
  */
 class OrderPayment extends DataObject
 {
-    /**
-     * int
-     */
     const ENTITY_ID = 'entity_id';
-
-    /**
-     * int
-     */
     const PARENT_ID = 'parent_id';
-
-    /**
-     * float
-     */
     const BASE_SHIPPING_CAPTURED = 'base_shipping_captured';
-
-    /**
-     * float
-     */
     const SHIPPING_CAPTURED = 'shipping_captured';
-
-    /**
-     * float
-     */
     const AMOUNT_REFUNDED = 'amount_refunded';
-
-    /**
-     * float
-     */
     const BASE_AMOUNT_PAID = 'base_amount_paid';
-
-    /**
-     * float
-     */
     const AMOUNT_CANCELED = 'amount_canceled';
-
-    /**
-     * float
-     */
     const BASE_AMOUNT_AUTHORIZED = 'base_amount_authorized';
-
-    /**
-     * float
-     */
     const BASE_AMOUNT_PAID_ONLINE = 'base_amount_paid_online';
-
-    /**
-     * float
-     */
     const BASE_AMOUNT_REFUNDED_ONLINE = 'base_amount_refunded_online';
-
-    /**
-     * float
-     */
     const BASE_SHIPPING_AMOUNT = 'base_shipping_amount';
-
-    /**
-     * float
-     */
     const SHIPPING_AMOUNT = 'shipping_amount';
-
-    /**
-     * float
-     */
     const AMOUNT_PAID = 'amount_paid';
-
-    /**
-     * float
-     */
     const AMOUNT_AUTHORIZED = 'amount_authorized';
-
-    /**
-     * float
-     */
     const BASE_AMOUNT_ORDERED = 'base_amount_ordered';
-
-    /**
-     * float
-     */
     const BASE_SHIPPING_REFUNDED = 'base_shipping_refunded';
-
-    /**
-     * float
-     */
     const SHIPPING_REFUNDED = 'shipping_refunded';
-
-    /**
-     * float
-     */
     const BASE_AMOUNT_REFUNDED = 'base_amount_refunded';
-
-    /**
-     * float
-     */
     const AMOUNT_ORDERED = 'amount_ordered';
-
-    /**
-     * float
-     */
     const BASE_AMOUNT_CANCELED = 'base_amount_canceled';
-
-    /**
-     * int
-     */
     const QUOTE_PAYMENT_ID = 'quote_payment_id';
-
-    /**
-     * string
-     */
     const ADDITIONAL_DATA = 'additional_data';
-
-    /**
-     * string
-     */
     const CC_EXP_MONTH = 'cc_exp_month';
-
-    /**
-     * string
-     */
     const CC_SS_START_YEAR = 'cc_ss_start_year';
-
-    /**
-     * string
-     */
     const ECHECK_BANK_NAME = 'echeck_bank_name';
-
-    /**
-     * string
-     */
     const METHOD = 'method';
-
-    /**
-     * string
-     */
     const CC_DEBUG_REQUEST_BODY = 'cc_debug_request_body';
-
-    /**
-     * string
-     */
     const CC_SECURE_VERIFY = 'cc_secure_verify';
-
-    /**
-     * string
-     */
     const PROTECTION_ELIGIBILITY = 'protection_eligibility';
-
-    /**
-     * string
-     */
     const CC_APPROVAL = 'cc_approval';
-
-    /**
-     * string
-     */
     const CC_LAST4 = 'cc_last4';
-
-    /**
-     * string
-     */
     const CC_STATUS_DESCRIPTION = 'cc_status_description';
-
-    /**
-     * string
-     */
     const ECHECK_TYPE = 'echeck_type';
-
-    /**
-     * string
-     */
     const CC_DEBUG_RESPONSE_SERIALIZED = 'cc_debug_response_serialized';
-
-    /**
-     * string
-     */
     const CC_SS_START_MONTH = 'cc_ss_start_month';
-
-    /**
-     * string
-     */
     const ECHECK_ACCOUNT_TYPE = 'echeck_account_type';
-
-    /**
-     * string
-     */
     const LAST_TRANS_ID = 'last_trans_id';
-
-    /**
-     * string
-     */
     const CC_CID_STATUS = 'cc_cid_status';
-
-    /**
-     * string
-     */
     const CC_OWNER = 'cc_owner';
-
-    /**
-     * string
-     */
     const CC_TYPE = 'cc_type';
-
-    /**
-     * string
-     */
     const PO_NUMBER = 'po_number';
-
-    /**
-     * string
-     */
     const CC_EXP_YEAR = 'cc_exp_year';
-
-    /**
-     * string
-     */
     const CC_STATUS = 'cc_status';
-
-    /**
-     * string
-     */
     const ECHECK_ROUTING_NUMBER = 'echeck_routing_number';
-
-    /**
-     * string
-     */
     const ACCOUNT_STATUS = 'account_status';
-
-    /**
-     * string
-     */
     const ANET_TRANS_METHOD = 'anet_trans_method';
-
-    /**
-     * string
-     */
     const CC_DEBUG_RESPONSE_BODY = 'cc_debug_response_body';
-
-    /**
-     * string
-     */
     const CC_SS_ISSUE = 'cc_ss_issue';
-
-    /**
-     * string
-     */
     const ECHECK_ACCOUNT_NAME = 'echeck_account_name';
-
-    /**
-     * string
-     */
     const CC_AVS_STATUS = 'cc_avs_status';
-
-    /**
-     * string
-     */
     const CC_NUMBER_ENC = 'cc_number_enc';
-
-    /**
-     * string
-     */
     const CC_TRANS_ID = 'cc_trans_id';
-
-    /**
-     * string
-     */
     const ADDRESS_STATUS = 'address_status';
-
-    /**
-     * string
-     */
     const ADDITIONAL_INFORMATION = 'additional_information';
 
     /**

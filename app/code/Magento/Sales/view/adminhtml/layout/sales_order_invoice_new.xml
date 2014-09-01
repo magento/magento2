@@ -24,6 +24,7 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
+    <update handle="sales_order_item_price"/>
     <referenceContainer name="content">
         <block class="Magento\Sales\Block\Adminhtml\Order\Invoice\Create" name="sales_invoice_create">
             <block class="Magento\Sales\Block\Adminhtml\Order\Invoice\Create\Form" name="form" template="order/invoice/create/form.phtml">

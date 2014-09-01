@@ -78,7 +78,7 @@ class CookieMetadataFactory
      * @param array $metadata
      * @return CookieMetadata
      */
-    public function createCookieMetadata($metadata)
+    public function createCookieMetadata($metadata = [])
     {
         return $this->objectManager->create(
             'Magento\Framework\Stdlib\Cookie\CookieMetadata',

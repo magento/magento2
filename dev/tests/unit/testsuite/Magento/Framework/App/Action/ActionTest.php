@@ -105,7 +105,8 @@ class ActionTest extends \PHPUnit_Framework_TestCase
                 'setModuleName',
                 'getActionName',
                 'setActionName',
-                'getParam'
+                'getParam',
+                'getCookie'
             ],
             [],
             '',

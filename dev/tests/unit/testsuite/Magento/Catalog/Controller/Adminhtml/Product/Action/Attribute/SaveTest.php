@@ -132,7 +132,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     {
         $this->request = $this->getMock(
             'Magento\Framework\App\RequestInterface',
-            ['getParam', 'getModuleName', 'setModuleName', 'getActionName', 'setActionName'],
+            ['getParam', 'getModuleName', 'setModuleName', 'getActionName', 'setActionName', 'getCookie'],
             [],
             '',
             false

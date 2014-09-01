@@ -25,7 +25,9 @@ namespace Magento\Catalog\Service\V1\Data\Eav\Product\Attribute;
 
 /**
  * Class TypeBuilder
+ *
  * @package Magento\Catalog\Service\V1\Data\Eav\Product\Attribute
+ * @codeCoverageIgnore
  */
 class TypeBuilder extends \Magento\Framework\Service\Data\AbstractObjectBuilder
 {

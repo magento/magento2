@@ -423,4 +423,16 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
 
         return $this;
     }
+
+
+    /**
+     * @inheritdoc
+     */
+    public function getSelectCountSql()
+    {
+        $countSelect = parent::getSelectCountSql();
+        $countSelect->reset(\Zend_Db_Select::COLUMNS);
+        $countSelect->columns('COUNT(DISTINCT main_table.attribute_id)');
+        return $countSelect;
+    }
 }

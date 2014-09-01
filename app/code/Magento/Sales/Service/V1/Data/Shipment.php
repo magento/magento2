@@ -30,80 +30,23 @@ use Magento\Framework\Service\Data\AbstractObject as DataObject;
  */
 class Shipment extends DataObject
 {
-    /**
-     * int
-     */
     const ENTITY_ID = 'entity_id';
-
-    /**
-     * int
-     */
     const STORE_ID = 'store_id';
-
-    /**
-     * float
-     */
     const TOTAL_WEIGHT = 'total_weight';
-
-    /**
-     * float
-     */
     const TOTAL_QTY = 'total_qty';
-
-    /**
-     * int
-     */
     const EMAIL_SENT = 'email_sent';
-
-    /**
-     * int
-     */
     const ORDER_ID = 'order_id';
-
-    /**
-     * int
-     */
     const CUSTOMER_ID = 'customer_id';
-
-    /**
-     * int
-     */
     const SHIPPING_ADDRESS_ID = 'shipping_address_id';
-
-    /**
-     * int
-     */
     const BILLING_ADDRESS_ID = 'billing_address_id';
-
-    /**
-     * int
-     */
     const SHIPMENT_STATUS = 'shipment_status';
-
-    /**
-     * string
-     */
     const INCREMENT_ID = 'increment_id';
-
-    /**
-     * string
-     */
     const CREATED_AT = 'created_at';
-
-    /**
-     * string
-     */
     const UPDATED_AT = 'updated_at';
-
-    /**
-     * string
-     */
     const PACKAGES = 'packages';
-
-    /**
-     * mediumblob
-     */
     const SHIPPING_LABEL = 'shipping_label';
+    const ITEMS = 'items';
+    const TRACKS = 'tracks';
 
     /**
      * Returns billing_address_id
@@ -253,5 +196,25 @@ class Shipment extends DataObject
     public function getUpdatedAt()
     {
         return $this->_get(self::UPDATED_AT);
+    }
+
+    /**
+     * Returns items
+     *
+     * @return \Magento\Sales\Service\V1\Data\ShipmentItem[]
+     */
+    public function getItems()
+    {
+        return (array)$this->_get(self::ITEMS);
+    }
+
+    /**
+     * Returns tracks
+     *
+     * @return \Magento\Sales\Service\V1\Data\ShipmentTrack[]
+     */
+    public function getTracks()
+    {
+        return (array)$this->_get(self::TRACKS);
     }
 }

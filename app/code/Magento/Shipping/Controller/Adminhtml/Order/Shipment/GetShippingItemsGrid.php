@@ -61,7 +61,11 @@ class GetShippingItemsGrid extends \Magento\Backend\App\Action
      */
     public function execute()
     {
-        $this->shipmentLoader->load($this->_request);
+        $this->shipmentLoader->setOrderId($this->getRequest()->getParam('order_id'));
+        $this->shipmentLoader->setShipmentId($this->getRequest()->getParam('shipment_id'));
+        $this->shipmentLoader->setShipment($this->getRequest()->getParam('shipment'));
+        $this->shipmentLoader->setTracking($this->getRequest()->getParam('tracking'));
+        $this->shipmentLoader->load();
         return $this->getResponse()->setBody(
             $this->_view->getLayout()->createBlock(
                 'Magento\Shipping\Block\Adminhtml\Order\Packaging\Grid'

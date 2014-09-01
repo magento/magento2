@@ -25,6 +25,7 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <update handle="sales_order_print_creditmemo_renderers" />
+    <update handle="sales_order_item_price"/>
     <referenceContainer name="content">
         <block class="Magento\Sales\Block\Order\PrintOrder\Creditmemo" name="sales.order.print.creditmemo" template="order/print/creditmemo.phtml">
             <block class="Magento\Framework\View\Element\RendererList" name="sales.order.print.creditmemo.renderers" as="renderer.list"/>

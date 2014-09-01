@@ -27,6 +27,9 @@ namespace Magento\Catalog\Service\V1\Product\Attribute\Media\Data;
 
 use \Magento\Framework\Service\Data\AbstractObject;
 
+/**
+ * @codeCoverageIgnore
+ */
 class GalleryEntryContent extends AbstractObject
 {
     const DATA = 'data';

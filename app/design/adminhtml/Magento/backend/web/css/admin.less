@@ -1338,7 +1338,8 @@ input.mage-error ~ .addafter {
 .field.type-price input ~ label.addafter strong,
 .field-price input ~ label.addafter strong,
 .field-special_price input ~ label.addafter strong,
-.field-msrp input ~ label.addafter strong {
+.field-msrp input ~ label.addafter strong,
+.field-gift_wrapping_price input ~ label.addafter strong {
     margin-left: 2px;
     margin-right: -2px;
 }
@@ -3021,115 +3022,9 @@ tr.dynamic-grid input.input-text {
     }
 }
 
-/*
-    Product Massaction page
-    TODO: css code below should be removed after element.html refactoring
--------------------------------------- */
-.attributes-edit-form .attribute-change-checkbox {
-    white-space: nowrap;
-    display: block;
-}
-
-.attributes-edit-form .attribute-change-checkbox > label > input {
-    width: auto;
-}
-
-.attributes-edit-form .field:last-child,
-.attributes-edit-form .field-name,
-.attributes-edit-form .field.type-price,
-.attributes-edit-form .field-price,
-.attributes-edit-form .field-special_price,
-.attributes-edit-form .field-meta_title,
-.attributes-edit-form .field-visibility,
-.attributes-edit-form .field-custom_design,
-.attributes-edit-form .field-page_layout,
-.attributes-edit-form .field-options_container,
-.attributes-edit-form .field-country_of_manufacture,
-.attributes-edit-form .field-msrp_display_actual_price_type,
-.attributes-edit-form .field-tax_class_id,
-.attributes-edit-form .field-is_returnable,
-.attributes-edit-form .field-msrp,
-.attributes-edit-form .field-gift_wrapping_price {
-    margin-bottom: 50px;
-}
-
-.attributes-edit-form .field .control {
-    position: relative;
-}
-
-.attributes-edit-form .field-name .attribute-change-checkbox,
-.attributes-edit-form .field-meta_title .attribute-change-checkbox,
-.attributes-edit-form .field-gift_wrapping_price .attribute-change-checkbox,
-.attributes-edit-form .field .control select + .addafter {
-    position: absolute;
-    left: 0;
-    top: 35px;
-}
-
-.attributes-edit-form .field.type-price .attribute-change-checkbox,
-.attributes-edit-form .field-price .attribute-change-checkbox,
-.attributes-edit-form .field-special_price .attribute-change-checkbox,
-.attributes-edit-form .field-msrp .attribute-change-checkbox {
-    position: absolute;
-    top: 35px;
-}
-
-.attributes-edit-form .field-special_from_date > .control .input-text,
-.attributes-edit-form .field-special_to_date > .control .input-text,
-.attributes-edit-form .field-news_from_date > .control .input-text,
-.attributes-edit-form .field-news_to_date > .control .input-text,
-.attributes-edit-form .field-custom_design_from > .control .input-text,
-.attributes-edit-form .field-custom_design_to > .control .input-text {
-    border-width: 1px;
-    border-radius: 4px;
-    width: 130px;
-}
-
-.attributes-edit-form .field-special_from_date .attribute-change-checkbox,
-.attributes-edit-form .field-special_to_date .attribute-change-checkbox,
-.attributes-edit-form .field-news_from_date .attribute-change-checkbox,
-.attributes-edit-form .field-news_to_date .attribute-change-checkbox,
-.attributes-edit-form .field-custom_design_from .attribute-change-checkbox,
-.attributes-edit-form .field-custom_design_to .attribute-change-checkbox {
-    margin-top: 5px;
-}
-
-.attributes-edit-form .field-weight .fields-group-2 .control {
-    width: 160px;
-}
-
-.attributes-edit-form .field-weight .fields-group-2 .control > input {
-    width: 130px;
-    float: left;
-}
-
-.attributes-edit-form .field-weight .fields-group-2 .control > input + .addafter {
-    position: absolute;
-    top: 35px;
-}
-
-.attributes-edit-form .field-weight .fields-group-2 .control .addafter strong {
-    line-height: 26px;
-}
-
-.attributes-edit-form .field .control select {
-    border-radius: 4px;
-}
-
-.attributes-edit-form .field-gift_message_available .addon > .select,
-.attributes-edit-form .field-gift_wrapping_available .addon > .select {
-    margin-bottom: 25px;
-}
-
-.attributes-edit-form .field-gift_message_available .addon > input[type="checkbox"],
-.attributes-edit-form .field-gift_wrapping_available .addon > input[type="checkbox"] {
-    width: auto;
-    margin-right: 5px;
-}
-
-/*
-    Widgets
--------------------------------------- */
+//
+//    Widgets
+//--------------------------------------
 .widget-layout-updates .fieldset-wrapper,
 .widget-layout-updates .data-table {
     margin: 0 0 18px;

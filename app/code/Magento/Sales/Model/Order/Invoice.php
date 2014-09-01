@@ -130,10 +130,12 @@ class Invoice extends \Magento\Sales\Model\AbstractModel
 
     const REPORT_DATE_TYPE_INVOICE_CREATED = 'invoice_created';
 
-    /*
-     * Identifier for order history item
+    /**
+     * Identifier for history item
+     *
+     * @var string
      */
-    const HISTORY_ENTITY_NAME = 'invoice';
+    protected $entityType = 'invoice';
 
     /**
      * @var array
@@ -331,7 +333,17 @@ class Invoice extends \Magento\Sales\Model\AbstractModel
         if (!$this->_order instanceof \Magento\Sales\Model\Order) {
             $this->_order = $this->_orderFactory->create()->load($this->getOrderId());
         }
-        return $this->_order->setHistoryEntityName(self::HISTORY_ENTITY_NAME);
+        return $this->_order->setHistoryEntityName($this->entityType);
+    }
+
+    /**
+     * Return order history item identifier
+     *
+     * @return string
+     */
+    public function getEntityType()
+    {
+        return $this->entityType;
     }
 
     /**

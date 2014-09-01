@@ -25,6 +25,9 @@ namespace Magento\Catalog\Service\V1\Data\Eav\Category;
 
 use Magento\Framework\Service\Data\AbstractObjectBuilder;
 
+/**
+ * @codeCoverageIgnore
+ */
 class TreeBuilder extends AbstractObjectBuilder
 {
     /**

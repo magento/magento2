@@ -53,9 +53,38 @@ require(['jquery', 'mage/mage', 'prototype'], function(jQuery){
         templateName: false,
         id: 'text',
 
+        events: {
+            'click [data-role=template-save]' : 'save',
+            'click [data-role=template-save-as]': 'saveAs',
+            'click [data-role=template-preview]' : 'preview',
+            'click [data-role=template-unstrip]' : 'unStripTags',
+            'click [data-role=template-strip]' : 'stripTags',
+            'click [data-role=template-delete]': 'deleteTemplate'
+        },
+
         init: function () {
             if ($('convert_button_back')) {
                 $('convert_button_back').hide();
+            }
+
+            this.bindEvents();
+        },
+
+        bindEvents: function(){
+            var events = this.events,
+                eventName,
+                selector,
+                callback,
+                key;
+
+            for( key in events ){
+                callback    = this[events[key]];
+                key         = key.split(' ');
+
+                eventName   = key[0];
+                selector    = key.slice(1).join(' ');
+                
+                jQuery(selector).on(eventName, jQuery.proxy(callback, this) );
             }
         },
 

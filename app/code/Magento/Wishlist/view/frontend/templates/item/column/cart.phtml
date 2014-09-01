@@ -31,15 +31,24 @@ $product = $item->getProduct();
     <?php echo $this->getLayout()->renderElement($childName, false); ?>
 <?php endforeach;?>
 <div class="box-tocart">
+    <fieldset class="fieldset">
     <?php if ($item->canHaveQty() && $product->isVisibleInSiteVisibility()): ?>
-        <input type="number" data-role="qty" class="input-text qty" data-validate="{required:true,'validate-greater-than-zero':true}"
+        <div class="field qty">
+            <label class="label" for="qty[<?php echo $item->getId() ?>]"><span><?php echo __('Qty') ?></span></label>
+            <div class="control">
+                <input type="number" data-role="qty" id="qty[<?php echo $item->getId() ?>]" class="input-text qty" data-validate="{required:true,'validate-greater-than-zero':true}"
                name="qty[<?php echo $item->getId() ?>]" value="<?php echo $this->getAddToCartQty($item) * 1 ?>">
-
+            </div>
+        </div>
     <?php endif; ?>
     <?php if ($product->isSaleable()): ?>
-        <button type="button" data-role="tocart" title="<?php echo __('Add to Cart') ?>" data-item-id="<?php echo $item->getId()?>" class="action tocart primary">
-            <span><?php echo __('Add to Cart') ?></span>
-        </button>
+    <div class="product-item-actions">
+        <div class="actions-primary">
+            <button type="button" data-role="tocart" title="<?php echo __('Add to Cart') ?>" data-item-id="<?php echo $item->getId()?>" class="action tocart primary">
+                <span><?php echo __('Add to Cart') ?></span>
+            </button>
+        </div>
+    </div>
     <?php else: ?>
         <?php if ($product->getIsSalable()): ?>
             <p class="available stock" title="<?php echo __('Availability') ?>">
@@ -51,12 +60,5 @@ $product = $item->getProduct();
             </p>
         <?php endif; ?>
     <?php endif; ?>
+    </fieldset>
 </div>
-
-<?php if ($product->isVisibleInSiteVisibility()): ?>
-    <p>
-        <a class="action edit" href="<?php echo $this->getItemConfigureUrl($item) ?>">
-            <span><?php echo __('Edit') ?></span>
-        </a>
-    </p>
-<?php endif ?>

@@ -38,6 +38,7 @@
     <update handle="sales_order_shipment_grid_block"/>
     <update handle="sales_order_transactions_grid_block"/>
     <update handle="sales_order_creditmemo_grid_block"/>
+    <update handle="sales_order_item_price"/>
     <referenceContainer name="left">
         <block class="Magento\Sales\Block\Adminhtml\Order\View\Tabs" name="sales_order_tabs">
             <block class="Magento\Sales\Block\Adminhtml\Order\View\Tab\Info" name="order_tab_info" template="order/view/tab/info.phtml">

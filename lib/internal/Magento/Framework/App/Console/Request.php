@@ -105,4 +105,15 @@ class Request implements \Magento\Framework\App\RequestInterface
         }
         return $defaultValue;
     }
+
+    /**
+     * Stub to satisfy RequestInterface
+     *
+     * @param null|string $name
+     * @param null|string $default
+     * @return null|string|void
+     */
+    public function getCookie($name, $default)
+    {
+    }
 }

@@ -903,6 +903,9 @@ class Item extends \Magento\Framework\Model\AbstractModel
         $isQty = $this->stockItemService->isQty($typeId);
 
         if ($isQty) {
+            if (!$this->getId()) {
+                $this->processIsInStock();
+            }
             if ($this->getManageStock() && !$this->verifyStock()) {
                 $this->setIsInStock(false)->setStockStatusChangedAutomaticallyFlag(true);
             }

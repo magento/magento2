@@ -24,7 +24,7 @@
 namespace Magento\Catalog\Service\V1\Category\Attribute;
 
 use Magento\Catalog\Model\Product\Attribute\Source\InputtypeFactory;
-use Magento\Catalog\Service\V1\Product\MetadataServiceInterface;
+use Magento\Catalog\Service\V1\Category\MetadataServiceInterface;
 
 /**
  * Class ReadService

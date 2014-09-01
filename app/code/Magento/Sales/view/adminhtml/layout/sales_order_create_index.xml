@@ -25,6 +25,7 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <update handle="sales_order_create_customer_block"/>
+    <update handle="sales_order_create_item_price"/>
     <referenceBlock name="page-title">
         <action method="setTitleId">
             <argument translate="true" name="id" xsi:type="string">order-header</argument>

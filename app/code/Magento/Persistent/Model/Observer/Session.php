@@ -52,13 +52,6 @@ class Session
     protected $_sessionFactory;
 
     /**
-     * Cookie model
-     *
-     * @var \Magento\Framework\Stdlib\Cookie
-     */
-    protected $_cookie;
-
-    /**
      * Customer session
      *
      * @var \Magento\Customer\Model\Session
@@ -73,13 +66,12 @@ class Session
     protected $_checkoutSession;
 
     /**
-     * Construct
+     * Constructor
      *
      * @param \Magento\Persistent\Helper\Data $persistentData
      * @param \Magento\Persistent\Helper\Session $persistentSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Framework\Stdlib\Cookie $cookie
      * @param \Magento\Persistent\Model\SessionFactory $sessionFactory
      */
     public function __construct(
@@ -87,14 +79,12 @@ class Session
         \Magento\Persistent\Helper\Session $persistentSession,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Framework\Stdlib\Cookie $cookie,
         \Magento\Persistent\Model\SessionFactory $sessionFactory
     ) {
         $this->_persistentData = $persistentData;
         $this->_persistentSession = $persistentSession;
         $this->_checkoutSession = $checkoutSession;
         $this->_customerSession = $customerSession;
-        $this->_cookie = $cookie;
         $this->_sessionFactory = $sessionFactory;
     }
 
@@ -138,9 +128,7 @@ class Session
 
         // Set new cookie
         if ($sessionModel->getId()) {
-            $this->_cookie->set(
-                \Magento\Persistent\Model\Session::COOKIE_NAME,
-                $sessionModel->getKey(),
+            $sessionModel->setPersistentCookie(
                 $persistentLifeTime,
                 $this->_customerSession->getCookiePath()
             );
@@ -239,11 +227,11 @@ class Session
         $request = $observer->getEvent()->getRequest();
 
         if ($this->_customerSession->isLoggedIn() || $request->getFullActionName() == 'customer_account_logout') {
-            $this->_cookie->renew(
-                \Magento\Persistent\Model\Session::COOKIE_NAME,
-                $this->_persistentData->getLifeTime(),
-                $this->_customerSession->getCookiePath()
-            );
+            $this->_sessionFactory->create()
+                ->renewPersistentCookie(
+                    $this->_persistentData->getLifeTime(),
+                    $this->_customerSession->getCookiePath()
+                );
         }
     }
 }

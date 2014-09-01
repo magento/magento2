@@ -23,6 +23,8 @@
  */
 namespace Magento\PageCache\Model\App\FrontController;
 
+use Magento\TestFramework\Helper\ObjectManager;
+
 /**
  * Class MessageBoxTest
  */
@@ -36,16 +38,25 @@ class MessageBoxTest extends \PHPUnit_Framework_TestCase
     protected $msgBox;
 
     /**
-     * @var \Magento\PageCache\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * Cookie manager mock
+     *
+     * @var \Magento\Framework\Stdlib\CookieManager|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $configMock;
+    protected $cookieManagerMock;
 
     /**
-     * Cookie mock
+     * Public cookie metadata mock
      *
-     * @var \Magento\Framework\Stdlib\Cookie|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $cookieMock;
+    protected $publicCookieMetadataMock;
+
+    /**
+     * Cookie metadata factory mock
+     *
+     * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $cookieMetadataFactoryMock;
 
     /**
      * Request mock
@@ -69,23 +80,34 @@ class MessageBoxTest extends \PHPUnit_Framework_TestCase
      */
     protected $responseMock;
 
-    /**
-     * Create cookie and request mock, version instance
-     */
     public function setUp()
     {
-        $this->cookieMock = $this->getMock('Magento\Framework\Stdlib\Cookie', array(), array(), '', false);
-        $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', array('isPost'), array(), '', false);
-        $this->configMock = $this->getMock('Magento\PageCache\Model\Config', array('isEnabled'), array(), '', false);
+        $this->cookieManagerMock = $this->getMockBuilder('Magento\Framework\Stdlib\CookieManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->cookieMetadataFactoryMock = $this->getMockBuilder(
+            'Magento\Framework\Stdlib\Cookie\CookieMetadataFactory'
+        )->disableOriginalConstructor()
+            ->getMock();
+        $this->publicCookieMetadataMock = $this->getMockBuilder(
+            'Magento\Framework\Stdlib\Cookie\PublicCookieMetadata'
+        )->disableOriginalConstructor()
+            ->getMock();
+        $this->requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->messageManagerMock = $this->getMockBuilder('Magento\Framework\Message\Manager')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->msgBox = new MessageBox(
-            $this->cookieMock,
-            $this->requestMock,
-            $this->configMock,
-            $this->messageManagerMock
+        $this->msgBox = (new ObjectManager($this))->getObject(
+            'Magento\PageCache\Model\App\FrontController\MessageBox',
+            [
+                'cookieManager' => $this->cookieManagerMock,
+                'cookieMetadataFactory' => $this->cookieMetadataFactoryMock,
+                'request' => $this->requestMock,
+                'messageManager' => $this->messageManagerMock,
+            ]
         );
 
         $this->objectMock = $this->getMock('Magento\Framework\App\FrontController', array(), array(), '', false);
@@ -93,46 +115,49 @@ class MessageBoxTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Handle private content message box cookie
-     * Set cookie if it is not set.
-     * Set or unset cookie on post request
-     * In all other cases do nothing.
+     * @param bool $isPost
+     * @param int $numOfCalls
+     * @dataProvider afterDispatchTestDataProvider
      */
-    public function testAfterDispatch()
+    public function testAfterDispatch($isPost, $numOfCalls)
     {
-        $this->messageManagerMock->expects($this->once())
+        $this->messageManagerMock->expects($this->exactly($numOfCalls))
             ->method('hasMessages')
             ->will($this->returnValue(true));
         $this->requestMock->expects($this->once())
             ->method('isPost')
-            ->will($this->returnValue(true));
-        $this->cookieMock->expects($this->once())
-            ->method('set')
+            ->will($this->returnValue($isPost));
+        $this->cookieMetadataFactoryMock->expects($this->exactly($numOfCalls))
+            ->method('createPublicCookieMetadata')
+            ->will($this->returnValue($this->publicCookieMetadataMock));
+        $this->publicCookieMetadataMock->expects(($this->exactly($numOfCalls)))
+            ->method('setDuration')
+            ->with(MessageBox::COOKIE_PERIOD)
+            ->will($this->returnValue($this->publicCookieMetadataMock));
+        $this->publicCookieMetadataMock->expects(($this->exactly($numOfCalls)))
+            ->method('setPath')
+            ->with('/')
+            ->will($this->returnValue($this->publicCookieMetadataMock));
+        $this->cookieManagerMock->expects($this->exactly($numOfCalls))
+            ->method('setPublicCookie')
             ->with(
-                $this->equalTo(MessageBox::COOKIE_NAME),
+                MessageBox::COOKIE_NAME,
                 1,
-                $this->equalTo(MessageBox::COOKIE_PERIOD),
-                '/'
+                $this->publicCookieMetadataMock
             );
-        $this->assertInstanceOf(
-            '\Magento\Framework\App\ResponseInterface',
-            $this->msgBox->afterDispatch($this->objectMock, $this->responseMock)
-        );
+        $this->assertSame($this->responseMock, $this->msgBox->afterDispatch($this->objectMock, $this->responseMock));
     }
 
     /**
-     * IF request is not POST
+     * Data provider
+     *
+     * @return array
      */
-    public function testProcessNoPost()
+    public function afterDispatchTestDataProvider()
     {
-        $this->requestMock->expects($this->once())
-            ->method('isPost')
-            ->will($this->returnValue(false));
-        $this->messageManagerMock->expects($this->never())
-            ->method('getMessages');
-        $this->assertInstanceOf(
-            '\Magento\Framework\App\ResponseInterface',
-            $this->msgBox->afterDispatch($this->objectMock, $this->responseMock)
-        );
+        return [
+            [true, 1],
+            [false, 0],
+        ];
     }
 }

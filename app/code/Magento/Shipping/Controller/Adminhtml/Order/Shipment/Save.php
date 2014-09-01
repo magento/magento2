@@ -79,9 +79,10 @@ class Save extends \Magento\Backend\App\Action
     protected function _saveShipment($shipment)
     {
         $shipment->getOrder()->setIsInProcess(true);
-        $transactionSave = $this->_objectManager->create(
+        $transaction = $this->_objectManager->create(
             'Magento\Framework\DB\Transaction'
-        )->addObject(
+        );
+        $transaction->addObject(
             $shipment
         )->addObject(
             $shipment->getOrder()
@@ -98,13 +99,18 @@ class Save extends \Magento\Backend\App\Action
      */
     public function execute()
     {
-        $data = $this->getRequest()->getPost('shipment');
+        $data = $this->getRequest()->getParam('shipment');
+
         if (!empty($data['comment_text'])) {
             $this->_objectManager->get('Magento\Backend\Model\Session')->setCommentText($data['comment_text']);
         }
 
         try {
-            $shipment = $this->shipmentLoader->load($this->_request);
+            $this->shipmentLoader->setOrderId($this->getRequest()->getParam('order_id'));
+            $this->shipmentLoader->setShipmentId($this->getRequest()->getParam('shipment_id'));
+            $this->shipmentLoader->setShipment($data);
+            $this->shipmentLoader->setTracking($this->getRequest()->getParam('tracking'));
+            $shipment = $this->shipmentLoader->load();
             if (!$shipment) {
                 $this->_forward('noroute');
                 return;
@@ -131,7 +137,8 @@ class Save extends \Magento\Backend\App\Action
             $responseAjax = new \Magento\Framework\Object();
             $isNeedCreateLabel = isset($data['create_shipping_label']) && $data['create_shipping_label'];
 
-            if ($isNeedCreateLabel && $this->labelGenerator->create($shipment, $this->_request)) {
+            if ($isNeedCreateLabel) {
+                $this->labelGenerator->create($shipment, $this->_request);
                 $responseAjax->setOk(true);
             }
 
@@ -167,7 +174,7 @@ class Save extends \Magento\Backend\App\Action
         if ($isNeedCreateLabel) {
             $this->getResponse()->representJson($responseAjax->toJson());
         } else {
-            $this->_redirect('sales/order/view', array('order_id' => $shipment->getOrderId()));
+            $this->_redirect('sales/order/view', ['order_id' => $shipment->getOrderId()]);
         }
     }
 }

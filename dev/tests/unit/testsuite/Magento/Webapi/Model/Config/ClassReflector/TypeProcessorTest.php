@@ -82,7 +82,8 @@ class TypeProcessorTest extends \PHPUnit_Framework_TestCase
         $this->_typeProcessor->setTypeData('typeA', array('dataA1'));
         $this->_typeProcessor->setTypeData('typeA', array('dataA2'));
         $this->_typeProcessor->setTypeData('typeA', array('dataA3'));
-        $this->assertEquals(array('dataA1', 'dataA2', 'dataA3'), $this->_typeProcessor->getTypeData('typeA'));
+        $this->_typeProcessor->setTypeData('typeA', array(null));
+        $this->assertEquals(array('dataA1', 'dataA2', 'dataA3', null), $this->_typeProcessor->getTypeData('typeA'));
     }
 
     public function testNormalizeType()

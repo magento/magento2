@@ -22,25 +22,38 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\UrlRewrite\Model;
+use \Magento\TestFramework\Helper\Bootstrap;
 
 class UrlRewriteTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\UrlRewrite\Model\UrlRewrite
      */
-    protected $_model;
+    protected $model;
+
+    /**
+     * @var \Magento\Framework\ObjectManager
+     */
+    protected $objectManager;
 
     protected function setUp()
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+        $this->objectManager = Bootstrap::getObjectManager();
+
+        $this->model = $this->objectManager->create(
             'Magento\UrlRewrite\Model\UrlRewrite'
         );
     }
 
+    /**
+     * @magentoDbIsolation enabled
+     *
+     * @throws \Exception
+     */
     public function testLoadByRequestPath()
     {
-        $this->_model->setStoreId(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+        $this->model->setStoreId(
+            $this->objectManager->get(
                 'Magento\Store\Model\StoreManagerInterface'
             )->getDefaultStoreView()->getId()
         )->setRequestPath(
@@ -54,33 +67,37 @@ class UrlRewriteTest extends \PHPUnit_Framework_TestCase
         )->save();
 
         try {
-            $read = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            $read = $this->objectManager->create(
                 'Magento\UrlRewrite\Model\UrlRewrite'
             );
             $read->setStoreId(
-                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                $this->objectManager->get(
                     'Magento\Store\Model\StoreManagerInterface'
                 )->getDefaultStoreView()->getId()
             )->loadByRequestPath(
                 'fancy/url.html'
             );
 
-            $this->assertEquals($this->_model->getStoreId(), $read->getStoreId());
-            $this->assertEquals($this->_model->getRequestPath(), $read->getRequestPath());
-            $this->assertEquals($this->_model->getTargetPath(), $read->getTargetPath());
-            $this->assertEquals($this->_model->getIsSystem(), $read->getIsSystem());
-            $this->assertEquals($this->_model->getOptions(), $read->getOptions());
-            $this->_model->delete();
+            $this->assertEquals($this->model->getStoreId(), $read->getStoreId());
+            $this->assertEquals($this->model->getRequestPath(), $read->getRequestPath());
+            $this->assertEquals($this->model->getTargetPath(), $read->getTargetPath());
+            $this->assertEquals($this->model->getIsSystem(), $read->getIsSystem());
+            $this->assertEquals($this->model->getOptions(), $read->getOptions());
+            $this->model->delete();
         } catch (\Exception $e) {
-            $this->_model->delete();
+            $this->model->delete();
             throw $e;
         }
     }
 
+    /**
+     * @magentoDbIsolation enabled
+     * @throws \Exception
+     */
     public function testLoadByIdPath()
     {
-        $this->_model->setStoreId(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+        $this->model->setStoreId(
+            $this->objectManager->get(
                 'Magento\Store\Model\StoreManagerInterface'
             )->getDefaultStoreView()->getId()
         )->setRequestPath(
@@ -96,45 +113,53 @@ class UrlRewriteTest extends \PHPUnit_Framework_TestCase
         )->save();
 
         try {
-            $read = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            $read = $this->objectManager->create(
                 'Magento\UrlRewrite\Model\UrlRewrite'
             );
             $read->setStoreId(
-                \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+                $this->objectManager->get(
                     'Magento\Store\Model\StoreManagerInterface'
                 )->getDefaultStoreView()->getId()
             )->loadByIdPath(
                 'product/1'
             );
-            $this->assertEquals($this->_model->getStoreId(), $read->getStoreId());
-            $this->assertEquals($this->_model->getRequestPath(), $read->getRequestPath());
-            $this->assertEquals($this->_model->getTargetPath(), $read->getTargetPath());
-            $this->assertEquals($this->_model->getIdPath(), $read->getIdPath());
-            $this->assertEquals($this->_model->getIsSystem(), $read->getIsSystem());
-            $this->assertEquals($this->_model->getOptions(), $read->getOptions());
-            $this->_model->delete();
+            $this->assertEquals($this->model->getStoreId(), $read->getStoreId());
+            $this->assertEquals($this->model->getRequestPath(), $read->getRequestPath());
+            $this->assertEquals($this->model->getTargetPath(), $read->getTargetPath());
+            $this->assertEquals($this->model->getIdPath(), $read->getIdPath());
+            $this->assertEquals($this->model->getIsSystem(), $read->getIsSystem());
+            $this->assertEquals($this->model->getOptions(), $read->getOptions());
+            $this->model->delete();
         } catch (\Exception $e) {
-            $this->_model->delete();
+            $this->model->delete();
             throw $e;
         }
     }
 
+    /**
+     * @magentoDbIsolation enabled
+     */
     public function testHasOption()
     {
-        $this->_model->setOptions('RP');
-        $this->assertTrue($this->_model->hasOption('RP'));
+        $this->model->setOptions('RP');
+        $this->assertTrue($this->model->hasOption('RP'));
     }
 
+    /**
+     *
+     * @magentoDbIsolation enabled
+     * @throws \Exception
+     */
     public function testRewrite()
     {
-        $request = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+        $request = $this->objectManager->create(
             'Magento\Framework\App\RequestInterface'
         )->setPathInfo(
             'fancy/url.html'
         );
         $_SERVER['QUERY_STRING'] = 'foo=bar&___fooo=bar';
 
-        $this->_model->setRequestPath(
+        $this->model->setRequestPath(
             'fancy/url.html'
         )->setTargetPath(
             'another/fancy/url.html'
@@ -143,51 +168,136 @@ class UrlRewriteTest extends \PHPUnit_Framework_TestCase
         )->save();
 
         try {
-            $this->assertTrue($this->_model->rewrite($request));
+            $this->assertTrue($this->model->rewrite($request));
             $this->assertEquals('/another/fancy/url.html?foo=bar', $request->getRequestUri());
             $this->assertEquals('another/fancy/url.html', $request->getPathInfo());
-            $this->_model->delete();
+            $this->model->delete();
         } catch (\Exception $e) {
-            $this->_model->delete();
+            $this->model->delete();
             throw $e;
         }
     }
 
+    /**
+     * @magentoDbIsolation enabled
+     */
+    public function testRewriteSetCookie()
+    {
+        $_SERVER['QUERY_STRING'] = 'foo=bar';
+
+        $context = $this->objectManager->create(
+            '\Magento\Framework\Model\Context'
+        );
+        $registry = $this->objectManager->create(
+            '\Magento\Framework\Registry'
+        );
+        $scopeConfig = $this->objectManager->create(
+            '\Magento\Framework\App\Config\ScopeConfigInterface'
+        );
+        $cookieMetadataFactory = $this->objectManager->create(
+            '\Magento\Framework\Stdlib\Cookie\CookieMetadataFactory'
+        );
+        $cookieManager = $this->objectManager->create(
+            '\Magento\Framework\Stdlib\CookieManager'
+        );
+        $storeManager = $this->objectManager->create(
+            '\Magento\Store\Model\StoreManagerInterface'
+        );
+        $httpContext = $this->objectManager->create(
+            '\Magento\Framework\App\Http\Context'
+        );
+
+        $constructorArgs = [
+            'context' => $context,
+            'registry' => $registry,
+            'scopeConfig' => $scopeConfig,
+            'cookieMetadataFactory' => $cookieMetadataFactory,
+            'cookieManager' => $cookieManager,
+            'storeManager' => $storeManager,
+            'httpContext' => $httpContext,
+        ];
+
+        //SUT must be mocked out for this test to prevent headers from being sent,
+        //causing errors.
+
+        /** @var \PHPUnit_Framework_MockObject_MockObject /\Magento\UrlRewrite\Model\UrlRewrite $modelMock */
+        $modelMock = $this->getMock('\Magento\UrlRewrite\Model\UrlRewrite',
+            ['_sendRedirectHeaders'],
+            $constructorArgs
+        );
+
+        $modelMock->setRequestPath('http://fancy/url.html')
+            ->setTargetPath('http://another/fancy/url.html')
+            ->setIsSystem(1)
+            ->setOptions('R')
+            ->save();
+
+        $modelMock->expects($this->exactly(2))
+            ->method('_sendRedirectHeaders');
+
+        $request = $this->objectManager
+            ->create('Magento\Framework\App\RequestInterface')
+            ->setPathInfo('http://fancy/url.html');
+
+        $this->assertTrue($modelMock->rewrite($request));
+        $this->assertEquals('admin', $_COOKIE[\Magento\Store\Model\Store::COOKIE_NAME]);
+
+        $modelMock->delete();
+
+    }
+
+    /**
+     * @magentoDbIsolation enabled
+     */
     public function testRewriteNonExistingRecord()
     {
-        $request = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+        $request = $this->objectManager
             ->create('Magento\Framework\App\RequestInterface');
-        $this->assertFalse($this->_model->rewrite($request));
+        $this->assertFalse($this->model->rewrite($request));
     }
 
+    /**
+     * @magentoDbIsolation enabled
+     */
     public function testRewriteWrongStore()
     {
-        $request = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+        $request = $this->objectManager
             ->create('Magento\Framework\App\RequestInterface');
         $_GET['___from_store'] = uniqid('store');
-        $this->assertFalse($this->_model->rewrite($request));
+        $this->assertFalse($this->model->rewrite($request));
     }
 
+    /**
+     * @magentoDbIsolation enabled
+     */
     public function testRewriteNonExistingRecordCorrectStore()
     {
-        $request = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+        $request = $this->objectManager
             ->create('Magento\Framework\App\RequestInterface');
-        $_GET['___from_store'] = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+        $_GET['___from_store'] = $this->objectManager->get(
             'Magento\Store\Model\StoreManagerInterface'
         )->getDefaultStoreView()->getCode();
-        $this->assertFalse($this->_model->rewrite($request));
+        $this->assertFalse($this->model->rewrite($request));
     }
 
+    /**
+     * @magentoDbIsolation enabled
+     */
     public function testGetStoreId()
     {
-        $this->_model->setStoreId(10);
-        $this->assertEquals(10, $this->_model->getStoreId());
+        $this->model->setStoreId(10);
+        $this->assertEquals(10, $this->model->getStoreId());
     }
 
+    /**
+     * @magentoDbIsolation enabled
+     *
+     * @throws \Exception
+     */
     public function testCRUD()
     {
-        $this->_model->setStoreId(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+        $this->model->setStoreId(
+            $this->objectManager->get(
                 'Magento\Store\Model\StoreManagerInterface'
             )->getDefaultStoreView()->getId()
         )->setRequestPath(
@@ -199,7 +309,7 @@ class UrlRewriteTest extends \PHPUnit_Framework_TestCase
         )->setOptions(
             'RP'
         );
-        $crud = new \Magento\TestFramework\Entity($this->_model, array('request_path' => 'fancy/url2.html'));
+        $crud = new \Magento\TestFramework\Entity($this->model, ['request_path' => 'fancy/url2.html']);
         $crud->testCrud();
     }
 }

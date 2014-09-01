@@ -77,31 +77,26 @@ class LabelGenerator
     /**
      * @param \Magento\Sales\Model\Order\Shipment $shipment
      * @param RequestInterface $request
-     * @return bool
+     * @return void
      * @throws \Magento\Framework\Model\Exception
      */
     public function create(\Magento\Sales\Model\Order\Shipment $shipment, RequestInterface $request)
     {
-        if (!$shipment) {
-            return false;
-        }
         $order = $shipment->getOrder();
         $carrier = $this->_carrierFactory->create($order->getShippingMethod(true)->getCarrierCode());
         if (!$carrier->isShippingLabelsAvailable()) {
-            return false;
+            throw new \Magento\Framework\Model\Exception(__('Shipping labels is not available.'));
         }
         $shipment->setPackages($request->getParam('packages'));
-        $response = $this->labelFactory->create()->requestToShipment(
-            $shipment
-        );
+        $response = $this->labelFactory->create()->requestToShipment($shipment);
         if ($response->hasErrors()) {
             throw new \Magento\Framework\Model\Exception($response->getErrors());
         }
         if (!$response->hasInfo()) {
-            return false;
+            throw new \Magento\Framework\Model\Exception(__('Response info is not exist.'));
         }
-        $labelsContent = array();
-        $trackingNumbers = array();
+        $labelsContent = [];
+        $trackingNumbers = [];
         $info = $response->getInfo();
         foreach ($info as $inf) {
             if (!empty($inf['tracking_number']) && !empty($inf['label_content'])) {
@@ -117,20 +112,15 @@ class LabelGenerator
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             $shipment->getStoreId()
         );
-        if ($trackingNumbers) {
+        if (!empty($trackingNumbers)) {
             foreach ($trackingNumbers as $trackingNumber) {
                 $track = $this->trackFactory->create()
-                    ->setNumber(
-                        $trackingNumber
-                    )->setCarrierCode(
-                        $carrierCode
-                    )->setTitle(
-                        $carrierTitle
-                    );
+                    ->setNumber($trackingNumber)
+                    ->setCarrierCode($carrierCode)
+                    ->setTitle($carrierTitle);
                 $shipment->addTrack($track);
             }
         }
-        return true;
     }
 
     /**

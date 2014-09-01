@@ -139,7 +139,8 @@ class PostTest extends \PHPUnit_Framework_TestCase
             'setModuleName',
             'getActionName',
             'setActionName',
-            'getParam'
+            'getParam',
+            'getCookie'
         );
         $this->_registryMock = $this->getMock('Magento\Framework\Registry', array(), array(), '', false);
         $this->_requestMock = $this->getMock(

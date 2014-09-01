@@ -62,22 +62,34 @@ class Content extends \Magento\Backend\Block\Widget\Container
         $this->buttonList->remove('edit');
         $this->buttonList->add(
             'new_folder',
-            array('class' => 'save', 'label' => __('Create Folder...'), 'type' => 'button')
+            array('class' => 'save', 'label' => __('Create Folder...'), 'type' => 'button'),
+            0,
+            0,
+            'header'
         );
 
         $this->buttonList->add(
             'delete_folder',
-            array('class' => 'delete no-display', 'label' => __('Delete Folder'), 'type' => 'button')
+            array('class' => 'delete no-display', 'label' => __('Delete Folder'), 'type' => 'button'),
+            0,
+            0,
+            'header'
         );
 
         $this->buttonList->add(
             'delete_files',
-            array('class' => 'delete no-display', 'label' => __('Delete File'), 'type' => 'button')
+            array('class' => 'delete no-display', 'label' => __('Delete File'), 'type' => 'button'),
+            0,
+            0,
+            'header'
         );
 
         $this->buttonList->add(
             'insert_files',
-            array('class' => 'save no-display primary', 'label' => __('Insert File'), 'type' => 'button')
+            array('class' => 'save no-display primary', 'label' => __('Insert File'), 'type' => 'button'),
+            0,
+            0,
+            'header'
         );
     }
 

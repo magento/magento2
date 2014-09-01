@@ -42,9 +42,10 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             /** @var \DOMElement $requestNode */
             $name = $requestNode->getAttribute('query');
             $request = $this->mergeAttributes((array)$simpleXmlNode);
+            $request['dimensions'] = $this->convertNodes($simpleXmlNode->dimensions, 'name');
             $request['queries'] = $this->convertNodes($simpleXmlNode->queries, 'name');
             $request['filters'] = $this->convertNodes($simpleXmlNode->filters, 'name');
-            //$request['aggregation'] = $this->convertNodes($simpleXmlNode->aggregation, 'name');
+            $request['aggregation'] = $this->convertNodes($simpleXmlNode->aggregation, 'name');
             $requests[$name] = $request;
         }
         return $requests;
@@ -89,10 +90,8 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         /** @var \SimpleXMLElement $node */
         foreach ($nodes->children() as $node) {
             $element = $this->convertToArray($node->attributes());
-            if (count($node->children()) > 0) {
-                foreach ($node->children() as $child) {
-                    $element[$child->getName()][] = $this->convertToArray($child);
-                }
+            if ($node->count() > 0) {
+                $element = $this->convertChildNodes($element, $node);
             }
             $type = (string)$node->attributes('xsi', true)['type'];
             if (!empty($type)) {
@@ -102,5 +101,24 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $list[$element[$name]] = $element;
         }
         return $list;
+    }
+
+    /**
+     * Convert child nodes to array
+     *
+     * @param array $element
+     * @param \SimpleXMLElement $node
+     * @return array
+     */
+    protected function convertChildNodes(array $element, \SimpleXMLElement $node)
+    {
+        if ($node->count() == 0) {
+            $element[$node->getName()][] = $this->convertToArray($node);
+        } else {
+            foreach ($node->children() as $child) {
+                $element = $this->convertChildNodes($element, $child);
+            }
+        }
+        return $element;
     }
 }

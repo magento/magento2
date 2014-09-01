@@ -25,12 +25,10 @@
 <?php if ($this->getIsProcessed()):?>
     <?php if ($this->getIsSuccess()):?>
         <script type="text/javascript">
-require(['jquery'], function(jQuery){
 
             parent.jQuery('[data-container="body"]').trigger("paymentAuthentication", {state: "success"});
         
-});
-</script>
+        </script>
     <?php else:?>
         <h4><?php echo __('Verification Failed');?></h4>
         <p><?php echo __('The card has failed verification with the issuer bank.')?> <strong><?php echo __('Order cannot be placed.')?></strong></p>

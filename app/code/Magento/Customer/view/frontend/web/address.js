@@ -43,8 +43,8 @@ define([
          * @private
          */
         _create: function() {
-            $(this.options.addAddress).on('click', $.proxy(this._addAddress, this));
-            $(this.options.deleteAddress).on('click', $.proxy(this._deleteAddress, this));
+            $(document).on('click', this.options.addAddress, $.proxy(this._addAddress, this));
+            $(document).on('click', this.options.deleteAddress, $.proxy(this._deleteAddress, this));
         },
 
         /**

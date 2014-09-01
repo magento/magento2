@@ -37,12 +37,14 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
     {
         $this->messageManager = $this->getMock('\Magento\Framework\Message\Manager', array(), array(), '', false);
         $request = new \Magento\TestFramework\Request(
-            $this->getMock('\Magento\Framework\App\Route\ConfigInterface', array(), array(), '', false),
-            $this->getMock('Magento\Framework\App\Request\PathInfoProcessorInterface', array(), array(), '', false)
+            $this->getMock('Magento\Framework\App\Route\ConfigInterface', [], [], '', false),
+            $this->getMock('Magento\Framework\App\Request\PathInfoProcessorInterface', [], [], '', false),
+            $this->getMock('Magento\Framework\Stdlib\CookieManager', [], [], '', false)
         );
         $response = new \Magento\TestFramework\Response(
-            $this->getMock('\Magento\Framework\Stdlib\Cookie', array(), array(), '', false),
-            $this->getMock('Magento\Framework\App\Http\Context', array(), array(), '', false)
+            $this->getMock('Magento\Framework\Stdlib\CookieManager', [], [], '', false),
+            $this->getMock('Magento\Framework\Stdlib\Cookie\CookieMetadataFactory', [], [], '', false),
+            $this->getMock('Magento\Framework\App\Http\Context', [], [], '', false)
         );
 
         $this->_objectManager = $this->getMock(

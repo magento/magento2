@@ -576,4 +576,43 @@ class Grid extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
     {
         return $this->_wishlistFactory->create()->getCollection()->filterByCustomerId($this->getCustomerId());
     }
+
+    /**
+     * Get the item unit price html
+     *
+     * @param Item $item
+     * @return string
+     */
+    public function getItemUnitPriceHtml(Item $item)
+    {
+        $block = $this->getLayout()->getBlock('item_unit_price');
+        $block->setItem($item);
+        return $block->toHtml();
+    }
+
+    /**
+     * Get the item row total html
+     *
+     * @param Item $item
+     * @return string
+     */
+    public function getItemRowTotalHtml(Item $item)
+    {
+        $block = $this->getLayout()->getBlock('item_row_total');
+        $block->setItem($item);
+        return $block->toHtml();
+    }
+
+    /**
+     * Return html for row total with discount
+     *
+     * @param Item $item
+     * @return string
+     */
+    public function getItemRowTotalWithDiscountHtml(Item $item)
+    {
+        $block = $this->getLayout()->getBlock('item_row_total_with_discount');
+        $block->setItem($item);
+        return $block->toHtml();
+    }
 }

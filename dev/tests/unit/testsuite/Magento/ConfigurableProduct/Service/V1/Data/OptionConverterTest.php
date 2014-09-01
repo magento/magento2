@@ -83,7 +83,7 @@ class OptionConverterTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->option = $this->getMockBuilder('Magento\ConfigurableProduct\Service\V1\Data\Option')
-            ->setMethods(['__toArray', 'getValues'])
+            ->setMethods(['__toArray', 'getValues', 'getAttributeId', 'getPosition', 'isUseDefault', 'getLabel'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -156,6 +156,36 @@ class OptionConverterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $value->getIndex());
         $this->assertEquals(12, $value->getPrice());
         $this->assertEquals(true, $value->isPercent());
+    }
+
+    public function testConvertArrayFromData()
+    {
+        $values = [$this->value];
+        $expected = [
+            'attribute_id' => 3,
+            'position' => 333,
+            'use_default' => true,
+            'label' => 'someLabel',
+            'values' => $values
+        ];
+
+        $this->option->expects($this->any())->method('getValues')->will($this->returnValue($values));
+        $this->option->expects($this->once())->method('getAttributeId')
+            ->will($this->returnValue($expected['attribute_id']));
+        $this->option->expects($this->once())->method('getPosition')
+            ->will($this->returnValue($expected['position']));
+        $this->option->expects($this->once())->method('isUseDefault')
+            ->will($this->returnValue($expected['use_default']));
+        $this->option->expects($this->once())->method('getLabel')
+            ->will($this->returnValue($expected['label']));
+
+        $this->valueConverter->expects($this->once())->method('convertArrayFromData')
+            ->with($this->equalTo($values[0]))
+            ->will($this->returnValue($values[0]));
+
+        $result = $this->converter->convertArrayFromData($this->option);
+
+        $this->assertEquals($expected, $result);
     }
 
     public function testGetModelFromData()

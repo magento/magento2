@@ -118,7 +118,7 @@ class MetadataService implements MetadataServiceInterface
     {
         /** @var AbstractAttribute $attribute */
         $attribute = $this->eavConfig->getAttribute($entityType, $attributeCode);
-        if ($attribute) {
+        if ($attribute->getId()) {
             $attributeMetadata = $this->createMetadataAttribute($attribute);
             return $attributeMetadata;
         } else {
@@ -146,7 +146,7 @@ class MetadataService implements MetadataServiceInterface
         $attributeCollection->join(
             ['eav_entity_attribute' => $attributeCollection->getTable('eav_entity_attribute')],
             'main_table.attribute_id = eav_entity_attribute.attribute_id',
-            ['attribute_set_id']
+            []
         );
         $attributeCollection->join(
             array('additional_table' => $attributeCollection->getTable('catalog_eav_attribute')),
@@ -164,7 +164,11 @@ class MetadataService implements MetadataServiceInterface
                 ($sortOrder->getDirection() == SearchCriteria::SORT_ASC) ? 'ASC' : 'DESC'
             );
         }
+
         $totalCount = $attributeCollection->getSize();
+
+        // Group attributes by id to prevent duplicates with different attribute sets
+        $attributeCollection->addAttributeGrouping();
 
         $attributeCollection->setCurPage($searchCriteria->getCurrentPage());
         $attributeCollection->setPageSize($searchCriteria->getPageSize());

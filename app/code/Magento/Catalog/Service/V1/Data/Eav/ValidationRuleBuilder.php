@@ -23,6 +23,9 @@
  */
 namespace Magento\Catalog\Service\V1\Data\Eav;
 
+/**
+ * @codeCoverageIgnore
+ */
 class ValidationRuleBuilder extends \Magento\Framework\Service\Data\AbstractObjectBuilder
 {
     /**

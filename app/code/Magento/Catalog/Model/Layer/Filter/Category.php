@@ -151,7 +151,16 @@ class Category extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      */
     protected function _isValidCategory($category)
     {
-        return $category->getId();
+        if ($category->getId()) {
+            while ($category->getLevel() != 0) {
+                if (!$category->getIsActive()) {
+                    return false;
+                }
+                $category = $category->getParentCategory();
+            }
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -194,13 +203,15 @@ class Category extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
         $this->getLayer()->getProductCollection()->addCountToCategories($categories);
 
         $data = array();
-        foreach ($categories as $category) {
-            if ($category->getIsActive() && $category->getProductCount()) {
-                $data[] = array(
-                    'label' => $this->_escaper->escapeHtml($category->getName()),
-                    'value' => $category->getId(),
-                    'count' => $category->getProductCount()
-                );
+        if ($category->getIsActive()) {
+            foreach ($categories as $category) {
+                if ($category->getIsActive() && $category->getProductCount()) {
+                    $data[] = array(
+                        'label' => $this->_escaper->escapeHtml($category->getName()),
+                        'value' => $category->getId(),
+                        'count' => $category->getProductCount()
+                    );
+                }
             }
         }
         return $data;

@@ -33,7 +33,6 @@
 </head>
 <body>
 <script type="text/javascript">
-require(['jquery'], function(jQuery){
 
     // this code is NOT tested!
     if (window.top == window.self) {
@@ -59,7 +58,6 @@ require(['jquery'], function(jQuery){
     window.top.location = "<?php echo $this->getUrl('checkout/cart') ?>";
     <?php endif; ?>
 
-});
 </script>
 </body>
 </html>

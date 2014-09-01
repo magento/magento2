@@ -24,8 +24,7 @@
 namespace Magento\Catalog\Service\V1\Data;
 
 /**
- * Class Product
- * @package Magento\Catalog\Service\V1\Data
+ * @codeCoverageIgnore
  */
 class Product extends \Magento\Framework\Service\Data\Eav\AbstractObject
 {

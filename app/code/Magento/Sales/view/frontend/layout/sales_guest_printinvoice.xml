@@ -25,6 +25,7 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <update handle="sales_order_print_invoice_renderers" />
+    <update handle="sales_order_item_price"/>
     <referenceContainer name="content">
         <block class="Magento\Sales\Block\Order\PrintOrder\Invoice" name="sales.order.print.invoice" template="order/print/invoice.phtml">
             <block class="Magento\Framework\View\Element\RendererList" name="sales.order.print.invoice.renderers" as="renderer.list" />

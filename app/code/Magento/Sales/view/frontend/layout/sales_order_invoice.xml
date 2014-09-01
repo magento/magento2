@@ -26,6 +26,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <update handle="customer_account"/>
     <update handle="sales_order_invoice_renderers" />
+    <update handle="sales_order_item_price"/>
     <referenceContainer name="page.main.title">
         <block class="Magento\Sales\Block\Order\Info" name="order.status" template="order/order_status.phtml" />
         <block class="Magento\Sales\Block\Order\Info" name="order.date" template="order/order_date.phtml" />

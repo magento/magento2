@@ -251,6 +251,9 @@ class Application
         );
 
         $this->loadArea(\Magento\TestFramework\Application::DEFAULT_APP_AREA);
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->configure(
+            $objectManager->get('Magento\Framework\ObjectManager\DynamicConfigInterface')->getConfiguration()
+        );
         \Magento\Framework\Phrase::setRenderer($objectManager->get('Magento\Framework\Phrase\RendererInterface'));
 
         /** @var \Magento\Framework\App\Filesystem\DirectoryList\Verification $verification */

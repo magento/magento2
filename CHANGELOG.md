@@ -1,3 +1,44 @@
+0.1.0-alpha93
+=============
+ * Price template refactoring
+   * Refactored order item templates in the Sales, Bundle and Downloadable modules
+   * Eliminated the unused PHTML templates and removed the direct dependencies on the TaxHelper module in the Catalog module
+ * Service layer implementation:
+   * Created service layer for Order creation
+   * Created service layer for Invoice
+   * Created service layer for Credit Memo
+   * Created service layer for Shipment
+ * Introduce the Search library:
+   * Created adapter interfaces for the Search library
+   * Created response structure
+   * Created parsing of XML declaration and creation of library objects (Queries, Filters, Aggregations)
+ * Refactored Framework\Stdlib\Cookie to use CookieManager
+ * Added the ability to prevent the backend cookie from going to the storefront
+ * Fixed bugs:
+   * Fixed an issue where taxes  were  not added in some orders
+   * Fixed an issue were the Add New Address button did not work if the default address was already set
+   * Fixed a Google Chrome and Internet Explorer specific issue when a JavaScript error made it impossible to register   during checkout downloadable product
+   * Fixed an issue when the credit card iframe (PayPal or 3D secure)  was absent on the Order Review step during Onepage Checkout
+   * Fixed an issue with the   Tax Rate, Customer Tax Class and Product Tax Class multiselects on the Tax Rule Information page
+   * Fixed JavaScript issues which prevented saving a newsletter template.
+   * Modified the Button component behavior
+   * Fixed an issue where it was impossible for a guest customer to register during Onepage checkout when the Require Customer To Be Logged In To Checkout option was set to Yes
+   * Fixed an issue where the Calendar icons were not displayed on the storefront
+   * Fixed an  AJAX loader issue in the Admin panel
+   * Fixed an issue where it was impossible to upload images for  variations of a configurable product on product form
+   * Fixed an issue where clicking on a row in the Search Terms Report Grid leads to 404 page
+   * Fixed an issue where configurable products fixture creates out of stock products
+   * Fixed an issue where Magento crashed when invalid cookie domain was set
+   * Fixed an issue where the Change checkbox label overlapped the text message for a recurring profile attribute on the attribute mass update page
+   * Fixed an issue where integrity test determined normal dependencies as redundant
+   * Fixed an issue where Catalog\Service\V1\Product\Attribute\ReadService::search returned an error
+   * Fixed an issue where Magento\Catalog\Service\V1\Category\Attribute\ReadService::options returned empty results
+ * GitHub requests:
+  * [#160] (https://github.com/magento/bugathon_march_2013/issues/160) -- Wrong default value for memory_limit in .htaccess.sample
+  * [#480] (https://github.com/magento/magento2/pull/480) -- Provide instructions on adding memcache support for Magento 2
+  * [#612] (https://github.com/magento/magento2/issues/612) -- Category Layered Navigation : Selection of disabled entity
+  * [#626] (https://github.com/magento/magento2/issues/626) -- Unable to install under IIS / FastCGI
+
 0.1.0-alpha92
 =============
  * Implemented API services:
@@ -10,7 +51,7 @@
  * Framework Improvements:
    * Ability to drop/regenerate access for native mobile apps
    * Ability to support extensible service data objects
-   * No Code Duplication in Root Templates (MAGETWO-26278)
+   * No Code Duplication in Root Templates
  * Fixed bugs:
    * Persistance session application. Loggin out the customer
    * Placing the order with two terms and conditions
@@ -20,7 +61,7 @@
    * Validation for country_id/region_id and percentage_rate during Tax Rate creation
    * Declaration of getSortOrders in Magento\Framework\Service\V1\Data\SearchCriteria
    * Order cancellation for online payment methods
-   * Order online processing  for   Authorize.net Direct Post
+   * Order online processing for Authorize.net Direct Post
    * Backend grids while search
    * Adding of downlodable sample block on product page
    * Variations on duplicated configurable product

@@ -60,14 +60,6 @@ interface ConfigInterface
     public function getOption($option);
 
     /**
-     * Check to see if an internal option has been set for the key provided.
-     *
-     * @param string $option
-     * @return bool
-     */
-    public function hasOption($option);
-
-    /**
      * Convert config to array
      *
      * @return array

@@ -26,6 +26,9 @@ namespace Magento\Catalog\Service\V1\Product\CustomOptions\Data\Option\Metadata\
 
 use \Magento\Catalog\Service\V1\Product\CustomOptions\Data\Option\Metadata;
 
+/**
+ * @codeCoverageIgnore
+ */
 class File extends DefaultReader
 {
     /**

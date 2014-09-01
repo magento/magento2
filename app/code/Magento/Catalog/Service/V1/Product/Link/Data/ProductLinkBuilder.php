@@ -30,6 +30,7 @@ use Magento\Framework\Service\Data\Eav\AttributeValueBuilder;
  * Builder for the ProductLink Service Data Object
  *
  * @method ProductLink create()
+ * @codeCoverageIgnore
  */
 class ProductLinkBuilder extends \Magento\Framework\Service\Data\Eav\AbstractObjectBuilder
 {

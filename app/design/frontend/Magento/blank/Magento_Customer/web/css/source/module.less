@@ -130,7 +130,9 @@
     }
     .sidebar .block-account-nav {
         .css(background, @sidebar-background);
-        margin: 0 0 40px;
+    }
+    .sidebar-additional {
+        margin-top: 40px;
     }
     .block-account-nav {
         .title {
@@ -233,6 +235,9 @@
 //--------------------------------------
 .responsive-smaller(@break) when (@break = @screen-m) {
     .account {
+        .page.messages {
+            margin-bottom: 40px;
+        }
         .data.table {
             &:extend(.table-vertical-mobile all);
             .col.actions {
@@ -255,33 +260,9 @@
             margin-right: -@layout-width-xs-indent;
             margin-top: -(@indent-base + 1);
             .title {
-                .icon-font(
-                    @_icon-font-content: @icon-down,
-                    @_icon-font-size: 30px,
-                    @_icon-font-position: after
-                );
-                border-top: @border-width-base solid @border-color-base;
-                border-bottom: @border-width-base solid @border-color-base;
-                cursor: pointer;
-                display: block;
-                font-weight: @font-weight-semibold;
-                margin-bottom: 0;
-                overflow: hidden;
-                padding: 7px 20px;
-                position: relative;
-                &:after {
-                    position: absolute;
-                    right: 0;
-                    top: -5px;
-                }
+                &:extend(.abstract-toggling-title-mobile all);
                 strong {
                     margin: 0;
-                }
-                &.active {
-                    .icon-font-symbol(
-                        @_icon-font-content: @icon-prev,
-                        @_icon-font-position: after
-                    );
                 }
             }
             .content {
@@ -342,7 +323,7 @@
     }
 
     // My account
-    .account.page-layout-2column-left {
+    .account.page-layout-2columns-left {
         .sidebar-main,
         .sidebar-additional {
             width: 22.3%;

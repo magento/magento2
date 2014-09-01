@@ -23,7 +23,7 @@
  */
 namespace Magento\Catalog\Service\V1\Data;
 
-use \Magento\Framework\Service\EavDataObjectConverter;
+use Magento\Framework\Service\EavDataObjectConverter;
 
 class ProductMapper
 {
@@ -56,14 +56,14 @@ class ProductMapper
         \Magento\Catalog\Model\Product $productModel = null
     ) {
         /** @var \Magento\Catalog\Model\Product $productModel */
-        $productModel = $productModel ?: $this->productFactory->create();
+        $productModel = $productModel ? : $this->productFactory->create();
         $productModel->addData(EavDataObjectConverter::toFlatArray($product));
         if (!is_numeric($productModel->getAttributeSetId())) {
             $productModel->setAttributeSetId($productModel->getDefaultAttributeSetId());
         }
         if (!$productModel->hasTypeId()) {
             $productModel->setTypeId(\Magento\Catalog\Model\Product\Type::DEFAULT_TYPE);
-        } else if (!isset($this->productTypes->getTypes()[$productModel->getTypeId()])) {
+        } elseif (!isset($this->productTypes->getTypes()[$productModel->getTypeId()])) {
             throw new \RuntimeException('Illegal product type');
         }
         return $productModel;

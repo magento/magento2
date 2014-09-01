@@ -65,4 +65,13 @@ interface RequestInterface
      * @return mixed
      */
     public function getParam($key, $defaultValue = null);
+
+    /**
+     * Retrieve cookie value
+     *
+     * @param string|null $name
+     * @param string|null $default
+     * @return string|null
+     */
+    public function getCookie($name, $default);
 }

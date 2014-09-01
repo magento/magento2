@@ -24,13 +24,16 @@
 namespace Magento\Sales\Block\Adminhtml\Items\Column;
 
 use Magento\Sales\Model\Order\Item;
+use Magento\Sales\Model\Quote\Item\AbstractItem as QuoteItem;
+use Magento\Sales\Model\Order\Invoice\Item as InvoiceItem;
+use Magento\Sales\Model\Order\Creditmemo\Item as CreditmemoItem;
 
 /**
  * Adminhtml sales order column renderer
  *
  * @author     Magento Core Team <core@magentocommerce.com>
  */
-class DefaultColumn extends \Magento\Backend\Block\Template
+class DefaultColumn extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
 {
     /**
      * Option factory
@@ -41,29 +44,34 @@ class DefaultColumn extends \Magento\Backend\Block\Template
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
+     * @param \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
+     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Model\Product\OptionFactory $optionFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
+        \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService,
+        \Magento\Framework\Registry $registry,
         \Magento\Catalog\Model\Product\OptionFactory $optionFactory,
         array $data = array()
     ) {
         $this->_optionFactory = $optionFactory;
-        parent::__construct($context, $data);
+        parent::__construct($context, $stockItemService, $registry, $data);
     }
 
     /**
      * Get item
      *
-     * @return Item
+     * @return Item|QuoteItem
      */
     public function getItem()
     {
-        if ($this->_getData('item') instanceof Item) {
-            return $this->_getData('item');
+        $item = $this->_getData('item');
+        if ($item instanceof Item || $item instanceof QuoteItem) {
+            return $item;
         } else {
-            return $this->_getData('item')->getOrderItem();
+            return $item->getOrderItem();
         }
     }
 
@@ -118,5 +126,32 @@ class DefaultColumn extends \Magento\Backend\Block\Template
     public function getSku()
     {
         return $this->getItem()->getSku();
+    }
+
+
+    /**
+     * Calculate total amount for the item
+     *
+     * @param QuoteItem|Item|InvoiceItem|CreditmemoItem $item
+     * @return mixed
+     */
+    public function getTotalAmount($item)
+    {
+        $totalAmount = $item->getRowTotal() - $item->getDiscountAmount();
+
+        return $totalAmount;
+    }
+
+    /**
+     * Calculate base total amount for the item
+     *
+     * @param QuoteItem|Item|InvoiceItem|CreditmemoItem $item
+     * @return mixed
+     */
+    public function getBaseTotalAmount($item)
+    {
+        $baseTotalAmount =  $item->getBaseRowTotal() - $item->getBaseDiscountAmount();
+
+        return $baseTotalAmount;
     }
 }

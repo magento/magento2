@@ -25,6 +25,8 @@ namespace Magento\Catalog\Service\V1\Data\Eav\Option;
 
 /**
  * Class LabelBuilder
+ *
+ * @codeCoverageIgnore
  */
 class LabelBuilder extends \Magento\Framework\Service\Data\AbstractObjectBuilder
 {

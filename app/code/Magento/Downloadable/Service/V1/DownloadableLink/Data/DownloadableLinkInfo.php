@@ -26,6 +26,9 @@ namespace Magento\Downloadable\Service\V1\DownloadableLink\Data;
 
 use Magento\Framework\Service\Data\AbstractObject;
 
+/**
+ * @codeCoverageIgnore
+ */
 class DownloadableLinkInfo extends AbstractObject
 {
     const ID = 'id';

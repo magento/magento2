@@ -176,6 +176,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             $stockItemAfterImport->loadByProduct($productId);
 
             $this->assertEquals($stockItmBeforeImport->getQty(), $stockItemAfterImport->getQty());
+            $this->assertEquals(1, $stockItemAfterImport->getIsInStock());
             unset($stockItemAfterImport);
         }
 

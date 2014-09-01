@@ -27,6 +27,8 @@ namespace Magento\Catalog\Service\V1\Data\Eav;
 
 /**
  * Class Option
+ *
+ * @codeCoverageIgnore
  */
 class Option extends \Magento\Framework\Service\Data\AbstractObject
 {

@@ -64,7 +64,6 @@ namespace Magento\Framework\Session {
         return call_user_func_array('\session_regenerate_id', func_get_args());
     }
 
-    
     /**
      * Test SessionManager
      *
@@ -90,6 +89,16 @@ namespace Magento\Framework\Session {
         private $mockSessionConfig;
 
         /**
+         * @var \Magento\Framework\Stdlib\CookieManager | \PHPUnit_Framework_MockObject_MockObject
+         */
+        private $mockCookieManager;
+
+        /**
+         * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory | \PHPUnit_Framework_MockObject_MockObject
+         */
+        private $mockCookieMetadataFactory;
+
+        /**
          * @var bool
          */
         public static $isIniSetInvoked;
@@ -101,9 +110,20 @@ namespace Magento\Framework\Session {
             $this->mockSessionConfig = $this->getMockBuilder('\Magento\Framework\Session\Config\ConfigInterface')
                 ->disableOriginalConstructor()
                 ->getMock();
-
+            $this->mockCookieManager = $this->getMockBuilder('\Magento\Framework\Stdlib\CookieManager')
+                ->disableOriginalConstructor()
+                ->getMock();
+            $this->mockCookieMetadataFactory = $this->getMockBuilder(
+                'Magento\Framework\Stdlib\Cookie\CookieMetadataFactory'
+            )
+                ->disableOriginalConstructor()
+                ->getMock();
             $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-            $arguments = ['sessionConfig' => $this->mockSessionConfig];
+            $arguments = [
+                'sessionConfig' => $this->mockSessionConfig,
+                'cookieManager' => $this->mockCookieManager,
+                'cookieMetadataFactory' => $this->mockCookieMetadataFactory
+            ];
             $this->sessionManager = $this->objectManager->getObject(
                 'Magento\Framework\Session\SessionManager',
                 $arguments

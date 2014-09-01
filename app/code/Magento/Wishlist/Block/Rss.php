@@ -98,7 +98,8 @@ class Rss extends \Magento\Wishlist\Block\AbstractBlock
     {
         if (is_null($this->_wishlist)) {
             $this->_wishlist = parent::_getWishlist();
-            if ($this->_wishlist->getCustomerId() != $this->_getHelper()->getCustomer()->getId()) {
+            $currentCustomerId = $this->_getHelper()->getCustomer()->getId();
+            if (!$this->_wishlist->getVisibility() && ($this->_wishlist->getCustomerId() != $currentCustomerId)) {
                 $this->_wishlist->unsetData();
             }
         }
