@@ -539,7 +539,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * Return instance of option for configurable product
      *
-     * @return \Magento\Framework\Service\Data\AbstractObject
+     * @return \Magento\Framework\Service\Data\AbstractExtensibleObject
      */
     private function getOption()
     {

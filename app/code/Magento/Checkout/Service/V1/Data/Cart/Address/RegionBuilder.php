@@ -28,7 +28,7 @@ namespace Magento\Checkout\Service\V1\Data\Cart\Address;
  *
  * @method Region create()
  */
-class RegionBuilder extends \Magento\Framework\Service\Data\AbstractObjectBuilder
+class RegionBuilder extends \Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder
 {
     /**
      * Set region code

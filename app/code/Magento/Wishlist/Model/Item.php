@@ -613,10 +613,7 @@ class Item extends AbstractModel implements ItemInterface
             if (in_array($code, $this->_notRepresentOptions)) {
                 continue;
             }
-            if (!isset(
-                $options2[$code]
-            ) || $options2[$code]->getValue() === null || $options2[$code]->getValue() != $option->getValue()
-            ) {
+            if (!isset($options2[$code]) || $options2[$code]->getValue() != $option->getValue()) {
                 return false;
             }
         }

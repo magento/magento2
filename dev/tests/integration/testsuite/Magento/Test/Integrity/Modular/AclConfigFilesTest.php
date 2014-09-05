@@ -69,17 +69,6 @@ class AclConfigFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function aclConfigFileDataProvider()
     {
-        $fileList = glob(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Framework\App\Filesystem'
-            )->getPath(
-                \Magento\Framework\App\Filesystem::APP_DIR
-            ) . '/*/*/*/etc/acl.xml'
-        );
-        $dataProviderResult = array();
-        foreach ($fileList as $file) {
-            $dataProviderResult[$file] = array($file);
-        }
-        return $dataProviderResult;
+        return \Magento\TestFramework\Utility\Files::init()->getConfigFiles('acl.xml');
     }
 }

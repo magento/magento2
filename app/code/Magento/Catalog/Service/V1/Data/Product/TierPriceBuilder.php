@@ -24,12 +24,12 @@
  */
 namespace Magento\Catalog\Service\V1\Data\Product;
 
-use Magento\Framework\Service\Data\AbstractObjectBuilder;
+use Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder;
 
 /**
  * @codeCoverageIgnore
  */
-class TierPriceBuilder extends AbstractObjectBuilder
+class TierPriceBuilder extends AbstractExtensibleObjectBuilder
 {
     /**
      * Set Quantity

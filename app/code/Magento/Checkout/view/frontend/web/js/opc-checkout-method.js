@@ -72,8 +72,9 @@ define([
             events['click ' + this.options.checkout.continueSelector] = function(e) {
                 this._continue($(e.currentTarget));
             };
-            events['click ' + this.options.backSelector] = function() {
-                var prev  = self.steps.index($('.' + self.sectionActiveClass)) -1 ;
+            events['click ' + this.options.backSelector] = function(event) {
+                event.preventDefault();
+                var prev  = self.steps.index($('li.' + self.sectionActiveClass)) -1 ;
                 this._activateSection(prev);
             };
             events['click ' + '[data-action=checkout-method-login]'] = function(event) {

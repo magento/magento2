@@ -41,7 +41,7 @@ class CreateProductAttribute extends Curl
     /**
      * Create attribute
      *
-     * @param Fixture|\Magento\Catalog\Test\Fixture\ProductAttribute $fixture [optional]
+     * @param FixtureInterface|\Magento\Catalog\Test\Fixture\ProductAttribute $fixture [optional]
      * @return mixed|string
      */
     public function persist(FixtureInterface $fixture = null)

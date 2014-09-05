@@ -222,6 +222,15 @@
             <attribute_code>password_confirmation</attribute_code>
             <backend_type>virtual</backend_type>
         </password_confirmation>
+        <reward_points_delta>
+            <attribute_code>reward_points_delta</attribute_code>
+            <backend_type>virtual</backend_type>
+            <source>Magento\Customer\Test\Fixture\CustomerInjectable\RewardPoints</source>
+        </reward_points_delta>
+        <store_credit>
+            <attribute_code>store_credit</attribute_code>
+            <backend_type>virtual</backend_type>
+        </store_credit>
     </fields>
     <handler_interface>Magento\Customer\Test\Handler\CustomerInjectable\CustomerInjectableInterface</handler_interface>
 </fixture>

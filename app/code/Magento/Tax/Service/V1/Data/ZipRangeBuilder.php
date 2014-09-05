@@ -28,7 +28,7 @@ namespace Magento\Tax\Service\V1\Data;
  *
  * @method ZipRange create()
  */
-class ZipRangeBuilder extends \Magento\Framework\Service\Data\AbstractObjectBuilder
+class ZipRangeBuilder extends \Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder
 {
     /**
      * Set zip range starting point

@@ -40,12 +40,23 @@ class WeeeTax extends Weee
     {
         \Magento\Sales\Model\Quote\Address\Total\AbstractTotal::collect($address);
         $this->store = $address->getQuote()->getStore();
-        if (!$this->weeeData->isEnabled($this->_store) || !$this->weeeData->isTaxable($this->_store)) {
+        if (!$this->weeeData->isEnabled($this->_store)) {
             return $this;
         }
 
         $items = $this->_getAddressItems($address);
         if (!count($items)) {
+            return $this;
+        }
+
+        //If Weee is not taxable, then the 'weee' collector has accumulated the non-taxable total values
+        if (!$this->weeeData->isTaxable($this->_store)) {
+            //Because Weee is not taxable:  Weee excluding tax == Weee including tax
+            $weeeTotal = $address->getWeeeTotalExclTax();
+            $weeeBaseTotal = $address->getWeeeBaseTotalExclTax();
+
+            //Add to appropriate 'subtotal' or 'weee' accumulators
+            $this->processTotalAmount($address, $weeeTotal, $weeeBaseTotal, $weeeTotal, $weeeBaseTotal);
             return $this;
         }
 
@@ -72,24 +83,23 @@ class WeeeTax extends Weee
 
                 //Process each weee attribute of an item
                 foreach ($weeeAttributesTaxDetails as $weeeTaxDetails) {
-                    $weeeCode = $weeeTaxDetails[self::KEY_TAX_DETAILS_CODE];
+                    $weeeCode = $weeeTaxDetails[CommonTaxCollector::KEY_TAX_DETAILS_CODE];
                     $attributeCode = explode('-', $weeeCode)[1];
 
-                    $valueExclTax = $weeeTaxDetails[self::KEY_TAX_DETAILS_PRICE_EXCL_TAX];
-                    $baseValueExclTax = $weeeTaxDetails[self::KEY_TAX_DETAILS_BASE_PRICE_EXCL_TAX];
-                    $valueInclTax = $weeeTaxDetails[self::KEY_TAX_DETAILS_PRICE_INCL_TAX];
-                    $baseValueInclTax = $weeeTaxDetails[self::KEY_TAX_DETAILS_BASE_PRICE_INCL_TAX];
+                    $valueExclTax = $weeeTaxDetails[CommonTaxCollector::KEY_TAX_DETAILS_PRICE_EXCL_TAX];
+                    $baseValueExclTax = $weeeTaxDetails[CommonTaxCollector::KEY_TAX_DETAILS_BASE_PRICE_EXCL_TAX];
+                    $valueInclTax = $weeeTaxDetails[CommonTaxCollector::KEY_TAX_DETAILS_PRICE_INCL_TAX];
+                    $baseValueInclTax = $weeeTaxDetails[CommonTaxCollector::KEY_TAX_DETAILS_BASE_PRICE_INCL_TAX];
 
-                    $rowValueExclTax = $weeeTaxDetails[self::KEY_TAX_DETAILS_ROW_TOTAL];
-                    $baseRowValueExclTax = $weeeTaxDetails[self::KEY_TAX_DETAILS_BASE_ROW_TOTAL];
-                    $rowValueInclTax = $weeeTaxDetails[self::KEY_TAX_DETAILS_ROW_TOTAL_INCL_TAX];
-                    $baseRowValueInclTax = $weeeTaxDetails[self::KEY_TAX_DETAILS_BASE_ROW_TOTAL_INCL_TAX];
+                    $rowValueExclTax = $weeeTaxDetails[CommonTaxCollector::KEY_TAX_DETAILS_ROW_TOTAL];
+                    $baseRowValueExclTax = $weeeTaxDetails[CommonTaxCollector::KEY_TAX_DETAILS_BASE_ROW_TOTAL];
+                    $rowValueInclTax = $weeeTaxDetails[CommonTaxCollector::KEY_TAX_DETAILS_ROW_TOTAL_INCL_TAX];
+                    $baseRowValueInclTax = $weeeTaxDetails[CommonTaxCollector::KEY_TAX_DETAILS_BASE_ROW_TOTAL_INCL_TAX];
 
                     $totalValueInclTax += $valueInclTax;
                     $baseTotalValueInclTax += $baseValueInclTax;
                     $totalRowValueInclTax += $rowValueInclTax;
                     $baseTotalRowValueInclTax += $baseRowValueInclTax;
-
 
                     $totalValueExclTax += $valueExclTax;
                     $baseTotalValueExclTax += $baseValueExclTax;

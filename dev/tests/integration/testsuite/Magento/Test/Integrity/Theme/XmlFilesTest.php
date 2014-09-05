@@ -47,12 +47,12 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function viewConfigFileDataProvider()
     {
-        $result = array();
+        $result = [];
         $files = glob($this->getPath(\Magento\Framework\App\Filesystem::THEMES_DIR) . '/*/*/view.xml');
         foreach ($files as $file) {
-            $result[$file] = array($file);
+            $result[substr($file, strlen(BP))] = [$file];
         }
-        return $result === array() ? array(array(self::NO_VIEW_XML_FILES_MARKER)) : $result;
+        return $result === [] ? [[self::NO_VIEW_XML_FILES_MARKER]] : $result;
     }
 
     /**
@@ -69,10 +69,10 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function themeConfigFileExistsDataProvider()
     {
-        $result = array();
+        $result = [];
         $files = glob($this->getPath(\Magento\Framework\App\Filesystem::THEMES_DIR) . '/*/*/*', GLOB_ONLYDIR);
         foreach ($files as $themeDir) {
-            $result[$themeDir] = array($themeDir);
+            $result[substr($themeDir, strlen(BP))] = [$themeDir];
         }
         return $result;
     }
@@ -108,10 +108,10 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function themeConfigFileDataProvider()
     {
-        $result = array();
+        $result = [];
         $files = glob($this->getPath(\Magento\Framework\App\Filesystem::THEMES_DIR) . '/*/*/*/theme.xml');
         foreach ($files as $file) {
-            $result[$file] = array($file);
+            $result[substr($file, strlen(BP))] = [$file];
         }
         return $result;
     }

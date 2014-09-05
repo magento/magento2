@@ -23,14 +23,14 @@
  */
 namespace Magento\CatalogInventory\Service\V1\Data;
 
-use Magento\Framework\Service\Data\AbstractObjectBuilder;
+use Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder;
 
 /**
  * Stock item details data builder
  *
  * @codeCoverageIgnore
  */
-class StockItemDetailsBuilder extends AbstractObjectBuilder
+class StockItemDetailsBuilder extends AbstractExtensibleObjectBuilder
 {
     /**
      * @param int $qty

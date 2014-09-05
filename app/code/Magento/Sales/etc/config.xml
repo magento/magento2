@@ -36,6 +36,9 @@
             <reorder>
                 <allow>1</allow>
             </reorder>
+            <minimum_order>
+                <tax_including>1</tax_including>
+            </minimum_order>
         </sales>
         <sales_email>
             <order>

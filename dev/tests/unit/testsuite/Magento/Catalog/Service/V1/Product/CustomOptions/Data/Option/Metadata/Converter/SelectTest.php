@@ -56,7 +56,7 @@ class SelectTest extends \PHPUnit_Framework_TestCase
         $this->optionMetadataMock =
             $this->getMock('\Magento\Catalog\Service\V1\Product\CustomOptions\Data\Option\Metadata', [], [], '', false);
         $this->attributeValueMock =
-            $this->getMock('\Magento\Framework\Service\Data\Eav\AttributeValue', [], [], '', false);
+            $this->getMock('\Magento\Framework\Service\Data\AttributeValue', [], [], '', false);
         $this->model = new Select();
     }
 

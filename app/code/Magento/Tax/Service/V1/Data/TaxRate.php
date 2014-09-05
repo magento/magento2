@@ -27,7 +27,7 @@ namespace Magento\Tax\Service\V1\Data;
 /**
  * Service data object for a tax percentage rate associated with a location.
  */
-class TaxRate extends \Magento\Framework\Service\Data\AbstractObject
+class TaxRate extends \Magento\Framework\Service\Data\AbstractExtensibleObject
 {
     /**#@+
      * Constants defined for keys of array, makes typos less likely

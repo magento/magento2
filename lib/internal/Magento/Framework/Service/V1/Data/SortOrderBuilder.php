@@ -24,14 +24,14 @@
 
 namespace Magento\Framework\Service\V1\Data;
 
-use Magento\Framework\Service\Data\AbstractObjectBuilder;
+use Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder;
 
 /**
  * Builder for sort order data object.
  *
  * @method SortOrder create()
  */
-class SortOrderBuilder extends AbstractObjectBuilder
+class SortOrderBuilder extends AbstractExtensibleObjectBuilder
 {
     /**
      * Set sorting field.

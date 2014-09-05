@@ -33,24 +33,34 @@ class SaveShipping extends \Magento\Checkout\Controller\Onepage
      */
     public function execute()
     {
-        if ($this->_expireAjax()) {
+        if (!$this->getRequest()->isPost() || $this->_expireAjax()) {
             return;
         }
-        if ($this->getRequest()->isPost()) {
-            $data = $this->getRequest()->getPost('shipping', array());
-            $customerAddressId = $this->getRequest()->getPost('shipping_address_id', false);
-            $result = $this->getOnepage()->saveShipping($data, $customerAddressId);
+        $data = $this->getRequest()->getPost('shipping', []);
+        $customerAddressId = $this->getRequest()->getPost('shipping_address_id', false);
+        $result = $this->getOnepage()->saveShipping($data, $customerAddressId);
 
-            if (!isset($result['error'])) {
+        $quote = $this->getOnepage()->getQuote();
+        if (!isset($result['error'])) {
+            if (!$quote->validateMinimumAmount()) {
+                $result = [
+                    'error' => -1,
+                    'message' => $this->scopeConfig->getValue(
+                        'sales/minimum_order/error_message',
+                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                        $quote->getStoreId()
+                    )
+                ];
+            } else {
                 $result['goto_section'] = 'shipping_method';
-                $result['update_section'] = array(
+                $result['update_section'] = [
                     'name' => 'shipping-method',
                     'html' => $this->_getShippingMethodsHtml()
-                );
+                ];
             }
-            $this->getResponse()->representJson(
-                $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result)
-            );
         }
+        $this->getResponse()->representJson(
+            $this->_objectManager->get('Magento\Core\Helper\Data')->jsonEncode($result)
+        );
     }
 }

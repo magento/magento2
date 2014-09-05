@@ -24,6 +24,7 @@
 
 namespace Magento\Catalog\Test\Constraint;
 
+use Mtf\Client\Browser;
 use Mtf\Fixture\FixtureInterface;
 use Mtf\Constraint\AbstractConstraint;
 use Magento\Checkout\Test\Page\CheckoutCart;
@@ -46,17 +47,18 @@ class AssertProductInCart extends AbstractConstraint
      *
      * @param CatalogProductView $catalogProductView
      * @param FixtureInterface $product
+     * @param Browser $browser
      * @param CheckoutCart $checkoutCart
      * @return void
      */
     public function processAssert(
         CatalogProductView $catalogProductView,
         FixtureInterface $product,
+        Browser $browser,
         CheckoutCart $checkoutCart
     ) {
         // Add product to cart
-        $catalogProductView->init($product);
-        $catalogProductView->open();
+        $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
         $productOptions = $product->getCustomOptions();
         if ($productOptions) {
             $customOption = $catalogProductView->getCustomOptionsBlock();

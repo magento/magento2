@@ -23,9 +23,9 @@
  */
 namespace Magento\Webapi\Service\Entity;
 
-use Magento\Framework\Service\Data\AbstractObject;
+use Magento\Framework\Service\Data\AbstractExtensibleObject;
 
-class SimpleArrayData extends AbstractObject
+class SimpleArrayData extends AbstractExtensibleObject
 {
     /**
      * @return int[]

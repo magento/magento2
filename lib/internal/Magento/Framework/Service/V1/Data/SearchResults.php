@@ -27,7 +27,7 @@ namespace Magento\Framework\Service\V1\Data;
 /**
  * SearchResults Service Data Object used for the search service requests
  */
-class SearchResults extends \Magento\Framework\Service\Data\AbstractObject
+class SearchResults extends \Magento\Framework\Service\Data\AbstractExtensibleObject
 {
     const KEY_ITEMS = 'items';
     const KEY_SEARCH_CRITERIA = 'search_criteria';
@@ -36,7 +36,7 @@ class SearchResults extends \Magento\Framework\Service\Data\AbstractObject
     /**
      * Get items
      *
-     * @return \Magento\Framework\Service\Data\AbstractObject[]
+     * @return \Magento\Framework\Service\Data\AbstractExtensibleObject[]
      */
     public function getItems()
     {

@@ -37,7 +37,6 @@ class ZeroTotal implements SpecificationInterface
      */
     public function isApplicable(PaymentMethodChecksInterface $paymentMethod, Quote $quote)
     {
-        $total = $quote->getBaseSubtotal() + $quote->getShippingAddress()->getBaseShippingAmount();
-        return !($total < 0.0001 && $paymentMethod->getCode() != 'free');
+        return !($quote->getBaseGrandTotal() < 0.0001 && $paymentMethod->getCode() != 'free');
     }
 }

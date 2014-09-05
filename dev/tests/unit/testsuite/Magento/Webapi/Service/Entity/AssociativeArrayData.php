@@ -23,9 +23,9 @@
  */
 namespace Magento\Webapi\Service\Entity;
 
-use Magento\Framework\Service\Data\AbstractObject;
+use Magento\Framework\Service\Data\AbstractExtensibleObject;
 
-class AssociativeArrayData extends AbstractObject
+class AssociativeArrayData extends AbstractExtensibleObject
 {
     /**
      * @return string[]

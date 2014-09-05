@@ -43,4 +43,13 @@ interface ReadServiceInterface
      * @return \Magento\Checkout\Service\V1\Data\CartSearchResults
      */
     public function getCartList(SearchCriteria $searchCriteria);
+
+    /**
+     * Retrieve quote totals data
+     *
+     * @param int $cartId
+     * @return \Magento\Checkout\Service\V1\Data\Cart\Totals
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function getTotals($cartId);
 }

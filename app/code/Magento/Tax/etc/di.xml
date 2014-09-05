@@ -31,6 +31,7 @@
     <preference for="Magento\Tax\Service\V1\TaxCalculationServiceInterface"
                 type="Magento\Tax\Service\V1\TaxCalculationService"/>
     <preference for="Magento\Tax\Service\V1\TaxClassServiceInterface" type="Magento\Tax\Service\V1\TaxClassService" />
+    <preference for="Magento\Tax\Service\V1\OrderTaxServiceInterface" type="Magento\Tax\Service\V1\OrderTaxService" />
     <type name="Magento\Tax\Helper\Data">
         <arguments>
             <argument name="taxConfig" xsi:type="object">Magento\Tax\Model\Config\Proxy</argument>

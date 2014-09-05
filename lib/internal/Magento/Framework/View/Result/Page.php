@@ -90,26 +90,11 @@ class Page extends Layout
         $update = $this->getLayout()->getUpdate();
         $update->addHandle('default');
         $update->addHandle($this->getDefaultLayoutHandle());
-        $pageLayout = $this->getPageLayout();
-        if ($pageLayout) {
-            $update->addHandle($pageLayout);
-            $this->setTemplate(self::DEFAULT_ROOT_TEMPLATE);
+        if ($update->isLayoutDefined()) {
+            $update->removeHandle('default');
         }
+        $this->setTemplate(self::DEFAULT_ROOT_TEMPLATE);
         return $this;
-    }
-
-    /**
-     * Get default page layout regarding definition in layout
-     *
-     * @return null|string
-     */
-    protected function getPageLayout()
-    {
-        if ($this->pageLayout === null) {
-            $update = $this->getLayout()->getUpdate();
-            $this->pageLayout = $update->isLayoutDefined() ? '' : $update->getPageLayout();
-        }
-        return $this->pageLayout;
     }
 
     /**
@@ -154,7 +139,7 @@ class Page extends Layout
      */
     public function renderResult(ResponseInterface $response)
     {
-        if ($this->getTemplate()) {
+        if ($this->getConfig()->getPageLayout()) {
             $layout = $this->getLayout();
             $config = $this->getConfig();
 
@@ -183,7 +168,7 @@ class Page extends Layout
     {
         $config = $this->getConfig();
         $config->addBodyClass($this->_request->getFullActionName('-'));
-        $pageLayout = $this->getPageLayout();
+        $pageLayout = $this->pageConfig->getPageLayout();
         if ($pageLayout) {
             $config->addBodyClass('page-layout-' . $pageLayout);
         }

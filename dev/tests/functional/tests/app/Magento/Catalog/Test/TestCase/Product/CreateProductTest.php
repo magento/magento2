@@ -56,10 +56,9 @@ class CreateProductTest extends Functional
         $product->switchData('simple_advanced_inventory');
         //Data
         $createProductPage = Factory::getPageFactory()->getCatalogProductNew();
-        $createProductPage->init($product);
         $productForm = $createProductPage->getProductForm();
         //Steps
-        $createProductPage->open();
+        $createProductPage->open(['type' => 'simple', 'set' => 4]);
         $productForm->fill($product);
         $createProductPage->getFormAction()->save();
         $createProductPage->getMessagesBlock()->assertSuccessMessage();
@@ -84,7 +83,7 @@ class CreateProductTest extends Functional
         $productGridPage = Factory::getPageFactory()->getCatalogProductIndex();
         $productGridPage->open();
         $gridBlock = $productGridPage->getProductGrid();
-        $this->assertTrue($gridBlock->isRowVisible(array('sku' => $product->getProductSku())));
+        $this->assertTrue($gridBlock->isRowVisible(['sku' => $product->getProductSku()]));
     }
 
     /**

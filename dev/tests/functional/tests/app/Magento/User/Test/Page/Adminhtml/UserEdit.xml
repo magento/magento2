@@ -23,29 +23,27 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page mca="admin/user/edit">
-    <block>
-        <name>pageActions</name>
-        <class>Magento\Backend\Test\Block\FormPageActions</class>
-        <locator>.page-main-actions</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>messagesBlock</name>
-        <class>Magento\Core\Test\Block\Messages</class>
-        <locator>#messages</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>userForm</name>
-        <class>Magento\User\Test\Block\Adminhtml\User\UserForm</class>
-        <locator>[id="page:main-container"]</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>rolesGrid</name>
-        <class>Magento\User\Test\Block\Adminhtml\User\Tab\Role\Grid</class>
-        <locator>[id="permissionsUserRolesGrid"]</locator>
-        <strategy>css selector</strategy>
-    </block>
+<page mca="admin/user/edit" module="Magento_User">
+    <blocks>
+        <pageActions>
+            <class>Magento\Backend\Test\Block\FormPageActions</class>
+            <locator>.page-main-actions</locator>
+            <strategy>css selector</strategy>
+        </pageActions>
+        <messagesBlock>
+            <class>Magento\Core\Test\Block\Messages</class>
+            <locator>#messages</locator>
+            <strategy>css selector</strategy>
+        </messagesBlock>
+        <userForm>
+            <class>Magento\User\Test\Block\Adminhtml\User\UserForm</class>
+            <locator>[id="page:main-container"]</locator>
+            <strategy>css selector</strategy>
+        </userForm>
+        <rolesGrid>
+            <class>Magento\User\Test\Block\Adminhtml\User\Tab\Role\Grid</class>
+            <locator>[id="permissionsUserRolesGrid"]</locator>
+            <strategy>css selector</strategy>
+        </rolesGrid>
+    </blocks>
 </page>

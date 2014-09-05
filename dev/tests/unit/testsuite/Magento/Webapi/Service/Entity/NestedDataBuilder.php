@@ -23,9 +23,9 @@
  */
 namespace Magento\Webapi\Service\Entity;
 
-use Magento\Framework\Service\Data\AbstractObjectBuilder;
+use Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder;
 
-class NestedDataBuilder extends AbstractObjectBuilder
+class NestedDataBuilder extends AbstractExtensibleObjectBuilder
 {
     /**
      * @param string $details

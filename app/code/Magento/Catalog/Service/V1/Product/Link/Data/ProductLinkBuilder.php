@@ -24,7 +24,7 @@
 
 namespace Magento\Catalog\Service\V1\Product\Link\Data;
 
-use Magento\Framework\Service\Data\Eav\AttributeValueBuilder;
+use Magento\Framework\Service\Data\AttributeValueBuilder;
 
 /**
  * Builder for the ProductLink Service Data Object
@@ -32,7 +32,7 @@ use Magento\Framework\Service\Data\Eav\AttributeValueBuilder;
  * @method ProductLink create()
  * @codeCoverageIgnore
  */
-class ProductLinkBuilder extends \Magento\Framework\Service\Data\Eav\AbstractObjectBuilder
+class ProductLinkBuilder extends \Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder
 {
     /**
      * @var array

@@ -24,6 +24,7 @@
 
 namespace Magento\ConfigurableProduct\Test\Constraint;
 
+use Mtf\Client\Browser;
 use Mtf\Constraint\AbstractConstraint;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\ConfigurableProduct\Test\Fixture\CatalogProductConfigurable;
@@ -44,16 +45,17 @@ class AssertConfigurableView extends AbstractConstraint
      * Assert configurable product, corresponds to the product page
      *
      * @param CatalogProductView $catalogProductView
+     * @param Browser $browser
      * @param CatalogProductConfigurable $configurable
      * @return void
      */
     public function processAssert(
         CatalogProductView $catalogProductView,
+        Browser $browser,
         CatalogProductConfigurable $configurable
     ) {
         //Open product view page
-        $catalogProductView->init($configurable);
-        $catalogProductView->open();
+        $browser->open($_ENV['app_frontend_url'] . $configurable->getUrlKey() . '.html');
 
         //Process assertions
         $this->assertOnProductView($configurable, $catalogProductView);

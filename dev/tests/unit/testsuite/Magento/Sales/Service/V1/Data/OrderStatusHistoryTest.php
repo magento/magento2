@@ -28,7 +28,7 @@ class OrderStatusHistoryTest extends \PHPUnit_Framework_TestCase
     public function testGetComment()
     {
         $data = ['comment' => 'test_value_comment'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -44,7 +44,7 @@ class OrderStatusHistoryTest extends \PHPUnit_Framework_TestCase
     public function testGetCreatedAt()
     {
         $data = ['created_at' => 'test_value_created_at'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -60,7 +60,7 @@ class OrderStatusHistoryTest extends \PHPUnit_Framework_TestCase
     public function testGetEntityId()
     {
         $data = ['entity_id' => 'test_value_entity_id'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -76,7 +76,7 @@ class OrderStatusHistoryTest extends \PHPUnit_Framework_TestCase
     public function testGetEntityName()
     {
         $data = ['entity_name' => 'test_value_entity_name'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -92,7 +92,7 @@ class OrderStatusHistoryTest extends \PHPUnit_Framework_TestCase
     public function testGetIsCustomerNotified()
     {
         $data = ['is_customer_notified' => 'test_value_is_customer_notified'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -108,7 +108,7 @@ class OrderStatusHistoryTest extends \PHPUnit_Framework_TestCase
     public function testGetIsVisibleOnFront()
     {
         $data = ['is_visible_on_front' => 'test_value_is_visible_on_front'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -124,7 +124,7 @@ class OrderStatusHistoryTest extends \PHPUnit_Framework_TestCase
     public function testGetParentId()
     {
         $data = ['parent_id' => 'test_value_parent_id'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -140,7 +140,7 @@ class OrderStatusHistoryTest extends \PHPUnit_Framework_TestCase
     public function testGetStatus()
     {
         $data = ['status' => 'test_value_status'];
-        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractObjectBuilder')
+        $abstractBuilderMock = $this->getMockBuilder('Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')
             ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();

@@ -24,10 +24,11 @@
 
 namespace Magento\GroupedProduct\Test\Constraint;
 
+use Mtf\Client\Browser;
 use Mtf\Fixture\InjectableFixture;
 use Mtf\Constraint\AbstractConstraint;
 use Magento\GroupedProduct\Test\Fixture\CatalogProductGrouped;
-use Magento\GroupedProduct\Test\Page\Product\CatalogProductView;
+use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Catalog\Test\Constraint\AssertPriceOnProductPageInterface;
 
 /**
@@ -56,6 +57,7 @@ abstract class AbstractAssertPriceOnGroupedProductPage extends AbstractConstrain
      * @param CatalogProductGrouped $product
      * @param CatalogProductView $catalogProductView
      * @param AssertPriceOnProductPageInterface $object
+     * @param Browser $browser
      * @param string $typePrice [optional]
      * @return bool|string
      */
@@ -63,10 +65,10 @@ abstract class AbstractAssertPriceOnGroupedProductPage extends AbstractConstrain
         CatalogProductGrouped $product,
         CatalogProductView $catalogProductView,
         AssertPriceOnProductPageInterface $object,
+        Browser $browser,
         $typePrice = ''
     ) {
-        $catalogProductView->init($product);
-        $catalogProductView->open();
+        $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
 
         $groupedData = $product->getAssociated();
         /** @var InjectableFixture $subProduct */

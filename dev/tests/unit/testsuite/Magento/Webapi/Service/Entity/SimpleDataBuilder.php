@@ -23,9 +23,9 @@
  */
 namespace Magento\Webapi\Service\Entity;
 
-use Magento\Framework\Service\Data\AbstractObjectBuilder;
+use Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder;
 
-class SimpleDataBuilder extends AbstractObjectBuilder
+class SimpleDataBuilder extends AbstractExtensibleObjectBuilder
 {
     /**
      * @param int $id

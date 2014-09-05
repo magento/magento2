@@ -38,30 +38,33 @@ class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
      */
     const MAX_PROBABILITY_OF_GUESSING = 0.25;
 
+    /**
+     * Number of attempts to generate
+     */
     const MAX_GENERATE_ATTEMPTS = 10;
 
     /**
      * Count of generated Coupons
      * @var int
      */
-    protected $_generatedCount = 0;
+    protected $generatedCount = 0;
 
     /**
      * Sales rule coupon
      *
      * @var \Magento\SalesRule\Helper\Coupon
      */
-    protected $_salesRuleCoupon = null;
+    protected $salesRuleCoupon;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
-    protected $_date;
+    protected $date;
 
     /**
      * @var \Magento\SalesRule\Model\CouponFactory
      */
-    protected $_couponFactory;
+    protected $couponFactory;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime
@@ -88,11 +91,11 @@ class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
-        array $data = array()
+        array $data = []
     ) {
-        $this->_salesRuleCoupon = $salesRuleCoupon;
-        $this->_date = $date;
-        $this->_couponFactory = $couponFactory;
+        $this->salesRuleCoupon = $salesRuleCoupon;
+        $this->date = $date;
+        $this->couponFactory = $couponFactory;
         $this->dateTime = $dateTime;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
@@ -115,29 +118,26 @@ class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
     public function generateCode()
     {
         $format = $this->getFormat();
-        if (!$format) {
+        if (empty($format)) {
             $format = \Magento\SalesRule\Helper\Coupon::COUPON_FORMAT_ALPHANUMERIC;
         }
-        $length = max(1, (int)$this->getLength());
-        $split = max(0, (int)$this->getDash());
-        $suffix = $this->getSuffix();
-        $prefix = $this->getPrefix();
 
         $splitChar = $this->getDelimiter();
-        $charset = $this->_salesRuleCoupon->getCharset($format);
+        $charset = $this->salesRuleCoupon->getCharset($format);
 
         $code = '';
         $charsetSize = count($charset);
-        for ($i = 0; $i < $length; $i++) {
+        $split = max(0, (int)$this->getDash());
+        $length = max(1, (int)$this->getLength());
+        for ($i = 0; $i < $length; ++$i) {
             $char = $charset[\Magento\Framework\Math\Random::getRandomNumber(0, $charsetSize - 1)];
-            if ($split > 0 && $i % $split == 0 && $i != 0) {
+            if (($split > 0) && (($i % $split) === 0) && ($i !== 0)) {
                 $char = $splitChar . $char;
             }
             $code .= $char;
         }
 
-        $code = $prefix . $code . $suffix;
-        return $code;
+        return $this->getPrefix() . $code . $this->getSuffix();
     }
 
     /**
@@ -147,10 +147,10 @@ class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
      */
     public function getDelimiter()
     {
-        if ($this->getData('delimiter')) {
+        if ($this->hasData('delimiter')) {
             return $this->getData('delimiter');
         } else {
-            return $this->_salesRuleCoupon->getCodeSeparator();
+            return $this->salesRuleCoupon->getCodeSeparator();
         }
     }
 
@@ -162,30 +162,13 @@ class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
      */
     public function generatePool()
     {
-        $this->_generatedCount = 0;
+        $this->generatedCount = 0;
         $size = $this->getQty();
-
-        $maxProbability = $this->getMaxProbability() ? $this->getMaxProbability() : self::MAX_PROBABILITY_OF_GUESSING;
         $maxAttempts = $this->getMaxAttempts() ? $this->getMaxAttempts() : self::MAX_GENERATE_ATTEMPTS;
-
+        $this->increaseLength();
         /** @var $coupon \Magento\SalesRule\Model\Coupon */
-        $coupon = $this->_couponFactory->create();
-
-        $chars = count($this->_salesRuleCoupon->getCharset($this->getFormat()));
-        $length = (int)$this->getLength();
-        $maxCodes = pow($chars, $length);
-        $probability = $size / $maxCodes;
-        //increase the length of Code if probability is low
-        if ($probability > $maxProbability) {
-            do {
-                $length++;
-                $maxCodes = pow($chars, $length);
-                $probability = $size / $maxCodes;
-            } while ($probability > $maxProbability);
-            $this->setLength($length);
-        }
-
-        $now = $this->dateTime->formatDate($this->_date->gmtTimestamp());
+        $coupon = $this->couponFactory->create();
+        $nowTimestamp = $this->dateTime->formatDate($this->date->gmtTimestamp());
 
         for ($i = 0; $i < $size; $i++) {
             $attempt = 0;
@@ -196,53 +179,72 @@ class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
                     );
                 }
                 $code = $this->generateCode();
-                $attempt++;
+                ++$attempt;
             } while ($this->getResource()->exists($code));
 
             $expirationDate = $this->getToDate();
             if ($expirationDate instanceof \Zend_Date) {
-                $expirationDate = $expirationDate->toString(\Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT);
+                $expirationDate = $expirationDate->toString(
+                    \Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT
+                );
             }
 
-            $coupon->setId(
-                null
-            )->setRuleId(
-                $this->getRuleId()
-            )->setUsageLimit(
-                $this->getUsesPerCoupon()
-            )->setUsagePerCustomer(
-                $this->getUsesPerCustomer()
-            )->setExpirationDate(
-                $expirationDate
-            )->setCreatedAt(
-                $now
-            )->setType(
-                \Magento\SalesRule\Helper\Coupon::COUPON_TYPE_SPECIFIC_AUTOGENERATED
-            )->setCode(
-                $code
-            )->save();
+            $coupon->setId(null)
+                ->setRuleId($this->getRuleId())
+                ->setUsageLimit($this->getUsesPerCoupon())
+                ->setUsagePerCustomer($this->getUsesPerCustomer())
+                ->setExpirationDate($expirationDate)
+                ->setCreatedAt($nowTimestamp)
+                ->setType(\Magento\SalesRule\Helper\Coupon::COUPON_TYPE_SPECIFIC_AUTOGENERATED)
+                ->setCode($code)
+                ->save();
 
-            $this->_generatedCount++;
+            $this->generatedCount += 1;
         }
+
         return $this;
     }
 
     /**
-     * Validate input
+     * Increase the length of Code if probability is low
+     *
+     * @return void
+     */
+    protected function increaseLength()
+    {
+        $maxProbability = $this->getMaxProbability() ? $this->getMaxProbability() : self::MAX_PROBABILITY_OF_GUESSING;
+        $chars = count($this->salesRuleCoupon->getCharset($this->getFormat()));
+        $size = $this->getQty();
+        $length = (int)$this->getLength();
+        $maxCodes = pow($chars, $length);
+        $probability = $size / $maxCodes;
+
+        if ($probability > $maxProbability) {
+            do {
+                $length++;
+                $maxCodes = pow($chars, $length);
+                $probability = $size / $maxCodes;
+            } while ($probability > $maxProbability);
+            $this->setLength($length);
+        }
+    }
+
+    /**
+     * Validate data input
      *
      * @param array $data
      * @return bool
      */
     public function validateData($data)
     {
-        return !empty($data) &&
-            !empty($data['qty']) &&
-            !empty($data['rule_id']) &&
-            !empty($data['length']) &&
-            !empty($data['format']) &&
-            (int)$data['qty'] > 0 &&
-            (int)$data['rule_id'] > 0 &&
-            (int)$data['length'] > 0;
+        return !empty($data)
+        && !empty($data['qty'])
+        && !empty($data['rule_id'])
+        && !empty($data['length'])
+        && !empty($data['format'])
+        && (int)$data['qty'] > 0
+        && (int)$data['rule_id'] > 0
+        && (int)$data['length'] > 0;
     }
 
     /**
@@ -252,6 +254,6 @@ class Massgenerator extends \Magento\Framework\Model\AbstractModel implements
      */
     public function getGeneratedCount()
     {
-        return $this->_generatedCount;
+        return $this->generatedCount;
     }
 }

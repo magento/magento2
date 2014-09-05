@@ -130,7 +130,7 @@ class CreateRole extends Curl
     /**
      * Execute handler
      *
-     * @param Fixture|null $fixture [optional]
+     * @param FixtureInterface|null $fixture [optional]
      * @throws \UnexpectedValueException
      * @throws \UnderflowException from findIdWithFilter
      * @throws \Exception from findIdWithFilter

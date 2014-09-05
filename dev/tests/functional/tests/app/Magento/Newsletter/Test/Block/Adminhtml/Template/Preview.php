@@ -37,31 +37,11 @@ use Mtf\Client\Element\Locator;
 class Preview extends Block
 {
     /**
-     * Browser
-     *
-     * @var Browser
-     */
-    protected $browser;
-
-    /**
      * IFrame locator
      *
      * @var string
      */
     protected $iFrame = '#preview_iframe';
-
-    /**
-     * Constructor
-     *
-     * @param Element $element
-     * @param BlockFactory $blockFactory
-     * @param Browser $browser
-     */
-    public function __construct(Element $element, BlockFactory $blockFactory, Browser $browser)
-    {
-        $this->browser = $browser;
-        parent::__construct($element, $blockFactory);
-    }
 
     /**
      * Get page content text

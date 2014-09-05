@@ -235,4 +235,16 @@
             <resource ref="Magento_Sales::sales" />
         </resources>
     </route>
+    <route url="/V1/transactions/:id" method="GET">
+        <service class="Magento\Sales\Service\V1\TransactionReadInterface" method="get"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/transactions" method="PUT">
+        <service class="Magento\Sales\Service\V1\TransactionReadInterface" method="search"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
 </routes>

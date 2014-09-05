@@ -23,12 +23,12 @@
  */
 namespace Magento\Bundle\Service\V1\Data\Product;
 
-use \Magento\Framework\Service\Data\AbstractObject;
+use \Magento\Framework\Service\Data\AbstractExtensibleObject;
 
 /**
  * @codeCoverageIgnore
  */
-class Option extends AbstractObject
+class Option extends AbstractExtensibleObject
 {
     const ID = 'id';
 

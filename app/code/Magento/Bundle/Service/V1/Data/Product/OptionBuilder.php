@@ -23,12 +23,12 @@
  */
 namespace Magento\Bundle\Service\V1\Data\Product;
 
-use Magento\Framework\Service\Data\AbstractObjectBuilder;
+use Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder;
 
 /**
  * @codeCoverageIgnore
  */
-class OptionBuilder extends AbstractObjectBuilder
+class OptionBuilder extends AbstractExtensibleObjectBuilder
 {
     /**
      * Set option id

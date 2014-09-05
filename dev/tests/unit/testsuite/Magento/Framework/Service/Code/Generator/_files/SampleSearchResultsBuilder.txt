@@ -10,8 +10,8 @@ class SampleSearchResultsBuilder extends \Magento\Framework\Service\V1\Data\Abst
      *
      * @param
      */
-    public function __construct(\Magento\Framework\Service\Data\ObjectFactory $objectFactory, \Magento\Framework\Service\V1\Data\SearchCriteriaBuilder $searchCriteriaBuilder, \Magento\Framework\Service\Code\Generator\SampleBuilder $itemObjectBuilder)
+    public function __construct(\Magento\Framework\Service\Data\ObjectFactory $objectFactory, \Magento\Framework\Service\Data\AttributeValueBuilder $valueBuilder, \Magento\Framework\Service\Config\MetadataConfig $metadataService, \Magento\Framework\Service\V1\Data\SearchCriteriaBuilder $searchCriteriaBuilder, \Magento\Framework\Service\Code\Generator\SampleBuilder $itemObjectBuilder)
     {
-        parent::__construct($objectFactory, $searchCriteriaBuilder, $itemObjectBuilder);
+        parent::__construct($objectFactory, $valueBuilder, $metadataService, $searchCriteriaBuilder, $itemObjectBuilder);
     }
 }

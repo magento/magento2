@@ -23,9 +23,9 @@
  */
 namespace Magento\Webapi\Service\Entity;
 
-use Magento\Framework\Service\Data\AbstractObjectBuilder;
+use Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder;
 
-class DataArrayDataBuilder extends AbstractObjectBuilder
+class DataArrayDataBuilder extends AbstractExtensibleObjectBuilder
 {
     /**
      * @param \Magento\Webapi\Service\Entity\SimpleData[] $items

@@ -27,7 +27,7 @@ namespace Magento\Checkout\Service\V1\Data\Cart;
 /**
  * @method PaymentMethod create()
  */
-class PaymentMethodBuilder extends \Magento\Framework\Service\Data\AbstractObjectBuilder
+class PaymentMethodBuilder extends \Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder
 {
     /**
      * Get purchase order number

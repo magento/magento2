@@ -40,7 +40,7 @@ interface AttributeMetadataBuilderInterface
     /**
      * Build the attribute data object.
      *
-     * @return AbstractObject
+     * @return AbstractSimpleObject
      */
     public function create();
 }

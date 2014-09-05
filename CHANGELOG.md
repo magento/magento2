@@ -1,3 +1,48 @@
+0.1.0-alpha94
+=============
+ * Implemented API services:
+   * Sales transactions
+ * Added the following functional tests:
+   * Create Store Group
+   * Customer Review Report
+   * Delete Store Group
+   * Update Store Group
+ * Improved error reporting when ini_set fails
+ * Increased unit test coverage for the following modules:
+   * SalesRule
+   * Payment
+ * Checkout API:
+   * Create Shopping Cart Gift Message service
+   * Create Shopping Cart Totals service
+ * Fixed bugs:
+   * Fixed an issue where  selecting a shipping method in PayPal Express Checkout resulted in a fatal error
+   * Fixed an issue where the information displayed on the Payment Information step of Zero Subtotal Checkout was confusing
+   * Fixed a JavaScript error in shipping label
+   * Fixed an issue with wrong layout of the storefront pages
+   * Fixed an issue where the price including tax value was incorrect on catalog pages when customer tax rate is different from store tax rate
+   * Fixed an issue where fixed product tax (FPT) was not included in the Grand total when 'Include FPT in Subtotal' was set to Yes
+   * Fixed an issue where Shipping Incl. Tax amount was not updated when changing shipping method
+   * Fixed an issue where the store tax configuration was ignored during backend order creation
+   * Fixed an issue where taxes were not applied in the shopping cart after registering customer on the storefront
+   * Fixed an issue where the wrong html markup was generated on My order pages for the WEEE tax
+   * Fixed an issue where the built-in caching did not work on product pages
+   * Removed the stream resource usage to avoid errors when  the allow_url_fopen PHP option is set to Off
+   * Fixed the New Return page layout on the backend
+   * Fixed an issue where  it was impossible to apply a specific coupon code when the Apply to Shipping Amount option of the Shopping Cart Rule was set to Yes
+   * Removed file paths/content from test case names in data-driven tests
+   * Fixed an issue where pagination was absent in the  Order Status grid
+   * Fixed an issue where after applying a discount coupon and changing the currency the discount value was incorrect
+   * Fixed an issue where trying to a new rating resulted in a fatal error
+   * Fixed an issue where the minimum order amount was compared with subtotal without taxes
+   * Fixed an issue where it was impossible to open the previous step during Onepage Checkout
+   * Fixed an issue with Persistent Shopping Cart where an unexpected message was displayed during checkout if a user started the checkout  after the short-term cookie had expired
+   * Fixed an issue where a customer was redirected to the shopping cart after selecting shipping method during checkout with a payment method using 3D Secure
+   * Fixed an issue where the Cart Item service used itemSku instead itemId
+   * Fixed an issue where gift messages for individual items were not saved during backend order creation
+   * Fixed an issue where the Purchase Order Number input field was not displayed in Onepage Checkout  if only one payment method was enabled
+ * GitHub requests:
+   * [#446] (https://github.com/magento/magento2/issues/446) -- Rounding different in order to original quote calculation
+
 0.1.0-alpha93
 =============
  * Price template refactoring

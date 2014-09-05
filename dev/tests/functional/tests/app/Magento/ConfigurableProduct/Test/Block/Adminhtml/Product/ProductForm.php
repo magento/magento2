@@ -91,24 +91,6 @@ class ProductForm extends ParentForm
     protected $variationsWrapper = '#product_info_tabs_super_config_content';
 
     /**
-     * @param Element $element
-     * @param Mapper $mapper
-     * @param XmlConverter $xmlConverter
-     * @param BlockFactory $blockFactory
-     * @param Browser $browser
-     */
-    public function __construct(
-        Element $element,
-        Mapper $mapper,
-        XmlConverter $xmlConverter,
-        BlockFactory $blockFactory,
-        Browser $browser
-    ) {
-        $this->browser = $browser;
-        parent::__construct($element, $mapper, $blockFactory, $xmlConverter);
-    }
-
-    /**
      * Get choose affected attribute set dialog popup window
      *
      * @return \Magento\ConfigurableProduct\Test\Block\Backend\Product\AffectedAttributeSet

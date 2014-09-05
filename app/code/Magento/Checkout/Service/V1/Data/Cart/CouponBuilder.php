@@ -27,7 +27,7 @@ namespace Magento\Checkout\Service\V1\Data\Cart;
 /**
  * @codeCoverageIgnore
  */
-class CouponBuilder extends \Magento\Framework\Service\Data\AbstractObjectBuilder
+class CouponBuilder extends \Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder
 {
     /**
      * @param string $value

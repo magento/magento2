@@ -27,6 +27,7 @@ namespace Magento\Customer\Controller\Adminhtml\Index;
 use Magento\Customer\Service\V1\Data\Customer;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Customer\Service\V1\Data\AddressConverter;
+use Magento\Framework\Service\ExtensibleDataObjectConverter;
 
 class Edit extends \Magento\Customer\Controller\Adminhtml\Index
 {
@@ -52,7 +53,7 @@ class Edit extends \Magento\Customer\Controller\Adminhtml\Index
         if ($isExistingCustomer) {
             try {
                 $customer = $this->_customerAccountService->getCustomer($customerId);
-                $customerData['account'] = \Magento\Framework\Service\EavDataObjectConverter::toFlatArray($customer);
+                $customerData['account'] = ExtensibleDataObjectConverter::toFlatArray($customer);
                 $customerData['account']['id'] = $customerId;
                 try {
                     $addresses = $this->_addressService->getAddresses($customerId);

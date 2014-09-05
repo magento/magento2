@@ -23,59 +23,52 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page mca="cms/index/index">
-    <block>
-        <name>searchBlock</name>
-        <class>Magento\Catalog\Test\Block\Search</class>
-        <locator>#search_mini_form</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>topmenu</name>
-        <class>Magento\Theme\Test\Block\Html\Topmenu</class>
-        <locator>[role="navigation"]</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>titleBlock</name>
-        <class>Magento\Theme\Test\Block\Html\Title</class>
-        <locator>.page-title</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>footerBlock</name>
-        <class>Magento\Theme\Test\Block\Html\Footer</class>
-        <locator>footer.page.footer</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>linksBlock</name>
-        <class>Magento\Theme\Test\Block\Links</class>
-        <locator>.header .links</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>storeSwitcherBlock</name>
-        <class>Magento\Store\Test\Block\Switcher</class>
-        <locator>//*[@data-ui-id="language-switcher"]</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>cartSidebarBlock</name>
-        <class>Magento\Checkout\Test\Block\Cart\Sidebar</class>
-        <locator>[data-block="minicart"]</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>compareProductsBlock</name>
-        <class>Magento\Catalog\Test\Block\Product\Compare\Sidebar</class>
-        <locator>.sidebar.sidebar-additional</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>currencyBlock</name>
-        <class>Magento\Directory\Test\Block\Currency\Switcher</class>
-        <locator>.switcher.currency</locator>
-        <strategy>css selector</strategy>
-    </block>
+<page mca="cms/index/index" module="Magento_Cms">
+    <blocks>
+        <searchBlock>
+            <class>Magento\Catalog\Test\Block\Search</class>
+            <locator>#search_mini_form</locator>
+            <strategy>css selector</strategy>
+        </searchBlock>
+        <topmenu>
+            <class>Magento\Theme\Test\Block\Html\Topmenu</class>
+            <locator>[role="navigation"]</locator>
+            <strategy>css selector</strategy>
+        </topmenu>
+        <titleBlock>
+            <class>Magento\Theme\Test\Block\Html\Title</class>
+            <locator>.page-title</locator>
+            <strategy>css selector</strategy>
+        </titleBlock>
+        <footerBlock>
+            <class>Magento\Theme\Test\Block\Html\Footer</class>
+            <locator>footer.page.footer</locator>
+            <strategy>css selector</strategy>
+        </footerBlock>
+        <linksBlock>
+            <class>Magento\Theme\Test\Block\Links</class>
+            <locator>.header .links</locator>
+            <strategy>css selector</strategy>
+        </linksBlock>
+        <storeSwitcherBlock>
+            <class>Magento\Store\Test\Block\Switcher</class>
+            <locator>[data-ui-id="language-switcher"]</locator>
+            <strategy>css selector</strategy>
+        </storeSwitcherBlock>
+        <cartSidebarBlock>
+            <class>Magento\Checkout\Test\Block\Cart\Sidebar</class>
+            <locator>[data-block="minicart"]</locator>
+            <strategy>css selector</strategy>
+        </cartSidebarBlock>
+        <compareProductsBlock>
+            <class>Magento\Catalog\Test\Block\Product\Compare\Sidebar</class>
+            <locator>.sidebar.sidebar-additional</locator>
+            <strategy>css selector</strategy>
+        </compareProductsBlock>
+        <currencyBlock>
+            <class>Magento\Directory\Test\Block\Currency\Switcher</class>
+            <locator>.switcher.currency</locator>
+            <strategy>css selector</strategy>
+        </currencyBlock>
+    </blocks>
 </page>

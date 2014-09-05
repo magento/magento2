@@ -23,12 +23,12 @@
  */
 namespace Magento\CheckoutAgreements\Service\V1\Data;
 
-use \Magento\Framework\Service\Data\AbstractObject;
+use \Magento\Framework\Service\Data\AbstractExtensibleObject;
 
 /**
  * @codeCoverageIgnore
  */
-class Agreement extends AbstractObject
+class Agreement extends AbstractExtensibleObject
 {
     const ID = 'id';
     const NAME = 'name';

@@ -23,11 +23,12 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page mca="reports/report_review/product" >
-    <block>
-        <name>gridBlock</name>
-        <class>Magento\Reports\Test\Block\Adminhtml\Review\Products\Grid</class>
-        <locator>#gridProducts</locator>
-        <strategy>css selector</strategy>
-    </block>
+<page mca="reports/report_review/product" module="Magento_Reports">
+    <blocks>
+        <gridBlock>
+            <class>Magento\Reports\Test\Block\Adminhtml\Review\Products\Grid</class>
+            <locator>#gridProducts</locator>
+            <strategy>css selector</strategy>
+        </gridBlock>
+    </blocks>
 </page>

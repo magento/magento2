@@ -24,9 +24,10 @@
 
 namespace Magento\Bundle\Test\Constraint;
 
+use Mtf\Client\Browser;
 use Mtf\Constraint\AbstractConstraint;
 use Magento\Bundle\Test\Fixture\CatalogProductBundle;
-use Magento\Bundle\Test\Page\Product\CatalogProductView;
+use Magento\Catalog\Test\Page\Product\CatalogProductView;
 
 /**
  * Class AssertBundleItemsOnProductPage
@@ -45,12 +46,15 @@ class AssertBundleItemsOnProductPage extends AbstractConstraint
      *
      * @param CatalogProductView $catalogProductView
      * @param CatalogProductBundle $product
+     * @param Browser $browser
      * @return void
      */
-    public function processAssert(CatalogProductView $catalogProductView, CatalogProductBundle $product)
-    {
-        $catalogProductView->init($product);
-        $catalogProductView->open();
+    public function processAssert(
+        CatalogProductView $catalogProductView,
+        CatalogProductBundle $product,
+        Browser $browser
+    ) {
+        $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
         $catalogProductView->getViewBlock()->clickCustomize();
         $result = $this->displayedBundleBlock($catalogProductView, $product);
         \PHPUnit_Framework_Assert::assertTrue(empty($result), $result);

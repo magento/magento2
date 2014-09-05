@@ -1,7 +1,5 @@
 <?php
 /**
- * Store Group fixture
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -26,40 +24,91 @@
 
 namespace Magento\Store\Test\Fixture;
 
-use Mtf\Fixture\DataFixture;
-use Mtf\Factory\Factory;
+use Mtf\Fixture\InjectableFixture;
 
-class StoreGroup extends DataFixture
+/**
+ * Class StoreGroup
+ */
+class StoreGroup extends InjectableFixture
 {
     /**
-     * Initialize fixture data
+     * @var string
      */
-    protected function _initData()
-    {
-        $this->_data = array(
-            'fields' => array(
-                'website_id' => array(
-                    'value' => 1,
-                    'input' => 'select'
-                ),
-                'name' => array(
-                    'value' => 'StoreGroup%isolation%'
-                ),
-                'root_category_id' => array(
-                    'value' => 2,
-                    'input' => 'select'
-                ),
-            ),
-        );
-    }
+    protected $repositoryClass = 'Magento\Store\Test\Repository\StoreGroup';
 
     /**
-     * Create Store
-     *
-     * @return Store
+     * @var string
      */
-    public function persist()
+    protected $handlerInterface = 'Magento\Store\Test\Handler\StoreGroup\StoreGroupInterface';
+
+    protected $defaultDataSet = [
+        'website_id' => [
+            'dataSet' => 'main_website'
+        ],
+        'name' => 'StoreGroup%isolation%',
+        'root_category_id' => [
+            'dataSet' => 'default_category'
+        ],
+    ];
+
+    protected $group_id = [
+        'attribute_code' => 'group_id',
+        'backend_type' => 'smallint',
+        'is_required' => '1',
+        'default_value' => '',
+        'input' => '',
+    ];
+
+    protected $website_id = [
+        'attribute_code' => 'website_id',
+        'backend_type' => 'virtual',
+        'source' => 'Magento\Store\Test\Fixture\StoreGroup\WebsiteId',
+    ];
+
+    protected $name = [
+        'attribute_code' => 'name',
+        'backend_type' => 'varchar',
+        'is_required' => '',
+        'default_value' => '',
+        'input' => '',
+    ];
+
+    protected $root_category_id = [
+        'attribute_code' => 'root_category_id',
+        'backend_type' => 'virtual',
+        'source' => 'Magento\Store\Test\Fixture\StoreGroup\CategoryId',
+    ];
+
+    protected $default_store_id = [
+        'attribute_code' => 'default_store_id',
+        'backend_type' => 'smallint',
+        'is_required' => '',
+        'default_value' => '0',
+        'input' => '',
+    ];
+
+    public function getGroupId()
     {
-        return Factory::getApp()->magentoStoreCreateStoreGroup($this);
+        return $this->getData('group_id');
+    }
+
+    public function getWebsiteId()
+    {
+        return $this->getData('website_id');
+    }
+
+    public function getName()
+    {
+        return $this->getData('name');
+    }
+
+    public function getRootCategoryId()
+    {
+        return $this->getData('root_category_id');
+    }
+
+    public function getDefaultStoreId()
+    {
+        return $this->getData('default_store_id');
     }
 }

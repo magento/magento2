@@ -30,6 +30,8 @@ namespace Mtf\Constraint;
  * Implements:
  *  - verify fixture data and form data
  *  - sort multidimensional array by paths
+ *
+ * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
 abstract class AbstractAssertForm extends AbstractConstraint
 {

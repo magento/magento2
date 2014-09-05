@@ -23,23 +23,22 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page mca="admin/user_role/editrole" >
-    <block>
-        <name>pageActions</name>
-        <class>Magento\User\Test\Block\Adminhtml\Role\PageActions</class>
-        <locator>.page-main-actions</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>roleFormTabs</name>
-        <class>Magento\User\Test\Block\Adminhtml\Role\RoleForm</class>
-        <locator>[id="page:main-container"]</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>messagesBlock</name>
-        <class>Magento\Core\Test\Block\Messages</class>
-        <locator>#messages</locator>
-        <strategy>css selector</strategy>
-    </block>
+<page mca="admin/user_role/editrole" module="Magento_User">
+    <blocks>
+        <pageActions>
+            <class>Magento\User\Test\Block\Adminhtml\Role\PageActions</class>
+            <locator>.page-main-actions</locator>
+            <strategy>css selector</strategy>
+        </pageActions>
+        <roleFormTabs>
+            <class>Magento\User\Test\Block\Adminhtml\Role\RoleForm</class>
+            <locator>[id="page:main-container"]</locator>
+            <strategy>css selector</strategy>
+        </roleFormTabs>
+        <messagesBlock>
+            <class>Magento\Core\Test\Block\Messages</class>
+            <locator>#messages</locator>
+            <strategy>css selector</strategy>
+        </messagesBlock>
+    </blocks>
 </page>

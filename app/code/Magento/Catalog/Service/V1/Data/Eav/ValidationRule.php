@@ -26,7 +26,7 @@ namespace Magento\Catalog\Service\V1\Data\Eav;
 /**
  * @codeCoverageIgnore
  */
-class ValidationRule extends \Magento\Framework\Service\Data\AbstractObject
+class ValidationRule extends \Magento\Framework\Service\Data\AbstractExtensibleObject
 {
     /**
      * Constants used as keys into $_data

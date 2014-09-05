@@ -27,7 +27,7 @@ namespace Magento\Customer\Service\V1\Data;
 /**
  * CustomerGroup Service Data Object
  */
-class CustomerGroup extends \Magento\Framework\Service\Data\AbstractObject
+class CustomerGroup extends \Magento\Framework\Service\Data\AbstractExtensibleObject
 {
     /**#@+
      * Constants for Data Object keys

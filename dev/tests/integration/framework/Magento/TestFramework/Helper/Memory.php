@@ -105,16 +105,10 @@ class Memory
     protected function _getWinProcessMemoryUsage($pid)
     {
         $output = $this->_shell->execute('tasklist.exe /fi %s /fo CSV /nh', array("PID eq {$pid}"));
-
-        /** @link http://www.php.net/manual/en/wrappers.data.php */
-        $csvStream = 'data://text/plain;base64,' . base64_encode($output);
-        $csvHandle = fopen($csvStream, 'r');
-        $stats = fgetcsv($csvHandle);
-        fclose($csvHandle);
-
-        $result = $stats[4];
-
-        return self::convertToBytes($result);
+        
+        $arr = str_getcsv($output);
+        $memory = $arr[4];
+        return self::convertToBytes($memory);
     }
 
     /**

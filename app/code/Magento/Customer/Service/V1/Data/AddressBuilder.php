@@ -25,18 +25,18 @@
 namespace Magento\Customer\Service\V1\Data;
 
 use Magento\Customer\Service\V1\AddressMetadataServiceInterface;
-use Magento\Framework\Service\Data\Eav\AbstractObject;
-use Magento\Framework\Service\Data\Eav\AbstractObjectBuilder;
-use Magento\Framework\Service\Data\Eav\AttributeValueBuilder;
+use Magento\Framework\Service\Data\AbstractExtensibleObject as ExtensibleObject;
+use Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder;
+use Magento\Framework\Service\Data\AttributeValueBuilder;
 
 /**
  * Builder for the Address Service Data Object
  *
  * @method Address create()
- * @method Address mergeDataObjectWithArray(AbstractObject $dataObject, array $data)
- * @method Address mergeDataObjects(AbstractObject $firstDataObject, AbstractObject $secondDataObject)
+ * @method Address mergeDataObjectWithArray(ExtensibleObject $dataObject, array $data)
+ * @method Address mergeDataObjects(ExtensibleObject $firstDataObject, ExtensibleObject $secondDataObject)
  */
-class AddressBuilder extends AbstractObjectBuilder
+class AddressBuilder extends AbstractExtensibleObjectBuilder
 {
     /**
      * Region builder

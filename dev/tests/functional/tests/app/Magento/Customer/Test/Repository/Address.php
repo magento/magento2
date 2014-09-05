@@ -36,12 +36,12 @@ class Address extends AbstractRepository
     /**
      * {inheritdoc}
      */
-    public function __construct(array $defaultConfig = array(), array $defaultData = array())
+    public function __construct(array $defaultConfig = [], array $defaultData = [])
     {
-        $this->_data['default'] = array(
+        $this->_data['default'] = [
             'config' => $defaultConfig,
             'data' => $defaultData
-        );
+        ];
 
         $this->_data['address_US_1'] = $this->_getUS1();
         $this->_data['address_US_2'] = $this->_getUS2();
@@ -54,140 +54,140 @@ class Address extends AbstractRepository
 
     protected function _getUS1()
     {
-        return array(
-            'data' => array(
-                'fields' => array(
-                    'firstname' => array(
+        return [
+            'data' => [
+                'fields' => [
+                    'firstname' => [
                         'value' => 'John'
-                    ),
-                    'lastname' => array(
+                    ],
+                    'lastname' => [
                         'value' => 'Doe'
-                    ),
-                    'email' => array(
+                    ],
+                    'email' => [
                         'value' => 'John.Doe%isolation%@example.com'
-                    ),
-                    'company' => array(
+                    ],
+                    'company' => [
                         'value' => 'Magento %isolation%'
-                    ),
-                    'street' => array(
+                    ],
+                    'street' => [
                         'value' => '6161 West Centinela Avenue'
-                    ),
-                    'city' => array(
+                    ],
+                    'city' => [
                         'value' => 'Culver City'
-                    ),
-                    'region_id' => array(
+                    ],
+                    'region_id' => [
                         'value' => 'California',
                         'input' => 'select'
-                    ),
-                    'postcode' => array(
+                    ],
+                    'postcode' => [
                         'value' => '90230'
-                    ),
-                    'country_id' => array(
+                    ],
+                    'country_id' => [
                         'value' => 'United States',
                         'input' => 'select'
-                    ),
-                    'telephone' => array(
+                    ],
+                    'telephone' => [
                         'value' => '555-55-555-55'
-                    )
-                )
-            )
-        );
+                    ]
+                ]
+            ]
+        ];
     }
 
     protected function _getBackendUS1()
     {
-        return array(
-            'data' => array(
-                'fields' => array(
-                    'save_in_address_book' => array(
+        return [
+            'data' => [
+                'fields' => [
+                    'save_in_address_book' => [
                         'value' => 'Yes',
                         'input' => 'checkbox'
-                    )
-                )
-            )
-        );
+                    ]
+                ]
+            ]
+        ];
     }
 
     protected function _getUS2()
     {
-        return array(
-            'data' => array(
-                'fields' => array(
-                    'firstname' => array(
+        return [
+            'data' => [
+                'fields' => [
+                    'firstname' => [
                         'value' => 'Billy'
-                    ),
-                    'lastname' => array(
+                    ],
+                    'lastname' => [
                         'value' => 'Holiday'
-                    ),
-                    'email' => array(
+                    ],
+                    'email' => [
                         'value' => 'b.holliday@example.net'
-                    ),
-                    'company' => array(
+                    ],
+                    'company' => [
                         'value' => 'Magento %isolation%'
-                    ),
-                    'street' => array(
+                    ],
+                    'street' => [
                         'value' => '727 5th Ave'
-                    ),
-                    'city' => array(
+                    ],
+                    'city' => [
                         'value' => 'New York'
-                    ),
-                    'region_id' => array(
+                    ],
+                    'region_id' => [
                         'value' => 'New York',
                         'input' => 'select'
-                    ),
-                    'postcode' => array(
+                    ],
+                    'postcode' => [
                         'value' => '10022'
-                    ),
-                    'country_id' => array(
+                    ],
+                    'country_id' => [
                         'value' => 'United States',
                         'input' => 'select'
-                    ),
-                    'telephone' => array(
+                    ],
+                    'telephone' => [
                         'value' => '777-77-77-77'
-                    )
-                )
-            )
-        );
+                    ]
+                ]
+            ]
+        ];
     }
 
     protected function _getDataUS1()
     {
-        return array(
-            'data' => array(
-                'fields' => array(
-                    'firstname' => array(
+        return [
+            'data' => [
+                'fields' => [
+                    'firstname' => [
                         'value' => 'John'
-                    ),
-                    'lastname' => array(
+                    ],
+                    'lastname' => [
                         'value' => 'Doe'
-                    ),
-                    'company' => array(
+                    ],
+                    'company' => [
                         'value' => 'Magento %isolation%'
-                    ),
-                    'street' => array(
+                    ],
+                    'street' => [
                         'value' => '6161 West Centinela Avenue'
-                    ),
-                    'country_id' => array(
+                    ],
+                    'country_id' => [
                         'value' => 'United States',
                         'input' => 'select'
-                    ),
-                    'region_id' => array(
+                    ],
+                    'region_id' => [
                         'value' => 'California',
                         'input' => 'select',
                         'selector' => '#region_id'
-                    ),
-                    'city' => array(
+                    ],
+                    'city' => [
                         'value' => 'Culver City'
-                    ),
-                    'postcode' => array(
+                    ],
+                    'postcode' => [
                         'value' => '90230'
-                    ),
-                    'telephone' => array(
+                    ],
+                    'telephone' => [
                         'value' => '555-55-555-55'
-                    )
-                )
-            )
-        );
+                    ]
+                ]
+            ]
+        ];
     }
 
     /**
@@ -197,40 +197,40 @@ class Address extends AbstractRepository
      */
     protected function getAddressUK()
     {
-        return array(
-            'data' => array(
-                'fields' => array(
-                    'firstname' => array(
+        return [
+            'data' => [
+                'fields' => [
+                    'firstname' => [
                         'value' => 'Jane',
-                    ),
-                    'lastname' => array(
+                    ],
+                    'lastname' => [
                         'value' => 'Doe',
-                    ),
-                    'telephone' => array(
+                    ],
+                    'telephone' => [
                         'value' => '444-44-444-44',
-                    ),
-                    'street[]' => array(
+                    ],
+                    'street[]' => [
                         'value' => '172, Westminster Bridge Rd',
-                    ),
-                    'country_id' => array(
+                    ],
+                    'country_id' => [
                         'value' => 'United Kingdom',
                         'input_value' => 'GB',
                         'input' => 'select',
                         'selector' => '#country',
-                    ),
-                    'region' => array(
+                    ],
+                    'region' => [
                         'value' => 'London',
-                    ),
-                    'city' => array(
+                    ],
+                    'city' => [
                         'value' => 'London',
-                    ),
-                    'postcode' => array(
+                    ],
+                    'postcode' => [
                         'value' => 'SE1 7RW',
                         'selector' => '#zip',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
     }
 
     /**
@@ -240,42 +240,42 @@ class Address extends AbstractRepository
      */
     protected function getAddressUK2()
     {
-        return array(
-            'data' => array(
-                'fields' => array(
-                    'firstname' => array(
+        return [
+            'data' => [
+                'fields' => [
+                    'firstname' => [
                         'value' => 'Jane'
-                    ),
-                    'lastname' => array(
+                    ],
+                    'lastname' => [
                         'value' => 'Doe'
-                    ),
-                    'company' => array(
+                    ],
+                    'company' => [
                         'value' => 'Magento %isolation%'
-                    ),
-                    'telephone' => array(
+                    ],
+                    'telephone' => [
                         'value' => '444-44-444-44'
-                    ),
-                    'street' => array(
+                    ],
+                    'street' => [
                         'value' => '42 King Street West'
-                    ),
-                    'country_id' => array(
+                    ],
+                    'country_id' => [
                         'value' => 'United Kingdom',
                         'input' => 'select',
-                    ),
-                    'region' => array(
+                    ],
+                    'region' => [
                         'value' => 'Manchester',
                         'selector' => '#region',
-                    ),
-                    'city' => array(
+                    ],
+                    'city' => [
                         'value' => 'Manchester'
-                    ),
-                    'postcode' => array(
+                    ],
+                    'postcode' => [
                         'value' => 'M3 2WY',
                         'selector' => '#zip',
-                    )
-                )
-            )
-        );
+                    ]
+                ]
+            ]
+        ];
     }
 
     /**
@@ -288,15 +288,15 @@ class Address extends AbstractRepository
     {
         return array_replace_recursive(
             $defaultData,
-            array(
-                'data' => array(
-                    'fields' => array(
-                        'vat_id' => array(
+            [
+                'data' => [
+                    'fields' => [
+                        'vat_id' => [
                             'value' => '584451913',
-                        ),
-                    ),
-                ),
-            )
+                        ],
+                    ],
+                ],
+            ]
         );
     }
 
@@ -307,41 +307,41 @@ class Address extends AbstractRepository
      */
     protected function getAddressDE()
     {
-        return array(
-            'data' => array(
-                'fields' => array(
-                    'firstname' => array(
+        return [
+            'data' => [
+                'fields' => [
+                    'firstname' => [
                         'value' => 'Jan'
-                    ),
-                    'lastname' => array(
+                    ],
+                    'lastname' => [
                         'value' => 'Jansen'
-                    ),
-                    'company' => array(
+                    ],
+                    'company' => [
                         'value' => 'Magento %isolation%'
-                    ),
-                    'country_id' => array(
+                    ],
+                    'country_id' => [
                         'value' => 'Germany',
                         'input' => 'select'
-                    ),
-                    'street' => array(
+                    ],
+                    'street' => [
                         'value' => 'Augsburger Strabe 41'
-                    ),
-                    'city' => array(
+                    ],
+                    'city' => [
                         'value' => 'Berlin'
-                    ),
-                    'region_id' => array(
+                    ],
+                    'region_id' => [
                         'value' => 'Berlin',
                         'input' => 'select',
                         'selector' => '#region_id',
-                    ),
-                    'postcode' => array(
+                    ],
+                    'postcode' => [
                         'value' => '10789'
-                    ),
-                    'telephone' => array(
+                    ],
+                    'telephone' => [
                         'value' => '333-33-333-33'
-                    )
-                )
-            )
-        );
+                    ]
+                ]
+            ]
+        ];
     }
 }

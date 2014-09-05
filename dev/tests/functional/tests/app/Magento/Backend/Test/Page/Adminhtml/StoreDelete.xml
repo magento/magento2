@@ -23,23 +23,22 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page mca="admin/system_store/deleteStore" >
-    <block>
-        <name>messagesBlock</name>
-        <class>Magento\Core\Test\Block\Messages</class>
-        <locator>#messages</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>storeForm</name>
-        <class>Magento\Backend\Test\Block\System\Store\Delete\StoreForm</class>
-        <locator>#edit_form</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>formPageActions</name>
-        <class>Magento\Backend\Test\Block\System\Store\FormPageActions</class>
-        <locator>.content-footer</locator>
-        <strategy>css selector</strategy>
-    </block>
+<page mca="admin/system_store/deleteStore" module="Magento_Backend">
+    <blocks>
+        <messagesBlock>
+            <class>Magento\Core\Test\Block\Messages</class>
+            <locator>#messages</locator>
+            <strategy>css selector</strategy>
+        </messagesBlock>
+        <storeForm>
+            <class>Magento\Backend\Test\Block\System\Store\Delete\Form</class>
+            <locator>#edit_form</locator>
+            <strategy>css selector</strategy>
+        </storeForm>
+        <formPageFooterActions>
+            <class>Magento\Backend\Test\Block\System\Store\FormPageFooterActions</class>
+            <locator>.content-footer</locator>
+            <strategy>css selector</strategy>
+        </formPageFooterActions>
+    </blocks>
 </page>

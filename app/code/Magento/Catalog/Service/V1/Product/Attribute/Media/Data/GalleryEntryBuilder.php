@@ -25,12 +25,12 @@
  */
 namespace Magento\Catalog\Service\V1\Product\Attribute\Media\Data;
 
-use Magento\Framework\Service\Data\AbstractObjectBuilder;
+use Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder;
 
 /**
  * @codeCoverageIgnore
  */
-class GalleryEntryBuilder extends AbstractObjectBuilder
+class GalleryEntryBuilder extends AbstractExtensibleObjectBuilder
 {
     /**
      * Set gallery entity ID

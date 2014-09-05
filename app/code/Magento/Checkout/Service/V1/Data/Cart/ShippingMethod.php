@@ -28,7 +28,7 @@ namespace Magento\Checkout\Service\V1\Data\Cart;
  *
  * @codeCoverageIgnore
  */
-class ShippingMethod extends \Magento\Framework\Service\Data\AbstractObject
+class ShippingMethod extends \Magento\Framework\Service\Data\AbstractExtensibleObject
 {
     /**#@+
      * Constants defined for keys of array, makes typos less likely

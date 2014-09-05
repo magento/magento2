@@ -23,11 +23,12 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page mca="wishlist/index/share" >
-    <block>
-        <name>sharingInfoForm</name>
-        <class>Magento\Wishlist\Test\Block\Customer\Sharing</class>
-        <locator>.wishlist.share</locator>
-        <strategy>css selector</strategy>
-    </block>
+<page mca="wishlist/index/share" module="Magento_Wishlist">
+    <blocks>
+        <sharingInfoForm>
+            <class>Magento\Wishlist\Test\Block\Customer\Sharing</class>
+            <locator>.wishlist.share</locator>
+            <strategy>css selector</strategy>
+        </sharingInfoForm>
+    </blocks>
 </page>

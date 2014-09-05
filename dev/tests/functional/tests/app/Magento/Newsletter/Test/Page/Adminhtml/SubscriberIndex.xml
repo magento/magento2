@@ -23,11 +23,12 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page mca="newsletter/subscriber/index" >
-    <block>
-        <name>subscriberGrid</name>
-        <class>Magento\Newsletter\Test\Block\Adminhtml\Subscriber\Grid</class>
-        <locator>#subscriberGrid</locator>
-        <strategy>css selector</strategy>
-    </block>
+<page mca="newsletter/subscriber/index" module="Magento_Newsletter">
+    <blocks>
+        <subscriberGrid>
+            <class>Magento\Newsletter\Test\Block\Adminhtml\Subscriber\Grid</class>
+            <locator>#subscriberGrid</locator>
+            <strategy>css selector</strategy>
+        </subscriberGrid>
+    </blocks>
 </page>

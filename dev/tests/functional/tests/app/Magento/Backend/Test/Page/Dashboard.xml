@@ -23,23 +23,22 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page mca="admin/dashboard">
-    <block>
-        <name>adminPanelHeader</name>
-        <class>Magento\Backend\Test\Block\Page\Header</class>
-        <locator>.page-header</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>titleBlock</name>
-        <class>Magento\Theme\Test\Block\Html\Title</class>
-        <locator>.page-title</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>menuBlock</name>
-        <class>Magento\Backend\Test\Block\Menu</class>
-        <locator>.navigation</locator>
-        <strategy>css selector</strategy>
-    </block>
+<page mca="admin/dashboard" module="Magento_Backend">
+    <blocks>
+        <adminPanelHeader>
+            <class>Magento\Backend\Test\Block\Page\Header</class>
+            <locator>.page-header</locator>
+            <strategy>css selector</strategy>
+        </adminPanelHeader>
+        <titleBlock>
+            <class>Magento\Theme\Test\Block\Html\Title</class>
+            <locator>.page-title</locator>
+            <strategy>css selector</strategy>
+        </titleBlock>
+        <menuBlock>
+            <class>Magento\Backend\Test\Block\Menu</class>
+            <locator>.navigation</locator>
+            <strategy>css selector</strategy>
+        </menuBlock>
+    </blocks>
 </page>

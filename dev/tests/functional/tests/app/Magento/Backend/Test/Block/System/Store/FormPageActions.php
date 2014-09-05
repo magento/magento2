@@ -28,7 +28,7 @@ use Magento\Backend\Test\Block\FormPageActions as ParentFormPageActions;
 
 /**
  * Class FormPageActions
- * Form page actions block in Store page
+ * Form page actions block
  */
 class FormPageActions extends ParentFormPageActions
 {

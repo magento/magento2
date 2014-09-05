@@ -49,14 +49,14 @@ class AdvancedSearchTest extends Functional
         //Pages
         $homePage = Factory::getPageFactory()->getCmsIndexIndex();
         $advancedSearchPage = Factory::getPageFactory()->getCatalogsearchAdvanced();
-        $advancedSearchResultPage = Factory::getPageFactory()->getCatalogsearchAdvancedResult();
+        $advancedSearchResultPage = Factory::getPageFactory()->getCatalogsearchResult();
 
         //Steps
         $homePage->open();
-        $homePage->getFooterBlock()->clickLink('Advanced Search');
+        $homePage->getSearchBlock()->clickAdvancedSearchButton();
         $searchForm = $advancedSearchPage->getForm();
         $this->assertTrue($searchForm->isVisible(), '"Advanced Search" form is not opened');
-        $searchForm->fillCustom($productFixture, array('name', 'sku'));
+        $searchForm->fillCustom($productFixture, ['name', 'sku']);
         $searchForm->submit();
 
         //Verifying

@@ -24,10 +24,11 @@
 
 namespace Magento\Catalog\Service\V1\Data\Product\Attribute;
 
+use Magento\Catalog\Service\V1\Data\Eav\AttributeBuilder;
+use Magento\Framework\Service\Data\AttributeValueBuilder;
+use Magento\Framework\Service\Data\MetadataServiceInterface;
 use Magento\Framework\Service\Data\ObjectFactory;
 use Magento\Framework\Service\V1\Data\SearchCriteriaBuilder;
-use Magento\Framework\Service\V1\Data\AbstractSearchResultsBuilder;
-use Magento\Catalog\Service\V1\Data\Eav\AttributeBuilder;
 
 /**
  * Builder for the SearchResults Service Data Object
@@ -41,15 +42,25 @@ class SearchResultsBuilder extends \Magento\Framework\Service\V1\Data\AbstractSe
      * Constructor
      *
      * @param ObjectFactory $objectFactory
+     * @param AttributeValueBuilder $valueBuilder
+     * @param MetadataServiceInterface $metadataService
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param AttributeBuilder $itemObjectBuilder
      */
     public function __construct(
         ObjectFactory $objectFactory,
+        AttributeValueBuilder $valueBuilder,
+        MetadataServiceInterface $metadataService,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         AttributeBuilder $itemObjectBuilder
     ) {
-        parent::__construct($objectFactory, $searchCriteriaBuilder, $itemObjectBuilder);
+        parent::__construct(
+            $objectFactory,
+            $valueBuilder,
+            $metadataService,
+            $searchCriteriaBuilder,
+            $itemObjectBuilder
+        );
     }
 
     /**

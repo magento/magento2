@@ -62,25 +62,6 @@ class Tax extends CommonTaxCollector
     protected $_config;
 
     /**
-     * @var Store
-     */
-    protected $_store;
-
-    /**
-     * Tax calculation service, the collector will call the service which performs the actual calculation
-     *
-     * @var \Magento\Tax\Service\V1\TaxCalculationService
-     */
-    protected $taxCalculationService;
-
-    /**
-     * Builder to create QuoteDetails as input to tax calculation service
-     *
-     * @var \Magento\Tax\Service\V1\Data\QuoteDetailsBuilder
-     */
-    protected $quoteDetailsBuilder;
-
-    /**
      * Hidden taxes array
      *
      * @var array
@@ -90,22 +71,20 @@ class Tax extends CommonTaxCollector
     /**
      * Class constructor
      *
-     * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Tax\Model\Config $taxConfig
      * @param \Magento\Tax\Service\V1\TaxCalculationService $taxCalculationService
      * @param \Magento\Tax\Service\V1\Data\QuoteDetailsBuilder $quoteDetailsBuilder
+     * @param \Magento\Tax\Helper\Data $taxData
      */
     public function __construct(
-        \Magento\Tax\Helper\Data $taxData,
         \Magento\Tax\Model\Config $taxConfig,
         \Magento\Tax\Service\V1\TaxCalculationService $taxCalculationService,
-        \Magento\Tax\Service\V1\Data\QuoteDetailsBuilder $quoteDetailsBuilder
+        \Magento\Tax\Service\V1\Data\QuoteDetailsBuilder $quoteDetailsBuilder,
+        \Magento\Tax\Helper\Data $taxData
     ) {
         $this->setCode('tax');
         $this->_taxData = $taxData;
-        $this->taxCalculationService = $taxCalculationService;
-        $this->quoteDetailsBuilder = $quoteDetailsBuilder;
-        $this->_config = $taxConfig;
+        parent::__construct($taxConfig, $taxCalculationService, $quoteDetailsBuilder);
     }
 
     /**
@@ -162,7 +141,7 @@ class Tax extends CommonTaxCollector
     protected function getQuoteTaxDetails($address, $useBaseCurrency)
     {
         //Setup taxable items
-        $priceIncludesTax = $this->_config->priceIncludesTax($this->_store);
+        $priceIncludesTax = $this->_config->priceIncludesTax($address->getQuote()->getStore());
         $itemDataObjects = $this->mapItems($address, $priceIncludesTax, $useBaseCurrency);
 
         //Add shipping

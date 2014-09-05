@@ -28,7 +28,7 @@ namespace Magento\CatalogInventory\Service\V1\Data;
  *
  * @codeCoverageIgnore
  */
-class LowStockResultBuilder extends \Magento\Framework\Service\Data\AbstractObjectBuilder
+class LowStockResultBuilder extends \Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder
 {
     /**
      * Set search criteria

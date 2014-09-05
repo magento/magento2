@@ -24,8 +24,9 @@
 
 namespace Magento\Downloadable\Test\Constraint;
 
+use Mtf\Client\Browser;
 use Mtf\Constraint\AbstractConstraint;
-use Magento\Downloadable\Test\Page\Product\CatalogProductView;
+use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Downloadable\Test\Fixture\CatalogProductDownloadable;
 
 /**
@@ -47,12 +48,15 @@ class AssertDownloadableSamplesData extends AbstractConstraint
      *
      * @param CatalogProductView $productView
      * @param CatalogProductDownloadable $product
+     * @param Browser $browser
      * @return void
      */
-    public function processAssert(CatalogProductView $productView, CatalogProductDownloadable $product)
-    {
-        $productView->init($product);
-        $productView->open();
+    public function processAssert(
+        CatalogProductView $productView,
+        CatalogProductDownloadable $product,
+        Browser $browser
+    ) {
+        $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
         $sampleBlock = $productView->getDownloadableViewBlock()->getDownloadableSamplesBlock();
         $fields = $product->getData();
 

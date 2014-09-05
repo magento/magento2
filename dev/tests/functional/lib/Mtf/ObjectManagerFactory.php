@@ -182,11 +182,11 @@ class ObjectManagerFactory
         );
 
         $objectManager->configure(
-            $objectManager->get('Mtf\ObjectManager\ConfigLoader\Module')->load('ui')
+            $objectManager->get('Mtf\ObjectManager\ConfigLoader\Module')->load('etc/ui')
         );
 
         $objectManager->configure(
-            $objectManager->get('Mtf\ObjectManager\ConfigLoader\Module')->load('curl')
+            $objectManager->get('Mtf\ObjectManager\ConfigLoader\Module')->load('etc/curl')
         );
     }
 }

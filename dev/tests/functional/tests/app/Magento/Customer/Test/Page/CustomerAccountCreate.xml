@@ -23,17 +23,17 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page mca="customer/account/create" >
-    <block>
-        <name>registerForm</name>
-        <class>Magento\Customer\Test\Block\Form\Register</class>
-        <locator>#form-validate</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>messagesBlock</name>
-        <class>Magento\Core\Test\Block\Messages</class>
-        <locator>.page.messages</locator>
-        <strategy>css selector</strategy>
-    </block>
+<page mca="customer/account/create" module="Magento_Customer">
+    <blocks>
+        <registerForm>
+            <class>Magento\Customer\Test\Block\Form\Register</class>
+            <locator>#form-validate</locator>
+            <strategy>css selector</strategy>
+        </registerForm>
+        <messagesBlock>
+            <class>Magento\Core\Test\Block\Messages</class>
+            <locator>.page.messages</locator>
+            <strategy>css selector</strategy>
+        </messagesBlock>
+    </blocks>
 </page>

@@ -23,17 +23,17 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page mca="admin/cache/">
-    <block>
-        <name>messagesBlock</name>
-        <class>Magento\Core\Test\Block\Messages</class>
-        <locator>#messages .messages</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>actionsBlock</name>
-        <class>Magento\Backend\Test\Block\Cache</class>
-        <locator>div.page-actions</locator>
-        <strategy>css selector</strategy>
-    </block>
+<page mca="admin/cache/" module="Magento_Backend">
+    <blocks>
+        <messagesBlock>
+            <class>Magento\Core\Test\Block\Messages</class>
+            <locator>#messages .messages</locator>
+            <strategy>css selector</strategy>
+        </messagesBlock>
+        <actionsBlock>
+            <class>Magento\Backend\Test\Block\Cache</class>
+            <locator>div.page-actions</locator>
+            <strategy>css selector</strategy>
+        </actionsBlock>
+    </blocks>
 </page>

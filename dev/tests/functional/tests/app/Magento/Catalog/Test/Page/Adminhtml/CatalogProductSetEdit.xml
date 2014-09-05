@@ -23,23 +23,22 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page mca="catalog/product_set/edit" >
-    <block>
-        <name>pageActions</name>
-        <class>Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Set\FormPageActions</class>
-        <locator>.page-main-actions</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>attributeSetEditBlock</name>
-        <class>Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Set\Main</class>
-        <locator>#tree-div2</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>attributeSetEditForm</name>
-        <class>Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Set\Main\EditForm</class>
-        <locator>#set_name</locator>
-        <strategy>css selector</strategy>
-    </block>
+<page mca="catalog/product_set/edit" module="Magento_Catalog">
+    <blocks>
+        <pageActions>
+            <class>Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Set\FormPageActions</class>
+            <locator>.page-main-actions</locator>
+            <strategy>css selector</strategy>
+        </pageActions>
+        <attributeSetEditBlock>
+            <class>Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Set\Main</class>
+            <locator>#tree-div2</locator>
+            <strategy>css selector</strategy>
+        </attributeSetEditBlock>
+        <attributeSetEditForm>
+            <class>Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Set\Main\EditForm</class>
+            <locator>#set_name</locator>
+            <strategy>css selector</strategy>
+        </attributeSetEditForm>
+    </blocks>
 </page>

@@ -65,6 +65,8 @@ app/code/Magento/Directory/Model/Currency/DefaultLocator.php
 app/code/Magento/Directory/Model/Resource/Region
 app/code/Magento/Eav/Model/Cache/Type.php
 app/code/Magento/GiftMessage/Model/Plugin
+app/code/Magento/GiftMessage/Model/Type/Plugin
+app/code/Magento/GiftMessage/Service
 app/code/Magento/GoogleShopping/Block/SiteVerification.php
 app/code/Magento/GoogleShopping/Model/AttributeFactory.php
 app/code/Magento/GroupedImportExport

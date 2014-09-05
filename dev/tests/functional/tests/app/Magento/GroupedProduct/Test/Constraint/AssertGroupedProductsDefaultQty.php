@@ -24,8 +24,9 @@
 
 namespace Magento\GroupedProduct\Test\Constraint;
 
+use Mtf\Client\Browser;
 use Mtf\Constraint\AbstractConstraint;
-use Magento\GroupedProduct\Test\Page\Product\CatalogProductView;
+use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\GroupedProduct\Test\Fixture\CatalogProductGrouped;
 
 /**
@@ -45,12 +46,15 @@ class AssertGroupedProductsDefaultQty extends AbstractConstraint
      *
      * @param CatalogProductView $groupedProductView
      * @param CatalogProductGrouped $product
+     * @param Browser $browser
      * @return void
      */
-    public function processAssert(CatalogProductView $groupedProductView, CatalogProductGrouped $product)
-    {
-        $groupedProductView->init($product);
-        $groupedProductView->open();
+    public function processAssert(
+        CatalogProductView $groupedProductView,
+        CatalogProductGrouped $product,
+        Browser $browser
+    ) {
+        $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
         $groupedBlock = $groupedProductView->getGroupedViewBlock()->getGroupedProductBlock();
         $groupedProduct = $product->getData();
 

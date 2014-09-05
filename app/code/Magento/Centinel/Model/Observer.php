@@ -114,10 +114,15 @@ class Observer extends \Magento\Framework\Object
         $method = $paymentFormBlock->getMethod();
 
         if ($method && $method->getIsCentinelValidationEnabled()) {
+            $layout = $paymentFormBlock->getLayout();
+            $block = $layout->createBlock('Magento\Centinel\Block\Logo');
+            $block->setMethod($method);
+
             $paymentFormBlock->setChild(
                 'payment.method.' . $method->getCode() . 'centinel.logo',
-                $this->_centinelData->getMethodFormBlock($method)
+                $block
             );
+
         }
         return $this;
     }

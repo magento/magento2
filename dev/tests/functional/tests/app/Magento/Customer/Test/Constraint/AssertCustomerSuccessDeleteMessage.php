@@ -44,7 +44,7 @@ class AssertCustomerSuccessDeleteMessage extends AbstractConstraint
     /**
      * Asserts that actual delete message equals expected
      *
-     * @param CustomerIndex $pageCustomerIndex
+     * @param CustomerIndex $customerIndexPage
      * @return void
      */
     public function processAssert(CustomerIndex $customerIndexPage)

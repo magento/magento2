@@ -28,7 +28,7 @@ use Mtf\Repository\AbstractRepository;
 
 /**
  * Class Store
- * Data for creation Catalog Price Rule
+ * Data for creation Store
  */
 class Store extends AbstractRepository
 {

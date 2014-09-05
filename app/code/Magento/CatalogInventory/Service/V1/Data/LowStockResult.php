@@ -23,14 +23,14 @@
  */
 namespace Magento\CatalogInventory\Service\V1\Data;
 
-use Magento\Framework\Service\Data\AbstractObject;
+use Magento\Framework\Service\Data\AbstractExtensibleObject;
 
 /**
  * Low stock search result data object
  *
  * @codeCoverageIgnore
  */
-class LowStockResult extends AbstractObject
+class LowStockResult extends AbstractExtensibleObject
 {
     /**#@+
      * Low stock search result object data keys

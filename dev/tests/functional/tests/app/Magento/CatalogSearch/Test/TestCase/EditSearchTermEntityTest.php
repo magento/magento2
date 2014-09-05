@@ -100,6 +100,7 @@ class EditSearchTermEntityTest extends Injectable
      */
     public function test(CatalogSearchQuery $searchTerm)
     {
+        $this->markTestIncomplete('MAGETWO-26170');
         // Preconditions
         $searchText = $searchTerm->getQueryText();
         // Steps

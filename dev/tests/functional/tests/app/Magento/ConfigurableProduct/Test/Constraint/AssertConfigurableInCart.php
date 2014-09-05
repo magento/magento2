@@ -24,6 +24,7 @@
 
 namespace Magento\ConfigurableProduct\Test\Constraint;
 
+use Mtf\Client\Browser;
 use Mtf\Constraint\AbstractConstraint;
 use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
@@ -46,17 +47,18 @@ class AssertConfigurableInCart extends AbstractConstraint
      *
      * @param CatalogProductView $catalogProductView
      * @param CatalogProductConfigurable $configurable
+     * @param Browser $browser
      * @param CheckoutCart $checkoutCart
      * @return void
      */
     public function processAssert(
         CatalogProductView $catalogProductView,
         CatalogProductConfigurable $configurable,
+        Browser $browser,
         CheckoutCart $checkoutCart
     ) {
         //Add product to cart
-        $catalogProductView->init($configurable);
-        $catalogProductView->open();
+        $browser->open($_ENV['app_frontend_url'] . $configurable->getUrlKey() . '.html');
         $configurableData = $configurable->getConfigurableAttributesData();
         if (!empty($configurableData)) {
             $configurableOption = $catalogProductView->getCustomOptionsBlock();

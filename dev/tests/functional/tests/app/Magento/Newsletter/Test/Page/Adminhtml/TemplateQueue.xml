@@ -23,23 +23,22 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page mca="newsletter/queue/edit" >
-    <block>
-        <name>formPageActions</name>
-        <class>Magento\Newsletter\Test\Block\Adminhtml\Template\FormPageActions</class>
-        <locator>.page-main-actions</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>editForm</name>
-        <class>Magento\Backend\Test\Block\Widget\Form</class>
-        <locator>#queue_edit_form</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>messagesBlock</name>
-        <class>Magento\Core\Test\Block\Messages</class>
-        <locator>#messages</locator>
-        <strategy>css selector</strategy>
-    </block>
+<page mca="newsletter/queue/edit" module="Magento_Newsletter">
+    <blocks>
+        <formPageActions>
+            <class>Magento\Newsletter\Test\Block\Adminhtml\Template\FormPageActions</class>
+            <locator>.page-main-actions</locator>
+            <strategy>css selector</strategy>
+        </formPageActions>
+        <editForm>
+            <class>Magento\Backend\Test\Block\Widget\Form</class>
+            <locator>#queue_edit_form</locator>
+            <strategy>css selector</strategy>
+        </editForm>
+        <messagesBlock>
+            <class>Magento\Core\Test\Block\Messages</class>
+            <locator>#messages</locator>
+            <strategy>css selector</strategy>
+        </messagesBlock>
+    </blocks>
 </page>

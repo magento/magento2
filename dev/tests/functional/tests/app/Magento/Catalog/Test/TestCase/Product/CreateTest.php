@@ -56,10 +56,12 @@ class CreateTest extends Functional
         $product->switchData('simple');
         //Data
         $createProductPage = Factory::getPageFactory()->getCatalogProductNew();
-        $createProductPage->init($product);
         $productForm = $createProductPage->getProductForm();
         //Steps
-        $createProductPage->open();
+        $createProductPage->open([
+                'type' => $product->getDataConfig()['create_url_params']['type'],
+                'set' => $product->getDataConfig()['create_url_params']['set']
+            ]);
         $productForm->fill($product);
         $createProductPage->getFormAction()->save();
         //Verifying

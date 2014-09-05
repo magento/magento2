@@ -170,7 +170,7 @@ class ObjectManager
      */
     public function getObject($className, array $arguments = array())
     {
-        if (is_subclass_of($className, '\Magento\Framework\Service\Data\AbstractObjectBuilder')) {
+        if (is_subclass_of($className, '\Magento\Framework\Service\Data\AbstractSimpleObjectBuilder')) {
             return $this->getBuilder($className, $arguments);
         }
         $constructArguments = $this->getConstructArguments($className, $arguments);
@@ -303,7 +303,7 @@ class ObjectManager
      */
     private function _getMockObject($argClassName, array $arguments)
     {
-        if (is_subclass_of($argClassName, '\Magento\Framework\Service\Data\AbstractObjectBuilder')) {
+        if (is_subclass_of($argClassName, '\Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder')) {
             $object = $this->getBuilder($argClassName, $arguments);
             return $object;
         } else {

@@ -59,7 +59,7 @@ class View extends Block
      *
      * @var string
      */
-    protected $addToCart = '#product-addtocart-button';
+    protected $addToCart = '.tocart';
 
     /**
      * Quantity input id

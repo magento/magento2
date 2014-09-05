@@ -28,7 +28,7 @@ namespace Magento\Catalog\Service\V1\Data\Eav\Option;
  *
  * @codeCoverageIgnore
  */
-class LabelBuilder extends \Magento\Framework\Service\Data\AbstractObjectBuilder
+class LabelBuilder extends \Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder
 {
     /**
      * Set option label

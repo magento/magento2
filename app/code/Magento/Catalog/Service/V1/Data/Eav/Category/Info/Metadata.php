@@ -23,13 +23,13 @@
  */
 namespace Magento\Catalog\Service\V1\Data\Eav\Category\Info;
 
-use Magento\Framework\Service\Data\Eav\AbstractObject;
+use Magento\Framework\Service\Data\AbstractExtensibleObject;
 
 /**
  * Class Metadata
  * @codeCoverageIgnore
  */
-class Metadata extends AbstractObject
+class Metadata extends AbstractExtensibleObject
 {
     const ID = 'category_id';
 
@@ -60,7 +60,7 @@ class Metadata extends AbstractObject
     const ACTIVE = 'active';
 
     /**
-     * @return \Magento\Framework\Service\Data\Eav\AttributeValue[]|null
+     * @return \Magento\Framework\Service\Data\AttributeValue[]|null
      */
     public function getCustomAttributes()
     {

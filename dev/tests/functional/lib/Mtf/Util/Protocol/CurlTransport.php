@@ -25,8 +25,6 @@
 
 namespace Mtf\Util\Protocol;
 
-use Mtf\Util\Protocol\CurlInterface;
-
 /**
  * HTTP CURL Adapter
  */
@@ -37,7 +35,7 @@ class CurlTransport implements CurlInterface
      *
      * @var array
      */
-    protected $_config = array();
+    protected $_config = [];
 
     /**
      * Curl handle
@@ -51,20 +49,20 @@ class CurlTransport implements CurlInterface
      *
      * @var array
      */
-    protected $_allowedParams = array(
-        'timeout'      => CURLOPT_TIMEOUT,
+    protected $_allowedParams = [
+        'timeout' => CURLOPT_TIMEOUT,
         'maxredirects' => CURLOPT_MAXREDIRS,
-        'proxy'        => CURLOPT_PROXY,
-        'ssl_cert'     => CURLOPT_SSLCERT,
-        'userpwd'      => CURLOPT_USERPWD
-    );
+        'proxy' => CURLOPT_PROXY,
+        'ssl_cert' => CURLOPT_SSLCERT,
+        'userpwd' => CURLOPT_USERPWD
+    ];
 
     /**
      * Array of CURL options
      *
      * @var array
      */
-    protected $_options = array();
+    protected $_options = [];
 
     /**
      * Apply current configuration array to curl resource
@@ -97,7 +95,7 @@ class CurlTransport implements CurlInterface
      * @param array $options
      * @return $this
      */
-    public function setOptions(array $options = array())
+    public function setOptions(array $options = [])
     {
         $this->_options = $options;
         return $this;
@@ -122,7 +120,7 @@ class CurlTransport implements CurlInterface
      * @param array $config
      * @return $this
      */
-    public function setConfig($config = array())
+    public function setConfig($config = [])
     {
         $this->_config = $config;
         return $this;
@@ -136,24 +134,25 @@ class CurlTransport implements CurlInterface
      * @param string $httpVer
      * @param array $headers
      * @param array $params
+     * @return void
      */
-    public function write($method, $url, $httpVer = '1.1', $headers = array(), $params = array())
+    public function write($method, $url, $httpVer = '1.1', $headers = [], $params = [])
     {
         $this->_applyConfig();
-        $options = array(
+        $options = [
             CURLOPT_URL                 => $url,
             CURLOPT_RETURNTRANSFER      => true,
             CURLOPT_FOLLOWLOCATION      => true,
+            CURLOPT_COOKIEFILE          => '',
             CURLOPT_HTTPHEADER          => $headers,
-            CURLOPT_COOKIEFILE          => ''
-        );
-
+        ];
         if ($method == CurlInterface::POST) {
-            $options[CURLOPT_POST]          = true;
-            $options[CURLOPT_POSTFIELDS]    = $params;
+            $options[CURLOPT_POST] = true;
+            $options[CURLOPT_POSTFIELDS] = $params;
         } elseif ($method == CurlInterface::GET) {
-            $options[CURLOPT_HTTPGET]       = true;
+            $options[CURLOPT_HTTPGET] = true;
         }
+
         curl_setopt_array($this->_getResource(), $options);
     }
 
@@ -228,10 +227,10 @@ class CurlTransport implements CurlInterface
      * @param array $options
      * @return array
      */
-    public function multiRequest($urls, $options = array())
+    public function multiRequest($urls, $options = [])
     {
-        $handles = array();
-        $result = array();
+        $handles = [];
+        $result = [];
 
         $multihandle = curl_multi_init();
 

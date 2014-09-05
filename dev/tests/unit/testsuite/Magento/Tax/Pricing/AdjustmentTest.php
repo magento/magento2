@@ -146,16 +146,13 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
      * @param $expectedResult
      * @dataProvider applyAdjustmentDataProvider
      */
-    public function testApplyAdjustment($isPriceIncludesTax, $amount, $price, $expectedResult)
+    public function testApplyAdjustment($amount, $price, $expectedResult)
     {
         $object = $this->getMockBuilder('Magento\Framework\Pricing\Object\SaleableInterface')->getMock();
 
-        $this->taxHelper->expects($this->any())
-            ->method('priceIncludesTax')
-            ->will($this->returnValue($isPriceIncludesTax));
         $this->catalogHelper->expects($this->any())
             ->method('getTaxPrice')
-            ->with($object, $amount, !$isPriceIncludesTax)
+            ->with($object, $amount, true)
             ->will($this->returnValue($price));
 
         $this->assertEquals($expectedResult, $this->adjustment->applyAdjustment($amount, $object));
@@ -167,9 +164,9 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
     public function applyAdjustmentDataProvider()
     {
         return [
-            [true, 1.1, 2.2, 2.2],
-            [true, 0.0, 2.2, 2.2],
-            [true, 1.1, 0.0, 0.0],
+            [1.1, 2.2, 2.2],
+            [0.0, 2.2, 2.2],
+            [1.1, 0.0, 0.0],
         ];
     }
 

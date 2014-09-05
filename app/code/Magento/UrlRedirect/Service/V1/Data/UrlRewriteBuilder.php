@@ -23,12 +23,12 @@
  */
 namespace Magento\UrlRedirect\Service\V1\Data;
 
-use Magento\Framework\Service\Data\AbstractObjectBuilder;
+use Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder;
 
 /**
  * Data builder class for url rewrite
  */
-class UrlRewriteBuilder extends AbstractObjectBuilder
+class UrlRewriteBuilder extends AbstractExtensibleObjectBuilder
 {
     /**
      * @param int $entityId

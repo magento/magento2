@@ -53,8 +53,9 @@ interface CurlInterface
      * @param string $httpVer
      * @param array  $headers
      * @param array  $params
+     * @return void
      */
-    public function write($method, $url, $httpVer = '1.1', $headers = array(), $params = array());
+    public function write($method, $url, $httpVer = '1.1', $headers = [], $params = []);
 
     /**
      * Read response from server

@@ -124,11 +124,6 @@ class Config implements ConfigInterface
     protected $_scopeType;
 
     /**
-     * @var \Magento\TestFramework\ObjectManager
-     */
-    protected $_objectManager;
-
-    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Stdlib\String $stringHelper
      * @param \Magento\Framework\App\RequestInterface $request

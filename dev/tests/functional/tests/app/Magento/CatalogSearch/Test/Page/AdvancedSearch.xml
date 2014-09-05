@@ -23,11 +23,12 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page mca="catalogsearch/advanced" >
-    <block>
-        <name>form</name>
-        <class>Magento\CatalogSearch\Test\Block\Advanced\Form</class>
-        <locator>.form.search.advanced</locator>
-        <strategy>css selector</strategy>
-    </block>
+<page mca="catalogsearch/advanced" module="Magento_CatalogSearch">
+    <blocks>
+        <form>
+            <class>Magento\CatalogSearch\Test\Block\Advanced\Form</class>
+            <locator>.form.search.advanced</locator>
+            <strategy>css selector</strategy>
+        </form>
+    </blocks>
 </page>

@@ -23,23 +23,37 @@
  */
 namespace Magento\Checkout\Service\V1\Data;
 
+use Magento\Framework\Service\Data\AttributeValueBuilder;
+use Magento\Framework\Service\Data\MetadataServiceInterface;
 use Magento\Framework\Service\Data\ObjectFactory;
-use Magento\Framework\Service\V1\Data\SearchCriteriaBuilder;
 use Magento\Framework\Service\V1\Data\AbstractSearchResultsBuilder;
+use Magento\Framework\Service\V1\Data\SearchCriteriaBuilder;
 
 class CartSearchResultsBuilder extends AbstractSearchResultsBuilder
 {
     /**
+     * Constructor
+     *
      * @param ObjectFactory $objectFactory
+     * @param AttributeValueBuilder $valueBuilder
+     * @param MetadataServiceInterface $metadataService
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param CartBuilder $itemObjectBuilder
      */
     public function __construct(
         ObjectFactory $objectFactory,
+        AttributeValueBuilder $valueBuilder,
+        MetadataServiceInterface $metadataService,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         CartBuilder $itemObjectBuilder
     ) {
-        parent::__construct($objectFactory, $searchCriteriaBuilder, $itemObjectBuilder);
+        parent::__construct(
+            $objectFactory,
+            $valueBuilder,
+            $metadataService,
+            $searchCriteriaBuilder,
+            $itemObjectBuilder
+        );
     }
 
     /**

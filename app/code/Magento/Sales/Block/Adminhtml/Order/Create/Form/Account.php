@@ -25,6 +25,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Form;
 
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
+use Magento\Framework\Service\ExtensibleDataObjectConverter;
 
 /**
  * Create order account form
@@ -154,7 +155,7 @@ class Account extends AbstractForm
         } catch (\Exception $e) {
             /** If customer does not exist do nothing. */
         }
-        $data = isset($customer) ? \Magento\Framework\Service\EavDataObjectConverter::toFlatArray($customer) : array();
+        $data = isset($customer) ? ExtensibleDataObjectConverter::toFlatArray($customer) : array();
         foreach ($this->getQuote()->getData() as $key => $value) {
             if (strpos($key, 'customer_') === 0) {
                 $data[substr($key, 9)] = $value;

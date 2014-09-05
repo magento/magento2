@@ -27,7 +27,7 @@ namespace Magento\ConfigurableProduct\Test\Constraint;
 use Mtf\Fixture\FixtureInterface;
 use Magento\Catalog\Test\Constraint\AssertProductForm;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
-use Magento\ConfigurableProduct\Test\Page\Adminhtml\CatalogProductEdit;
+use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 
 /**
  * Class AssertConfigurableProductForm
@@ -63,7 +63,7 @@ class AssertConfigurableProductForm extends AssertProductForm
             unset($formData['configurable_attributes_data']['matrix'][$key]['price']);
         }
 
-        $fixtureData = $this->prepareFixtureData($product->getData());
+        $fixtureData = $this->prepareFixtureData($product->getData(), $product);
         $attributes = $fixtureData['configurable_attributes_data']['attributes_data'];
         $matrix = $fixtureData['configurable_attributes_data']['matrix'];
         unset($fixtureData['configurable_attributes_data'], $fixtureData['id']);

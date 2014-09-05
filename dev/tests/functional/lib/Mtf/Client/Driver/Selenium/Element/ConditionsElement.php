@@ -165,11 +165,11 @@ class ConditionsElement extends AbstractElement
     ];
 
     /**
-     * Magento varienLoader.js loader
+     * Rule param wait locator
      *
      * @var string
      */
-    protected $loader = './/ancestor::body/div[@id="loading-mask"]';
+    protected $ruleParamWait = './/*[@class="rule-param-wait"]';
 
     /**
      * Chooser grid locator
@@ -206,7 +206,7 @@ class ConditionsElement extends AbstractElement
         $newCondition->find($this->addNew, Locator::SELECTOR_XPATH)->click();
         $typeNewCondition = $newCondition->find($this->typeNew, Locator::SELECTOR_XPATH, 'select');
         $typeNewCondition->setValue($condition['type']);
-        $this->waitLoader();
+        $this->ruleParamWait();
 
         $createdCondition = $newCondition->find($this->created, Locator::SELECTOR_XPATH);
         if (!empty($condition['rules'])) {
@@ -248,7 +248,7 @@ class ConditionsElement extends AbstractElement
         $newCondition = $context->find($this->newCondition, Locator::SELECTOR_XPATH);
         $newCondition->find($this->addNew, Locator::SELECTOR_XPATH)->click();
         $newCondition->find($this->typeNew, Locator::SELECTOR_XPATH, 'select')->setValue($condition['type']);
-        $this->waitLoader();
+        $this->ruleParamWait();
 
         $createdCondition = $newCondition->find($this->created, Locator::SELECTOR_XPATH);
         $this->fillCondition($condition['rules'], $createdCondition);
@@ -380,17 +380,17 @@ class ConditionsElement extends AbstractElement
     }
 
     /**
-     * Wait loader
+     * Param wait loader
      *
      * @return void
      */
-    protected function waitLoader()
+    protected function ruleParamWait()
     {
         $browser = $this;
-        $loader = $this->loader;
+        $ruleParamWait = $this->ruleParamWait;
         $browser->waitUntil(
-            function () use ($browser, $loader) {
-                $element = $browser->find($loader, Locator::SELECTOR_XPATH);
+            function () use ($browser, $ruleParamWait) {
+                $element = $browser->find($ruleParamWait, Locator::SELECTOR_XPATH);
                 return $element->isVisible() ? null : true;
             }
         );

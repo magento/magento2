@@ -66,7 +66,7 @@ class CreditmemoMapper
 
     /**
      * @param \Magento\Sales\Model\Order\Creditmemo $creditmemo
-     * @return \Magento\Framework\Service\Data\AbstractObject
+     * @return \Magento\Framework\Service\Data\AbstractExtensibleObject
      */
     public function extractDto(\Magento\Sales\Model\Order\Creditmemo $creditmemo)
     {

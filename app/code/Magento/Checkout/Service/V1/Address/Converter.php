@@ -24,11 +24,12 @@
 
 namespace Magento\Checkout\Service\V1\Address;
 
-use \Magento\Checkout\Service\V1\Data\Cart\Address;
-use \Magento\Checkout\Service\V1\Data\Cart\AddressBuilder;
-use \Magento\Checkout\Service\V1\Data\Cart\Address\Region;
+use Magento\Checkout\Service\V1\Data\Cart\Address;
+use Magento\Checkout\Service\V1\Data\Cart\AddressBuilder;
+use Magento\Checkout\Service\V1\Data\Cart\Address\Region;
 use Magento\Customer\Service\V1\CustomerMetadataServiceInterface;
-use \Magento\Framework\Service\Data\Eav\AttributeValue;
+use Magento\Framework\Service\Data\AttributeValue;
+use Magento\Framework\Service\SimpleDataObjectConverter;
 
 class Converter
 {
@@ -84,7 +85,7 @@ class Converter
 
         foreach ($this->metadataService->getCustomAttributesMetadata() as $attributeMetadata) {
             $attributeCode = $attributeMetadata->getAttributeCode();
-            $method = 'get' . \Magento\Framework\Service\DataObjectConverter::snakeCaseToCamelCase($attributeCode);
+            $method = 'get' . SimpleDataObjectConverter::snakeCaseToCamelCase($attributeCode);
             $data[Address::CUSTOM_ATTRIBUTES_KEY][] =
                 [AttributeValue::ATTRIBUTE_CODE => $attributeCode, AttributeValue::VALUE => $address->$method()];
         }
@@ -105,7 +106,7 @@ class Converter
 
         //set custom attributes
         $customAttributes = $dataObject->getCustomAttributes();
-        /** @var \Magento\Framework\Service\Data\Eav\AttributeValue $attributeData */
+        /** @var \Magento\Framework\Service\Data\AttributeValue $attributeData */
         foreach ($customAttributes as $attributeData) {
             $address->setData($attributeData->getAttributeCode(), $attributeData->getValue());
         }

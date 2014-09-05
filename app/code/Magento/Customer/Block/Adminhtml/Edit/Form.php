@@ -83,7 +83,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             $form->addField('id', 'hidden', array('name' => 'customer_id'));
             $customer = $this->_customerAccountService->getCustomer($customerId);
             $form->setValues(
-                \Magento\Framework\Service\EavDataObjectConverter::toFlatArray($customer)
+                \Magento\Framework\Service\ExtensibleDataObjectConverter::toFlatArray($customer)
             )->addValues(
                 array('customer_id' => $customerId)
             );

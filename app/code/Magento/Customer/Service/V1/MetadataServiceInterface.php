@@ -24,7 +24,7 @@
 
 namespace Magento\Customer\Service\V1;
 
-use Magento\Framework\Service\Data\Eav\MetadataServiceInterface as EavMetadataServiceInterface;
+use Magento\Framework\Service\Data\MetadataServiceInterface as EavMetadataServiceInterface;
 
 /**
  * Interface providing APIs to fetch custom attributes metadata

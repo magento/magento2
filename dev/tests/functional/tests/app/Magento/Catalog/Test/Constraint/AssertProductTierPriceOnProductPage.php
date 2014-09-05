@@ -24,10 +24,11 @@
 
 namespace Magento\Catalog\Test\Constraint;
 
+use Mtf\Client\Browser;
 use Mtf\Fixture\FixtureInterface;
 use Mtf\Constraint\AbstractConstraint;
-use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Catalog\Test\Block\Product\View;
+use Magento\Catalog\Test\Page\Product\CatalogProductView;
 
 /**
  * Class AssertProductTierPriceOnProductPage
@@ -59,17 +60,18 @@ class AssertProductTierPriceOnProductPage extends AbstractConstraint implements 
      * Assertion that tier prices are displayed correctly
      *
      * @param CatalogProductView $catalogProductView
+     * @param Browser $browser
      * @param FixtureInterface $product
      * @return void
      */
     public function processAssert(
         CatalogProductView $catalogProductView,
+        Browser $browser,
         FixtureInterface $product
     ) {
         // TODO fix initialization url for frontend page
         //Open product view page
-        $catalogProductView->init($product);
-        $catalogProductView->open();
+        $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
 
         //Process assertions
         $this->assertPrice($product, $catalogProductView);

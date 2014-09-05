@@ -24,15 +24,15 @@
 
 namespace Magento\Catalog\Service\V1\Data\Eav\Category\Info;
 
-use Magento\Framework\Service\Data\Eav\AbstractObjectBuilder;
-use Magento\Framework\Service\Data\Eav\AttributeValueBuilder;
+use Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder;
+use Magento\Framework\Service\Data\AttributeValueBuilder;
 
 /**
  * Class MetadataBuilder
  *
  * @codeCoverageIgnore
  */
-class MetadataBuilder extends AbstractObjectBuilder
+class MetadataBuilder extends AbstractExtensibleObjectBuilder
 {
     /**
      * @param \Magento\Framework\Service\Data\ObjectFactory $objectFactory

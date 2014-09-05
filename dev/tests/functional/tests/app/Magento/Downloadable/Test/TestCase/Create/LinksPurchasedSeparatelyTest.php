@@ -101,7 +101,7 @@ class LinksPurchasedSeparatelyTest extends Functional
         $product = $this->product;
         $frontendHomePage = Factory::getPageFactory()->getCmsIndexIndex();
         $categoryPage = Factory::getPageFactory()->getCatalogCategoryView();
-        $productPage = Factory::getPageFactory()->getDownloadableCatalogProductView();
+        $productPage = Factory::getPageFactory()->getCatalogProductView();
 
         $frontendHomePage->open();
         $frontendHomePage->getTopmenu()->selectCategoryByName($product->getCategoryName());

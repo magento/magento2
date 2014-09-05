@@ -67,6 +67,14 @@ class SearchResultsBuilder extends EntityAbstract
                     'type' => '\\Magento\Framework\Service\Data\ObjectFactory'
                 ],
                 [
+                    'name' => 'valueBuilder',
+                    'type' => '\\Magento\Framework\Service\Data\AttributeValueBuilder'
+                ],
+                [
+                    'name' => 'metadataService',
+                    'type' => '\\Magento\Framework\Service\Config\MetadataConfig'
+                ],
+                [
                     'name' => 'searchCriteriaBuilder',
                     'type' => '\\Magento\Framework\Service\V1\Data\SearchCriteriaBuilder'
                 ],
@@ -75,7 +83,8 @@ class SearchResultsBuilder extends EntityAbstract
                     'type' => $this->_getFullyQualifiedClassName($this->_getSourceClassName()) . 'Builder'
                 ],
             ],
-            'body' => "parent::__construct(\$objectFactory, \$searchCriteriaBuilder, \$itemObjectBuilder);",
+            'body' => "parent::__construct(\$objectFactory, \$valueBuilder, \$metadataService, " .
+                "\$searchCriteriaBuilder, \$itemObjectBuilder);",
             'docblock' => [
                 'shortDescription' => ucfirst(static::ENTITY_TYPE) . ' constructor',
                 'tags' => [

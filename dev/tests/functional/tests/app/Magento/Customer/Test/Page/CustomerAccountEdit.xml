@@ -23,11 +23,12 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page mca="customer/account/edit" >
-    <block>
-        <name>accountInfoForm</name>
-        <class>Magento\Customer\Test\Block\Form\CustomerForm</class>
-        <locator>#form-validate</locator>
-        <strategy>css selector</strategy>
-    </block>
+<page mca="customer/account/edit" module="Magento_Customer">
+    <blocks>
+        <accountInfoForm>
+            <class>Magento\Customer\Test\Block\Form\CustomerForm</class>
+            <locator>#form-validate</locator>
+            <strategy>css selector</strategy>
+        </accountInfoForm>
+    </blocks>
 </page>

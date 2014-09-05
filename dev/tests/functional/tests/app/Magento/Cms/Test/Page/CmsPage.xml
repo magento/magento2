@@ -23,11 +23,12 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page mca="cms/page" >
-    <block>
-        <name>cmsPageBlock</name>
-        <class>Magento\Cms\Test\Block\Page</class>
-        <locator>.page.main</locator>
-        <strategy>css selector</strategy>
-    </block>
+<page mca="cms/page" module="Magento_Cms">
+    <blocks>
+        <cmsPageBlock>
+            <class>Magento\Cms\Test\Block\Page</class>
+            <locator>.page.main</locator>
+            <strategy>css selector</strategy>
+        </cmsPageBlock>
+    </blocks>
 </page>

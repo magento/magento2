@@ -23,23 +23,22 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page mca="customer/index" >
-    <block>
-        <name>messagesBlock</name>
-        <class>Magento\Core\Test\Block\Messages</class>
-        <locator>#messages</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>pageActionsBlock</name>
-        <class>Magento\Backend\Test\Block\GridPageActions</class>
-        <locator>.page-main-actions</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>customerGridBlock</name>
-        <class>Magento\Customer\Test\Block\Adminhtml\CustomerGrid</class>
-        <locator>#customerGrid</locator>
-        <strategy>css selector</strategy>
-    </block>
+<page mca="customer/index" module="Magento_Customer">
+    <blocks>
+        <messagesBlock>
+            <class>Magento\Core\Test\Block\Messages</class>
+            <locator>#messages</locator>
+            <strategy>css selector</strategy>
+        </messagesBlock>
+        <pageActionsBlock>
+            <class>Magento\Backend\Test\Block\GridPageActions</class>
+            <locator>.page-main-actions</locator>
+            <strategy>css selector</strategy>
+        </pageActionsBlock>
+        <customerGridBlock>
+            <class>Magento\Customer\Test\Block\Adminhtml\CustomerGrid</class>
+            <locator>#customerGrid</locator>
+            <strategy>css selector</strategy>
+        </customerGridBlock>
+    </blocks>
 </page>

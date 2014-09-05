@@ -23,7 +23,7 @@
  */
 namespace Magento\Webapi\Service\Entity;
 
-class SimpleDataObjectBuilder extends \Magento\Framework\Service\Data\AbstractObjectBuilder
+class SimpleDataObjectBuilder extends \Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder
 {
     /**
      * @param int $entityId

@@ -1,9 +1,9 @@
 {
     "name": "magento/language-es_es",
     "description": "Spanish (Spain) language",
-    "version": "0.1.0-alpha93",
+    "version": "0.1.0-alpha94",
     "require": {
-        "magento/framework": "0.1.0-alpha93",
+        "magento/framework": "0.1.0-alpha94",
         "magento/magento-composer-installer": "*"
     },
     "type": "magento2-language",

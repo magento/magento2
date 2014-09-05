@@ -23,9 +23,9 @@
  */
 namespace Magento\Webapi\Service\Entity;
 
-use Magento\Framework\Service\Data\AbstractObject;
+use Magento\Framework\Service\Data\AbstractExtensibleObject;
 
-class SimpleData extends AbstractObject
+class SimpleData extends AbstractExtensibleObject
 {
     /**
      * @return int|null

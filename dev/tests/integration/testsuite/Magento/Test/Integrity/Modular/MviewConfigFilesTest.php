@@ -69,17 +69,6 @@ class MviewConfigFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function mviewConfigFileDataProvider()
     {
-        $fileList = glob(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Framework\App\Filesystem'
-            )->getPath(
-                \Magento\Framework\App\Filesystem::APP_DIR
-            ) . '/*/*/*/etc/mview.xml'
-        );
-        $dataProviderResult = array();
-        foreach ($fileList as $file) {
-            $dataProviderResult[$file] = array($file);
-        }
-        return $dataProviderResult;
+        return \Magento\TestFramework\Utility\Files::init()->getConfigFiles('mview.xml');
     }
 }

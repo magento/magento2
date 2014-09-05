@@ -24,6 +24,7 @@
 
 namespace Magento\Tax\Test\Constraint;
 
+use Mtf\Client\Browser;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Customer\Test\Fixture\AddressInjectable;
@@ -106,6 +107,7 @@ abstract class AssertTaxRuleApplying extends AbstractConstraint
      * @param CheckoutCart $checkoutCart
      * @param AddressInjectable $address
      * @param array $shipping
+     * @param Browser $browser
      * @param TaxRule $initialTaxRule
      * @return void
      *
@@ -121,6 +123,7 @@ abstract class AssertTaxRuleApplying extends AbstractConstraint
         CheckoutCart $checkoutCart,
         AddressInjectable $address,
         array $shipping,
+        Browser $browser,
         TaxRule $initialTaxRule = null
     ) {
         $this->initialTaxRule = $initialTaxRule;
@@ -154,8 +157,7 @@ abstract class AssertTaxRuleApplying extends AbstractConstraint
         $customerAccountLogin->getLoginBlock()->login($customer);
         // Clearing shopping cart and adding product to shopping cart
         $checkoutCart->open()->getCartBlock()->clearShoppingCart();
-        $catalogProductView->init($this->productSimple);
-        $catalogProductView->open();
+        $browser->open($_ENV['app_frontend_url'] . $this->productSimple->getUrlKey() . '.html');
         $catalogProductView->getViewBlock()->clickAddToCart();
         // Estimate Shipping and Tax
         $checkoutCart->getShippingBlock()->openEstimateShippingAndTax();

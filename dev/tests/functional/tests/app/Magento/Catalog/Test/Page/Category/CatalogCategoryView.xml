@@ -23,41 +23,37 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page mca="catalog/category/view" >
-    <block>
-        <name>listProductBlock</name>
-        <class>Magento\Catalog\Test\Block\Product\ListProduct</class>
-        <locator>.products.wrapper.grid</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>mapBlock</name>
-        <class>Magento\Catalog\Test\Block\Product\Price</class>
-        <locator>#map-popup-content</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>layeredNavigationBlock</name>
-        <class>Magento\LayeredNavigation\Test\Block\Navigation</class>
-        <locator>.block.filter</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>toolbar</name>
-        <class>Magento\Catalog\Test\Block\Product\ProductList\Toolbar</class>
-        <locator>.pages .items</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>titleBlock</name>
-        <class>Magento\Theme\Test\Block\Html\Title</class>
-        <locator>.page-title h1.title .base</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>viewBlock</name>
-        <class>Magento\Catalog\Test\Block\Category\View</class>
-        <locator>.column.main</locator>
-        <strategy>css selector</strategy>
-    </block>
+<page mca="catalog/category/view" module="Magento_Catalog">
+    <blocks>
+        <listProductBlock>
+            <class>Magento\Catalog\Test\Block\Product\ListProduct</class>
+            <locator>.products.wrapper.grid</locator>
+            <strategy>css selector</strategy>
+        </listProductBlock>
+        <mapBlock>
+            <class>Magento\Catalog\Test\Block\Product\Price</class>
+            <locator>#map-popup-content</locator>
+            <strategy>css selector</strategy>
+        </mapBlock>
+        <layeredNavigationBlock>
+            <class>Magento\LayeredNavigation\Test\Block\Navigation</class>
+            <locator>.block.filter</locator>
+            <strategy>css selector</strategy>
+        </layeredNavigationBlock>
+        <toolbar>
+            <class>Magento\Catalog\Test\Block\Product\ProductList\Toolbar</class>
+            <locator>.toolbar-products</locator>
+            <strategy>css selector</strategy>
+        </toolbar>
+        <titleBlock>
+            <class>Magento\Theme\Test\Block\Html\Title</class>
+            <locator>.page-title h1.title .base</locator>
+            <strategy>css selector</strategy>
+        </titleBlock>
+        <viewBlock>
+            <class>Magento\Catalog\Test\Block\Category\View</class>
+            <locator>.column.main</locator>
+            <strategy>css selector</strategy>
+        </viewBlock>
+    </blocks>
 </page>

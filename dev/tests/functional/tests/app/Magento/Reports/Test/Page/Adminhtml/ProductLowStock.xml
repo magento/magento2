@@ -23,11 +23,12 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page mca="reports/report_product/lowstock" >
-    <block>
-        <name>lowStockGrid</name>
-        <class>Magento\Reports\Test\Block\Adminhtml\Product\Lowstock\Grid</class>
-        <locator>#gridLowstock</locator>
-        <strategy>css selector</strategy>
-    </block>
+<page mca="reports/report_product/lowstock" module="Magento_Reports">
+    <blocks>
+        <lowStockGrid>
+            <class>Magento\Reports\Test\Block\Adminhtml\Product\Lowstock\Grid</class>
+            <locator>#gridLowstock</locator>
+            <strategy>css selector</strategy>
+        </lowStockGrid>
+    </blocks>
 </page>

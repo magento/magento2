@@ -25,9 +25,9 @@
  */
 namespace Magento\Downloadable\Service\V1\DownloadableLink\Data;
 
-use Magento\Framework\Service\Data\AbstractObjectBuilder;
+use Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder;
 
-class DownloadableResourceInfoBuilder extends AbstractObjectBuilder
+class DownloadableResourceInfoBuilder extends AbstractExtensibleObjectBuilder
 {
     /**
      * Set file path

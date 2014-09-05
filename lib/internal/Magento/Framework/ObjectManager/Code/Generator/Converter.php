@@ -127,7 +127,7 @@ class Converter extends \Magento\Framework\Code\Generator\EntityAbstract
             'parameters' => [
                 [
                     'name' => $paramName,
-                    'type' => '\Magento\Framework\Service\Data\AbstractObject'
+                    'type' => '\Magento\Framework\Service\Data\AbstractExtensibleObject'
                 ]
             ],
             'body' => $body,
@@ -136,7 +136,7 @@ class Converter extends \Magento\Framework\Code\Generator\EntityAbstract
                 'tags' => [
                     [
                         'name' => 'param',
-                        'description' => '\Magento\Framework\Service\Data\AbstractObject $' . $paramName,
+                        'description' => '\Magento\Framework\Service\Data\AbstractExtensibleObject $' . $paramName,
                     ],
                     [
                         'name' => 'return',

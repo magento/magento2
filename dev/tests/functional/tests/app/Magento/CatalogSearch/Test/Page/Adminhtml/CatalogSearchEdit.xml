@@ -23,17 +23,17 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page mca="catalog/search/edit" >
-    <block>
-        <name>form</name>
-        <class>Magento\CatalogSearch\Test\Block\Adminhtml\Edit\SearchTermForm</class>
-        <locator>#edit_form</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>formPageActions</name>
-        <class>Magento\Backend\Test\Block\FormPageActions</class>
-        <locator>.page-main-actions</locator>
-        <strategy>css selector</strategy>
-    </block>
+<page mca="catalog/search/edit" module="Magento_CatalogSearch">
+    <blocks>
+        <form>
+            <class>Magento\CatalogSearch\Test\Block\Adminhtml\Edit\SearchTermForm</class>
+            <locator>#edit_form</locator>
+            <strategy>css selector</strategy>
+        </form>
+        <formPageActions>
+            <class>Magento\Backend\Test\Block\FormPageActions</class>
+            <locator>.page-main-actions</locator>
+            <strategy>css selector</strategy>
+        </formPageActions>
+    </blocks>
 </page>

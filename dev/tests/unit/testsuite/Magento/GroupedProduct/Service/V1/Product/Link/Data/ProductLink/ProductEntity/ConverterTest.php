@@ -25,7 +25,7 @@
 namespace Magento\GroupedProduct\Service\V1\Product\Link\Data\ProductLink\ProductEntity;
 
 use \Magento\Catalog\Service\V1\Product\Link\Data\ProductLink;
-use \Magento\Framework\Service\Data\Eav\AttributeValue;
+use \Magento\Framework\Service\Data\AttributeValue;
 
 class ConverterTest extends \PHPUnit_Framework_TestCase
 {

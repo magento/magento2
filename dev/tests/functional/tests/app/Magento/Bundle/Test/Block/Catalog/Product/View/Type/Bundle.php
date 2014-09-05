@@ -27,7 +27,7 @@ namespace Magento\Bundle\Test\Block\Catalog\Product\View\Type;
 use Mtf\Block\Block;
 use Mtf\Client\Element\Locator;
 use Magento\Bundle\Test\Fixture\CatalogProductBundle;
-use Magento\Bundle\Test\Page\Product\CatalogProductView;
+use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Bundle\Test\Block\Catalog\Product\View\Type\Option;
 
 /**

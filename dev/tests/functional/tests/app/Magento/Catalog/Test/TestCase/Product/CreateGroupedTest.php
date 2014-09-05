@@ -85,10 +85,10 @@ class CreateGroupedTest extends Functional
     protected function assertOnGrid($product)
     {
         //Search data
-        $search = array(
+        $search = [
             'sku' => $product->getProductSku(),
             'type' => 'Grouped Product'
-        );
+        ];
         //Page & Block
         $productGridPage = Factory::getPageFactory()->getCatalogProductIndex();
         $productGridPage->open();

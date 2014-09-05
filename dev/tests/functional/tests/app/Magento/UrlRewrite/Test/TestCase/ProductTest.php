@@ -60,7 +60,7 @@ class ProductTest extends Functional
         $urlRewriteGridPage->open();
         $pageActionsBlock->addNew();
         $typeSelectorBlock->selectType($urlRewriteProduct->getUrlRewriteType());
-        $productGridBlock->searchAndSelect(array('sku' => $urlRewriteProduct->getProductSku()));
+        $productGridBlock->searchAndSelect(['sku' => $urlRewriteProduct->getProductSku()]);
         $categoryTreeBlock->selectCategory($urlRewriteProduct->getCategoryName());
         $urlRewriteInfoForm->fill($urlRewriteProduct);
         $urlRewriteEditPage->getPageMainActions()->save();

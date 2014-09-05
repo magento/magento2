@@ -28,7 +28,7 @@ namespace Magento\Checkout\Service\V1\Data;
  *
  * @codeCoverageIgnore
  */
-class Cart extends \Magento\Framework\Service\Data\AbstractObject
+class Cart extends \Magento\Framework\Service\Data\AbstractExtensibleObject
 {
     const ID = 'id';
 

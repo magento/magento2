@@ -23,47 +23,42 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page mca="admin/urlrewrite/edit">
-    <block>
-        <name>treeBlock</name>
-        <class>Magento\UrlRewrite\Test\Block\Adminhtml\Catalog\Category\Tree</class>
-        <locator>[id="page:main-container"]</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>formBlock</name>
-        <class>Magento\UrlRewrite\Test\Block\Adminhtml\Catalog\Edit\UrlRewriteForm</class>
-        <locator>#edit_form</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>messagesBlock</name>
-        <class>Magento\Core\Test\Block\Messages</class>
-        <locator>#messages .messages</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>pageMainActions</name>
-        <class>Magento\Backend\Test\Block\FormPageActions</class>
-        <locator>.page-main-actions</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>productGridBlock</name>
-        <class>Magento\UrlRewrite\Test\Block\Adminhtml\Catalog\Product\Grid</class>
-        <locator>[id="productGrid"]</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>urlRewriteTypeSelectorBlock</name>
-        <class>Magento\UrlRewrite\Test\Block\Adminhtml\Selector</class>
-        <locator>[data-ui-id="urlrewrite-type-selector"]</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>cmsGridBlock</name>
-        <class>Magento\UrlRewrite\Test\Block\Cms\Page\Grid</class>
-        <locator>#cmsPageGrid</locator>
-        <strategy>css selector</strategy>
-    </block>
+<page mca="admin/urlrewrite/edit" module="Magento_UrlRewrite">
+    <blocks>
+        <treeBlock>
+            <class>Magento\UrlRewrite\Test\Block\Adminhtml\Catalog\Category\Tree</class>
+            <locator>[id="page:main-container"]</locator>
+            <strategy>css selector</strategy>
+        </treeBlock>
+        <formBlock>
+            <class>Magento\UrlRewrite\Test\Block\Adminhtml\Catalog\Edit\UrlRewriteForm</class>
+            <locator>#edit_form</locator>
+            <strategy>css selector</strategy>
+        </formBlock>
+        <messagesBlock>
+            <class>Magento\Core\Test\Block\Messages</class>
+            <locator>#messages .messages</locator>
+            <strategy>css selector</strategy>
+        </messagesBlock>
+        <pageMainActions>
+            <class>Magento\Backend\Test\Block\FormPageActions</class>
+            <locator>.page-main-actions</locator>
+            <strategy>css selector</strategy>
+        </pageMainActions>
+        <productGridBlock>
+            <class>Magento\UrlRewrite\Test\Block\Adminhtml\Catalog\Product\Grid</class>
+            <locator>[id="productGrid"]</locator>
+            <strategy>css selector</strategy>
+        </productGridBlock>
+        <urlRewriteTypeSelectorBlock>
+            <class>Magento\UrlRewrite\Test\Block\Adminhtml\Selector</class>
+            <locator>[data-ui-id="urlrewrite-type-selector"]</locator>
+            <strategy>css selector</strategy>
+        </urlRewriteTypeSelectorBlock>
+        <cmsGridBlock>
+            <class>Magento\UrlRewrite\Test\Block\Adminhtml\Cms\Page\Grid</class>
+            <locator>#cmsPageGrid</locator>
+            <strategy>css selector</strategy>
+        </cmsGridBlock>
+    </blocks>
 </page>

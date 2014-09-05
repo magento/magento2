@@ -46,12 +46,12 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ->method('getCalculationSequence')
             ->will($this->returnValue($calculationSequence));
 
-        $config = $this->getMock('\Magento\Tax\Model\Config', [], [], '', false);
+        $taxConfig = $this->getMock('\Magento\Tax\Model\Config', [], [], '', false);
         $taxCalculationService = $this->getMock('\Magento\Tax\Service\V1\TaxCalculationService', [], [], '', false);
         $quoteDetailsBuilder = $this->getMock('\Magento\Tax\Service\V1\Data\QuoteDetailsBuilder', [], [], '', false);
 
         /** @var \Magento\Tax\Model\Sales\Total\Quote\Tax */
-        $taxTotalsCalcModel = new Tax($taxData, $config, $taxCalculationService, $quoteDetailsBuilder);
+        $taxTotalsCalcModel = new Tax($taxConfig, $taxCalculationService, $quoteDetailsBuilder, $taxData);
         $array = $taxTotalsCalcModel->processConfigArray([], null);
         $this->assertArrayHasKey($keyExpected, $array, 'Did not find the expected array key: ' . $keyExpected);
         $this->assertArrayNotHasKey($keyAbsent, $array, 'Should not have found the array key; ' . $keyAbsent);

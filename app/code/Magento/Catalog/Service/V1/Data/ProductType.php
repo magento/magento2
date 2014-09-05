@@ -25,12 +25,12 @@
  */
 namespace Magento\Catalog\Service\V1\Data;
 
-use \Magento\Framework\Service\Data\AbstractObject;
+use \Magento\Framework\Service\Data\AbstractExtensibleObject;
 
 /**
  * @codeCoverageIgnore
  */
-class ProductType extends AbstractObject
+class ProductType extends AbstractExtensibleObject
 {
     const NAME = 'name';
     const LABEL = 'label';

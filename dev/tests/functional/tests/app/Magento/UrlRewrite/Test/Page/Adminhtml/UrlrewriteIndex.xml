@@ -23,23 +23,22 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page mca="admin/urlrewrite/index">
-    <block>
-        <name>pageActionsBlock</name>
-        <class>Magento\Backend\Test\Block\GridPageActions</class>
-        <locator>.page-main-actions</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>urlRedirectGrid</name>
-        <class>Magento\UrlRewrite\Test\Block\Adminhtml\Catalog\Category\Grid</class>
-        <locator>#urlrewriteGrid</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>messagesBlock</name>
-        <class>Magento\Core\Test\Block\Messages</class>
-        <locator>.messages .messages</locator>
-        <strategy>css selector</strategy>
-    </block>
+<page mca="admin/urlrewrite/index" module="Magento_UrlRewrite">
+    <blocks>
+        <pageActionsBlock>
+            <class>Magento\Backend\Test\Block\GridPageActions</class>
+            <locator>.page-main-actions</locator>
+            <strategy>css selector</strategy>
+        </pageActionsBlock>
+        <urlRedirectGrid>
+            <class>Magento\UrlRewrite\Test\Block\Adminhtml\Catalog\Category\Grid</class>
+            <locator>#urlrewriteGrid</locator>
+            <strategy>css selector</strategy>
+        </urlRedirectGrid>
+        <messagesBlock>
+            <class>Magento\Core\Test\Block\Messages</class>
+            <locator>.messages .messages</locator>
+            <strategy>css selector</strategy>
+        </messagesBlock>
+    </blocks>
 </page>

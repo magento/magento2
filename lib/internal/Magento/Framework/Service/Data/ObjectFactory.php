@@ -44,7 +44,7 @@ class ObjectFactory
      *
      * @param string $className
      * @param array $arguments
-     * @return AbstractObject
+     * @return AbstractExtensibleObject
      */
     public function create($className, array $arguments)
     {

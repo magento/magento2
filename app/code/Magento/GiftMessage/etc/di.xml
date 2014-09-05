@@ -38,4 +38,6 @@
             </argument>
         </arguments>
     </type>
+    <preference for="Magento\GiftMessage\Service\V1\ReadServiceInterface" type="Magento\GiftMessage\Service\V1\ReadService"/>
+    <preference for="Magento\GiftMessage\Service\V1\WriteServiceInterface" type="Magento\GiftMessage\Service\V1\WriteService"/>
 </config>

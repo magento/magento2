@@ -97,6 +97,7 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection\Abstract
             'Magento\Sales\Model\Order\Payment\Transaction',
             'Magento\Sales\Model\Resource\Order\Payment\Transaction'
         );
+        $this->addFilterToMap('created_at', 'main_table.created_at');
         parent::_construct();
     }
 
@@ -109,7 +110,6 @@ class Collection extends \Magento\Sales\Model\Resource\Order\Collection\Abstract
     public function addOrderInformation(array $keys)
     {
         $this->_addOrderInformation = array_merge($this->_addOrderInformation, $keys);
-        $this->addFilterToMap('created_at', 'main_table.created_at');
         return $this;
     }
 

@@ -30,7 +30,7 @@
     </referenceContainer>
     <referenceContainer name="content">
         <container name="product.info.details" label="invisible" htmlTag="div" htmlClass="product info detailed" after="product.info.media">
-            <block class="Magento\Review\Block\Form" name="product.review.form" as="review_form" cacheable="false">
+            <block class="Magento\Review\Block\Form" name="product.review.form" as="review_form">
                 <container name="product.review.form.fields.before" as="form_fields_before" label="Review Form Fields Before" htmlTag="div" htmlClass="rewards"/>
             </block>
             <block class="Magento\Review\Block\Product\View\ListView" name="product.info.product_additional_data" as="product_additional_data" template="product/view/list.phtml"/>

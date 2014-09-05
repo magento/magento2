@@ -29,7 +29,7 @@ namespace Magento\Catalog\Service\V1\Product\Link\Data;
  *
  * @codeCoverageIgnore
  */
-class ProductLink extends \Magento\Framework\Service\Data\Eav\AbstractObject
+class ProductLink extends \Magento\Framework\Service\Data\AbstractExtensibleObject
 {
     /**#@+
      * Constants for Data Object keys

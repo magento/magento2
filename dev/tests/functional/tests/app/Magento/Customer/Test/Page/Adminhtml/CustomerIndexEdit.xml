@@ -23,29 +23,27 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page mca="customer/index/edit">
-    <block>
-        <name>titleBlock</name>
-        <class>Magento\Theme\Test\Block\Html\Title</class>
-        <locator>.page-title .title</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>messagesBlock</name>
-        <class>Magento\Core\Test\Block\Messages</class>
-        <locator>#messages</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>pageActionsBlock</name>
-        <class>Magento\Backend\Test\Block\FormPageActions</class>
-        <locator>.page-main-actions</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>customerForm</name>
-        <class>Magento\Customer\Test\Block\Adminhtml\Edit\CustomerForm</class>
-        <locator>[id="page:main-container"]</locator>
-        <strategy>css selector</strategy>
-    </block>
+<page mca="customer/index/edit" module="Magento_Customer">
+    <blocks>
+        <titleBlock>
+            <class>Magento\Theme\Test\Block\Html\Title</class>
+            <locator>.page-title .title</locator>
+            <strategy>css selector</strategy>
+        </titleBlock>
+        <messagesBlock>
+            <class>Magento\Core\Test\Block\Messages</class>
+            <locator>#messages</locator>
+            <strategy>css selector</strategy>
+        </messagesBlock>
+        <pageActionsBlock>
+            <class>Magento\Backend\Test\Block\FormPageActions</class>
+            <locator>.page-main-actions</locator>
+            <strategy>css selector</strategy>
+        </pageActionsBlock>
+        <customerForm>
+            <class>Magento\Customer\Test\Block\Adminhtml\Edit\CustomerForm</class>
+            <locator>[id="page:main-container"]</locator>
+            <strategy>css selector</strategy>
+        </customerForm>
+    </blocks>
 </page>

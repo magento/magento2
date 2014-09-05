@@ -23,12 +23,12 @@
  */
 namespace Magento\Bundle\Service\V1\Data\Product\Option;
 
-use Magento\Framework\Service\Data\AbstractObjectBuilder;
+use Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder;
 
 /**
  * @codeCoverageIgnore
  */
-class TypeBuilder extends AbstractObjectBuilder
+class TypeBuilder extends AbstractExtensibleObjectBuilder
 {
     /**
      * Set type label

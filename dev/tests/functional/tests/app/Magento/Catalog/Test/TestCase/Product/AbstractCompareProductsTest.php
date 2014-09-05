@@ -24,6 +24,7 @@
 
 namespace Magento\Catalog\Test\TestCase\Product;
 
+use Mtf\Client\Browser;
 use Mtf\TestCase\Injectable;
 use Mtf\Fixture\FixtureFactory;
 use Mtf\Fixture\InjectableFixture;
@@ -53,6 +54,13 @@ abstract class AbstractCompareProductsTest extends Injectable
      * @var CmsIndex
      */
     protected $cmsIndex;
+
+    /**
+     * Browser
+     *
+     * @var Browser
+     */
+    protected $browser;
 
     /**
      * Catalog product compare page
@@ -108,17 +116,20 @@ abstract class AbstractCompareProductsTest extends Injectable
      *
      * @param CmsIndex $cmsIndex
      * @param CatalogProductView $catalogProductView
+     * @param Browser $browser
      * @param CustomerAccountLogin $customerAccountLogin
      * @return void
      */
     public function __inject(
         CmsIndex $cmsIndex,
         CatalogProductView $catalogProductView,
+        Browser $browser,
         CustomerAccountLogin $customerAccountLogin
     ) {
         $this->cmsIndex = $cmsIndex;
         $this->catalogProductView = $catalogProductView;
         $this->customerAccountLogin = $customerAccountLogin;
+        $this->browser = $browser;
     }
 
     /**
@@ -162,8 +173,7 @@ abstract class AbstractCompareProductsTest extends Injectable
     protected function addProducts(array $products, AbstractConstraint $assert = null)
     {
         foreach ($products as $itemProduct) {
-            $this->catalogProductView->init($itemProduct);
-            $this->catalogProductView->open();
+            $this->browser->open($_ENV['app_frontend_url'] . $itemProduct->getUrlKey() . '.html');
             $this->catalogProductView->getViewBlock()->clickAddToCompare();
             if ($assert !== null) {
                 $this->productCompareAssert($assert, $itemProduct);

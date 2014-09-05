@@ -42,7 +42,6 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->backendHelperMock = $this->getMockBuilder('Magento\Backend\Helper\Data')
-            ->setMethods([])
             ->disableOriginalConstructor()
             ->getMock();
         $this->image = $objectManager->getObject(
@@ -57,7 +56,6 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $url = 'http://example.com/backend/customer/index/viewfile/' . $value;
         $formMock = $this->getMockBuilder('Magento\Framework\Data\Form')
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
         $this->image->setForm($formMock);
         $this->image->setValue($value);

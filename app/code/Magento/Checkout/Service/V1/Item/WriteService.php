@@ -25,7 +25,6 @@
 namespace Magento\Checkout\Service\V1\Item;
 
 use Magento\Framework\Exception\NoSuchEntityException;
-use \Magento\Checkout\Service\V1\Data\Cart\ItemBuilder as ItemBuilder;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
 
@@ -34,12 +33,7 @@ class WriteService implements WriteServiceInterface
     /**
      * @var \Magento\Checkout\Service\V1\QuoteLoader
      */
-    protected $quoteLoader;
-
-    /**
-     * @var ItemBuilder
-     */
-    protected $itemBuilder;
+    protected $quoteRepository;
 
     /**
      * @var \Magento\Catalog\Service\V1\Product\ProductLoader
@@ -47,26 +41,15 @@ class WriteService implements WriteServiceInterface
     protected $productLoader;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    protected $storeManager;
-
-    /**
-     * @param \Magento\Checkout\Service\V1\QuoteLoader $quoteLoader
-     * @param ItemBuilder $itemBuilder
+     * @param \Magento\Sales\Model\QuoteRepository $quoteRepository
      * @param \Magento\Catalog\Service\V1\Product\ProductLoader $productLoader
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
-        \Magento\Checkout\Service\V1\QuoteLoader $quoteLoader,
-        ItemBuilder $itemBuilder,
-        \Magento\Catalog\Service\V1\Product\ProductLoader $productLoader,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Sales\Model\QuoteRepository $quoteRepository,
+        \Magento\Catalog\Service\V1\Product\ProductLoader $productLoader
     ) {
-        $this->quoteLoader = $quoteLoader;
-        $this->itemBuilder = $itemBuilder;
+        $this->quoteRepository = $quoteRepository;
         $this->productLoader = $productLoader;
-        $this->storeManager = $storeManager;
     }
 
     /**
@@ -78,9 +61,8 @@ class WriteService implements WriteServiceInterface
         if (!is_numeric($qty) || $qty <= 0) {
             throw InputException::invalidFieldValue('qty', $qty);
         }
-        $storeId = $this->storeManager->getStore()->getId();
         /** @var \Magento\Sales\Model\Quote $quote */
-        $quote = $this->quoteLoader->load($cartId, $storeId);
+        $quote = $this->quoteRepository->get($cartId);
 
         $product = $this->productLoader->load($data->getSku());
 
@@ -90,25 +72,23 @@ class WriteService implements WriteServiceInterface
         } catch (\Exception $e) {
             throw new CouldNotSaveException('Could not add item to quote');
         }
-        return true;
+        return $quote->getItemByProduct($product)->getId();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function updateItem($cartId, $itemSku, \Magento\Checkout\Service\V1\Data\Cart\Item $data)
+    public function updateItem($cartId, $itemId, \Magento\Checkout\Service\V1\Data\Cart\Item $data)
     {
         $qty = $data->getQty();
         if (!is_numeric($qty) || $qty <= 0) {
             throw InputException::invalidFieldValue('qty', $qty);
         }
-        $storeId = $this->storeManager->getStore()->getId();
         /** @var \Magento\Sales\Model\Quote $quote */
-        $quote = $this->quoteLoader->load($cartId, $storeId);
-        $product = $this->productLoader->load($itemSku);
-        $quoteItem = $quote->getItemByProduct($product);
+        $quote = $this->quoteRepository->get($cartId);
+        $quoteItem = $quote->getItemById($itemId);
         if (!$quoteItem) {
-            throw new NoSuchEntityException("Cart $cartId doesn't contain product $itemSku");
+            throw new NoSuchEntityException("Cart $cartId doesn't contain item  $itemId");
         }
         $quoteItem->setData('qty', $qty);
 
@@ -123,18 +103,16 @@ class WriteService implements WriteServiceInterface
     /**
      * {@inheritdoc}
      */
-    public function removeItem($cartId, $itemSku)
+    public function removeItem($cartId, $itemId)
     {
-        $storeId = $this->storeManager->getStore()->getId();
         /** @var \Magento\Sales\Model\Quote $quote */
-        $quote = $this->quoteLoader->load($cartId, $storeId);
-        $product = $this->productLoader->load($itemSku);
-        $quoteItem = $quote->getItemByProduct($product);
+        $quote = $this->quoteRepository->get($cartId);
+        $quoteItem = $quote->getItemById($itemId);
         if (!$quoteItem) {
-            throw new NoSuchEntityException("Cart $cartId doesn't contain product $itemSku");
+            throw new NoSuchEntityException("Cart $cartId doesn't contain item  $itemId");
         }
         try {
-            $quote->removeItem($quoteItem->getId());
+            $quote->removeItem($itemId);
             $quote->collectTotals()->save();
         } catch (\Exception $e) {
             throw new CouldNotSaveException('Could not remove item from quote');

@@ -29,7 +29,7 @@ namespace Magento\Framework\Service\V1\Data;
  *
  * @method Filter create()
  */
-class FilterBuilder extends \Magento\Framework\Service\Data\AbstractObjectBuilder
+class FilterBuilder extends \Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder
 {
     /**
      * Set field

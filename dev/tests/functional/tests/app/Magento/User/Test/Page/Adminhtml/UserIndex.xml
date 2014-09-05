@@ -23,29 +23,27 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page mca="admin/user">
-    <block>
-        <name>pageActions</name>
-        <class>Magento\Backend\Test\Block\GridPageActions</class>
-        <locator>.page-main-actions</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>userGrid</name>
-        <class>Magento\User\Test\Block\Adminhtml\UserGrid</class>
-        <locator>#permissionsUserGrid</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>messagesBlock</name>
-        <class>Magento\Core\Test\Block\Messages</class>
-        <locator>#messages</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>accessDeniedBlock</name>
-        <class>Magento\Backend\Test\Block\Denied</class>
-        <locator>#anchor-content</locator>
-        <strategy>css selector</strategy>
-    </block>
+<page mca="admin/user" module="Magento_User">
+    <blocks>
+        <pageActions>
+            <class>Magento\Backend\Test\Block\GridPageActions</class>
+            <locator>.page-main-actions</locator>
+            <strategy>css selector</strategy>
+        </pageActions>
+        <userGrid>
+            <class>Magento\User\Test\Block\Adminhtml\UserGrid</class>
+            <locator>#permissionsUserGrid</locator>
+            <strategy>css selector</strategy>
+        </userGrid>
+        <messagesBlock>
+            <class>Magento\Core\Test\Block\Messages</class>
+            <locator>#messages</locator>
+            <strategy>css selector</strategy>
+        </messagesBlock>
+        <accessDeniedBlock>
+            <class>Magento\Backend\Test\Block\Denied</class>
+            <locator>#anchor-content</locator>
+            <strategy>css selector</strategy>
+        </accessDeniedBlock>
+    </blocks>
 </page>

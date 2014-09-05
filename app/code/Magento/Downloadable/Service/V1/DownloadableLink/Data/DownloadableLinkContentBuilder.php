@@ -25,13 +25,13 @@
  */
 namespace Magento\Downloadable\Service\V1\DownloadableLink\Data;
 
-use \Magento\Framework\Service\Data\AbstractObjectBuilder;
+use \Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder;
 use \Magento\Downloadable\Service\V1\Data\FileContent;
 
 /**
  * @codeCoverageIgnore
  */
-class DownloadableLinkContentBuilder extends AbstractObjectBuilder
+class DownloadableLinkContentBuilder extends AbstractExtensibleObjectBuilder
 {
     /**
      * Set link title

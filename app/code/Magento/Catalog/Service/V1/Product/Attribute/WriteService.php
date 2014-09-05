@@ -23,7 +23,6 @@
  */
 namespace Magento\Catalog\Service\V1\Product\Attribute;
 
-use Magento\Framework\Service\EavDataObjectConverter;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\CouldNotSaveException;

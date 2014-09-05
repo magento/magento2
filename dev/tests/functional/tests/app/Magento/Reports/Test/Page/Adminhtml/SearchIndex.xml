@@ -23,11 +23,12 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page mca="reports/index/search" >
-    <block>
-        <name>searchGrid</name>
-        <class>Magento\Reports\Test\Block\Adminhtml\SearchTermsGrid</class>
-        <locator>#searchReportGrid</locator>
-        <strategy>css selector</strategy>
-    </block>
+<page mca="reports/index/search" module="Magento_Reports">
+    <blocks>
+        <searchGrid>
+            <class>Magento\Reports\Test\Block\Adminhtml\SearchTermsGrid</class>
+            <locator>#searchReportGrid</locator>
+            <strategy>css selector</strategy>
+        </searchGrid>
+    </blocks>
 </page>

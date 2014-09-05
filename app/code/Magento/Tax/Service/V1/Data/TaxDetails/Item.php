@@ -24,7 +24,7 @@
 
 namespace Magento\Tax\Service\V1\Data\TaxDetails;
 
-class Item extends \Magento\Framework\Service\Data\AbstractObject
+class Item extends \Magento\Framework\Service\Data\AbstractExtensibleObject
 {
     /**#@+
      * Constants defined for keys of array, makes typos less likely

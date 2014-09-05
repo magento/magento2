@@ -24,10 +24,11 @@
  */
 -->
 <page mca="catalog/product/view">
-    <block>
-        <name>downloadableViewBlock</name>
-        <class>Magento\Downloadable\Test\Block\Catalog\Product\View</class>
-        <locator>.product-info-main</locator>
-        <strategy>css selector</strategy>
-    </block>
+    <blocks>
+        <downloadableViewBlock>
+            <class>Magento\Downloadable\Test\Block\Catalog\Product\View</class>
+            <locator>.product-info-main</locator>
+            <strategy>css selector</strategy>
+        </downloadableViewBlock>
+    </blocks>
 </page>

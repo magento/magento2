@@ -23,12 +23,12 @@
  */
 namespace Magento\Catalog\Service\V1\Data;
 
-use \Magento\Framework\Service\Data\Eav\AbstractObject;
+use \Magento\Framework\Service\Data\AbstractExtensibleObject;
 
 /**
  * @codeCoverageIgnore
  */
-class Category extends AbstractObject
+class Category extends AbstractExtensibleObject
 {
     const ID = 'id';
 

@@ -176,6 +176,10 @@
             <default_value></default_value>
             <input>checkbox</input>
         </default_shipping>
+        <email>
+            <attribute_code>email</attribute_code>
+            <backend_type>virtual</backend_type>
+        </email>
     </fields>
     <repository_class>Magento\Customer\Test\Repository\AddressInjectable</repository_class>
     <handler_interface>Magento\Customer\Test\Handler\AddressInjectable\AddressInjectableInterface</handler_interface>

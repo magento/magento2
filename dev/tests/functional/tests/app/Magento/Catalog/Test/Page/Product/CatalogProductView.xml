@@ -23,77 +23,67 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page mca="catalog/product/view">
-    <block>
-        <name>viewBlock</name>
-        <class>Magento\Catalog\Test\Block\Product\View</class>
-        <locator>#maincontent</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>customOptionsBlock</name>
-        <class>Magento\Catalog\Test\Block\Product\View\CustomOptions</class>
-        <locator>#product-options-wrapper</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>relatedProductBlock</name>
-        <class>Magento\Catalog\Test\Block\Product\ProductList\Related</class>
-        <locator>.block.related</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>upsellBlock</name>
-        <class>Magento\Catalog\Test\Block\Product\ProductList\Upsell</class>
-        <locator>.block.upsell</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>crosssellBlock</name>
-        <class>Magento\Catalog\Test\Block\Product\ProductList\Crosssell</class>
-        <locator>.block.crosssell</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>downloadableLinksBlock</name>
-        <class>Magento\Downloadable\Test\Block\Catalog\Product\Links</class>
-        <locator>[data-container-for=downloadable-links]</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>mapBlock</name>
-        <class>Magento\Catalog\Test\Block\Product\Price</class>
-        <locator>#map-popup</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>messagesBlock</name>
-        <class>Magento\Core\Test\Block\Messages</class>
-        <locator>.page.messages .messages</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>reviewSummary</name>
-        <class>Magento\Review\Test\Block\Product\View\Summary</class>
-        <locator>.product-reviews-summary</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>customerReviewBlock</name>
-        <class>Magento\Review\Test\Block\Product\View</class>
-        <locator>#customer-reviews</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>reviewFormBlock</name>
-        <class>Magento\Review\Test\Block\Form</class>
-        <locator>#review-form</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>titleBlock</name>
-        <class>Magento\Theme\Test\Block\Html\Title</class>
-        <locator>.page-title h1.title .base</locator>
-        <strategy>css selector</strategy>
-    </block>
+<page mca="catalog/product/view" module="Magento_Catalog">
+    <blocks>
+        <viewBlock>
+            <class>Magento\Catalog\Test\Block\Product\View</class>
+            <locator>#maincontent</locator>
+            <strategy>css selector</strategy>
+        </viewBlock>
+        <customOptionsBlock>
+            <class>Magento\Catalog\Test\Block\Product\View\CustomOptions</class>
+            <locator>#product-options-wrapper</locator>
+            <strategy>css selector</strategy>
+        </customOptionsBlock>
+        <relatedProductBlock>
+            <class>Magento\Catalog\Test\Block\Product\ProductList\Related</class>
+            <locator>.block.related</locator>
+            <strategy>css selector</strategy>
+        </relatedProductBlock>
+        <upsellBlock>
+            <class>Magento\Catalog\Test\Block\Product\ProductList\Upsell</class>
+            <locator>.block.upsell</locator>
+            <strategy>css selector</strategy>
+        </upsellBlock>
+        <crosssellBlock>
+            <class>Magento\Catalog\Test\Block\Product\ProductList\Crosssell</class>
+            <locator>.block.crosssell</locator>
+            <strategy>css selector</strategy>
+        </crosssellBlock>
+        <downloadableLinksBlock>
+            <class>Magento\Downloadable\Test\Block\Catalog\Product\View\Links</class>
+            <locator>[data-container-for=downloadable-links]</locator>
+            <strategy>css selector</strategy>
+        </downloadableLinksBlock>
+        <mapBlock>
+            <class>Magento\Catalog\Test\Block\Product\Price</class>
+            <locator>#map-popup-click-for-price</locator>
+            <strategy>css selector</strategy>
+        </mapBlock>
+        <messagesBlock>
+            <class>Magento\Core\Test\Block\Messages</class>
+            <locator>.page.messages .messages</locator>
+            <strategy>css selector</strategy>
+        </messagesBlock>
+        <reviewSummary>
+            <class>Magento\Review\Test\Block\Product\View\Summary</class>
+            <locator>.product-reviews-summary</locator>
+            <strategy>css selector</strategy>
+        </reviewSummary>
+        <customerReviewBlock>
+            <class>Magento\Review\Test\Block\Product\View</class>
+            <locator>#customer-reviews</locator>
+            <strategy>css selector</strategy>
+        </customerReviewBlock>
+        <reviewFormBlock>
+            <class>Magento\Review\Test\Block\Form</class>
+            <locator>#review-form</locator>
+            <strategy>css selector</strategy>
+        </reviewFormBlock>
+        <titleBlock>
+            <class>Magento\Theme\Test\Block\Html\Title</class>
+            <locator>.page-title h1.title .base</locator>
+            <strategy>css selector</strategy>
+        </titleBlock>
+    </blocks>
 </page>

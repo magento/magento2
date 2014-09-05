@@ -23,41 +23,42 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page mca="checkout/cart" >
-    <block>
-        <name>cartBlock</name>
-        <class>Magento\Checkout\Test\Block\Cart</class>
-        <locator>//div[contains(@class, "column main")]</locator>
-        <strategy>xpath</strategy>
-    </block>
-    <block>
-        <name>messagesBlock</name>
-        <class>Magento\Core\Test\Block\Messages</class>
-        <locator>.messages .messages</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>shippingBlock</name>
-        <class>Magento\Checkout\Test\Block\Cart\Shipping</class>
-        <locator>.block.shipping</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>totalsBlock</name>
-        <class>Magento\Checkout\Test\Block\Cart\Totals</class>
-        <locator>#shopping-cart-totals-table</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>crosssellBlock</name>
-        <class>Magento\Catalog\Test\Block\Product\ProductList\Crosssell</class>
-        <locator>//div[contains(@class, "block")][contains(@class, "crosssell")]</locator>
-        <strategy>xpath</strategy>
-    </block>
-    <block>
-        <name>discountCodesBlock</name>
-        <class>Magento\Checkout\Test\Block\Cart\DiscountCodes</class>
-        <locator>.block.discount</locator>
-        <strategy>css selector</strategy>
-    </block>
+<page mca="checkout/cart/index" module="Magento_Checkout">
+    <blocks>
+        <cartBlock>
+            <class>Magento\Checkout\Test\Block\Cart</class>
+            <locator>//div[contains(@class, "column main")]</locator>
+            <strategy>xpath</strategy>
+        </cartBlock>
+        <messagesBlock>
+            <class>Magento\Core\Test\Block\Messages</class>
+            <locator>.messages .messages</locator>
+            <strategy>css selector</strategy>
+        </messagesBlock>
+        <shippingBlock>
+            <class>Magento\Checkout\Test\Block\Cart\Shipping</class>
+            <locator>.block.shipping</locator>
+            <strategy>css selector</strategy>
+        </shippingBlock>
+        <totalsBlock>
+            <class>Magento\Checkout\Test\Block\Cart\Totals</class>
+            <locator>#shopping-cart-totals-table</locator>
+            <strategy>css selector</strategy>
+        </totalsBlock>
+        <crosssellBlock>
+            <class>Magento\Catalog\Test\Block\Product\ProductList\Crosssell</class>
+            <locator>//div[contains(@class, "block")][contains(@class, "crosssell")]</locator>
+            <strategy>xpath</strategy>
+        </crosssellBlock>
+        <discountCodesBlock>
+            <class>Magento\Checkout\Test\Block\Cart\DiscountCodes</class>
+            <locator>.block.discount</locator>
+            <strategy>css selector</strategy>
+        </discountCodesBlock>
+        <proceedToCheckoutBlock>
+            <class>Magento\Checkout\Test\Block\Onepage\Link</class>
+            <locator>ul.checkout-methods-items button.primary.checkout</locator>
+            <strategy>css selector</strategy>
+        </proceedToCheckoutBlock>
+    </blocks>
 </page>

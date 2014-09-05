@@ -24,12 +24,12 @@
 
 namespace Magento\Tax\Service\V1\Data;
 
-use Magento\Framework\Service\Data\AbstractObject;
+use Magento\Framework\Service\Data\AbstractExtensibleObject;
 
 /**
  * Class TaxRule
  */
-class TaxRule extends AbstractObject
+class TaxRule extends AbstractExtensibleObject
 {
     /**#@+
      * Constants defined for keys of array, makes typos less likely

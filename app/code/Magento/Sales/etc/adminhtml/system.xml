@@ -100,6 +100,10 @@
                     <label>Minimum Amount</label>
                     <comment>Subtotal after discount</comment>
                 </field>
+                <field id="tax_including" translate="label" sortOrder="15" type="select" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Include Tax to Amount</label>
+                    <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
+                </field>
                 <field id="description" translate="label comment" sortOrder="20" type="textarea" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Description Message</label>
                     <comment>This message will be shown in the shopping cart when the subtotal (after discount) is lower than the minimum allowed amount.</comment>

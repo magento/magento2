@@ -23,23 +23,22 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page mca="tax/rate/add" >
-    <block>
-        <name>formPageActions</name>
-        <class>Magento\Tax\Test\Block\Adminhtml\Rate\Edit\FormPageActions</class>
-        <locator>.page-main-actions</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>taxRateForm</name>
-        <class>Magento\Tax\Test\Block\Adminhtml\Rate\Edit\Form</class>
-        <locator>#rate-form</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>messagesBlock</name>
-        <class>Magento\Core\Test\Block\Messages</class>
-        <locator>#messages</locator>
-        <strategy>css selector</strategy>
-    </block>
+<page mca="tax/rate/add" module="Magento_Tax">
+    <blocks>
+        <formPageActions>
+            <class>Magento\Tax\Test\Block\Adminhtml\Rate\Edit\FormPageActions</class>
+            <locator>.page-main-actions</locator>
+            <strategy>css selector</strategy>
+        </formPageActions>
+        <taxRateForm>
+            <class>Magento\Tax\Test\Block\Adminhtml\Rate\Edit\Form</class>
+            <locator>#rate-form</locator>
+            <strategy>css selector</strategy>
+        </taxRateForm>
+        <messagesBlock>
+            <class>Magento\Core\Test\Block\Messages</class>
+            <locator>#messages</locator>
+            <strategy>css selector</strategy>
+        </messagesBlock>
+    </blocks>
 </page>

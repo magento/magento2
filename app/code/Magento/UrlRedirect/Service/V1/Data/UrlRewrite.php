@@ -23,12 +23,12 @@
  */
 namespace Magento\UrlRedirect\Service\V1\Data;
 
-use Magento\Framework\Service\Data\AbstractObject;
+use Magento\Framework\Service\Data\AbstractExtensibleObject;
 
 /**
  * Data abstract class for url storage
  */
-class UrlRewrite extends AbstractObject
+class UrlRewrite extends AbstractExtensibleObject
 {
     /**#@+
      * Value object attribute names

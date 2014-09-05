@@ -24,6 +24,7 @@
 
 namespace Magento\Catalog\Test\Constraint;
 
+use Mtf\Client\Browser;
 use Mtf\Fixture\FixtureInterface;
 use Mtf\Constraint\AbstractConstraint;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
@@ -64,16 +65,16 @@ class AssertProductPage extends AbstractConstraint
      * Assertion that the product page is displayed correctly
      *
      * @param CatalogProductView $catalogProductView
+     * @param Browser $browser
      * @param FixtureInterface $product
      * @return void
      */
-    public function processAssert(CatalogProductView $catalogProductView, FixtureInterface $product)
+    public function processAssert(CatalogProductView $catalogProductView, Browser $browser, FixtureInterface $product)
     {
         $this->product = $product;
         // TODO fix initialization url for frontend page
         //Open product view page
-        $catalogProductView->init($product);
-        $catalogProductView->open();
+        $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
 
         $data = $this->prepareData($catalogProductView);
         $badValues = array_diff($data['onPage'], $data['fixture']);

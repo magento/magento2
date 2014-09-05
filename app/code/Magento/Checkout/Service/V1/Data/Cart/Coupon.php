@@ -29,7 +29,7 @@ namespace Magento\Checkout\Service\V1\Data\Cart;
  *
  * @codeCoverageIgnore
  */
-class Coupon extends \Magento\Framework\Service\Data\AbstractObject
+class Coupon extends \Magento\Framework\Service\Data\AbstractExtensibleObject
 {
     /**
      * Constants defined for keys of array

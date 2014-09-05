@@ -23,23 +23,22 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page mca="newsletter/template/index">
-    <block>
-        <name>messagesBlock</name>
-        <class>Magento\Core\Test\Block\Messages</class>
-        <locator>#messages .messages</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>gridPageActions</name>
-        <class>Magento\Newsletter\Test\Block\Adminhtml\Template\GridPageActions</class>
-        <locator>.page-main-actions</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>newsletterTemplateGrid</name>
-        <class>Magento\Newsletter\Test\Block\Adminhtml\Template\Grid</class>
-        <locator>[id="page:main-container"]</locator>
-        <strategy>css selector</strategy>
-    </block>
+<page mca="newsletter/template/index" module="Magento_Newsletter">
+    <blocks>
+        <messagesBlock>
+            <class>Magento\Core\Test\Block\Messages</class>
+            <locator>#messages .messages</locator>
+            <strategy>css selector</strategy>
+        </messagesBlock>
+        <gridPageActions>
+            <class>Magento\Newsletter\Test\Block\Adminhtml\Template\GridPageActions</class>
+            <locator>.page-main-actions</locator>
+            <strategy>css selector</strategy>
+        </gridPageActions>
+        <newsletterTemplateGrid>
+            <class>Magento\Newsletter\Test\Block\Adminhtml\Template\Grid</class>
+            <locator>[id="page:main-container"]</locator>
+            <strategy>css selector</strategy>
+        </newsletterTemplateGrid>
+    </blocks>
 </page>

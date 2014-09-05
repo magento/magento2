@@ -71,8 +71,6 @@ class Curl extends AbstractCurl implements TaxRateInterface
         $data['tax_country_id'] = array_search($data['tax_country_id'], $this->countryId);
         if (isset($data['tax_region_id'])) {
             $data['tax_region_id'] = array_search($data['tax_region_id'], $this->regionId);
-        } else {
-            $data['tax_region_id'] = 0;
         }
 
         $url = $_ENV['app_backend_url'] . 'tax/rate/ajaxSave/?isAjax=true';

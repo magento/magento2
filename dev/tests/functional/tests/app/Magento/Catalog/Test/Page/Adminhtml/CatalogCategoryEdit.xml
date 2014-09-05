@@ -23,23 +23,22 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page mca="catalog/category/edit" >
-    <block>
-        <name>messagesBlock</name>
-        <class>Magento\Core\Test\Block\Messages</class>
-        <locator>#messages</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>formPageActions</name>
-        <class>Magento\Backend\Test\Block\FormPageActions</class>
-        <locator>.page-main-actions</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>editForm</name>
-        <class>Magento\Catalog\Test\Block\Adminhtml\Category\Edit\CategoryForm</class>
-        <locator>#category-edit-container</locator>
-        <strategy>css selector</strategy>
-    </block>
+<page mca="catalog/category/edit" module="Magento_Catalog">
+    <blocks>
+        <messagesBlock>
+            <class>Magento\Core\Test\Block\Messages</class>
+            <locator>#messages</locator>
+            <strategy>css selector</strategy>
+        </messagesBlock>
+        <formPageActions>
+            <class>Magento\Backend\Test\Block\FormPageActions</class>
+            <locator>.page-main-actions</locator>
+            <strategy>css selector</strategy>
+        </formPageActions>
+        <editForm>
+            <class>Magento\Catalog\Test\Block\Adminhtml\Category\Edit\CategoryForm</class>
+            <locator>#category-edit-container</locator>
+            <strategy>css selector</strategy>
+        </editForm>
+    </blocks>
 </page>

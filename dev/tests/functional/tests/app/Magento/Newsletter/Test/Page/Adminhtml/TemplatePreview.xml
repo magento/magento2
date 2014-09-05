@@ -23,11 +23,12 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page mca="newsletter/template/preview" >
-    <block>
-        <name>content</name>
-        <class>Magento\Newsletter\Test\Block\Adminhtml\Template\Preview</class>
-        <locator>body</locator>
-        <strategy>css selector</strategy>
-    </block>
+<page mca="newsletter/template/preview" module="Magento_Newsletter">
+    <blocks>
+        <content>
+            <class>Magento\Newsletter\Test\Block\Adminhtml\Template\Preview</class>
+            <locator>body</locator>
+            <strategy>css selector</strategy>
+        </content>
+    </blocks>
 </page>

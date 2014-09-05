@@ -23,23 +23,22 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page mca="admin/system_store" >
-    <block>
-        <name>messagesBlock</name>
-        <class>Magento\Core\Test\Block\Messages</class>
-        <locator>#messages</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>gridPageActions</name>
-        <class>Magento\Backend\Test\Block\System\Store\GridPageActions</class>
-        <locator>.page-main-actions</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>storeGrid</name>
-        <class>Magento\Backend\Test\Block\System\Store\StoreGrid</class>
-        <locator>[id="page:main-container"]</locator>
-        <strategy>css selector</strategy>
-    </block>
+<page mca="admin/system_store" module="Magento_Backend">
+    <blocks>
+        <messagesBlock>
+            <class>Magento\Core\Test\Block\Messages</class>
+            <locator>#messages</locator>
+            <strategy>css selector</strategy>
+        </messagesBlock>
+        <gridPageActions>
+            <class>Magento\Backend\Test\Block\System\Store\GridPageActions</class>
+            <locator>.page-main-actions</locator>
+            <strategy>css selector</strategy>
+        </gridPageActions>
+        <storeGrid>
+            <class>Magento\Backend\Test\Block\System\Store\StoreGrid</class>
+            <locator>[id="page:main-container"]</locator>
+            <strategy>css selector</strategy>
+        </storeGrid>
+    </blocks>
 </page>

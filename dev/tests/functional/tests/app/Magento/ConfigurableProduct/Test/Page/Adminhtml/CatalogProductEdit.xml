@@ -23,11 +23,16 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page mca="configurable/catalog/product/edit" >
-    <block>
-        <name>form</name>
-        <class>Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\ProductForm</class>
-        <locator>[id="page:main-container"]</locator>
-        <strategy>css selector</strategy>
-    </block>
+<page mca="catalog/product/edit">
+    <blocks>
+        <productForm>
+            <renders>
+                <configurable>
+                    <class>Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\ProductForm</class>
+                    <locator>[id="page:main-container"]</locator>
+                    <strategy>css selector</strategy>
+                </configurable>
+            </renders>
+        </productForm>
+    </blocks>
 </page>

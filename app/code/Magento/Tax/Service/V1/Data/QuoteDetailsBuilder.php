@@ -23,12 +23,15 @@
  */
 namespace Magento\Tax\Service\V1\Data;
 
+use Magento\Framework\Service\Data\AttributeValueBuilder;
+use Magento\Framework\Service\Data\MetadataServiceInterface;
+
 /**
  * QuoteDetailsBuilder
  *
  * @method QuoteDetails create()
  */
-class QuoteDetailsBuilder extends \Magento\Framework\Service\Data\AbstractObjectBuilder
+class QuoteDetailsBuilder extends \Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder
 {
     /**
      * QuoteDetails item builder
@@ -55,17 +58,21 @@ class QuoteDetailsBuilder extends \Magento\Framework\Service\Data\AbstractObject
      * Initialize dependencies.
      *
      * @param \Magento\Framework\Service\Data\ObjectFactory $objectFactory
+     * @param AttributeValueBuilder $valueBuilder
+     * @param MetadataServiceInterface $metadataService
      * @param \Magento\Tax\Service\V1\Data\QuoteDetails\ItemBuilder $itemBuilder
      * @param \Magento\Tax\Service\V1\Data\TaxClassKeyBuilder $taxClassKeyBuilder
      * @param \Magento\Customer\Service\V1\Data\AddressBuilder $addressBuilder
      */
     public function __construct(
         \Magento\Framework\Service\Data\ObjectFactory $objectFactory,
+        AttributeValueBuilder $valueBuilder,
+        MetadataServiceInterface $metadataService,
         \Magento\Tax\Service\V1\Data\QuoteDetails\ItemBuilder $itemBuilder,
         \Magento\Tax\Service\V1\Data\TaxClassKeyBuilder $taxClassKeyBuilder,
         \Magento\Customer\Service\V1\Data\AddressBuilder $addressBuilder
     ) {
-        parent::__construct($objectFactory);
+        parent::__construct($objectFactory, $valueBuilder, $metadataService);
         $this->itemBuilder = $itemBuilder;
         $this->taxClassKeyBuilder = $taxClassKeyBuilder;
         $this->addressBuilder = $addressBuilder;

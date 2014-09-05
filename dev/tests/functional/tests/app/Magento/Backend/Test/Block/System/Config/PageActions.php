@@ -50,9 +50,7 @@ class PageActions extends AbstractPageActions
      */
     public function selectStore($websiteScope)
     {
-        $scope = $this->_rootElement->find($this->scopeSelector, Locator::SELECTOR_CSS, 'liselect');
-        $scope->click();
-        $scope->setValue($websiteScope);
+        $this->_rootElement->find($this->scopeSelector, Locator::SELECTOR_CSS, 'liselect')->setValue($websiteScope);
         $this->_rootElement->acceptAlert();
 
         return $this;

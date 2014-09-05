@@ -24,6 +24,7 @@
 
 namespace Magento\Bundle\Test\Constraint;
 
+use Mtf\Client\Browser;
 use Mtf\Fixture\FixtureInterface;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Catalog\Test\Constraint\AssertProductTierPriceOnProductPage;
@@ -59,13 +60,13 @@ class AssertTierPriceOnBundleProductPage extends AssertProductTierPriceOnProduct
      *
      * @param CatalogProductView $catalogProductView
      * @param FixtureInterface $product
+     * @param Browser $browser
      * @return void
      */
-    public function processAssert(CatalogProductView $catalogProductView, FixtureInterface $product)
+    public function processAssert(CatalogProductView $catalogProductView, FixtureInterface $product, Browser $browser)
     {
         //Open product view page
-        $catalogProductView->init($product);
-        $catalogProductView->open();
+        $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
         $viewBlock = $catalogProductView->getViewBlock();
         $viewBlock->clickCustomize();
 

@@ -24,6 +24,7 @@
 
 namespace Magento\Catalog\Test\Constraint;
 
+use Mtf\Client\Browser;
 use Mtf\Fixture\FixtureInterface;
 use Magento\Cms\Test\Page\CmsIndex;
 use Mtf\Constraint\AbstractConstraint;
@@ -78,6 +79,13 @@ class AssertProductIsNotDisplayingOnFrontend extends AbstractConstraint
     protected $cmsIndex;
 
     /**
+     * Browser
+     *
+     * @var Browser
+     */
+    protected $browser;
+
+    /**
      * Fixture category
      *
      * @var CatalogCategory
@@ -92,6 +100,7 @@ class AssertProductIsNotDisplayingOnFrontend extends AbstractConstraint
      * @param CatalogCategoryView $catalogCategoryView
      * @param CmsIndex $cmsIndex
      * @param FixtureInterface|FixtureInterface[] $product
+     * @param Browser $browser
      * @param CatalogCategory|null $category
      */
     public function processAssert(
@@ -100,8 +109,10 @@ class AssertProductIsNotDisplayingOnFrontend extends AbstractConstraint
         CatalogCategoryView $catalogCategoryView,
         CmsIndex $cmsIndex,
         $product,
+        Browser $browser,
         CatalogCategory $category = null
     ) {
+        $this->browser = $browser;
         $this->catalogProductView = $catalogProductView;
         $this->catalogSearchResult = $catalogSearchResult;
         $this->catalogCategoryView = $catalogCategoryView;
@@ -131,8 +142,7 @@ class AssertProductIsNotDisplayingOnFrontend extends AbstractConstraint
         $errors = [];
         // Check the product page is not available
         // TODO fix initialization url for frontend page
-        $this->catalogProductView->init($product);
-        $this->catalogProductView->open();
+        $this->browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
         $titleBlock = $this->catalogProductView->getTitleBlock();
 
         if ($titleBlock->getTitle() !== self::NOT_FOUND_MESSAGE) {

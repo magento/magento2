@@ -24,19 +24,19 @@
 
 namespace Magento\Customer\Service\V1\Data;
 
-use Magento\Framework\Service\Data\Eav\AbstractObject;
-use Magento\Framework\Service\Data\Eav\AbstractObjectBuilder;
-use Magento\Framework\Service\Data\Eav\AttributeValueBuilder;
+use Magento\Framework\Service\Data\AbstractExtensibleObject as ExtensibleObject;
+use Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder;
+use Magento\Framework\Service\Data\AttributeValueBuilder;
 use Magento\Customer\Service\V1\CustomerMetadataServiceInterface;
 
 /**
  * Builder for the Customer Service Data Object
  *
  * @method Customer create()
- * @method Customer mergeDataObjectWithArray(AbstractObject $dataObject, array $data)
- * @method Customer mergeDataObjects(AbstractObject $firstDataObject, AbstractObject $secondDataObject)
+ * @method Customer mergeDataObjectWithArray(ExtensibleObject $dataObject, array $data)
+ * @method Customer mergeDataObjects(ExtensibleObject $firstDataObject, ExtensibleObject $secondDataObject)
  */
-class CustomerBuilder extends AbstractObjectBuilder
+class CustomerBuilder extends AbstractExtensibleObjectBuilder
 {
     /**
      * @param \Magento\Framework\Service\Data\ObjectFactory $objectFactory

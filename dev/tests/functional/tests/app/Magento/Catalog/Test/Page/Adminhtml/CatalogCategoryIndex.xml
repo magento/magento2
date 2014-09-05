@@ -23,11 +23,12 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page mca="catalog/category/index">
-    <block>
-        <name>treeCategories</name>
-        <class>Magento\Catalog\Test\Block\Adminhtml\Category\Tree</class>
-        <locator>[id="page:left"]</locator>
-        <strategy>css selector</strategy>
-    </block>
+<page mca="catalog/category/index" module="Magento_Catalog">
+    <blocks>
+        <treeCategories>
+            <class>Magento\Catalog\Test\Block\Adminhtml\Category\Tree</class>
+            <locator>[id="page:left"]</locator>
+            <strategy>css selector</strategy>
+        </treeCategories>
+    </blocks>
 </page>

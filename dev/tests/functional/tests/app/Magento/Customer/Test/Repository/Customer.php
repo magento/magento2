@@ -50,22 +50,22 @@ class Customer extends AbstractRepository
     /**
      * @var array attributes that represent a group type of 'General'
      */
-    protected $groupGeneral = array(self::INDEX_VALUE => 'General', self::INDEX_INPUT_VALUE => '1');
+    protected $groupGeneral = [self::INDEX_VALUE => 'General', self::INDEX_INPUT_VALUE => '1'];
 
     /**
      * @var array attributes that represent a group type of 'Retailer'
      */
-    protected $groupRetailer = array(self::INDEX_VALUE => 'Retailer', self::INDEX_INPUT_VALUE => '3');
+    protected $groupRetailer = [self::INDEX_VALUE => 'Retailer', self::INDEX_INPUT_VALUE => '3'];
 
     /**
      * {inheritdoc}
      */
-    public function __construct(array $defaultConfig = array(), array $defaultData = array())
+    public function __construct(array $defaultConfig = [], array $defaultData = [])
     {
-        $this->_data['default'] = array(
+        $this->_data['default'] = [
             'config' => $defaultConfig,
             'data' => $defaultData
-        );
+        ];
 
         $this->_data['customer_US_1'] = $this->_getUS1();
         $this->_data['backend_customer'] = $this->_getBackendCustomer($this->groupGeneral);
@@ -77,35 +77,35 @@ class Customer extends AbstractRepository
 
     protected function _getUS1()
     {
-        return array(
-            'data' => array(
-                'fields' => array(
-                    'firstname' => array(
+        return [
+            'data' => [
+                'fields' => [
+                    'firstname' => [
                         'value' => 'John',
                         'group' => self::GROUP_CUSTOMER_INFO_TABS_ACCOUNT
-                    ),
-                    'lastname' => array(
+                    ],
+                    'lastname' => [
                         'value' => 'Doe',
                         'group' => self::GROUP_CUSTOMER_INFO_TABS_ACCOUNT
-                    ),
-                    'email' => array(
+                    ],
+                    'email' => [
                         'value' => 'John.Doe%isolation%@example.com',
                         'group' => self::GROUP_CUSTOMER_INFO_TABS_ACCOUNT
-                    ),
-                    'password' => array(
+                    ],
+                    'password' => [
                         'value' => '123123q'
-                    ),
-                    'password_confirmation' => array(
+                    ],
+                    'password_confirmation' => [
                         'value' => '123123q'
-                    )
-                ),
-                'address' => array(
-                    'dataset' => array(
+                    ]
+                ],
+                'address' => [
+                    'dataset' => [
                         'value' => 'address_US_1',
-                    ),
-                ),
-            )
-        );
+                    ],
+                ],
+            ]
+        ];
     }
 
     /**
@@ -115,78 +115,78 @@ class Customer extends AbstractRepository
      */
     protected function getDE1()
     {
-        return array(
-            'data' => array(
-                'fields' => array(
-                    'firstname' => array(
+        return [
+            'data' => [
+                'fields' => [
+                    'firstname' => [
                         'value' => 'Jan',
                         'group' => self::GROUP_CUSTOMER_INFO_TABS_ACCOUNT
-                    ),
-                    'lastname' => array(
+                    ],
+                    'lastname' => [
                         'value' => 'Jansen',
                         'group' => self::GROUP_CUSTOMER_INFO_TABS_ACCOUNT
-                    ),
-                    'email' => array(
+                    ],
+                    'email' => [
                         'value' => 'Jan.Jansen%isolation%@example.com',
                         'group' => self::GROUP_CUSTOMER_INFO_TABS_ACCOUNT
-                    ),
-                    'password' => array(
+                    ],
+                    'password' => [
                         'value' => '123123q'
-                    ),
-                    'password_confirmation' => array(
+                    ],
+                    'password_confirmation' => [
                         'value' => '123123q'
-                    )
-                ),
-            )
-        );
+                    ]
+                ],
+            ]
+        ];
     }
 
     protected function _getBackendCustomer($groupType)
     {
-        return array(
-            'data' => array(
-                'fields' => array(
-                    'firstname' => array(
+        return [
+            'data' => [
+                'fields' => [
+                    'firstname' => [
                         'value' => 'John',
                         'group' => self::GROUP_CUSTOMER_INFO_TABS_ACCOUNT
-                    ),
-                    'lastname' => array(
+                    ],
+                    'lastname' => [
                         'value' => 'Doe',
                         'group' => self::GROUP_CUSTOMER_INFO_TABS_ACCOUNT
-                    ),
-                    'email' => array(
+                    ],
+                    'email' => [
                         'value' => 'John.Doe%isolation%@example.com',
                         'group' => self::GROUP_CUSTOMER_INFO_TABS_ACCOUNT
-                    ),
-                    'website_id' => array(
+                    ],
+                    'website_id' => [
                         'value' => 'Main Website',
                         'group' => self::GROUP_CUSTOMER_INFO_TABS_ACCOUNT,
                         'input' => 'select',
                         'input_value' => '1'
-                    ),
-                    'group_id' => array(
+                    ],
+                    'group_id' => [
                         'value' => $groupType[self::INDEX_VALUE],
                         'group' => self::GROUP_CUSTOMER_INFO_TABS_ACCOUNT,
                         'input' => 'select',
                         'input_value' => $groupType[self::INDEX_INPUT_VALUE]
-                    ),
-                    'password' => array(
+                    ],
+                    'password' => [
                         'value' => '123123q',
                         'group' => null
-                    ),
-                    'password_confirmation' => array(
+                    ],
+                    'password_confirmation' => [
                         'value' => '123123q',
                         'group' => null
-                    )
-                ),
-                'address' => array(
-                    'dataset' => array(
+                    ]
+                ],
+                'address' => [
+                    'dataset' => [
                         'value' => 'address_US_1',
-                    ),
-                ),
-                'addresses' => array()
-            )
-        );
+                    ],
+                ],
+                'addresses' => []
+            ]
+        ];
     }
 
     /**
@@ -196,35 +196,35 @@ class Customer extends AbstractRepository
      */
     protected function getUK1()
     {
-        return array(
-            'data' => array(
-                'fields' => array(
-                    'firstname' => array(
+        return [
+            'data' => [
+                'fields' => [
+                    'firstname' => [
                         'value' => 'Jane',
                         'group' => self::GROUP_CUSTOMER_INFO_TABS_ACCOUNT,
-                    ),
-                    'lastname' => array(
+                    ],
+                    'lastname' => [
                         'value' => 'Doe',
                         'group' => self::GROUP_CUSTOMER_INFO_TABS_ACCOUNT,
-                    ),
-                    'email' => array(
+                    ],
+                    'email' => [
                         'value' => 'Jane.Doe%isolation%@example.com',
                         'group' => self::GROUP_CUSTOMER_INFO_TABS_ACCOUNT,
-                    ),
-                    'password' => array(
+                    ],
+                    'password' => [
                         'value' => '123123q',
-                    ),
-                    'password_confirmation' => array(
+                    ],
+                    'password_confirmation' => [
                         'value' => '123123q',
-                    ),
-                ),
-                'address' => array(
-                    'dataset' => array(
+                    ],
+                ],
+                'address' => [
+                    'dataset' => [
                         'value' => 'address_UK',
-                    ),
-                ),
-            ),
-        );
+                    ],
+                ],
+            ],
+        ];
     }
 
     /**
@@ -237,15 +237,15 @@ class Customer extends AbstractRepository
     {
         return array_replace_recursive(
             $defaultData,
-            array(
-                'data' => array(
-                    'address' => array(
-                        'dataset' => array(
+            [
+                'data' => [
+                    'address' => [
+                        'dataset' => [
                             'value' => 'address_UK_with_VAT',
-                        ),
-                    ),
-                ),
-            )
+                        ],
+                    ],
+                ],
+            ]
         );
     }
 }

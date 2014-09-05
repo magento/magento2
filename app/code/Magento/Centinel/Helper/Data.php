@@ -32,23 +32,6 @@ namespace Magento\Centinel\Helper;
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
-     * Layout factory
-     *
-     * @var \Magento\Framework\View\LayoutInterface
-     */
-    protected $_layout;
-
-    /**
-     * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\View\LayoutInterface $layout
-     */
-    public function __construct(\Magento\Framework\App\Helper\Context $context, \Magento\Framework\View\LayoutInterface $layout)
-    {
-        $this->_layout = $layout;
-        parent::__construct($context);
-    }
-
-    /**
      * Return label for cmpi field
      *
      * @param string $fieldName
@@ -156,19 +139,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             default:
                 return $value;
         }
-    }
-
-    /**
-     * Return centinel block for payment form with logos
-     *
-     * @param \Magento\Payment\Model\MethodInterface $method
-     * @return \Magento\Centinel\Block\Logo
-     */
-    public function getMethodFormBlock($method)
-    {
-        $block = $this->_layout->createBlock('Magento\Centinel\Block\Logo');
-        $block->setMethod($method);
-        return $block;
     }
 
     /**

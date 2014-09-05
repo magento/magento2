@@ -25,12 +25,12 @@
  */
 namespace Magento\Catalog\Service\V1\Data;
 
-use Magento\Framework\Service\Data\AbstractObjectBuilder;
+use Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder;
 
 /**
  * @codeCoverageIgnore
  */
-class ProductTypeBuilder extends AbstractObjectBuilder
+class ProductTypeBuilder extends AbstractExtensibleObjectBuilder
 {
     /**
      * Set product type name

@@ -23,17 +23,17 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page mca="admin/googleshopping_types/new" >
-    <block>
-        <name>pageActions</name>
-        <class>Magento\GoogleShopping\Test\Block\Adminhtml\Types\FormPageActions</class>
-        <locator>.page-main-actions</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>googleShoppingForm</name>
-        <class>Magento\GoogleShopping\Test\Block\Adminhtml\Types\Edit\GoogleShoppingForm</class>
-        <locator>#edit_form</locator>
-        <strategy>css selector</strategy>
-    </block>
+<page mca="admin/googleshopping_types/new" module="Magento_GoogleShopping">
+    <blocks>
+        <pageActions>
+            <class>Magento\GoogleShopping\Test\Block\Adminhtml\Types\FormPageActions</class>
+            <locator>.page-main-actions</locator>
+            <strategy>css selector</strategy>
+        </pageActions>
+        <googleShoppingForm>
+            <class>Magento\GoogleShopping\Test\Block\Adminhtml\Types\Edit\GoogleShoppingForm</class>
+            <locator>#edit_form</locator>
+            <strategy>css selector</strategy>
+        </googleShoppingForm>
+    </blocks>
 </page>

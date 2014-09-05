@@ -670,8 +670,8 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Admin', $customerAfter->getCreatedIn());
         $passwordFromFixture = 'password';
         $this->_customerAccountService->authenticate($customerAfter->getEmail(), $passwordFromFixture);
-        $attributesBefore = \Magento\Framework\Service\EavDataObjectConverter::toFlatArray($customerBefore);
-        $attributesAfter = \Magento\Framework\Service\EavDataObjectConverter::toFlatArray($customerAfter);
+        $attributesBefore = \Magento\Framework\Service\ExtensibleDataObjectConverter::toFlatArray($customerBefore);
+        $attributesAfter = \Magento\Framework\Service\ExtensibleDataObjectConverter::toFlatArray($customerAfter);
         // ignore 'updated_at'
         unset($attributesBefore['updated_at']);
         unset($attributesAfter['updated_at']);
@@ -730,8 +730,8 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
             'password',
             true
         );
-        $attributesBefore = \Magento\Framework\Service\EavDataObjectConverter::toFlatArray($customerBefore);
-        $attributesAfter = \Magento\Framework\Service\EavDataObjectConverter::toFlatArray($customerAfter);
+        $attributesBefore = \Magento\Framework\Service\ExtensibleDataObjectConverter::toFlatArray($customerBefore);
+        $attributesAfter = \Magento\Framework\Service\ExtensibleDataObjectConverter::toFlatArray($customerAfter);
         // ignore 'updated_at'
         unset($attributesBefore['updated_at']);
         unset($attributesAfter['updated_at']);
@@ -796,8 +796,8 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
             'password',
             true
         );
-        $attributesBefore = \Magento\Framework\Service\EavDataObjectConverter::toFlatArray($customerBefore);
-        $attributesAfter = \Magento\Framework\Service\EavDataObjectConverter::toFlatArray($customerAfter);
+        $attributesBefore = \Magento\Framework\Service\ExtensibleDataObjectConverter::toFlatArray($customerBefore);
+        $attributesAfter = \Magento\Framework\Service\ExtensibleDataObjectConverter::toFlatArray($customerAfter);
         // ignore 'updated_at'
         unset($attributesBefore['updated_at']);
         unset($attributesAfter['updated_at']);
@@ -883,8 +883,8 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
             'aPassword',
             true
         );
-        $attributesBefore = \Magento\Framework\Service\EavDataObjectConverter::toFlatArray($existingCustomer);
-        $attributesAfter = \Magento\Framework\Service\EavDataObjectConverter::toFlatArray($customerAfter);
+        $attributesBefore = \Magento\Framework\Service\ExtensibleDataObjectConverter::toFlatArray($existingCustomer);
+        $attributesAfter = \Magento\Framework\Service\ExtensibleDataObjectConverter::toFlatArray($customerAfter);
         // ignore 'updated_at'
         unset($attributesBefore['updated_at']);
         unset($attributesAfter['updated_at']);
@@ -950,7 +950,7 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
         $customerData = $this->_customerAccountService->createCustomer($customerDetails, $password);
         $this->assertNotNull($customerData->getId());
         $savedCustomer = $this->_customerAccountService->getCustomer($customerData->getId());
-        $dataInService = \Magento\Framework\Service\DataObjectConverter::toFlatArray($savedCustomer);
+        $dataInService = \Magento\Framework\Service\SimpleDataObjectConverter::toFlatArray($savedCustomer);
         $expectedDifferences = [
             'created_at',
             'updated_at',

@@ -1,0 +1,59 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<page mca="checkout/onepage" module="Magento_Checkout">
+    <blocks>
+        <loginBlock>
+            <class>Magento\Checkout\Test\Block\Onepage\Login</class>
+            <locator>#checkout-step-login</locator>
+            <strategy>css selector</strategy>
+        </loginBlock>
+        <billingBlock>
+            <class>Magento\Checkout\Test\Block\Onepage\Billing</class>
+            <locator>#checkout-step-billing</locator>
+            <strategy>css selector</strategy>
+        </billingBlock>
+        <shippingBlock>
+            <class>Magento\Checkout\Test\Block\Onepage\Shipping</class>
+            <locator>#checkout-step-shipping</locator>
+            <strategy>css selector</strategy>
+        </shippingBlock>
+        <shippingMethodBlock>
+            <class>Magento\Checkout\Test\Block\Onepage\Shipping\Method</class>
+            <locator>#checkout-step-shipping_method</locator>
+            <strategy>css selector</strategy>
+        </shippingMethodBlock>
+        <paymentMethodsBlock>
+            <class>Magento\Checkout\Test\Block\Onepage\Payment\Methods</class>
+            <locator>#checkout-step-payment</locator>
+            <strategy>css selector</strategy>
+        </paymentMethodsBlock>
+        <reviewBlock>
+            <class>Magento\Checkout\Test\Block\Onepage\Review</class>
+            <locator>#checkout-step-review</locator>
+            <strategy>css selector</strategy>
+        </reviewBlock>
+    </blocks>
+</page>

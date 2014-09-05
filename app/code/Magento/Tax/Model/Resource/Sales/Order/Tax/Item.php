@@ -65,4 +65,36 @@ class Item extends \Magento\Framework\Model\Resource\Db\AbstractDb
 
         return $adapter->fetchAll($select);
     }
+
+    /**
+     * Get Tax Items with order tax information
+     *
+     * @param int $orderId
+     * @return array
+     */
+    public function getTaxItemsByOrderId($orderId)
+    {
+        $adapter = $this->_getReadAdapter();
+        $select = $adapter->select()->from(
+            ['item' => $this->getTable('sales_order_tax_item')],
+            [
+                'tax_id',
+                'tax_percent',
+                'item_id',
+                'taxable_item_type',
+                'associated_item_id',
+                'real_amount',
+                'real_base_amount',
+            ]
+        )->join(
+            ['tax' => $this->getTable('sales_order_tax')],
+            'item.tax_id = tax.tax_id',
+            ['code', 'title', 'order_id']
+        )->where(
+            'tax.order_id = ?',
+            $orderId
+        );
+
+        return $adapter->fetchAll($select);
+    }
 }

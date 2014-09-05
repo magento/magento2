@@ -57,7 +57,7 @@ class EditConfigurableTest extends CreateConfigurableTest
         $productGridPage = Factory::getPageFactory()->getCatalogProductIndex();
         $productGridPage->open();
         //Search and open original configurable product
-        $productGridPage->getProductGrid()->searchAndOpen(array('sku' => $productSku));
+        $productGridPage->getProductGrid()->searchAndOpen(['sku' => $productSku]);
         //Editing product options
         $productForm->fill($editProduct);
         $createProductPage->getFormAction()->save();

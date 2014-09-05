@@ -273,6 +273,11 @@ class CustomerInjectable extends InjectableFixture
         'group' => null,
     ];
 
+    public function getId()
+    {
+        return $this->getData('id');
+    }
+
     public function getAddress()
     {
         return $this->getData('address');

@@ -48,7 +48,7 @@ class Subtotal extends CommonTaxCollector
             return $this;
         }
 
-        $priceIncludesTax = $this->_config->priceIncludesTax($this->_store);
+        $priceIncludesTax = $this->_config->priceIncludesTax($address->getQuote()->getStore());
 
         //Setup taxable items
         $itemDataObjects = $this->mapItems($address, $priceIncludesTax, false);

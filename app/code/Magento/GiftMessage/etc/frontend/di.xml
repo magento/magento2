@@ -39,4 +39,12 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\GiftMessage\Model\Type\Plugin\Onepage" shared="false" />
+    <type name="Magento\GiftMessage\Model\Type\Plugin\Multishipping" shared="false" />
+    <type name="Magento\Checkout\Model\Type\Onepage">
+        <plugin name="save_gift_message" type="Magento\GiftMessage\Model\Type\Plugin\Onepage"/>
+    </type>
+    <type name="Magento\Multishipping\Model\Checkout\Type\Multishipping">
+        <plugin name="save_gift_messages" type="Magento\GiftMessage\Model\Type\Plugin\Multishipping"/>
+    </type>
 </config>

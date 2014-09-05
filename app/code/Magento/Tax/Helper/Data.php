@@ -33,6 +33,7 @@ use Magento\Tax\Service\V1\Data\TaxClassKeyBuilder;
 use Magento\Tax\Service\V1\TaxCalculationServiceInterface;
 use Magento\Customer\Model\Address\Converter as AddressConverter;
 use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Tax\Service\V1\OrderTaxServiceInterface;
 
 /**
  * Catalog data helper
@@ -162,6 +163,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $catalogHelper;
 
     /**
+     * @var \Magento\Tax\Service\V1\OrderTaxServiceInterface
+     */
+    protected $orderTaxService;
+    /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Framework\Registry $coreRegistry
@@ -180,6 +185,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param CustomerSession $customerSession
      * @param AddressConverter $addressConverter
      * @param \Magento\Catalog\Helper\Data $catalogHelper
+     * @param OrderTaxServiceInterface $orderTaxService
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -199,7 +205,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         TaxCalculationServiceInterface $taxCalculationService,
         CustomerSession $customerSession,
         AddressConverter $addressConverter,
-        \Magento\Catalog\Helper\Data $catalogHelper
+        \Magento\Catalog\Helper\Data $catalogHelper,
+        OrderTaxServiceInterface $orderTaxService
     ) {
         parent::__construct($context);
         $this->_scopeConfig = $scopeConfig;
@@ -219,6 +226,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->customerSession = $customerSession;
         $this->addressConverter = $addressConverter;
         $this->catalogHelper = $catalogHelper;
+        $this->orderTaxService = $orderTaxService;
     }
 
     /**
@@ -721,17 +729,17 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $taxClassAmount = array();
         if ($current && $source) {
             if ($current == $source) {
-                // use the actuals
-                $rates = $this->_getTaxRateSubtotals($source);
-                foreach ($rates['items'] as $rate) {
-                    $taxClassId = $rate['tax_id'];
-                    $taxClassAmount[$taxClassId]['tax_amount'] = $rate['amount'];
-                    $taxClassAmount[$taxClassId]['base_tax_amount'] = $rate['base_amount'];
-                    $taxClassAmount[$taxClassId]['title'] = $rate['title'];
-                    $taxClassAmount[$taxClassId]['percent'] = $rate['percent'];
+                $orderTaxDetails = $this->orderTaxService->getOrderTaxDetails($current->getId());
+                $appliedTaxes = $orderTaxDetails->getAppliedTaxes();
+                foreach ($appliedTaxes as $appliedTax) {
+                    $taxCode = $appliedTax->getCode();
+                    $taxClassAmount[$taxCode]['tax_amount'] = $appliedTax->getAmount();
+                    $taxClassAmount[$taxCode]['base_tax_amount'] = $appliedTax->getBaseAmount();
+                    $taxClassAmount[$taxCode]['title'] = $appliedTax->getTitle();
+                    $taxClassAmount[$taxCode]['percent'] = $appliedTax->getPercent();
                 }
             } else {
-                // regenerate tax subtotals
+                $orderTaxDetails = $this->orderTaxService->getOrderTaxDetails($source->getId());
                 // Calculate taxes for shipping
                 $shippingTaxAmount = $current->getShippingTaxAmount();
                 if ($shippingTaxAmount) {
@@ -739,35 +747,37 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                     $taxClassAmount = array_merge($taxClassAmount, $shippingTax);
                 }
 
-                /** @var $item \Magento\Sales\Model\Order\Item */
+                /** @var $item \Magento\Sales\Model\Order\Invoice\Item|\Magento\Sales\Model\Order\Creditmemo\Item */
                 foreach ($current->getItemsCollection() as $item) {
-                    /** @var $taxCollection \Magento\Tax\Model\Resource\Sales\Order\Tax\Item */
-                    $taxCollection = $this->_taxItemFactory->create();
-                    $taxCollection->getTaxItemsByItemId(
-                        $item->getOrderItemId() ? $item->getOrderItemId() : $item->getItemId()
-                    );
-
-                    foreach ($taxCollection as $tax) {
-                        $taxClassId = $tax['tax_id'];
-                        $percent = $tax['tax_percent'];
-
-                        $price = $item->getRowTotal();
-                        $basePrice = $item->getBaseRowTotal();
-                        if ($this->applyTaxAfterDiscount($item->getStoreId())) {
-                            $price = $price - $item->getDiscountAmount() + $item->getHiddenTaxAmount();
-                            $basePrice = $basePrice - $item->getBaseDiscountAmount() + $item->getBaseHiddenTaxAmount();
-                        }
-                        $taxAmount = $price * $percent / 100;
-                        $baseTaxAmount = $basePrice * $percent / 100;
-
-                        if (isset($taxClassAmount[$taxClassId])) {
-                            $taxClassAmount[$taxClassId]['tax_amount'] += $taxAmount;
-                            $taxClassAmount[$taxClassId]['base_tax_amount'] += $baseTaxAmount;
-                        } else {
-                            $taxClassAmount[$taxClassId]['tax_amount'] = $taxAmount;
-                            $taxClassAmount[$taxClassId]['base_tax_amount'] = $baseTaxAmount;
-                            $taxClassAmount[$taxClassId]['title'] = $tax['title'];
-                            $taxClassAmount[$taxClassId]['percent'] = $tax['percent'];
+                    $orderItem = $item->getOrderItem();
+                    $orderItemId = $orderItem->getId();
+                    $orderItemTax = $orderItem->getTaxAmount();
+                    $itemTax = $item->getTaxAmount();
+                    if (!$itemTax || !$orderItemTax) {
+                        continue;
+                    }
+                    //In the case that invoiced item or creditmemo item qty is different from order item qty
+                    $ratio = $itemTax / $orderItemTax;
+                    $itemTaxDetails = $orderTaxDetails->getItems();
+                    foreach ($itemTaxDetails as $itemTaxDetail) {
+                        //Aggregate taxable items associated with an item
+                        if ($itemTaxDetail->getItemId() == $orderItemId
+                            || $itemTaxDetail->getAssociatedItemId() == $orderItemId) {
+                            $itemAppliedTaxes = $itemTaxDetail->getAppliedTaxes();
+                            foreach ($itemAppliedTaxes as $itemAppliedTax) {
+                                $taxCode = $itemAppliedTax->getCode();
+                                if (!isset($taxClassAmount[$taxCode])) {
+                                    $taxClassAmount[$taxCode]['title'] = $itemAppliedTax->getTitle();
+                                    $taxClassAmount[$taxCode]['percent'] = $itemAppliedTax->getPercent();
+                                    $taxClassAmount[$taxCode]['tax_amount'] = $itemAppliedTax->getAmount() * $ratio;
+                                    $taxClassAmount[$taxCode]['base_tax_amount'] =
+                                        $itemAppliedTax->getBaseAmount() * $ratio;
+                                } else {
+                                    $taxClassAmount[$taxCode]['tax_amount'] += $itemAppliedTax->getAmount() * $ratio;
+                                    $taxClassAmount[$taxCode]['base_tax_amount'] +=
+                                        $itemAppliedTax->getBaseAmount() * $ratio;
+                                }
+                            }
                         }
                     }
                 }
@@ -776,6 +786,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             foreach ($taxClassAmount as $key => $tax) {
                 if ($tax['tax_amount'] == 0 && $tax['base_tax_amount'] == 0) {
                     unset($taxClassAmount[$key]);
+                } else {
+                    $taxClassAmount[$key]['tax_amount'] = $source->getStore()->roundPrice($tax['tax_amount']);
+                    $taxClassAmount[$key]['base_tax_amount'] = $source->getStore()->roundPrice($tax['base_tax_amount']);
                 }
             }
 

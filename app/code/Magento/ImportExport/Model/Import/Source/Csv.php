@@ -48,22 +48,22 @@ class Csv extends \Magento\ImportExport\Model\Import\AbstractSource
      *
      * There must be column names in the first line
      *
-     * @param string $fileOrStream
+     * @param string $file
      * @param \Magento\Framework\Filesystem\Directory\Write $directory
      * @param string $delimiter
      * @param string $enclosure
      * @throws \LogicException
      */
     public function __construct(
-        $fileOrStream,
+        $file,
         \Magento\Framework\Filesystem\Directory\Write $directory,
         $delimiter = ',',
         $enclosure = '"'
     ) {
         try {
-            $this->_file = $directory->openFile($directory->getRelativePath($fileOrStream), 'r');
+            $this->_file = $directory->openFile($directory->getRelativePath($file), 'r');
         } catch (\Magento\Framework\Filesystem\FilesystemException $e) {
-            throw new \LogicException("Unable to open file or stream: '{$fileOrStream}'");
+            throw new \LogicException("Unable to open file: '{$file}'");
         }
         $this->_delimiter = $delimiter;
         $this->_enclosure = $enclosure;

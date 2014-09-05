@@ -24,10 +24,5 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
-    <update handle="1column"/>
-    <referenceContainer name="columns">
-        <container name="div.sidebar.additional" htmlTag="div" htmlClass="sidebar sidebar-additional" after="main">
-            <container name="sidebar.additional" as="sidebar_additional" label="Sidebar Additional"/>
-        </container>
-    </referenceContainer>
+    <update handle="2columns-left"/>
 </layout>

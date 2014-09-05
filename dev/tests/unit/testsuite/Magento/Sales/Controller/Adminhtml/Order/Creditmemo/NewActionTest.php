@@ -181,7 +181,8 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->modelMenuMock = $this->getMock('Magento\Backend\Model\Menu', ['getParentItems'], [], '', false);
+        $this->modelMenuMock = $this->getMockBuilder('Magento\Backend\Model\Menu')
+            ->disableOriginalConstructor()->getMock();
         $this->modelMenuItem = $this->getMock('Magento\Backend\Model\Menu\Item', [], [], '', false);
         $this->contextMock->expects($this->once())
             ->method('getRequest')

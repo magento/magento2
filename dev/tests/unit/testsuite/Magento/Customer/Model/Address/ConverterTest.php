@@ -23,7 +23,7 @@
  */
 namespace Magento\Customer\Model\Address;
 
-use Magento\Framework\Service\Data\Eav\AttributeValue;
+use Magento\Framework\Service\Data\AttributeValue;
 
 class ConverterTest extends \PHPUnit_Framework_TestCase
 {

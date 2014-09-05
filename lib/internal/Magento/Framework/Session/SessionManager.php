@@ -526,7 +526,13 @@ class SessionManager implements SessionManagerInterface
     private function initIniOptions()
     {
         foreach ($this->sessionConfig->getOptions() as $option => $value) {
-            ini_set($option, $value);
+            $result = ini_set($option, $value);
+            if ($result === false) {
+                $error = error_get_last();
+                throw new \InvalidArgumentException(
+                    sprintf('"%s" is not a valid sessions-related ini setting. %s', $option, $error['message'])
+                );
+            }
         }
     }
 }

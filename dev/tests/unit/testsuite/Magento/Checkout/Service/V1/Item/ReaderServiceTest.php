@@ -37,57 +37,44 @@ class ReaderServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $quoteLoaderMock;
+    protected $quoteRepositoryMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $itemBuilderMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $storeManagerMock;
+    protected $itemMapperMock;
 
     protected function setUp()
     {
-        $this->quoteLoaderMock = $this->getMock('\Magento\Checkout\Service\V1\QuoteLoader', [], [], '', false);
-        $this->itemBuilderMock =
-            $this->getMock('\Magento\Checkout\Service\V1\Data\Cart\ItemBuilder', [], [], '', false);
-        $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
-        $this->service = new ReadService($this->quoteLoaderMock, $this->itemBuilderMock, $this->storeManagerMock);
+        $this->quoteRepositoryMock = $this->getMock('Magento\Sales\Model\QuoteRepository', [], [], '', false);
+        $this->itemMapperMock =
+            $this->getMock('\Magento\Checkout\Service\V1\Data\Cart\ItemMapper', ['extractDto'], [], '', false);
+        $this->service = new ReadService($this->quoteRepositoryMock, $this->itemMapperMock);
     }
 
     public  function testGetList()
     {
-        $storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
-        $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($storeMock));
-        $storeMock->expects($this->once())->method('getId')->will($this->returnValue(11));
-        $quoteMock = $this->getMock('\Magento\Sales\Model\Quote', [], [], '', false);
-        $this->quoteLoaderMock->expects($this->once())->method('load')
-            ->with(33, 11)
+        $quoteMock = $this->getMock('Magento\Sales\Model\Quote', [], [], '', false);
+        $this->quoteRepositoryMock->expects($this->once())->method('get')
+            ->with(33)
             ->will($this->returnValue($quoteMock));
         $itemMock = $this->getMock('\Magento\Sales\Model\Quote\Item',
             ['getSku', 'getName', 'getPrice', 'getQty', 'getProductType', '__wakeup'], [], '', false);
         $quoteMock->expects($this->any())->method('getAllItems')->will($this->returnValue(array($itemMock)));
-        $itemMock->expects($this->any())->method('getSku')->will($this->returnValue('prd_SKU'));
-        $itemMock->expects($this->any())->method('getName')->will($this->returnValue('prd_NAME'));
-        $itemMock->expects($this->any())->method('getPrice')->will($this->returnValue(100.15));
-        $itemMock->expects($this->any())->method('getQty')->will($this->returnValue(16));
-        $itemMock->expects($this->any())->method('getProductType')->will($this->returnValue('simple'));
         $testData = [
+            Item::ITEM_ID => 7,
             Item::SKU => 'prd_SKU',
             Item::NAME => 'prd_NAME',
             Item::PRICE => 100.15,
             Item::QTY => 16,
-            Item::TYPE => 'simple',
+            Item::PRODUCT_TYPE => 'simple',
         ];
-        $this->itemBuilderMock->expects($this->once())
-            ->method('populateWithArray')
-            ->with($testData)
-            ->will($this->returnValue($this->itemBuilderMock));
-        $this->itemBuilderMock->expects($this->once())->method('create')->will($this->returnValue('Expected value'));
 
-        $this->assertEquals(array('Expected value'), $this->service->getList(33));
+        $this->itemMapperMock
+            ->expects($this->once())
+            ->method('extractDto')
+            ->with($itemMock)
+            ->will($this->returnValue($testData));
+        $this->assertEquals([$testData], $this->service->getList(33));
     }
 }

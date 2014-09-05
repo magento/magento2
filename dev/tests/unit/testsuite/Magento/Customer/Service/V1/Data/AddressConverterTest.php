@@ -24,7 +24,7 @@
 namespace Magento\Customer\Service\V1\Data;
 
 use Magento\Customer\Service\V1\AddressMetadataService;
-use Magento\Framework\Service\Data\Eav\AttributeValue;
+use Magento\Framework\Service\Data\AttributeValue;
 
 class AddressConverterTest extends \PHPUnit_Framework_TestCase
 {
@@ -127,7 +127,7 @@ class AddressConverterTest extends \PHPUnit_Framework_TestCase
         );
 
         $addressData = $this->_sampleAddressDataObject();
-        $valueBuilder = $this->_objectManager->getObject('Magento\Framework\Service\Data\Eav\AttributeValueBuilder');
+        $valueBuilder = $this->_objectManager->getObject('Magento\Framework\Service\Data\AttributeValueBuilder');
         /** @var \Magento\Customer\Service\V1\Data\AddressBuilder $addressDataBuilder */
         $addressDataBuilder = $this->_objectManager->getObject(
             'Magento\Customer\Service\V1\Data\AddressBuilder',
@@ -150,7 +150,7 @@ class AddressConverterTest extends \PHPUnit_Framework_TestCase
     {
         $regionBuilder = $this->_objectManager->getObject('\Magento\Customer\Service\V1\Data\RegionBuilder')
             ->setRegion('Texas')->setRegionId(1)->setRegionCode('TX');
-        $valueBuilder = $this->_objectManager->getObject('Magento\Framework\Service\Data\Eav\AttributeValueBuilder');
+        $valueBuilder = $this->_objectManager->getObject('Magento\Framework\Service\Data\AttributeValueBuilder');
         /** @var \Magento\Customer\Service\V1\Data\AddressBuilder $addressData */
         $addressData = $this->_objectManager->getObject(
             'Magento\Customer\Service\V1\Data\AddressBuilder',

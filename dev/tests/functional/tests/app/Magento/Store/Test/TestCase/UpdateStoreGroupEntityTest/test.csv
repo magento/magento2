@@ -1,0 +1,3 @@
+"storeGroupOrigin/dataSet";"storeGroup/data/website_id/dataSet";"storeGroup/data/name";"storeGroup/data/root_category_id/dataSet";"constraint"
+"default";"main_website";"store_name_updated_%isolation%";"default_category";"assertStoreGroupSuccessSaveMessage, assertStoreGroupInGrid, assertStoreGroupForm, assertStoreGroupOnStoreViewForm"
+"default";"custom_website";"store_name_updated_%isolation%";"root_category";"assertStoreGroupSuccessSaveMessage, assertStoreGroupInGrid, assertStoreGroupForm, assertStoreGroupOnStoreViewForm"

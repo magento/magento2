@@ -96,6 +96,7 @@ class AdvancedSearchEntityTest extends Injectable
         CmsIndex $cmsIndex,
         AdvancedSearch $searchPage
     ) {
+        $this->markTestIncomplete('MAGETWO-27664');
         $cmsIndex->open();
         $cmsIndex->getSearchBlock()->clickAdvancedSearchButton();
         $searchForm = $searchPage->getForm();

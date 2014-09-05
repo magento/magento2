@@ -26,7 +26,7 @@ namespace Magento\ConfigurableProduct\Service\V1\Data;
 /**
  * @codeCoverageIgnore
  */
-class OptionBuilder extends \Magento\Framework\Service\Data\AbstractObjectBuilder
+class OptionBuilder extends \Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder
 {
     /**
      * @param int $value

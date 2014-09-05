@@ -89,7 +89,8 @@ class Save extends \Magento\Framework\Object
         }
 
         foreach ($giftmessages as $entityId => $giftmessage) {
-            $this->_saveOne($entityId, $giftmessage, 'quote');
+            $entityType = $this->getMappedType($giftmessage['type']);
+            $this->_saveOne($entityId, $giftmessage, $entityType);
         }
 
         return $this;
@@ -344,6 +345,27 @@ class Save extends \Magento\Framework\Object
         $allowedItems = array_diff($allowedItems, $deleteAllowedItems);
         $this->setAllowQuoteItems($allowedItems);
         return $this;
+    }
+
+    /**
+     * Retrieve mapped type for entity
+     *
+     * @param string $type
+     * @return string|null
+     */
+    protected function getMappedType($type)
+    {
+        $map = [
+            'main' => 'quote',
+            'item' => 'quote_item',
+            'order' => 'order',
+            'order_item' => 'order_item'
+        ];
+
+        if (isset($map[$type])) {
+            return $map[$type];
+        }
+        return null;
     }
 
     /**

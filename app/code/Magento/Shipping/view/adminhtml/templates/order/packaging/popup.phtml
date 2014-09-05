@@ -30,9 +30,10 @@ $girthEnabled = $this->isDisplayGirthValue() && $this->isGirthAllowed() ? 1 : 0;
 ?>
 <script type="text/javascript">
 require([
+    "jquery",
     "prototype",
     "Magento_Shipping/order/packaging"
-], function(){
+], function(jQuery){
 
     packaging = new Packaging(<?php echo $this->getConfigDataJson() ?>);
     packaging.changeContainerType($$('select[name=package_container]')[0]);
@@ -40,6 +41,8 @@ require([
             $$('select[name=package_container]')[0],
     <?php echo $girthEnabled; ?>
     );
+
+    jQuery('body').trigger('packageInitialized');
 
 });
 </script>

@@ -26,7 +26,7 @@ namespace Magento\Checkout\Service\V1\Data\Cart\Address;
 /**
  * Data Object for Address Region
  */
-class Region extends \Magento\Framework\Service\Data\AbstractObject
+class Region extends \Magento\Framework\Service\Data\AbstractExtensibleObject
 {
     /**#@+
      * Array keys

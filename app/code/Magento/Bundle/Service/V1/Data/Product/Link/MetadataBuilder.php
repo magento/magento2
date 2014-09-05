@@ -23,12 +23,12 @@
  */
 namespace Magento\Bundle\Service\V1\Data\Product\Link;
 
-use Magento\Framework\Service\Data\AbstractObjectBuilder;
+use Magento\Framework\Service\Data\AbstractExtensibleObjectBuilder;
 
 /**
  * @codeCoverageIgnore
  */
-class MetadataBuilder extends AbstractObjectBuilder
+class MetadataBuilder extends AbstractExtensibleObjectBuilder
 {
     /**
      * @param string $value

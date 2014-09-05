@@ -83,11 +83,17 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
                 $attributeCode
             );
 
+        $typeBuilder = $objectManager->getObject(
+            '\Magento\Catalog\Service\V1\Data\Eav\Product\Attribute\TypeBuilder',
+            ['metadataService' => $objectManager->getObject('Magento\Framework\Service\Config\MetadataConfig')]
+        );
+
         /** @var \Magento\Catalog\Service\V1\Product\Attribute\ReadServiceInterface $service */
         $service = $objectManager->getObject(
             'Magento\Catalog\Service\V1\Product\Attribute\ReadService',
             array(
-               'metadataService' => $metadataServiceMock
+                'metadataService' => $metadataServiceMock,
+                'attributeTypeBuilder' => $typeBuilder
             )
         );
         $service->info($attributeCode);

@@ -45,8 +45,10 @@ class Ui extends AbstractUi implements CatalogProductSimpleInterface
         Factory::getApp()->magentoBackendLoginUser();
 
         $createProductPage = Factory::getPageFactory()->getCatalogProductNew();
-        $createProductPage->init($fixture);
-        $createProductPage->open();
+        $createProductPage->open([
+                'type' => $fixture->getDataConfig()['create_url_params']['type'],
+                'set' => $fixture->getDataConfig()['create_url_params']['set']
+            ]);
 
         $productForm = $createProductPage->getProductForm();
         $productForm->fill($fixture);

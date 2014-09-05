@@ -23,9 +23,9 @@
  */
 namespace Magento\Webapi\Service\Entity;
 
-use Magento\Framework\Service\Data\AbstractObject;
+use Magento\Framework\Service\Data\AbstractExtensibleObject;
 
-class NestedData extends AbstractObject
+class NestedData extends AbstractExtensibleObject
 {
     /**
      * @return \Magento\Webapi\Service\Entity\SimpleData

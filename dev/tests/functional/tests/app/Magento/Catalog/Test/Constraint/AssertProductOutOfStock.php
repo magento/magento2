@@ -24,6 +24,7 @@
 
 namespace Magento\Catalog\Test\Constraint;
 
+use Mtf\Client\Browser;
 use Mtf\Fixture\FixtureInterface;
 use Mtf\Constraint\AbstractConstraint;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
@@ -49,13 +50,13 @@ class AssertProductOutOfStock extends AbstractConstraint
      * Assert that Out of Stock status is displayed on product page
      *
      * @param CatalogProductView $catalogProductView
+     * @param Browser $browser
      * @param FixtureInterface $product
      * @return void
      */
-    public function processAssert(CatalogProductView $catalogProductView, FixtureInterface $product)
+    public function processAssert(CatalogProductView $catalogProductView, Browser $browser, FixtureInterface $product)
     {
-        $catalogProductView->init($product);
-        $catalogProductView->open();
+        $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
         \PHPUnit_Framework_Assert::assertEquals(
             self::STOCK_AVAILABILITY,
             $catalogProductView->getViewBlock()->stockAvailability(),

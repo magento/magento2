@@ -1,0 +1,92 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<page module="Magento_Catalog">
+    <catalogProductIndex>
+        <mca>catalog/product/index</mca>
+        <area>adminhtml</area>
+        <class>Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex</class>
+    </catalogProductIndex>
+    <catalogProductNew>
+        <mca>catalog/product/new</mca>
+        <area>adminhtml</area>
+        <class>Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew</class>
+    </catalogProductNew>
+    <catalogProductEdit>
+        <mca>catalog/product/edit</mca>
+        <area>adminhtml</area>
+        <class>Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit</class>
+    </catalogProductEdit>
+    <catalogProductView>
+        <mca>catalog/product/view</mca>
+        <area>product</area>
+        <class>Magento\Catalog\Test\Page\Product\CatalogProductView</class>
+    </catalogProductView>
+    <catalogCategoryView>
+        <mca>catalog/category/view</mca>
+        <area>category</area>
+        <class>Magento\Catalog\Test\Page\Category\CatalogCategoryView</class>
+    </catalogCategoryView>
+    <catalogProductAttributeIndex>
+        <mca>catalog/product_attribute/index</mca>
+        <area>adminhtml</area>
+        <class>Magento\Catalog\Test\Page\Adminhtml\CatalogProductAttributeIndex</class>
+    </catalogProductAttributeIndex>
+    <catalogProductAttributeNew>
+        <mca>catalog/product_attribute/new</mca>
+        <area>adminhtml</area>
+        <class>Magento\Catalog\Test\Page\Adminhtml\CatalogProductAttributeNew</class>
+    </catalogProductAttributeNew>
+    <catalogCategoryEdit>
+        <mca>catalog/category/edit</mca>
+        <area>adminhtml</area>
+        <class>Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryEdit</class>
+    </catalogCategoryEdit>
+    <catalogProductSetIndex>
+        <mca>catalog/product_set/index</mca>
+        <area>adminhtml</area>
+        <class>Magento\Catalog\Test\Page\Adminhtml\CatalogProductSetIndex</class>
+    </catalogProductSetIndex>
+    <catalogProductSetEdit>
+        <mca>catalog/product_set/edit</mca>
+        <area>adminhtml</area>
+        <class>Magento\Catalog\Test\Page\Adminhtml\CatalogProductSetEdit</class>
+    </catalogProductSetEdit>
+    <catalogCategoryEdit>
+        <mca>catalog/category/edit</mca>
+        <area>adminhtml</area>
+        <class>Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryEdit</class>
+    </catalogCategoryEdit>
+    <catalogProductSetAdd>
+        <mca>catalog/product_set/add</mca>
+        <area>adminhtml</area>
+        <class>Magento\Catalog\Test\Page\Adminhtml\CatalogProductSetAdd</class>
+    </catalogProductSetAdd>
+    <catalogProductCompare>
+        <mca>catalog/product_compare/index</mca>
+        <area>product</area>
+        <class>Magento\Catalog\Test\Page\Product\CatalogProductCompare</class>
+    </catalogProductCompare>
+</page>

@@ -24,11 +24,12 @@
 
 namespace Magento\Review\Test\TestCase;
 
-use Magento\Catalog\Test\Page\Product\CatalogProductView;
+use Mtf\Client\Browser;
+use Mtf\TestCase\Injectable;
 use Magento\Review\Test\Fixture\ReviewInjectable;
 use Magento\Review\Test\Page\Adminhtml\RatingEdit;
 use Magento\Review\Test\Page\Adminhtml\RatingIndex;
-use Mtf\TestCase\Injectable;
+use Magento\Catalog\Test\Page\Product\CatalogProductView;
 
 /**
  * Test Creation for Create Frontend Product Review
@@ -102,18 +103,18 @@ class CreateProductReviewFrontendEntityTest extends Injectable
      * Run create frontend product rating test
      *
      * @param ReviewInjectable $review
+     * @param Browser $browser
      * @return void
      */
-    public function test(ReviewInjectable $review)
+    public function test(ReviewInjectable $review, Browser $browser)
     {
         // Prepare for tear down
         $this->review = $review;
 
         // Steps
         $product = $review->getDataFieldConfig('entity_id')['source']->getEntity();
-        $this->catalogProductView->init($product);
-        $this->catalogProductView->open();
-        $reviewLink = $this->catalogProductView->getReviewSummaryBlock()->getAddReviewLink();
+        $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
+        $reviewLink = $this->catalogProductView->getReviewSummary()->getAddReviewLink();
         if ($reviewLink->isVisible()) {
             $reviewLink->click();
         }

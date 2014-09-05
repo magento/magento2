@@ -25,7 +25,7 @@
 namespace Magento\GroupedProduct\Test\Constraint;
 
 use Magento\GroupedProduct\Test\Fixture\CatalogProductGrouped;
-use Magento\GroupedProduct\Test\Page\Product\CatalogProductView;
+use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Catalog\Test\Constraint\AssertProductGroupedPriceOnProductPage;
 
 /**

@@ -918,6 +918,7 @@ AdminOrder.prototype = {
     },
 
     loadArea : function(area, indicator, params){
+        var deferred = new jQuery.Deferred();
         var url = this.loadBaseUrl;
         if (area) {
             area = this.prepareArea(area);
@@ -935,15 +936,23 @@ AdminOrder.prototype = {
                 onSuccess: function(transport) {
                     var response = transport.responseText.evalJSON();
                     this.loadAreaResponseHandler(response);
+                    deferred.resolve();
                 }.bind(this)
             });
         }
         else {
-            new Ajax.Request(url, {parameters:params,loaderArea: indicator});
+            new Ajax.Request(url, {
+                parameters:params,
+                loaderArea: indicator,
+                onSuccess: function(transport) {
+                    deferred.resolve();
+                }
+            });
         }
         if (typeof productConfigure != 'undefined' && area instanceof Array && area.indexOf('items') != -1) {
             productConfigure.clean('quote_items');
         }
+        return deferred.promise();
     },
 
     loadAreaResponseHandler : function (response) {

@@ -23,23 +23,22 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page mca="admin/system_config" >
-    <block>
-        <name>pageActions</name>
-        <class>Magento\Backend\Test\Block\FormPageActions</class>
-        <locator>.page-main-actions</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>form</name>
-        <class>Magento\Backend\Test\Block\System\Config\Form</class>
-        <locator>#config-edit-form</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>messagesBlock</name>
-        <class>Magento\Core\Test\Block\Messages</class>
-        <locator>#messages</locator>
-        <strategy>css selector</strategy>
-    </block>
+<page mca="admin/system_config" module="Magento_Backend">
+    <blocks>
+        <pageActions>
+            <class>Magento\Backend\Test\Block\System\Config\PageActions</class>
+            <locator>.page-main-actions</locator>
+            <strategy>css selector</strategy>
+        </pageActions>
+        <form>
+            <class>Magento\Backend\Test\Block\System\Config\Form</class>
+            <locator>#config-edit-form</locator>
+            <strategy>css selector</strategy>
+        </form>
+        <messagesBlock>
+            <class>Magento\Core\Test\Block\Messages</class>
+            <locator>#messages</locator>
+            <strategy>css selector</strategy>
+        </messagesBlock>
+    </blocks>
 </page>

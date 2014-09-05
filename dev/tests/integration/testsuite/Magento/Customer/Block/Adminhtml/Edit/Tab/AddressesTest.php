@@ -167,7 +167,7 @@ class AddressesTest extends \PHPUnit_Framework_TestCase
         $customer = $this->_customerAccountService->getCustomer(1);
         $this->_customerData = array(
             'customer_id' => $customer->getId(),
-            'account' => \Magento\Framework\Service\EavDataObjectConverter::toFlatArray($customer)
+            'account' => \Magento\Framework\Service\ExtensibleDataObjectConverter::toFlatArray($customer)
         );
         $this->_customerData['account']['id'] = $customer->getId();
         /** @var Address[] $addresses */

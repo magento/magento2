@@ -23,6 +23,8 @@
  */
 namespace Magento\Payment\Block;
 
+use Magento\Framework\Object;
+
 class InfoTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -35,6 +37,16 @@ class InfoTest extends \PHPUnit_Framework_TestCase
      */
     protected $_storeManager;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_eventManager;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_escaper;
+
     protected function setUp()
     {
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
@@ -43,9 +55,19 @@ class InfoTest extends \PHPUnit_Framework_TestCase
         )->setMethods(
             array('getStore')
         )->disableOriginalConstructor()->getMock();
+        $this->_eventManager = $this->getMockBuilder(
+            '\Magento\Framework\Event\ManagerInterface'
+        )->setMethods(
+            array('dispatch')
+        )->disableOriginalConstructor()->getMock();
+        $this->_escaper = $this->getMock('\Magento\Framework\Escaper', null, [], '', true);
         $context = $helper->getObject(
             'Magento\Framework\View\Element\Template\Context',
-            array('storeManager' => $this->_storeManager)
+            array(
+                'storeManager' => $this->_storeManager,
+                'eventManager' => $this->_eventManager,
+                'escaper' => $this->_escaper
+            )
         );
         $this->_object = $helper->getObject('Magento\Payment\Block\Info', array('context' => $context));
     }
@@ -114,5 +136,45 @@ class InfoTest extends \PHPUnit_Framework_TestCase
         $storeMock = $this->getMockBuilder('\Magento\Store\Model\Store')->disableOriginalConstructor()->getMock();
         $storeMock->expects($this->any())->method('getCode')->will($this->returnValue($storeCode));
         return $storeMock;
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Model\Exception
+     */
+    public function testGetInfoThrowException()
+    {
+        $this->_object->setData('info', new \Magento\Framework\Object([]));
+        $this->_object->getInfo();
+    }
+
+    public function testGetSpecificInformation()
+    {
+        $paymentInfo = $this->getMockBuilder('\Magento\Payment\Model\Info')->disableOriginalConstructor()->getMock();
+
+        $this->_object->setData('info', $paymentInfo);
+        $this->_object->getSpecificInformation();
+    }
+
+    /**
+     * @dataProvider getValueAsArrayDataProvider
+     */
+    public function testGetValueAsArray($value, $escapeHtml, $expected)
+    {
+        $this->assertEquals($expected, $this->_object->getValueAsArray($value, $escapeHtml));
+    }
+
+    /**
+     * @return array
+     */
+    public function getValueAsArrayDataProvider()
+    {
+        return [
+            [array(), true, []],
+            [array(), false, []],
+            ['string', true, [0 => 'string']],
+            ['string', false, ['string']],
+            [array('key' => 'v"a!@#%$%^^&&*(*/\'\]l'), true, ['key' => 'v&quot;a!@#%$%^^&amp;&amp;*(*/\'\]l']],
+            [array('key' => 'val'), false, ['key' => 'val']]
+        ];
     }
 }

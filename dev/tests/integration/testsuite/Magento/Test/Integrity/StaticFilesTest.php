@@ -65,17 +65,17 @@ class StaticFilesTest extends \PHPUnit_Framework_TestCase
      * We want to check integrity of all these references
      * Note that the references may have syntax specific to the Magento preprocessing subsystem
      *
-     * @param string $file
      * @param string $area
      * @param string $themePath
      * @param string $locale
      * @param string $module
      * @param string $filePath
+     * @param string $absolutePath
      * @dataProvider referencesFromStaticFilesDataProvider
      */
-    public function testReferencesFromStaticFiles($file, $area, $themePath, $locale, $module, $filePath)
+    public function testReferencesFromStaticFiles($area, $themePath, $locale, $module, $filePath, $absolutePath)
     {
-        $contents = file_get_contents($file);
+        $contents = file_get_contents($absolutePath);
         preg_match_all(
             \Magento\Framework\View\Url\CssResolver::REGEX_CSS_RELATIVE_URLS,
             $contents,
@@ -163,12 +163,7 @@ class StaticFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function referencesFromStaticFilesDataProvider()
     {
-        $result = array();
-        $files = \Magento\TestFramework\Utility\Files::init()->getStaticPreProcessingFiles('*.{less,css}');
-        foreach ($files as $file => $data) {
-            $result[$file] = array_merge(array($file), $data);
-        }
-        return $result;
+        return \Magento\TestFramework\Utility\Files::init()->getStaticPreProcessingFiles('*.{less,css}');
     }
 
     /**
@@ -235,8 +230,8 @@ class StaticFilesTest extends \PHPUnit_Framework_TestCase
     public function referencesFromPhtmlFilesDataProvider()
     {
         $result = array();
-        foreach (\Magento\TestFramework\Utility\Files::init()->getPhtmlFiles(true, false) as $file => $info) {
-            list($area, $themePath) = $info;
+        foreach (\Magento\TestFramework\Utility\Files::init()->getPhtmlFiles(true, false) as $info) {
+            list($area, $themePath, , , $file) = $info;
             foreach ($this->collectGetViewFileUrl($file) as $fileId) {
                 $result[] = array($file, $area, $themePath, $fileId);
             }
@@ -284,8 +279,8 @@ class StaticFilesTest extends \PHPUnit_Framework_TestCase
     {
         $result = array();
         $files = \Magento\TestFramework\Utility\Files::init()->getLayoutFiles(array('with_metainfo' => true), false);
-        foreach ($files as $file => $metaInfo) {
-            list($area, $themePath) = $metaInfo;
+        foreach ($files as $metaInfo) {
+            list($area, $themePath, , ,$file) = $metaInfo;
             foreach ($this->collectFileIdsFromLayout($file) as $fileId) {
                 $result[] = array($file, $area, $themePath, $fileId);
             }

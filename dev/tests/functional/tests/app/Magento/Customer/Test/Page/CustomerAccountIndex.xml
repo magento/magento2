@@ -23,41 +23,37 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page mca="customer/account/index">
-    <block>
-        <name>messages</name>
-        <class>Magento\Core\Test\Block\Messages</class>
-        <locator>.page.messages</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>dashboardAddress</name>
-        <class>Magento\Customer\Test\Block\Account\Dashboard\Address</class>
-        <locator>.block-dashboard-addresses</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>titleBlock</name>
-        <class>Magento\Theme\Test\Block\Html\Title</class>
-        <locator>.page-title</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>accountMenuBlock</name>
-        <class>Magento\Customer\Test\Block\Account\Links</class>
-        <locator>.nav.items</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>infoBlock</name>
-        <class>Magento\Customer\Test\Block\Account\Dashboard\Info</class>
-        <locator>.column.main</locator>
-        <strategy>css selector</strategy>
-    </block>
-    <block>
-        <name>compareProductsBlock</name>
-        <class>Magento\Catalog\Test\Block\Product\Compare\Sidebar</class>
-        <locator>.block.compare</locator>
-        <strategy>css selector</strategy>
-    </block>
+<page mca="customer/account/index" module="Magento_Customer">
+    <blocks>
+        <messages>
+            <class>Magento\Core\Test\Block\Messages</class>
+            <locator>.page.messages</locator>
+            <strategy>css selector</strategy>
+        </messages>
+        <dashboardAddress>
+            <class>Magento\Customer\Test\Block\Account\Dashboard\Address</class>
+            <locator>.block-dashboard-addresses</locator>
+            <strategy>css selector</strategy>
+        </dashboardAddress>
+        <titleBlock>
+            <class>Magento\Theme\Test\Block\Html\Title</class>
+            <locator>.page-title</locator>
+            <strategy>css selector</strategy>
+        </titleBlock>
+        <accountMenuBlock>
+            <class>Magento\Customer\Test\Block\Account\Links</class>
+            <locator>.nav.items</locator>
+            <strategy>css selector</strategy>
+        </accountMenuBlock>
+        <infoBlock>
+            <class>Magento\Customer\Test\Block\Account\Dashboard\Info</class>
+            <locator>.column.main</locator>
+            <strategy>css selector</strategy>
+        </infoBlock>
+        <compareProductsBlock>
+            <class>Magento\Catalog\Test\Block\Product\Compare\Sidebar</class>
+            <locator>.block.compare</locator>
+            <strategy>css selector</strategy>
+        </compareProductsBlock>
+    </blocks>
 </page>

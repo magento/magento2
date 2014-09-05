@@ -428,11 +428,12 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
     protected function _prepareFiles($fileType, $files, $skip = null)
     {
         $result = array();
-        foreach (array_keys($files) as $file) {
-            if (!$skip && substr_count(self::_getRelativeFilename($file), '/') < self::DIR_PATH_COUNT) {
+        foreach ($files as $relativePath => $file) {
+            $absolutePath = $file[0];
+            if (!$skip && substr_count($relativePath, '/') < self::DIR_PATH_COUNT) {
                 continue;
             }
-            $result[$file] = array($fileType, $file);
+            $result[$relativePath] = array($fileType, $absolutePath);
         }
         return $result;
     }

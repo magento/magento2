@@ -24,12 +24,12 @@
 
 namespace Magento\Framework\Service\V1\Data;
 
-use Magento\Framework\Service\Data\AbstractObject;
+use Magento\Framework\Service\Data\AbstractExtensibleObject;
 
 /**
  * Data object for sort order.
  */
-class SortOrder extends AbstractObject
+class SortOrder extends AbstractExtensibleObject
 {
     const FIELD = 'field';
     const DIRECTION = 'direction';

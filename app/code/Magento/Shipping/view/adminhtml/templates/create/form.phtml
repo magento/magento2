@@ -76,7 +76,7 @@ require([
     "prototype"
 ], function(jQuery){
 
-    setTimeout(function(){
+    jQuery('body').one('packageInitialized', function(){
         packaging.setConfirmPackagingCallback(function(){
             packaging.setParamsCreateLabelRequest($('edit_form').serialize(true));
             packaging.sendCreateLabelRequest();
@@ -98,7 +98,7 @@ require([
                 return item.value;
             }
         });
-    }, 500);
+    });
 
     jQuery('#edit_form').mage('form').mage('validation');
 

@@ -106,9 +106,10 @@ xsi:noNamespaceSchemaLocation="../../../lib/internal/Magento/Framework/etc/somet
 
     protected function _dataSet($files)
     {
-        $arrayWrap = function ($item) {
-            return [$item];
-        };
-        return array_combine($files, array_map($arrayWrap, $files));
+        $data = [];
+        foreach ($files as $file) {
+            $data[substr($file, strlen(BP))] = [$file];
+        }
+        return $data;
     }
 }

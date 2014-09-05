@@ -1357,6 +1357,7 @@ class Payment extends \Magento\Payment\Model\Info
                 foreach ($this->_transactionAdditionalInfo as $key => $value) {
                     $transaction->setAdditionalInformation($key, $value);
                 }
+                $this->_transactionAdditionalInfo = [];
             }
 
             // link with sales entities
