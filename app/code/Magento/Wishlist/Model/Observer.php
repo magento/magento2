@@ -29,7 +29,7 @@
  */
 namespace Magento\Wishlist\Model;
 
-class Observer extends \Magento\Framework\Model\AbstractModel
+class Observer
 {
     /**
      * Wishlist data
@@ -59,35 +59,24 @@ class Observer extends \Magento\Framework\Model\AbstractModel
     protected $messageManager;
 
     /**
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Wishlist\Helper\Data $wishlistData
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
      * @param WishlistFactory $wishlistFactory
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\Db $resourceCollection
-     * @param array $data
      */
     public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
         \Magento\Wishlist\Helper\Data $wishlistData,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Customer\Model\Session $customerSession,
         WishlistFactory $wishlistFactory,
-        \Magento\Framework\Message\ManagerInterface $messageManager,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\Db $resourceCollection = null,
-        array $data = array()
+        \Magento\Framework\Message\ManagerInterface $messageManager
     ) {
         $this->_wishlistData = $wishlistData;
         $this->_checkoutSession = $checkoutSession;
         $this->_customerSession = $customerSession;
         $this->_wishlistFactory = $wishlistFactory;
         $this->messageManager = $messageManager;
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
     /**
@@ -177,9 +166,8 @@ class Observer extends \Magento\Framework\Model\AbstractModel
                 return;
             }
 
-            $wishlist->getItemCollection()->load();
-
-            foreach ($wishlist->getItemCollection() as $wishlistItem) {
+            $wishlists = $wishlist->getItemCollection()->load();
+            foreach ($wishlists as $wishlistItem) {
                 if ($wishlistItem->getId() == $wishlistId) {
                     $wishlistItem->delete();
                 }

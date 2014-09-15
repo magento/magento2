@@ -40,7 +40,7 @@ class GroupTest extends \PHPUnit_Framework_TestCase
     public function testSetGetWebsite()
     {
         $this->assertFalse($this->_model->getWebsite());
-        $website = Bootstrap::getObjectManager()->get('Magento\Store\Model\StoreManagerInterface')->getWebsite();
+        $website = Bootstrap::getObjectManager()->get('Magento\Framework\StoreManagerInterface')->getWebsite();
         $this->_model->setWebsite($website);
         $actualResult = $this->_model->getWebsite();
         $this->assertSame($website, $actualResult);
@@ -52,7 +52,7 @@ class GroupTest extends \PHPUnit_Framework_TestCase
     public function testGetWebsiteDefault()
     {
         $this->assertFalse($this->_model->getWebsite());
-        $website = Bootstrap::getObjectManager()->get('Magento\Store\Model\StoreManagerInterface')->getWebsite();
+        $website = Bootstrap::getObjectManager()->get('Magento\Framework\StoreManagerInterface')->getWebsite();
         $this->_model->setWebsite($website);
         // Empty string should get treated like no parameter
         $actualResult = $this->_model->getWebsite('');

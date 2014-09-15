@@ -50,18 +50,20 @@ class IndexableAttributeFilter
     {
         $codes = [];
         $catalogResource = $this->_attributeFactory->create();
-
-        foreach ($set->getGroups() as $group) {
-            /** @var $group \Magento\Eav\Model\Entity\Attribute\Group */
-            foreach ($group->getAttributes() as $attribute) {
-                /** @var $attribute \Magento\Eav\Model\Entity\Attribute */
-                $catalogResource->load($attribute->getId());
-                if ($catalogResource->isIndexable()) {
-                    // Attribute requires to be cloned for new dataset to maintain attribute set changes
-                    $attributeClone = clone $attribute;
-                    $attributeClone->load($attribute->getAttributeId());
-                    $codes[] = $attributeClone->getAttributeCode();
-                    unset($attributeClone);
+        $groups = $set->getGroups();
+        if (is_array($groups)) {
+            foreach ($groups as $group) {
+                /** @var $group \Magento\Eav\Model\Entity\Attribute\Group */
+                foreach ($group->getAttributes() as $attribute) {
+                    /** @var $attribute \Magento\Eav\Model\Entity\Attribute */
+                    $catalogResource->load($attribute->getId());
+                    if ($catalogResource->isIndexable()) {
+                        // Attribute requires to be cloned for new dataset to maintain attribute set changes
+                        $attributeClone = clone $attribute;
+                        $attributeClone->load($attribute->getAttributeId());
+                        $codes[] = $attributeClone->getAttributeCode();
+                        unset($attributeClone);
+                    }
                 }
             }
         }

@@ -84,7 +84,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
     /**
      * Store manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -122,7 +122,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Persistent\Helper\Data $persistentData
      * @param \Magento\Framework\Stdlib\CookieManager $cookieManager
      * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Math\Random $mathRandom
      * @param \Magento\Framework\Session\Config\ConfigInterface $sessionConfig
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
@@ -137,7 +137,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
         \Magento\Persistent\Helper\Data $persistentData,
         \Magento\Framework\Stdlib\CookieManager $cookieManager,
         \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Framework\Math\Random $mathRandom,
         \Magento\Framework\Session\Config\ConfigInterface $sessionConfig,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
@@ -312,14 +312,8 @@ class Session extends \Magento\Framework\Model\AbstractModel
      */
     public function setPersistentCookie($duration, $path)
     {
-        $publicCookieMetadata = $this->_cookieMetadataFactory->createPublicCookieMetadata()
-            ->setDuration($duration)
-            ->setPath($path);
-        $this->_cookieManager->setPublicCookie(
-            self::COOKIE_NAME,
-            $this->getKey(),
-            $publicCookieMetadata
-        );
+        $value = $this->getKey();
+        $this->setCookie($value, $duration, $path);
         return $this;
     }
 
@@ -337,14 +331,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
         }
         $value = $this->_cookieManager->getCookie(self::COOKIE_NAME);
         if (null !== $value) {
-            $publicCookieMetadata = $this->_cookieMetadataFactory->createPublicCookieMetadata()
-                ->setDuration($duration)
-                ->setPath($path);
-            $this->_cookieManager->setPublicCookie(
-                self::COOKIE_NAME,
-                $value,
-                $publicCookieMetadata
-            );
+            $this->setCookie($value, $duration, $path);
         }
         return $this;
     }
@@ -394,5 +381,26 @@ class Session extends \Magento\Framework\Model\AbstractModel
     {
         $this->setUpdatedAt(gmdate('Y-m-d H:i:s'));
         return parent::save();
+    }
+
+    /**
+     * Set persistent shopping cart cookie.
+     *
+     * @param string $value
+     * @param int $duration
+     * @param string $path
+     * @return void
+     */
+    private function setCookie($value, $duration, $path)
+    {
+        $publicCookieMetadata = $this->_cookieMetadataFactory->createPublicCookieMetadata()
+            ->setDuration($duration)
+            ->setPath($path)
+            ->setHttpOnly(true);
+        $this->_cookieManager->setPublicCookie(
+            self::COOKIE_NAME,
+            $value,
+            $publicCookieMetadata
+        );
     }
 }

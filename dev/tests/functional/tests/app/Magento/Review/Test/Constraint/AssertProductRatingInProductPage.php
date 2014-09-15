@@ -48,20 +48,19 @@ class AssertProductRatingInProductPage extends AbstractConstraint
      * Assert that product rating is displayed on product review(frontend)
      *
      * @param CatalogProductView $catalogProductView
-     * @param CatalogProductSimple $product
      * @param Browser $browser
+     * @param CatalogProductSimple $product
      * @param ReviewInjectable|null $review [optional]
      * @param Rating|null $productRating [optional]
      * @return void
      */
     public function processAssert(
         CatalogProductView $catalogProductView,
-        CatalogProductSimple $product,
         Browser $browser,
+        CatalogProductSimple $product,
         ReviewInjectable $review = null,
         Rating $productRating = null
     ) {
-        $product = $review === null ? $product : $review->getDataFieldConfig('entity_id')['source']->getEntity();
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
         $reviewSummaryBlock = $catalogProductView->getReviewSummary();
         if ($reviewSummaryBlock->isVisible()) {

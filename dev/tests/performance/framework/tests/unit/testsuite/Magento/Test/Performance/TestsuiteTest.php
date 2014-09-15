@@ -81,7 +81,7 @@ class TestsuiteTest extends \PHPUnit_Framework_TestCase
         $this->_application = $this->getMock(
             'Magento\TestFramework\Application',
             array('applyFixtures'),
-            array($this->_config, $shell)
+            array($this->_config, $this->getMockForAbstractClass('Magento\Framework\ObjectManager'), $shell)
         );
         $this->_handler = $this->getMockForAbstractClass(
             'Magento\TestFramework\Performance\Scenario\HandlerInterface'
@@ -287,13 +287,5 @@ class TestsuiteTest extends \PHPUnit_Framework_TestCase
     public function testOnScenarioFailureException()
     {
         $this->_object->onScenarioFailure(array($this, 'invalid_callback'));
-    }
-
-    /**
-     * Test get application
-     */
-    public function testGetApplication()
-    {
-        $this->assertEquals(true, $this->_object->getApplication() instanceof \Magento\TestFramework\Application);
     }
 }

@@ -65,7 +65,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Validator\UniversalFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $universalFactoryMock;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $storeManagerMock;
 
     /** @var \Magento\Catalog\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
@@ -108,7 +108,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $entity->expects($this->any())->method('getDefaultAttributes')->will($this->returnValue([]));
         $this->universalFactoryMock = $this->getMock('Magento\Framework\Validator\UniversalFactory', [], [], '', false);
         $this->universalFactoryMock->expects($this->any())->method('create')->will($this->returnValue($entity));
-        $this->storeManagerMock = $this->getMockForAbstractClass('Magento\Store\Model\StoreManagerInterface');
+        $this->storeManagerMock = $this->getMockForAbstractClass('Magento\Framework\StoreManagerInterface');
         $this->storeManagerMock
             ->expects($this->any())
             ->method('getStore')

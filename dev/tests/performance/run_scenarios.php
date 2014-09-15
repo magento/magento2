@@ -24,8 +24,8 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/** @var $config \Magento\TestFramework\Performance\Config */
-$config = require_once __DIR__ . '/framework/bootstrap.php';
+/** @var $bootstrap \Magento\TestFramework\Performance\Bootstrap */
+$bootstrap = require_once __DIR__ . '/framework/bootstrap.php';
 
 $logWriter = new \Zend_Log_Writer_Stream('php://output');
 $logWriter->setFormatter(new \Zend_Log_Formatter_Simple('%message%' . PHP_EOL));
@@ -41,13 +41,10 @@ $scenarioHandler->register(
     new \Magento\TestFramework\Performance\Scenario\Handler\Php($shell)
 );
 
-$testsuite = new \Magento\TestFramework\Performance\Testsuite(
-    $config,
-    new \Magento\TestFramework\Application($config, $shell),
-    $scenarioHandler
-);
+$application = $bootstrap->createApplication($shell);
+$testsuite = $bootstrap->createTestSuite($application, $scenarioHandler);
 
-$scenarioTotalCount = count($config->getScenarios());
+$scenarioTotalCount = count($bootstrap->getConfig()->getScenarios());
 $scenarioCount = 1;
 $scenarioFailCount = 0;
 $testsuite->onScenarioRun(

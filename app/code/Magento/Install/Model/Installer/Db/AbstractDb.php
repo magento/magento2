@@ -197,7 +197,7 @@ abstract class AbstractDb
     /**
      * Clean up database
      *
-     * @return \Magento\Install\Model\Installer\Db\AbstractDb
+     * @return void
      */
     abstract public function cleanUpDatabase();
 }

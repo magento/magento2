@@ -102,6 +102,7 @@ class AdminAccount
                 'sort_order' => 1,
                 'role_type' => 'G',
                 'user_id' => 0,
+                'user_type' => 2,
                 'role_name' => 'Administrators',
             ],
             1 => [
@@ -110,6 +111,7 @@ class AdminAccount
                 'sort_order' => 0,
                 'role_type' => 'U',
                 'user_id' => $adminId,
+                'user_type' => 2,
                 'role_name' => $this->config['admin_username'],
             ]
         ];

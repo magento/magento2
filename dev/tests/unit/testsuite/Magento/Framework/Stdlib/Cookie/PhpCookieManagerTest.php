@@ -63,7 +63,8 @@ namespace Magento\Framework\Stdlib\Cookie {
     class PhpCookieManagerTest extends \PHPUnit_Framework_TestCase
     {
         const COOKIE_NAME = 'cookie_name';
-        const SENSITIVE_COOKIE_NAME_NO_METADATA = 'sensitive_cookie_name_no_metadata';
+        const SENSITIVE_COOKIE_NAME_NO_METADATA_HTTPS = 'sensitive_cookie_name_no_metadata_https';
+        const SENSITIVE_COOKIE_NAME_NO_METADATA_NOT_HTTPS = 'sensitive_cookie_name_no_metadata_not_https';
         const SENSITIVE_COOKIE_NAME_NO_DOMAIN_NO_PATH = 'sensitive_cookie_name_no_domain_no_path';
         const SENSITIVE_COOKIE_NAME_WITH_DOMAIN_AND_PATH = 'sensitive_cookie_name_with_domain_and_path';
         const PUBLIC_COOKIE_NAME_NO_METADATA = 'public_cookie_name_no_metadata';
@@ -89,7 +90,8 @@ namespace Magento\Framework\Stdlib\Cookie {
         static $functionTestAssertionMapping = [
             self::DELETE_COOKIE_NAME => 'self::assertDeleteCookie',
             self::DELETE_COOKIE_NAME_NO_METADATA => 'self::assertDeleteCookieWithNoMetadata',
-            self::SENSITIVE_COOKIE_NAME_NO_METADATA => 'self::assertSensitiveCookieWithNoMetaData',
+            self::SENSITIVE_COOKIE_NAME_NO_METADATA_HTTPS => 'self::assertSensitiveCookieWithNoMetaDataHttps',
+            self::SENSITIVE_COOKIE_NAME_NO_METADATA_NOT_HTTPS => 'self::assertSensitiveCookieWithNoMetaDataNotHttps',
             self::SENSITIVE_COOKIE_NAME_NO_DOMAIN_NO_PATH => 'self::assertSensitiveCookieNoDomainNoPath',
             self::SENSITIVE_COOKIE_NAME_WITH_DOMAIN_AND_PATH => 'self::assertSensitiveCookieWithDomainAndPath',
             self::PUBLIC_COOKIE_NAME_NO_METADATA => 'self::assertPublicCookieWithNoMetaData',
@@ -113,7 +115,7 @@ namespace Magento\Framework\Stdlib\Cookie {
          */
         protected $cookieManager;
         /**
-         * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Stdlib\Cookie\CookieScope
+         * @var \PHPUnit_Framework_MockObject_MockObject|CookieScopeInterface
          */
         protected $scopeMock;
 
@@ -122,13 +124,23 @@ namespace Magento\Framework\Stdlib\Cookie {
          */
         public static $isSetCookieInvoked;
 
+        /**
+         * @var \Magento\Framework\StoreManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+         */
+        protected $storeManagerMock;
+
+        /**
+         * @var \Magento\Store\Model\Store| \PHPUnit_Framework_MockObject_MockObject
+         */
+        protected $storeMock;
+
         protected function setUp()
         {
             global $mockTranslateSetCookie;
             $mockTranslateSetCookie = true;
             self::$isSetCookieInvoked = false;
             $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-            $this->scopeMock = $this->getMockBuilder('Magento\Framework\Stdlib\Cookie\CookieScope')
+            $this->scopeMock = $this->getMockBuilder('Magento\Framework\Stdlib\Cookie\CookieScopeInterface')
                 ->setMethods(['getPublicCookieMetadata', 'getCookieMetadata', 'getSensitiveCookieMetadata'])
                 ->disableOriginalConstructor()
                 ->getMock();
@@ -136,6 +148,15 @@ namespace Magento\Framework\Stdlib\Cookie {
                 'Magento\Framework\Stdlib\Cookie\PhpCookieManager',
                 ['scope' => $this->scopeMock]
             );
+            $this->storeManagerMock = $this->getMockBuilder('Magento\Framework\StoreManagerInterface')
+                ->disableOriginalConstructor()
+                ->getMock();
+            $this->storeMock = $this->getMockBuilder('Magento\Store\Model\Store')
+                ->disableOriginalConstructor()
+                ->getMock();
+            $this->storeManagerMock->expects($this->any())
+                ->method('getStore')
+                ->will($this->returnValue($this->storeMock));
         }
 
         public function testGetCookie()
@@ -230,12 +251,22 @@ namespace Magento\Framework\Stdlib\Cookie {
             }
         }
 
-        public function testSetSensitiveCookieNoMetadata()
+        /**
+         * @param string $cookieName
+         * @param bool $secure
+         * @dataProvider isCurrentlySecureDataProvider
+         */
+        public function testSetSensitiveCookieNoMetadata($cookieName, $secure)
         {
             self::$isSetCookieInvoked = false;
             /** @var SensitiveCookieMetadata $sensitiveCookieMetadata */
             $sensitiveCookieMetadata = $this->objectManager
-                ->getObject('Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata');
+                ->getObject(
+                    'Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata',
+                    [
+                        'storeManager' => $this->storeManagerMock
+                    ]
+                 );
 
             $this->scopeMock->expects($this->once())
                 ->method('getSensitiveCookieMetadata')
@@ -244,11 +275,23 @@ namespace Magento\Framework\Stdlib\Cookie {
                     $this->returnValue($sensitiveCookieMetadata)
                 );
 
+            $this->storeMock->expects($this->once())
+                ->method('isCurrentlySecure')
+                ->will($this->returnValue($secure));
+
             $this->cookieManager->setSensitiveCookie(
-                self::SENSITIVE_COOKIE_NAME_NO_METADATA,
+                $cookieName,
                 'cookie_value'
             );
             $this->assertTrue(self::$isSetCookieInvoked);
+        }
+
+        public function isCurrentlySecureDataProvider()
+        {
+            return [
+                [self::SENSITIVE_COOKIE_NAME_NO_METADATA_HTTPS, true],
+                [self::SENSITIVE_COOKIE_NAME_NO_METADATA_NOT_HTTPS, false]
+            ];
         }
 
         public function testSetSensitiveCookieNullDomainAndPath()
@@ -259,6 +302,7 @@ namespace Magento\Framework\Stdlib\Cookie {
                 ->getObject(
                     'Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata',
                     [
+                        'storeManager' => $this->storeManagerMock,
                         'metadata' => [
                             'domain' => null,
                             'path' => null,
@@ -274,6 +318,10 @@ namespace Magento\Framework\Stdlib\Cookie {
                 ->will(
                     $this->returnValue($sensitiveCookieMetadata)
                 );
+
+            $this->storeMock->expects($this->once())
+                ->method('isCurrentlySecure')
+                ->will($this->returnValue(true));
 
             $this->cookieManager->setSensitiveCookie(
                 self::SENSITIVE_COOKIE_NAME_NO_DOMAIN_NO_PATH,
@@ -291,6 +339,7 @@ namespace Magento\Framework\Stdlib\Cookie {
                 ->getObject(
                     'Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata',
                     [
+                        'storeManager' => $this->storeManagerMock,
                         'metadata' => [
                             'domain' => 'magento.url',
                             'path' => '/backend',
@@ -304,6 +353,11 @@ namespace Magento\Framework\Stdlib\Cookie {
                 ->will(
                     $this->returnValue($sensitiveCookieMetadata)
                 );
+
+            $this->storeMock->expects($this->once())
+                ->method('isCurrentlySecure')
+                ->will($this->returnValue(false));
+
             $this->cookieManager->setSensitiveCookie(
                 self::SENSITIVE_COOKIE_NAME_WITH_DOMAIN_AND_PATH,
                 'cookie_value',
@@ -587,7 +641,7 @@ namespace Magento\Framework\Stdlib\Cookie {
          * Suppressing UnusedPrivateMethod, since PHPMD doesn't detect callback method use.
          * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
          */
-        private static function assertSensitiveCookieWithNoMetaData(
+        private static function assertSensitiveCookieWithNoMetaDataHttps(
             $name,
             $value,
             $expiry,
@@ -596,10 +650,34 @@ namespace Magento\Framework\Stdlib\Cookie {
             $secure,
             $httpOnly
         ) {
-            self::assertEquals(self::SENSITIVE_COOKIE_NAME_NO_METADATA, $name);
+            self::assertEquals(self::SENSITIVE_COOKIE_NAME_NO_METADATA_HTTPS, $name);
             self::assertEquals(self::COOKIE_VALUE, $value);
             self::assertEquals(PhpCookieManager::EXPIRE_AT_END_OF_SESSION_TIME, $expiry);
             self::assertTrue($secure);
+            self::assertTrue($httpOnly);
+            self::assertEquals('', $domain);
+            self::assertEquals('', $path);
+        }
+
+        /**
+         * Assert sensitive cookie with no meta data
+         *
+         * Suppressing UnusedPrivateMethod, since PHPMD doesn't detect callback method use.
+         * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
+         */
+        private static function assertSensitiveCookieWithNoMetaDataNotHttps(
+            $name,
+            $value,
+            $expiry,
+            $path,
+            $domain,
+            $secure,
+            $httpOnly
+        ) {
+            self::assertEquals(self::SENSITIVE_COOKIE_NAME_NO_METADATA_NOT_HTTPS, $name);
+            self::assertEquals(self::COOKIE_VALUE, $value);
+            self::assertEquals(PhpCookieManager::EXPIRE_AT_END_OF_SESSION_TIME, $expiry);
+            self::assertFalse($secure);
             self::assertTrue($httpOnly);
             self::assertEquals('', $domain);
             self::assertEquals('', $path);
@@ -647,7 +725,7 @@ namespace Magento\Framework\Stdlib\Cookie {
             self::assertEquals(self::SENSITIVE_COOKIE_NAME_WITH_DOMAIN_AND_PATH, $name);
             self::assertEquals(self::COOKIE_VALUE, $value);
             self::assertEquals(PhpCookieManager::EXPIRE_AT_END_OF_SESSION_TIME, $expiry);
-            self::assertTrue($secure);
+            self::assertFalse($secure);
             self::assertTrue($httpOnly);
             self::assertEquals('magento.url', $domain);
             self::assertEquals('/backend', $path);

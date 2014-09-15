@@ -23,12 +23,12 @@
  */
 namespace Magento\Sales\Model\Resource\Order;
 
+use Magento\Sales\Model\Resource\Entity as SalesResource;
+
 /**
  * Flat sales order item resource
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Item extends AbstractOrder
+class Item extends SalesResource
 {
     /**
      * Event prefix

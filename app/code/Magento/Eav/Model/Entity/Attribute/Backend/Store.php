@@ -26,15 +26,15 @@ namespace Magento\Eav\Model\Entity\Attribute\Backend;
 class Store extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
      * @param \Magento\Framework\Logger $logger
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      */
-    public function __construct(\Magento\Framework\Logger $logger, \Magento\Store\Model\StoreManagerInterface $storeManager)
+    public function __construct(\Magento\Framework\Logger $logger, \Magento\Framework\StoreManagerInterface $storeManager)
     {
         $this->_storeManager = $storeManager;
         parent::__construct($logger);

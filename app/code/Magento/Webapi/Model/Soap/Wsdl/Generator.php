@@ -62,7 +62,7 @@ class Generator
     protected $_registeredTypes = array();
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -73,14 +73,14 @@ class Generator
      * @param Factory $wsdlFactory
      * @param \Magento\Webapi\Model\Cache\Type $cache
      * @param \Magento\Webapi\Model\Config\ClassReflector\TypeProcessor $typeProcessor
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Webapi\Model\Soap\Config $apiConfig,
         Factory $wsdlFactory,
         \Magento\Webapi\Model\Cache\Type $cache,
         \Magento\Webapi\Model\Config\ClassReflector\TypeProcessor $typeProcessor,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Framework\StoreManagerInterface $storeManager
     ) {
         $this->_apiConfig = $apiConfig;
         $this->_wsdlFactory = $wsdlFactory;

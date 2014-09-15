@@ -21,64 +21,10 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-?>
-<?php
+
 /**
  * Template for block \Magento\Customer\Block\Adminhtml\Edit\Tab\View
  */
-?>
-<?php
-$lastLoginDateAdmin = $this->getLastLoginDate();
-$lastLoginDateStore = $this->getStoreLastLoginDate();
 
-$createDateAdmin    = $this->getCreateDate();
-$createDateStore    = $this->getStoreCreateDate();
-?>
-
-<div class="fieldset-wrapper customer-information">
-    <div class="fieldset-wrapper-title">
-        <span class="title"><?php echo __('Personal Information') ?></span>
-    </div>
-    <table class="data-table">
-        <tbody>
-            <tr>
-                <th><?php echo __('Last Logged In:') ?></th>
-                <td><?php echo $lastLoginDateAdmin ?> (<?php echo $this->getCurrentStatus() ?>)</td>
-            </tr>
-            <?php if ($lastLoginDateAdmin != $lastLoginDateStore): ?>
-            <tr>
-                <th><?php echo __('Last Logged In (%1):', $this->getStoreLastLoginDateTimezone()) ?></th>
-                <td><?php echo $lastLoginDateStore ?> (<?php echo $this->getCurrentStatus() ?>)</td>
-            </tr>
-            <?php endif; ?>
-            <tr>
-                <th><?php echo __('Confirmed email:') ?></th>
-                <td><?php echo $this->getIsConfirmedStatus() ?></td>
-            </tr>
-            <tr>
-                <th><?php echo __('Account Created on:') ?></th>
-                <td><?php echo $createDateAdmin ?></td>
-            </tr>
-            <?php if ($createDateAdmin != $createDateStore): ?>
-            <tr>
-                <th><?php echo __('Account Created on (%1):', $this->getStoreCreateDateTimezone()) ?></th>
-                <td><?php echo $createDateStore ?></td>
-            </tr>
-            <?php endif; ?>
-            <tr>
-                <th><?php echo __('Account Created in:') ?></th>
-                <td><?php echo $this->getCreatedInStore() ?></td>
-            </tr>
-            <tr>
-                <th><?php echo __('Customer Group:') ?></th>
-                <td><?php echo $this->getGroupName() ?></td>
-            </tr>
-        </tbody>
-    </table>
-    <address>
-        <strong><?php echo __('Default Billing Address') ?></strong><br/>
-        <?php echo $this->getBillingAddressHtml() ?>
-    </address>
-
-</div>
-<?php echo $this->getChildHtml('', true); ?>
+/** @var $this \Magento\Customer\Block\Adminhtml\Edit\Tab\View */
+echo $this->getChildHtml();

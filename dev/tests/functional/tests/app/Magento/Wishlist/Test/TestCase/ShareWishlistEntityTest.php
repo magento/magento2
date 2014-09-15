@@ -24,6 +24,7 @@
 
 namespace Magento\Wishlist\Test\TestCase;
 
+use Mtf\Client\Browser;
 use Mtf\TestCase\Injectable;
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Customer\Test\Page\CustomerAccountLogin;
@@ -38,11 +39,13 @@ use Magento\Wishlist\Test\Page\WishlistShare;
 /**
  * Test Creation for ShareWishlistEntity
  *
+ * Test Flow:
+ *
  * Preconditions:
  * 1. Create Customer Account
  * 2. Create product
  *
- * Test Flow:
+ * Steps:
  * 1. Login to frontend as a Customer
  * 2. Add product to Wish List
  * 3. Click "Share Wish List" button
@@ -157,17 +160,22 @@ class ShareWishlistEntityTest extends Injectable
     /**
      * Share wish list
      *
+     * @param Browser $browser
      * @param CustomerInjectable $customer
      * @param CatalogProductSimple $product
      * @param array $sharingInfo
      * @return void
      */
-    public function test(CustomerInjectable $customer, CatalogProductSimple $product, $sharingInfo)
-    {
+    public function test(
+        Browser $browser,
+        CustomerInjectable $customer,
+        CatalogProductSimple $product,
+        array $sharingInfo
+    ) {
         //Steps
         $this->loginCustomer($customer);
-        $this->catalogProductView->init($product);
-        $this->catalogProductView->open()->getViewBlock()->addToWishlist();
+        $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
+        $this->catalogProductView->getViewBlock()->addToWishlist();
         $this->wishlistIndex->getWishlistBlock()->clickShareWishList();
         $this->wishlistShare->getSharingInfoForm()->fillForm($sharingInfo);
         $this->wishlistShare->getSharingInfoForm()->shareWishlist();

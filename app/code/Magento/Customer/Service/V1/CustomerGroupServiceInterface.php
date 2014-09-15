@@ -52,7 +52,7 @@ interface CustomerGroupServiceInterface
      *
      * @param \Magento\Framework\Service\V1\Data\SearchCriteria $searchCriteria
      * @throws \Magento\Framework\Exception\InputException If there is a problem with the input
-     * @return \Magento\Customer\Service\V1\Data\SearchResults containing Data\CustomerGroup objects
+     * @return \Magento\Customer\Service\V1\Data\CustomerGroupSearchResults containing Data\CustomerGroup objects
      */
     public function searchGroups(\Magento\Framework\Service\V1\Data\SearchCriteria $searchCriteria);
 

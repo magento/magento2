@@ -25,7 +25,7 @@
 namespace Magento\Tax\Service\V1;
 
 use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\StoreManagerInterface;
 use Magento\Tax\Model\Calculation;
 use Magento\Tax\Model\Resource\Sales\Order\Tax;
 use Magento\Tax\Service\V1\Data\QuoteDetails;
@@ -82,7 +82,7 @@ class TaxCalculationService implements TaxCalculationServiceInterface
     protected $taxDetailsItemBuilder;
 
     /**
-     * @var StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $storeManager;
 

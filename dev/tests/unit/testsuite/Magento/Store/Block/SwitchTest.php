@@ -42,7 +42,7 @@ class SwitchTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
+        $this->_storeManagerMock = $this->getMock('\Magento\Framework\StoreManagerInterface');
 
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_block = $helper->getObject(

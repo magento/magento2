@@ -73,11 +73,11 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
     protected $httpContext;
 
     /**
-     * Log visitor
+     * Customer visitor
      *
-     * @var \Magento\Log\Model\Visitor
+     * @var \Magento\Customer\Model\Visitor
      */
-    protected $_logVisitor;
+    protected $_customerVisitor;
 
     /**
      * Catalog product visibility
@@ -108,7 +108,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory $itemCollectionFactory
      * @param Product\Visibility $catalogProductVisibility
-     * @param \Magento\Log\Model\Visitor $logVisitor
+     * @param \Magento\Customer\Model\Visitor $customerVisitor
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer
      * @param array $data
@@ -118,7 +118,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
         \Magento\Core\Helper\Data $coreData,
         \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory $itemCollectionFactory,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
-        \Magento\Log\Model\Visitor $logVisitor,
+        \Magento\Customer\Model\Visitor $customerVisitor,
         \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Customer\Helper\Session\CurrentCustomer $currentCustomer,
         array $data = array()
@@ -126,7 +126,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
         $this->_coreData = $coreData;
         $this->_itemCollectionFactory = $itemCollectionFactory;
         $this->_catalogProductVisibility = $catalogProductVisibility;
-        $this->_logVisitor = $logVisitor;
+        $this->_customerVisitor = $customerVisitor;
         $this->httpContext = $httpContext;
         $this->currentCustomer = $currentCustomer;
         parent::__construct(
@@ -184,7 +184,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\Compare\AbstractCompare
             } elseif ($this->_customerId) {
                 $this->_items->setCustomerId($this->_customerId);
             } else {
-                $this->_items->setVisitorId($this->_logVisitor->getId());
+                $this->_items->setVisitorId($this->_customerVisitor->getId());
             }
 
             $this->_items->addAttributeToSelect(

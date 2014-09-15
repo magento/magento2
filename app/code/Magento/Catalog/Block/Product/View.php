@@ -202,8 +202,7 @@ class View extends AbstractProduct implements \Magento\Framework\View\Block\Iden
      */
     public function canEmailToFriend()
     {
-        $sendToFriendModel = $this->_coreRegistry->registry('send_to_friend_model');
-        return $sendToFriendModel && $sendToFriendModel->canEmailToFriend();
+        return false;
     }
 
     /**

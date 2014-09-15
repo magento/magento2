@@ -37,11 +37,11 @@ class ShippingMethodConverter
 
     /**
      * @param ShippingMethodBuilder $builder
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Checkout\Service\V1\Data\Cart\ShippingMethodBuilder $builder,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Framework\StoreManagerInterface $storeManager
     ) {
         $this->builder = $builder;
         $this->storeManager = $storeManager;

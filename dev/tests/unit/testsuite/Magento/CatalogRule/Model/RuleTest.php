@@ -34,7 +34,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $storeManager;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
@@ -51,7 +51,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $this->storeManager = $this->getMock('Magento\Framework\StoreManagerInterface');
         $this->storeModel = $this->getMock('Magento\Store\Model\Store', array('__wakeup', 'getId'), array(), '', false);
         $this->combineFactory = $this->getMock(
             'Magento\CatalogRule\Model\Rule\Condition\CombineFactory',

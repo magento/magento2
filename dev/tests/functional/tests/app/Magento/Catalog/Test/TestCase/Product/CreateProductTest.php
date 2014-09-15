@@ -60,7 +60,7 @@ class CreateProductTest extends Functional
         //Steps
         $createProductPage->open(['type' => 'simple', 'set' => 4]);
         $productForm->fill($product);
-        $createProductPage->getFormAction()->save();
+        $createProductPage->getFormPageActions()->save();
         $createProductPage->getMessagesBlock()->assertSuccessMessage();
         //Flush cache
         $cachePage = Factory::getPageFactory()->getAdminCache();

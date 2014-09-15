@@ -24,7 +24,7 @@
 namespace Magento\CatalogUrlRewrite\Service\V1;
 
 use Magento\CatalogUrlRewrite\Helper\Data as CatalogUrlRewriteHelper;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\StoreManagerInterface;
 use Magento\UrlRedirect\Model\OptionProvider;
 use Magento\UrlRedirect\Service\V1\Data\FilterFactory;
 use Magento\UrlRedirect\Service\V1\UrlMatcherInterface;

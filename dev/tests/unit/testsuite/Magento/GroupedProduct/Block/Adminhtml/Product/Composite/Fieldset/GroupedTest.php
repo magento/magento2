@@ -56,7 +56,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         $this->productMock = $this->getMock('\Magento\Catalog\Model\Product', array(), array(), '', false);
         $this->coreHelperMock = $this->getMock('\Magento\Core\Helper\Data', array(), array(), '', false);
         $this->storeManagerMock = $this->getMock(
-            '\Magento\Store\Model\StoreManagerInterface',
+            '\Magento\Framework\StoreManagerInterface',
             array(),
             array(),
             '',

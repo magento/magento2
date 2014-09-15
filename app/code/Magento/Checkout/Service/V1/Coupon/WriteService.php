@@ -44,19 +44,19 @@ class WriteService implements WriteServiceInterface
     protected $couponBuilder;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $storeManager;
 
     /**
      * @param \Magento\Checkout\Service\V1\QuoteLoader $quoteLoader
      * @param CouponBuilder $couponBuilder
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Checkout\Service\V1\QuoteLoader $quoteLoader,
         CouponBuilder $couponBuilder,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Framework\StoreManagerInterface $storeManager
     ) {
         $this->quoteLoader = $quoteLoader;
         $this->couponBuilder = $couponBuilder;

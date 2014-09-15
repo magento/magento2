@@ -26,14 +26,14 @@ namespace Magento\Store\App\Request;
 class PathInfoProcessor implements \Magento\Framework\App\Request\PathInfoProcessorInterface
 {
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     private $_storeManager;
 
     /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      */
-    public function __construct(\Magento\Store\Model\StoreManagerInterface $storeManager)
+    public function __construct(\Magento\Framework\StoreManagerInterface $storeManager)
     {
         $this->_storeManager = $storeManager;
     }

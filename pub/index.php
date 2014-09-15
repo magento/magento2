@@ -23,15 +23,18 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-require __DIR__ . '/../app/bootstrap.php';
 
 use Magento\Framework\App\Filesystem;
 
+require __DIR__ . '/../app/bootstrap.php';
 $params = $_SERVER;
-
-$params[Filesystem::PARAM_APP_DIRS][Filesystem::PUB_DIR] = array('uri' => '');
-$params[Filesystem::PARAM_APP_DIRS][Filesystem::MEDIA_DIR] = array('uri' => 'media');
-$params[Filesystem::PARAM_APP_DIRS][Filesystem::STATIC_VIEW_DIR] = array('uri' => 'static');
-$params[Filesystem::PARAM_APP_DIRS][Filesystem::UPLOAD_DIR] = array('uri' => 'media/upload');
-$entryPoint = new \Magento\Framework\App\EntryPoint\EntryPoint(BP, $params);
-$entryPoint->run('Magento\Framework\App\Http');
+$params[Filesystem::PARAM_APP_DIRS] = [
+    Filesystem::PUB_DIR => ['uri' => ''],
+    Filesystem::MEDIA_DIR => ['uri' => 'media'],
+    Filesystem::STATIC_VIEW_DIR => ['uri' => 'static'],
+    Filesystem::UPLOAD_DIR => ['uri' => 'media/upload'],
+];
+$bootstrap = \Magento\Framework\App\Bootstrap::create(BP, $params);
+/** @var \Magento\Framework\App\Http $app */
+$app = $bootstrap->createApplication('Magento\Framework\App\Http');
+$bootstrap->run($app);

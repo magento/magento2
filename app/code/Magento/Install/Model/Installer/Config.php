@@ -26,7 +26,7 @@ namespace Magento\Install\Model\Installer;
 /**
  * Config installer
  */
-class Config extends \Magento\Install\Model\Installer\AbstractInstaller
+class Config
 {
     const TMP_INSTALL_DATE_VALUE = 'd-d-d-d-d';
 
@@ -43,11 +43,6 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
      * @var \Magento\Framework\App\RequestInterface
      */
     protected $_request;
-
-    /**
-     * @var array
-     */
-    protected $_configData = array();
 
     /**
      * @var \Magento\Framework\App\Filesystem
@@ -67,7 +62,7 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
     /**
      * Store Manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -77,20 +72,17 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
     protected $messageManager;
 
     /**
-     * @param \Magento\Install\Model\Installer $installer
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\App\Filesystem $filesystem
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      */
     public function __construct(
-        \Magento\Install\Model\Installer $installer,
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Framework\App\Filesystem $filesystem,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Framework\Message\ManagerInterface $messageManager
     ) {
-        parent::__construct($installer);
         $this->_request = $request;
         $this->_storeManager = $storeManager;
         $this->_filesystem = $filesystem;
@@ -100,34 +92,13 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
     }
 
     /**
-     * @param array $data
-     * @return $this
-     */
-    public function setConfigData($data)
-    {
-        if (is_array($data)) {
-            $this->_configData = $data;
-        }
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getConfigData()
-    {
-        return $this->_configData;
-    }
-
-    /**
      * Generate installation data and record them into local.xml using local.xml.template
      *
-     * @return void
+     * @param array $config
+     * @return array
      */
-    public function install()
+    public function install($config)
     {
-        $data = $this->getConfigData();
-
         $defaults = array(
             'root_dir' => $this->_filesystem->getPath(\Magento\Framework\App\Filesystem::ROOT_DIR),
             'app_dir' => $this->_filesystem->getPath(\Magento\Framework\App\Filesystem::APP_DIR),
@@ -135,46 +106,46 @@ class Config extends \Magento\Install\Model\Installer\AbstractInstaller
             'base_url' => $this->_request->getDistroBaseUrl()
         );
         foreach ($defaults as $index => $value) {
-            if (!isset($data[$index])) {
-                $data[$index] = $value;
+            if (!isset($config[$index])) {
+                $config[$index] = $value;
             }
         }
 
-        if (isset($data['unsecure_base_url'])) {
-            $data['unsecure_base_url'] .= substr($data['unsecure_base_url'], -1) != '/' ? '/' : '';
-            if (strpos($data['unsecure_base_url'], 'http') !== 0) {
-                $data['unsecure_base_url'] = 'http://' . $data['unsecure_base_url'];
+        if (isset($config['unsecure_base_url'])) {
+            $config['unsecure_base_url'] .= substr($config['unsecure_base_url'], -1) != '/' ? '/' : '';
+            if (strpos($config['unsecure_base_url'], 'http') !== 0) {
+                $config['unsecure_base_url'] = 'http://' . $config['unsecure_base_url'];
             }
-            if (!$this->_getInstaller()->getDataModel()->getSkipBaseUrlValidation()) {
-                $this->_checkUrl($data['unsecure_base_url']);
-            }
-        }
-        if (isset($data['secure_base_url'])) {
-            $data['secure_base_url'] .= substr($data['secure_base_url'], -1) != '/' ? '/' : '';
-            if (strpos($data['secure_base_url'], 'http') !== 0) {
-                $data['secure_base_url'] = 'https://' . $data['secure_base_url'];
-            }
-
-            if (!empty($data['use_secure']) && !$this->_getInstaller()->getDataModel()->getSkipUrlValidation()) {
-                $this->_checkUrl($data['secure_base_url']);
+            if (empty($config['skip_base_url_validation'])) {
+                $this->_checkUrl($config['unsecure_base_url']);
             }
         }
+        if (isset($config['secure_base_url'])) {
+            $config['secure_base_url'] .= substr($config['secure_base_url'], -1) != '/' ? '/' : '';
+            if (strpos($config['secure_base_url'], 'http') !== 0) {
+                $config['secure_base_url'] = 'https://' . $config['secure_base_url'];
+            }
 
-        $data['date'] = self::TMP_INSTALL_DATE_VALUE;
-        $data['key'] = self::TMP_ENCRYPT_KEY_VALUE;
-        $data['var_dir'] = $data['root_dir'] . '/var';
+            if (!empty($config['use_secure']) && empty($config['skip_url_validation'])) {
+                $this->_checkUrl($config['secure_base_url']);
+            }
+        }
 
-        $data['use_script_name'] = isset($data['use_script_name']) ? 'true' : 'false';
+        $config['date'] = self::TMP_INSTALL_DATE_VALUE;
+        $config['key'] = self::TMP_ENCRYPT_KEY_VALUE;
+        $config['var_dir'] = $config['root_dir'] . '/var';
 
-        $this->_getInstaller()->getDataModel()->setConfigData($data);
+        $config['use_script_name'] = isset($config['use_script_name']) ? 'true' : 'false';
 
         $contents = $this->_configDirectory->readFile('local.xml.template');
-        foreach ($data as $index => $value) {
+        foreach ($config as $index => $value) {
             $contents = str_replace('{{' . $index . '}}', '<![CDATA[' . $value . ']]>', $contents);
         }
 
         $this->_configDirectory->writeFile($this->_localConfigFile, $contents);
         $this->_configDirectory->changePermissions($this->_localConfigFile, 0777);
+
+        return $config;
     }
 
     /**

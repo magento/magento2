@@ -44,9 +44,9 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
     private $product;
 
     /**
-     * @var \Magento\Bundle\Service\V1\Data\Product\Link\MetadataConverter|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Bundle\Service\V1\Data\Product\LinkConverter|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $metadataConverter;
+    private $linkConverter;
 
     /**
      * @var \Magento\Bundle\Model\Product\Type\Interceptor|\PHPUnit_Framework_MockObject_MockObject
@@ -69,9 +69,9 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
     private $option;
 
     /**
-     * @var \Magento\Bundle\Service\V1\Data\Product\Link\Metadata|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Bundle\Service\V1\Data\Product\Link|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $metadata;
+    private $link;
 
     private $storeId = 2;
 
@@ -110,12 +110,12 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->metadata = $this->getMockBuilder('Magento\Bundle\Service\V1\Data\Product\Link\Metadata')
+        $this->link = $this->getMockBuilder('Magento\Bundle\Service\V1\Data\Product\Link')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->metadataConverter = $this->getMockBuilder(
-            'Magento\Bundle\Service\V1\Data\Product\Link\MetadataConverter'
+        $this->linkConverter = $this->getMockBuilder(
+            'Magento\Bundle\Service\V1\Data\Product\LinkConverter'
         )
             ->setMethods(['createDataFromModel'])
             ->disableOriginalConstructor()
@@ -125,7 +125,7 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
             'Magento\Bundle\Service\V1\Product\Link\ReadService',
             [
                 'productRepository' => $this->productRepository,
-                'metadataConverter' => $this->metadataConverter
+                'linkConverter' => $this->linkConverter
             ]
         );
     }
@@ -157,11 +157,11 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->option->expects($this->any())->method('getSelections')->will($this->returnValue([$this->product]));
 
-        $this->metadataConverter->expects($this->once())->method('createDataFromModel')
+        $this->linkConverter->expects($this->once())->method('createDataFromModel')
             ->with($this->equalTo($this->product), $this->equalTo($this->product))
-            ->will($this->returnValue($this->metadata));
+            ->will($this->returnValue($this->link));
 
-        $this->assertEquals([$this->metadata], $this->model->getChildren($productSku));
+        $this->assertEquals([$this->link], $this->model->getChildren($productSku));
     }
 
     /**
@@ -177,7 +177,7 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->product->expects($this->once())->method('getTypeId')->will($this->returnValue('simple'));
 
-        $this->assertEquals([$this->metadata], $this->model->getChildren($productSku));
+        $this->assertEquals([$this->link], $this->model->getChildren($productSku));
     }
 
     private function getOptions()

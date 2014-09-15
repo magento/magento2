@@ -69,7 +69,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         /** @var $this->_themeMock \Magento\Core\Model\Theme */
         $this->_themeMock = $this->getMock('Magento\Core\Model\Theme', array(), array(), '', false);
         $this->_storeManagerMock = $this->getMockForAbstractClass(
-            'Magento\Store\Model\StoreManagerInterface',
+            'Magento\Framework\StoreManagerInterface',
             array(),
             '',
             true,

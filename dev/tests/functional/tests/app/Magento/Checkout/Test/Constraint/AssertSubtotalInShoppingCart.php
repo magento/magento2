@@ -54,8 +54,8 @@ class AssertSubtotalInShoppingCart extends AbstractConstraint
         Cart $cart,
         CatalogProductSimple $product
     ) {
-        $cartProductSubtotal = $checkoutCart->open()->getCartBlock()
-            ->getCartItemSubTotalByProductName($product->getName());
+        $checkoutCart->open();
+        $cartProductSubtotal = $checkoutCart->getCartBlock()->getCartItem($product)->getSubtotalPrice();
         \PHPUnit_Framework_Assert::assertEquals(
             $cartProductSubtotal,
             $cart->getRowTotal(),

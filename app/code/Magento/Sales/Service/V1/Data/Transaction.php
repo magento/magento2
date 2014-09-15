@@ -63,7 +63,7 @@ class Transaction extends DataObject
     /**
      * Returns parent_id
      *
-     * @return int
+     * @return int|null
      */
     public function getParentId()
     {

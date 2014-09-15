@@ -1,7 +1,5 @@
 <?php
 /**
- * Search Request
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -29,6 +27,9 @@ use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\Search\Request\QueryInterface;
 use Magento\Framework\Search\Request\Dimension;
 
+/**
+ * Search Request
+ */
 interface RequestInterface
 {
     /**

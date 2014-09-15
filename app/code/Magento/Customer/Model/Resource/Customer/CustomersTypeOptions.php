@@ -35,8 +35,8 @@ class CustomersTypeOptions implements \Magento\Framework\Option\ArrayInterface
     public function toOptionArray()
     {
         return array(
-            \Magento\Log\Model\Visitor::VISITOR_TYPE_CUSTOMER => __('Customer'),
-            \Magento\Log\Model\Visitor::VISITOR_TYPE_VISITOR => __('Visitor')
+            \Magento\Customer\Model\Visitor::VISITOR_TYPE_CUSTOMER => __('Customer'),
+            \Magento\Customer\Model\Visitor::VISITOR_TYPE_VISITOR => __('Visitor')
         );
     }
 }

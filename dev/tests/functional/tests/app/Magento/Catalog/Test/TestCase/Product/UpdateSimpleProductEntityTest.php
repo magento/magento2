@@ -130,8 +130,7 @@ class UpdateSimpleProductEntityTest extends Injectable
     {
         $filter = ['sku' => $this->product->getSku()];
         $this->productGrid->open()->getProductGrid()->searchAndOpen($filter);
-        $productBlockForm = $this->editProductPage->getForm();
-        $productBlockForm->fill($product);
-        $this->editProductPage->getFormAction()->save();
+        $this->editProductPage->getProductForm()->fill($product);
+        $this->editProductPage->getFormPageActions()->save();
     }
 }

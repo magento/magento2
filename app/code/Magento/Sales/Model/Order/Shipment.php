@@ -23,6 +23,8 @@
  */
 namespace Magento\Sales\Model\Order;
 
+use Magento\Sales\Model\EntityInterface;
+
 /**
  * Sales order shipment model
  *
@@ -46,14 +48,13 @@ namespace Magento\Sales\Model\Order;
  * @method \Magento\Sales\Model\Order\Shipment setBillingAddressId(int $value)
  * @method int getShipmentStatus()
  * @method \Magento\Sales\Model\Order\Shipment setShipmentStatus(int $value)
- * @method string getIncrementId()
  * @method \Magento\Sales\Model\Order\Shipment setIncrementId(string $value)
  * @method string getCreatedAt()
  * @method \Magento\Sales\Model\Order\Shipment setCreatedAt(string $value)
  * @method string getUpdatedAt()
  * @method \Magento\Sales\Model\Order\Shipment setUpdatedAt(string $value)
  */
-class Shipment extends \Magento\Sales\Model\AbstractModel
+class Shipment extends \Magento\Sales\Model\AbstractModel implements EntityInterface
 {
     const STATUS_NEW = 1;
 
@@ -576,5 +577,15 @@ class Shipment extends \Magento\Sales\Model\AbstractModel
             return $this->getResource()->getReadConnection()->decodeVarbinary($label);
         }
         return $label;
+    }
+
+    /**
+     * Returns increment id
+     *
+     * @return string
+     */
+    public function getIncrementId()
+    {
+        return $this->getData('increment_id');
     }
 }

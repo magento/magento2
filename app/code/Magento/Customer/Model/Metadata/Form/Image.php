@@ -25,6 +25,8 @@
  */
 namespace Magento\Customer\Model\Metadata\Form;
 
+use Magento\Framework\Service\ArrayObjectSearch;
+
 class Image extends File
 {
     /**
@@ -57,23 +59,36 @@ class Image extends File
             $value['name'] = pathinfo($value['name'], PATHINFO_FILENAME) . '.' . $allowImageTypes[$imageProp[2]];
         }
 
+        $maxFileSize = ArrayObjectSearch::getArrayElementByName(
+            $rules,
+            'max_file_size'
+        );
         $errors = array();
-        if (!empty($rules['max_file_size'])) {
+        if (!is_null($maxFileSize)) {
             $size = $value['size'];
-            if ($rules['max_file_size'] < $size) {
+            if ($maxFileSize < $size) {
                 $errors[] = __('"%1" exceeds the allowed file size.', $label);
             }
         }
 
-        if (!empty($rules['max_image_width'])) {
-            if ($rules['max_image_width'] < $imageProp[0]) {
-                $r = $rules['max_image_width'];
+        $maxImageWidth = ArrayObjectSearch::getArrayElementByName(
+            $rules,
+            'max_image_width'
+        );
+        if (!is_null($maxImageWidth)) {
+            if ($maxImageWidth < $imageProp[0]) {
+                $r = $maxImageWidth;
                 $errors[] = __('"%1" width exceeds allowed value of %2 px.', $label, $r);
             }
         }
-        if (!empty($rules['max_image_heght'])) {
-            if ($rules['max_image_heght'] < $imageProp[1]) {
-                $r = $rules['max_image_heght'];
+
+        $maxImageHeight = ArrayObjectSearch::getArrayElementByName(
+            $rules,
+            'max_image_height'
+        );
+        if (!is_null($maxImageHeight)) {
+            if ($maxImageHeight < $imageProp[1]) {
+                $r = $maxImageHeight;
                 $errors[] = __('"%1" height exceeds allowed value of %2 px.', $label, $r);
             }
         }

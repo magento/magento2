@@ -103,4 +103,24 @@
             <argument name="calculator" xsi:type="object">Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface</argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Service\V1\Product\ProductLoadProcessorComposite">
+        <arguments>
+            <argument name="loadProcessors" xsi:type="array">
+                <item name="bundleProductLoadProcessor" xsi:type="array">
+                    <item name="type" xsi:type="object">Magento\Bundle\Service\V1\Product\BundleProductLoadProcessor</item>
+                    <item name="sortOrder" xsi:type="string">50</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Service\V1\Product\ProductSaveProcessorComposite">
+        <arguments>
+            <argument name="saveProcessors" xsi:type="array">
+                <item name="bundleProductSaveProcessor" xsi:type="array">
+                    <item name="type" xsi:type="object">Magento\Bundle\Service\V1\Product\BundleProductSaveProcessor</item>
+                    <item name="sortOrder" xsi:type="string">50</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

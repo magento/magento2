@@ -25,8 +25,6 @@
  */
 namespace Magento\Framework\App;
 
-use Magento\TestFramework\Helper\Bootstrap;
-
 /**
  * Class FilesystemTest
  * Test for Magento\Framework\App\Filesystem class
@@ -41,7 +39,8 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->filesystem = Bootstrap::getObjectManager()->create('Magento\Framework\App\Filesystem');
+        $this->filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\Framework\App\Filesystem');
     }
 
     /**

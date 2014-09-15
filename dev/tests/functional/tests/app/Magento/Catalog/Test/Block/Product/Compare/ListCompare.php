@@ -53,7 +53,7 @@ class ListCompare extends Block
      *
      * @var string
      */
-    protected $nameSelector = './/*[contains(@class, "product name")]/a';
+    protected $nameSelector = './/*[contains(@class, "product-item-name")]/a';
 
     /**
      * Selector for search product via name

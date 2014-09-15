@@ -28,13 +28,19 @@ use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
 
 class CombineTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\Rule\Model\Condition\Combine */
+    /**
+     * @var \Magento\Rule\Model\Condition\Combine
+     */
     protected $_combine;
 
-    /** @var ObjectManagerHelper */
+    /**
+     * @var ObjectManagerHelper
+     */
     protected $_objectManagerHelper;
 
-    /** @var \Magento\Rule\Model\Condition\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /**
+     * @var \Magento\Rule\Model\Condition\Context|\PHPUnit_Framework_MockObject_MockObject
+     */
     protected $_contextMock;
 
     protected function setUp()

@@ -32,11 +32,11 @@ use Magento\Sales\Model\Quote\Address;
  * Allows dispatching before and after events for each controller action
  *
  * @method mixed getCouponCode()
- * @method \Magento\SalesRule\Model\Validator setCouponCode($code)
+ * @method Validator setCouponCode($code)
  * @method mixed getWebsiteId()
- * @method \Magento\SalesRule\Model\Validator setWebsiteId($id)
+ * @method Validator setWebsiteId($id)
  * @method mixed getCustomerGroupId()
- * @method \Magento\SalesRule\Model\Validator setCustomerGroupId($id)
+ * @method Validator setCustomerGroupId($id)
  */
 class Validator extends \Magento\Framework\Model\AbstractModel
 {
@@ -92,12 +92,24 @@ class Validator extends \Magento\Framework\Model\AbstractModel
     protected $rulesApplier;
 
     /**
+     * @var Validator\Pool
+     */
+    protected $validators;
+
+    /**
+     * @var \Magento\Framework\Message\ManagerInterface
+     */
+    protected $messageManager;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param Resource\Rule\CollectionFactory $collectionFactory
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param Utility $utility
      * @param RulesApplier $rulesApplier
+     * @param Validator\Pool $validators
+     * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -109,6 +121,8 @@ class Validator extends \Magento\Framework\Model\AbstractModel
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\SalesRule\Model\Utility $utility,
         \Magento\SalesRule\Model\RulesApplier $rulesApplier,
+        \Magento\SalesRule\Model\Validator\Pool $validators,
+        \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
@@ -117,6 +131,8 @@ class Validator extends \Magento\Framework\Model\AbstractModel
         $this->_catalogData = $catalogData;
         $this->validatorUtility = $utility;
         $this->rulesApplier = $rulesApplier;
+        $this->validators = $validators;
+        $this->messageManager = $messageManager;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -338,6 +354,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
             return $this;
         }
 
+        /** @var \Magento\SalesRule\Model\Rule $rule */
         foreach ($this->_getRules() as $rule) {
             if (\Magento\SalesRule\Model\Rule::CART_FIXED_ACTION == $rule->getSimpleAction()
                 && $this->validatorUtility->canProcessRule($rule, $address)
@@ -352,6 +369,9 @@ class Validator extends \Magento\Framework\Model\AbstractModel
                         continue;
                     }
                     if (!$rule->getActions()->validate($item)) {
+                        continue;
+                    }
+                    if (!$this->canApplyDiscount($item)) {
                         continue;
                     }
                     $qty = $this->validatorUtility->getItemQty($item, $rule);
@@ -492,5 +512,24 @@ class Validator extends \Magento\Framework\Model\AbstractModel
         $this->_rulesItemTotals[$key]['items_count']--;
 
         return $this;
+    }
+
+    /**
+     * Check if we can apply discount to current QuoteItem
+     *
+     * @param AbstractItem $item
+     * @return bool
+     */
+    public function canApplyDiscount(AbstractItem $item)
+    {
+        $result = true;
+        /** @var \Zend_Validate_Interface $validator */
+        foreach ($this->validators->getValidators('discount') as $validator) {
+            $result = $validator->isValid($item);
+            if (!$result) {
+                break;
+            }
+        }
+        return $result;
     }
 }

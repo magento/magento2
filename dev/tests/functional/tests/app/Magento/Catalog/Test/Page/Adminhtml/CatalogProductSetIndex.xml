@@ -31,7 +31,7 @@
             <strategy>css selector</strategy>
         </messagesBlock>
         <pageActionsBlock>
-            <class>Magento\Backend\Test\Block\GridPageActions</class>
+            <class>Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Set\GridPageActions</class>
             <locator>.page-main-actions</locator>
             <strategy>css selector</strategy>
         </pageActionsBlock>

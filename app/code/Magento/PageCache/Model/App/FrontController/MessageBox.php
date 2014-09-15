@@ -110,7 +110,8 @@ class MessageBox
         if ($this->request->isPost() && $this->messageManager->hasMessages()) {
             $publicCookieMetadata = $this->cookieMetadataFactory->createPublicCookieMetadata()
                 ->setDuration(self::COOKIE_PERIOD)
-                ->setPath('/');
+                ->setPath('/')
+                ->setHttpOnly(false);
             $this->cookieManager->setPublicCookie(self::COOKIE_NAME, 1, $publicCookieMetadata);
         }
         return $response;

@@ -205,7 +205,6 @@ return array(
     array('_filesystem', 'Magento\Index\Model\Lock\Storage'),
     array('_coreDir', 'Magento\Sales\Model\Order\Pdf\AbstractPdf'),
     array('_coreDir', 'Magento\ScheduledImportExport\Model\Scheduled\Operation'),
-    array('_dir', 'Magento\Store\App\FrontController\Plugin\DispatchExceptionHandler'),
     array('_dirs', 'Magento\Core\Block\Template'),
     array('_applicationDirs', 'Magento\Framework\App\Config\FileResolver'),
     array('_dir', 'Magento\Core\Model\File\Storage'),
@@ -343,4 +342,7 @@ return array(
     ['_usageFactory', 'Magento\SalesRule\Model\Validator', 'Magento\SalesRule\Model\Validator\Utility'],
     ['_couponFactory', 'Magento\SalesRule\Model\Validator', 'Magento\SalesRule\Model\Validator\Utility'],
     ['_customerFactory', 'Magento\SalesRule\Model\Validator', 'Magento\SalesRule\Model\Validator\Utility'],
+    ['_skipModuleUpdate', '\Magento\Framework\Module\Updater'],
+    ['_factory', 'Magento\Framework\Module\Updater'],
+    ['_resourceList', 'Magento\Framework\Module\Updater'],
 );

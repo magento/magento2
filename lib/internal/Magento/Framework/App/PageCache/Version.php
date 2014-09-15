@@ -96,7 +96,8 @@ class Version
         if ($this->request->isPost()) {
             $publicCookieMetadata = $this->cookieMetadataFactory->createPublicCookieMetadata()
                 ->setDuration(self::COOKIE_PERIOD)
-                ->setPath('/');
+                ->setPath('/')
+                ->setHttpOnly(false);
             $this->cookieManager->setPublicCookie(self::COOKIE_NAME, $this->generateValue(), $publicCookieMetadata);
         }
     }

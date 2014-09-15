@@ -62,6 +62,7 @@ class VariationMatrix
         } while (true);
 
         return $variations;
+
     }
 
     /**
@@ -77,7 +78,7 @@ class VariationMatrix
             $options = array();
             foreach ($attribute['options'] as $valueInfo) {
                 foreach ($attribute['values'] as $priceData) {
-                    if ($priceData['value_index'] == $valueInfo['value']
+                    if (isset($priceData['value_index']) && $priceData['value_index'] == $valueInfo['value']
                         && (!isset($priceData['include']) || $priceData['include'])
                     ) {
                         $valueInfo['price'] = $priceData;

@@ -43,18 +43,18 @@ class Discount extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
     protected $_eventManager = null;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\SalesRule\Model\Validator $validator
      */
     public function __construct(
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\SalesRule\Model\Validator $validator
     ) {
         $this->_eventManager = $eventManager;
@@ -93,8 +93,9 @@ class Discount extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
         $address->setDiscountDescription(array());
 
         $items = $this->_calculator->sortItemsByPriority($items);
+        /** @var \Magento\Sales\Model\Quote\Item $item */
         foreach ($items as $item) {
-            if ($item->getNoDiscount()) {
+            if ($item->getNoDiscount() || !$this->_calculator->canApplyDiscount($item)) {
                 $item->setDiscountAmount(0);
                 $item->setBaseDiscountAmount(0);
                 continue;

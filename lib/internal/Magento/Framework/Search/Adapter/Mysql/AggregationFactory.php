@@ -1,7 +1,5 @@
 <?php
 /**
- * Aggregation Factory
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -25,6 +23,9 @@
  */
 namespace Magento\Framework\Search\Adapter\Mysql;
 
+/**
+ * Aggregation Factory
+ */
 class AggregationFactory
 {
     /**
@@ -62,6 +63,6 @@ class AggregationFactory
                 ]
             );
         }
-        return $this->objectManager->create('\Magento\Framework\Search\Aggregation', $buckets);
+        return $this->objectManager->create('\Magento\Framework\Search\Aggregation', ['buckets' => $buckets]);
     }
 }

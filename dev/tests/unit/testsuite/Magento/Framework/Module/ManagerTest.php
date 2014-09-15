@@ -45,41 +45,47 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
      */
     private $_outputConfig;
 
+    /**
+     * @var \Magento\Framework\Module\ResourceInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $moduleResource;
+
     protected function setUp()
     {
         $this->_moduleList = $this->getMockForAbstractClass('Magento\Framework\Module\ModuleListInterface');
+        $this->_moduleList->expects($this->any())
+            ->method('getModule')
+            ->will($this->returnValueMap([
+                ['Module_One', ['name' => 'One_Module', 'schema_version' => '1']],
+                ['Module_Two', ['name' => 'Two_Module', 'schema_version' => '2']],
+                ['Module_Three', ['name' => 'Two_Three']],
+            ]));
         $this->_outputConfig = $this->getMockForAbstractClass('Magento\Framework\Module\Output\ConfigInterface');
+        $this->moduleResource = $this->getMockForAbstractClass('\Magento\Framework\Module\ResourceInterface');
         $this->_model = new \Magento\Framework\Module\Manager(
             $this->_outputConfig,
             $this->_moduleList,
+            $this->moduleResource,
             array(
-                'Fixture_Module' => self::XML_PATH_OUTPUT_ENABLED,
+                'Module_Two' => self::XML_PATH_OUTPUT_ENABLED,
             )
         );
     }
 
     public function testIsEnabledReturnsTrueForActiveModule()
     {
-        $this->_moduleList->expects(
-            $this->once()
-        )->method(
-            'getModule'
-        )->will(
-            $this->returnValue(array('name' => 'Some_Module'))
-        );
-        $this->assertTrue($this->_model->isEnabled('Some_Module'));
+        $this->assertTrue($this->_model->isEnabled('Module_One'));
     }
 
     public function testIsEnabledReturnsFalseForInactiveModule()
     {
-        $this->_moduleList->expects($this->once())->method('getModule');
-        $this->assertFalse($this->_model->isEnabled('Some_Module'));
+        $this->assertFalse($this->_model->isEnabled('Disabled_Module'));
     }
 
     public function testIsOutputEnabledReturnsFalseForDisabledModule()
     {
         $this->_outputConfig->expects($this->any())->method('isSetFlag')->will($this->returnValue(true));
-        $this->assertFalse($this->_model->isOutputEnabled('Nonexisting_Module'));
+        $this->assertFalse($this->_model->isOutputEnabled('Disabled_Module'));
     }
 
     /**
@@ -89,23 +95,12 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsOutputEnabledGenericConfigPath($configValue, $expectedResult)
     {
-        $this->_moduleList->expects(
-            $this->any()
-        )->method(
-            'getModule'
-        )->will(
-            $this->returnValue(array('name' => 'Module_EnabledOne'))
-        );
-        $this->_outputConfig->expects(
-            $this->once()
-        )->method(
-            'isEnabled'
-        )->with(
-            'Module_EnabledOne'
-        )->will(
-            $this->returnValue($configValue)
-        );
-        $this->assertEquals($expectedResult, $this->_model->isOutputEnabled('Module_EnabledOne'));
+        $this->_outputConfig->expects($this->once())
+            ->method('isEnabled')
+            ->with('Module_One')
+            ->will($this->returnValue($configValue))
+        ;
+        $this->assertEquals($expectedResult, $this->_model->isOutputEnabled('Module_One'));
     }
 
     public function isOutputEnabledGenericConfigPathDataProvider()
@@ -115,36 +110,89 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param bool $configValue
-     * @param string $moduleName
      * @param bool $expectedResult
      * @dataProvider isOutputEnabledCustomConfigPathDataProvider
      */
-    public function testIsOutputEnabledCustomConfigPath($configValue, $moduleName, $expectedResult)
+    public function testIsOutputEnabledCustomConfigPath($configValue, $expectedResult)
     {
-        $this->_moduleList->expects(
-            $this->any()
-        )->method(
-            'getModule'
-        )->will(
-            $this->returnValue(array('name' => $moduleName))
-        );
-        $this->_outputConfig->expects(
-            $this->at(0)
-        )->method(
-            'isSetFlag'
-        )->with(
-            self::XML_PATH_OUTPUT_ENABLED
-        )->will(
-            $this->returnValue($configValue)
-        );
-        $this->assertEquals($expectedResult, $this->_model->isOutputEnabled($moduleName));
+        $this->_outputConfig->expects($this->at(0))
+            ->method('isSetFlag')
+            ->with(self::XML_PATH_OUTPUT_ENABLED)
+            ->will($this->returnValue($configValue))
+        ;
+        $this->assertEquals($expectedResult, $this->_model->isOutputEnabled('Module_Two'));
     }
 
     public function isOutputEnabledCustomConfigPathDataProvider()
     {
         return array(
-            'path literal, output disabled' => array(false, 'Fixture_Module', false),
-            'path literal, output enabled'  => array(true, 'Fixture_Module', true),
+            'path literal, output disabled' => array(false, false),
+            'path literal, output enabled'  => array(true, true),
         );
+    }
+
+    /**
+     * @param string $moduleName
+     * @param string|bool $dbVersion
+     * @param bool $expectedResult
+     *
+     * @dataProvider isDbUpToDateDataProvider
+     */
+    public function testIsDbSchemaUpToDate($moduleName, $dbVersion, $expectedResult)
+    {
+        $resourceName = 'resource';
+        $this->moduleResource->expects($this->once())
+            ->method('getDbVersion')
+            ->with($resourceName)
+            ->will($this->returnValue($dbVersion));
+        $this->assertSame($expectedResult, $this->_model->isDbSchemaUpToDate($moduleName, $resourceName));
+    }
+
+    /**
+     * @param string $moduleName
+     * @param string|bool $dbVersion
+     * @param bool $expectedResult
+     *
+     * @dataProvider isDbUpToDateDataProvider
+     */
+    public function testIsDbDataUpToDate($moduleName, $dbVersion, $expectedResult)
+    {
+        $resourceName = 'resource';
+        $this->moduleResource->expects($this->once())
+            ->method('getDataVersion')
+            ->with($resourceName)
+            ->will($this->returnValue($dbVersion));
+        $this->assertSame($expectedResult, $this->_model->isDbDataUpToDate($moduleName, $resourceName));
+    }
+
+    /**
+     * @return array
+     */
+    public function isDbUpToDateDataProvider()
+    {
+        return [
+            'version in config == version in db' => ['Module_One', '1', true],
+            'version in config < version in db' => ['Module_One', '2', false],
+            'version in config > version in db' => ['Module_Two', '1', false],
+            'no version in db' => ['Module_One', false, false],
+        ];
+    }
+
+    /**
+     * @expectedException \UnexpectedValueException
+     * @expectedExceptionMessage Schema version for module 'Module_Three' is not specified
+     */
+    public function testIsDbSchemaUpToDateException()
+    {
+        $this->_model->isDbSchemaUpToDate('Module_Three', 'resource');
+    }
+
+    /**
+     * @expectedException \UnexpectedValueException
+     * @expectedExceptionMessage Schema version for module 'Module_Three' is not specified
+     */
+    public function testIsDbDataUpToDateException()
+    {
+        $this->_model->isDbDataUpToDate('Module_Three', 'resource');
     }
 }

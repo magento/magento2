@@ -25,13 +25,15 @@
  */
 namespace Magento\Webapi\Controller;
 
+use Magento\Framework\ObjectManager;
+use Magento\Framework\Service\Config\Reader as ServiceConfigReader;
+use Magento\Framework\Service\Data\AttributeValue;
+use Magento\Framework\Service\Data\AttributeValueBuilder;
+use Magento\Webapi\Model\Config\ClassReflector\TypeProcessor;
 use Zend\Code\Reflection\ClassReflection;
 use Zend\Code\Reflection\MethodReflection;
 use Zend\Code\Reflection\ParameterReflection;
-use Magento\Framework\ObjectManager;
-use Magento\Webapi\Model\Config\ClassReflector\TypeProcessor;
-use Magento\Webapi\Model\Soap\Wsdl\ComplexTypeStrategy;
-use \Magento\Webapi\DeserializationException;
+use Magento\Framework\Service\SimpleDataObjectConverter;
 
 class ServiceArgsSerializer
 {
@@ -41,16 +43,30 @@ class ServiceArgsSerializer
     /** @var ObjectManager */
     protected $_objectManager;
 
+    /** @var ServiceConfigReader */
+    protected $serviceConfigReader;
+
+    /** @var AttributeValueBuilder */
+    protected $attributeValueBuilder;
+
     /**
      * Initialize dependencies.
      *
      * @param TypeProcessor $typeProcessor
      * @param ObjectManager $objectManager
+     * @param ServiceConfigReader $serviceConfigReader
+     * @param AttributeValueBuilder $attributeValueBuilder
      */
-    public function __construct(TypeProcessor $typeProcessor, ObjectManager $objectManager)
-    {
+    public function __construct(
+        TypeProcessor $typeProcessor,
+        ObjectManager $objectManager,
+        ServiceConfigReader $serviceConfigReader,
+        AttributeValueBuilder $attributeValueBuilder
+    ) {
         $this->_typeProcessor = $typeProcessor;
         $this->_objectManager = $objectManager;
+        $this->serviceConfigReader = $serviceConfigReader;
+        $this->attributeValueBuilder = $attributeValueBuilder;
     }
 
     /**
@@ -139,16 +155,76 @@ class ServiceArgsSerializer
         foreach ($data as $propertyName => $value) {
             // Converts snake_case to uppercase CamelCase to help form getter/setter method names
             // This use case is for REST only. SOAP request data is already camel cased
-            $camelCaseProperty = str_replace(' ', '', ucwords(str_replace('_', ' ', $propertyName)));
+            $camelCaseProperty = SimpleDataObjectConverter::snakeCaseToUpperCamelCase($propertyName);
             $methodName = $this->_processGetterMethod($class, $camelCaseProperty);
             $methodReflection = $class->getMethod($methodName);
             if ($methodReflection->isPublic()) {
                 $returnType = $this->_typeProcessor->getGetterReturnType($methodReflection)['type'];
                 $setterName = 'set' . $camelCaseProperty;
-                $builder->{$setterName}($this->_convertValue($value, $returnType));
+                if ($camelCaseProperty === 'CustomAttributes') {
+                    $setterValue = $this->convertCustomAttributeValue($value, $returnType, $className);
+                } else {
+                    $setterValue = $this->_convertValue($value, $returnType);
+                }
+                $builder->{$setterName}($setterValue);
             }
         }
         return $builder->create();
+    }
+
+    /**
+     * Convert custom attribute data array to array of AttributeValue Data Object
+     *
+     * @param array $customAttributesValueArray
+     * @param string $returnType
+     * @param string $dataObjectClassName
+     * @return AttributeValue[]
+     */
+    protected function convertCustomAttributeValue($customAttributesValueArray, $returnType, $dataObjectClassName)
+    {
+        $result = [];
+        $allAttributes = $this->serviceConfigReader->read();
+        $dataObjectClassName = ltrim($dataObjectClassName, '\\');
+        if (!isset($allAttributes[$dataObjectClassName])) {
+            return $this->_convertValue($customAttributesValueArray, $returnType);
+        }
+        $dataObjectAttributes = $allAttributes[$dataObjectClassName];
+        $camelCaseAttributeCodeKey = lcfirst(
+            SimpleDataObjectConverter::snakeCaseToUpperCamelCase(AttributeValue::ATTRIBUTE_CODE)
+        );
+        foreach ($customAttributesValueArray as $customAttribute) {
+            if (isset($customAttribute[AttributeValue::ATTRIBUTE_CODE])) {
+                $customAttributeCode = $customAttribute[AttributeValue::ATTRIBUTE_CODE];
+            } else if (isset($customAttribute[$camelCaseAttributeCodeKey])) {
+                $customAttributeCode = $customAttribute[$camelCaseAttributeCodeKey];
+            } else {
+                $customAttributeCode = null;
+            }
+
+            //Check if type is defined, else default to mixed
+            $type = isset($dataObjectAttributes[$customAttributeCode])
+                ? $dataObjectAttributes[$customAttributeCode]
+                : TypeProcessor::ANY_TYPE;
+
+            $customAttributeValue = $customAttribute[AttributeValue::VALUE];
+            if (is_array($customAttributeValue)) {
+                //If type for AttributeValue's value as array is mixed, further processing is not possible
+                if ($type === TypeProcessor::ANY_TYPE) {
+                    continue;
+                }
+                //If custom attribute value is an array then its a data object type
+                $attributeValue = $this->_createFromArray($type, $customAttributeValue);
+            } else {
+                $attributeValue = $this->_convertValue($customAttributeValue, $type);
+            }
+            //Populate the attribute value data object once the value for custom attribute is derived based on type
+            $result[] = $this->attributeValueBuilder
+                ->setAttributeCode($customAttributeCode)
+                ->setValue($attributeValue)
+                ->create();
+        }
+
+        return $result;
     }
 
     /**
@@ -172,8 +248,10 @@ class ServiceArgsSerializer
                 // Initializing the result for array type else it will return null for empty array
                 $result = is_array($value) ? [] : null;
                 $itemType = $this->_typeProcessor->getArrayItemType($type);
-                foreach ($value as $key => $item) {
-                    $result[$key] = $this->_createFromArray($itemType, $item);
+                if (is_array($value)) {
+                    foreach ($value as $key => $item) {
+                        $result[$key] = $this->_createFromArray($itemType, $item);
+                    }
                 }
             } else {
                 $result = $this->_createFromArray($type, $value);

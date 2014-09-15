@@ -39,6 +39,9 @@
     <assertProductReviewIsAvailableForProduct module="Magento_Reports">
         <severeness>low</severeness>
     </assertProductReviewIsAvailableForProduct>
+    <assertNewAccountsReportTotalResult module="Magento_Reports">
+        <severeness>low</severeness>
+    </assertNewAccountsReportTotalResult>
     <assertProductReviewsQtyByCustomer module="Magento_Reports">
         <severeness>low</severeness>
     </assertProductReviewsQtyByCustomer>
@@ -48,4 +51,10 @@
     <assertProductReportByCustomerNotInGrid module="Magento_Reports">
         <severeness>low</severeness>
     </assertProductReportByCustomerNotInGrid>
+    <assertProductViewsReportTotalResult module="Magento_Reports">
+        <severeness>low</severeness>
+    </assertProductViewsReportTotalResult>
+    <assertProductInCartResult module="Magento_Reports">
+        <severeness>low</severeness>
+    </assertProductInCartResult>
 </constraint>

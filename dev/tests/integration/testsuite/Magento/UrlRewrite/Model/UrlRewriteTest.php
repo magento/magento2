@@ -54,7 +54,7 @@ class UrlRewriteTest extends \PHPUnit_Framework_TestCase
     {
         $this->model->setStoreId(
             $this->objectManager->get(
-                'Magento\Store\Model\StoreManagerInterface'
+                'Magento\Framework\StoreManagerInterface'
             )->getDefaultStoreView()->getId()
         )->setRequestPath(
             'fancy/url.html'
@@ -72,7 +72,7 @@ class UrlRewriteTest extends \PHPUnit_Framework_TestCase
             );
             $read->setStoreId(
                 $this->objectManager->get(
-                    'Magento\Store\Model\StoreManagerInterface'
+                    'Magento\Framework\StoreManagerInterface'
                 )->getDefaultStoreView()->getId()
             )->loadByRequestPath(
                 'fancy/url.html'
@@ -98,7 +98,7 @@ class UrlRewriteTest extends \PHPUnit_Framework_TestCase
     {
         $this->model->setStoreId(
             $this->objectManager->get(
-                'Magento\Store\Model\StoreManagerInterface'
+                'Magento\Framework\StoreManagerInterface'
             )->getDefaultStoreView()->getId()
         )->setRequestPath(
             'product1.html'
@@ -118,7 +118,7 @@ class UrlRewriteTest extends \PHPUnit_Framework_TestCase
             );
             $read->setStoreId(
                 $this->objectManager->get(
-                    'Magento\Store\Model\StoreManagerInterface'
+                    'Magento\Framework\StoreManagerInterface'
                 )->getDefaultStoreView()->getId()
             )->loadByIdPath(
                 'product/1'
@@ -194,14 +194,8 @@ class UrlRewriteTest extends \PHPUnit_Framework_TestCase
         $scopeConfig = $this->objectManager->create(
             '\Magento\Framework\App\Config\ScopeConfigInterface'
         );
-        $cookieMetadataFactory = $this->objectManager->create(
-            '\Magento\Framework\Stdlib\Cookie\CookieMetadataFactory'
-        );
-        $cookieManager = $this->objectManager->create(
-            '\Magento\Framework\Stdlib\CookieManager'
-        );
         $storeManager = $this->objectManager->create(
-            '\Magento\Store\Model\StoreManagerInterface'
+            '\Magento\Framework\StoreManagerInterface'
         );
         $httpContext = $this->objectManager->create(
             '\Magento\Framework\App\Http\Context'
@@ -211,8 +205,6 @@ class UrlRewriteTest extends \PHPUnit_Framework_TestCase
             'context' => $context,
             'registry' => $registry,
             'scopeConfig' => $scopeConfig,
-            'cookieMetadataFactory' => $cookieMetadataFactory,
-            'cookieManager' => $cookieManager,
             'storeManager' => $storeManager,
             'httpContext' => $httpContext,
         ];
@@ -275,7 +267,7 @@ class UrlRewriteTest extends \PHPUnit_Framework_TestCase
         $request = $this->objectManager
             ->create('Magento\Framework\App\RequestInterface');
         $_GET['___from_store'] = $this->objectManager->get(
-            'Magento\Store\Model\StoreManagerInterface'
+            'Magento\Framework\StoreManagerInterface'
         )->getDefaultStoreView()->getCode();
         $this->assertFalse($this->model->rewrite($request));
     }
@@ -298,7 +290,7 @@ class UrlRewriteTest extends \PHPUnit_Framework_TestCase
     {
         $this->model->setStoreId(
             $this->objectManager->get(
-                'Magento\Store\Model\StoreManagerInterface'
+                'Magento\Framework\StoreManagerInterface'
             )->getDefaultStoreView()->getId()
         )->setRequestPath(
             'fancy/url.html'

@@ -24,20 +24,30 @@
 
 namespace Magento\Catalog\Test\Constraint;
 
+use Mtf\ObjectManager;
 use Mtf\Client\Browser;
-use Mtf\Fixture\FixtureInterface;
-use Mtf\Constraint\AbstractConstraint;
+use Mtf\Constraint\AbstractAssertForm;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
+use Mtf\Fixture\FixtureInterface;
+use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProductInjectable;
 
 /**
  * Class AssertProductPage
+ * Assert that displayed product data on product page(front-end) equals passed from fixture.
  */
-class AssertProductPage extends AbstractConstraint
+class AssertProductPage extends AbstractAssertForm
 {
+    /**
+     * Product view block on frontend page
+     *
+     * @var \Magento\ConfigurableProduct\Test\Block\Product\View
+     */
+    protected $productView;
+
     /**
      * Product fixture
      *
-     * @var FixtureInterface
+     * @var ConfigurableProductInjectable
      */
     protected $product;
 
@@ -46,123 +56,159 @@ class AssertProductPage extends AbstractConstraint
      *
      * @var string
      */
-    protected $severeness = 'low';
+    protected $severeness = 'middle';
 
     /**
-     * Error messages
+     * Assert that displayed product data on product page(front-end) equals passed from fixture:
+     * 1. Product Name
+     * 2. Price
+     * 3. Special price
+     * 4. SKU
+     * 5. Description
+     * 6. Short Description
      *
-     * @var array
-     */
-    protected $errorsMessages = [
-        'name' => '- product name on product view page is not correct.',
-        'sku' => '- product sku on product view page is not correct.',
-        'regular_price' => '- product regular price on product view page is not correct.',
-        'short_description' => '- product short description on product view page is not correct.',
-        'description' => '- product description on product view page is not correct.'
-    ];
-
-    /**
-     * Assertion that the product page is displayed correctly
-     *
-     * @param CatalogProductView $catalogProductView
      * @param Browser $browser
+     * @param CatalogProductView $catalogProductView
      * @param FixtureInterface $product
      * @return void
      */
-    public function processAssert(CatalogProductView $catalogProductView, Browser $browser, FixtureInterface $product)
+    public function processAssert(Browser $browser, CatalogProductView $catalogProductView, FixtureInterface $product)
     {
-        $this->product = $product;
-        // TODO fix initialization url for frontend page
-        //Open product view page
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
 
-        $data = $this->prepareData($catalogProductView);
-        $badValues = array_diff($data['onPage'], $data['fixture']);
-        $errors = array_intersect_key($this->errorsMessages, array_keys($badValues));
-        $errors += $this->verifySpecialPrice($catalogProductView);
+        $this->product = $product;
+        $this->productView = $catalogProductView->getViewBlock();
+
+        $errors = $this->verify();
         \PHPUnit_Framework_Assert::assertEmpty(
             $errors,
-            PHP_EOL . 'Found the following errors:' . PHP_EOL . implode(' ' . PHP_EOL, $this->errorsMessages)
+            "\nFound the following errors:\n" . implode(" \n", $errors)
         );
     }
 
     /**
-     * Prepare array for assert
+     * Verify displayed product data on product page(front-end) equals passed from fixture
      *
-     * @param CatalogProductView $catalogProductView
      * @return array
      */
-    protected function prepareData(CatalogProductView $catalogProductView)
+    protected function verify()
     {
-        $viewBlock = $catalogProductView->getViewBlock();
-        $price = $viewBlock->getProductPriceBlock()->getPrice();
-        $data = [
-            'onPage' => [
-                'name' => $viewBlock->getProductName(),
-                'sku' => $viewBlock->getProductSku(),
-            ],
-            'fixture' => [
-                'name' => $this->product->getName(),
-                'sku' => $this->product->getSku(),
-            ]
-        ];
+        $errors = [];
 
-        list($priceOnPage, $priceFixture) = $this->preparePrice($price);
-        $data['onPage'] += $priceOnPage;
-        $data['fixture'] += $priceFixture;
+        $errors[] = $this->verifyName();
+        $errors[] = $this->verifyPrice();
+        $errors[] = $this->verifySpecialPrice();
+        $errors[] = $this->verifySku();
+        $errors[] = $this->verifyDescription();
+        $errors[] = $this->verifyShortDescription();
 
-        if ($productShortDescription = $this->product->getShortDescription()) {
-            $data['fixture']['short_description'] = $productShortDescription;
-            $data['onPage']['short_description'] = $viewBlock->getProductShortDescription();
-        }
-        if ($productDescription = $this->product->getDescription()) {
-            $data['fixture']['description'] = $productDescription;
-            $data['onPage']['description'] = $viewBlock->getProductDescription();
-        }
-
-        return $data;
+        return array_filter($errors);
     }
 
     /**
-     * Prepare Price data
+     * Verify displayed product name on product page(front-end) equals passed from fixture
      *
-     * @param array $price
-     * @return array
+     * @return string|null
      */
-    protected function preparePrice($price)
+    protected function verifyName()
     {
-        return [
-            ['regular_price' => $price['price_regular_price']],
-            ['regular_price' => number_format($this->product->getPrice(), 2)]
-        ];
+        $fixtureProductName = $this->product->getName();
+        $formProductName = $this->productView->getProductName();
+
+        if ($fixtureProductName == $formProductName) {
+            return null;
+        }
+        return "Displayed product name on product page(front-end) not equals passed from fixture. "
+        . "Actual: {$formProductName}, expected: {$fixtureProductName}.";
     }
 
     /**
-     * Checking the special product price
+     * Verify displayed product price on product page(front-end) equals passed from fixture
      *
-     * @param CatalogProductView $catalogProductView
-     * @return array
+     * @return string|null
      */
-    protected function verifySpecialPrice(CatalogProductView $catalogProductView)
+    protected function verifyPrice()
     {
-        $priceBlock = $catalogProductView->getViewBlock()->getProductPriceBlock();
-        $price = $priceBlock->isVisible() ? $priceBlock->getPrice() : ['price_special_price' => null];
-        $priceComparing = false;
+        $fixtureProductPrice = number_format($this->product->getPrice(), 2);
+        $formProductPrice = $this->productView->getPriceBlock()->getRegularPrice();
 
-        if ($specialPrice = $this->product->getSpecialPrice()) {
-            $priceComparing = $specialPrice;
+        if ($fixtureProductPrice == $formProductPrice) {
+            return null;
         }
-        if ($groupPrice = $this->product->getGroupPrice()) {
-            $groupPrice = reset($groupPrice);
-            $priceComparing = $groupPrice['price'];
-        }
-        if ($priceComparing && isset($price['price_special_price'])
-            && number_format($priceComparing, 2) !== $price['price_special_price']
-        ) {
-            return ['special_price' => '- product special price on product view page is not correct.'];
+        return "Displayed product price on product page(front-end) not equals passed from fixture. "
+        . "Actual: {$formProductPrice}, expected: {$fixtureProductPrice}.";
+    }
+
+    /**
+     * Verify displayed product special price on product page(front-end) equals passed from fixture
+     *
+     * @return string|null
+     */
+    protected function verifySpecialPrice()
+    {
+        $fixtureProductSpecialPrice = $this->product->getSpecialPrice();
+        if (!$fixtureProductSpecialPrice) {
+            return null;
         }
 
-        return [];
+        $fixtureProductSpecialPrice = number_format($fixtureProductSpecialPrice, 2);
+        $formProductSpecialPrice = $this->productView->getPriceBlock()->getSpecialPrice();
+        if ($fixtureProductSpecialPrice == $formProductSpecialPrice) {
+            return null;
+        }
+        return "Displayed product special price on product page(front-end) not equals passed from fixture. "
+            . "Actual: {$formProductSpecialPrice}, expected: {$fixtureProductSpecialPrice}.";
+    }
+
+    /**
+     * Verify displayed product sku on product page(front-end) equals passed from fixture
+     *
+     * @return string|null
+     */
+    protected function verifySku()
+    {
+        $fixtureProductSku = $this->product->getSku();
+        $formProductSku = $this->productView->getProductSku();
+
+        if ($fixtureProductSku == $formProductSku) {
+            return null;
+        }
+        return "Displayed product sku on product page(front-end) not equals passed from fixture. "
+            . "Actual: {$formProductSku}, expected: {$fixtureProductSku}.";
+    }
+
+    /**
+     * Verify displayed product description on product page(front-end) equals passed from fixture
+     *
+     * @return string|null
+     */
+    protected function verifyDescription()
+    {
+        $fixtureProductDescription = $this->product->getDescription();
+        $formProductDescription = $this->productView->getProductDescription();
+
+        if ($fixtureProductDescription == $formProductDescription) {
+            return null;
+        }
+        return "Displayed product description on product page(front-end) not equals passed from fixture. "
+            . "Actual: {$formProductDescription}, expected: {$fixtureProductDescription}.";
+    }
+
+    /**
+     * Verify displayed product short description on product page(front-end) equals passed from fixture
+     *
+     * @return string|null
+     */
+    protected function verifyShortDescription()
+    {
+        $fixtureProductShortDescription = $this->product->getShortDescription();
+        $formProductShortDescription = $this->productView->getProductShortDescription();
+
+        if ($fixtureProductShortDescription == $formProductShortDescription) {
+            return null;
+        }
+        return "Displayed product short description on product page(front-end) not equals passed from fixture. "
+            . "Actual: {$formProductShortDescription}, expected: {$fixtureProductShortDescription}.";
     }
 
     /**
@@ -172,6 +218,6 @@ class AssertProductPage extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Product on product view page is not correct.';
+        return 'Product on product view page is correct.';
     }
 }

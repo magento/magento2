@@ -25,7 +25,7 @@
 namespace Magento\Checkout\Service\V1\PaymentMethod;
 
 use \Magento\Checkout\Service\V1\QuoteLoader;
-use \Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\StoreManagerInterface;
 use \Magento\Checkout\Service\V1\Data\Cart\PaymentMethod\Builder;
 use \Magento\Framework\Exception\State\InvalidTransitionException;
 use \Magento\Payment\Model\MethodList;
@@ -33,7 +33,7 @@ use \Magento\Payment\Model\MethodList;
 class WriteService implements WriteServiceInterface
 {
     /**
-     * @var StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -54,7 +54,7 @@ class WriteService implements WriteServiceInterface
 
     /**
      * @param QuoteLoader $quoteLoader
-     * @param StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param Builder $paymentMethodBuilder
      * @param \Magento\Payment\Model\Checks\ZeroTotal $zeroTotalValidator
      */

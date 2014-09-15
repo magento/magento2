@@ -63,7 +63,7 @@ $productByUsedAttributes = $this->getAssociatedProducts();
                     <?php
                     foreach ($usedProductAttributes as $attribute) {
                         /** @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
-                        echo '<th class="col-' . preg_replace('#[^a-z0-9]+#', '-', strtolower($attribute->getStoreLabel())) . '">', $attribute->getStoreLabel(), '</th>', PHP_EOL;
+                        echo '<th class="col-' . preg_replace('#[^a-z0-9]+#', '-', strtolower($attribute->getStoreLabel(0))) . '">', $attribute->getStoreLabel(0), '</th>', PHP_EOL;
                     }
                     ?>
                     <th class="col-actions hidden"></th>

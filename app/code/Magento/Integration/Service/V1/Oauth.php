@@ -40,7 +40,7 @@ use Magento\Integration\Model\Oauth\Consumer as ConsumerModel;
 class Oauth implements OauthInterface
 {
     /**
-     * @var  \Magento\Store\Model\StoreManagerInterface
+     * @var  \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -82,7 +82,7 @@ class Oauth implements OauthInterface
     /**
      * Initialize dependencies.
      *
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param ConsumerFactory $consumerFactory
      * @param TokenFactory $tokenFactory
      * @param IntegrationOauthHelper $dataHelper
@@ -92,7 +92,7 @@ class Oauth implements OauthInterface
      * @param TokenProvider $tokenProvider
      */
     public function __construct(
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         ConsumerFactory $consumerFactory,
         TokenFactory $tokenFactory,
         IntegrationOauthHelper $dataHelper,

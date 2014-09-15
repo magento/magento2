@@ -54,7 +54,7 @@ class Context extends \Magento\Framework\View\Element\Context
     /**
      * Store manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -81,7 +81,7 @@ class Context extends \Magento\Framework\View\Element\Context
      * @param \Magento\Framework\View\FileSystem $viewFileSystem
      * @param \Magento\Framework\View\TemplateEnginePool $enginePool
      * @param \Magento\Framework\App\State $appState
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -108,7 +108,7 @@ class Context extends \Magento\Framework\View\Element\Context
         \Magento\Framework\View\FileSystem $viewFileSystem,
         \Magento\Framework\View\TemplateEnginePool $enginePool,
         \Magento\Framework\App\State $appState,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Framework\StoreManagerInterface $storeManager
     ) {
         parent::__construct(
             $request,
@@ -192,7 +192,7 @@ class Context extends \Magento\Framework\View\Element\Context
     /**
      * Get store manager
      *
-     * @return \Magento\Store\Model\StoreManagerInterface
+     * @return \Magento\Framework\StoreManagerInterface
      */
     public function getStoreManager()
     {

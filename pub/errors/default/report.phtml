@@ -100,7 +100,7 @@
         </div>
     </div>
     <?php endif; ?>
-    <?php if ($this->reportId && $this->reportUrl): ?>
-        <p>Error log record number: <a href="<?php echo htmlspecialchars($this->reportUrl) ?>"><?php echo $this->reportId ?></a></p>
+    <?php if ($this->reportId): ?>
+        <p>Error log record number: <?php echo $this->reportId ?></p>
     <?php endif; ?>
 </div>

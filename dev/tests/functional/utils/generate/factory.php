@@ -21,11 +21,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-umask(0);
 
-$appRoot = dirname(dirname(dirname(dirname(dirname(__DIR__)))));
-
-require $appRoot . '/app/bootstrap.php';
+require __DIR__ . '/../../../../../app/bootstrap.php';
+$bootstrap = \Magento\Framework\App\Bootstrap::create(BP, $_SERVER);
 
 $mtfRoot = dirname(dirname(dirname(__FILE__)));
 $mtfRoot = str_replace('\\', '/', $mtfRoot);
@@ -41,6 +39,8 @@ $path .= PATH_SEPARATOR . MTF_BP . '/vendor/magento/mtf';
 $path .= PATH_SEPARATOR . MTF_BP . '/vendor/phpunit/phpunit';
 set_include_path($path);
 
-$entryPoint = new \Magento\Framework\App\EntryPoint\EntryPoint(BP, $_SERVER);
-$entryPoint->run('Mtf\Util\Generate\Factory');
+$om = $bootstrap->getObjectManager();
+/** @var \Mtf\Util\Generate\Factory $generator */
+$generator = $om->create('Mtf\Util\Generate\Factory');
+$generator->launch();
 \Mtf\Util\Generate\GenerateResult::displayResults();

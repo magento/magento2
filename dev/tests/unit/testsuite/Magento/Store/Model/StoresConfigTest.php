@@ -57,7 +57,7 @@ class StoresConfigTest extends \PHPUnit_Framework_TestCase
     {
         $this->_storeOne = $this->getMock('Magento\Store\Model\Store', array(), array(), '', false);
         $this->_storeTwo = $this->getMock('Magento\Store\Model\Store', array(), array(), '', false);
-        $this->_storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $this->_storeManager = $this->getMock('Magento\Framework\StoreManagerInterface');
         $this->_config = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
         $this->_model = new \Magento\Store\Model\StoresConfig(

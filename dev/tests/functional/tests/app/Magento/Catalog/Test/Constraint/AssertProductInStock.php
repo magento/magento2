@@ -61,7 +61,7 @@ class AssertProductInStock extends AbstractConstraint
         \PHPUnit_Framework_Assert::assertEquals(
             self::STOCK_AVAILABILITY,
             $catalogProductView->getViewBlock()->stockAvailability(),
-            'Control \'' . self::STOCK_AVAILABILITY . '\' is not visible.'
+            'Control "' . self::STOCK_AVAILABILITY . '" is not visible.'
         );
     }
 

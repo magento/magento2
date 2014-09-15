@@ -56,6 +56,21 @@ class CreatePostTest extends \PHPUnit_Framework_TestCase
      */
     protected $response;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $request;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $urlFactoryMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $urlMock;
+
     protected function setUp()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
@@ -63,7 +78,16 @@ class CreatePostTest extends \PHPUnit_Framework_TestCase
         $this->customerHelperMock = $this->getMock('\Magento\Customer\Helper\Data', [], [], '', false);
         $this->redirectMock = $this->getMock('Magento\Framework\App\Response\RedirectInterface');
         $this->accountServiceMock = $this->getMock('Magento\Customer\Service\V1\CustomerAccountServiceInterface');
-        $this->response = $this->getMock('Magento\Framework\App\ResponseInterface');
+        $this->response = $this->getMock('Magento\Webapi\Controller\Response');
+        $this->request = $this->getMockBuilder('Magento\Webapi\Controller\Request')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->urlFactoryMock = $this->getMockBuilder('\Magento\Framework\UrlFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->urlMock = $this->getMockBuilder('\Magento\Backend\Model\Url')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->object = $objectManager->getObject('Magento\Customer\Controller\Account\CreatePost',
             [
                 'response' => $this->response,
@@ -71,6 +95,8 @@ class CreatePostTest extends \PHPUnit_Framework_TestCase
                 'customerHelperData' => $this->customerHelperMock,
                 'redirect' => $this->redirectMock,
                 'customerAccountService' => $this->accountServiceMock,
+                'request' => $this->request,
+                'urlFactory' => $this->urlFactoryMock,
             ]
         );
     }
@@ -96,6 +122,26 @@ class CreatePostTest extends \PHPUnit_Framework_TestCase
         $this->accountServiceMock->expects($this->never())
             ->method('createCustomer');
 
+        $this->object->execute();
+    }
+
+    public function testRegenerateIdOnExecution()
+    {
+        $this->customerSession->expects($this->once())
+            ->method('regenerateId');
+        $this->customerSession->expects($this->once())
+            ->method('isLoggedIn')
+            ->will($this->returnValue(false));
+
+        $this->customerHelperMock->expects($this->once())
+            ->method('isRegistrationAllowed')
+            ->will($this->returnValue(true));
+        $this->request->expects($this->once())
+            ->method('isPost')
+            ->will($this->returnValue(true));
+        $this->urlFactoryMock->expects($this->once())
+            ->method('create')
+            ->will($this->returnValue($this->urlMock));
         $this->object->execute();
     }
 }

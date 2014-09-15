@@ -72,12 +72,12 @@ class RequestFactoryTest extends \PHPUnit_Framework_TestCase
             'queries' => ':str',
             'filters' => 'f',
             'query' => 'q',
-            'aggregation' => 'a',
+            'aggregations' => 'a',
             'index' => 'i',
             'from' => '1',
             'size' => '15',
-            'demensions' => [
-                'name' => ['name' =>'', 'value' => '']
+            'dimensions' => [
+                'name' => ['name' => '', 'value' => '']
             ]
         ];
         $mappedQuery = $configData['query'] . 'Mapped';
@@ -103,7 +103,7 @@ class RequestFactoryTest extends \PHPUnit_Framework_TestCase
                         'objectManager' => $this->objectManager,
                         'queries' => $bindValues[':str'],
                         'rootQueryName' => $configData['query'],
-                        'aggregation' => $configData['aggregation'],
+                        'aggregations' => $configData['aggregations'],
                         'filters' => $configData['filters']
                     ]
                 )
@@ -137,7 +137,7 @@ class RequestFactoryTest extends \PHPUnit_Framework_TestCase
                         'from' => $configData['from'],
                         'size' => $configData['size'],
                         'query' => $mappedQuery,
-                        'demensions' => [
+                        'dimensions' => [
                             'name' => $dimension
                         ],
                         'buckets' => [],

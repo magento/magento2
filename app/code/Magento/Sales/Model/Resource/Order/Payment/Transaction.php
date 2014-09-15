@@ -28,7 +28,7 @@ namespace Magento\Sales\Model\Resource\Order\Payment;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Transaction extends \Magento\Sales\Model\Resource\Order\AbstractOrder
+class Transaction extends \Magento\Sales\Model\Resource\Entity
 {
     /**
      * Serializeable field: additional_information

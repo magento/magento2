@@ -29,6 +29,13 @@ namespace Magento\Log\Model\Resource;
 class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
     /**
+     * Primary key auto increment flag
+     *
+     * @var bool
+     */
+    protected $_isPkAutoIncrement = false;
+
+    /**
      * Magento string lib
      *
      * @var \Magento\Framework\Stdlib\String
@@ -41,20 +48,20 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $_date;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Stdlib\String $string
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Framework\Stdlib\String $string
     ) {
         $this->_date = $date;
@@ -82,7 +89,7 @@ class Visitor extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected function _prepareDataForSave(\Magento\Framework\Model\AbstractModel $visitor)
     {
         return array(
-            'session_id' => $visitor->getSessionId(),
+            'visitor_id' => $visitor->getVisitorId(),
             'first_visit_at' => $visitor->getFirstVisitAt(),
             'last_visit_at' => $visitor->getLastVisitAt(),
             'last_url_id' => $visitor->getLastUrlId() ? $visitor->getLastUrlId() : 0,

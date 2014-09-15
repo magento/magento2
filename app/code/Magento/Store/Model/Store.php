@@ -25,6 +25,7 @@ namespace Magento\Store\Model;
 
 use Magento\Directory\Model\Currency\Filter;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\StoreManagerInterface;
 
 /**
  * Store model
@@ -117,11 +118,6 @@ class Store extends AbstractModel implements
      * Cookie name
      */
     const COOKIE_NAME = 'store';
-
-    /**
-     * Cookie currency key
-     */
-    const COOKIE_CURRENCY = 'currency';
 
     /**
      * Script name, which returns all the images
@@ -354,7 +350,7 @@ class Store extends AbstractModel implements
         \Magento\Core\Model\Resource\Config\Data $configDataResource,
         \Magento\Framework\App\Filesystem $filesystem,
         \Magento\Framework\App\Config\ReinitableConfigInterface $config,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Framework\Session\SidResolverInterface $sidResolver,
         \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
         \Magento\Framework\Stdlib\CookieManager $cookieManager,
@@ -429,9 +425,8 @@ class Store extends AbstractModel implements
     protected function _getSession()
     {
         if (!$this->_session->isSessionExists()) {
-            $this->_session->start(
-                'store_' . $this->getCode()
-            );
+            $this->_session->setName('store_' . $this->getCode());
+            $this->_session->start();
         }
         return $this->_session;
     }
@@ -497,7 +492,7 @@ class Store extends AbstractModel implements
     protected function _getConfig($path)
     {
         $data = $this->_config->getValue($path, ScopeInterface::SCOPE_STORE, $this->getCode());
-        if (!$data && !$this->_appState->isInstalled()) {
+        if (!$data) {
             $data = $this->_config->getValue($path, \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT);
         }
         return $data === false ? null : $data;
@@ -629,10 +624,7 @@ class Store extends AbstractModel implements
      */
     protected function _updatePathUseRewrites($url)
     {
-        if ($this->getForceDisableRewrites() || !$this->_getConfig(
-            self::XML_PATH_USE_REWRITES
-        ) || !$this->_appState->isInstalled()
-        ) {
+        if ($this->getForceDisableRewrites() || !$this->_getConfig(self::XML_PATH_USE_REWRITES)) {
             if ($this->_isCustomEntryPoint()) {
                 $indexFileName = 'index.php';
             } else {
@@ -699,7 +691,6 @@ class Store extends AbstractModel implements
     {
         return !($this->hasDisableStoreInUrl() &&
             $this->getDisableStoreInUrl()) &&
-            $this->_appState->isInstalled() &&
             $this->_getConfig(self::XML_PATH_STORE_IN_URL);
     }
 
@@ -757,26 +748,21 @@ class Store extends AbstractModel implements
             return true;
         }
 
-        if ($this->_appState->isInstalled()) {
-            $secureBaseUrl = $this->_config->getValue(
-                self::XML_PATH_SECURE_BASE_URL,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-            );
+        $secureBaseUrl = $this->_config->getValue(
+            self::XML_PATH_SECURE_BASE_URL,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
 
-            if (!$secureBaseUrl) {
-                return false;
-            }
-
-            $uri = \Zend_Uri::factory($secureBaseUrl);
-            $port = $uri->getPort();
-            $isSecure = $uri->getScheme() == 'https' && isset(
-                $_SERVER['SERVER_PORT']
-            ) && $port == $_SERVER['SERVER_PORT'];
-            return $isSecure;
-        } else {
-            $isSecure = isset($_SERVER['SERVER_PORT']) && 443 == $_SERVER['SERVER_PORT'];
-            return $isSecure;
+        if (!$secureBaseUrl) {
+            return false;
         }
+
+        $uri = \Zend_Uri::factory($secureBaseUrl);
+        $port = $uri->getPort();
+        $isSecure = $uri->getScheme() == 'https' && isset(
+            $_SERVER['SERVER_PORT']
+        ) && $port == $_SERVER['SERVER_PORT'];
+        return $isSecure;
     }
 
     /*************************************************************************************
@@ -853,16 +839,7 @@ class Store extends AbstractModel implements
         $code = strtoupper($code);
         if (in_array($code, $this->getAvailableCurrencyCodes())) {
             $this->_getSession()->setCurrencyCode($code);
-            $path = $this->_getSession()->getCookiePath();
-            
-            $sensitiveCookieMetadata = $this->_cookieMetadataFactory->createSensitiveCookieMetadata()
-                ->setPath($path);
-            
-            if ($code == $this->getDefaultCurrency()->getCurrencyCode()) {
-                $this->_cookieManager->deleteCookie(self::COOKIE_CURRENCY, $sensitiveCookieMetadata);
-            } else {
-                $this->_cookieManager->setSensitiveCookie(self::COOKIE_CURRENCY, $code, $sensitiveCookieMetadata);
-            }
+
             $this->_httpContext->setValue(
                 \Magento\Core\Helper\Data::CONTEXT_CURRENCY,
                 $code,
@@ -1313,5 +1290,44 @@ class Store extends AbstractModel implements
     public function getIdentities()
     {
         return array(self::CACHE_TAG . '_' . $this->getId());
+    }
+
+    /**
+     * Set store cookie with this store's code for a year.
+     *
+     * @return $this
+     */
+    public function setCookie()
+    {
+        $cookieMetadata = $this->_cookieMetadataFactory->createPublicCookieMetadata()
+            ->setHttpOnly(true)
+            ->setDurationOneYear();
+        $this->_cookieManager->setPublicCookie(
+            self::COOKIE_NAME,
+            $this->getCode(),
+            $cookieMetadata
+        );
+        return $this;
+    }
+
+    /**
+     * Get store code from store cookie.
+     *
+     * @return null|string
+     */
+    public function getStoreCodeFromCookie()
+    {
+        return $this->_cookieManager->getCookie(self::COOKIE_NAME);
+    }
+
+    /**
+     * Delete store cookie.
+     *
+     * @return $this
+     */
+    public function deleteCookie()
+    {
+        $this->_cookieManager->deleteCookie(self::COOKIE_NAME);
+        return $this;
     }
 }

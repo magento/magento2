@@ -28,7 +28,7 @@
 namespace Magento\Newsletter\Controller;
 
 use Magento\Framework\App\Action\Context;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\StoreManagerInterface;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
 use Magento\Newsletter\Model\SubscriberFactory;
@@ -58,7 +58,7 @@ class Subscriber extends \Magento\Framework\App\Action\Action
     protected $_subscriberFactory;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 

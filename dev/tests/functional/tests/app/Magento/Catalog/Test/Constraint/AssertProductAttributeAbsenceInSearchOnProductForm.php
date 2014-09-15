@@ -28,7 +28,6 @@ use Mtf\Constraint\AbstractConstraint;
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew;
-use Magento\ConfigurableProduct\Test\Fixture\CatalogProductConfigurable;
 
 /**
  * Class AssertAbsenceInAddAttributeSearch
@@ -60,7 +59,7 @@ class AssertProductAttributeAbsenceInSearchOnProductForm extends AbstractConstra
         $productGrid->open();
         $productGrid->getGridPageActionBlock()->addProduct('simple');
         \PHPUnit_Framework_Assert::assertFalse(
-            $newProductPage->getForm()->checkAttributeInSearchAttributeForm($productAttribute),
+            $newProductPage->getProductForm()->checkAttributeInSearchAttributeForm($productAttribute),
             "Product attribute found in Attribute Search form."
         );
     }

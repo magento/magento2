@@ -1,7 +1,5 @@
 <?php
 /**
- * Filter Interface
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -25,6 +23,9 @@
  */
 namespace Magento\Framework\Search\Request;
 
+/**
+ * Filter Interface
+ */
 interface FilterInterface
 {
     /**

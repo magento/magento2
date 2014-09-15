@@ -1,6 +1,5 @@
 <?php
 /**
- * Bool Filter
  * Magento
  *
  * NOTICE OF LICENSE
@@ -26,6 +25,9 @@ namespace Magento\Framework\Search\Request\Filter;
 
 use Magento\Framework\Search\Request\FilterInterface;
 
+/**
+ * Bool Filter
+ */
 class Bool implements FilterInterface
 {
     /**
@@ -87,7 +89,7 @@ class Bool implements FilterInterface
     /**
      * Get Must filters
      *
-     * @return array
+     * @return \Magento\Framework\Search\Request\FilterInterface[]
      */
     public function getMust()
     {
@@ -97,7 +99,7 @@ class Bool implements FilterInterface
     /**
      * Get Should filters
      *
-     * @return array
+     * @return \Magento\Framework\Search\Request\FilterInterface[]
      */
     public function getShould()
     {
@@ -107,7 +109,7 @@ class Bool implements FilterInterface
     /**
      * Get Must Not filters
      *
-     * @return array
+     * @return \Magento\Framework\Search\Request\FilterInterface[]
      */
     public function getMustNot()
     {

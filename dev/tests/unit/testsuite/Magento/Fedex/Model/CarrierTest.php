@@ -68,7 +68,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
 
         $store = $this->getMock('Magento\Store\Model\Store', ['getBaseCurrencyCode', '__wakeup'], [], '', false);
         $storeManager = $this->getMock(
-            'Magento\Store\Model\StoreManagerInterface',
+            'Magento\Framework\StoreManagerInterface',
             [
                 'getStore',
                 'setIsSingleStoreModeAllowed',

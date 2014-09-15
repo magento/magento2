@@ -33,38 +33,32 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Indexer\Model\Processor
      */
-    protected $processorMock;
+    protected $processor;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem
      */
-    protected $filesystemMock;
+    protected $filesystem;
 
     protected function setUp()
     {
-        $this->filesystemMock = $this->getMock(
-            'Magento\Framework\Filesystem',
-            array('getDirectoryWrite'),
-            array(),
-            '',
-            false
-        );
-        $directoryMock = $this->getMock('Magento\Framework\Filesystem\Directory\Write', array(), array(), '', false);
-        $directoryMock->expects($this->any())->method('getRelativePath')->will($this->returnArgument(0));
-        $this->filesystemMock->expects(
-            $this->once()
-        )->method(
-            'getDirectoryWrite'
-        )->will(
-            $this->returnValue($directoryMock)
-        );
-        $this->processorMock = $this->getMock('Magento\Indexer\Model\Processor', array(), array(), '', false);
-        $this->entryPoint = new \Magento\Indexer\App\Indexer('reportDir', $this->filesystemMock, $this->processorMock);
+        $this->filesystem = $this->getMock('Magento\Framework\Filesystem', ['getDirectoryWrite'], [], '', false);
+        $this->processor = $this->getMock('Magento\Indexer\Model\Processor', [], [], '', false);
+        $this->entryPoint = new Indexer('reportDir', $this->filesystem, $this->processor);
     }
 
     public function testExecute()
     {
-        $this->processorMock->expects($this->once())->method('reindexAll');
+        $dir = $this->getMock('Magento\Framework\Filesystem\Directory\Write', [], [], '', false);
+        $dir->expects($this->any())->method('getRelativePath')->will($this->returnArgument(0));
+        $this->filesystem->expects($this->once())->method('getDirectoryWrite')->will($this->returnValue($dir));
+        $this->processor->expects($this->once())->method('reindexAll');
         $this->assertEquals('0', $this->entryPoint->launch());
+    }
+
+    public function testCatchException()
+    {
+        $bootstrap = $this->getMock('Magento\Framework\App\Bootstrap', [], [], '', false);
+        $this->assertFalse($this->entryPoint->catchException($bootstrap, new \Exception));
     }
 }

@@ -89,7 +89,7 @@ class SendfriendTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->cookieManagerMock->expects($this->once())->method('getCookie')->with($cookieName);
-        $this->cookieManagerMock->expects($this->once())->method('setPublicCookie');
+        $this->cookieManagerMock->expects($this->once())->method('setSensitiveCookie');
         $sendFriendClass = new \ReflectionClass('Magento\Sendfriend\Model\Sendfriend');
         $method = $sendFriendClass->getMethod('_sentCountByCookies');
         $method->setAccessible(true);

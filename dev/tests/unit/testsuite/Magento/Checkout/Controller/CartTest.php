@@ -36,7 +36,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
     public function testGoBack()
     {
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $storeManagerMock = $this->getMock('Magento\Framework\StoreManagerInterface');
 
         $responseMock = $this->getMock('Magento\Framework\App\Response\Http', array(), array(), '', false);
         $responseMock->headersSentThrowsException = false;

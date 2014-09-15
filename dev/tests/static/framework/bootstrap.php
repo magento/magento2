@@ -22,8 +22,7 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-define('BP', str_replace('\\', '/', realpath(__DIR__ . '/../../../../')));
-require BP . '/app/autoload.php';
+require __DIR__ . '/../../../../app/autoload.php';
 (new \Magento\Framework\Autoload\IncludePath())->addIncludePath(
     array(__DIR__, dirname(__DIR__) . '/testsuite', BP . '/lib/internal')
 );

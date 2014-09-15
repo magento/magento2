@@ -34,8 +34,8 @@ class Post extends \Magento\Review\Controller\Adminhtml\Product
         $productId = $this->getRequest()->getParam('product_id', false);
 
         if ($data = $this->getRequest()->getPost()) {
-            /** @var \Magento\Store\Model\StoreManagerInterface $storeManagerInterface */
-            $storeManager = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface');
+            /** @var \Magento\Framework\StoreManagerInterface $storeManagerInterface */
+            $storeManager = $this->_objectManager->get('Magento\Framework\StoreManagerInterface');
             if ($storeManager->hasSingleStore()) {
                 $data['stores'] = array(
                     $storeManager->getStore(true)->getId()

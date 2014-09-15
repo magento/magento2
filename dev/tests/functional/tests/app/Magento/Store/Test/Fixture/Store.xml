@@ -56,6 +56,7 @@
             <is_required></is_required>
             <default_value>0</default_value>
             <input>select</input>
+            <source>Magento\Store\Test\Fixture\Store\GroupId</source>
         </group_id>
         <name>
             <attribute_code>name</attribute_code>

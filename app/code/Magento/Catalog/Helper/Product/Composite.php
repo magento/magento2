@@ -27,7 +27,7 @@ use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\ViewInterface;
 use Magento\Catalog\Helper\Product;
 use Magento\Catalog\Model\ProductFactory;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\StoreManagerInterface;
 use Magento\Customer\Controller\RegistryConstants;
 use Magento\Customer\Model\Converter;
 use Magento\Framework\Registry;
@@ -54,7 +54,7 @@ class Composite extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_catalogProduct = null;
 
     /**
-     * @var StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -76,7 +76,7 @@ class Composite extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param ProductFactory $productFactory
-     * @param StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param Product $catalogProduct
      * @param Registry $coreRegistry
      * @param ViewInterface $view

@@ -25,8 +25,10 @@
 namespace Magento\Review\Test\Constraint;
 
 use Mtf\Client\Browser;
+use Mtf\Fixture\FixtureInterface;
 use Mtf\Constraint\AbstractConstraint;
 use Magento\Review\Test\Fixture\ReviewInjectable;
+use Magento\Backend\Test\Page\Adminhtml\AdminCache;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 
@@ -48,19 +50,20 @@ class AssertProductReviewOnProductPage extends AbstractConstraint
      *
      * @param CatalogProductView $catalogProductView
      * @param ReviewInjectable $review
-     * @param ReviewInjectable $reviewInitial
+     * @param FixtureInterface $product
      * @param Browser $browser
+     * @param AdminCache $cachePage
      * @return void
      */
     public function processAssert(
         CatalogProductView $catalogProductView,
         ReviewInjectable $review,
-        ReviewInjectable $reviewInitial,
-        Browser $browser
+        FixtureInterface $product,
+        Browser $browser,
+        AdminCache $cachePage
     ) {
         $errors = [];
-        /** @var CatalogProductSimple $product */
-        $product = $reviewInitial->getDataFieldConfig('entity_id')['source']->getEntity();
+        $cachePage->open()->getActionsBlock()->flushMagentoCache();
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
 
         $reviewBlock = $catalogProductView->getCustomerReviewBlock();

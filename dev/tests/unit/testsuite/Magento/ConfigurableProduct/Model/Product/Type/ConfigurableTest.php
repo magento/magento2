@@ -239,7 +239,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->_model->canUseAttribute($attribute));
     }
 
-    public function testgetUsedProducts()
+    public function testGetUsedProducts()
     {
         $attributeCollection = $this->getMockBuilder(
             '\Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\Collection'
@@ -289,5 +289,82 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->_productCollectionFactory->expects($this->any())->method('create')
             ->will($this->returnValue($productCollection));
         $this->_model->getUsedProducts($product);
+    }
+
+    /**
+     * @param int $productStore
+     * @param int $attributeStore
+     *
+     * @dataProvider getConfigurableAttributesAsArrayDataProvider
+     */
+    public function testGetConfigurableAttributesAsArray($productStore, $attributeStore)
+    {
+        $attributeSource = $this->getMockForAbstractClass(
+            'Magento\Eav\Model\Entity\Attribute\Source\AbstractSource',
+            array(),
+            '',
+            false,
+            true,
+            true,
+            array('getAllOptions')
+        );
+        $attributeSource->expects($this->any())->method('getAllOptions')->will($this->returnValue([]));
+
+        $attributeFrontend = $this->getMockForAbstractClass(
+            'Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend',
+            array(),
+            '',
+            false,
+            true,
+            true,
+            array('getLabel')
+        );
+        $attributeFrontend->expects($this->any())->method('getLabel')->will($this->returnValue('Label'));
+
+        $eavAttribute = $this->getMock(
+            'Magento\Catalog\Model\Resource\Eav\Attribute',
+            array('getFrontend', 'getSource', 'getStoreLabel', '__wakeup', 'setStoreId', '__sleep'),
+            array(),
+            '',
+            false
+        );
+        $eavAttribute->expects($this->any())->method('getFrontend')->will($this->returnValue($attributeFrontend));
+        $eavAttribute->expects($this->any())->method('getSource')->will($this->returnValue($attributeSource));
+        $eavAttribute->expects($this->any())->method('getStoreLabel')->will($this->returnValue('Store Label'));
+        $eavAttribute->expects($this->any())->method('setStoreId')->with($attributeStore);
+
+        $attribute = $this->getMockBuilder('\Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute')
+            ->disableOriginalConstructor()
+            ->setMethods(['getProductAttribute', '__wakeup', '__sleep'])
+            ->getMock();
+        $attribute->expects($this->any())->method('getProductAttribute')->will($this->returnValue($eavAttribute));
+
+        $product = $this->getMockBuilder('\Magento\Catalog\Model\Product')
+            ->setMethods(['getStoreId', 'getData', 'hasData', '__wakeup', '__sleep'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $product->expects($this->any())->method('getStoreId')->will($this->returnValue($productStore));
+        $product->expects($this->any())->method('hasData')
+            ->will($this->returnValueMap([
+                ['_cache_instance_configurable_attributes', 1],
+            ]));
+        $product->expects($this->any())->method('getData')
+            ->will($this->returnValueMap([
+                ['_cache_instance_configurable_attributes', null, [$attribute]],
+            ]));
+
+        $result = $this->_model->getConfigurableAttributesAsArray($product);
+        $this->assertCount(1, $result);
+    }
+
+    /**
+     * @return array
+     */
+    public function getConfigurableAttributesAsArrayDataProvider()
+    {
+        return array(
+            array(5, 5),
+            array(null, 0),
+        );
     }
 }

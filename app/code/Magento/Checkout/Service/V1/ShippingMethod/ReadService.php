@@ -37,7 +37,7 @@ class ReadService implements ReadServiceInterface
     protected $quoteLoader;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -53,13 +53,13 @@ class ReadService implements ReadServiceInterface
 
     /**
      * @param \Magento\Checkout\Service\V1\QuoteLoader $quoteLoader
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Checkout\Service\V1\Data\Cart\ShippingMethodConverter $converter
      * @param ShippingMethodBuilder $methodBuilder
      */
     public function __construct(
         \Magento\Checkout\Service\V1\QuoteLoader $quoteLoader,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Checkout\Service\V1\Data\Cart\ShippingMethodConverter $converter,
         \Magento\Checkout\Service\V1\Data\Cart\ShippingMethodBuilder $methodBuilder
     ) {

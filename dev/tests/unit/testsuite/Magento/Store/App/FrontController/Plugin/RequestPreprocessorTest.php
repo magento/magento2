@@ -38,11 +38,6 @@ class RequestPreprocessorTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_appStateMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $_urlMock;
 
     /**
@@ -78,33 +73,19 @@ class RequestPreprocessorTest extends \PHPUnit_Framework_TestCase
             return 'Expected';
         };
         $this->_storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManager', array(), array(), '', false);
-        $this->_appStateMock = $this->getMock('\Magento\Framework\App\State', array(), array(), '', false);
         $this->_urlMock = $this->getMock('\Magento\Framework\Url', array(), array(), '', false);
         $this->_scopeConfigMock = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface');
         $this->subjectMock = $this->getMock('Magento\Framework\App\FrontController', array(), array(), '', false);
         $this->_model = new \Magento\Store\App\FrontController\Plugin\RequestPreprocessor(
             $this->_storeManagerMock,
-            $this->_appStateMock,
             $this->_urlMock,
             $this->_scopeConfigMock,
             $this->getMock('\Magento\Framework\App\ResponseFactory', array(), array(), '', false)
         );
     }
 
-    public function testAroundDispatchIfNotInstalled()
+    public function testAroundDispatchIfRedirectCodeNotExist()
     {
-        $this->_appStateMock->expects($this->once())->method('isInstalled')->will($this->returnValue(false));
-        $this->_requestMock->expects($this->once())->method('setDispatched')->with(false);
-        $this->_scopeConfigMock->expects($this->never())->method('getValue');
-        $this->assertEquals(
-            'Expected',
-            $this->_model->aroundDispatch($this->subjectMock, $this->closureMock, $this->_requestMock)
-        );
-    }
-
-    public function testAroundDispatchIfInstalledAndRedirectCodeNotExist()
-    {
-        $this->_appStateMock->expects($this->once())->method('isInstalled')->will($this->returnValue(true));
         $this->_requestMock->expects($this->once())->method('setDispatched')->with(false);
         $this->_scopeConfigMock->expects($this->once())->method('getValue')->with('web/url/redirect_to_base');
         $this->_requestMock->expects($this->never())->method('getRequestUri');
@@ -114,9 +95,8 @@ class RequestPreprocessorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testAroundDispatchIfInstalledAndRedirectCodeExist()
+    public function testAroundDispatchIfRedirectCodeExist()
     {
-        $this->_appStateMock->expects($this->once())->method('isInstalled')->will($this->returnValue(true));
         $this->_requestMock->expects($this->once())->method('setDispatched')->with(false);
         $this->_scopeConfigMock->expects(
             $this->once()
@@ -144,7 +124,6 @@ class RequestPreprocessorTest extends \PHPUnit_Framework_TestCase
 
     public function testAroundDispatchIfBaseUrlNotExists()
     {
-        $this->_appStateMock->expects($this->once())->method('isInstalled')->will($this->returnValue(true));
         $this->_requestMock->expects($this->once())->method('setDispatched')->with(false);
         $this->_scopeConfigMock->expects(
             $this->once()

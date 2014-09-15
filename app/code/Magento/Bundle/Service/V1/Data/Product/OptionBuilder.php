@@ -95,4 +95,15 @@ class OptionBuilder extends AbstractExtensibleObjectBuilder
     {
         return $this->_set(Option::SKU, $value);
     }
+
+    /**
+     * Set product links
+     *
+     * @param \Magento\Bundle\Service\V1\Data\Product\Link[] $value
+     * @return $this
+     */
+    public function setProductLinks($value)
+    {
+        return $this->_set(Option::PRODUCT_LINKS, $value);
+    }
 }

@@ -23,12 +23,10 @@
  */
 
 if (!defined('TESTS_TEMP_DIR')) {
-    define('BP', realpath(__DIR__ . '/../../../../'));
     define('TESTS_TEMP_DIR', dirname(__DIR__) . '/tmp');
 }
-
+require __DIR__ . '/../../../../app/autoload.php';
 require BP . '/app/functions.php';
-require BP . '/app/autoload.php';
 (new \Magento\Framework\Autoload\IncludePath())->addIncludePath(
     array(
         __DIR__,

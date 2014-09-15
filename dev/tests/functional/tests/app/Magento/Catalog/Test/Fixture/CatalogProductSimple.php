@@ -89,6 +89,7 @@ class CatalogProductSimple extends InjectableFixture
     }
 
     protected $dataConfig = [
+        'type_id' => 'simple',
         'create_url_params' => [
             'type' => 'simple',
             'set' => '4',
@@ -549,6 +550,12 @@ class CatalogProductSimple extends InjectableFixture
         'source' => 'Magento\Catalog\Test\Fixture\CatalogProductSimple\AttributeSetId',
     ];
 
+    protected $attributes = [
+        'attribute_code' => 'attributes',
+        'backend_type' => 'virtual',
+        'group' => 'product-details',
+    ];
+
     protected $custom_options = [
         'attribute_code' => 'custom_options',
         'backend_type' => 'virtual',
@@ -595,6 +602,13 @@ class CatalogProductSimple extends InjectableFixture
         'attribute_code' => 'stock_data',
         'backend_type' => 'virtual',
         'group' => 'advanced-inventory'
+    ];
+
+    protected $checkout_data = [
+        'attribute_code' => 'checkout_data',
+        'backend_type' => 'virtual',
+        'group' => null,
+        'source' => 'Magento\Catalog\Test\Fixture\CatalogProductSimple\CheckoutData'
     ];
 
     public function getCategoryIds()
@@ -862,6 +876,11 @@ class CatalogProductSimple extends InjectableFixture
         return $this->getData('attribute_set_id');
     }
 
+    public function getAttribute()
+    {
+        return $this->getData('attributes');
+    }
+
     public function getCustomOptions()
     {
         return $this->getData('custom_options');
@@ -887,8 +906,13 @@ class CatalogProductSimple extends InjectableFixture
         return $this->getData('news_to_date');
     }
 
-    public function getStockDate()
+    public function getStockData()
     {
         return $this->getData('stock_data');
+    }
+
+    public function getCheckoutData()
+    {
+        return $this->getData('checkout_data');
     }
 }

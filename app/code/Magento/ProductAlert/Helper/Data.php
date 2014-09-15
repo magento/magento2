@@ -60,14 +60,14 @@ class Data extends \Magento\Core\Helper\Url
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\View\LayoutInterface $layout,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig

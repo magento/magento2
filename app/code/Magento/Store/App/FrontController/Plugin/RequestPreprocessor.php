@@ -41,31 +41,23 @@ class RequestPreprocessor
     protected $_url;
 
     /**
-     * @var \Magento\Framework\App\State
-     */
-    protected $_appState;
-
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\App\State $appState
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Framework\UrlInterface $url
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\App\ResponseFactory $responseFactory
      */
     public function __construct(
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\App\State $appState,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Framework\UrlInterface $url,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\App\ResponseFactory $responseFactory
     ) {
         $this->_storeManager = $storeManager;
-        $this->_appState = $appState;
         $this->_url = $url;
         $this->_scopeConfig = $scopeConfig;
         $this->_responseFactory = $responseFactory;
@@ -87,7 +79,7 @@ class RequestPreprocessor
         \Closure $proceed,
         \Magento\Framework\App\RequestInterface $request
     ) {
-        if ($this->_appState->isInstalled() && !$request->isPost() && $this->_isBaseUrlCheckEnabled()) {
+        if (!$request->isPost() && $this->_isBaseUrlCheckEnabled()) {
             $baseUrl = $this->_storeManager->getStore()->getBaseUrl(
                 \Magento\Framework\UrlInterface::URL_TYPE_WEB,
                 $this->_storeManager->getStore()->isCurrentlySecure()

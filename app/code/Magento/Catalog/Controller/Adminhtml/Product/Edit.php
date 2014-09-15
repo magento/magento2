@@ -66,7 +66,7 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product
         $this->_setActiveMenu('Magento_Catalog::catalog_products');
 
         if (!$this->_objectManager->get(
-            'Magento\Store\Model\StoreManagerInterface'
+            'Magento\Framework\StoreManagerInterface'
         )->isSingleStoreMode() && ($switchBlock = $this->_view->getLayout()->getBlock(
             'store_switcher'
         ))

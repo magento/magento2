@@ -100,7 +100,7 @@ class Product extends \Magento\Framework\App\Action\Action
     /**
      * Core model store manager interface
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -122,7 +122,7 @@ class Product extends \Magento\Framework\App\Action\Action
      * @param \Magento\Review\Model\RatingFactory $ratingFactory
      * @param \Magento\Catalog\Model\Design $catalogDesign
      * @param \Magento\Framework\Session\Generic $reviewSession
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
      */
     public function __construct(
@@ -136,7 +136,7 @@ class Product extends \Magento\Framework\App\Action\Action
         \Magento\Review\Model\RatingFactory $ratingFactory,
         \Magento\Catalog\Model\Design $catalogDesign,
         \Magento\Framework\Session\Generic $reviewSession,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Core\App\Action\FormKeyValidator $formKeyValidator
     ) {
         $this->_storeManager = $storeManager;

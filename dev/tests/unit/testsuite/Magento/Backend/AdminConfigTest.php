@@ -22,14 +22,14 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Test class for \Magento\Backend\AdminConfig
- */
 namespace Magento\Backend;
 
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 
+/**
+ * Test class for \Magento\Backend\AdminConfig
+ *
+ */
 class AdminConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -38,9 +38,9 @@ class AdminConfigTest extends \PHPUnit_Framework_TestCase
     private $requestMock;
 
     /**
-     * @var \Magento\Framework\App\State
+     * @var \Magento\TestFramework\Helper\ObjectManager
      */
-    private $appState;
+    private $objectManager;
 
 
     protected function setUp()
@@ -61,9 +61,7 @@ class AdminConfigTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue('init.host')
         );
-        $this->appState = $this->getMock('\Magento\Framework\App\State',
-            ['isInstalled'], [], '', false, false);
-        $this->appState->expects($this->atLeastOnce())->method('isInstalled')->will($this->returnValue(true));
+        $this->objectManager =  new \Magento\TestFramework\Helper\ObjectManager($this);
     }
 
     public function testSetCookiePathNonDefault()
@@ -72,20 +70,35 @@ class AdminConfigTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $mockFrontNameResolver
+        $mockFrontNameResolver->expects($this->once())
             ->method('getFrontName')
             ->will($this->returnValue('backend'));
 
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $adminConfig = $objectManager->getObject(
+        $adminConfig = $this->objectManager->getObject(
             'Magento\Backend\AdminConfig',
             [
                 'request' => $this->requestMock,
-                'appState' => $this->appState,
                 'frontNameResolver' => $mockFrontNameResolver,
             ]
         );
 
         $this->assertEquals('/backend', $adminConfig->getCookiePath());
+    }
+
+    /**
+     * Test for setting session name for admin
+     *
+     */
+    public function testSetSessionNameByConstructor()
+    {
+        $sessionName = 'admin';
+        $adminConfig = $this->objectManager->getObject(
+            'Magento\Backend\AdminConfig',
+            [
+                'request' => $this->requestMock,
+                'sessionName' => $sessionName
+            ]
+        );
+        $this->assertSame($sessionName, $adminConfig->getName());
     }
 }

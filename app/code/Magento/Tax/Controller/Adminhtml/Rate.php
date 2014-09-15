@@ -32,11 +32,6 @@ namespace Magento\Tax\Controller\Adminhtml;
 class Rate extends \Magento\Backend\App\Action
 {
     /**
-     * @var \Magento\Framework\App\Response\Http\FileFactory
-     */
-    protected $_fileFactory;
-
-    /**
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry;
@@ -63,7 +58,6 @@ class Rate extends \Magento\Backend\App\Action
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Tax\Service\V1\TaxRateServiceInterface $taxRateService
      * @param \Magento\Tax\Service\V1\Data\TaxRateBuilder $taxRateBuilder
@@ -72,14 +66,12 @@ class Rate extends \Magento\Backend\App\Action
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Tax\Service\V1\TaxRateServiceInterface $taxRateService,
         \Magento\Tax\Service\V1\Data\TaxRateBuilder $taxRateBuilder,
         \Magento\Tax\Service\V1\Data\ZipRangeBuilder $zipRangeBuilder,
         \Magento\Tax\Service\V1\Data\TaxRateTitleBuilder $taxRateTitleBuilder
     ) {
-        $this->_fileFactory = $fileFactory;
         $this->_coreRegistry = $coreRegistry;
         $this->_taxRateService = $taxRateService;
         $this->_taxRateBuilder = $taxRateBuilder;
@@ -132,28 +124,7 @@ class Rate extends \Magento\Backend\App\Action
      */
     protected function _isAllowed()
     {
-        switch ($this->getRequest()->getActionName()) {
-            case 'importExport':
-                return $this->_authorization->isAllowed('Magento_Tax::import_export');
-                break;
-
-            case 'index':
-                return $this->_authorization->isAllowed('Magento_Tax::manage_tax');
-                break;
-
-            case 'importPost':
-            case 'exportPost':
-                return $this->_authorization->isAllowed(
-                    'Magento_Tax::manage_tax'
-                ) || $this->_authorization->isAllowed(
-                    'Magento_Tax::import_export'
-                );
-                break;
-
-            default:
-                return $this->_authorization->isAllowed('Magento_Tax::manage_tax');
-                break;
-        }
+        return $this->_authorization->isAllowed('Magento_Tax::manage_tax');
     }
 
     /**

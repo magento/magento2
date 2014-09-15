@@ -57,7 +57,7 @@ class Server
     /** @var \Magento\Webapi\Controller\Soap\Request */
     protected $_request;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface */
+    /** @var \Magento\Framework\StoreManagerInterface */
     protected $_storeManager;
 
     /** @var \Magento\Webapi\Model\Soap\Server\Factory */
@@ -78,7 +78,7 @@ class Server
      * @param \Magento\Framework\Config\ScopeInterface $configScope
      * @param \Magento\Webapi\Controller\Soap\Request $request
      * @param \Magento\Framework\DomDocument\Factory $domDocumentFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Webapi\Model\Soap\Server\Factory $soapServerFactory
      * @param \Magento\Webapi\Model\Config\ClassReflector\TypeProcessor $typeProcessor
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -89,7 +89,7 @@ class Server
         \Magento\Framework\Config\ScopeInterface $configScope,
         \Magento\Webapi\Controller\Soap\Request $request,
         \Magento\Framework\DomDocument\Factory $domDocumentFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Webapi\Model\Soap\Server\Factory $soapServerFactory,
         \Magento\Webapi\Model\Config\ClassReflector\TypeProcessor $typeProcessor,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig

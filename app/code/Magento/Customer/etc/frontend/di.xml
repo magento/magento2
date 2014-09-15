@@ -24,11 +24,6 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <type name="Magento\Customer\Model\Session">
-        <arguments>
-            <argument name="sessionName" xsi:type="string">frontend</argument>
-        </arguments>
-    </type>
     <type name="Magento\Core\Model\Url\SecurityInfo">
         <arguments>
             <argument name="secureUrlList" xsi:type="array">

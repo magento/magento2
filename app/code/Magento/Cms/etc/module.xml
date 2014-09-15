@@ -39,7 +39,6 @@
             <module name="Magento_Backend"/>
             <module name="Magento_Catalog"/>
             <module name="Magento_Email"/>
-            <module name="Magento_Install"/>
         </depends>
     </module>
 </config>

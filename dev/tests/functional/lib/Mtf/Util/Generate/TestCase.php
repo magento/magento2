@@ -25,6 +25,7 @@ namespace Mtf\Util\Generate;
 
 use Mtf\Util\Protocol\CurlInterface;
 use Mtf\Util\Protocol\CurlTransport;
+use Magento\Framework\App;
 
 /**
  * Class TestCaseClass

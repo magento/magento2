@@ -54,7 +54,7 @@ class DesignTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\View\DesignInterface'
         );
         $storeId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Store\Model\StoreManagerInterface'
+            'Magento\Framework\StoreManagerInterface'
         )->getDefaultStoreView()->getId();
         // fixture design_change
         $designChange = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -121,7 +121,7 @@ class DesignTest extends \PHPUnit_Framework_TestCase
             ->create('Magento\Framework\Stdlib\DateTime');
         $date = $dateTime->now(true);
         $storeId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Store\Model\StoreManagerInterface'
+            'Magento\Framework\StoreManagerInterface'
         )->getDefaultStoreView()->getId();
         // fixture design_change
 
@@ -184,7 +184,7 @@ class DesignTest extends \PHPUnit_Framework_TestCase
         }
 
         $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Store\Model\StoreManagerInterface'
+            'Magento\Framework\StoreManagerInterface'
         )->getStore(
             $storeCode
         );

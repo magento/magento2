@@ -62,7 +62,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\CatalogInventory\Helper\Minsaleqty|\PHPUnit_Framework_MockObject_MockObject */
     protected $catalogInventoryMinsaleqty;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $storeManager;
 
     /** @var \Magento\CatalogInventory\Model\Stock\ItemRegistry|\PHPUnit_Framework_MockObject_MockObject */
@@ -113,7 +113,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->scopeConfig = $this->getMock('Magento\Framework\App\Config', [], [], '', false);
-        $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface', [], [], '', false);
+        $this->storeManager = $this->getMock('Magento\Framework\StoreManagerInterface', [], [], '', false);
 
         $this->stockItemRegistry = $this->getMock(
             '\Magento\CatalogInventory\Model\Stock\ItemRegistry',

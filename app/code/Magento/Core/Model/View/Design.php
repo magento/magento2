@@ -54,7 +54,7 @@ class Design implements \Magento\Framework\View\DesignInterface
     /**
      * Store list manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -84,7 +84,7 @@ class Design implements \Magento\Framework\View\DesignInterface
     protected $_appState;
 
     /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Framework\View\Design\Theme\FlyweightFactory $flyweightFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Core\Model\ThemeFactory $themeFactory
@@ -93,7 +93,7 @@ class Design implements \Magento\Framework\View\DesignInterface
      * @param array $themes
      */
     public function __construct(
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Framework\View\Design\Theme\FlyweightFactory $flyweightFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Core\Model\ThemeFactory $themeFactory,

@@ -1,7 +1,5 @@
 <?php
 /**
- * Match Query
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -27,6 +25,9 @@ namespace Magento\Framework\Search\Request\Query;
 
 use Magento\Framework\Search\Request\QueryInterface;
 
+/**
+ * Match Query
+ */
 class Match implements QueryInterface
 {
     /**

@@ -26,9 +26,7 @@ namespace Magento\Webapi\Controller;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Exception\AuthorizationException;
-use Magento\Framework\Service\Data\AbstractSimpleObject;
-use Magento\Framework\Service\Data\AbstractExtensibleObject;
-use Magento\Framework\Service\ExtensibleDataObjectConverter;
+use Magento\Framework\Service\SimpleDataObjectConverter;
 use Magento\Webapi\Controller\Rest\Request as RestRequest;
 use Magento\Webapi\Controller\Rest\Response as RestResponse;
 use Magento\Webapi\Controller\Rest\Response\PartialResponseProcessor;
@@ -65,9 +63,6 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     /** @var \Magento\Framework\App\State */
     protected $_appState;
 
-    /** @var \Magento\Framework\View\LayoutInterface */
-    protected $_layout;
-
     /** @var AuthorizationInterface */
     protected $_authorization;
 
@@ -101,6 +96,11 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     protected $userContext;
 
     /**
+     * @var SimpleDataObjectConverter $dataObjectConverter
+     */
+    protected $dataObjectConverter;
+
+    /**
      * Initialize dependencies
      *
      * @param RestRequest $request
@@ -108,7 +108,6 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      * @param Router $router
      * @param \Magento\Framework\ObjectManager $objectManager
      * @param \Magento\Framework\App\State $appState
-     * @param \Magento\Framework\View\LayoutInterface $layout
      * @param AuthorizationInterface $authorization
      * @param ServiceArgsSerializer $serializer
      * @param ErrorProcessor $errorProcessor
@@ -116,6 +115,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      * @param \Magento\Framework\App\AreaList $areaList
      * @param PartialResponseProcessor $partialResponseProcessor
      * @param UserContextInterface $userContext
+     * @param SimpleDataObjectConverter $dataObjectConverter
      *
      * TODO: Consider removal of warning suppression
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -126,21 +126,20 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         Router $router,
         \Magento\Framework\ObjectManager $objectManager,
         \Magento\Framework\App\State $appState,
-        \Magento\Framework\View\LayoutInterface $layout,
         AuthorizationInterface $authorization,
         ServiceArgsSerializer $serializer,
         ErrorProcessor $errorProcessor,
         PathProcessor $pathProcessor,
         \Magento\Framework\App\AreaList $areaList,
         PartialResponseProcessor $partialResponseProcessor,
-        UserContextInterface $userContext
+        UserContextInterface $userContext,
+        SimpleDataObjectConverter $dataObjectConverter
     ) {
         $this->_router = $router;
         $this->_request = $request;
         $this->_response = $response;
         $this->_objectManager = $objectManager;
         $this->_appState = $appState;
-        $this->_layout = $layout;
         $this->_authorization = $authorization;
         $this->_serializer = $serializer;
         $this->_errorProcessor = $errorProcessor;
@@ -148,6 +147,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         $this->areaList = $areaList;
         $this->partialResponseProcessor = $partialResponseProcessor;
         $this->userContext = $userContext;
+        $this->dataObjectConverter = $dataObjectConverter;
     }
 
     /**
@@ -163,9 +163,6 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         $this->areaList->getArea($this->_appState->getAreaCode())
             ->load(\Magento\Framework\App\Area::PART_TRANSLATE);
         try {
-            if (!$this->_appState->isInstalled()) {
-                throw new \Magento\Webapi\Exception(__('Magento is not yet installed'));
-            }
             $this->checkPermissions();
             $route = $this->getCurrentRoute();
             if ($route->isSecure() && !$this->_request->isSecure()) {
@@ -180,7 +177,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
             $service = $this->_objectManager->get($serviceClassName);
             /** @var \Magento\Framework\Service\Data\AbstractExtensibleObject $outputData */
             $outputData = call_user_func_array([$service, $serviceMethodName], $inputParams);
-            $outputData = $this->processServiceOutput($outputData);
+            $outputData = $this->dataObjectConverter->processServiceOutput($outputData);
             if ($this->_request->getParam(PartialResponseProcessor::FILTER_PARAMETER) && is_array($outputData)) {
                 $outputData = $this->partialResponseProcessor->filter($outputData);
             }
@@ -190,61 +187,6 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
             $this->_response->setException($maskedException);
         }
         return $this->_response;
-    }
-
-    /**
-     * Converts the incoming data into scalar or an array of scalars format.
-     *
-     * If the data provided is null, then an empty array is returned.  Otherwise, if the data is an object, it is
-     * assumed to be a Data Object and converted to an associative array with keys representing the properties of the
-     * Data Object.
-     * Nested Data Objects are also converted.  If the data provided is itself an array, then we iterate through the
-     * contents and convert each piece individually.
-     *
-     * @param mixed $data
-     * @return array|int|string|bool|float Scalar or array of scalars
-     */
-    protected function processServiceOutput($data)
-    {
-        if (is_array($data)) {
-            $result = [];
-            foreach ($data as $datum) {
-                if ($datum instanceof AbstractSimpleObject) {
-                    $datum = $this->processDataObject($datum->__toArray());
-                }
-                $result[] = $datum;
-            }
-            return $result;
-        } else if ($data instanceof AbstractSimpleObject) {
-            return $this->processDataObject($data->__toArray());
-        } else if (is_null($data)) {
-            return [];
-        } else {
-            /** No processing is required for scalar types */
-            return $data;
-        }
-    }
-
-    /**
-     * Convert data object to array and process available custom attributes
-     *
-     * @param array $dataObjectArray
-     * @return array
-     */
-    protected function processDataObject($dataObjectArray)
-    {
-        if (isset($dataObjectArray[AbstractExtensibleObject::CUSTOM_ATTRIBUTES_KEY])) {
-            $dataObjectArray = ExtensibleDataObjectConverter::convertCustomAttributesToSequentialArray(
-                $dataObjectArray
-            );
-        }
-        //Check for nested custom_attributes
-        foreach ($dataObjectArray as $key => $value) {
-            if (is_array($value)) {
-                $dataObjectArray[$key] = $this->processDataObject($value);
-            }
-        }
-        return $dataObjectArray;
     }
 
     /**

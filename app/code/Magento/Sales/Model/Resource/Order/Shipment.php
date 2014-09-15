@@ -23,12 +23,19 @@
  */
 namespace Magento\Sales\Model\Resource\Order;
 
+use Magento\Framework\App\Resource;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\Sales\Model\Resource\Attribute;
+use Magento\Sales\Model\Increment as SalesIncrement;
+use Magento\Sales\Model\Resource\Entity as SalesResource;
+use Magento\Sales\Model\Resource\Order\Shipment\Grid as ShipmentGrid;
+
 /**
  * Flat sales order shipment resource
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Shipment extends AbstractOrder
+class Shipment extends SalesResource
 {
     /**
      * Event prefix
@@ -38,32 +45,11 @@ class Shipment extends AbstractOrder
     protected $_eventPrefix = 'sales_order_shipment_resource';
 
     /**
-     * Is grid available
-     *
-     * @var bool
-     */
-    protected $_grid = true;
-
-    /**
-     * Use increment id
-     *
-     * @var bool
-     */
-    protected $_useIncrementId = true;
-
-    /**
-     * Entity type for increment id
-     *
-     * @var string
-     */
-    protected $_entityTypeForIncrementId = 'shipment';
-
-    /**
      * Fields that should be serialized before persistence
      *
      * @var array
      */
-    protected $_serializableFields = array('packages' => array(array(), array()));
+    protected $_serializableFields = ['packages' => [[], []]];
 
     /**
      * Model initialization
@@ -73,38 +59,5 @@ class Shipment extends AbstractOrder
     protected function _construct()
     {
         $this->_init('sales_flat_shipment', 'entity_id');
-    }
-
-    /**
-     * Init virtual grid records for entity
-     *
-     * @return $this
-     */
-    protected function _initVirtualGridColumns()
-    {
-        parent::_initVirtualGridColumns();
-        $adapter = $this->getReadConnection();
-        $checkedFirstname = $adapter->getIfNullSql('{{table}}.firstname', $adapter->quote(''));
-        $checkedLastname = $adapter->getIfNullSql('{{table}}.lastname', $adapter->quote(''));
-        $concatName = $adapter->getConcatSql(array($checkedFirstname, $adapter->quote(' '), $checkedLastname));
-
-        $this->addVirtualGridColumn(
-            'shipping_name',
-            'sales_flat_order_address',
-            array('shipping_address_id' => 'entity_id'),
-            $concatName
-        )->addVirtualGridColumn(
-            'order_increment_id',
-            'sales_flat_order',
-            array('order_id' => 'entity_id'),
-            'increment_id'
-        )->addVirtualGridColumn(
-            'order_created_at',
-            'sales_flat_order',
-            array('order_id' => 'entity_id'),
-            'created_at'
-        );
-
-        return $this;
     }
 }

@@ -32,7 +32,7 @@ use Magento\Store\Model\StoreFactory;
 use Magento\Store\Model\Website;
 use Magento\Store\Model\WebsiteFactory as WebsiteFactory;
 
-class Db implements \Magento\Store\Model\StoreManagerInterface
+class Db implements \Magento\Framework\StoreManagerInterface
 {
     /**
      * Flag that shows that system has only one store view
@@ -287,7 +287,7 @@ class Db implements \Magento\Store\Model\StoreManagerInterface
      *
      * @param null|string|bool|int|Store $storeId
      * @return Store
-     * @throws \Magento\Store\Model\Exception
+     * @throws \Magento\Framework\App\InitException
      */
     public function getStore($storeId = null)
     {
@@ -315,7 +315,7 @@ class Db implements \Magento\Store\Model\StoreManagerInterface
             }
 
             if (!$store->getCode()) {
-                throw new \Magento\Store\Model\Exception(
+                throw new \Magento\Framework\App\InitException(
                     'Store Manager has been initialized not properly'
                 );
             }
@@ -354,7 +354,7 @@ class Db implements \Magento\Store\Model\StoreManagerInterface
      *
      * @param null|bool|int|string|Website $websiteId
      * @return Website
-     * @throws \Magento\Store\Model\Exception
+     * @throws \Magento\Framework\App\InitException
      */
     public function getWebsite($websiteId = null)
     {
@@ -371,7 +371,7 @@ class Db implements \Magento\Store\Model\StoreManagerInterface
             // load method will load website by code if given ID is not a numeric value
             $website->load($websiteId);
             if (!$website->hasWebsiteId()) {
-                throw new \Magento\Store\Model\Exception('Invalid website id/code requested.');
+                throw new \Magento\Framework\App\InitException('Invalid website id/code requested.');
             }
             $this->_websites[$website->getWebsiteId()] = $website;
             $this->_websites[$website->getCode()] = $website;
@@ -409,7 +409,7 @@ class Db implements \Magento\Store\Model\StoreManagerInterface
      *
      * @param null|Group|string $groupId
      * @return Group
-     * @throws \Magento\Store\Model\Exception
+     * @throws \Magento\Framework\App\InitException
      */
     public function getGroup($groupId = null)
     {
@@ -423,7 +423,7 @@ class Db implements \Magento\Store\Model\StoreManagerInterface
             if (is_numeric($groupId)) {
                 $group->load($groupId);
                 if (!$group->hasGroupId()) {
-                    throw new \Magento\Store\Model\Exception('Invalid store group id requested.');
+                    throw new \Magento\Framework\App\InitException('Invalid store group id requested.');
                 }
             }
             $this->_groups[$group->getGroupId()] = $group;

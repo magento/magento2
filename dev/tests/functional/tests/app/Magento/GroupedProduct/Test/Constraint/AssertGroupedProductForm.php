@@ -56,7 +56,7 @@ class AssertGroupedProductForm extends AssertProductForm
     ) {
         $filter = ['sku' => $product->getSku()];
         $productGrid->open()->getProductGrid()->searchAndOpen($filter);
-        $fieldsForm = $productPage->getForm()->getData($product);
+        $fieldsForm = $productPage->getProductForm()->getData($product);
         $fieldsFixture = $this->prepareFixtureData($product->getData());
         $fieldsFixture['associated'] = $this->prepareGroupedOptions($fieldsFixture['associated']);
 

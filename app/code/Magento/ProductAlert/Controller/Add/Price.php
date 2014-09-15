@@ -29,19 +29,19 @@ use Magento\Framework\App\Action\Context;
 class Price extends \Magento\ProductAlert\Controller\Add
 {
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
      * @param Context $context
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      */
     public function __construct(
         Context $context,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Framework\StoreManagerInterface $storeManager
     ) {
         $this->_storeManager = $storeManager;
         parent::__construct($context, $customerSession);
@@ -102,7 +102,7 @@ class Price extends \Magento\ProductAlert\Controller\Add
             )->setPrice(
                 $product->getFinalPrice()
             )->setWebsiteId(
-                $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getWebsiteId()
+                $this->_objectManager->get('Magento\Framework\StoreManagerInterface')->getStore()->getWebsiteId()
             );
             $model->save();
             $this->messageManager->addSuccess(__('You saved the alert subscription.'));

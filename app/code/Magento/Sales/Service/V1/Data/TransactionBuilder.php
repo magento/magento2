@@ -34,7 +34,7 @@ class TransactionBuilder extends \Magento\Framework\Service\Data\AbstractExtensi
      */
     public function setTransactionId($transactionId)
     {
-        $this->_set(\Magento\Sales\Service\V1\Data\Transaction::TRANSACTION_ID, $transactionId);
+        $this->_set(\Magento\Sales\Service\V1\Data\Transaction::TRANSACTION_ID, (int)$transactionId);
     }
 
     /**
@@ -50,7 +50,7 @@ class TransactionBuilder extends \Magento\Framework\Service\Data\AbstractExtensi
      */
     public function setOrderId($orderId)
     {
-        $this->_set(\Magento\Sales\Service\V1\Data\Transaction::ORDER_ID, $orderId);
+        $this->_set(\Magento\Sales\Service\V1\Data\Transaction::ORDER_ID, (int)$orderId);
     }
 
     /**
@@ -58,7 +58,7 @@ class TransactionBuilder extends \Magento\Framework\Service\Data\AbstractExtensi
      */
     public function setPaymentId($paymentId)
     {
-        $this->_set(\Magento\Sales\Service\V1\Data\Transaction::PAYMENT_ID, $paymentId);
+        $this->_set(\Magento\Sales\Service\V1\Data\Transaction::PAYMENT_ID, (int)$paymentId);
     }
 
     /**
@@ -66,7 +66,7 @@ class TransactionBuilder extends \Magento\Framework\Service\Data\AbstractExtensi
      */
     public function setTxnId($txnId)
     {
-        $this->_set(\Magento\Sales\Service\V1\Data\Transaction::TXN_ID, $txnId);
+        $this->_set(\Magento\Sales\Service\V1\Data\Transaction::TXN_ID, (string)$txnId);
     }
 
     /**
@@ -74,7 +74,7 @@ class TransactionBuilder extends \Magento\Framework\Service\Data\AbstractExtensi
      */
     public function setParentTxnId($parentTxnId)
     {
-        $this->_set(\Magento\Sales\Service\V1\Data\Transaction::PARENT_TXN_ID, $parentTxnId);
+        $this->_set(\Magento\Sales\Service\V1\Data\Transaction::PARENT_TXN_ID, (string)$parentTxnId);
     }
 
     /**
@@ -82,7 +82,7 @@ class TransactionBuilder extends \Magento\Framework\Service\Data\AbstractExtensi
      */
     public function setTxnType($txnType)
     {
-        $this->_set(\Magento\Sales\Service\V1\Data\Transaction::TXN_TYPE, $txnType);
+        $this->_set(\Magento\Sales\Service\V1\Data\Transaction::TXN_TYPE, (string)$txnType);
     }
 
     /**
@@ -90,7 +90,7 @@ class TransactionBuilder extends \Magento\Framework\Service\Data\AbstractExtensi
      */
     public function setIsClosed($isClosed)
     {
-        $this->_set(\Magento\Sales\Service\V1\Data\Transaction::IS_CLOSED, $isClosed);
+        $this->_set(\Magento\Sales\Service\V1\Data\Transaction::IS_CLOSED, (int)$isClosed);
     }
 
     /**
@@ -106,7 +106,7 @@ class TransactionBuilder extends \Magento\Framework\Service\Data\AbstractExtensi
      */
     public function setCreatedAt($createdAt)
     {
-        $this->_set(\Magento\Sales\Service\V1\Data\Transaction::CREATED_AT, $createdAt);
+        $this->_set(\Magento\Sales\Service\V1\Data\Transaction::CREATED_AT, (string)$createdAt);
     }
 
     /**
@@ -114,7 +114,7 @@ class TransactionBuilder extends \Magento\Framework\Service\Data\AbstractExtensi
      */
     public function setMethod($method)
     {
-        $this->_set(\Magento\Sales\Service\V1\Data\Transaction::METHOD, $method);
+        $this->_set(\Magento\Sales\Service\V1\Data\Transaction::METHOD, (string)$method);
     }
 
     /**
@@ -122,7 +122,7 @@ class TransactionBuilder extends \Magento\Framework\Service\Data\AbstractExtensi
      */
     public function setIncrementId($incrementId)
     {
-        $this->_set(\Magento\Sales\Service\V1\Data\Transaction::INCREMENT_ID, $incrementId);
+        $this->_set(\Magento\Sales\Service\V1\Data\Transaction::INCREMENT_ID, (string)$incrementId);
     }
 
     /**

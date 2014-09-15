@@ -29,13 +29,4 @@
             <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManager\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Log\Model\Visitor">
-        <arguments>
-            <argument name="ignoredUserAgents" xsi:type="array">
-                <item name="google1" xsi:type="string">Googlebot/1.0 (googlebot@googlebot.com http://googlebot.com/)</item>
-                <item name="google2" xsi:type="string">Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)</item>
-                <item name="google3" xsi:type="string">Googlebot/2.1 (+http://www.googlebot.com/bot.html)</item>
-            </argument>
-        </arguments>
-    </type>
 </config>

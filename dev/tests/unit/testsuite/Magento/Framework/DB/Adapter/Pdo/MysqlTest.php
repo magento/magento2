@@ -169,7 +169,7 @@ class MysqlTest extends \PHPUnit_Framework_TestCase
      * Test DDL query inside transaction in Developer mode
      *
      * @dataProvider ddlSqlQueryProvider
-     * @expectedException \PHPUnit_Framework_Error
+     * @expectedException \Exception
      * @expectedExceptionMessage DDL statements are not allowed in transactions
      */
     public function testCheckDdlTransaction($ddlQuery)

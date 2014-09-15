@@ -64,16 +64,21 @@ class Ratings implements FixtureInterface
     public function __construct(FixtureFactory $fixtureFactory, array $params, array $data = [])
     {
         $this->params = $params;
+        /** @var Rating $fixtureRating */
+        $fixtureRating = null;
 
         foreach ($data as $rating) {
             if (isset($rating['dataSet'])) {
-                /** @var Rating $fixtureRating */
                 $fixtureRating = $fixtureFactory->createByCode('rating', ['dataSet' => $rating['dataSet']]);
-                if (!$fixtureRating->hasData('id')) {
+                if (!$fixtureRating->hasData('rating_id')) {
                     $fixtureRating->persist();
                 }
-                $this->ratings[] = $fixtureRating;
+            } elseif (isset($rating['fixtureRating'])) {
+                $fixtureRating = $rating['fixtureRating'];
+            }
 
+            if ($fixtureRating !== null) {
+                $this->ratings[] = $fixtureRating;
                 $this->data[] = [
                     'title' => $fixtureRating->getRatingCode(),
                     'rating' => $rating['rating']

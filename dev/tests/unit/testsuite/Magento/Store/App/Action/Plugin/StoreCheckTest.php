@@ -53,16 +53,11 @@ class StoreCheckTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $appStateMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $requestMock;
 
     protected function setUp()
     {
-        $this->_storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $this->_storeManagerMock = $this->getMock('Magento\Framework\StoreManagerInterface');
         $this->_storeMock = $this->getMock('Magento\Store\Model\Store', array(), array(), '', false);
         $this->_storeManagerMock->expects(
             $this->any()
@@ -76,18 +71,16 @@ class StoreCheckTest extends \PHPUnit_Framework_TestCase
             return 'Expected';
         };
         $this->requestMock = $this->getMock('Magento\Framework\App\RequestInterface');
-        $this->appStateMock = $this->getMock('Magento\Framework\App\State', array(), array(), '', false);
 
-        $this->_plugin = new \Magento\Store\App\Action\Plugin\StoreCheck($this->_storeManagerMock, $this->appStateMock);
+        $this->_plugin = new \Magento\Store\App\Action\Plugin\StoreCheck($this->_storeManagerMock);
     }
 
     /**
-     * @expectedException \Magento\Store\Model\Exception
+     * @expectedException \Magento\Framework\App\InitException
      * @expectedExceptionMessage Current store is not active.
      */
-    public function testAroundDispatchWhenStoreNotActiveAppInstalled()
+    public function testAroundDispatchWhenStoreNotActive()
     {
-        $this->appStateMock->expects($this->once())->method('isInstalled')->will($this->returnValue(true));
         $this->_storeMock->expects($this->any())->method('getIsActive')->will($this->returnValue(false));
         $this->assertEquals(
             'Expected',
@@ -95,9 +88,8 @@ class StoreCheckTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testAroundDispatchWhenStoreIsActiveAppInstalled()
+    public function testAroundDispatchWhenStoreIsActive()
     {
-        $this->appStateMock->expects($this->once())->method('isInstalled')->will($this->returnValue(true));
         $this->_storeMock->expects($this->any())->method('getIsActive')->will($this->returnValue(true));
         $this->assertEquals(
             'Expected',
@@ -105,23 +97,4 @@ class StoreCheckTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testAroundDispatchWhenStoreNotActiveAppNotInstalled()
-    {
-        $this->appStateMock->expects($this->once())->method('isInstalled')->will($this->returnValue(false));
-        $this->_storeMock->expects($this->never())->method('getIsActive');
-        $this->assertEquals(
-            'Expected',
-            $this->_plugin->aroundDispatch($this->subjectMock, $this->closureMock, $this->requestMock)
-        );
-    }
-
-    public function testAroundDispatchWhenStoreIsActiveAppNotInstalled()
-    {
-        $this->appStateMock->expects($this->once())->method('isInstalled')->will($this->returnValue(false));
-        $this->_storeMock->expects($this->never())->method('getIsActive');
-        $this->assertEquals(
-            'Expected',
-            $this->_plugin->aroundDispatch($this->subjectMock, $this->closureMock, $this->requestMock)
-        );
-    }
 }

@@ -28,11 +28,11 @@ use Mtf\Fixture\FixtureFactory;
 use Mtf\Constraint\AbstractConstraint;
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
-use Magento\ConfigurableProduct\Test\Fixture\CatalogProductConfigurable;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew;
 
 /**
  * Class AssertProductAttributeIsConfigurable
+ * Assert check whether the attribute is used to create a configurable products
  */
 class AssertProductAttributeIsConfigurable extends AbstractConstraint
 {
@@ -86,11 +86,11 @@ class AssertProductAttributeIsConfigurable extends AbstractConstraint
             ]
         );
 
-        $productBlockForm = $newProductPage->getForm();
+        $productBlockForm = $newProductPage->getProductForm();
         $productBlockForm->fill($productConfigurable);
 
         \PHPUnit_Framework_Assert::assertTrue(
-            $newProductPage->getForm()->findAttribute($this->attribute->getFrontendLabel()),
+            $productBlockForm->checkAttributeInSearchAttributeForm($this->attribute),
             "Product attribute is absent on the product page."
         );
     }
@@ -102,6 +102,6 @@ class AssertProductAttributeIsConfigurable extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Attribute label, present on the product page in variations section.';
+        return 'Attribute label present on the product page in variations section.';
     }
 }

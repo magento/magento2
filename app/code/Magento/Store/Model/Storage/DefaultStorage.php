@@ -25,7 +25,7 @@
  */
 namespace Magento\Store\Model\Storage;
 
-class DefaultStorage implements \Magento\Store\Model\StoreManagerInterface
+class DefaultStorage implements \Magento\Framework\StoreManagerInterface
 {
     /**
      * Application store object
@@ -97,10 +97,7 @@ class DefaultStorage implements \Magento\Store\Model\StoreManagerInterface
     }
 
     /**
-     * Retrieve application store object
-     *
-     * @param null|string|bool|int|\Magento\Store\Model\Store $storeId
-     * @return \Magento\Store\Model\Store
+     * {@inheritdoc}
      */
     public function getStore($storeId = null)
     {
@@ -155,11 +152,7 @@ class DefaultStorage implements \Magento\Store\Model\StoreManagerInterface
     }
 
     /**
-     * Retrieve application store group object
-     *
-     * @param null|\Magento\Store\Model\Group|string $groupId
-     * @return \Magento\Store\Model\Group
-     * @throws \Magento\Framework\Model\Exception
+     * {@inheritdoc}
      */
     public function getGroup($groupId = null)
     {

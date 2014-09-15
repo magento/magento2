@@ -30,7 +30,7 @@ use Magento\Sales\Model\Order\Status\History\Validator;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class History extends \Magento\Sales\Model\Resource\Order\AbstractOrder
+class History extends \Magento\Sales\Model\Resource\Entity
 {
     /**
      * @var Validator
@@ -40,19 +40,21 @@ class History extends \Magento\Sales\Model\Resource\Order\AbstractOrder
     /**
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Eav\Model\Entity\TypeFactory $eavEntityTypeFactory
+     * @param \Magento\Sales\Model\Resource\Attribute $attribute
+     * @param \Magento\Sales\Model\Increment $salesIncrement
      * @param Validator $validator
+     * @param \Magento\Sales\Model\Resource\GridInterface $gridAggregator
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Eav\Model\Entity\TypeFactory $eavEntityTypeFactory,
-        Validator $validator
+        \Magento\Sales\Model\Resource\Attribute $attribute,
+        \Magento\Sales\Model\Increment $salesIncrement,
+        Validator $validator,
+        \Magento\Sales\Model\Resource\GridInterface $gridAggregator = null
     ) {
         $this->validator = $validator;
-        parent::__construct($resource, $dateTime, $eventManager, $eavEntityTypeFactory);
+        parent::__construct($resource, $dateTime, $attribute, $salesIncrement, $gridAggregator);
     }
 
     /**

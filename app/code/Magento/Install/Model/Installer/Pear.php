@@ -26,7 +26,7 @@ namespace Magento\Install\Model\Installer;
 /**
  * PEAR Packages Download Manager
  */
-class Pear extends \Magento\Install\Model\Installer\AbstractInstaller
+class Pear
 {
     /**
      * @var \Magento\Framework\Message\ManagerInterface
@@ -34,14 +34,11 @@ class Pear extends \Magento\Install\Model\Installer\AbstractInstaller
     protected $messageManager;
 
     /**
-     * @param \Magento\Install\Model\Installer $installer
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      */
     public function __construct(
-        \Magento\Install\Model\Installer $installer,
         \Magento\Framework\Message\ManagerInterface $messageManager
     ) {
-        parent::__construct($installer);
         $this->messageManager = $messageManager;
     }
 

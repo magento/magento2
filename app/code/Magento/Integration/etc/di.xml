@@ -30,7 +30,8 @@
     <preference for="Magento\Framework\Oauth\ConsumerInterface" type="Magento\Integration\Model\Oauth\Consumer"/>
     <preference for="Magento\Framework\Oauth\NonceGeneratorInterface" type="Magento\Integration\Model\Oauth\Nonce\Generator"/>
     <preference for="Magento\Framework\Oauth\TokenProviderInterface" type="Magento\Integration\Model\Oauth\Token\Provider"/>
-    <preference for="Magento\Integration\Service\V1\TokenServiceInterface" type="Magento\Integration\Service\V1\TokenService" />
+    <preference for="Magento\Integration\Service\V1\CustomerTokenServiceInterface" type="Magento\Integration\Service\V1\CustomerTokenService" />
+    <preference for="Magento\Integration\Service\V1\AdminTokenServiceInterface" type="Magento\Integration\Service\V1\AdminTokenService" />
     <type name="Magento\Integration\Model\Oauth\Nonce\Generator">
         <arguments>
             <argument name="date" xsi:type="object">Magento\Framework\Stdlib\DateTime\DateTime\Proxy</argument>

@@ -23,7 +23,7 @@
  */
 namespace Magento\CmsUrlRewrite\Service\V1;
 
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\StoreManagerInterface;
 use Magento\UrlRedirect\Service\V1\Data\Converter;
 use Magento\UrlRedirect\Service\V1\Data\UrlRewrite;
 

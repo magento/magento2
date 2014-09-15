@@ -144,11 +144,11 @@ abstract class Grid extends Block
     protected $waitForSelectorVisible = true;
 
     /**
-     * Selector for status select
+     * Selector for action option select
      *
      * @var string
      */
-    protected $status = '[name="status"]';
+    protected $option = '[name="status"]';
 
     /**
      * Get backend abstract block
@@ -283,7 +283,7 @@ abstract class Grid extends Block
         $actionType = key($action);
         $this->_rootElement->find($this->massactionSelect, Locator::SELECTOR_CSS, 'select')->setValue($actionType);
         if (isset($action[$actionType]) && $action[$actionType] != '-') {
-            $this->_rootElement->find($this->status, Locator::SELECTOR_CSS, 'select')->setValue($action[$actionType]);
+            $this->_rootElement->find($this->option, Locator::SELECTOR_CSS, 'select')->setValue($action[$actionType]);
         }
         $this->massActionSubmit($acceptAlert);
     }

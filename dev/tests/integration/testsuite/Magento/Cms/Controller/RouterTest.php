@@ -42,13 +42,12 @@ class RouterTest extends \PHPUnit_Framework_TestCase
                 $this->getMock('Magento\Framework\Event\ObserverFactory', array(), array(), '', false)
             ),
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\UrlInterface'),
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\App\StateInterface'),
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Cms\Model\PageFactory'),
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Store\Model\StoreManagerInterface'
+                'Magento\Framework\StoreManagerInterface'
             ),
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Store\Model\StoreManagerInterface'
+                'Magento\Framework\StoreManagerInterface'
             )
         );
     }

@@ -81,7 +81,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
         $this->jsHelperMock = $this->getMock('Magento\Backend\Helper\Js', array(), array(), '', false);
         $this->storeMock = $this->getMock('Magento\Store\Model\Store', array(), array(), '', false);
         $this->websiteMock = $this->getMock('Magento\Store\Model\Website', array(), array(), '', false);
-        $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $this->storeManagerMock = $this->getMock('Magento\Framework\StoreManagerInterface');
 
         $this->stockFilterMock = $this->getMock(
             'Magento\Catalog\Controller\Adminhtml\Product\Initialization\StockDataFilter',

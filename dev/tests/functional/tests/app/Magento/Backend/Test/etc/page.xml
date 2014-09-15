@@ -24,6 +24,11 @@
  */
 -->
 <page module="Magento_Backend">
+    <dashboard>
+        <mca>admin/dashboard</mca>
+        <area>adminhtml</area>
+        <class>Magento\Backend\Test\Page\Adminhtml\Dashboard</class>
+    </dashboard>
     <systemConfig>
         <mca>admin/system_config</mca>
         <area>adminhtml</area>
@@ -39,6 +44,11 @@
         <area>adminhtml</area>
         <class>Magento\Backend\Test\Page\Adminhtml\StoreNew</class>
     </storeNew>
+    <editStore>
+        <mca>admin/system_store/editStore</mca>
+        <area>adminhtml</area>
+        <class>Magento\Backend\Test\Page\Adminhtml\EditStore</class>
+    </editStore>
     <storeDelete>
         <mca>admin/system_store/deleteStore</mca>
         <area>adminhtml</area>
@@ -59,4 +69,19 @@
         <area>adminhtml</area>
         <class>Magento\Backend\Test\Page\Adminhtml\DeleteGroup</class>
     </deleteGroup>
+    <newWebsiteIndex>
+        <mca>system_store/newWebsite/index</mca>
+        <area>adminhtml</area>
+        <class>Magento\Backend\Test\Page\Adminhtml\NewWebsiteIndex</class>
+    </newWebsiteIndex>
+    <editWebsite>
+        <mca>system_store/editWebsite</mca>
+        <area>adminhtml</area>
+        <class>Magento\Backend\Test\Page\Adminhtml\EditWebsite</class>
+    </editWebsite>
+    <deleteWebsite>
+        <mca>system_store/deleteWebsite</mca>
+        <area>adminhtml</area>
+        <class>Magento\Backend\Test\Page\Adminhtml\DeleteWebsite</class>
+    </deleteWebsite>
 </page>

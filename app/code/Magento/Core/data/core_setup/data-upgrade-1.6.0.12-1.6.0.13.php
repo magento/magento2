@@ -22,11 +22,16 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+$fileCollection = $this->createThemeFactory();
+$fileCollection->addDefaultPattern('*');
+$fileCollection->setItemObjectClass('Magento\Core\Model\Theme\Data');
+
 /** @var $themeDbCollection \Magento\Core\Model\Resource\Theme\Collection */
 $themeDbCollection = $this->createThemeResourceFactory();
+$themeDbCollection->setItemObjectClass('Magento\Core\Model\Theme\Data');
 
 /** @var $theme \Magento\Framework\View\Design\ThemeInterface */
-foreach ($this->createThemeFactory()->addDefaultPattern('*') as $theme) {
+foreach ($fileCollection as $theme) {
     $dbTheme = $themeDbCollection->getThemeByFullPath($theme->getFullPath());
     $dbTheme->setCode($theme->getCode());
     $dbTheme->save();

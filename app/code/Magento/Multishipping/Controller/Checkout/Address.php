@@ -29,6 +29,17 @@ namespace Magento\Multishipping\Controller\Checkout;
 class Address extends \Magento\Framework\App\Action\Action
 {
     /**
+     * {@inheritdoc}
+     */
+    public function dispatch(\Magento\Framework\App\RequestInterface $request)
+    {
+        if (!$this->_getCheckout()->getCustomer()->getId()) {
+            return $this->_redirect('customer/account/login');
+        }
+        return parent::dispatch($request);
+    }
+
+    /**
      * Retrieve multishipping checkout model
      *
      * @return \Magento\Multishipping\Model\Checkout\Type\Multishipping

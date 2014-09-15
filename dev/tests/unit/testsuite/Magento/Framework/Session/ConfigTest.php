@@ -50,11 +50,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected $_requestMock;
 
     /**
-     * @var \Magento\Framework\App\State
-     */
-    protected $_appState;
-
-    /**
      * @var \Magento\Framework\App\Filesystem
      */
     protected $_filesystem;
@@ -80,15 +75,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue('init.host')
         );
-        $this->_appState = $this->getMock('\Magento\Framework\App\State', array('isInstalled'), array(), '', false, false);
-        $this->_appState->expects($this->atLeastOnce())->method('isInstalled')->will($this->returnValue(true));
         $this->_filesystem = $this->getMock('\Magento\Framework\App\Filesystem', array(), array(), '', false, false);
 
         $this->config = new \Magento\Framework\Session\Config(
             $this->_configMock,
             $this->_stringHelperMock,
             $this->_requestMock,
-            $this->_appState,
             $this->_filesystem,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             \Magento\Framework\Session\SaveHandlerInterface::DEFAULT_HANDLER,
@@ -332,7 +324,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             $this->_configMock,
             $this->_stringHelperMock,
             $this->_requestMock,
-            $this->_appState,
             $this->_filesystem,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             \Magento\Framework\Session\SaveHandlerInterface::DEFAULT_HANDLER,

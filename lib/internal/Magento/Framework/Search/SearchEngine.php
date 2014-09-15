@@ -1,7 +1,5 @@
 <?php
 /**
- * Search Engine
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -25,6 +23,9 @@
  */
 namespace Magento\Framework\Search;
 
+/**
+ * Search Engine
+ */
 class SearchEngine implements SearchEngineInterface
 {
     /**

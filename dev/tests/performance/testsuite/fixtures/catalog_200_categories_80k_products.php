@@ -33,7 +33,7 @@ $anchorStep = 2;
 
 $nestingLevel = 1;
 $parentCategoryId = $defaultParentCategoryId = $this->getObjectManager()->get(
-    'Magento\Store\Model\StoreManagerInterface'
+    'Magento\Framework\StoreManagerInterface'
 )->getStore()->getRootCategoryId();
 $nestingPath = "1/{$parentCategoryId}";
 $categoryPath = '';

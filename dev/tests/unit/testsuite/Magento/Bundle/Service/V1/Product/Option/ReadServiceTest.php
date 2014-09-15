@@ -82,7 +82,7 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->product = $this->getMockBuilder('Magento\Catalog\Model\Product')
-            ->setMethods(['__wakeup', 'getTypeId', 'getTypeInstance'])
+            ->setMethods(['__wakeup', 'getTypeId', 'getTypeInstance', 'getStoreId'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -105,6 +105,28 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMock();
+
+        $productType = $this->getMockBuilder('Magento\Bundle\Model\Product\Type')
+            ->setMethods(['setStoreFilter', 'getSelectionsCollection'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->product->expects($this->any())
+            ->method('getTypeInstance')
+            ->will($this->returnValue($productType));
+        $selectionsCollection = $this->getMockBuilder('Magento\Bundle\Model\Resource\Selection\Collection')
+            ->setMethods(['getIterator'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $productType->expects($this->any())
+            ->method('getSelectionsCollection')
+            ->will($this->returnValue($selectionsCollection));
+        $iterator = $this->getMockBuilder('Iterator')
+            ->setMethods(['getNext'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $selectionsCollection->expects($this->any())
+            ->method('getIterator')
+            ->will($this->returnValue($iterator));
 
         $this->model = $objectManager->getObject(
             'Magento\Bundle\Service\V1\Product\Option\ReadService',

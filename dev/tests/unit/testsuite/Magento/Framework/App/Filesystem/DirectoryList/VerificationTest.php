@@ -81,7 +81,7 @@ class VerificationTest extends \PHPUnit_Framework_TestCase
      * @param string $mode
      * @param array $expectedDirs
      * @dataProvider notWritableDataProvider
-     * @expectedException \Magento\Framework\BootstrapException
+     * @expectedException \Magento\Framework\App\InitException
      */
     public function testNotWritable($mode, $expectedDirs)
     {
@@ -114,7 +114,7 @@ class VerificationTest extends \PHPUnit_Framework_TestCase
      * @param string $mode
      * @param array $expectedDirs
      * @dataProvider createExceptionDataProvider
-     * @expectedException \Magento\Framework\BootstrapException
+     * @expectedException \Magento\Framework\App\InitException
      */
     public function testCreateException($mode, $expectedDirs)
     {

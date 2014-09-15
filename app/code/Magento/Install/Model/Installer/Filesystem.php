@@ -26,7 +26,7 @@ namespace Magento\Install\Model\Installer;
 /**
  * Filesystem installer
  */
-class Filesystem extends \Magento\Install\Model\Installer\AbstractInstaller
+class Filesystem
 {
     /**#@+
      * @deprecated since 1.7.1.0
@@ -62,18 +62,15 @@ class Filesystem extends \Magento\Install\Model\Installer\AbstractInstaller
     protected $messageManager;
 
     /**
-     * @param \Magento\Install\Model\Installer $installer
      * @param \Magento\Framework\App\Filesystem $filesystem
      * @param \Magento\Install\Model\Config $installConfig
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      */
     public function __construct(
-        \Magento\Install\Model\Installer $installer,
         \Magento\Framework\App\Filesystem $filesystem,
         \Magento\Install\Model\Config $installConfig,
         \Magento\Framework\Message\ManagerInterface $messageManager
     ) {
-        parent::__construct($installer);
         $this->_filesystem = $filesystem;
         $this->_installConfig = $installConfig;
         $this->messageManager = $messageManager;

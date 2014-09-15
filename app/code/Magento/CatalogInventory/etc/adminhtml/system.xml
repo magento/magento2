@@ -35,7 +35,7 @@
                     <label>Decrease Stock When Order is Placed</label>
                     <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="can_back_in_stock" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="can_back_in_stock" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Set Items' Status to be In Stock When Order is Cancelled</label>
                     <source_model>Magento\Backend\Model\Config\Source\Yesno</source_model>
                 </field>

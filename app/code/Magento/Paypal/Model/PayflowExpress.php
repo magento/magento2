@@ -56,7 +56,7 @@ class PayflowExpress extends \Magento\Paypal\Model\Express
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Logger\AdapterFactory $logAdapterFactory
      * @param ProFactory $proFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param CartFactory $cartFactory
      * @param \Magento\Checkout\Model\Session $checkoutSession
@@ -70,7 +70,7 @@ class PayflowExpress extends \Magento\Paypal\Model\Express
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Logger\AdapterFactory $logAdapterFactory,
         ProFactory $proFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Framework\UrlInterface $urlBuilder,
         CartFactory $cartFactory,
         \Magento\Checkout\Model\Session $checkoutSession,

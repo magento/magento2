@@ -30,11 +30,6 @@
             <argument name="attributeLabelCache" xsi:type="object">Magento\Framework\App\Cache\Type\Translate</argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Model\Session">
-        <arguments>
-            <argument name="sessionName" xsi:type="string">adminhtml</argument>
-        </arguments>
-    </type>
     <type name="Magento\Catalog\Block\Adminhtml\Product\Frontend\Product\Watermark">
         <arguments>
             <argument name="imageTypes" xsi:type="array">

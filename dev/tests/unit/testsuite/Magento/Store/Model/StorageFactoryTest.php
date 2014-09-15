@@ -123,16 +123,6 @@ class StorageFactoryTest extends \PHPUnit_Framework_TestCase
     protected $request;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $cookieManagerMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $cookieMetadataFactoryMock;
-
-    /**
      * @var \Magento\TestFramework\Helper\ObjectManager
      */
     protected $helper;
@@ -159,17 +149,10 @@ class StorageFactoryTest extends \PHPUnit_Framework_TestCase
         $this->helper = new \Magento\TestFramework\Helper\ObjectManager($this);
 
         $this->_appStateMock = $this->getMock('Magento\Framework\App\State', [], [], '', false);
-        $this->_storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
-        $this->cookieManagerMock = $this->getMock('Magento\Framework\Stdlib\CookieManager', [], [], '', false);
+        $this->_storeManager = $this->getMock('Magento\Framework\StoreManagerInterface');
         $this->_httpContext = $this->getMock('Magento\Framework\App\Http\Context', [], [], '', false);
         $this->_scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->request = $this->getMock('Magento\Framework\App\RequestInterface', [], [], '', false);
-        $this->cookieMetadataFactoryMock = $this->getMock('Magento\Framework\Stdlib\Cookie\CookieMetadataFactory',
-            [],
-            [],
-            '',
-            false
-        );
 
         $this->_model = $this->helper->getObject('\Magento\Store\Model\StorageFactory', [
             'objectManager' => $this->_objectManagerMock,
@@ -177,11 +160,9 @@ class StorageFactoryTest extends \PHPUnit_Framework_TestCase
             'logger' => $this->_logMock,
             'sidResolver' => $this->_sidResolverMock,
             'appState' => $this->_appStateMock,
-            'cookieManager' => $this->cookieManagerMock,
             'httpContext' => $this->_httpContext,
             'scopeConfig' => $this->_scopeConfig,
             'request' => $this->request,
-            'cookieMetadataFactory' => $this->cookieMetadataFactoryMock
         ]);
 
         $this->store = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
@@ -383,7 +364,7 @@ class StorageFactoryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Store\Model\Exception
+     * @expectedException \Magento\Framework\App\InitException
      */
     public function testGetWithStoresReinitUnknownScopeType()
     {
@@ -416,15 +397,11 @@ class StorageFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->store->expects($this->once())->method('getId')->will($this->returnValue(21));
         $this->store->expects($this->once())->method('getIsActive')->will($this->returnValue(true));
+        $this->store->expects($this->once())->method('getStoreCodeFromCookie')->will($this->returnValue('store1'));
 
         $this->storage->expects($this->any())->method('setCurrentStore')->with('store1');
 
         $this->_objectManagerMock->expects($this->once())->method('create')->will($this->returnValue($this->storage));
-
-        $this->cookieManagerMock->expects($this->atLeastOnce())
-            ->method('getCookie')
-            ->with(Store::COOKIE_NAME)
-            ->will($this->returnValue('store1'));
 
         $this->assertEquals($this->storage, $this->_model->get($this->_arguments));
     }
@@ -450,8 +427,9 @@ class StorageFactoryTest extends \PHPUnit_Framework_TestCase
      *
      * @param bool $isActiveStore
      * @param bool $isDefault
+     * @param string $cookieCall
      */
-    public function testGetFromRequest($isActiveStore, $isDefault)
+    public function testGetFromRequest($isActiveStore, $isDefault, $cookieCall = '')
     {
         $this->_appStateMock->expects($this->once())->method('isInstalled')->will($this->returnValue(true));
 
@@ -475,15 +453,13 @@ class StorageFactoryTest extends \PHPUnit_Framework_TestCase
         $this->store->expects($this->atLeastOnce())->method('getId')->will($this->returnValue(21));
         $this->store->expects($this->once())->method('getIsActive')->will($this->returnValue($isActiveStore));
         $this->store->expects($this->any())->method('getWebsite')->will($this->returnValue($this->website));
-
+        if (!empty($cookieCall)) {
+            $this->store->expects($this->once())->method($cookieCall);
+        }
         $this->storage->expects($this->any())->method('setCurrentStore')->with('store1');
 
         $numCreateCookieCalls = $isDefault ? 0 : 1;
         $this->_objectManagerMock->expects($this->once())->method('create')->will($this->returnValue($this->storage));
-        $cookieMetadata = $this->helper->getObject('Magento\Framework\Stdlib\Cookie\PublicCookieMetadata', []);
-        $this->cookieMetadataFactoryMock->expects($this->exactly($numCreateCookieCalls))
-            ->method('createPublicCookieMetadata')
-            ->will($this->returnValue($cookieMetadata));
 
         $this->request->expects($this->atLeastOnce())
             ->method('getParam')
@@ -500,8 +476,8 @@ class StorageFactoryTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [false, true],
-            [true, true],
-            [true, false],
+            [true, true, 'deleteCookie'],
+            [true, false, 'setCookie'],
         ];
     }
 }

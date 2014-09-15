@@ -30,11 +30,6 @@
             <argument name="request" xsi:type="object">Magento\Webapi\Controller\Rest\Request</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Session\Generic">
-        <arguments>
-            <argument name="sessionName" xsi:type="string">frontend</argument>
-        </arguments>
-    </type>
     <type name="Magento\Authorization\Model\CompositeUserContext">
         <arguments>
             <argument name="userContexts" xsi:type="array">

@@ -431,6 +431,12 @@
             <group>bundle</group>
             <fixture>Magento\Bundle\Test\Fixture\Bundle\BundleSelections</fixture>
         </bundle_selections>
+        <checkout_data>
+            <attribute_code>checkout_data</attribute_code>
+            <backend_type>virtual</backend_type>
+            <group />
+            <fixture>Magento\Bundle\Test\Fixture\CatalogProductBundle\CheckoutData</fixture>
+        </checkout_data>
         <custom_options>
             <attribute_code>custom_options</attribute_code>
             <backend_type>virtual</backend_type>

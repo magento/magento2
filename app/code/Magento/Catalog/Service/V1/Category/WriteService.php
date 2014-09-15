@@ -31,7 +31,7 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\Catalog\Service\V1\Data\Category\Mapper as CategoryMapper;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\StoreManagerInterface;
 
 class WriteService implements WriteServiceInterface
 {
@@ -46,7 +46,7 @@ class WriteService implements WriteServiceInterface
     private $categoryMapper;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -60,7 +60,7 @@ class WriteService implements WriteServiceInterface
     /**
      * @param CategoryFactory $categoryFactory
      * @param CategoryMapper $categoryMapper
-     * @param StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      */
     public function __construct(
         CategoryFactory $categoryFactory,

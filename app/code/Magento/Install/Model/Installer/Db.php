@@ -27,7 +27,7 @@
  */
 namespace Magento\Install\Model\Installer;
 
-class Db extends \Magento\Install\Model\Installer\AbstractInstaller
+class Db
 {
     /**
      * Database resource
@@ -43,7 +43,7 @@ class Db extends \Magento\Install\Model\Installer\AbstractInstaller
 
     /**
      * Database model factory
-     * 
+     *
      * @var \Magento\Install\Model\Installer\Db\Factory
      */
     protected $_dbFactory;
@@ -56,18 +56,15 @@ class Db extends \Magento\Install\Model\Installer\AbstractInstaller
     protected $_dbConfig;
 
     /**
-     * @param \Magento\Install\Model\Installer $installer
      * @param \Magento\Framework\Logger $logger
      * @param \Magento\Install\Model\Installer\Db\Factory $dbFactory
      * @param array $dbConfig
      */
     public function __construct(
-        \Magento\Install\Model\Installer $installer,
         \Magento\Framework\Logger $logger,
         \Magento\Install\Model\Installer\Db\Factory $dbFactory,
         array $dbConfig
     ) {
-        parent::__construct($installer);
         $this->_logger = $logger;
         $this->_dbConfig = $dbConfig;
         $this->_dbFactory = $dbFactory;

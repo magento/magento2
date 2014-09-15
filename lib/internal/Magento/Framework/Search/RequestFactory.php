@@ -1,6 +1,5 @@
 <?php
 /**
- * Search Request Pool
  * Magento
  *
  * NOTICE OF LICENSE
@@ -24,6 +23,9 @@
  */
 namespace Magento\Framework\Search;
 
+/**
+ * Search Request Pool
+ */
 class RequestFactory
 {
     const CACHE_PREFIX = 'search_request::';
@@ -103,7 +105,7 @@ class RequestFactory
                 'objectManager' => $this->objectManager,
                 'rootQueryName' => $data['query'],
                 'queries' => $data['queries'],
-                'aggregation' => $data['aggregation'],
+                'aggregations' => $data['aggregations'],
                 'filters' => $data['filters']
             ]
         );
@@ -115,14 +117,14 @@ class RequestFactory
                 'from' => $data['from'],
                 'size' => $data['size'],
                 'query' => $mapper->getRootQuery(),
-                'demensions' => array_map(
+                'dimensions' => array_map(
                     function ($data) {
                         return $this->objectManager->create(
                             'Magento\Framework\Search\Request\Dimension',
                             $data
                         );
                     },
-                    isset($data['demensions']) ? $data['demensions'] : []
+                    isset($data['dimensions']) ? $data['dimensions'] : []
                 ),
                 'buckets' => $mapper->getBuckets()
             ]

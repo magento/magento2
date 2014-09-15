@@ -81,17 +81,7 @@ class UrlRewrite extends \Magento\Framework\Model\AbstractModel
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory
-     */
-    protected $_cookieMetadataFactory;
-
-    /**
-     * @var \Magento\Framework\Stdlib\CookieManager
-     */
-    protected $_cookieManager;
-
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -104,9 +94,7 @@ class UrlRewrite extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
-     * @param \Magento\Framework\Stdlib\CookieManager $cookieManager,
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
@@ -116,9 +104,7 @@ class UrlRewrite extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Stdlib\Cookie\CookieMetadataFactory $cookieMetadataFactory,
-        \Magento\Framework\Stdlib\CookieManager $cookieManager,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
@@ -126,8 +112,6 @@ class UrlRewrite extends \Magento\Framework\Model\AbstractModel
     ) {
         $this->_scopeConfig = $scopeConfig;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
-        $this->_cookieManager = $cookieManager;
-        $this->_cookieMetadataFactory = $cookieMetadataFactory;
         $this->_storeManager = $storeManager;
         $this->_httpContext = $httpContext;
     }
@@ -207,9 +191,6 @@ class UrlRewrite extends \Magento\Framework\Model\AbstractModel
      */
     public function rewrite(\Magento\Framework\App\RequestInterface $request = null)
     {
-        if (!$this->_appState->isInstalled()) {
-            return false;
-        }
         if (is_null($this->getStoreId()) || false === $this->getStoreId()) {
             $this->setStoreId($this->_storeManager->getStore()->getId());
         }
@@ -256,14 +237,7 @@ class UrlRewrite extends \Magento\Framework\Model\AbstractModel
             }
             $currentStore = $this->_storeManager->getStore();
             $this->setStoreId($currentStore->getId())->loadByIdPath($this->getIdPath());
-
-            $cookieMetadata = $this->_cookieMetadataFactory->createPublicCookieMetadata()
-                ->setDurationOneYear();
-            $this->_cookieManager->setPublicCookie(
-                \Magento\Store\Model\Store::COOKIE_NAME,
-                $currentStore->getCode(),
-                $cookieMetadata
-            );
+            $currentStore->setCookie();
             $targetUrl .= '/' . $this->getRequestPath();
 
             $this->_sendRedirectHeaders($targetUrl, true);
@@ -278,16 +252,7 @@ class UrlRewrite extends \Magento\Framework\Model\AbstractModel
         $external = substr($this->getTargetPath(), 0, 6);
         $isPermanentRedirectOption = $this->hasOption('RP');
         if ($external === 'http:/' || $external === 'https:') {
-            $destinationStoreCode = $this->_storeManager->getStore($this->getStoreId())->getCode();
-
-            $cookieMetadata = $this->_cookieMetadataFactory->createPublicCookieMetadata()
-                ->setDurationOneYear();
-            $this->_cookieManager->setPublicCookie(
-                \Magento\Store\Model\Store::COOKIE_NAME,
-                $destinationStoreCode,
-                $cookieMetadata
-            );
-
+            $this->_storeManager->getStore($this->getStoreId())->setCookie();
             $this->_sendRedirectHeaders($this->getTargetPath(), $isPermanentRedirectOption);
         } else {
             $targetUrl .= '/' . $this->getTargetPath();

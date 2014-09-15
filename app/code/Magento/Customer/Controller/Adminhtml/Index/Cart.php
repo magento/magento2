@@ -44,7 +44,7 @@ class Cart extends \Magento\Customer\Controller\Adminhtml\Index
             $quote = $this->_objectManager->create(
                 'Magento\Sales\Model\Quote'
             )->setWebsite(
-                $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->getWebsite($websiteId)
+                $this->_objectManager->get('Magento\Framework\StoreManagerInterface')->getWebsite($websiteId)
             )->loadByCustomer(
                 $this->_coreRegistry->registry(RegistryConstants::CURRENT_CUSTOMER_ID)
             );

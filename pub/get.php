@@ -80,19 +80,20 @@ if ($mediaDirectory) {
 // Materialize file in application
 $params = $_SERVER;
 if (empty($mediaDirectory)) {
-    $params[Filesystem::PARAM_ALLOWED_MODULES] = array('Magento_Core');
-    $params[Factory::PARAM_CACHE_FORCED_OPTIONS]['frontend_options']['disable_save'] = true;
+    $params[Filesystem::PARAM_ALLOWED_MODULES] = ['Magento_Core'];
+    $params[Factory::PARAM_CACHE_FORCED_OPTIONS] = ['frontend_options' => ['disable_save' => true]];
 }
-
-$entryPoint = new \Magento\Framework\App\EntryPoint\EntryPoint(dirname(__DIR__), $params);
-$entryPoint->run(
+$bootstrap = \Magento\Framework\App\Bootstrap::create(BP, $params);
+/** @var \Magento\Core\App\Media $app */
+$app = $bootstrap->createApplication(
     'Magento\Core\App\Media',
-    array(
+    [
         'request' => $request,
         'workingDirectory' => __DIR__,
         'mediaDirectory' => $mediaDirectory,
         'configCacheFile' => $configCacheFile,
         'isAllowed' => $isAllowed,
         'relativeFileName' => $relativeFilename,
-    )
+    ]
 );
+$bootstrap->run($app);

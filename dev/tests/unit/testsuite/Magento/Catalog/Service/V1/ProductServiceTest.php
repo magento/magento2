@@ -130,7 +130,22 @@ class ProductServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->_productMock->expects($this->at(0))->method('getIdBySku')->will($this->returnValue($productId));
         $this->_productMock->expects($this->at(1))->method('load')->with($productId);
-        $productService = $this->_createService();
+
+        $productData = $this->getMockBuilder('Magento\Catalog\Service\V1\Data\Product')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->converterMock->expects($this->once())
+            ->method('createProductDataFromModel')
+            ->with($this->_productMock)
+            ->will($this->returnValue($productData));
+
+        $productService = $this->_objectManager->getObject(
+            'Magento\Catalog\Service\V1\ProductService',
+            [
+                'productLoader' => $this->_productLoaderMock,
+                'converter' => $this->converterMock,
+            ]
+        );
 
         $this->assertTrue($productService->delete($productSku));
     }
@@ -200,8 +215,8 @@ class ProductServiceTest extends \PHPUnit_Framework_TestCase
         $productDataBuilder->setSku('test');
         $productDataBuilder->setStoreId(10);
         $this->converterMock->expects($this->once())
-            ->method('createProductDataFromModel')
-            ->will($this->returnValue($productDataBuilder->create()));
+            ->method('createProductBuilderFromModel')
+            ->will($this->returnValue($productDataBuilder));
 
         $this->searchResultsBuilderMock->expects($this->once())
             ->method('setItems')
@@ -243,7 +258,13 @@ class ProductServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->_productMock->expects($this->at(0))->method('getIdBySku')->will($this->returnValue($productId));
         $this->_productMock->expects($this->at(1))->method('load')->with($productId);
-        $this->converterMock->expects($this->once())->method('createProductDataFromModel')->with($this->_productMock);
+        $productDataBuilder = $this->getMockBuilder('\Magento\Catalog\Service\V1\Data\ProductBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->converterMock->expects($this->once())
+            ->method('createProductBuilderFromModel')
+            ->with($this->_productMock)
+            ->will($this->returnValue($productDataBuilder));
 
         $productService = $this->_objectManager->getObject(
             'Magento\Catalog\Service\V1\ProductService',
@@ -312,8 +333,8 @@ class ProductServiceTest extends \PHPUnit_Framework_TestCase
 
         $initializationHelper->expects($this->once())->method('initialize')->with($productModel);
 
-        $productModel->expects($this->once())->method('validate');
-        $productModel->expects($this->once())->method('save');
+        $productModel->expects($this->any())->method('validate');
+        $productModel->expects($this->any())->method('save');
 
         $productSku = 'sku-001';
         $productModel->expects($this->once())->method('getId')->will($this->returnValue(100));
@@ -481,8 +502,8 @@ class ProductServiceTest extends \PHPUnit_Framework_TestCase
         $initializationHelper->expects($this->once())->method('initialize')->with($productModel);
         $productTypeManager->expects($this->once())->method('processProduct')->with($productModel);
 
-        $productModel->expects($this->once())->method('validate');
-        $productModel->expects($this->once())->method('save');
+        $productModel->expects($this->any())->method('validate');
+        $productModel->expects($this->any())->method('save');
 
         $productSku = 'sku-001';
         $productModel->expects($this->any())->method('getSku')->will($this->returnValue($productSku));

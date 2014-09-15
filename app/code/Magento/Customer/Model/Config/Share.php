@@ -49,7 +49,7 @@ class Share extends \Magento\Framework\App\Config\Value implements \Magento\Fram
      */
     protected $_customerResource;
 
-    /** @var  \Magento\Store\Model\StoreManagerInterface */
+    /** @var  \Magento\Framework\StoreManagerInterface */
     protected $_storeManager;
 
     /**
@@ -58,7 +58,7 @@ class Share extends \Magento\Framework\App\Config\Value implements \Magento\Fram
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Customer\Model\Resource\Customer $customerResource
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
@@ -68,7 +68,7 @@ class Share extends \Magento\Framework\App\Config\Value implements \Magento\Fram
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Customer\Model\Resource\Customer $customerResource,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,

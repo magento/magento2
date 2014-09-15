@@ -63,7 +63,7 @@ class StoreManagerTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_storage = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $this->_storage = $this->getMock('Magento\Framework\StoreManagerInterface');
 
         $this->_model = new \Magento\Store\Model\StoreManager(
             $this->_factoryMock,

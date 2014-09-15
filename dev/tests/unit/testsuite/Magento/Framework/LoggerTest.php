@@ -47,9 +47,28 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
      */
     protected $directory;
 
+    /**
+     * @var string
+     */
+    private static $logDir;
+
+    public static function setUpBeforeClass()
+    {
+        self::$logDir = TESTS_TEMP_DIR . '/var/log';
+        if (!is_dir(self::$logDir)) {
+            mkdir(self::$logDir, 0777, true);
+        }
+    }
+
+    public static function tearDownAfterClass()
+    {
+        $filesystemAdapter = new \Magento\Framework\Filesystem\Driver\File();
+        $filesystemAdapter->deleteDirectory(self::$logDir);
+    }
+
     protected function setUp()
     {
-        $logDir = TESTS_TEMP_DIR . '/var/log';
+        $logDir = self::$logDir;
         $this->filesystemMock = $this->getMock('Magento\Framework\App\Filesystem', [], [], '', false);
         $this->directory = $this->getMock('Magento\Framework\Filesystem\Directory\Write', [], [], '', false);
         $this->filesystemMock->expects($this->any())
@@ -66,13 +85,14 @@ class LoggerTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        if (!is_dir($logDir)) {
-            mkdir($logDir, 0777, true);
-        }
-
         $this->model = new \Magento\Framework\Logger($this->filesystemMock);
         $this->loggersProperty = new \ReflectionProperty($this->model, '_loggers');
         $this->loggersProperty->setAccessible(true);
+    }
+
+    protected function tearDown()
+    {
+        $this->model = null; // will cause __descruct() in the underlying log class, which will close the open log files
     }
 
     /**

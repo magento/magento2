@@ -23,7 +23,7 @@
  */
 namespace Magento\Backend\Model\Config\Structure;
 
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\StoreManagerInterface;
 
 abstract class AbstractElement implements ElementInterface
 {
@@ -44,12 +44,12 @@ abstract class AbstractElement implements ElementInterface
     /**
      * Store manager
      *
-     * @var StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @param StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      */
     public function __construct(StoreManagerInterface $storeManager)
     {

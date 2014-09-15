@@ -56,7 +56,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected $coreResourceMock;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeManagerMock;
 
@@ -101,7 +101,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->storeManagerMock = $this->getMock(
-            'Magento\Store\Model\StoreManagerInterface',
+            'Magento\Framework\StoreManagerInterface',
             array(),
             array(),
             '',

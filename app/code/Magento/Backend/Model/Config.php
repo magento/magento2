@@ -88,7 +88,7 @@ class Config extends \Magento\Framework\Object
     protected $_configValueFactory;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -99,7 +99,7 @@ class Config extends \Magento\Framework\Object
      * @param \Magento\Framework\DB\TransactionFactory $transactionFactory
      * @param \Magento\Backend\Model\Config\Loader $configLoader
      * @param \Magento\Framework\App\Config\ValueFactory $configValueFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param array $data
      */
     public function __construct(
@@ -109,7 +109,7 @@ class Config extends \Magento\Framework\Object
         \Magento\Framework\DB\TransactionFactory $transactionFactory,
         \Magento\Backend\Model\Config\Loader $configLoader,
         \Magento\Framework\App\Config\ValueFactory $configValueFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         array $data = array()
     ) {
         parent::__construct($data);

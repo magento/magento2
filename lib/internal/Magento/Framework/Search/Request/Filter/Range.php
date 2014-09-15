@@ -1,7 +1,5 @@
 <?php
 /**
- * Range Filter
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -28,6 +26,7 @@ namespace Magento\Framework\Search\Request\Filter;
 use Magento\Framework\Search\Request\FilterInterface;
 
 /**
+ * Range Filter
  * @SuppressWarnings(PHPMD.ShortVariable)
  */
 class Range implements FilterInterface

@@ -1,3 +1,65 @@
+0.1.0-alpha95
+=============
+ * Modularity
+   * Log module became switchable
+   * New switchable module TaxImportExport was created
+ * Sales module improvement: 
+   * Performance was improved
+   * Complexity of the order persistence logic was reduced
+ * Unit tests coverage for modules was increased:
+   * Magento\Rule
+   * Magento\Contact
+ * Framework:
+   * Composite and bundle save/load processors were added
+   * Support for the complex custom attributes were added
+   * Generic abstract data objects, that is simple and extensible (supports custom attributes), were created  
+ * Search Library:
+   * Approach of matching the fields to table names was implemented
+   * MySQL Adapter Library for Match and Filtered query types was added
+   * Ability to filter queries was added
+   * Response handler for MySQL adapter was added
+   * XML declarations for full-text search were added
+ * Functional tests:
+   * Add Products to Order from Last Ordered Products Section
+   * Add Products to Order from Products in Comparison List Section
+   * Add Products to Order from Recently Compared Products Section
+   * Create Configurable Product
+   * Create Store
+   * Create Website
+   * Delete Product From Customer Wishlist On Backend
+   * Delete Store
+   * Delete Website
+   * Viewed Products Report
+   * Products In Cart Report
+   * Manage Product Review from Customer Page
+   * Mass Assign Customer Group
+   * New Account Report
+   * Update Product Review From Product Page
+   * Update Store
+   * Manage Product Review From Customer Page
+ * Other:
+   * Session.name ini set
+   * Calls to setPublicCookie became more secured
+   * Generating the session ID for sensitive data was added
+ *  Fixed bugs:
+   * Placing the order from backend
+   * Redirecting the customer to empty shopping cart instead of displaying credit card iFrame on checkout with for PayPal Payflow Link
+   * Showing the  message for multiple shipping address checkout in Authorize partial approval flow
+   * Mess detector failure
+   * flv_player security vulnerability
+   * Calling the inexistent method in cart with shopping cart price rules
+   * Overriding a non-empty custom attribute value with empty value in store view scope
+   * Editing  in 'WYSIWYG editor' by clicking "Use Default" checkbox when switched to store view scope
+   * RSS list page vulnerability
+   * Applying the store View title on frontend for configurable attributes
+   * Viewing the uploaded sample in downloadable product
+   * Google Shopping: Problem with publishing products if change value for option 'Update Google Shopping Item when Product is Updated'
+   * Configuration scope of items' InStock status on order cancellation
+   * Creating the new customer in admin
+ * GitHub requests:
+   * #621 -- Parse error: syntax error, unexpected T_OBJECT_OPERATOR
+   * #651 -- Multishipping checkout add/edit address page issue
+
 0.1.0-alpha94
 =============
  * Implemented API services:
@@ -15,7 +77,7 @@
    * Create Shopping Cart Gift Message service
    * Create Shopping Cart Totals service
  * Fixed bugs:
-   * Fixed an issue where  selecting a shipping method in PayPal Express Checkout resulted in a fatal error
+   * Fixed an issue where selecting a shipping method in PayPal Express Checkout resulted in a fatal error
    * Fixed an issue where the information displayed on the Payment Information step of Zero Subtotal Checkout was confusing
    * Fixed a JavaScript error in shipping label
    * Fixed an issue with wrong layout of the storefront pages
@@ -26,20 +88,20 @@
    * Fixed an issue where taxes were not applied in the shopping cart after registering customer on the storefront
    * Fixed an issue where the wrong html markup was generated on My order pages for the WEEE tax
    * Fixed an issue where the built-in caching did not work on product pages
-   * Removed the stream resource usage to avoid errors when  the allow_url_fopen PHP option is set to Off
+   * Removed the stream resource usage to avoid errors when the allow_url_fopen PHP option is set to Off
    * Fixed the New Return page layout on the backend
-   * Fixed an issue where  it was impossible to apply a specific coupon code when the Apply to Shipping Amount option of the Shopping Cart Rule was set to Yes
+   * Fixed an issue where it was impossible to apply a specific coupon code when the Apply to Shipping Amount option of the Shopping Cart Rule was set to Yes
    * Removed file paths/content from test case names in data-driven tests
-   * Fixed an issue where pagination was absent in the  Order Status grid
+   * Fixed an issue where pagination was absent in the Order Status grid
    * Fixed an issue where after applying a discount coupon and changing the currency the discount value was incorrect
    * Fixed an issue where trying to a new rating resulted in a fatal error
    * Fixed an issue where the minimum order amount was compared with subtotal without taxes
    * Fixed an issue where it was impossible to open the previous step during Onepage Checkout
-   * Fixed an issue with Persistent Shopping Cart where an unexpected message was displayed during checkout if a user started the checkout  after the short-term cookie had expired
+   * Fixed an issue with Persistent Shopping Cart where an unexpected message was displayed during checkout if a user started the checkout after the short-term cookie had expired
    * Fixed an issue where a customer was redirected to the shopping cart after selecting shipping method during checkout with a payment method using 3D Secure
    * Fixed an issue where the Cart Item service used itemSku instead itemId
    * Fixed an issue where gift messages for individual items were not saved during backend order creation
-   * Fixed an issue where the Purchase Order Number input field was not displayed in Onepage Checkout  if only one payment method was enabled
+   * Fixed an issue where the Purchase Order Number input field was not displayed in Onepage Checkout if only one payment method was enabled
  * GitHub requests:
    * [#446] (https://github.com/magento/magento2/issues/446) -- Rounding different in order to original quote calculation
 

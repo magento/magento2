@@ -38,7 +38,7 @@ class CalculationTest extends \PHPUnit_Framework_TestCase
     {
         // create the mocks
         $resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
-        $storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface', [], [], '', false);
+        $storeManager = $this->getMock('Magento\Framework\StoreManagerInterface', [], [], '', false);
 
         $taxData = $this->getMock('Magento\Tax\Helper\Data', ['getPostCodeSubStringLength'], [], '', false);
         $taxData

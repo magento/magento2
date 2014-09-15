@@ -24,7 +24,7 @@
 
 namespace Magento\User\Test\Constraint;
 
-use Magento\Backend\Test\Page\Dashboard;
+use Magento\Backend\Test\Page\Adminhtml\Dashboard;
 use Magento\User\Test\Page\Adminhtml\UserIndex;
 use Mtf\Constraint\AbstractConstraint;
 

@@ -52,9 +52,9 @@ class MagentoImportTest extends \PHPUnit_Framework_TestCase
     private $assetRepo;
 
     /**
-     * @var \Magento\Framework\View\Design\Theme\Provider|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\Design\Theme\ListInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $themeProvider;
+    private $themeList;
 
     /**
      * @var \Magento\Framework\Less\PreProcessor\Instruction\Import
@@ -71,13 +71,13 @@ class MagentoImportTest extends \PHPUnit_Framework_TestCase
         $this->asset = $this->getMock('\Magento\Framework\View\Asset\File', [], [], '', false);
         $this->asset->expects($this->any())->method('getContentType')->will($this->returnValue('css'));
         $this->assetRepo = $this->getMock('\Magento\Framework\View\Asset\Repository', [], [], '', false);
-        $this->themeProvider = $this->getMock('\Magento\Framework\View\Design\Theme\Provider', [], [], '', false);
+        $this->themeList = $this->getMockForAbstractClass('\Magento\Framework\View\Design\Theme\ListInterface');
         $this->object = new \Magento\Framework\Less\PreProcessor\Instruction\MagentoImport(
             $this->design,
             $this->fileSource,
             $this->errorHandler,
             $this->assetRepo,
-            $this->themeProvider
+            $this->themeList
         );
     }
 
@@ -104,7 +104,7 @@ class MagentoImportTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($relatedAsset));
         $relatedAsset->expects($this->once())->method('getContext')->will($this->returnValue($context));
         $theme = $this->getMockForAbstractClass('\Magento\Framework\View\Design\ThemeInterface');
-        $this->themeProvider->expects($this->once())->method('getThemeModel')->will($this->returnValue($theme));
+        $this->themeList->expects($this->once())->method('getThemeByFullPath')->will($this->returnValue($theme));
         $files = [];
         foreach ($foundFiles as $file) {
             $fileObject = $this->getMock('Magento\Framework\View\File', [], [], '', false);

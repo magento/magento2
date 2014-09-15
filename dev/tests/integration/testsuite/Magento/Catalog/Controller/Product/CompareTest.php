@@ -175,8 +175,9 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
 
     protected function _prepareCompareListWithProductNameXss()
     {
-        /** @var $visitor \Magento\Log\Model\Visitor */
-        $visitor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Log\Model\Visitor');
+        /** @var $visitor \Magento\Customer\Model\Visitor */
+        $visitor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\Customer\Model\Visitor');
         /** @var \Magento\Framework\Stdlib\DateTime $dateTime */
         $dateTime = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Framework\Stdlib\DateTime');
@@ -187,7 +188,7 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         );
         $item->setVisitorId($visitor->getId())->setProductId(1)->save();
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Log\Model\Visitor'
+            'Magento\Customer\Model\Visitor'
         )->load(
             $visitor->getId()
         );
@@ -195,8 +196,9 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
 
     protected function _requireVisitorWithNoProducts()
     {
-        /** @var $visitor \Magento\Log\Model\Visitor */
-        $visitor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Log\Model\Visitor');
+        /** @var $visitor \Magento\Customer\Model\Visitor */
+        $visitor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\Customer\Model\Visitor');
 
         /** @var \Magento\Framework\Stdlib\DateTime $dateTime */
         $dateTime = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
@@ -205,7 +207,7 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         $visitor->setSessionId(md5(time()) . md5(microtime()))->setLastVisitAt($dateTime->now())->save();
 
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Log\Model\Visitor'
+            'Magento\Customer\Model\Visitor'
         )->load(
             $visitor->getId()
         );
@@ -215,8 +217,9 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
 
     protected function _requireVisitorWithTwoProducts()
     {
-        /** @var $visitor \Magento\Log\Model\Visitor */
-        $visitor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Log\Model\Visitor');
+        /** @var $visitor \Magento\Customer\Model\Visitor */
+        $visitor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\Customer\Model\Visitor');
         /** @var \Magento\Framework\Stdlib\DateTime $dateTime */
         $dateTime = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Framework\Stdlib\DateTime');
@@ -235,7 +238,7 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         $item->setVisitorId($visitor->getId())->setProductId(2)->save();
 
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Log\Model\Visitor'
+            'Magento\Customer\Model\Visitor'
         )->load(
             $visitor->getId()
         );
@@ -271,9 +274,9 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
             ->get('Magento\Customer\Model\Session');
         $session->setCustomerId(1);
 
-        /** @var $visitor \Magento\Log\Model\Visitor */
+        /** @var $visitor \Magento\Customer\Model\Visitor */
         $visitor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Log\Model\Visitor');
+            ->create('Magento\Customer\Model\Visitor');
         /** @var \Magento\Framework\Stdlib\DateTime $dateTime */
         $dateTime = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Framework\Stdlib\DateTime');
@@ -296,7 +299,7 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
             ->setProductId(2)
             ->save();
 
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Log\Model\Visitor')
+        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Customer\Model\Visitor')
             ->load($visitor->getId());
 
         $this->_assertCompareListEquals(array(1, 2));
@@ -316,7 +319,7 @@ class CompareTest extends \Magento\TestFramework\TestCase\AbstractController
         $compareItems->useProductItem(true);
         // important
         $compareItems->setVisitorId(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Log\Model\Visitor')->getId()
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Customer\Model\Visitor')->getId()
         );
         $actualProductIds = array();
         foreach ($compareItems as $compareItem) {

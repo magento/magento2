@@ -163,6 +163,7 @@ return array(
     'customer_entity_int' => 'Magento_Customer',
     'customer_entity_text' => 'Magento_Customer',
     'customer_entity_varchar' => 'Magento_Customer',
+    'customer_visitor' => 'Magento_Customer',
     'directory_country' => 'Magento_Directory',
     'directory_country_format' => 'Magento_Directory',
     'directory_country_name' => 'Magento_Directory',

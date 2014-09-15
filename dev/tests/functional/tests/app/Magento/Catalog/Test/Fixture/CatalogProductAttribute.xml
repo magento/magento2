@@ -287,6 +287,15 @@
             <default_value>1</default_value>
             <input></input>
         </search_weight>
+        <options>
+            <attribute_code>options</attribute_code>
+            <backend_type>smallint</backend_type>
+            <is_required></is_required>
+            <default_value></default_value>
+            <input></input>
+            <source>\Magento\Catalog\Test\Fixture\CatalogProductAttribute\Options</source>
+            <group>manage-options</group>
+        </options>
     </fields>
     <repository_class>Magento\Catalog\Test\Repository\CatalogProductAttribute</repository_class>
     <handler_interface>Magento\Catalog\Test\Handler\CatalogProductAttribute\CatalogAttributeEntityInterface</handler_interface>

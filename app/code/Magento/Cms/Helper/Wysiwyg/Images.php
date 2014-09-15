@@ -69,7 +69,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Store manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -80,14 +80,14 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Backend\Helper\Data $backendData
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Framework\App\Filesystem $filesystem
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Backend\Helper\Data $backendData,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Framework\App\Filesystem $filesystem,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Framework\StoreManagerInterface $storeManager
     ) {
         parent::__construct($context);
         $this->_backendData = $backendData;

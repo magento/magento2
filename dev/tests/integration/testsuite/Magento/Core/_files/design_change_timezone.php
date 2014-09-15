@@ -32,7 +32,7 @@ $designChanges = array(
 );
 foreach ($designChanges as $designChangeData) {
     $storeId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-        'Magento\Store\Model\StoreManagerInterface'
+        'Magento\Framework\StoreManagerInterface'
     )->getStore(
         $designChangeData['store']
     )->getId();

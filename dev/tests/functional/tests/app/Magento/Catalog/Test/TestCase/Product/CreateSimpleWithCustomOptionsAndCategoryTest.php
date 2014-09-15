@@ -56,7 +56,7 @@ class CreateSimpleWithCustomOptionsAndCategoryTest extends Functional
         $product->switchData('simple_custom_options');
         //Data
         $createProductPage = Factory::getPageFactory()->getCatalogProductNew();
-        $productForm = $createProductPage->getForm();
+        $productForm = $createProductPage->getProductForm();
         //Steps
         $createProductPage->open([
                 'type' => $product->getDataConfig()['create_url_params']['type'],
@@ -64,7 +64,7 @@ class CreateSimpleWithCustomOptionsAndCategoryTest extends Functional
             ]);
         $category = $product->getCategories()['category'];
         $productForm->fill($product, null, $category);
-        $createProductPage->getFormAction()->save();
+        $createProductPage->getFormPageActions()->save();
         //Verifying
         $createProductPage->getMessagesBlock()->assertSuccessMessage();
         // Flush cache
@@ -88,7 +88,7 @@ class CreateSimpleWithCustomOptionsAndCategoryTest extends Functional
         $productGridPage->open();
         /** @var \Magento\Catalog\Test\Block\Adminhtml\Product\Grid $gridBlock */
         $gridBlock = $productGridPage->getProductGrid();
-        $this->assertTrue($gridBlock->isRowVisible(array('sku' => $product->getProductSku())));
+        $this->assertTrue($gridBlock->isRowVisible(['sku' => $product->getProductSku()]));
     }
 
     /**
@@ -116,11 +116,11 @@ class CreateSimpleWithCustomOptionsAndCategoryTest extends Functional
         $price = $productViewBlock->getProductPrice();
         $this->assertEquals(number_format($product->getProductPrice(), 2), $price['price_regular_price']);
 
-        $productOptionsBlock = $productPage->getCustomOptionsBlock();
+        $productOptionsBlock = $productPage->getViewBlock()->getCustomOptionsBlock();
         $fixture = $product->getData('fields/custom_options/value');
-        $actualOptions = $productOptionsBlock->getOptions();
+        $actualOptions = $productOptionsBlock->getOptions($product);
         $this->assertCount(count($fixture), $actualOptions);
-        $this->assertTrue(isset($actualOptions[$fixture[0]['title']]['title']));
-        $this->assertEquals($fixture[0]['title'], $actualOptions[$fixture[0]['title']]['title']);
+        $this->assertTrue(isset($actualOptions['custom_options'][$fixture[0]['title']]['options'][0]['title']));
+        $this->assertEquals($fixture[0]['title'], $actualOptions['custom_options'][$fixture[0]['title']]['title']);
     }
 }

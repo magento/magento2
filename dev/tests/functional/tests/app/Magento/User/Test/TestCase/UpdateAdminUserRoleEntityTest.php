@@ -25,7 +25,7 @@
 namespace Magento\User\Test\TestCase;
 
 use Magento\Backend\Test\Page\AdminAuthLogin;
-use Magento\Backend\Test\Page\Dashboard;
+use Magento\Backend\Test\Page\Adminhtml\Dashboard;
 use Magento\User\Test\Page\Adminhtml\UserRoleIndex;
 use Magento\User\Test\Page\Adminhtml\UserRoleEditRole;
 use Magento\User\Test\Fixture\User;

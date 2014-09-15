@@ -26,7 +26,7 @@ namespace Magento\Sales\Model\Quote\Item;
 use \Magento\Catalog\Model\Product;
 use \Magento\Sales\Model\Quote\ItemFactory;
 use \Magento\Sales\Model\Quote\Item;
-use \Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\StoreManagerInterface;
 use \Magento\Framework\App\State;
 use \Magento\Framework\Object;
 
@@ -43,7 +43,7 @@ class Processor
     protected $quoteItemFactory;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $storeManager;
 

@@ -37,6 +37,8 @@
             <is_required>0</is_required>
             <default_value></default_value>
             <input>text</input>
+            <group>product-details</group>
+            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\CategoryIds</source>
         </category_ids>
         <cost>
             <attribute_code>cost</attribute_code>

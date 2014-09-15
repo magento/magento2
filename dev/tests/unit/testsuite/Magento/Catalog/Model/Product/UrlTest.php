@@ -92,7 +92,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
         $store = $this->getMock('Magento\Store\Model\Store', ['getId', '__wakeup'], [], '', false);
         $store->expects($this->any())->method('getId')->will($this->returnValue(1));
-        $storeManager = $this->getMockForAbstractClass('Magento\Store\Model\StoreManagerInterface');
+        $storeManager = $this->getMockForAbstractClass('Magento\Framework\StoreManagerInterface');
         $storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
 
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);

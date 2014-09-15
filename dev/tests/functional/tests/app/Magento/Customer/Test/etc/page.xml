@@ -32,6 +32,10 @@
         <mca>customer/account/index</mca>
         <class>Magento\Customer\Test\Page\CustomerAccountIndex</class>
     </customerAccountIndex>
+    <customerAccountLogin>
+        <mca>customer/account/login</mca>
+        <class>Magento\Customer\Test\Page\CustomerAccountLogin</class>
+    </customerAccountLogin>
     <customerAccountEdit>
         <mca>customer/account/edit</mca>
         <class>Magento\Customer\Test\Page\CustomerAccountEdit</class>

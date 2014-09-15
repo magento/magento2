@@ -43,7 +43,7 @@ class GroupPriceService implements GroupPriceServiceInterface
     protected $groupPriceBuilder;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -65,7 +65,7 @@ class GroupPriceService implements GroupPriceServiceInterface
     /**
      * @param ProductRepository $productRepository
      * @param Product\GroupPriceBuilder $groupPriceBuilder
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Customer\Service\V1\CustomerGroupServiceInterface $customerGroupService
      * @param \Magento\Catalog\Model\Product\PriceModifier $priceModifier
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
@@ -73,7 +73,7 @@ class GroupPriceService implements GroupPriceServiceInterface
     public function __construct(
         ProductRepository $productRepository,
         Product\GroupPriceBuilder $groupPriceBuilder,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Customer\Service\V1\CustomerGroupServiceInterface $customerGroupService,
         \Magento\Catalog\Model\Product\PriceModifier $priceModifier,
         \Magento\Framework\App\Config\ScopeConfigInterface $config

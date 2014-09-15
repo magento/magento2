@@ -47,7 +47,7 @@ class Remove extends \Magento\Catalog\Controller\Product\Compare
                 } elseif ($this->_customerId) {
                     $item->setCustomerId($this->_customerId);
                 } else {
-                    $item->addVisitorId($this->_logVisitor->getId());
+                    $item->addVisitorId($this->_customerVisitor->getId());
                 }
 
                 $item->loadByProduct($product);

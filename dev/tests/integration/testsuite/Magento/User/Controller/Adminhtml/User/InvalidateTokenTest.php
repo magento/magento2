@@ -37,8 +37,8 @@ class InvalidateTokenTest extends \Magento\Backend\Utility\Controller
      */
     public function testInvalidateSingleToken()
     {
-        /** @var \Magento\Integration\Service\V1\TokenService $tokenService */
-        $tokenService = Bootstrap::getObjectManager()->get('Magento\Integration\Service\V1\TokenService');
+        /** @var \Magento\Integration\Service\V1\AdminTokenService $tokenService */
+        $tokenService = Bootstrap::getObjectManager()->get('Magento\Integration\Service\V1\AdminTokenService');
         /** @var \Magento\Integration\Model\Oauth\Token $tokenModel */
         $tokenModel = Bootstrap::getObjectManager()->get('Magento\Integration\Model\Oauth\Token');
         /** @var \Magento\User\Model\User $userModel */
@@ -63,8 +63,14 @@ class InvalidateTokenTest extends \Magento\Backend\Utility\Controller
      */
     public function testInvalidateMultipleTokens()
     {
-        /** @var \Magento\Integration\Service\V1\TokenService $tokenService */
-        $tokenService = Bootstrap::getObjectManager()->get('Magento\Integration\Service\V1\TokenService');
+        /** @var \Magento\Integration\Service\V1\AdminTokenService $tokenService */
+        $tokenService = Bootstrap::getObjectManager()->get('Magento\Integration\Service\V1\AdminTokenService');
+
+        /** @var \Magento\Integration\Model\Resource\Oauth\Token\CollectionFactory $tokenModelCollectionFactory */
+        $tokenModelCollectionFactory = Bootstrap::getObjectManager()->get(
+            'Magento\Integration\Model\Resource\Oauth\Token\CollectionFactory'
+        );
+
         /** @var \Magento\User\Model\User $userModel */
         $userModel = Bootstrap::getObjectManager()->get('Magento\User\Model\User');
 
@@ -84,7 +90,7 @@ class InvalidateTokenTest extends \Magento\Backend\Utility\Controller
         // invalidate tokens
         $this->getRequest()->setParam('user_id', $adminUserId);
         $this->dispatch('backend/admin/user/invalidateToken');
-        foreach ($tokenService->tokenModelCollectionFactory->create()->addFilterByAdminId($adminUserId) as $token) {
+        foreach ($tokenModelCollectionFactory->create()->addFilterByAdminId($adminUserId) as $token) {
             $this->assertEquals(1, $token->getRevoked());
         }
     }

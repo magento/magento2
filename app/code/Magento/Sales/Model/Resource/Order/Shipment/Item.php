@@ -28,7 +28,7 @@ namespace Magento\Sales\Model\Resource\Order\Shipment;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Item extends \Magento\Sales\Model\Resource\Order\AbstractOrder
+class Item extends \Magento\Sales\Model\Resource\Entity
 {
     /**
      * Event prefix

@@ -38,7 +38,7 @@ class ScopeResolverTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->_storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')->getMock();
+        $this->_storeManagerMock = $this->getMockBuilder('Magento\Framework\StoreManagerInterface')->getMock();
         $this->_object = $objectManager->getObject(
             'Magento\Core\Model\Url\ScopeResolver',
             array('storeManager' => $this->_storeManagerMock)

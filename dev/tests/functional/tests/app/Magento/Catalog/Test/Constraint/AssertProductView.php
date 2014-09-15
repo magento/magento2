@@ -71,7 +71,7 @@ class AssertProductView extends AbstractConstraint
     protected function assertOnProductView(CatalogProductSimple $product, CatalogProductView $catalogProductView)
     {
         $viewBlock = $catalogProductView->getViewBlock();
-        $price = $viewBlock->getProductPriceBlock()->getPrice();
+        $price = $viewBlock->getPriceBlock()->getPrice();
         $name = $viewBlock->getProductName();
         $sku = $viewBlock->getProductSku();
 

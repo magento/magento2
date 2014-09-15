@@ -81,14 +81,9 @@ class Base implements \Magento\Framework\App\RouterInterface
     protected $_url;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
-
-    /**
-     * @var \Magento\Framework\App\State
-     */
-    protected $_appState;
 
     /**
      * @var \Magento\Framework\App\ResponseFactory
@@ -133,9 +128,8 @@ class Base implements \Magento\Framework\App\RouterInterface
      * @param \Magento\Framework\App\DefaultPathInterface $defaultPath
      * @param \Magento\Framework\App\ResponseFactory $responseFactory
      * @param \Magento\Framework\App\Route\ConfigInterface $routeConfig
-     * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\UrlInterface $url
-     * @param \Magento\Store\Model\StoreManagerInterface|\Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface|\Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Url\SecurityInfoInterface $urlSecurityInfo
      * @param string $routerId
@@ -148,9 +142,8 @@ class Base implements \Magento\Framework\App\RouterInterface
         \Magento\Framework\App\DefaultPathInterface $defaultPath,
         \Magento\Framework\App\ResponseFactory $responseFactory,
         \Magento\Framework\App\Route\ConfigInterface $routeConfig,
-        \Magento\Framework\App\State $appState,
         \Magento\Framework\UrlInterface $url,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Url\SecurityInfoInterface $urlSecurityInfo,
         $routerId,
@@ -165,7 +158,6 @@ class Base implements \Magento\Framework\App\RouterInterface
         $this->_scopeConfig = $scopeConfig;
         $this->_url = $url;
         $this->_storeManager = $storeManager;
-        $this->_appState = $appState;
         $this->nameBuilder = $nameBuilder;
     }
 
@@ -374,7 +366,7 @@ class Base implements \Magento\Framework\App\RouterInterface
      */
     protected function _checkShouldBeSecure(\Magento\Framework\App\RequestInterface $request, $path = '')
     {
-        if (!$this->_appState->isInstalled() || $request->getPost()) {
+        if ($request->getPost()) {
             return;
         }
 

@@ -25,6 +25,8 @@
  */
 namespace Magento\Customer\Model\Metadata\Form;
 
+use Magento\Framework\Service\ArrayObjectSearch;
+
 class Text extends AbstractData
 {
     /**
@@ -90,13 +92,21 @@ class Text extends AbstractData
         $length = $this->_string->strlen(trim($value));
 
         $validateRules = $attribute->getValidationRules();
-        if (!empty($validateRules['min_text_length']) && $length < $validateRules['min_text_length']->getValue()) {
-            $v = $validateRules['min_text_length']->getValue();
-            $errors[] = __('"%1" length must be equal or greater than %2 characters.', $label, $v);
+
+        $minTextLength = ArrayObjectSearch::getArrayElementByName(
+            $validateRules,
+            'min_text_length'
+        );
+        if (!is_null($minTextLength) && $length < $minTextLength) {
+            $errors[] = __('"%1" length must be equal or greater than %2 characters.', $label, $minTextLength);
         }
-        if (!empty($validateRules['max_text_length']) && $length > $validateRules['max_text_length']->getValue()) {
-            $v = $validateRules['max_text_length']->getValue();
-            $errors[] = __('"%1" length must be equal or less than %2 characters.', $label, $v);
+
+        $maxTextLength = ArrayObjectSearch::getArrayElementByName(
+            $validateRules,
+            'max_text_length'
+        );
+        if (!is_null($maxTextLength) && $length > $maxTextLength) {
+            $errors[] = __('"%1" length must be equal or less than %2 characters.', $label, $maxTextLength);
         }
 
         $result = $this->_validateInputRule($value);

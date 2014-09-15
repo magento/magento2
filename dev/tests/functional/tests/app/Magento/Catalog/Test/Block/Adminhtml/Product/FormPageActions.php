@@ -72,18 +72,27 @@ class FormPageActions extends ParentFormPageActions
     protected $saveButton = '#save-split-button-button';
 
     /**
-     * Save product form with window confirmation
+     * Click on "Save" button
      *
-     * @param BackendPage $page
-     * @param FixtureInterface $product
+     * @param FixtureInterface|null $product [optional]
      * @return void
      */
-    public function saveProduct(BackendPage $page, FixtureInterface $product)
+    public function save(FixtureInterface $product = null)
     {
-        parent::save();
-        /** @var \Magento\Catalog\Test\Block\Adminhtml\Product\AffectedAttributeSetForm $affectedAttributeSetForm */
-        $affectedAttributeSetForm = $page->getAffectedAttributeSetForm();
-        $affectedAttributeSetForm->fill($product)->confirm();
+        $typeId = null;
+
+        if ($product) {
+            $dataConfig = $product->getDataConfig();
+            $typeId = isset($dataConfig['type_id']) ? $dataConfig['type_id'] : null;
+        }
+
+        if ($this->hasRender($typeId)) {
+            $this->callRender($typeId, 'save', ['product' => $product]);
+        } else {
+            $this->_rootElement->find($this->saveButton)->click();
+            $this->waitForElementNotVisible($this->loader, Locator::SELECTOR_XPATH);
+            $this->waitForElementNotVisible($this->loaderOld, Locator::SELECTOR_XPATH);
+        }
     }
 
     /**

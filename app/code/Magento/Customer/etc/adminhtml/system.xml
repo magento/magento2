@@ -42,13 +42,6 @@
                     <source_model>Magento\Customer\Model\Config\Share</source_model>
                 </field>
             </group>
-            <group id="online_customers" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
-                <label>Online Customers Options</label>
-                <field id="online_minutes_interval" translate="label comment" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Online Minutes Interval</label>
-                    <comment>Leave empty for default (15 minutes).</comment>
-                </field>
-            </group>
             <group id="create_account" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Create New Account Options</label>
                 <field id="auto_group_assign" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">

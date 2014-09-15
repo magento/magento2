@@ -25,7 +25,7 @@
 -->
 
 <fixture>
-    <catalogProductConfigurable module="Magento_ConfigurableProduct">
+    <configurableProductInjectable module="Magento_ConfigurableProduct">
         <type>eav</type>
         <entity_type>catalog_product</entity_type>
         <product_type>configurable</product_type>
@@ -49,7 +49,7 @@
                 <backend_type>virtual</backend_type>
                 <is_required>0</is_required>
                 <group>variations</group>
-                <fixture>Magento\ConfigurableProduct\Test\Fixture\CatalogProductConfigurable\ConfigurableOptions</fixture>
+                <fixture>Magento\ConfigurableProduct\Test\Fixture\ConfigurableProductInjectable\ConfigurableOptions</fixture>
             </configurable_options>
         </fields>
         <data_set>
@@ -66,5 +66,5 @@
             </create_url_params>
             <input_prefix>product</input_prefix>
         </data_config>
-    </catalogProductConfigurable>
+    </configurableProductInjectable>
 </fixture>

@@ -44,7 +44,7 @@ class GuestTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $scopeConfigInterfaceMock;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $storeManagerInterfaceMock;
 
     /** @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject */
@@ -75,13 +75,13 @@ class GuestTest extends \PHPUnit_Framework_TestCase
     {
         $this->appContextHelperMock = $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false);
         $this->scopeConfigInterfaceMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->storeManagerInterfaceMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $this->storeManagerInterfaceMock = $this->getMock('Magento\Framework\StoreManagerInterface');
         $this->stateMock = $this->getMock('Magento\Framework\App\State', [], [], '', false);
         $this->registryMock = $this->getMock('Magento\Framework\Registry');
         $this->sessionMock = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
-        $this->cookieManagerMock = $this->getMock('\Magento\Framework\Stdlib\CookieManager', [], [], '', false);
+        $this->cookieManagerMock = $this->getMock('Magento\Framework\Stdlib\CookieManager', [], [], '', false);
         $this->cookieMetadataFactoryMock = $this->getMock(
-            '\Magento\Framework\Stdlib\Cookie\CookieMetadataFactory',
+            'Magento\Framework\Stdlib\Cookie\CookieMetadataFactory',
             [],
             [],
             '',
@@ -153,13 +153,31 @@ class GuestTest extends \PHPUnit_Framework_TestCase
         $orderMock->expects($this->once())->method('getBillingAddress')->will($this->returnValue($billingAddressMock));
         $protectedCode = 'protectedCode';
         $orderMock->expects($this->once())->method('getProtectCode')->will($this->returnValue($protectedCode));
-        $metaData = new \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata();
+        $metaDataMock = $this->getMock(
+            'Magento\Framework\Stdlib\Cookie\PublicCookieMetadata',
+            [],
+            [],
+            '',
+            false
+        );
+        $metaDataMock->expects($this->once())
+            ->method('setPath')
+            ->with(Guest::COOKIE_PATH)
+            ->will($this->returnSelf());
+        $metaDataMock->expects($this->once())
+            ->method('setDuration')
+            ->with(Guest::COOKIE_LIFETIME)
+            ->will($this->returnSelf());
+        $metaDataMock->expects($this->once())
+            ->method('setHttpOnly')
+            ->with(true)
+            ->will($this->returnSelf());
         $this->cookieMetadataFactoryMock->expects($this->once())
             ->method('createPublicCookieMetadata')
-            ->will($this->returnValue($metaData));
+            ->will($this->returnValue($metaDataMock));
         $this->cookieManagerMock->expects($this->once())
             ->method('setPublicCookie')
-            ->with(Guest::COOKIE_NAME, $this->anything(), $metaData);
+            ->with(Guest::COOKIE_NAME, $this->anything(), $metaDataMock);
         $responseMock = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
         $this->assertTrue($this->guest->loadValidOrder($requestMock, $responseMock));
     }
@@ -186,13 +204,31 @@ class GuestTest extends \PHPUnit_Framework_TestCase
         $orderMock->expects($this->once())->method('loadByIncrementId')->with($incrementId);
         $orderMock->expects($this->exactly(1))->method('getId')->will($this->returnValue($incrementId));
         $orderMock->expects($this->once())->method('getProtectCode')->will($this->returnValue($protectedCode));
-        $metaData = new \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata();
+        $metaDataMock = $this->getMock(
+            'Magento\Framework\Stdlib\Cookie\PublicCookieMetadata',
+            [],
+            [],
+            '',
+            false
+        );
+        $metaDataMock->expects($this->once())
+            ->method('setPath')
+            ->with(Guest::COOKIE_PATH)
+            ->will($this->returnSelf());
+        $metaDataMock->expects($this->once())
+            ->method('setDuration')
+            ->with(Guest::COOKIE_LIFETIME)
+            ->will($this->returnSelf());
+        $metaDataMock->expects($this->once())
+            ->method('setHttpOnly')
+            ->with(true)
+            ->will($this->returnSelf());
         $this->cookieMetadataFactoryMock->expects($this->once())
             ->method('createPublicCookieMetadata')
-            ->will($this->returnValue($metaData));
+            ->will($this->returnValue($metaDataMock));
         $this->cookieManagerMock->expects($this->once())
             ->method('setPublicCookie')
-            ->with(Guest::COOKIE_NAME, $this->anything(), $metaData);
+            ->with(Guest::COOKIE_NAME, $this->anything(), $metaDataMock);
 
         $requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
         $responseMock = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);

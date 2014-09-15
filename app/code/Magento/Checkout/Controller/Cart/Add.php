@@ -35,7 +35,7 @@ class Add extends \Magento\Checkout\Controller\Cart
     {
         $productId = (int)$this->getRequest()->getParam('product');
         if ($productId) {
-            $storeId = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getId();
+            $storeId = $this->_objectManager->get('Magento\Framework\StoreManagerInterface')->getStore()->getId();
             $product = $this->_objectManager->create(
                 'Magento\Catalog\Model\Product'
             )->setStoreId(

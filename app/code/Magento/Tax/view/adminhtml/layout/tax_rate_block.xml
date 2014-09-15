@@ -33,20 +33,6 @@
                 <argument name="default_dir" xsi:type="string">ASC</argument>
                 <argument name="save_parameters_in_session" xsi:type="string">1</argument>
             </arguments>
-            <block class="Magento\Backend\Block\Widget\Grid\Export" name="adminhtml.tax.rate.grid.export" as="grid.export">
-                <arguments>
-                    <argument name="exportTypes" xsi:type="array">
-                        <item name="csv" xsi:type="array">
-                            <item name="urlPath" xsi:type="string">tax/*/exportCsv</item>
-                            <item name="label" xsi:type="string" translate="true">CSV</item>
-                        </item>
-                        <item name="excel" xsi:type="array">
-                            <item name="urlPath" xsi:type="string">tax/*/exportXml</item>
-                            <item name="label" xsi:type="string" translate="true">Excel XML</item>
-                        </item>
-                    </argument>
-                </arguments>
-            </block>
             <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" name="adminhtml.catalog.product.set.grid.columnSet" as="grid.columnSet">
                 <arguments>
                     <argument name="id" xsi:type="string">tax_rate_grid</argument>
@@ -57,43 +43,40 @@
                         </item>
                     </argument>
                 </arguments>
-                <block class="Magento\Backend\Block\Widget\Grid\Column" as="code">
+                <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.catalog.product.set.grid.column.code" as="code">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Tax Identifier</argument>
-                        <argument name="header_export" xsi:type="string" translate="true">Code</argument>
                         <argument name="filter_index" xsi:type="string">code</argument>
                         <argument name="index" xsi:type="string">code</argument>
                         <argument name="column_css_class" xsi:type="string">col-name</argument>
                         <argument name="header_css_class" xsi:type="string">col-name</argument>
                     </arguments>
                 </block>
-                <block class="Magento\Backend\Block\Widget\Grid\Column" as="tax_country_id">
+                <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.catalog.product.set.grid.column.tax_country_id" as="tax_country_id">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Country</argument>
                         <argument name="type" xsi:type="string">country</argument>
                         <argument name="filter_index" xsi:type="string">tax_country_id</argument>
                         <argument name="index" xsi:type="string">tax_country_id</argument>
-                        <argument name="renderer" xsi:type="string">Magento\Tax\Block\Adminhtml\Rate\Grid\Renderer\Country</argument>
                         <argument name="sortable" xsi:type="string">0</argument>
                     </arguments>
                 </block>
-                <block class="Magento\Backend\Block\Widget\Grid\Column" as="region_name">
+                <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.catalog.product.set.grid.column.region_name" as="region_name">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">State/Region</argument>
-                        <argument name="header_export" xsi:type="string" translate="true">State</argument>
                         <argument name="filter_index" xsi:type="string">region_name</argument>
                         <argument name="index" xsi:type="string">region_name</argument>
                         <argument name="default" xsi:type="string">*</argument>
                     </arguments>
                 </block>
-                <block class="Magento\Backend\Block\Widget\Grid\Column" as="tax_postcode">
+                <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.catalog.product.set.grid.column.tax_postcode" as="tax_postcode">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Zip/Post Code</argument>
                         <argument name="index" xsi:type="string">tax_postcode</argument>
                         <argument name="default" xsi:type="string">*</argument>
                     </arguments>
                 </block>
-                <block class="Magento\Backend\Block\Widget\Grid\Column" as="rate">
+                <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.catalog.product.set.grid.column.rate" as="rate">
                     <arguments>
                         <argument name="header" xsi:type="string" translate="true">Rate</argument>
                         <argument name="index" xsi:type="string">rate</argument>

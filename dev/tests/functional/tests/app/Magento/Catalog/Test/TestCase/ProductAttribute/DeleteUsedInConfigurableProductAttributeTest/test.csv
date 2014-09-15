@@ -1,2 +1,2 @@
 "product/dataSet";"constraint"
-"default_one_variation";"assertUsedSuperAttributeImpossibleDeleteMessages, assertProductAttributeInGrid, assertConfigurableProductForm"
+"one_variation";"assertUsedSuperAttributeImpossibleDeleteMessages, assertProductAttributeInGrid, assertConfigurableProductForm"

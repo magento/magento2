@@ -1,0 +1,3 @@
+"product";"constraint"
+"configurableProductInjectable::default";"assertProductIsAbsentInWishlist"
+"catalogProductSimple::simple_for_composite_products";"assertProductIsAbsentInWishlist"

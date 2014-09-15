@@ -45,12 +45,12 @@ class RecentTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Helper\Session\CurrentCustomer|\PHPUnit_Framework_MockObject_MockObject */
     protected $currentCustomer;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $storeManager;
 
     protected function setUp()
     {
-        $this->storeManager = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
+        $this->storeManager = $this->getMock('\Magento\Framework\StoreManagerInterface');
         $this->context = $this->getMock('Magento\Framework\View\Element\Template\Context', array(), array(), '', false);
         $this->context->expects(
             $this->any()

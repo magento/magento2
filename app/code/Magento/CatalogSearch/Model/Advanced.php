@@ -34,7 +34,7 @@ use Magento\CatalogSearch\Model\Resource\EngineProvider;
 use Magento\Framework\Model\Exception;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\StoreManagerInterface;
 use Magento\Directory\Model\Currency;
 use Magento\Directory\Model\CurrencyFactory;
 use Magento\Eav\Model\Entity\Attribute as EntityAttribute;
@@ -109,7 +109,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
     /**
      * Store manager
      *
-     * @var StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -138,7 +138,7 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
      * @param EngineProvider $engineProvider
      * @param CurrencyFactory $currencyFactory
      * @param ProductFactory $productFactory
-     * @param StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param array $data
      */
     public function __construct(

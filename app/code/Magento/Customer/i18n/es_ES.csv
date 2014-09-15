@@ -124,7 +124,6 @@ Unknown,Desconocido
 "Purchase Point","Comprado a"
 Never,Nunca
 Offline,"Sin conexión"
-Online,Conectado
 Confirmed,Confirmado
 "Confirmation Required","Confirmation Required"
 "Confirmation Not Required","Confirmation Not Required"
@@ -222,8 +221,6 @@ Visitor,Visitante
 "An error occurred while resetting customer password.","An error occurred while resetting customer password."
 "A total of %1 record(s) were deleted.","A total of %1 record(s) were deleted."
 "Please select customer(s).","Please select customer(s)."
-"Customers Now Online","Customers Now Online"
-"Online Customers","Clientes conectados"
 "No wishlist item ID is defined.","No wishlist item ID is defined."
 "Please load the wish list item.","Please load the wish list item."
 "PHP SOAP extension is required.","PHP SOAP extension is required."
@@ -353,8 +350,6 @@ Gender,Género
 "Customer Configuration","Customer Configuration"
 "Account Sharing Options","Account Sharing Options"
 "Share Customer Accounts","Share Customer Accounts"
-"Online Customers Options","Online Customers Options"
-"Online Minutes Interval","Online Minutes Interval"
 "Leave empty for default (15 minutes).","Leave empty for default (15 minutes)."
 "Create New Account Options","Create New Account Options"
 "Enable Automatic Assignment to Customer Group","Enable Automatic Assignment to Customer Group"

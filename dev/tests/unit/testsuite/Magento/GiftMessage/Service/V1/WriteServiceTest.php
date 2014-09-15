@@ -87,7 +87,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
         $objectManager =new \Magento\TestFramework\Helper\ObjectManager($this);
 
         $this->quoteRepositoryMock = $this->getMock('\Magento\Sales\Model\QuoteRepository', [], [], '', false);
-        $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
+        $this->storeManagerMock = $this->getMock('\Magento\Framework\StoreManagerInterface');
         $this->giftMessageManagerMock =
             $this->getMock('\Magento\GiftMessage\Model\GiftMessageManager', [], [], '', false);
         $this->helperMock = $this->getMock('\Magento\GiftMessage\Helper\Message', [], [], '', false);

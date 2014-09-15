@@ -34,13 +34,13 @@
           <xs:field xpath="@name" />
         </xs:key>
       </xs:element>
-      <xs:element type="filters" name="filters">
+      <xs:element type="filters" name="filters" minOccurs="0">
         <xs:key name="filterName">
           <xs:selector xpath="filter" />
           <xs:field xpath="@name" />
         </xs:key>
       </xs:element>
-      <xs:element type="aggregation" name="aggregation" >
+      <xs:element type="aggregation" name="aggregation" minOccurs="0">
         <xs:key name="aggregationName">
           <xs:selector xpath="bucket" />
           <xs:field xpath="@name" />
@@ -168,8 +168,8 @@
     <xs:complexContent>
       <xs:extension base="filter">
         <xs:attribute type="xs:string" name="field" use="required" />
-        <xs:attribute type="xs:string" name="from" use="required" />
-        <xs:attribute type="xs:string" name="to" use="required" />
+        <xs:attribute type="xs:string" name="from" use="optional" />
+        <xs:attribute type="xs:string" name="to" use="optional" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>

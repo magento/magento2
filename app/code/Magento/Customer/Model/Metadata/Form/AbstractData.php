@@ -25,6 +25,8 @@
  */
 namespace Magento\Customer\Model\Metadata\Form;
 
+use Magento\Framework\Service\ArrayObjectSearch;
+
 abstract class AbstractData
 {
     /**
@@ -284,8 +286,13 @@ abstract class AbstractData
         $label = $this->getAttribute()->getStoreLabel();
         $validateRules = $this->getAttribute()->getValidationRules();
 
-        if (!empty($validateRules['input_validation'])) {
-            switch ($validateRules['input_validation']) {
+        $inputValidation = ArrayObjectSearch::getArrayElementByName(
+            $validateRules,
+            'input_validation'
+        );
+
+        if (!is_null($inputValidation)) {
+            switch ($inputValidation) {
                 case 'alphanumeric':
                     $validator = new \Zend_Validate_Alnum(true);
                     $validator->setMessage(__('"%1" invalid type entered.', $label), \Zend_Validate_Alnum::INVALID);

@@ -1322,7 +1322,7 @@ class Authorizenet extends \Magento\Payment\Model\Method\Cc
                     $this->_clearAssignedData($quotePayment);
                     $this->setPartialAuthorizationLastActionState(self::PARTIAL_AUTH_LAST_SUCCESS);
                     $quotePayment->setAdditionalInformation($orderPayment->getAdditionalInformation());
-                    $exceptionMessage = null;
+                    $exceptionMessage = $this->_wrapGatewayError($response->getResponseReasonText());
                     break;
                 case self::RESPONSE_CODE_DECLINED:
                 case self::RESPONSE_CODE_ERROR:

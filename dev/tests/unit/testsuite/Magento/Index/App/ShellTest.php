@@ -73,4 +73,10 @@ class ShellTest extends \PHPUnit_Framework_TestCase
     {
         return array(array(true), array(false));
     }
+
+    public function testCatchException()
+    {
+        $bootstrap = $this->getMock('Magento\Framework\App\Bootstrap', array(), array(), '', false);
+        $this->assertFalse($this->_entryPoint->catchException($bootstrap, new \Exception));
+    }
 }

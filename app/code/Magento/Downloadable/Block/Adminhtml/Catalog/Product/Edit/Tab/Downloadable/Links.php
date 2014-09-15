@@ -294,7 +294,7 @@ class Links extends \Magento\Backend\Block\Template
                 if ($fileExist) {
                     $name = '<a href="' . $this->getUrl(
                         'adminhtml/downloadable_product_edit/link',
-                        array('id' => $item->getId(), '_secure' => true)
+                        array('id' => $item->getId(), 'type' => 'link', '_secure' => true)
                     ) . '">' . $fileHelper->getFileFromPathFile(
                         $linkFile
                     ) . '</a>';
@@ -316,10 +316,16 @@ class Links extends \Magento\Backend\Block\Template
                 $fileExist = $fileHelper->ensureFileInFilesystem($file);
 
                 if ($fileExist) {
+                    $name = '<a href="' . $this->getUrl(
+                        'adminhtml/downloadable_product_edit/link',
+                        array('id' => $item->getId(), 'type' => 'sample', '_secure' => true)
+                    ) . '">' . $fileHelper->getFileFromPathFile(
+                        $sampleFile
+                    ) . '</a>';
                     $tmpLinkItem['sample_file_save'] = array(
                         array(
                             'file' => $item->getSampleFile(),
-                            'name' => $fileHelper->getFileFromPathFile($sampleFile),
+                            'name' => $name,
                             'size' => $fileHelper->getFileSize($file),
                             'status' => 'old'
                         )

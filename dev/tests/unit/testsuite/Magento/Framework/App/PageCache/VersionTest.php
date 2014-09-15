@@ -104,6 +104,11 @@ class VersionTest extends \PHPUnit_Framework_TestCase
                 ->with(Version::COOKIE_PERIOD)
                 ->will($this->returnSelf());
 
+            $publicCookieMetadataMock->expects($this->once())
+                ->method('setHttpOnly')
+                ->with(false)
+                ->will($this->returnSelf());
+
             $this->cookieMetadataFactoryMock->expects($this->once())
                 ->method('createPublicCookieMetadata')
                 ->with()

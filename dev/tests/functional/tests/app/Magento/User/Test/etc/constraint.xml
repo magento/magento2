@@ -27,7 +27,7 @@
     <assertUserSuccessLogin module="Magento_User">
         <severeness>low</severeness>
         <require>
-            <dashboard class="Magento\Backend\Test\Page\Dashboard" />
+            <dashboard class="Magento\Backend\Test\Page\Adminhtml\Dashboard" />
             <adminAuth class="Magento\Backend\Test\Page\AdminAuthLogin" />
             <user class="Magento\User\Test\Fixture\User" />
             <customAdmin class="Magento\User\Test\Fixture\User" />
@@ -37,7 +37,7 @@
         <severeness>low</severeness>
         <require>
             <adminAuth class="Magento\Backend\Test\Page\AdminAuthLogin" />
-            <dashboard class="Magento\Backend\Test\Page\Dashboard" />
+            <dashboard class="Magento\Backend\Test\Page\Adminhtml\Dashboard" />
         </require>
     </assertUserSuccessLogOut>
     <assertUserWrongCredentialsMessage module="Magento_User">
@@ -51,7 +51,7 @@
         <severeness>low</severeness>
         <require>
             <userIndex class="Magento\User\Test\Page\Adminhtml\UserIndex" />
-            <dashboard class="Magento\Backend\Test\Page\Dashboard" />
+            <dashboard class="Magento\Backend\Test\Page\Adminhtml\Dashboard" />
         </require>
     </assertUserRoleSalesRestrictedAccess>
     <assertRoleSuccessSaveMessage module="Magento_User">

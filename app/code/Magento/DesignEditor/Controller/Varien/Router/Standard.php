@@ -74,9 +74,8 @@ class Standard extends \Magento\Core\App\Router\Base
      * @param \Magento\Framework\App\DefaultPathInterface $defaultPath
      * @param \Magento\Framework\App\ResponseFactory $responseFactory
      * @param \Magento\Framework\App\Route\Config $routeConfig
-     * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\UrlInterface $url
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Url\SecurityInfoInterface $urlSecurityInfo
      * @param string $routerId
@@ -95,9 +94,8 @@ class Standard extends \Magento\Core\App\Router\Base
         \Magento\Framework\App\DefaultPathInterface $defaultPath,
         \Magento\Framework\App\ResponseFactory $responseFactory,
         \Magento\Framework\App\Route\Config $routeConfig,
-        \Magento\Framework\App\State $appState,
         \Magento\Framework\UrlInterface $url,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Url\SecurityInfoInterface $urlSecurityInfo,
         $routerId,
@@ -114,7 +112,6 @@ class Standard extends \Magento\Core\App\Router\Base
             $defaultPath,
             $responseFactory,
             $routeConfig,
-            $appState,
             $url,
             $storeManager,
             $scopeConfig,

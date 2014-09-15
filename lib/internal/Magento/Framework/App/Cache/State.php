@@ -61,21 +61,17 @@ class State implements StateInterface
     /**
      * @param State\OptionsInterface $options
      * @param \Magento\Framework\App\Cache\Frontend\Pool $cacheFrontendPool
-     * @param \Magento\Framework\App\State $appState
      * @param bool $banAll Whether all cache types are forced to be disabled
      */
     public function __construct(
         State\OptionsInterface $options,
         \Magento\Framework\App\Cache\Frontend\Pool $cacheFrontendPool,
-        \Magento\Framework\App\State $appState,
         $banAll = false
     ) {
         $this->_options = $options;
         $this->_cacheFrontend =
             $cacheFrontendPool->get(\Magento\Framework\App\Cache\Frontend\Pool::DEFAULT_FRONTEND_ID);
-        if ($appState->isInstalled()) {
-            $this->_loadTypeStatuses($banAll);
-        }
+        $this->_loadTypeStatuses($banAll);
     }
 
     /**

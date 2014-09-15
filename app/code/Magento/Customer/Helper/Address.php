@@ -82,7 +82,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
     /** @var \Magento\Framework\View\Element\BlockFactory */
     protected $_blockFactory;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface */
+    /** @var \Magento\Framework\StoreManagerInterface */
     protected $_storeManager;
 
     /** @var \Magento\Framework\App\Config\ScopeConfigInterface */
@@ -100,7 +100,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\View\Element\BlockFactory $blockFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $customerMetadataService
      * @param \Magento\Customer\Service\V1\AddressMetadataServiceInterface $addressMetadataService
@@ -109,7 +109,7 @@ class Address extends \Magento\Framework\App\Helper\AbstractHelper
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Framework\View\Element\BlockFactory $blockFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $customerMetadataService,
         \Magento\Customer\Service\V1\AddressMetadataServiceInterface $addressMetadataService,

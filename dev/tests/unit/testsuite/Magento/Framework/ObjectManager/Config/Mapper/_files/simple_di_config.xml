@@ -25,7 +25,7 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
     <!-- Comment within root node -->
-    <preference for="Magento\Framework\Module\UpdaterInterface" type="Magento\Framework\Module\Updaterter" />
+    <preference for="Magento\Framework\Module\SomeInterface" type="Magento\Framework\Module\ClassOne" />
     <preference for="Magento\Framework\App\RequestInterface" type="Magento\Framework\App\Request\Http\Proxy" />
     <!--Arguments only-->
     <type name="Magento\Framework\App\State">

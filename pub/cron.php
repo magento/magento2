@@ -23,10 +23,16 @@
  * @copyright  Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
+use Magento\Framework\App\Bootstrap;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManager;
 
 require dirname(__DIR__) . '/app/bootstrap.php';
-umask(0);
-$params = array(StoreManager::PARAM_RUN_CODE => 'admin', \Magento\Store\Model\Store::CUSTOM_ENTRY_POINT_PARAM => true);
-$entryPoint = new \Magento\Framework\App\EntryPoint\EntryPoint(BP, $params);
-$entryPoint->run('Magento\Framework\App\Cron', array('parameters' => array('group::')));
+$params = $_SERVER;
+$params[StoreManager::PARAM_RUN_CODE] = 'admin';
+$params[Store::CUSTOM_ENTRY_POINT_PARAM] = true;
+$bootstrap = \Magento\Framework\App\Bootstrap::create(BP, $params);
+/** @var \Magento\Framework\App\Cron $app */
+$app = $bootstrap->createApplication('Magento\Framework\App\Cron', ['parameters' => ['group::']]);
+$bootstrap->run($app);

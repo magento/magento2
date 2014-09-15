@@ -101,7 +101,7 @@ class Sendfriend extends \Magento\Framework\Model\AbstractModel
     protected $_transportBuilder;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -128,7 +128,7 @@ class Sendfriend extends \Magento\Framework\Model\AbstractModel
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
      * @param \Magento\Catalog\Helper\Image $catalogImage
      * @param \Magento\Sendfriend\Helper\Data $sendfriendData
@@ -143,7 +143,7 @@ class Sendfriend extends \Magento\Framework\Model\AbstractModel
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder,
         \Magento\Catalog\Helper\Image $catalogImage,
         \Magento\Sendfriend\Helper\Data $sendfriendData,
@@ -506,7 +506,7 @@ class Sendfriend extends \Magento\Framework\Model\AbstractModel
         if ($increment) {
             $newTimes[] = $time;
             $newValue = implode(',', $newTimes);
-            $this->cookieManager->setPublicCookie($cookieName, $newValue);
+            $this->cookieManager->setSensitiveCookie($cookieName, $newValue);
             $this->_lastCookieValue[$cookieName] = $newValue;
         }
 

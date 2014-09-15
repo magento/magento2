@@ -1,7 +1,5 @@
 <?php
 /**
- * Term Filter
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -27,6 +25,9 @@ namespace Magento\Framework\Search\Request\Filter;
 
 use Magento\Framework\Search\Request\FilterInterface;
 
+/**
+ * Term Filter
+ */
 class Term implements FilterInterface
 {
     /**

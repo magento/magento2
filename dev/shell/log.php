@@ -22,13 +22,14 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-require_once __DIR__ . '/../../app/bootstrap.php';
+use Magento\Framework\App\Bootstrap;
 use Magento\Store\Model\StoreManager;
 
-$params = array(
-    StoreManager::PARAM_RUN_CODE => 'admin',
-    StoreManager::PARAM_RUN_TYPE => 'store'
-);
-
-$entryPoint = new \Magento\Framework\App\EntryPoint\EntryPoint(BP, $params);
-$entryPoint->run('Magento\Log\App\Shell', array('entryFileName' => basename(__FILE__)));
+require __DIR__ . '/../../app/bootstrap.php';
+$params = $_SERVER;
+$params[StoreManager::PARAM_RUN_CODE] = 'admin';
+$params[StoreManager::PARAM_RUN_TYPE] = 'store';
+$bootstrap = \Magento\Framework\App\Bootstrap::create(BP, $params);
+/** @var \Magento\Log\App\Shell $app */
+$app = $bootstrap->createApplication('Magento\Log\App\Shell', ['entryFileName' => basename(__FILE__)]);
+$bootstrap->run($app);

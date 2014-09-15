@@ -38,7 +38,7 @@ class Observer
     /**
      * Store manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -56,13 +56,13 @@ class Observer
 
     /**
      * @param \Magento\Framework\LocaleInterface $locale
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\RecurringPayment\Model\RecurringPaymentFactory  $recurringPaymentFactory
      * @param \Magento\RecurringPayment\Block\Fields $fields
      */
     public function __construct(
         \Magento\Framework\LocaleInterface $locale,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\RecurringPayment\Model\RecurringPaymentFactory $recurringPaymentFactory,
         \Magento\RecurringPayment\Block\Fields $fields
     ) {

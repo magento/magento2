@@ -24,59 +24,28 @@
  */
 -->
 <constraint>
-    <assertConfigurableInGrid module="Magento_ConfigurableProduct">
-        <severeness>high</severeness>
-        <require>
-            <manageProductsPage class="Magento\Catalog\Test\Page\Product\CatalogProductIndex" />
-            <configurable class="Magento\ConfigurableProduct\Test\Fixture\CatalogProductConfigurable" />
-        </require>
-    </assertConfigurableInGrid>
-    <assertConfigurableInCategory module="Magento_ConfigurableProduct">
+    <assertConfigurableProductInCart module="Magento_ConfigurableProduct">
         <severeness>low</severeness>
-        <require>
-            <catalogCategoryView class="Magento\Catalog\Test\Page\Category\CatalogCategoryView" />
-            <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
-            <configurable class="Magento\ConfigurableProduct\Test\Fixture\CatalogProductConfigurable" />
-            <category class="Magento\Catalog\Test\Fixture\Category" />
-        </require>
-    </assertConfigurableInCategory>
-    <assertConfigurableView module="Magento_ConfigurableProduct">
-        <severeness>low</severeness>
-        <require>
-            <catalogProductView class="Magento\Catalog\Test\Page\Product\CatalogProductView" />
-            <configurable class="Magento\ConfigurableProduct\Test\Fixture\CatalogProductConfigurable" />
-        </require>
-    </assertConfigurableView>
-    <assertConfigurableInCart module="Magento_ConfigurableProduct">
-        <severeness>low</severeness>
-        <require>
-            <catalogProductView class="Magento\Catalog\Test\Page\Product\CatalogProductView" />
-            <configurable class="Magento\ConfigurableProduct\Test\Fixture\CatalogProductConfigurable" />
-            <checkoutCart class="Magento\Checkout\Test\Page\CheckoutCart" />
-        </require>
-    </assertConfigurableInCart>
-    <assertProductAttributeIsConfigurable module="Magento_ConfigurableProduct">
+    </assertConfigurableProductInCart>
+    <assertConfigurableProductDuplicateForm module="Magento_ConfigurableProduct">
         <severeness>high</severeness>
-        <require>
-            <productAttribute class="Magento\Catalog\Test\Fixture\CatalogAttributeEntity" />
-            <productGrid class="Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex" />
-            <newProductPage class="Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew" />
-        </require>
-    </assertProductAttributeIsConfigurable>
-    <assertProductConfigurableDuplicateForm module="Magento_ConfigurableProduct">
-        <severeness>high</severeness>
-        <require>
-            <productGrid class="Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex" />
-            <productPage class="Magento\ConfigurableProduct\Test\Page\Adminhtml\CatalogProductEdit" />
-            <product class="Mtf\Fixture\FixtureInterface" />
-        </require>
-    </assertProductConfigurableDuplicateForm>
+    </assertConfigurableProductDuplicateForm>
+    <assertChildProductIsNotDisplayedSeparately module="Magento_ConfigurableProduct">
+        <severeness>middle</severeness>
+    </assertChildProductIsNotDisplayedSeparately>
+    <assertChildProductsInGrid module="Magento_ConfigurableProduct">
+        <severeness>low</severeness>
+    </assertChildProductsInGrid>
     <assertConfigurableProductForm module="Magento_ConfigurableProduct">
-        <severeness>high</severeness>
-        <require>
-            <productGrid class="Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex" />
-            <productPage class="Magento\ConfigurableProduct\Test\Page\Adminhtml\CatalogProductEdit" />
-            <product class="Mtf\Fixture\FixtureInterface" />
-        </require>
+        <severeness>low</severeness>
     </assertConfigurableProductForm>
+    <assertConfigurableProductInItemsOrderedGrid module="Magento_ConfigurableProduct">
+        <severeness>low</severeness>
+    </assertConfigurableProductInItemsOrderedGrid>
+    <assertConfigurableProductPage module="Magento_ConfigurableProduct">
+        <severeness>high</severeness>
+    </assertConfigurableProductPage>
+    <assertProductAttributeAbsenceInVariationsSearch module="Magento_ConfigurableProduct">
+        <severeness>low</severeness>
+    </assertProductAttributeAbsenceInVariationsSearch>
 </constraint>

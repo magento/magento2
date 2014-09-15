@@ -51,7 +51,7 @@ use Magento\Framework\Service\V1\Data\Search\FilterGroup;
 use Magento\Framework\Service\V1\Data\SearchCriteria;
 use Magento\Framework\Service\V1\Data\SortOrder;
 use Magento\Framework\UrlInterface;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\StoreManagerInterface;
 
 /**
  * Handle various customer account actions
@@ -88,7 +88,7 @@ class CustomerAccountService implements CustomerAccountServiceInterface
     private $eventManager;
 
     /**
-     * @var StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     private $storeManager;
 
@@ -150,7 +150,7 @@ class CustomerAccountService implements CustomerAccountServiceInterface
     /**
      * @param CustomerFactory $customerFactory
      * @param ManagerInterface $eventManager
-     * @param StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param Random $mathRandom
      * @param Converter $converter
      * @param Validator $validator

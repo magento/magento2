@@ -51,7 +51,7 @@
             <filter xsi:type="rangeFilter" field="promoted_boost" name="price_name" from="10" to="100" />
             <filter xsi:type="termFilter" name="price_name1" field="price_name" value="$name" />
         </filters>
-        <aggregation>
+        <aggregations>
             <bucket xsi:type="termBucket" name="category_bucket" field="category">
                 <metrics>
                     <metric type="sum" />
@@ -73,7 +73,7 @@
                     <range from="100" to=""/>
                 </ranges>
             </bucket>
-        </aggregation>
+        </aggregations>
         <from>10</from>
         <size>10</size>
     </request>

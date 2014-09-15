@@ -26,6 +26,8 @@ namespace Magento\Backend\Test\Block\System\Store;
 
 use Mtf\Client\Element\Locator;
 use Magento\Store\Test\Fixture\StoreGroup;
+use Magento\Store\Test\Fixture\Website;
+use Magento\Store\Test\Fixture\Store;
 use Magento\Backend\Test\Block\Widget\Grid as GridInterface;
 
 /**
@@ -52,6 +54,9 @@ class StoreGrid extends GridInterface
         ],
         'group_title' => [
             'selector' => '#storeGrid_filter_group_title'
+        ],
+        'website_title' => [
+            'selector' => '#storeGrid_filter_website_title'
         ]
     ];
 
@@ -82,26 +87,53 @@ class StoreGrid extends GridInterface
     }
 
     /**
-     * Click to appropriate store in Store grid for edit
+     * Check if website exists
      *
-     * @param string $name
-     * @return void
+     * @param Website $website
+     * @return bool
      */
-    public function editStore($name)
+    public function isWebsiteExists($website)
     {
-        $this->_rootElement->find(sprintf($this->storeName, $name), Locator::SELECTOR_XPATH)->click();
+        return $this->_rootElement->find(sprintf($this->titleFormat, $website->getName()), Locator::SELECTOR_XPATH)
+            ->isVisible();
     }
 
     /**
-     * Search and open appropriate store
+     * Search and open appropriate Website
+     *
+     * @param Website $website
+     * @return void
+     */
+    public function searchAndOpenWebsite(Website $website)
+    {
+        $websiteName = $website->getName();
+        $this->search(['website_title' => $websiteName]);
+        $this->_rootElement->find(sprintf($this->storeName, $websiteName), Locator::SELECTOR_XPATH)->click();
+    }
+
+    /**
+     * Search and open appropriate Store View
+     *
+     * @param Store $store
+     * @return void
+     */
+    public function searchAndOpenStore(Store $store)
+    {
+        $storeName = $store->getName();
+        $this->search(['store_title' => $storeName]);
+        $this->_rootElement->find(sprintf($this->storeName, $storeName), Locator::SELECTOR_XPATH)->click();
+    }
+
+    /**
+     * Search and open appropriate Store
      *
      * @param StoreGroup $storeGroup
      * @return void
      */
-    public function searchAndOpenStore(StoreGroup $storeGroup)
+    public function searchAndOpenStoreGroup(StoreGroup $storeGroup)
     {
-        $storeName = $storeGroup->getName();
-        $this->search(['group_title' => $storeName]);
-        $this->editStore($storeName);
+        $storeGroupName = $storeGroup->getName();
+        $this->search(['group_title' => $storeGroupName]);
+        $this->_rootElement->find(sprintf($this->storeName, $storeGroupName), Locator::SELECTOR_XPATH)->click();
     }
 }

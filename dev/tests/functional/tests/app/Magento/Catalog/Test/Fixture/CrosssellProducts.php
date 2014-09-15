@@ -24,9 +24,10 @@
 
 namespace Magento\Catalog\Test\Fixture;
 
-use Mtf\System\Config;
 use Mtf\Factory\Factory;
 use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Crosssell;
+use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Related;
+use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Upsell;
 
 class CrosssellProducts extends AssignProducts
 {

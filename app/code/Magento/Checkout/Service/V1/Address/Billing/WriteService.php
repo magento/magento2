@@ -28,7 +28,7 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Logger;
 use \Magento\Checkout\Service\V1\QuoteLoader;
 use \Magento\Sales\Model\Quote\AddressFactory;
-use \Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\StoreManagerInterface;
 use \Magento\Checkout\Service\V1\Address\Converter;
 use \Magento\Checkout\Service\V1\Address\Validator;
 

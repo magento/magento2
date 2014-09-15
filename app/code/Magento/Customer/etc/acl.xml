@@ -29,7 +29,6 @@
             <resource id="Magento_Adminhtml::admin">
                 <resource id="Magento_Customer::customer" title="Customers" sortOrder="40">
                     <resource id="Magento_Customer::manage" title="All Customers" sortOrder="10" />
-                    <resource id="Magento_Customer::online" title="Now Online" sortOrder="20" />
                 </resource>
                 <resource id="Magento_Adminhtml::stores">
                     <resource id="Magento_Adminhtml::stores_settings">

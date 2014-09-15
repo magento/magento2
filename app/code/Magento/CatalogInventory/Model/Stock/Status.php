@@ -81,7 +81,7 @@ class Status extends \Magento\Framework\Model\AbstractModel
     /**
      * Store model manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -97,7 +97,7 @@ class Status extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Registry $registry
      * @param Type $productType
      * @param \Magento\Catalog\Model\Product\Website $productWebsite
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param ItemFactory $stockItemFactory
      * @param \Magento\CatalogInventory\Helper\Data $catalogInventoryData
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
@@ -109,7 +109,7 @@ class Status extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Registry $registry,
         Type $productType,
         \Magento\Catalog\Model\Product\Website $productWebsite,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         ItemFactory $stockItemFactory,
         \Magento\CatalogInventory\Helper\Data $catalogInventoryData,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,

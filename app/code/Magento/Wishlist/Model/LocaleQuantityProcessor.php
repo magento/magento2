@@ -32,17 +32,20 @@ class LocaleQuantityProcessor
     protected $localeResolver;
 
     /**
-     * @var \Zend_Filter_LocalizedToNormalized
+     * @var \Magento\Framework\Filter\LocalizedToNormalized
      */
     protected $localFilter;
 
     /**
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
+     * @param \Magento\Framework\Filter\LocalizedToNormalized $localFilter
      */
     public function __construct(
-        \Magento\Framework\Locale\ResolverInterface $localeResolver
+        \Magento\Framework\Locale\ResolverInterface $localeResolver,
+        \Magento\Framework\Filter\LocalizedToNormalized $localFilter
     ) {
         $this->localeResolver = $localeResolver;
+        $this->localFilter = $localFilter;
     }
 
     /**
@@ -53,11 +56,7 @@ class LocaleQuantityProcessor
      */
     public function process($qty)
     {
-        if (!$this->localFilter) {
-            $this->localFilter = new \Zend_Filter_LocalizedToNormalized(
-                array('locale' => $this->localeResolver->getLocaleCode())
-            );
-        }
+        $this->localFilter->setOptions(array('locale' => $this->localeResolver->getLocaleCode()));
         $qty = $this->localFilter->filter((double)$qty);
         if ($qty < 0) {
             $qty = null;

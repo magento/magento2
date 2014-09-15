@@ -45,9 +45,9 @@ class ProductAttribute extends DataFixture
      *
      * @return string
      */
-    public function getAttributeLabel()
+    public function getFrontendLabel()
     {
-        return $this->getData('fields/attribute_label/value');
+        return $this->getData('fields/frontend_label/value');
     }
 
     /**
@@ -131,7 +131,7 @@ class ProductAttribute extends DataFixture
                     'value' => 'attribute_code_%isolation%',
                     'group' => self::GROUP_PRODUCT_ATTRIBUTE_MAIN,
                 ),
-                'attribute_label' => array(
+                'frontend_label' => array(
                     'value' => 'Attribute %isolation%',
                     'input_name' => 'frontend_label[0]',
                     'group' => self::GROUP_PRODUCT_ATTRIBUTE_MAIN

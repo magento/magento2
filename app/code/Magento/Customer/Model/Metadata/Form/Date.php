@@ -25,6 +25,8 @@
  */
 namespace Magento\Customer\Model\Metadata\Form;
 
+use Magento\Framework\Service\ArrayObjectSearch;
+
 class Date extends AbstractData
 {
     /**
@@ -65,29 +67,37 @@ class Date extends AbstractData
 
         //range validation
         $validateRules = $attribute->getValidationRules();
-        if (!empty($validateRules['date_range_min']) && strtotime(
-            $value
-        ) < $validateRules['date_range_min'] || !empty($validateRules['date_range_max']) && strtotime(
-            $value
-        ) > $validateRules['date_range_max']
+
+        $minDateValue = ArrayObjectSearch::getArrayElementByName(
+            $validateRules,
+            'date_range_min'
+        );
+
+        $maxDateValue = ArrayObjectSearch::getArrayElementByName(
+            $validateRules,
+            'date_range_max'
+        );
+
+        if (!is_null($minDateValue) && strtotime($value) < $minDateValue
+            || !is_null($maxDateValue) && strtotime($value) > $maxDateValue
         ) {
-            if (!empty($validateRules['date_range_min']) && !empty($validateRules['date_range_max'])) {
+            if (!is_null($minDateValue) && !is_null($maxDateValue)) {
                 $errors[] = __(
                     'Please enter a valid date between %1 and %2 at %3.',
-                    date('d/m/Y', $validateRules['date_range_min']),
-                    date('d/m/Y', $validateRules['date_range_max']),
+                    date('d/m/Y', $minDateValue),
+                    date('d/m/Y', $maxDateValue),
                     $label
                 );
-            } elseif (!empty($validateRules['date_range_min'])) {
+            } elseif (!is_null($minDateValue)) {
                 $errors[] = __(
                     'Please enter a valid date equal to or greater than %1 at %2.',
-                    date('d/m/Y', $validateRules['date_range_min']),
+                    date('d/m/Y', $minDateValue),
                     $label
                 );
-            } elseif (!empty($validateRules['date_range_max'])) {
+            } elseif (!is_null($maxDateValue)) {
                 $errors[] = __(
                     'Please enter a valid date less than or equal to %1 at %2.',
-                    date('d/m/Y', $validateRules['date_range_max']),
+                    date('d/m/Y', $maxDateValue),
                     $label
                 );
             }

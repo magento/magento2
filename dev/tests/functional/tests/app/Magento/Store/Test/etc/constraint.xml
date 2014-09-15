@@ -45,4 +45,58 @@
     <assertStoreGroupSuccessDeleteAndBackupMessages module="Magento_Store">
         <severeness>low</severeness>
     </assertStoreGroupSuccessDeleteAndBackupMessages>
+    <assertStoreSuccessSaveMessage module="Magento_Store">
+        <severeness>low</severeness>
+    </assertStoreSuccessSaveMessage>
+    <assertStoreInGrid module="Magento_Store">
+        <severeness>low</severeness>
+    </assertStoreInGrid>
+    <assertStoreBackend module="Magento_Store">
+        <severeness>low</severeness>
+    </assertStoreBackend>
+    <assertStoreFrontend module="Magento_Store">
+        <severeness>low</severeness>
+    </assertStoreFrontend>
+    <assertStoreNotOnFrontend module="Magento_Store">
+        <severeness>low</severeness>
+    </assertStoreNotOnFrontend>
+    <assertWebsiteSuccessSaveMessage module="Magento_Store">
+        <severeness>low</severeness>
+    </assertWebsiteSuccessSaveMessage>
+    <assertWebsiteInGrid module="Magento_Store">
+        <severeness>low</severeness>
+    </assertWebsiteInGrid>
+    <assertWebsiteOnStoreForm module="Magento_Store">
+        <severeness>low</severeness>
+    </assertWebsiteOnStoreForm>
+    <assertWebsiteForm module="Magento_Store">
+        <severeness>low</severeness>
+    </assertWebsiteForm>
+    <assertWebsiteSuccessDeleteAndBackupMessages module="Magento_Store">
+        <severeness>low</severeness>
+    </assertWebsiteSuccessDeleteAndBackupMessages>
+    <assertWebsiteSuccessDeleteMessage module="Magento_Store">
+        <severeness>low</severeness>
+    </assertWebsiteSuccessDeleteMessage>
+    <assertWebsiteNotInGrid module="Magento_Store">
+        <severeness>low</severeness>
+    </assertWebsiteNotInGrid>
+    <assertStoreForm module="Magento_Store">
+        <severeness>low</severeness>
+    </assertStoreForm>
+    <assertStoreSuccessDeleteMessage module="Magento_Store">
+        <severeness>low</severeness>
+    </assertStoreSuccessDeleteMessage>
+    <assertStoreSuccessDeleteMessage module="Magento_Store">
+        <severeness>low</severeness>
+    </assertStoreSuccessDeleteMessage>
+    <assertStoreNotInGrid module="Magento_Store">
+        <severeness>low</severeness>
+    </assertStoreNotInGrid>
+    <assertStoreNotOnFrontend module="Magento_Store">
+        <severeness>low</severeness>
+    </assertStoreNotOnFrontend>
+    <assertStoreSuccessDeleteAndBackupMessages module="Magento_Store">
+        <severeness>low</severeness>
+    </assertStoreSuccessDeleteAndBackupMessages>
 </constraint>

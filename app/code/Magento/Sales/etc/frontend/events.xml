@@ -28,9 +28,9 @@
         <observer name="sales_customer_validate_vat_number" instance="Magento\Sales\Model\Observer\Frontend\Quote\Address\CollectTotals" method="dispatch" />
     </event>
     <event name="sales_quote_address_collect_totals_after">
-        <observer name="sales_customer_validate_vat_number" instance="Magento\Sales\Model\Observer" method="restoreQuoteCustomerGroupId" />
+        <observer name="sales_customer_validate_vat_number" instance="Magento\Sales\Model\Observer\Frontend\Quote\RestoreCustomerGroupId" method="execute" />
     </event>
     <event name="sales_quote_collect_totals_after">
-        <observer name="catalog_msrp" instance="Magento\Sales\Model\Observer" method="setQuoteCanApplyMsrp" />
+        <observer name="catalog_msrp" instance="Magento\Sales\Model\Observer\Frontend\Quote\SetCanApplyMsrp" method="execute" />
     </event>
 </config>

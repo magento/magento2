@@ -171,4 +171,10 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals('invoice', $this->model->getEntityType());
     }
+
+    public function testGetIncrementId()
+    {
+        $this->model->setIncrementId('test_increment_id');
+        $this->assertEquals('test_increment_id', $this->model->getIncrementId());
+    }
 }

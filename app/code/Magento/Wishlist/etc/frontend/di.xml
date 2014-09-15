@@ -32,14 +32,8 @@
     <virtualType name="Magento\Wishlist\Model\Session" type="Magento\Framework\Session\Generic">
         <arguments>
             <argument name="storage" xsi:type="object">Magento\Wishlist\Model\Session\Storage</argument>
-            <argument name="sessionName" xsi:type="string">frontend</argument>
         </arguments>
     </virtualType>
-    <type name="Magento\Framework\Session\Generic">
-        <arguments>
-            <argument name="sessionName" xsi:type="string">frontend</argument>
-        </arguments>
-    </type>
     <type name="Magento\Core\Model\Url\SecurityInfo">
         <arguments>
             <argument name="secureUrlList" xsi:type="array">

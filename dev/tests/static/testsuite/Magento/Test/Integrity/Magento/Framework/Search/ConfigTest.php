@@ -86,7 +86,6 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
             explode(
                 "\n",
                 "
-Element 'from': This element is not expected. Expected is ( filters ).
 No match found for key-sequence ['sugegsted_search_container'] of keyref 'requestQueryReference'.
 Element 'queryReference': No match found for key-sequence ['fulltext_search_query4'] of keyref 'queryReference'.
 "

@@ -27,7 +27,7 @@ use \Magento\CheckoutAgreements\Model\Resource\Agreement\CollectionFactory as Ag
 use \Magento\CheckoutAgreements\Model\Resource\Agreement\Collection as AgreementCollection;
 use \Magento\CheckoutAgreements\Model\Agreement;
 use \Magento\Framework\App\Config\ScopeConfigInterface;
-use \Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\StoreManagerInterface;
 use \Magento\Store\Model\ScopeInterface;
 use \Magento\CheckoutAgreements\Service\V1\Data\AgreementBuilder;
 use \Magento\CheckoutAgreements\Service\V1\Data\Agreement as AgreementDataObject;
@@ -45,7 +45,7 @@ class ReadService implements ReadServiceInterface
     private $agreementBuilder;
 
     /**
-     * @var  StoreManagerInterface
+     * @var  \Magento\Framework\StoreManagerInterface
      */
     private $storeManager;
 
@@ -57,7 +57,7 @@ class ReadService implements ReadServiceInterface
     /**
      * @param AgreementCollectionFactory $collectionFactory
      * @param AgreementBuilder $agreementBuilder
-     * @param StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(

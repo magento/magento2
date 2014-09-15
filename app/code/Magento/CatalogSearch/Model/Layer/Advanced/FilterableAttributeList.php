@@ -29,12 +29,12 @@ class FilterableAttributeList extends \Magento\Catalog\Model\Layer\Category\Filt
 {
     /**
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $collectionFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\CatalogSearch\Model\Layer\Advanced $layer
      */
     public function __construct(
         \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $collectionFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\CatalogSearch\Model\Layer\Advanced $layer
     ) {
         parent::__construct($collectionFactory, $storeManager, $layer);

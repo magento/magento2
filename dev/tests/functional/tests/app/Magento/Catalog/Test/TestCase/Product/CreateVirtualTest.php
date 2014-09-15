@@ -60,7 +60,7 @@ class CreateVirtualTest extends Functional
         $productForm = $createProductPage->getProductForm();
         //Steps
         $productForm->fill($product);
-        $createProductPage->getFormAction()->save();
+        $createProductPage->getFormPageActions()->save();
         //Verifying
         $createProductPage->getMessagesBlock()->assertSuccessMessage();
         //Flush cache

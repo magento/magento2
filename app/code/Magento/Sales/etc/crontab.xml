@@ -25,22 +25,22 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Cron/etc/crontab.xsd">
     <group id="default">
-        <job name="sales_clean_quotes" instance="Magento\Sales\Model\Observer" method="cleanExpiredQuotes">
+        <job name="sales_clean_quotes" instance="Magento\Sales\Model\Observer\CleanExpiredQuotes" method="execute">
             <schedule>0 0 * * *</schedule>
         </job>
-        <job name="aggregate_sales_report_order_data" instance="Magento\Sales\Model\Observer" method="aggregateSalesReportOrderData">
+        <job name="aggregate_sales_report_order_data" instance="Magento\Sales\Model\Observer\AggregateSalesReportOrderData" method="execute">
             <schedule>0 0 * * *</schedule>
         </job>
-        <job name="aggregate_sales_report_shipment_data" instance="Magento\Sales\Model\Observer" method="aggregateSalesReportShipmentData">
+        <job name="aggregate_sales_report_shipment_data" instance="Magento\Sales\Model\Observer\AggregateSalesReportShipmentData" method="execute">
             <schedule>0 0 * * *</schedule>
         </job>
-        <job name="aggregate_sales_report_invoiced_data" instance="Magento\Sales\Model\Observer" method="aggregateSalesReportInvoicedData">
+        <job name="aggregate_sales_report_invoiced_data" instance="Magento\Sales\Model\Observer\AggregateSalesReportInvoicedData" method="execute">
             <schedule>0 0 * * *</schedule>
         </job>
-        <job name="aggregate_sales_report_refunded_data" instance="Magento\Sales\Model\Observer" method="aggregateSalesReportRefundedData">
+        <job name="aggregate_sales_report_refunded_data" instance="Magento\Sales\Model\Observer\AggregateSalesReportRefundedData" method="execute">
             <schedule>0 0 * * *</schedule>
         </job>
-        <job name="aggregate_sales_report_bestsellers_data" instance="Magento\Sales\Model\Observer" method="aggregateSalesReportBestsellersData">
+        <job name="aggregate_sales_report_bestsellers_data" instance="Magento\Sales\Model\Observer\AggregateSalesReportBestsellersData" method="execute">
             <schedule>0 0 * * *</schedule>
         </job>
     </group>

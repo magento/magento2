@@ -61,7 +61,7 @@ class Stock extends \Magento\Framework\Model\AbstractModel
     /**
      * Store model manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -88,7 +88,7 @@ class Stock extends \Magento\Framework\Model\AbstractModel
      * @param Resource\Stock\Item\CollectionFactory $collectionFactory
      * @param \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
      * @param Stock\Status $stockStatus
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param Stock\ItemFactory $stockItemFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
@@ -101,7 +101,7 @@ class Stock extends \Magento\Framework\Model\AbstractModel
         \Magento\CatalogInventory\Model\Resource\Stock\Item\CollectionFactory $collectionFactory,
         \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService,
         \Magento\CatalogInventory\Model\Stock\Status $stockStatus,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\CatalogInventory\Model\Stock\ItemFactory $stockItemFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,

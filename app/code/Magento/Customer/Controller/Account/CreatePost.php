@@ -62,9 +62,8 @@ class CreatePost extends \Magento\Customer\Controller\Account
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Helper\Address $addressHelper
      * @param \Magento\Framework\UrlFactory $urlFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\App\State $appState
      * @param CustomerAccountServiceInterface $customerAccountService
      * @param \Magento\Customer\Model\Metadata\FormFactory $formFactory
      * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
@@ -82,9 +81,8 @@ class CreatePost extends \Magento\Customer\Controller\Account
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Helper\Address $addressHelper,
         \Magento\Framework\UrlFactory $urlFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\App\State $appState,
         CustomerAccountServiceInterface $customerAccountService,
         \Magento\Customer\Model\Metadata\FormFactory $formFactory,
         \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
@@ -110,7 +108,6 @@ class CreatePost extends \Magento\Customer\Controller\Account
             $urlFactory,
             $storeManager,
             $scopeConfig,
-            $appState,
             $customerAccountService
         );
     }
@@ -187,6 +184,8 @@ class CreatePost extends \Magento\Customer\Controller\Account
             $this->getResponse()->setRedirect($this->_redirect->error($url));
             return;
         }
+
+        $this->_session->regenerateId();
 
         try {
             $customer = $this->customerExtractor->extract('customer_account_create', $this->_request);

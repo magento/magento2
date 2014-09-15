@@ -44,6 +44,7 @@ class Save extends \Magento\Sales\Controller\Adminhtml\Order\Create
                 $this->_forward('denied');
                 return;
             }
+            $this->_getOrderCreateModel()->getQuote()->setCustomerId($this->_getSession()->getCustomerId());
             $this->_processActionData('save');
             $paymentData = $this->getRequest()->getPost('payment');
             if ($paymentData) {

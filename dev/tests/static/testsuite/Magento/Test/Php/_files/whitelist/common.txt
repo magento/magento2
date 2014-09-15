@@ -55,6 +55,8 @@ app/code/Magento/Directory/Helper
 app/code/Magento/Customer/Block
 app/code/Magento/Customer/Controller
 app/code/Magento/Customer/Helper
+app/code/Magento/Customer/Model/Visitor.php
+app/code/Magento/Customer/Model/Resource/Visitor.php
 app/code/Magento/Customer/Model/Address/Config
 app/code/Magento/Customer/Model/Address/Config.php
 app/code/Magento/Customer/Service
@@ -111,6 +113,7 @@ app/code/Magento/Sales/Model/Order/Pdf/Total/Factory.php
 app/code/Magento/Sales/Model/Observer
 app/code/Magento/Sales/Model/Quote/Address/*Interface.php
 app/code/Magento/SalesRule/Model/Plugin
+app/code/Magento/Sendfriend/Block/Plugin/Catalog/Product/View.php
 app/code/Magento/Shipping/Block/Adminhtml/Order/Tracking/Invoice.php
 app/code/Magento/Shipping/Model/Observer.php
 app/code/Magento/Shipping/Model/Order/Track.php
@@ -123,12 +126,14 @@ app/code/Magento/UrlRedirect
 app/code/Magento/Wishlist/Block/Link.php
 dev/shell
 dev/tests/functional
-dev/tests/integration
+dev/tests/integration/*
 dev/tests/js
 dev/tests/performance
 dev/tests/static
-dev/tests/unit
+dev/tests/unit/framework
+dev/tests/unit/testsuite/Magento/*
 dev/tools
+lib/internal/Magento/Framework/App
 lib/internal/Magento/Framework/Backup/Db
 lib/internal/Magento/Framework/Backup/Factory.php
 lib/internal/Magento/Framework/Cache/Core.php
@@ -136,13 +141,10 @@ lib/internal/Magento/Framework/Convert
 lib/internal/Magento/Framework/Exception
 lib/internal/Magento/Framework/Stdlib/DateTime.php
 lib/internal/Magento/Framework/Object.php
-lib/internal/Magento/Framework/App
 lib/internal/Magento/Framework/Data/Argument
 lib/internal/Magento/Framework/ObjectManager
 lib/internal/Magento/Framework/Service
 lib/internal/Magento/Framework/Url/SecurityInfoInterface.php
 lib/internal/Magento/Framework/View
-lib/internal/Magento/Framework/App/AbstractShell.php
 lib/internal/Magento/Framework/Locale/Validator.php
 lib/internal/Magento/Framework/Notification
-lib/internal/Magento/Framework/App/Config

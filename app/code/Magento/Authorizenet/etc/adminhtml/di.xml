@@ -25,11 +25,6 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
     <preference for="Magento\Authorizenet\Helper\HelperInterface" type="Magento\Authorizenet\Helper\Backend" />
-    <type name="Magento\Authorizenet\Model\Directpost\Session">
-        <arguments>
-            <argument name="sessionName" xsi:type="string">adminhtml</argument>
-        </arguments>
-    </type>
     <type name="Magento\Authorizenet\Model\Directpost">
         <arguments>
             <argument name="session" xsi:type="object">Magento\Backend\Model\Session\Quote</argument>

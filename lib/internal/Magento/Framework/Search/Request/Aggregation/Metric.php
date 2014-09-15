@@ -1,7 +1,5 @@
 <?php
 /**
- * Metric
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -25,6 +23,9 @@
  */
 namespace Magento\Framework\Search\Request\Aggregation;
 
+/**
+ * Metric
+ */
 class Metric
 {
     /**

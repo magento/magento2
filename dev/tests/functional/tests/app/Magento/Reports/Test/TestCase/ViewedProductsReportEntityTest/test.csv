@@ -1,0 +1,4 @@
+"description";"total";"products";"viewsReport/period_type";"viewsReport/from";"viewsReport/to";"viewsReport/show_empty_rows";"constraint"
+"view products on front and verify they all reflected in Year report";"2, 1";"catalogProductSimple::default, catalogProductVirtual::default";"Year";"m/d/Y -1 year";"m/d/Y";"No";"assertProductViewsReportTotalResult"
+"view products on front and verify they all reflected in Month report";"1, 1";"catalogProductDownloadable::default, catalogProductBundle::bundle_dynamic_product";"Month";"m/d/Y";"m/d/Y";"No";"assertProductViewsReportTotalResult"
+"view products on front and verify they all reflected in Day report";"1, 1";"catalogProductConfigurable::default, catalogProductGrouped::default";"Day";"m/d/Y -1 day";"m/d/Y +1 day";"Yes";"assertProductViewsReportTotalResult"

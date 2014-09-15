@@ -34,6 +34,13 @@ use Magento\Backend\Test\Block\Widget\Grid as AbstractGrid;
 class CustomerGrid extends AbstractGrid
 {
     /**
+     * Selector for action option select
+     *
+     * @var string
+     */
+    protected $option = '[name="group"]';
+
+    /**
      * Filters array mapping
      *
      * @var array

@@ -26,7 +26,6 @@ namespace Magento\Framework\Backup;
 require_once __DIR__ . '/_files/Fs.php';
 require_once __DIR__ . '/_files/Helper.php';
 require_once __DIR__ . '/_files/io.php';
-require_once __DIR__ . '/_files/app_dirs.php';
 
 class NomediaTest extends \PHPUnit_Framework_TestCase
 {
@@ -44,6 +43,11 @@ class NomediaTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\Backup\Db
      */
     protected $_backupDbMock;
+
+    public static function setUpBeforeClass()
+    {
+        require __DIR__ . '/_files/app_dirs.php';
+    }
 
     protected function setUp()
     {

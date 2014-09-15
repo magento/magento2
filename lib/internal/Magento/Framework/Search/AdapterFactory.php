@@ -1,7 +1,5 @@
 <?php
 /**
- * Adapter Factory
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -25,6 +23,9 @@
  */
 namespace Magento\Framework\Search;
 
+/**
+ * Adapter Factory
+ */
 class AdapterFactory
 {
     /**

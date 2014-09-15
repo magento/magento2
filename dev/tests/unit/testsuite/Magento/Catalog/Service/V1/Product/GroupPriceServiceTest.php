@@ -88,7 +88,7 @@ class GroupPriceServiceTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->storeManagerMock = $this->getMockBuilder('\Magento\Store\Model\StoreManagerInterface')
+        $this->storeManagerMock = $this->getMockBuilder('\Magento\Framework\StoreManagerInterface')
             ->setMethods(['getWebsite'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();

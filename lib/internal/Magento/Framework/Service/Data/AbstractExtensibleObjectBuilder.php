@@ -134,7 +134,7 @@ abstract class AbstractExtensibleObjectBuilder extends AbstractSimpleObjectBuild
         $dataObjectMethods = get_class_methods($this->_getDataObjectType());
         foreach ($data as $key => $value) {
             /* First, verify is there any getter for the key on the Service Data Object */
-            $camelCaseKey = \Magento\Framework\Service\SimpleDataObjectConverter::snakeCaseToCamelCase($key);
+            $camelCaseKey = \Magento\Framework\Service\SimpleDataObjectConverter::snakeCaseToUpperCamelCase($key);
             $possibleMethods = array(
                 'get' . $camelCaseKey,
                 'is' . $camelCaseKey

@@ -25,7 +25,7 @@
 namespace Magento\Checkout\Service\V1\PaymentMethod;
 
 use \Magento\Checkout\Service\V1\QuoteLoader;
-use \Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\StoreManagerInterface;
 use Magento\Checkout\Service\V1\Data\Cart\PaymentMethod\Converter as QuoteMethodConverter;
 use Magento\Checkout\Service\V1\Data\PaymentMethod\Converter as PaymentMethodConverter;
 use \Magento\Payment\Model\MethodList;

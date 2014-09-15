@@ -29,6 +29,7 @@ use Magento\Customer\Service\V1\Data\Eav\AttributeMetadataDataProvider;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Service\Config\MetadataConfig;
+use Magento\Framework\Service\SimpleDataObjectConverter;
 
 /**
  * Service to fetch customer related custom attributes
@@ -146,7 +147,7 @@ class CustomerMetadataService implements CustomerMetadataServiceInterface
         }
         foreach ($this->getAllAttributesMetadata() as $attributeMetadata) {
             $attributeCode = $attributeMetadata->getAttributeCode();
-            $camelCaseKey = \Magento\Framework\Service\SimpleDataObjectConverter::snakeCaseToCamelCase($attributeCode);
+            $camelCaseKey = SimpleDataObjectConverter::snakeCaseToUpperCamelCase($attributeCode);
             $isDataObjectMethod = isset($this->customerDataObjectMethods['get' . $camelCaseKey])
                 || isset($this->customerDataObjectMethods['is' . $camelCaseKey]);
 

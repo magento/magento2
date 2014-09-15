@@ -26,11 +26,6 @@ namespace Magento\Framework\Locale;
 class Lists implements \Magento\Framework\Locale\ListsInterface
 {
     /**
-     * @var \Magento\Framework\App\State
-     */
-    protected $_appState;
-
-    /**
      * @var \Magento\Framework\App\ScopeResolverInterface
      */
     protected $_scopeResolver;
@@ -46,20 +41,17 @@ class Lists implements \Magento\Framework\Locale\ListsInterface
     protected $_localeResolver;
 
     /**
-     * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
      * @param \Magento\Framework\Locale\ConfigInterface $config
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param string $locale
      */
     public function __construct(
-        \Magento\Framework\App\State $appState,
         \Magento\Framework\App\ScopeResolverInterface $scopeResolver,
         \Magento\Framework\Locale\ConfigInterface $config,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         $locale = null
     ) {
-        $this->_appState = $appState;
         $this->_scopeResolver = $scopeResolver;
         $this->_config = $config;
         $this->_localeResolver = $localeResolver;
@@ -181,7 +173,7 @@ class Lists implements \Magento\Framework\Locale\ListsInterface
     {
         $currencies = $this->getTranslationList('currencytoname');
         $options = array();
-        $allowed = $this->_getAllowedCurrencies();
+        $allowed = $this->_config->getAllowedCurrencies();
 
         foreach ($currencies as $name => $code) {
             if (!in_array($code, $allowed)) {
@@ -191,21 +183,6 @@ class Lists implements \Magento\Framework\Locale\ListsInterface
             $options[] = array('label' => $name, 'value' => $code);
         }
         return $this->_sortOptionArray($options);
-    }
-
-    /**
-     * Retrieve array of allowed currencies
-     *
-     * @return array
-     */
-    protected function _getAllowedCurrencies()
-    {
-        if ($this->_appState->isInstalled()) {
-            $allowed = $this->_scopeResolver->getScope()->getAllowedCurrencies();
-        } else {
-            $allowed = $this->_config->getAllowedCurrencies();
-        }
-        return $allowed;
     }
 
     /**

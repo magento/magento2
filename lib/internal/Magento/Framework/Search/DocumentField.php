@@ -1,7 +1,5 @@
 <?php
 /**
- * Search Document Field
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -25,49 +23,9 @@
  */
 namespace Magento\Framework\Search;
 
-class DocumentField
+/**
+ * Search Document Field
+ */
+class DocumentField extends AbstractKeyValuePair
 {
-    /**
-     * Document field name
-     *
-     * @var string
-     */
-    protected $name;
-
-    /**
-     * Document field values
-     *
-     * @var array
-     */
-    protected $values;
-
-    /**
-     * @param string $name
-     * @param array $values
-     */
-    public function __construct($name, array $values)
-    {
-        $this->name = $name;
-        $this->values = $values;
-    }
-
-    /**
-     * Get field name
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * Get field values
-     *
-     * @return array
-     */
-    public function getValues()
-    {
-        return $this->values;
-    }
 }

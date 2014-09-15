@@ -39,17 +39,17 @@
     <type name="Magento\Store\Model\Config\Reader\Store">
         <arguments>
             <argument name="scopePool" xsi:type="object">Magento\Framework\App\Config\ScopePool\Proxy</argument>
-            <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManagerInterface\Proxy</argument>
+            <argument name="storeManager" xsi:type="object">Magento\Framework\StoreManagerInterface\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Store\Model\Resolver\Store">
         <arguments>
-            <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManagerInterface\Proxy</argument>
+            <argument name="storeManager" xsi:type="object">Magento\Framework\StoreManagerInterface\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Store\Model\Resolver\Website">
         <arguments>
-            <argument name="storeManager" xsi:type="object">Magento\Store\Model\StoreManagerInterface\Proxy</argument>
+            <argument name="storeManager" xsi:type="object">Magento\Framework\StoreManagerInterface\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Store\Model\Config\Reader\ReaderPool">
@@ -68,9 +68,6 @@
     <preference for="Magento\Framework\Stdlib\CookieManager" type="Magento\Framework\Stdlib\Cookie\PhpCookieManager" />
     <type name="Magento\Framework\App\Action\Action">
         <plugin name="storeCheck" type="Magento\Store\App\Action\Plugin\StoreCheck" sortOrder="10"/>
-    </type>
-    <type name="Magento\Framework\App\FrontController">
-        <plugin name="dispatchExceptionHandler" type="Magento\Store\App\FrontController\Plugin\DispatchExceptionHandler" sortOrder="30"/>
     </type>
     <type name="Magento\Store\Model\Resource\Website\Collection">
         <arguments>

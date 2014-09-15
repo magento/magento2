@@ -113,7 +113,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
     protected $_resourceFactory;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -140,7 +140,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
     /**
      * Initialize base inline translation model
      *
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Translation\Model\Resource\StringFactory $resource
      * @param \Zend_Filter_Interface $inputFilter
      * @param \Magento\Framework\App\State $appState
@@ -149,7 +149,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
      */
     public function __construct(
         \Magento\Translation\Model\Resource\StringFactory $resource,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         \Zend_Filter_Interface $inputFilter,
         \Magento\Framework\App\State $appState,
         \Magento\Framework\App\Cache\TypeListInterface $appCache,

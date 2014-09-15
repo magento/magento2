@@ -64,7 +64,22 @@ class TransactionMapperTest extends \PHPUnit_Framework_TestCase
         );
         $this->transactionBuilderMock = $this->getMock(
             'Magento\Sales\Service\V1\Data\TransactionBuilder',
-            ['populateWithArray', 'setAdditionalInformation', 'setIncrementId', 'setChildTransactions', 'create'],
+            [
+                'setTransactionId',
+                'setParentId',
+                'setOrderId',
+                'setTxnId',
+                'setPaymentId',
+                'setParentTxnId',
+                'setTxnType',
+                'setIsClosed',
+                'setCreatedAt',
+                'setMethod',
+                'setAdditionalInformation',
+                'setIncrementId',
+                'setChildTransactions',
+                'create'
+            ],
             [],
             '',
             false
@@ -183,15 +198,23 @@ class TransactionMapperTest extends \PHPUnit_Framework_TestCase
      */
     public function testExtractDto($lazy)
     {
-        list($id, $data) = [1, []];
+        $id = 1;
         $transactionModelMock = $this->getMockBuilder('Magento\Sales\Model\Order\Payment\Transaction')
             ->disableOriginalConstructor()->setMethods([])->getMock();
         $transactionDtoMock = $this->getMockBuilder('Magento\Sales\Service\V1\Data\Transaction')
             ->disableOriginalConstructor()->setMethods([])->getMock();
         $this->prepareTransactionOrder($transactionModelMock, $id);
 
-        $transactionModelMock->expects($this->once())->method('getData')->will($this->returnValue($data));
-        $this->transactionBuilderMock->expects($this->once())->method('populateWithArray')->with($data);
+        $this->transactionBuilderMock->expects($this->once())->method('setTransactionId');
+        $this->transactionBuilderMock->expects($this->once())->method('setParentId');
+        $this->transactionBuilderMock->expects($this->once())->method('setOrderId');
+        $this->transactionBuilderMock->expects($this->once())->method('setTxnId');
+        $this->transactionBuilderMock->expects($this->once())->method('setPaymentId');
+        $this->transactionBuilderMock->expects($this->once())->method('setParentTxnId');
+        $this->transactionBuilderMock->expects($this->once())->method('setTxnType');
+        $this->transactionBuilderMock->expects($this->once())->method('setIsClosed');
+        $this->transactionBuilderMock->expects($this->once())->method('setCreatedAt');
+        $this->transactionBuilderMock->expects($this->once())->method('setMethod');
         $transactionModelMock->expects($this->once())->method('getAdditionalInformation')->will($this->returnValue([]));
         $this->transactionBuilderMock->expects($this->once())->method('setAdditionalInformation')->with([]);
         $this->transactionBuilderMock->expects($this->once())->method('setIncrementId')->with($id);

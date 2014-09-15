@@ -40,17 +40,27 @@ class SuggestConfigurableAttributes extends Action
     protected $coreHelper;
 
     /**
+     * Store manager
+     *
+     * @var \Magento\Framework\StoreManagerInterface
+     */
+    protected $storeManager;
+
+    /**
      * @param Action\Context $context
      * @param SuggestedAttributeList $attributeList
      * @param \Magento\Core\Helper\Data $coreHelper
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      */
     public function __construct(
         Action\Context $context,
         SuggestedAttributeList $attributeList,
-        \Magento\Core\Helper\Data $coreHelper
+        \Magento\Core\Helper\Data $coreHelper,
+        \Magento\Framework\StoreManagerInterface $storeManager
     ) {
         $this->attributeList = $attributeList;
         $this->coreHelper = $coreHelper;
+        $this->storeManager = $storeManager;
         parent::__construct($context);
     }
 
@@ -71,6 +81,8 @@ class SuggestConfigurableAttributes extends Action
      */
     public function execute()
     {
+        $this->storeManager->setCurrentStore(\Magento\Store\Model\Store::ADMIN_CODE);
+
         $this->getResponse()->representJson(
             $this->coreHelper->jsonEncode(
                 $this->attributeList->getSuggestedAttributes($this->getRequest()->getParam('label_part'))

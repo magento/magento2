@@ -42,7 +42,7 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_storeManagerMock = $this->getMock(
-            'Magento\Store\Model\StoreManagerInterface',
+            'Magento\Framework\StoreManagerInterface',
             array(),
             array(),
             '',
@@ -71,7 +71,7 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Store\Model\Exception
+     * @expectedException \Magento\Framework\App\InitException
      */
     public function testGetScopeWithInvalidScope()
     {

@@ -40,17 +40,17 @@ class AgreementsProvider implements AgreementsProviderInterface
     /** @var \Magento\Framework\App\Config\ScopeConfigInterface */
     protected $scopeConfig;
 
-    /** @var  \Magento\Store\Model\StoreManagerInterface */
+    /** @var  \Magento\Framework\StoreManagerInterface */
     protected $storeManager;
 
     /**
      * @param Resource\Agreement\CollectionFactory $agreementCollectionFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         \Magento\CheckoutAgreements\Model\Resource\Agreement\CollectionFactory $agreementCollectionFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
         $this->agreementCollectionFactory = $agreementCollectionFactory;

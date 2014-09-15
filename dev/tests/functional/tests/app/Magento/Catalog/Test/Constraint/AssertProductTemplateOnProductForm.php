@@ -73,7 +73,7 @@ class AssertProductTemplateOnProductForm extends AbstractConstraint
 
         $productGrid->open();
         $productGrid->getGridPageActionBlock()->addProduct('simple');
-        $productBlockForm = $newProductPage->getForm();
+        $productBlockForm = $newProductPage->getProductForm();
 
         /**@var CatalogProductSimple $catalogProductSimple */
         $productSimple = $fixtureFactory->createByCode(
@@ -86,9 +86,9 @@ class AssertProductTemplateOnProductForm extends AbstractConstraint
             ]
         );
         $productBlockForm->fill($productSimple);
-        $newProductPage->getFormAction()->save();
+        $newProductPage->getFormPageActions()->save();
 
-        $formData = $productEdit->getForm()->getData($productSimple);
+        $formData = $productEdit->getProductForm()->getData($productSimple);
         $formAttributeSet = $formData['attribute_set_id'];
         \PHPUnit_Framework_Assert::assertEquals(
             $attributeSet->getAttributeSetName(),
@@ -99,10 +99,10 @@ class AssertProductTemplateOnProductForm extends AbstractConstraint
         );
 
         if ($attributeSetOriginal === null) {
-            $productEdit->getForm()->openTab('product-details');
+            $productEdit->getProductForm()->openTab('product-details');
 
             \PHPUnit_Framework_Assert::assertTrue(
-                $productEdit->getForm()->checkAttributeLabel($productAttribute),
+                $productEdit->getProductForm()->checkAttributeLabel($productAttribute),
                 "Product Attribute is absent on Product form."
             );
         }

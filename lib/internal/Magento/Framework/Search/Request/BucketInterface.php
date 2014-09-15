@@ -1,7 +1,5 @@
 <?php
 /**
- * Aggregation Bucket Interface
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -25,6 +23,9 @@
  */
 namespace Magento\Framework\Search\Request;
 
+/**
+ * Aggregation Bucket Interface
+ */
 interface BucketInterface
 {
     /**

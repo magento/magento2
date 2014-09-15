@@ -162,7 +162,7 @@ class Product extends DataFixture
                         ->getMagentoDownloadableDownloadableProductLinksNotPurchasedSeparately();
                     break;
                 case 'configurable':
-                    $product = Factory::getFixtureFactory()->getMagentoCatalogConfigurableProduct();
+                    $product = Factory::getFixtureFactory()->getMagentoConfigurableProductConfigurableProduct();
                     break;
                 default:
                     throw new \InvalidArgumentException(

@@ -25,6 +25,9 @@
  */
 namespace Magento\Customer\Model\Metadata\Form;
 
+use Magento\Customer\Service\V1\Data\Eav\ValidationRule;
+use Magento\Customer\Service\V1\Data\Eav\ValidationRuleBuilder;
+
 class DateTest extends AbstractFormTestCase
 {
     /** @var \Magento\Customer\Model\Metadata\Form\Date */
@@ -86,12 +89,24 @@ class DateTest extends AbstractFormTestCase
      */
     public function testValidateValue($value, $validation, $required, $expected)
     {
+        $validationRules = array();
+        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $ruleBuilder = $helper->getObject('\Magento\Customer\Service\V1\Data\Eav\ValidationRuleBuilder');
+        $ruleBuilder->populateWithArray(array('name' => 'input_validation', 'value' => 'date'));
+        $validationRules[] = new ValidationRule($ruleBuilder);
+        if (is_array($validation)) {
+            foreach ($validation as $ruleName => $ruleValue) {
+                $ruleBuilder->populateWithArray(array('name' => $ruleName, 'value' => $ruleValue));
+                $validationRules[] = new ValidationRule($ruleBuilder);
+            }
+        }
+
         $this->attributeMetadataMock->expects(
             $this->any()
         )->method(
             'getValidationRules'
         )->will(
-            $this->returnValue(array_merge(array('input_validation' => 'date'), $validation))
+            $this->returnValue($validationRules)
         );
 
         $this->attributeMetadataMock->expects($this->any())->method('isRequired')->will($this->returnValue($required));

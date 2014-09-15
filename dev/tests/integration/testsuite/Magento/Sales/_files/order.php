@@ -66,7 +66,7 @@ $order->setIncrementId(
 )->setShippingAddress(
     $shippingAddress
 )->setStoreId(
-    $objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getId()
+    $objectManager->get('Magento\Framework\StoreManagerInterface')->getStore()->getId()
 )->addItem(
     $orderItem
 )->setPayment(

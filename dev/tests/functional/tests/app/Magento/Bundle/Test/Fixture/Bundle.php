@@ -85,14 +85,21 @@ class Bundle extends Product
      */
     public function getBundleOptions()
     {
-        $options = array();
+        $options = [];
         $bundleOptions = $this->getData('fields/bundle_selections/value');
         foreach ($bundleOptions['bundle_options'] as $optionData) {
-            $optionName = $optionData['title'];
+            $option = [
+                'title' => $optionData['title'],
+                'type' => $optionData['type'],
+                'options' => []
+            ];
+
             foreach ($optionData['assigned_products'] as $productData) {
-                $options[$optionName][] = $productData['search_data']['name'];
+                $option['options'][] = ['title' => $productData['search_data']['name']];
             }
+            $options[] = $option;
         }
+
         return $options;
     }
 
@@ -138,14 +145,15 @@ class Bundle extends Product
     protected function _initData()
     {
         parent::_initData();
-        $this->_dataConfig = array(
+        $this->_dataConfig = [
+            'type_id' => 'bundle',
             'constraint' => 'Success',
-            'create_url_params' => array(
+            'create_url_params' => [
                 'type' => 'bundle',
                 'set' => static::DEFAULT_ATTRIBUTE_SET_ID,
-            ),
+            ],
             'input_prefix' => 'product'
-        );
+        ];
 
         $this->_repository = Factory::getRepositoryFactory()
             ->getMagentoBundleBundle($this->_dataConfig, $this->_data);

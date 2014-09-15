@@ -24,166 +24,102 @@
 
 namespace Magento\ConfigurableProduct\Test\Block\Adminhtml\Product;
 
-use Mtf\Block\Mapper;
 use Mtf\Client\Element;
-use Mtf\Client\Browser;
-use Mtf\Factory\Factory;
+use Magento\Backend\Test\Block\Widget\FormTabs;
+use Mtf\Fixture\DataFixture;
 use Mtf\Fixture\FixtureInterface;
-use Mtf\Util\XmlConverter;
-use Mtf\Block\BlockFactory;
-use Mtf\Client\Element\Locator;
-use Magento\Catalog\Test\Fixture\CatalogCategory;
-use Magento\Catalog\Test\Block\Adminhtml\Product\ProductForm as ParentForm;
+use Mtf\Fixture\InjectableFixture;
 
 /**
  * Class ProductForm
  * Product creation form
  */
-class ProductForm extends ParentForm
+class ProductForm extends \Magento\Catalog\Test\Block\Adminhtml\Product\ProductForm
 {
     /**
-     * New attribute selector
+     * Fill the product form
      *
-     * @var string
+     * @param FixtureInterface $product
+     * @param Element|null $element [optional]
+     * @param FixtureInterface|null $category [optional]
+     * @return FormTabs
      */
-    protected $newAttribute = 'body';
-
-    /**
-     * New attribute frame selector
-     *
-     * @var string
-     */
-    protected $newAttributeFrame = '#create_new_attribute_container';
-
-    /**
-     * New variation set button selector
-     *
-     * @var string
-     */
-    protected $newVariationSet = '[data-ui-id="admin-product-edit-tab-super-config-grid-container-add-attribute"]';
-
-    /**
-     * Variations tab selector
-     *
-     * @var string
-     */
-    protected $productDetailsTab = '#product_info_tabs_product-details';
-
-    /**
-     * Choose affected attribute set dialog popup window
-     *
-     * @var string
-     */
-    protected $affectedAttributeSet = "//div[div/@data-id='affected-attribute-set-selector']";
-
-    /**
-     * Variations tab selector
-     *
-     * @var string
-     */
-    protected $variationsTab = '#product_info_tabs_super_config_content .title';
-
-    /**
-     * Variations wrapper selector
-     *
-     * @var string
-     */
-    protected $variationsWrapper = '#product_info_tabs_super_config_content';
-
-    /**
-     * Get choose affected attribute set dialog popup window
-     *
-     * @return \Magento\ConfigurableProduct\Test\Block\Backend\Product\AffectedAttributeSet
-     */
-    protected function getAffectedAttributeSetBlock()
+    public function fill(FixtureInterface $product, Element $element = null, FixtureInterface $category = null)
     {
-        return Factory::getBlockFactory()->getMagentoConfigurableProductBackendProductAffectedAttributeSet(
-            $this->_rootElement->find($this->affectedAttributeSet, Locator::SELECTOR_XPATH)
-        );
-    }
+        $tabs = $this->getFieldsByTabs($product);
+        ksort($tabs);
 
-    /**
-     * Get attribute edit block
-     *
-     * @return \Magento\ConfigurableProduct\Test\Block\Backend\Product\Attribute\Edit
-     */
-    public function getConfigurableAttributeEditBlock()
-    {
-        $this->browser->switchToFrame(new Locator($this->newAttributeFrame));
-        return Factory::getBlockFactory()->getMagentoConfigurableProductBackendProductAttributeEdit(
-            $this->browser->find($this->newAttribute, Locator::SELECTOR_TAG_NAME)
-        );
-    }
-
-    /**
-     * Save product
-     *
-     * @param FixtureInterface $fixture
-     * @return \Magento\Backend\Test\Block\Widget\Form|void
-     */
-    public function save(FixtureInterface $fixture = null)
-    {
-        parent::save($fixture);
-        if ($this->getAffectedAttributeSetBlock()->isVisible()) {
-            $this->getAffectedAttributeSetBlock()->chooseAttributeSet($fixture);
+        if ($product instanceof DataFixture) {
+            $tabs = $this->normalizeDeprecateData($tabs);
+            $category = ($category === null) ? $product->getCategories()['category'] : $category;
         }
+
+        if ($category) {
+            $tabs['product-details']['category_ids']['value'] = ($category instanceof InjectableFixture )
+                ? $category->getName()
+                : $category->getCategoryName();
+        }
+
+        $this->showAdvancedSettings();
+        return $this->fillTabs($tabs, $element);
     }
 
     /**
-     * Get variations block
+     * Normalize data in DataFixture
      *
-     * @return \Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Super\Config
+     * @param array $tabs
+     * @return array
      */
-    protected function getVariationsBlock()
+    protected function normalizeDeprecateData(array $tabs)
     {
-        return Factory::getBlockFactory()->getMagentoConfigurableProductAdminhtmlProductEditTabSuperConfig(
-            $this->browser->find($this->variationsWrapper)
-        );
-    }
+        if (!isset($tabs['variations'])) {
+            return $tabs;
+        }
 
-    /**
-     * Fill product variations
-     *
-     * @param array $variations
-     * @return void
-     */
-    public function variationsFill(array $variations)
-    {
-        $variationsBlock = $this->getVariationsBlock();
-        $variationsBlock->fillAttributeOptions($variations);
-        $variationsBlock->generateVariations();
-    }
+        $variations = $tabs['variations'];
 
-    /**
-     * Open variations tab
-     *
-     * @return void
-     */
-    public function openVariationsTab()
-    {
-        $this->_rootElement->find($this->variationsTab)->click();
-    }
+        $attributesData = [];
+        if (isset($variations['configurable_attributes_data']['value'])) {
+            foreach ($variations['configurable_attributes_data']['value'] as $key => $attribute) {
+                $attributesData[$key] = [
+                    'frontend_label' => $attribute['label']['value']
+                ];
+                unset($attribute['label']);
 
-    /**
-     * Click on 'Create New Variation Set' button
-     *
-     * @return void
-     */
-    public function clickCreateNewVariationSet()
-    {
-        $this->_rootElement->find($this->newVariationSet)->click();
-    }
+                foreach ($attribute as $optionKey => $option) {
+                    foreach ($option as $name => $field) {
+                        $option[$name] = $field['value'];
+                    }
 
-    /**
-     * Find Attribute on Product page
-     *
-     * @param string $attributeName
-     * @return bool
-     */
-    public function findAttribute($attributeName)
-    {
-        $this->openTab('product-details');
+                    $option['label'] = $option['option_label'];
+                    unset($option['option_label']);
 
-        return $this->getVariationsBlock()->getAttributeBlock($attributeName)->isVisible();
+                    $attribute[$optionKey] = $option;
+                }
+
+
+                $attributesData[$key]['options'] = $attribute;
+            }
+        }
+
+        $matrix = [];
+        if (isset($variations['variations-matrix'])) {
+            foreach ($variations['variations-matrix']['value'] as $key => $variation) {
+                foreach ($variation['value'] as $name => $field) {
+                    $matrix[$key][$name] = $field['value'];
+                }
+            }
+        }
+
+        $tabs['variations'] = [
+            'configurable_attributes_data' => [
+                'value' => [
+                    'attributes_data' => $attributesData,
+                    'matrix' => $matrix
+                ]
+            ]
+        ];
+        unset($tabs['variations']['variations-matrix']);
+        return $tabs;
     }
 }

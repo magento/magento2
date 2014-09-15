@@ -74,7 +74,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
+        $this->storeManagerMock = $this->getMock('\Magento\Framework\StoreManagerInterface');
         $this->localeDateMock = $this->getMock('\Magento\Framework\Stdlib\DateTime\TimezoneInterface');
         $this->customerSessionMock = $this->getMock('\Magento\Customer\Model\Session', array(), array(), '', false);
         $this->eventManagerMock = $this->getMock('\Magento\Framework\Event\ManagerInterface');

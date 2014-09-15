@@ -1,3 +1,3 @@
 "storeGroup/dataSet";"createBackup";"constraint"
-"default";"Yes";"assertStoreGroupSuccessDeleteAndBackupMessages, assertStoreGroupNotInGrid, assertBackupInGrid"
-"default";"No";"assertStoreGroupSuccessDeleteMessage, assertStoreGroupNotInGrid"
+"custom";"Yes";"assertStoreGroupSuccessDeleteAndBackupMessages, assertStoreGroupNotInGrid, assertBackupInGrid"
+"custom";"No";"assertStoreGroupSuccessDeleteMessage, assertStoreGroupNotInGrid"

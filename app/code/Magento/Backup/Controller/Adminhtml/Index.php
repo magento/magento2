@@ -53,7 +53,7 @@ class Index extends \Magento\Backend\App\Action
     protected $_backupModelFactory;
 
     /**
-     * @var \Magento\Framework\App\State\MaintenanceMode
+     * @var \Magento\Framework\App\MaintenanceMode
      */
     protected $maintenanceMode;
 
@@ -63,7 +63,7 @@ class Index extends \Magento\Backend\App\Action
      * @param \Magento\Framework\Backup\Factory $backupFactory
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      * @param \Magento\Backup\Model\BackupFactory $backupModelFactory
-     * @param \Magento\Framework\App\State\MaintenanceMode $maintenanceMode
+     * @param \Magento\Framework\App\MaintenanceMode $maintenanceMode
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -71,7 +71,7 @@ class Index extends \Magento\Backend\App\Action
         \Magento\Framework\Backup\Factory $backupFactory,
         \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
         \Magento\Backup\Model\BackupFactory $backupModelFactory,
-        \Magento\Framework\App\State\MaintenanceMode $maintenanceMode
+        \Magento\Framework\App\MaintenanceMode $maintenanceMode
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_backupFactory = $backupFactory;

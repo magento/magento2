@@ -54,7 +54,8 @@ class AssertPriceInShoppingCart extends AbstractConstraint
         Cart $cart,
         CatalogProductSimple $product
     ) {
-        $cartProductPrice = $checkoutCart->open()->getCartBlock()->getProductPriceByName($product->getName());
+        $checkoutCart->open();
+        $cartProductPrice = $checkoutCart->getCartBlock()->getCartItem($product)->getPrice();
         \PHPUnit_Framework_Assert::assertEquals(
             $cartProductPrice,
             $cart->getPrice(),

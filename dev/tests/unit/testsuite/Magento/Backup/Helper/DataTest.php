@@ -24,7 +24,7 @@
 namespace Magento\Backup\Helper;
 
 use Magento\Framework\App\Filesystem;
-use Magento\Framework\App\State\MaintenanceMode;
+use Magento\Framework\App\MaintenanceMode;
 
 class DataTest extends \PHPUnit_Framework_TestCase
 {
@@ -92,7 +92,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             [
                 '.git',
                 '.svn',
-                'var/maintenance.flag',
+                'var/' . MaintenanceMode::FLAG_FILENAME,
                 Filesystem::SESSION_DIR,
                 Filesystem::CACHE_DIR,
                 Filesystem::LOG_DIR,
@@ -119,7 +119,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             [
                 '.svn',
                 '.git',
-                'var/maintenance.flag',
+                'var/' . MaintenanceMode::FLAG_FILENAME,
                 Filesystem::SESSION_DIR,
                 Filesystem::LOG_DIR,
                 Filesystem::VAR_DIR . '/locks',

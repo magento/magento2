@@ -96,7 +96,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false),
             $this->getMock('Magento\Eav\Model\Config', array(), array(), '', false),
             $this->getMock('Magento\Eav\Model\Entity\TypeFactory', array(), array(), '', false),
-            $this->getMock('Magento\Store\Model\StoreManagerInterface', array(), array(), '', false),
+            $this->getMock('Magento\Framework\StoreManagerInterface', array(), array(), '', false),
             $this->getMock('Magento\Eav\Model\Resource\Helper', array(), array(), '', false),
             $this->getMock('Magento\Framework\Validator\UniversalFactory', array(), array(), '', false),
             $this->getMock('Magento\Framework\Stdlib\DateTime\TimezoneInterface', array(), array(), '', false),

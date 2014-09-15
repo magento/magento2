@@ -54,7 +54,8 @@ class AssertProductQtyInShoppingCart extends AbstractConstraint
         Cart $cart,
         CatalogProductSimple $product
     ) {
-        $cartProductQty = $checkoutCart->open()->getCartBlock()->getProductQty($product->getName());
+        $checkoutCart->open();
+        $cartProductQty = $checkoutCart->getCartBlock()->getCartItem($product)->getQty();
         \PHPUnit_Framework_Assert::assertEquals(
             $cartProductQty,
             $cart->getQty(),

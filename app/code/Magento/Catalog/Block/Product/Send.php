@@ -88,13 +88,4 @@ class Send extends \Magento\Catalog\Block\Product\AbstractProduct
     {
         return $this->getRequest()->getParam('id');
     }
-
-    /**
-     * @return int
-     */
-    public function getMaxRecipients()
-    {
-        $sendToFriendModel = $this->_coreRegistry->registry('send_to_friend_model');
-        return $sendToFriendModel->getMaxRecipients();
-    }
 }

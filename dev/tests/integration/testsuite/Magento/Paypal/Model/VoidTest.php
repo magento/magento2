@@ -40,7 +40,7 @@ class VoidTest extends \PHPUnit_Framework_TestCase
         $logAdapterFactory = $objectManager->get('Magento\Framework\Logger\AdapterFactory');
         $localeDate = $objectManager->get('Magento\Framework\Stdlib\DateTime\TimezoneInterface');
         $centinelService = $objectManager->get('Magento\Centinel\Model\Service');
-        $storeManager = $objectManager->get('Magento\Store\Model\StoreManagerInterface');
+        $storeManager = $objectManager->get('Magento\Framework\StoreManagerInterface');
         $configFactory = $objectManager->get('Magento\Paypal\Model\ConfigFactory');
         $mathRandom = $objectManager->get('Magento\Framework\Math\Random');
         $httpClientFactoryMock = $this->getMockBuilder('Magento\Framework\HTTP\ZendClientFactory')

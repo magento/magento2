@@ -41,7 +41,7 @@ class Clear extends \Magento\Catalog\Controller\Product\Compare
         } elseif ($this->_customerId) {
             $items->setCustomerId($this->_customerId);
         } else {
-            $items->setVisitorId($this->_logVisitor->getId());
+            $items->setVisitorId($this->_customerVisitor->getId());
         }
 
         try {

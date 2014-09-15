@@ -42,7 +42,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->with('wishlist/index/cart', array('item' => '%item%', 'uenc' => $encoded))
             ->will($this->returnValue($url));
 
-        $storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface', array(), array(), '', false);
+        $storeManager = $this->getMock('Magento\Framework\StoreManagerInterface', array(), array(), '', false);
         $storeManager->expects($this->any())
             ->method('getStore')
             ->will($this->returnValue($store));

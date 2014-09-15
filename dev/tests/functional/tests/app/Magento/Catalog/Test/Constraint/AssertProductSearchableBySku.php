@@ -80,7 +80,7 @@ class AssertProductSearchableBySku extends AbstractConstraint
             : null;
 
         $isVisible = $catalogSearchResult->getListProductBlock()->isProductVisible($product->getName());
-        while (!$isVisible && $catalogSearchResult->getToolbar()->nextPage()) {
+        while (!$isVisible && $catalogSearchResult->getBottomToolbar()->nextPage()) {
             $isVisible = $catalogSearchResult->getListProductBlock()->isProductVisible($product->getName());
         }
 

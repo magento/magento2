@@ -26,6 +26,7 @@ namespace Magento\Framework\App;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request;
 use Magento\Framework\App\Response;
+use Magento\Framework\App;
 
 /**
  * Entry point for retrieving static resources like JS, CSS, images by requested public path
@@ -40,7 +41,7 @@ class StaticResource implements \Magento\Framework\AppInterface
     private $state;
 
     /**
-     * @var Response\FileInterface
+     * @var \Magento\Framework\App\Response\FileInterface
      */
     private $response;
 
@@ -116,24 +117,31 @@ class StaticResource implements \Magento\Framework\AppInterface
         if ($appMode == \Magento\Framework\App\State::MODE_PRODUCTION) {
             $this->response->setHttpResponseCode(404);
         } else {
-            try {
-                $path = $this->request->get('resource');
-                $params = $this->parsePath($path);
-                $this->state->setAreaCode($params['area']);
-                $this->objectManager->configure($this->configLoader->load($params['area']));
-                $file = $params['file'];
-                unset($params['file']);
-                $asset = $this->assetRepo->createAsset($file, $params);
-                $this->response->setFilePath($asset->getSourceFile());
-                $this->publisher->publish($asset);
-            } catch (\Exception $e) {
-                if ($appMode == \Magento\Framework\App\State::MODE_DEVELOPER) {
-                    throw $e;
-                }
-                $this->response->setHttpResponseCode(404);
-            }
+            $path = $this->request->get('resource');
+            $params = $this->parsePath($path);
+            $this->state->setAreaCode($params['area']);
+            $this->objectManager->configure($this->configLoader->load($params['area']));
+            $file = $params['file'];
+            unset($params['file']);
+            $asset = $this->assetRepo->createAsset($file, $params);
+            $this->response->setFilePath($asset->getSourceFile());
+            $this->publisher->publish($asset);
         }
         return $this->response;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function catchException(App\Bootstrap $bootstrap, \Exception $exception)
+    {
+        $this->response->setHttpResponseCode(404);
+        $this->response->setHeader('Content-Type', 'text/plain');
+        if ($bootstrap->isDeveloperMode()) {
+            $this->response->setBody($exception->getMessage() . "\n" . $exception->getTraceAsString());
+        }
+        $this->response->sendResponse();
+        return true;
     }
 
     /**

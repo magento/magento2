@@ -261,12 +261,6 @@ $table = $installer->getConnection()->newTable(
     array('identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true),
     'Visitor ID'
 )->addColumn(
-    'session_id',
-    \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-    64,
-    array('nullable' => true, 'default' => null),
-    'Session ID'
-)->addColumn(
     'first_visit_at',
     \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
     null,
@@ -294,6 +288,15 @@ $table = $installer->getConnection()->newTable(
     'Log Visitors Table'
 );
 $installer->getConnection()->createTable($table);
+$installer->getConnection()->addForeignKey(
+    $installer->getFkName('log_visitor', 'visitor_id', 'customer_visitor', 'visitor_id'),
+    $installer->getTable('log_visitor'),
+    'visitor_id',
+    $installer->getTable('customer_visitor'),
+    'visitor_id',
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
+    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
+);
 
 /**
  * Create table 'log_visitor_info'

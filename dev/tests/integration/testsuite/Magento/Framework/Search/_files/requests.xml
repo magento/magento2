@@ -1,0 +1,223 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<requests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <request query="one_match" index="catalogsearch_fulltext">
+        <dimensions>
+            <dimension name="scope" value="default" />
+        </dimensions>
+        <queries>
+            <query xsi:type="boolQuery" name="one_match" boost="2">
+                <queryReference clause="must" ref="fulltext_search_query" />
+            </query>
+
+            <query xsi:type="matchQuery" name="fulltext_search_query" boost="5">
+                <match field="data_index" value="%request.title%" boost="2" />
+            </query>
+        </queries>
+        <from>10</from>
+        <size>10</size>
+    </request>
+    <request query="one_match_filters" index="catalogsearch_fulltext">
+        <dimensions>
+            <dimension name="scope" value="default" />
+        </dimensions>
+        <queries>
+            <query xsi:type="boolQuery" name="one_match_filters" boost="2">
+                <queryReference clause="must" ref="fulltext_search_query" />
+                <queryReference clause="must" ref="fulltext_search_query2" />
+            </query>
+
+            <query xsi:type="matchQuery" name="fulltext_search_query" boost="5">
+                <match field="data_index" value="%request.title%" boost="2" />
+            </query>
+
+            <query xsi:type="filteredQuery" name="fulltext_search_query2">
+                <filterReference ref="pid" />
+            </query>
+        </queries>
+        <filters>
+            <filter xsi:type="boolFilter" name="pid">
+                <filterReference clause="should" ref="pidm" />
+                <filterReference clause="should" ref="pidsh" />
+            </filter>
+            <filter name="pidm" xsi:type="rangeFilter" field="product_id" from="%pidm_from%" to="%pidm_to%" />
+            <filter name="pidsh" xsi:type="termFilter" field="product_id" value="%pidsh%" />
+        </filters>
+        <from>10</from>
+        <size>10</size>
+    </request>
+    <request query="range_filter" index="catalogsearch_fulltext">
+        <dimensions>
+            <dimension name="scope" value="default" />
+        </dimensions>
+        <queries>
+            <query xsi:type="filteredQuery" name="range_filter">
+                <filterReference ref="range_filter" />
+            </query>
+        </queries>
+        <filters>
+            <filter name="range_filter"
+                    xsi:type="rangeFilter"
+                    field="product_id"
+                    from="%request.product_id.from%"
+                    to="%request.product_id.to%" />
+        </filters>
+        <from>10</from>
+        <size>10</size>
+    </request>
+    <request query="range_filter_without_from_field" index="catalogsearch_fulltext">
+        <dimensions>
+            <dimension name="scope" value="default" />
+        </dimensions>
+        <queries>
+            <query xsi:type="filteredQuery" name="range_filter_without_from_field">
+                <filterReference ref="range_filter_without_from_field" />
+            </query>
+        </queries>
+        <filters>
+            <filter name="range_filter_without_from_field"
+                    xsi:type="rangeFilter"
+                    field="product_id"
+                    to="%request.product_id.to%" />
+        </filters>
+        <from>10</from>
+        <size>10</size>
+    </request>
+    <request query="range_filter_without_to_field" index="catalogsearch_fulltext">
+        <dimensions>
+            <dimension name="scope" value="default" />
+        </dimensions>
+        <queries>
+            <query xsi:type="filteredQuery" name="range_filter_without_to_field">
+                <filterReference ref="range_filter_without_to_field" />
+            </query>
+        </queries>
+        <filters>
+            <filter name="range_filter_without_to_field"
+                    xsi:type="rangeFilter"
+                    field="product_id"
+                    from="%request.product_id.from%" />
+        </filters>
+        <from>10</from>
+        <size>10</size>
+    </request>
+    <request query="term_filter" index="catalogsearch_fulltext">
+        <dimensions>
+            <dimension name="scope" value="default" />
+        </dimensions>
+        <queries>
+            <query xsi:type="filteredQuery" name="term_filter">
+                <filterReference ref="term_filter" />
+            </query>
+        </queries>
+        <filters>
+            <filter name="term_filter" xsi:type="termFilter" field="product_id" value="%request.product_id%" />
+        </filters>
+        <from>10</from>
+        <size>10</size>
+    </request>
+    <request query="bool_filter" index="catalogsearch_fulltext">
+        <dimensions>
+            <dimension name="scope" value="default" />
+        </dimensions>
+        <queries>
+            <query xsi:type="filteredQuery" name="bool_filter">
+                <filterReference ref="bool_filter" />
+            </query>
+        </queries>
+        <filters>
+            <filter xsi:type="boolFilter" name="bool_filter">
+                <filterReference clause="must" ref="must_range_filter1" />
+                <filterReference clause="should" ref="should_term_filter1" />
+                <filterReference clause="should" ref="should_term_filter2" />
+                <filterReference clause="not" ref="not_term_filter1" />
+                <filterReference clause="not" ref="not_term_filter2" />
+            </filter>
+            <filter name="must_range_filter1"
+                    xsi:type="rangeFilter"
+                    field="product_id"
+                    from="%request.must.range_filter1.from%"
+                    to="%request.must.range_filter1.to%" />
+            <filter name="should_term_filter1"
+                    xsi:type="termFilter"
+                    field="product_id"
+                    value="%request.should.term_filter1%" />
+            <filter name="should_term_filter2"
+                    xsi:type="termFilter"
+                    field="product_id"
+                    value="%request.should.term_filter2%" />
+            <filter name="should_term_filter3"
+                    xsi:type="termFilter"
+                    field="product_id"
+                    value="%request.should.term_filter3%" />
+            <filter name="should_term_filter4"
+                    xsi:type="termFilter"
+                    field="product_id"
+                    value="%request.should.term_filter4%" />
+            <filter name="not_term_filter1"
+                    xsi:type="termFilter"
+                    field="product_id"
+                    value="%request.not.term_filter1%" />
+            <filter name="not_term_filter2"
+                    xsi:type="termFilter"
+                    field="product_id"
+                    value="%request.not.term_filter2%" />
+        </filters>
+        <from>10</from>
+        <size>10</size>
+    </request>
+    <request query="advanced_search_test" index="catalogsearch_fulltext">
+        <dimensions>
+            <dimension name="scope" value="default" />
+        </dimensions>
+        <queries>
+            <query xsi:type="boolQuery" name="advanced_search_test" boost="1">
+                <queryReference clause="should" ref="name_query" />
+                <queryReference clause="should" ref="description_query" />
+                <queryReference clause="should" ref="query_filter" />
+            </query>
+            <query xsi:type="matchQuery" name="name_query">
+                <match field="data_index" value="%request.name%" boost="1" />
+            </query>
+            <query xsi:type="matchQuery" name="description_query">
+                <match field="data_index" value="%request.description%" boost="1" />
+            </query>
+            <query xsi:type="filteredQuery" name="query_filter">
+                <filterReference ref="filter" />
+            </query>
+        </queries>
+        <filters>
+            <filter xsi:type="boolFilter" name="filter">
+                <filterReference clause="must" ref="store_filter" />
+                <filterReference clause="must" ref="product_id_filter" />
+            </filter>
+            <filter name="store_filter" xsi:type="termFilter" field="store_id" value="%request.store_id%" />
+            <filter name="product_id_filter" xsi:type="rangeFilter" field="product_id" from="%request.from_product_id%" to="%request.to_product_id%" />
+        </filters>
+        <from>10</from>
+        <size>10</size>
+    </request>
+</requests>

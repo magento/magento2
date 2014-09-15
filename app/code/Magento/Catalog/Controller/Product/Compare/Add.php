@@ -39,7 +39,7 @@ class Add extends \Magento\Catalog\Controller\Product\Compare
         }
 
         $productId = (int)$this->getRequest()->getParam('product');
-        if ($productId && ($this->_logVisitor->getId() || $this->_customerSession->isLoggedIn())) {
+        if ($productId && ($this->_customerVisitor->getId() || $this->_customerSession->isLoggedIn())) {
             /** @var \Magento\Catalog\Model\Product $product */
             $product = $this->_productFactory->create();
             $product->setStoreId($this->_storeManager->getStore()->getId())->load($productId);

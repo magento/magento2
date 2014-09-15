@@ -35,7 +35,7 @@ interface AppInterface
     /**
      * Magento version
      */
-    const VERSION = '0.1.0-alpha94';
+    const VERSION = '0.1.0-alpha95';
 
     /**
      * Launch application
@@ -43,4 +43,17 @@ interface AppInterface
      * @return \Magento\Framework\App\ResponseInterface
      */
     public function launch();
+
+    /**
+     * Ability to handle exceptions that may have occurred during bootstrap and launch
+     *
+     * Return values:
+     * - true: exception has been handled, no additional action is needed
+     * - false: exception has not been handled - pass the control to Bootstrap
+     *
+     * @param App\Bootstrap $bootstrap
+     * @param \Exception $exception
+     * @return bool
+     */
+    public function catchException(App\Bootstrap $bootstrap, \Exception $exception);
 }

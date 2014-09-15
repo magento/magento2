@@ -44,6 +44,8 @@ $model->setName(
     'text'
 )->setFrontendLabel(
     FIXTURE_ATTRIBUTE_USER_DEFINED_CUSTOMER_FRONTEND_LABEL
+)->setSortOrder(
+    1221
 );
 
 $model->save();

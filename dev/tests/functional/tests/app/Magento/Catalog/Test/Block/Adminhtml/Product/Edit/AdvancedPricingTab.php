@@ -53,20 +53,21 @@ class AdvancedPricingTab extends Tab
      */
     public function fillFormTab(array $fields, Element $element = null)
     {
+        $context = $element ? $element : $this->_rootElement;
         foreach ($fields as $fieldName => $field) {
             // Fill form
             if (isset($this->childrenForm[$fieldName]) && is_array($field['value'])) {
-                /** @var \Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Options $optionsForm */
+                /** @var \Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Options\AbstractOptions $optionsForm */
                 $optionsForm = $this->blockFactory->create(
                     __NAMESPACE__ . '\\' . $this->childrenForm[$fieldName],
-                    ['element' => $this->_rootElement]
+                    ['element' => $context]
                 );
 
                 foreach ($field['value'] as $key => $option) {
                     ++$key;
                     $optionsForm->fillOptions(
                         $option,
-                        $this->_rootElement->find(
+                        $context->find(
                             '#attribute-' . $fieldName . '-container tbody tr:nth-child(' . $key . ')'
                         )
                     );
@@ -93,7 +94,7 @@ class AdvancedPricingTab extends Tab
         foreach ($fields as $fieldName => $field) {
             // Data collection forms
             if (isset($this->childrenForm[$fieldName]) && is_array($field['value'])) {
-                /** @var \Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Options $optionsForm */
+                /** @var \Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Options\AbstractOptions $optionsForm */
                 $optionsForm = $this->blockFactory->create(
                     __NAMESPACE__ . '\\' . $this->childrenForm[$fieldName],
                     ['element' => $this->_rootElement]

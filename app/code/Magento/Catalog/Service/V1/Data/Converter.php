@@ -53,8 +53,19 @@ class Converter
      */
     public function createProductDataFromModel(\Magento\Catalog\Model\Product $productModel)
     {
+        return $this->createProductBuilderFromModel($productModel)->create();
+    }
+
+    /**
+     * Initialize product builder with product model data
+     *
+     * @param \Magento\Catalog\Model\Product $productModel
+     * @return \Magento\Catalog\Service\V1\Data\ProductBuilder
+     */
+    public function createProductBuilderFromModel(\Magento\Catalog\Model\Product $productModel)
+    {
         $this->populateBuilderWithAttributes($productModel);
-        return $this->productBuilder->create();
+        return $this->productBuilder;
     }
 
     /**

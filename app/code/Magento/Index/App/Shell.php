@@ -26,6 +26,7 @@
 namespace Magento\Index\App;
 
 use Magento\Framework\App\Console\Response;
+use Magento\Framework\App\Bootstrap;
 use Magento\Framework\AppInterface;
 
 class Shell implements AppInterface
@@ -75,5 +76,13 @@ class Shell implements AppInterface
             $this->_response->setCode(0);
         }
         return $this->_response;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function catchException(Bootstrap $bootstrap, \Exception $exception)
+    {
+        return false;
     }
 }

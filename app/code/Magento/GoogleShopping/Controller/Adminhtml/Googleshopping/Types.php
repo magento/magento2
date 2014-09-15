@@ -114,9 +114,9 @@ class Types extends \Magento\Backend\App\Action
     {
         $storeId = (int)$this->getRequest()->getParam('store', 0);
         if ($storeId == 0) {
-            return $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->getDefaultStoreView();
+            return $this->_objectManager->get('Magento\Framework\StoreManagerInterface')->getDefaultStoreView();
         }
-        return $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore($storeId);
+        return $this->_objectManager->get('Magento\Framework\StoreManagerInterface')->getStore($storeId);
     }
 
     /**

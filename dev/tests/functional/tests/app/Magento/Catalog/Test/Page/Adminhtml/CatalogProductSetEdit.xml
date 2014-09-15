@@ -32,7 +32,7 @@
         </pageActions>
         <attributeSetEditBlock>
             <class>Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Set\Main</class>
-            <locator>#tree-div2</locator>
+            <locator>.attribute-set</locator>
             <strategy>css selector</strategy>
         </attributeSetEditBlock>
         <attributeSetEditForm>

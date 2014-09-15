@@ -32,6 +32,7 @@ use Magento\Catalog\Test\Page\Product\CatalogProductView;
 
 /**
  * Class AssertProductInCart
+ * Assertion that the product is correctly displayed in cart
  */
 class AssertProductInCart extends AbstractConstraint
 {
@@ -59,13 +60,7 @@ class AssertProductInCart extends AbstractConstraint
     ) {
         // Add product to cart
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
-        $productOptions = $product->getCustomOptions();
-        if ($productOptions) {
-            $customOption = $catalogProductView->getCustomOptionsBlock();
-            $options = $customOption->getOptions();
-            $key = $productOptions[0]['title'];
-            $customOption->selectProductCustomOption($options[$key]['title']);
-        }
+        $catalogProductView->getViewBlock()->fillOptions($product);
         $catalogProductView->getViewBlock()->clickAddToCart();
 
         // Check price
@@ -81,43 +76,39 @@ class AssertProductInCart extends AbstractConstraint
      */
     protected function assertOnShoppingCart(FixtureInterface $product, CheckoutCart $checkoutCart)
     {
-        $cartBlock = $checkoutCart->getCartBlock();
-        $productName = $product->getName();
-        $productOptions = $product->getCustomOptions();
-        $priceComparing = $product->getPrice();
+        $customOptions = $product->getCustomOptions();
+        $checkoutData = $product->getCheckoutData();
+        $checkoutCustomOptions = isset($checkoutData['custom_options']) ? $checkoutData['custom_options'] : [];
+        $fixturePrice = $product->getPrice();
+        $groupPrice = $product->getGroupPrice();
+        $specialPrice = $product->getSpecialPrice();
+        $cartItem = $checkoutCart->getCartBlock()->getCartItem($product);
+        $formPrice = $cartItem->getPrice();
 
-        if ($groupPrice = $product->getGroupPrice()) {
+        if ($groupPrice) {
             $groupPrice = reset($groupPrice);
-            $priceComparing = $groupPrice['price'];
+            $fixturePrice = $groupPrice['price'];
         }
-
-        if ($specialPrice = $product->getSpecialPrice()) {
-            $priceComparing = $specialPrice;
+        if ($specialPrice) {
+            $fixturePrice = $specialPrice;
         }
+        $fixtureActualPrice = $fixturePrice;
 
-        if (!empty($productOptions)) {
-            $productOption = reset($productOptions);
-            $optionsData = reset($productOption['options']);
-            $optionName = $cartBlock->getCartItemOptionsNameByProductName($productName);
-            $optionValue = $cartBlock->getCartItemOptionsValueByProductName($productName);
+        foreach ($checkoutCustomOptions as $checkoutOption) {
+            $attributeKey = $checkoutOption['title'];
+            $optionKey = $checkoutOption['value'];
+            $option = $customOptions[$attributeKey]['options'][$optionKey];
 
-            \PHPUnit_Framework_Assert::assertTrue(
-                trim($optionName) === $productOption['title']
-                && trim($optionValue) === $optionsData['title'],
-                'In the cart wrong option product.'
-            );
-
-            if ($optionsData['price_type'] === 'Percent') {
-                $priceComparing = $priceComparing * (1 + $optionsData['price'] / 100);
+            if ('Fixed' == $option['price_type']) {
+                $fixtureActualPrice += $option['price'];
             } else {
-                $priceComparing += $optionsData['price'];
+                $fixtureActualPrice += ($fixturePrice / 100) * $option['price'];
             }
         }
 
-        $price = $checkoutCart->getCartBlock()->getProductPriceByName($productName);
         \PHPUnit_Framework_Assert::assertEquals(
-            number_format($priceComparing, 2),
-            $price,
+            number_format($fixtureActualPrice, 2),
+            $formPrice,
             'Product price in shopping cart is not correct.'
         );
     }

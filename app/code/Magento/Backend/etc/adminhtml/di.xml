@@ -47,11 +47,6 @@
             <argument name="backendUrl" xsi:type="object">Magento\Backend\Model\UrlInterface\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Session\Generic">
-        <arguments>
-            <argument name="sessionName" xsi:type="string">adminhtml</argument>
-        </arguments>
-    </type>
     <type name="Magento\Backend\Model\Config\Structure\Element\Iterator\Tab" shared="false" />
     <type name="Magento\Backend\Model\Config\Structure\Element\Iterator\Section" shared="false" />
     <type name="Magento\Framework\View\Layout">
@@ -101,6 +96,7 @@
     <type name="Magento\Backend\AdminConfig">
         <arguments>
             <argument name="lifetimePath" xsi:type="const">Magento\Backend\Model\Auth\Session::XML_PATH_SESSION_LIFETIME</argument>
+            <argument name="sessionName" xsi:type="const">Magento\Backend\AdminConfig::SESSION_NAME_ADMIN</argument>
         </arguments>
     </type>
 </config>

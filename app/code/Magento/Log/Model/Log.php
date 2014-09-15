@@ -45,6 +45,8 @@ class Log extends \Magento\Framework\Model\AbstractModel
 {
     const XML_LOG_CLEAN_DAYS = 'system/log/clean_after_day';
 
+    const DEFAULT_ONLINE_MINUTES_INTERVAL = 15;
+
     /**
      * Core store config
      *
@@ -104,5 +106,19 @@ class Log extends \Magento\Framework\Model\AbstractModel
     {
         $this->getResource()->clean($this);
         return $this;
+    }
+
+    /**
+     * Return Online Minutes Interval
+     *
+     * @return int Minutes Interval
+     */
+    public function getOnlineMinutesInterval()
+    {
+        $configValue = $this->_scopeConfig->getValue(
+            'customer/online_customers/online_minutes_interval',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        return intval($configValue) > 0 ? intval($configValue) : self::DEFAULT_ONLINE_MINUTES_INTERVAL;
     }
 }

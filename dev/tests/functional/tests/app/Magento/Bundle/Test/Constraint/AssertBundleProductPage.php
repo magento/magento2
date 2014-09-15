@@ -32,59 +32,26 @@ use Magento\Catalog\Test\Constraint\AssertProductPage;
 class AssertBundleProductPage extends AssertProductPage
 {
     /**
-     * Constraint severeness
+     * Verify displayed product price on product page(front-end) equals passed from fixture
      *
-     * @var string
+     * @return string|null
      */
-    protected $severeness = 'low';
-
-    /**
-     * Error messages
-     *
-     * @var array
-     */
-    protected $errorsMessages = [
-        'name' => '- product name on product view page is not correct.',
-        'sku' => '- product sku on product view page is not correct.',
-        'price_from' => '- bundle product price from on product view page is not correct.',
-        'price_to' => '- bundle product price to on product view page is not correct.',
-        'short_description' => '- product short description on product view page is not correct.',
-        'description' => '- product description on product view page is not correct.'
-    ];
-
-    /**
-     * Prepare Price data
-     *
-     * @param array $price
-     * @return array
-     */
-    protected function preparePrice($price)
+    protected function verifyPrice()
     {
         $priceData = $this->product->getDataFieldConfig('price')['source']->getPreset();
-        $priceView = $this->product->getPriceView();
-        if ($priceView === null || $priceView == 'Price Range') {
-            if (isset($price['price_from']) && isset($price['price_to'])) {
-                return [
-                    ['price_from' => $price['price_from'], 'price_to' => $price['price_to']],
-                    [
-                        'price_from' => number_format($priceData['price_from'], 2),
-                        'price_to' => number_format($priceData['price_to'], 2)
-                    ]
-                ];
-            }
-            return [
-                ['price_regular_price' => $price['price_regular_price']],
-                ['price_regular_price' => number_format($priceData['price_from'], 2)]
-            ];
-        } else {
-            return [
-                ['price_from' => $price['price_regular_price']],
-                [
-                    'price_from' => is_numeric($priceData['price_from'])
-                            ? number_format($priceData['price_from'], 2)
-                            : $priceData['price_from']
-                ]
-            ];
+        $priceBlock = $this->productView->getPriceBlock();
+        $priceLow = ($this->product->getPriceView() == 'Price Range')
+            ? $priceBlock->getPriceFrom()
+            : $priceBlock->getRegularPrice();
+        $errors = [];
+
+        if ($priceData['price_from'] != $priceLow) {
+            $errors[] = 'Bundle price "From" on product view page is not correct.';
         }
+        if ($this->product->getPriceView() == 'Price Range' && $priceData['price_to'] != $priceBlock->getPriceTo()) {
+            $errors[] = 'Bundle price "To" on product view page is not correct.';
+        }
+
+        return empty($errors) ? null : implode("\n", $errors);
     }
 }

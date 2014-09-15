@@ -50,7 +50,7 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->quoteLoaderMock = $this->getMock('\Magento\Checkout\Service\V1\QuoteLoader', [], [], '', false);
-        $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
+        $this->storeManagerMock = $this->getMock('\Magento\Framework\StoreManagerInterface');
         $this->converterMock = $this->getMock('\Magento\Checkout\Service\V1\Address\Converter', [], [], '', false);
 
         $this->service = new ReadService($this->quoteLoaderMock, $this->converterMock, $this->storeManagerMock);

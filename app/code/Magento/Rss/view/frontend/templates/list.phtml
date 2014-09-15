@@ -54,7 +54,7 @@
     <tbody>
         <?php foreach ($_categories as $_category): ?>
         <tr>
-            <td class="col feed"><?php echo $_category->getLabel() ?></td>
+            <td class="col feed"><?php echo $this->escapeHtml($_category->getLabel()) ?></td>
             <td class="col action"><a href="<?php echo $_category->getUrl() ?>" class="action get"><span><?php echo __('Get Feed'); ?></span></a></td>
         </tr>
         <?php endforeach; ?>

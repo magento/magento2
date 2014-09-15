@@ -27,34 +27,14 @@
  */
 namespace Magento\Install\Model\Installer;
 
-use Magento\Framework\App\Filesystem as AppFilesystem;
-use Magento\Framework\Filesystem\FilesystemException;
-use Magento\Framework\Message\MessageInterface;
-
-class Console extends \Magento\Install\Model\Installer\AbstractInstaller
+class Console
 {
-    /**#@+
-     * Installation options for application initialization
-     */
-    const OPTION_URIS = 'install_option_uris';
-
-    const OPTION_DIRS = 'install_option_dirs';
-
-    /**#@- */
-
     /**
      * Available installation options
      *
      * @var array
      */
     protected $installParameters = [];
-
-    /**
-     * Stores errors on file delete
-     *
-     * @var array
-     */
-    protected $fileDeleteErrors = [];
 
     /**
      * Required parameters with descriptions
@@ -101,11 +81,6 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
     ];
 
     /**
-     * @var AppFilesystem
-     */
-    protected $_filesystem;
-
-    /**
      * Installer data model to store data between installations steps
      *
      * @var \Magento\Install\Model\Installer\Data|\Magento\Framework\Session\Generic
@@ -113,16 +88,16 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
     protected $_dataModel;
 
     /**
-     * Resource config
+     * Installer model
      *
-     * @var \Magento\Framework\App\Resource\Config
+     * @var \Magento\Install\Model\Installer
      */
-    protected $_resourceConfig;
+    protected $installer;
 
     /**
      * DB updater
      *
-     * @var \Magento\Framework\Module\UpdaterInterface
+     * @var \Magento\Framework\Module\Updater
      */
     protected $_dbUpdater;
 
@@ -134,13 +109,6 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
     protected $_installerData = null;
 
     /**
-     * Application State
-     *
-     * @var \Magento\Framework\App\State
-     */
-    protected $_appState;
-
-    /**
      * Locale Lists
      *
      * @var \Magento\Framework\Locale\ListsInterface
@@ -150,40 +118,39 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
     /**
      * Magento Object Manager
      *
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\Message\ManagerInterface
      */
-    protected $_objectManager;
+    protected $messageManager;
+
+    /**
+     * @var \Magento\Install\Model\Installer\Db\Mysql4
+     */
+    protected $db;
 
     /**
      * @param \Magento\Install\Model\Installer $installer
-     * @param \Magento\Framework\App\Resource\Config $resourceConfig
-     * @param \Magento\Framework\Module\UpdaterInterface $dbUpdater
-     * @param AppFilesystem $filesystem
+     * @param \Magento\Framework\Module\Updater $dbUpdater
      * @param \Magento\Install\Model\Installer\Data $installerData
-     * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\Locale\ListsInterface $localeLists
-     * @param \Magento\Framework\ObjectManager $objectManager
+     * @param \Magento\Install\Model\Installer\Db\Mysql4 $db
+     * @param \Magento\Framework\Message\ManagerInterface $messageManager
      */
     public function __construct(
         \Magento\Install\Model\Installer $installer,
-        \Magento\Framework\App\Resource\Config $resourceConfig,
-        \Magento\Framework\Module\UpdaterInterface $dbUpdater,
-        AppFilesystem $filesystem,
+        \Magento\Framework\Module\Updater $dbUpdater,
         \Magento\Install\Model\Installer\Data $installerData,
-        \Magento\Framework\App\State $appState,
         \Magento\Framework\Locale\ListsInterface $localeLists,
-        \Magento\Framework\ObjectManager $objectManager
+        Db\Mysql4 $db,
+        \Magento\Framework\Message\ManagerInterface $messageManager
     ) {
-        parent::__construct($installer);
-        $this->_resourceConfig = $resourceConfig;
+        $this->installer = $installer;
         $this->_dbUpdater = $dbUpdater;
-        $this->_filesystem = $filesystem;
         $this->_installerData = $installerData;
-        $this->_installer->setDataModel($this->_installerData);
-        $this->_appState = $appState;
+        $this->installer->setDataModel($this->_installerData);
         $this->_localeLists = $localeLists;
-        $this->_objectManager = $objectManager;
         $this->installParameters = array_keys($this->requiredParameters + $this->optionalParameters);
+        $this->db = $db;
+        $this->messageManager = $messageManager;
     }
 
     /**
@@ -284,14 +251,6 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
             }
 
             /**
-             * Check if already installed
-             */
-            if ($this->_appState->isInstalled()) {
-                $this->addError('ERROR: Magento is already installed.');
-                return false;
-            }
-
-            /**
              * Skip URL validation, if set
              */
             $this->_installerData->setSkipUrlValidation($options['skip_url_validation']);
@@ -351,15 +310,13 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
                 return false;
             }
 
-            $installer = $this->_getInstaller();
-
             /**
              * Install configuration
              */
-            $installer->installConfig($this->_installerData->getConfigData());
+            $this->installer->installConfig($this->_installerData->getConfigData());
 
             if (!empty($options['cleanup_database'])) {
-                $this->_cleanUpDatabase();
+                $this->db->cleanUpDatabase();
             }
 
             if ($this->hasErrors()) {
@@ -369,7 +326,7 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
             /**
              * Install database
              */
-            $installer->installDb();
+            $this->installer->installDb();
 
             if ($this->hasErrors()) {
                 return false;
@@ -382,26 +339,18 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
              * Create primary administrator user & install encryption key
              */
             $encryptionKey = !empty($options['encryption_key']) ? $options['encryption_key'] : null;
-            $encryptionKey = $installer->getValidEncryptionKey($encryptionKey);
-            $installer->createAdministrator($this->_installerData->getAdminData());
-            $installer->installEncryptionKey($encryptionKey);
+            $encryptionKey = $this->installer->getValidEncryptionKey($encryptionKey);
+            $this->installer->createAdministrator($this->_installerData->getAdminData());
+            $this->installer->installEncryptionKey($encryptionKey);
 
             /**
              * Installation finish
              */
-            $installer->finish();
+            $this->installer->finish();
 
             if ($this->hasErrors()) {
                 return false;
             }
-
-            /**
-             * Change directories mode to be writable by apache user
-             */
-            $this->_filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::VAR_DIR)->changePermissions(
-                '',
-                0777
-            );
 
             return $encryptionKey;
         } catch (\Exception $e) {
@@ -416,92 +365,10 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
                 }
 
             } else {
-                $this->addError('ERROR: ' . $e->getMessage());
+                $this->addError('ERROR: ' . $e->getMessage() . $e->getTraceAsString());
             }
             return false;
         }
-    }
-
-    /**
-     * Cleanup database use system configuration
-     *
-     * @return void
-     */
-    protected function _cleanUpDatabase()
-    {
-        $modelName = 'Magento\Install\Model\Installer\Db\Mysql4';
-        /** @var $resourceModel \Magento\Install\Model\Installer\Db\AbstractDb */
-        $resourceModel = $this->_objectManager->get($modelName);
-        $resourceModel->cleanUpDatabase();
-    }
-
-    /**
-     * Remove temp directory
-     *
-     * @return void
-     */
-
-    protected function _removeTempDir()
-    {
-        $varDirectory = $this->_filesystem->getDirectoryWrite(AppFilesystem::VAR_DIR);
-        foreach ($varDirectory->read() as $path) {
-            if ($varDirectory->isDirectory($path)) {
-                try {
-                    $varDirectory->delete($path);
-                } catch (FilesystemException $e) {
-                    $this->fileDeleteErrors[] = $e->getMessage();
-                }
-            }
-        }
-    }
-
-    /**
-     * Remove local.xml
-     *
-     * @return void
-     */
-
-    protected function _removeLocalXml()
-    {
-        try {
-            $this->_filesystem->getDirectoryWrite(AppFilesystem::CONFIG_DIR)->delete('local.xml');
-        } catch (FilesystemException $e) {
-            $this->fileDeleteErrors[] = $e->getMessage();
-        }
-    }
-
-    /**
-     * Display files that were not deleted on uninstall
-     *
-     * @return void
-     */
-
-    protected function _displayFileDeleteErrors()
-    {
-        foreach ($this->fileDeleteErrors as $errors) {
-            $unDeletedFile = trim(explode(" ", $errors)[2]);
-            echo "Please delete the file manually : $unDeletedFile \n";
-        }
-    }
-
-    /**
-     * Uninstall the application
-     *
-     * @return bool
-     */
-    public function uninstall()
-    {
-        if (!$this->_appState->isInstalled()) {
-            return false;
-        }
-
-        $this->_cleanUpDatabase();
-        $this->_removeTempDir();
-        $this->_removeLocalXml();
-        if (!empty($this->fileDeleteErrors)) {
-            $this->_displayFileDeleteErrors();
-        }
-        return true;
     }
 
     /**
@@ -560,21 +427,54 @@ class Console extends \Magento\Install\Model\Installer\AbstractInstaller
      */
     public function checkServer()
     {
-        \Magento\Framework\Phrase::setRenderer(
-            $this->_objectManager->get('Magento\Framework\Phrase\RendererInterface')
-        );
-
-        $installer = $this->_getInstaller();
-        $result = $installer->checkServer();
+        $result = $this->installer->checkServer();
         if (!$result) {
-            /** @var \Magento\Framework\Message\ManagerInterface $messageManager*/
-            $messageManager = $this->_objectManager->get('Magento\Framework\Message\ManagerInterface');
-            /** @var \Magento\Framework\Message\MessageInterface $message */
-            foreach ($messageManager->getMessages()->getItems() as $message) {
+            foreach ($this->messageManager->getMessages()->getItems() as $message) {
                 $this->addError($message->toString());
             }
         }
 
         return $this;
+    }
+
+    /**
+     * Validate session storage value (files or db)
+     * If empty, will return 'files'
+     *
+     * @param string $value
+     * @return string
+     * @throws \Exception
+     */
+    protected function _checkSessionSave($value)
+    {
+        if (empty($value)) {
+            return 'files';
+        }
+        if (!in_array($value, array('files', 'db'), true)) {
+            throw new \Exception('session_save value must be "files" or "db".');
+        }
+        return $value;
+    }
+
+    /**
+     * Validate backend area frontname value.
+     * If empty, "backend" will be returned
+     *
+     * @param string $value
+     * @return string
+     * @throws \Exception
+     */
+    protected function _checkBackendFrontname($value)
+    {
+        if (empty($value)) {
+            return 'backend';
+        }
+        if (!preg_match('/^[a-z]+[a-z0-9_]+$/', $value)) {
+            throw new \Exception(
+                'backend_frontname value must contain only letters (a-z), numbers (0-9)' .
+                ' or underscore(_), first character should be a letter.'
+            );
+        }
+        return $value;
     }
 }

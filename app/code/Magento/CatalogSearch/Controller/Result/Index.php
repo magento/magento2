@@ -26,7 +26,7 @@ namespace Magento\CatalogSearch\Controller\Result;
 
 use Magento\Framework\App\Action\Context;
 use Magento\Catalog\Model\Session;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\StoreManagerInterface;
 
 class Index extends \Magento\Framework\App\Action\Action
 {

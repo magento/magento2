@@ -24,23 +24,22 @@
 
 namespace Magento\Bundle\Test\Fixture\CatalogProductBundle;
 
-use Magento\Catalog\Test\Fixture\CatalogProductSimple\CheckoutData as AbstractCheckoutData;
-
 /**
  * Class CheckoutData
  * Data keys:
  *  - preset (Checkout data verification preset name)
- *
- * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
  */
-class CheckoutData extends AbstractCheckoutData
+class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\CheckoutData
 {
     /**
      * Get preset array
      *
+     * @param string $name
      * @return array|null
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function getPreset()
+    protected function getPreset($name)
     {
         $presets = [
             'default' => [
@@ -84,52 +83,52 @@ class CheckoutData extends AbstractCheckoutData
                 ],
                 'custom_options' => [
                     [
-                        'option' => 1,
-                        'value' => [1],
+                        'title' => 0,
+                        'value' => 0,
                     ],
                     [
-                        'option' => 2,
-                        'value' => [1],
+                        'title' => 1,
+                        'value' => 0,
                     ],
                     [
-                        'option' => 3,
-                        'value' => ['Field'],
+                        'title' => 2,
+                        'value' => 'Field',
                     ],
                     [
-                        'option' => 4,
-                        'value' => ['Field'],
+                        'title' => 3,
+                        'value' => 'Field',
                     ],
                     [
-                        'option' => 5,
-                        'value' => ['Area'],
+                        'title' => 4,
+                        'value' => 'Area',
                     ],
                     [
-                        'option' => 7,
-                        'value' => [1],
+                        'title' => 6,
+                        'value' => 0,
                     ],
                     [
-                        'option' => 8,
-                        'value' => [1],
+                        'title' => 7,
+                        'value' => 0,
                     ],
                     [
-                        'option' => 9,
-                        'value' => [1],
+                        'title' => 8,
+                        'value' => 0,
                     ],
                     [
-                        'option' => 10,
-                        'value' => [1],
+                        'title' => 9,
+                        'value' => 0,
                     ],
                     [
-                        'option' => 11,
-                        'value' => ['12/12/2014'],
+                        'title' => 10,
+                        'value' => '12/12/2014',
                     ],
                     [
-                        'option' => 12,
-                        'value' => ['12/12/2014/12/30/AM'],
+                        'title' => 11,
+                        'value' => '12/12/2014/12/30/AM',
                     ],
                     [
-                        'option' => 13,
-                        'value' => ['12/12/AM'],
+                        'title' => 12,
+                        'value' => '12/12/AM',
                     ],
                 ]
             ],
@@ -145,8 +144,8 @@ class CheckoutData extends AbstractCheckoutData
                 ],
                 'custom_options' => [
                     [
-                        'option' => 1,
-                        'value' => [1],
+                        'title' => 0,
+                        'value' => 0,
                     ],
                 ]
             ],
@@ -183,40 +182,40 @@ class CheckoutData extends AbstractCheckoutData
                 ],
                 'custom_options' => [
                     [
-                        'option' => 1,
-                        'value' => ['Field'],
+                        'title' => 0,
+                        'value' => 'Field',
                     ],
                     [
-                        'option' => 2,
-                        'value' => ['Area'],
+                        'title' => 1,
+                        'value' => 'Area',
                     ],
                     [
-                        'option' => 4,
-                        'value' => [1],
+                        'title' => 3,
+                        'value' => 0,
                     ],
                     [
-                        'option' => 5,
-                        'value' => [1],
+                        'title' => 4,
+                        'value' => 0,
                     ],
                     [
-                        'option' => 6,
-                        'value' => [1],
+                        'title' => 5,
+                        'value' => 0,
                     ],
                     [
-                        'option' => 7,
-                        'value' => [1],
+                        'title' => 6,
+                        'value' => 0,
                     ],
                     [
-                        'option' => 8,
-                        'value' => ['12/12/2014'],
+                        'title' => 7,
+                        'value' => '12/12/2014',
                     ],
                     [
-                        'option' => 9,
-                        'value' => ['12/12/2014/12/30/AM'],
+                        'title' => 8,
+                        'value' => '12/12/2014/12/30/AM',
                     ],
                     [
-                        'option' => 10,
-                        'value' => ['12/12/AM'],
+                        'title' => 9,
+                        'value' => '12/12/AM',
                     ],
                 ]
             ],
@@ -253,9 +252,6 @@ class CheckoutData extends AbstractCheckoutData
                 ],
             ],
         ];
-        if (!isset($presets[$this->currentPreset])) {
-            return null;
-        }
-        return $presets[$this->currentPreset];
+        return isset($presets[$name]) ? $presets[$name] : null;
     }
 }

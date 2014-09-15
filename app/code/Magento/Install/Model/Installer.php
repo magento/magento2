@@ -38,7 +38,7 @@ class Installer extends \Magento\Framework\Object
     /**
      * DB updated model
      *
-     * @var \Magento\Framework\Module\UpdaterInterface
+     * @var \Magento\Framework\Module\Updater
      */
     protected $_dbUpdater;
 
@@ -102,7 +102,7 @@ class Installer extends \Magento\Framework\Object
     /**
      * Store Manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -183,7 +183,7 @@ class Installer extends \Magento\Framework\Object
 
     /**
      * @param \Magento\Framework\App\Config\ReinitableConfigInterface $config
-     * @param \Magento\Framework\Module\UpdaterInterface $dbUpdater
+     * @param \Magento\Framework\Module\Updater $dbUpdater
      * @param \Magento\Framework\App\CacheInterface $cache
      * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
      * @param \Magento\Framework\App\Cache\StateInterface $cacheState
@@ -191,7 +191,7 @@ class Installer extends \Magento\Framework\Object
      * @param \Magento\Framework\App\Arguments $arguments
      * @param \Magento\Framework\App\AreaList $areaList
      * @param \Magento\Framework\App\State $appState
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\User\Model\UserFactory $userModelFactory
      * @param Installer\Filesystem $filesystem
      * @param Installer\Pear $installerPear
@@ -210,7 +210,7 @@ class Installer extends \Magento\Framework\Object
      */
     public function __construct(
         \Magento\Framework\App\Config\ReinitableConfigInterface $config,
-        \Magento\Framework\Module\UpdaterInterface $dbUpdater,
+        \Magento\Framework\Module\Updater $dbUpdater,
         \Magento\Framework\App\CacheInterface $cache,
         \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
         \Magento\Framework\App\Cache\StateInterface $cacheState,
@@ -218,7 +218,7 @@ class Installer extends \Magento\Framework\Object
         \Magento\Framework\App\Arguments $arguments,
         \Magento\Framework\App\AreaList $areaList,
         \Magento\Framework\App\State $appState,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\User\Model\UserFactory $userModelFactory,
         \Magento\Install\Model\Installer\Filesystem $filesystem,
         \Magento\Install\Model\Installer\Pear $installerPear,
@@ -260,16 +260,6 @@ class Installer extends \Magento\Framework\Object
         $this->_localeDate = $localeDate;
         $this->_localeResolver = $localeResolver;
         parent::__construct($data);
-    }
-
-    /**
-     * Checking install status of application
-     *
-     * @return bool
-     */
-    public function isApplicationInstalled()
-    {
-        return $this->_appState->isInstalled();
     }
 
     /**
@@ -376,7 +366,8 @@ class Installer extends \Magento\Framework\Object
 
         $data = $this->_installerDb->checkDbConnectionData($data);
 
-        $this->_installerConfig->setConfigData($data)->install();
+        $data = $this->_installerConfig->install($data);
+        $this->getDataModel()->setConfigData($data);
 
         $this->_arguments->reload();
         $this->_resource->setTablePrefix($data['db_prefix']);
@@ -416,12 +407,18 @@ class Installer extends \Magento\Framework\Object
         $unsecureBaseUrl = $this->_storeManager->getStore()->getBaseUrl('web');
         if (!empty($data['unsecure_base_url'])) {
             $unsecureBaseUrl = $data['unsecure_base_url'];
-            $this->_installSetup->setConfigData(\Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_URL, $unsecureBaseUrl);
+            $this->_installSetup->setConfigData(
+                \Magento\Store\Model\Store::XML_PATH_UNSECURE_BASE_URL,
+                $unsecureBaseUrl
+            );
         }
 
         if (!empty($data['use_secure'])) {
             $this->_installSetup->setConfigData(\Magento\Store\Model\Store::XML_PATH_SECURE_IN_FRONTEND, 1);
-            $this->_installSetup->setConfigData(\Magento\Store\Model\Store::XML_PATH_SECURE_BASE_URL, $data['secure_base_url']);
+            $this->_installSetup->setConfigData(
+                \Magento\Store\Model\Store::XML_PATH_SECURE_BASE_URL,
+                $data['secure_base_url']
+            );
             if (!empty($data['use_secure_admin'])) {
                 $this->_installSetup->setConfigData(\Magento\Store\Model\Store::XML_PATH_SECURE_IN_ADMINHTML, 1);
             }
@@ -440,7 +437,10 @@ class Installer extends \Magento\Framework\Object
             $this->_installSetup->setConfigData($this->_localeDate->getDefaultTimezonePath(), $locale['timezone']);
         }
         if (!empty($locale['currency'])) {
-            $this->_installSetup->setConfigData(\Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE, $locale['currency']);
+            $this->_installSetup->setConfigData(
+                \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE,
+                $locale['currency']
+            );
             $this->_installSetup->setConfigData(
                 \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_DEFAULT,
                 $locale['currency']

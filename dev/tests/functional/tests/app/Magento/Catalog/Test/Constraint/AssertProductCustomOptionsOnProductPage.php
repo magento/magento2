@@ -24,6 +24,7 @@
 
 namespace Magento\Catalog\Test\Constraint;
 
+use Mtf\ObjectManager;
 use Mtf\Client\Browser;
 use Mtf\Fixture\FixtureInterface;
 use Mtf\Constraint\AbstractAssertForm;
@@ -106,44 +107,20 @@ class AssertProductCustomOptionsOnProductPage extends AbstractAssertForm
      */
     public function processAssert(CatalogProductView $catalogProductView, FixtureInterface $product, Browser $browser)
     {
-        $this->openProductPage($product, $browser);
-        // Prepare data
-        $formCustomOptions = $catalogProductView->getCustomOptionsBlock()->getOptions($product);
-        $actualPrice = $this->isPrice ? $this->getProductPrice($catalogProductView) : null;
+        $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
+
+        $actualPrice = null;
+        if ($this->isPrice) {
+            $prices = $catalogProductView->getViewBlock()->getPriceBlock()->getPrice();
+            $actualPrice = isset($prices['price_special_price'])
+                ? $prices['price_special_price']
+                : $prices['price_regular_price'];
+        }
         $fixtureCustomOptions = $this->prepareOptions($product, $actualPrice);
+        $formCustomOptions = $catalogProductView->getViewBlock()->getOptions($product)['custom_options'];
 
         $error = $this->verifyData($fixtureCustomOptions, $formCustomOptions);
         \PHPUnit_Framework_Assert::assertEmpty($error, $error);
-    }
-
-    /**
-     * Get price from product page
-     *
-     * @param CatalogProductView $catalogProductView
-     * @return string
-     */
-    protected function getProductPrice(CatalogProductView $catalogProductView)
-    {
-        $prices = $catalogProductView->getViewBlock()->getProductPriceBlock()->getPrice();
-        $actualPrice = isset($prices['price_special_price'])
-            ? $prices['price_special_price']
-            : $prices['price_regular_price'];
-
-        return $actualPrice;
-    }
-
-    /**
-     * Open product view page
-     *
-     * @param FixtureInterface $product
-     * @param Browser $browser
-     * @return void
-     */
-    protected function openProductPage(
-        FixtureInterface $product,
-        Browser $browser
-    ) {
-        $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
     }
 
     /**

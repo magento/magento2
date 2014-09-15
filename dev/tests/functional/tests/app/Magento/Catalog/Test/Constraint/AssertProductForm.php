@@ -35,6 +35,16 @@ use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 class AssertProductForm extends AbstractAssertForm
 {
     /**
+     * List skipped fixture fields in verify
+     *
+     * @var array
+     */
+    protected $skippedFixtureFields = [
+        'id',
+        'checkout_data'
+    ];
+
+    /**
      * Sort fields for fixture and form data
      *
      * @var array
@@ -74,8 +84,13 @@ class AssertProductForm extends AbstractAssertForm
         $productGrid->open();
         $productGrid->getProductGrid()->searchAndOpen($filter);
 
-        $fixtureData = $this->prepareFixtureData($product->getData(), $product, $this->sortFields);
-        $formData = $this->prepareFormData($productPage->getForm()->getData($product), $this->sortFields);
+        $productData = $product->getData();
+        if ($product->hasData('custom_options')) {
+            $customOptionsSource = $product->getDataFieldConfig('custom_options')['source'];
+            $productData['custom_options'] = $customOptionsSource->getCustomOptions();
+        }
+        $fixtureData = $this->prepareFixtureData($productData, $this->sortFields);
+        $formData = $this->prepareFormData($productPage->getProductForm()->getData($product), $this->sortFields);
         $error = $this->verifyData($fixtureData, $formData);
         \PHPUnit_Framework_Assert::assertTrue(empty($error), $error);
     }
@@ -84,17 +99,15 @@ class AssertProductForm extends AbstractAssertForm
      * Prepares fixture data for comparison
      *
      * @param array $data
-     * @param FixtureInterface $product
      * @param array $sortFields [optional]
      * @return array
      */
-    protected function prepareFixtureData(array $data, FixtureInterface $product, array $sortFields = [])
+    protected function prepareFixtureData(array $data, array $sortFields = [])
     {
+        $data = array_diff_key($data, array_flip($this->skippedFixtureFields));
+
         if (isset($data['website_ids']) && !is_array($data['website_ids'])) {
             $data['website_ids'] = [$data['website_ids']];
-        }
-        if (isset($data['custom_options'])) {
-            $data['custom_options'] = $product->getDataFieldConfig('custom_options')['source']->getCustomOptions();
         }
         if (!empty($this->specialArray)) {
             $data = $this->prepareSpecialPriceArray($data);

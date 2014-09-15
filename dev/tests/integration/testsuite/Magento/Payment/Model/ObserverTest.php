@@ -158,6 +158,6 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     protected function _resetConfig()
     {
         $this->_objectManager->get('Magento\Framework\App\Config\ReinitableConfigInterface')->reinit();
-        $this->_objectManager->create('Magento\Store\Model\StoreManagerInterface')->reinitStores();
+        $this->_objectManager->create('Magento\Framework\StoreManagerInterface')->reinitStores();
     }
 }

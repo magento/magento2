@@ -32,11 +32,6 @@ class ListsTest extends \PHPUnit_Framework_TestCase
     protected $listsModel;
 
     /**
-     * @var  \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\State
-     */
-    protected $mockAppState;
-
-    /**
      * @var  \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\ScopeResolverInterface
      */
     protected $mockScopeResolver;
@@ -53,9 +48,6 @@ class ListsTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->mockAppState = $this->getMockBuilder('\Magento\Framework\App\State')
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->mockScopeResolver = $this->getMockBuilder('\Magento\Framework\App\ScopeResolverInterface')
             ->disableOriginalConstructor()
             ->getMock();
@@ -71,7 +63,6 @@ class ListsTest extends \PHPUnit_Framework_TestCase
             ->with($locale);
 
         $this->listsModel = new \Magento\Framework\Locale\Lists(
-            $this->mockAppState,
             $this->mockScopeResolver,
             $this->mockConfig,
             $this->mockLocaleResolver,
@@ -168,10 +159,6 @@ class ListsTest extends \PHPUnit_Framework_TestCase
         $this->mockLocaleResolver->expects($this->exactly(2))
             ->method('getLocale')
             ->will($this->returnValue($locale));
-
-        $this->mockAppState->expects($this->once())
-            ->method('isInstalled')
-            ->will($this->returnValue(false));
 
         $allowedCurrencies = ['USD', 'GBP', 'EUR'];
 

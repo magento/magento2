@@ -54,11 +54,11 @@ class Compare extends \Magento\Framework\App\Action\Action
     protected $_catalogProductCompareList;
 
     /**
-     * Log visitor
+     * Customer visitor
      *
-     * @var \Magento\Log\Model\Visitor
+     * @var \Magento\Customer\Model\Visitor
      */
-    protected $_logVisitor;
+    protected $_customerVisitor;
 
     /**
      * Customer session
@@ -89,7 +89,7 @@ class Compare extends \Magento\Framework\App\Action\Action
     protected $_compareItemFactory;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -104,10 +104,10 @@ class Compare extends \Magento\Framework\App\Action\Action
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory $itemCollectionFactory
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Log\Model\Visitor $logVisitor
+     * @param \Magento\Customer\Model\Visitor $customerVisitor
      * @param \Magento\Catalog\Model\Product\Compare\ListCompare $catalogProductCompareList
      * @param \Magento\Catalog\Model\Session $catalogSession
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param FormKeyValidator $formKeyValidator
      */
     public function __construct(
@@ -116,10 +116,10 @@ class Compare extends \Magento\Framework\App\Action\Action
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory $itemCollectionFactory,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Log\Model\Visitor $logVisitor,
+        \Magento\Customer\Model\Visitor $customerVisitor,
         \Magento\Catalog\Model\Product\Compare\ListCompare $catalogProductCompareList,
         \Magento\Catalog\Model\Session $catalogSession,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         FormKeyValidator $formKeyValidator
     ) {
         $this->_storeManager = $storeManager;
@@ -127,7 +127,7 @@ class Compare extends \Magento\Framework\App\Action\Action
         $this->_productFactory = $productFactory;
         $this->_itemCollectionFactory = $itemCollectionFactory;
         $this->_customerSession = $customerSession;
-        $this->_logVisitor = $logVisitor;
+        $this->_customerVisitor = $customerVisitor;
         $this->_catalogProductCompareList = $catalogProductCompareList;
         $this->_catalogSession = $catalogSession;
         $this->_formKeyValidator = $formKeyValidator;

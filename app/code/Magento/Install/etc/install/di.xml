@@ -25,24 +25,4 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
     <preference for="Magento\Core\Model\Theme" type="Magento\Core\Model\Theme\Data" />
-    <type name="Magento\Framework\App\RouterList" shared="true">
-        <arguments>
-            <argument name="routerList" xsi:type="array">
-                <item name="install" xsi:type="array">
-                    <item name="class" xsi:type="string">Magento\Core\App\Router\Base</item>
-                    <item name="disable" xsi:type="boolean">false</item>
-                    <item name="sortOrder" xsi:type="string">20</item>
-                </item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Install\Controller\Index\Index">
-        <plugin name="installInitializer" disabled="true" />
-        <plugin name="designLoader" type="Magento\Install\App\Action\Plugin\Design" />
-        <plugin name="directoryCleaner" type="Magento\Install\App\Action\Plugin\Dir" sortOrder="10"/>
-    </type>
-    <type name="Magento\Install\Controller\Wizard">
-        <plugin name="installInitializer" disabled="true" />
-        <plugin name="designLoader" type="Magento\Install\App\Action\Plugin\Design" />
-    </type>
 </config>

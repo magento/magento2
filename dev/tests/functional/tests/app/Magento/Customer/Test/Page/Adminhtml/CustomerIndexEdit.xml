@@ -36,7 +36,7 @@
             <strategy>css selector</strategy>
         </messagesBlock>
         <pageActionsBlock>
-            <class>Magento\Backend\Test\Block\FormPageActions</class>
+            <class>Magento\Customer\Test\Block\Adminhtml\Edit\FormPageActions</class>
             <locator>.page-main-actions</locator>
             <strategy>css selector</strategy>
         </pageActionsBlock>

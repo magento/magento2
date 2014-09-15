@@ -26,6 +26,10 @@ namespace Magento\Catalog\Test\Fixture;
 use Mtf\Factory\Factory;
 use Mtf\System\Config;
 
+/**
+ * Class SimpleProduct
+ * Fixture simple product
+ */
 class SimpleProduct extends Product
 {
     const PRICE_VALUE = 'price.value';
@@ -36,7 +40,7 @@ class SimpleProduct extends Product
      * @param Config $configuration
      * @param array $placeholders
      */
-    public function __construct(Config $configuration, $placeholders = array())
+    public function __construct(Config $configuration, $placeholders = [])
     {
         $this->_placeholders[self::PRICE_VALUE] = 10;
 
@@ -49,12 +53,12 @@ class SimpleProduct extends Product
     protected function _initData()
     {
         parent::_initData();
-        $this->_dataConfig = array(
+        $this->_dataConfig = [
             'constraint' => 'Success',
-            'grid_filter' => array('name'),
-            'create_url_params' => array('type' => 'simple', 'set' => static::DEFAULT_ATTRIBUTE_SET_ID),
+            'grid_filter' => ['name'],
+            'create_url_params' => ['type' => 'simple', 'set' => static::DEFAULT_ATTRIBUTE_SET_ID],
             'input_prefix' => 'product'
-        );
+        ];
 
         $data = $this->_getPreparedData();
         $this->_data['fields'] = array_merge($this->_data['fields'], $data);
@@ -72,43 +76,43 @@ class SimpleProduct extends Product
      */
     protected function _getPreparedData()
     {
-        return array(
-            'price' => array(
+        return [
+            'price' => [
                 'value' => '%' . self::PRICE_VALUE . '%',
                 'group' => static::GROUP_PRODUCT_DETAILS
-            ),
-            'tax_class_id' => array(
+            ],
+            'tax_class_id' => [
                 'value' => 'Taxable Goods',
                 'input_value' => '2',
                 'group' => static::GROUP_PRODUCT_DETAILS,
                 'input' => 'select'
-            ),
-            'qty' => array(
+            ],
+            'qty' => [
                 'value' => 1000,
                 'group' => static::GROUP_PRODUCT_DETAILS,
                 'input_name' => 'product[quantity_and_stock_status][qty]'
-            ),
-            'quantity_and_stock_status' => array(
+            ],
+            'quantity_and_stock_status' => [
                 'value' => 'In Stock',
                 'input_value' => 1,
                 'group' => static::GROUP_PRODUCT_DETAILS,
                 'input_name' => 'product[quantity_and_stock_status][is_in_stock]'
-            ),
-            'weight' => array('value' => '1', 'group' => static::GROUP_PRODUCT_DETAILS),
-            'product_website_1' => array(
+            ],
+            'weight' => ['value' => '1', 'group' => static::GROUP_PRODUCT_DETAILS],
+            'product_website_1' => [
                 'value' => 'Yes',
                 'input_value' => 1,
                 'group' => static::GROUP_PRODUCT_WEBSITE,
                 'input' => 'checkbox',
                 'input_name' => 'product[website_ids][]'
-            ),
-            'inventory_manage_stock' => array(
+            ],
+            'inventory_manage_stock' => [
                 'value' => 'No',
                 'input_value' => '0',
                 'group' => static::GROUP_PRODUCT_INVENTORY,
                 'input' => 'select',
                 'input_name' => 'product[stock_data][manage_stock]'
-            ),
-        );
+            ],
+        ];
     }
 }

@@ -44,5 +44,10 @@
             </xs:element>
         </xs:sequence>
     </xs:complexType>
-    <xs:element name="requests" type="requests"/>
+    <xs:element name="requests" type="requests">
+        <xs:unique name="uniqueRequest">
+            <xs:selector xpath="./*" />
+            <xs:field xpath="@query" />
+        </xs:unique>
+    </xs:element>
 </xs:schema>

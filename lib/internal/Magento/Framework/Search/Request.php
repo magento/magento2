@@ -1,6 +1,5 @@
 <?php
 /**
- * Search Request
  * Magento
  *
  * NOTICE OF LICENSE
@@ -29,6 +28,8 @@ use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Search\Request\QueryInterface;
 
 /**
+ * Search Request
+ *
  * @codeCoverageIgnore
  */
 class Request implements RequestInterface
@@ -118,7 +119,7 @@ class Request implements RequestInterface
      */
     public function getDimensions()
     {
-        $this->dimensions;
+        return $this->dimensions;
     }
 
     /**

@@ -1,7 +1,5 @@
 <?php
 /**
- * Search Adapter interface
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -25,6 +23,9 @@
  */
 namespace Magento\Framework\Search;
 
+/**
+ * Search Adapter interface
+ */
 interface AdapterInterface
 {
     /**

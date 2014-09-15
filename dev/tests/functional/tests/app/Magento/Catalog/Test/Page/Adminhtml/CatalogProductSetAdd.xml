@@ -26,7 +26,7 @@
 <page mca="catalog/product_set/add" module="Magento_Catalog">
     <blocks>
         <pageActions>
-            <class>Magento\Backend\Test\Block\FormPageActions</class>
+            <class>Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Set\FormPageActions</class>
             <locator>.page-main-actions</locator>
             <strategy>css selector</strategy>
         </pageActions>

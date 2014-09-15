@@ -117,7 +117,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_attributeFactory;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -143,7 +143,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Catalog\Model\Attribute\Config $attributeConfig
      * @param \Magento\Catalog\Model\Resource\ConfigFactory $configFactory
      * @param \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Mview\View\Changelog $changelog
      * @param bool $addFilterableAttrs
      * @param bool $addChildData
@@ -156,7 +156,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Catalog\Model\Attribute\Config $attributeConfig,
         \Magento\Catalog\Model\Resource\ConfigFactory $configFactory,
         \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Framework\Mview\View\Changelog $changelog,
         $addFilterableAttrs = false,
         $addChildData = false,

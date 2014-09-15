@@ -24,7 +24,6 @@
 
 namespace Magento\Bundle\Test\Constraint;
 
-use Mtf\Fixture\FixtureInterface;
 use Magento\Catalog\Test\Constraint\AssertProductForm;
 
 /**
@@ -57,17 +56,16 @@ class AssertBundleProductForm extends AssertProductForm
      * Prepares fixture data for comparison
      *
      * @param array $data
-     * @param FixtureInterface $product
      * @param array $sortFields [optional]
      * @return array
      */
-    protected function prepareFixtureData(array $data, FixtureInterface $product, array $sortFields = [])
+    protected function prepareFixtureData(array $data, array $sortFields = [])
     {
         $data['bundle_selections'] = $this->prepareBundleOptions(
             $data['bundle_selections']['bundle_options']
         );
 
-        return parent::prepareFixtureData($data, $product, $sortFields);
+        return parent::prepareFixtureData($data, $sortFields);
     }
 
     /**

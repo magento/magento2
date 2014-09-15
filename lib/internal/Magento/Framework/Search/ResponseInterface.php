@@ -1,7 +1,5 @@
 <?php
 /**
- * Search Request
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -25,6 +23,9 @@
  */
 namespace Magento\Framework\Search;
 
+/**
+ * Search Request
+ */
 interface ResponseInterface
 {
 }

@@ -73,7 +73,7 @@ class StaticResourceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->state = $this->getMock('Magento\Framework\App\State', array(), array(), '', false);
-        $this->response = $this->getMockForAbstractClass('Magento\Framework\App\Response\FileInterface');
+        $this->response = $this->getMock('Magento\Core\Model\File\Storage\Response', array(), array(), '', false);
         $this->request = $this->getMock('Magento\Framework\App\Request\Http', array(), array(), '', false);
         $this->publisher = $this->getMock('Magento\Framework\App\View\Asset\Publisher', array(), array(), '', false);
         $this->assetRepo = $this->getMock('Magento\Framework\View\Asset\Repository', array(), array(), '', false);
@@ -201,5 +201,19 @@ class StaticResourceTest extends \PHPUnit_Framework_TestCase
             ->with('resource')
             ->will($this->returnValue('short/path.js'));
         $this->object->launch();
+    }
+
+    public function testCatchException()
+    {
+        $bootstrap = $this->getMock('Magento\Framework\App\Bootstrap', [], [], '', false);
+        $bootstrap->expects($this->at(0))->method('isDeveloperMode')->willReturn(false);
+        $bootstrap->expects($this->at(1))->method('isDeveloperMode')->willReturn(true);
+        $exception = new \Exception('message');
+        $this->response->expects($this->exactly(2))->method('setHttpResponseCode')->with(404);
+        $this->response->expects($this->exactly(2))->method('setHeader')->with('Content-Type', 'text/plain');
+        $this->response->expects($this->exactly(2))->method('sendResponse');
+        $this->response->expects($this->once())->method('setBody')->with($this->stringStartsWith('message'));
+        $this->assertTrue($this->object->catchException($bootstrap, $exception));
+        $this->assertTrue($this->object->catchException($bootstrap, $exception));
     }
 }

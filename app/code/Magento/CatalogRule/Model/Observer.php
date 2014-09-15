@@ -35,7 +35,7 @@ use Magento\CatalogRule\Model\Rule;
 use Magento\CatalogRule\Model\Resource\Rule\Collection;
 use Magento\CatalogRule\Model\Rule\Product\Price;
 use Magento\Framework\Registry;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\StoreManagerInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Customer\Service\V1\CustomerGroupServiceInterface as Group;
 use Magento\Customer\Model\Session as CustomerModelSession;

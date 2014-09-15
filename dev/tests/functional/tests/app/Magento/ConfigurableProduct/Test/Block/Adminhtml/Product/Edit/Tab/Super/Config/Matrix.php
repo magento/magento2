@@ -24,51 +24,155 @@
 
 namespace Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Super\Config;
 
-use Mtf\Block\Form;
-use Mtf\Client\Element;
+use Mtf\Client\Driver\Selenium\Element;
 use Mtf\Client\Element\Locator;
+use Magento\Backend\Test\Block\Widget\Form;
 
 /**
  * Class Matrix
- * Product variations matrix block
+ * Matrix row form
  */
 class Matrix extends Form
 {
     /**
-     * Fill qty to current variations
+     * Mapping for get optional fields
      *
-     * @param array $variations
+     * @var array
+     */
+    protected $mappingGetFields = [
+        'name' => [
+            'selector' => 'td[data-column="name"] > a',
+            'strategy' => Locator::SELECTOR_CSS
+        ],
+        'sku' => [
+            'selector' => 'td[data-column="sku"] > span',
+            'strategy' => Locator::SELECTOR_CSS
+        ],
+        'quantity_and_stock_status' => [
+            'composite' => 1,
+            'fields' => [
+                'qty' => [
+                    'selector' => 'td[data-column="qty"]',
+                    'strategy' => Locator::SELECTOR_CSS
+                ]
+            ]
+        ],
+        'weight' => [
+            'selector' => 'td[data-column="weight"]',
+            'strategy' => Locator::SELECTOR_CSS
+        ],
+    ];
+
+    /**
+     * Selector for variation row by number
+     *
+     * @var string
+     */
+    protected $variationRowByNumber = './/tr[@data-role="row"][%d]';
+
+    /**
+     * Selector for variation row
+     *
+     * @var string
+     */
+    protected $variationRow = './/tr[@data-role="row"]';
+
+    /**
+     * Button for assign product to variation
+     *
+     * @var string
+     */
+    protected $configurableAttribute = 'td[data-column="name"] button.action-choose';
+
+    // @codingStandardsIgnoreStart
+    /**
+     * Selector for row on product grid by product id
+     *
+     * @var string
+     */
+    protected $selectAssociatedProduct = '//ancestor::div[*[@id="associated-products-container"]]//td[@data-column="entity_id" and (contains(text(),"%s"))]';
+    // @codingStandardsIgnoreEnd
+
+    /**
+     * Fill variations
+     *
+     * @param array $matrix
      * @return void
      */
-    public function fillVariation(array $variations)
+    public function fillVariations(array $matrix)
     {
-        foreach ($variations as $variation) {
-            $variationRow = $this->getVariationRow($variation['configurable_attribute']);
-            foreach ($variation['value'] as $key => $field) {
-                if (!empty($this->mapping[$key])) {
-                    $this->_rootElement->find(
-                        $variationRow . $this->mapping[$key]['selector'],
-                        Locator::SELECTOR_XPATH,
-                        isset($this->mapping[$key]['input']) ? $this->mapping[$key]['input'] : null
-                    )->setValue($field['value']);
-                }
+        $count = 1;
+        foreach ($matrix as $variation) {
+            $variationRow = $this->_rootElement->find(
+                sprintf($this->variationRowByNumber, $count),
+                Locator::SELECTOR_XPATH
+            );
+            $mapping = $this->dataMapping($variation);
+
+            $this->_fill($mapping, $variationRow);
+            if (isset($variation['configurable_attribute'])) {
+                $this->assignProduct($variationRow, $variation['configurable_attribute']);
             }
+
+            ++$count;
         }
     }
 
     /**
-     * Define row that clarifies which line in Current Variations grid will be used
+     * Assign product to variation matrix
      *
-     * @param array $variationData
-     * @return string
+     * @param Element $variationRow
+     * @param int $productId
+     * @return void
      */
-    private function getVariationRow(array $variationData)
+    protected function assignProduct(Element $variationRow, $productId)
     {
-        $options = array();
-        foreach ($variationData as $attributeData) {
-            $options[] = 'td[text()="' . $attributeData['attribute_option'] . '"]';
+        $variationRow->find($this->configurableAttribute)->click();
+        $this->_rootElement->find(
+            sprintf($this->selectAssociatedProduct, $productId),
+            Locator::SELECTOR_XPATH
+        )->click();
+    }
+
+    /**
+     * Get variations data
+     *
+     * @return array
+     */
+    public function getVariationsData()
+    {
+        $data = [];
+        $variationRows = $this->_rootElement->find($this->variationRow, Locator::SELECTOR_XPATH)->getElements();
+
+        foreach ($variationRows as $key => $variationRow) {
+            /** @var Element $variationRow */
+            if ($variationRow->isVisible()) {
+                $data[$key] = $this->_getData($this->dataMapping(), $variationRow);
+                $data[$key] += $this->getOptionalFields($variationRow, $this->mappingGetFields);
+            }
         }
 
-        return '//tr[' . implode(' and ', $options) . ']';
+        return $data;
+    }
+
+    /**
+     * Get optional fields
+     *
+     * @param Element $context
+     * @param array $fields
+     * @return array
+     */
+    protected function getOptionalFields(Element $context, array $fields)
+    {
+        $data = [];
+
+        foreach ($fields as $name => $params) {
+            if (isset($params['composite']) && $params['composite']) {
+                $data[$name] = $this->getOptionalFields($context, $params['fields']);
+            } else {
+                $data[$name] = $context->find($params['selector'], $params['strategy'])->getText();
+            }
+        }
+        return $data;
     }
 }

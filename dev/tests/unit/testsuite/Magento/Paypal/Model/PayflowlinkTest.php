@@ -46,7 +46,7 @@ class PayflowlinkTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->store = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
-        $storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $storeManager = $this->getMock('Magento\Framework\StoreManagerInterface');
         $storeManager->expects($this->any())->method('getStore')->will($this->returnValue($this->store));
         $this->paypalConfig = $this->getMock('Magento\Paypal\Model\Config', [], [], '', false);
         $configFactory = $this->getMock('Magento\Paypal\Model\ConfigFactory', ['create']);

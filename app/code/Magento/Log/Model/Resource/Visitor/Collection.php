@@ -147,7 +147,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
     {
         if ($fieldName == 'type' && is_array($condition) && isset($condition['eq'])) {
             $fieldName = 'customer_id';
-            if ($condition['eq'] === \Magento\Log\Model\Visitor::VISITOR_TYPE_VISITOR) {
+            if ($condition['eq'] === \Magento\Customer\Model\Visitor::VISITOR_TYPE_VISITOR) {
                 $condition = array('null' => 1);
             } else {
                 $condition = array('moreq' => 1);

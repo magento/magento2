@@ -31,6 +31,36 @@ namespace Magento\Sales\Model\Resource\Collection;
 abstract class AbstractCollection extends \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
 {
     /**
+     * @var \Zend_Db_Select
+     */
+    protected $_countSelect;
+
+    /**
+     * Set select count sql
+     *
+     * @param \Zend_Db_Select $countSelect
+     * @return $this
+     */
+    public function setSelectCountSql(\Zend_Db_Select $countSelect)
+    {
+        $this->_countSelect = $countSelect;
+        return $this;
+    }
+
+    /**
+     * get select count sql
+     *
+     * @return \Zend_Db_Select
+     */
+    public function getSelectCountSql()
+    {
+        if (!$this->_countSelect instanceof \Zend_Db_Select) {
+            $this->setSelectCountSql(parent::getSelectCountSql());
+        }
+        return $this->_countSelect;
+    }
+
+    /**
      * Check if $attribute is \Magento\Eav\Model\Entity\Attribute and convert to string field name
      *
      * @param string|\Magento\Eav\Model\Entity\Attribute $attribute

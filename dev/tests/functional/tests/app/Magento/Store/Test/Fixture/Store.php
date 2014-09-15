@@ -43,7 +43,7 @@ class Store extends InjectableFixture
     protected $handlerInterface = 'Magento\Store\Test\Handler\Store\StoreInterface';
 
     protected $defaultDataSet = [
-        'group_id' => 'Main Website Store',
+        'group_id' => ['dataSet' => 'default'],
         'name' => 'Custom_Store_%isolation%',
         'code' => 'code_%isolation%',
         'is_active' => 'Enabled',
@@ -79,6 +79,7 @@ class Store extends InjectableFixture
         'is_required' => '',
         'default_value' => '0',
         'input' => 'select',
+        'source' => 'Magento\Store\Test\Fixture\Store\GroupId',
     ];
 
     protected $name = [

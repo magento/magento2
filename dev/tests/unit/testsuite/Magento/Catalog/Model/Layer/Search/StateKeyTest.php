@@ -48,7 +48,7 @@ class StateKeyTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
+        $this->storeManagerMock = $this->getMock('\Magento\Framework\StoreManagerInterface');
         $this->customerSessionMock = $this->getMock('\Magento\Customer\Model\Session', array(), array(), '', false);
         $this->helperMock = $this->getMock('\Magento\CatalogSearch\Helper\Data', array(), array(), '', false);
 

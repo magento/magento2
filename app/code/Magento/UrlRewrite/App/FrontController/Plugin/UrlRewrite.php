@@ -33,24 +33,16 @@ class UrlRewrite
     protected $_rewriteService;
 
     /**
-     * @var \Magento\Framework\App\State
-     */
-    protected $_state;
-
-    /**
      * @param \Magento\UrlRewrite\App\Request\RewriteService $rewriteService
-     * @param \Magento\Framework\App\State $state
      */
     public function __construct(
-        \Magento\UrlRewrite\App\Request\RewriteService $rewriteService,
-        \Magento\Framework\App\State $state
+        \Magento\UrlRewrite\App\Request\RewriteService $rewriteService
     ) {
         $this->_rewriteService = $rewriteService;
-        $this->_state = $state;
     }
 
     /**
-     * Perform url rewites
+     * Perform url rewrites
      *
      * @param \Magento\Framework\App\FrontController $subject
      * @param callable $proceed
@@ -64,9 +56,6 @@ class UrlRewrite
         \Closure $proceed,
         \Magento\Framework\App\RequestInterface $request
     ) {
-        if (!$this->_state->isInstalled()) {
-            return $proceed($request);
-        }
         $this->_rewriteService->applyRewrites($request);
         return $proceed($request);
     }

@@ -76,7 +76,7 @@ class Standard extends \Magento\Payment\Model\Method\AbstractMethod
     protected $_urlBuilder;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -108,7 +108,7 @@ class Standard extends \Magento\Payment\Model\Method\AbstractMethod
      * @param \Magento\Framework\Session\Generic $paypalSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Framework\UrlInterface $urlBuilder
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Paypal\Model\Api\StandardFactory $apiStandardFactory
      * @param \Magento\Paypal\Model\CartFactory $cartFactory
@@ -125,7 +125,7 @@ class Standard extends \Magento\Payment\Model\Method\AbstractMethod
         \Magento\Framework\Session\Generic $paypalSession,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Framework\UrlInterface $urlBuilder,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Paypal\Model\Api\StandardFactory $apiStandardFactory,
         \Magento\Paypal\Model\CartFactory $cartFactory,

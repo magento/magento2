@@ -43,7 +43,7 @@ class DocumentTest extends \PHPUnit_Framework_TestCase
                 ->getMock();
 
             $field->expects($this->any())->method('getName')->will($this->returnValue("$count"));
-            $field->expects($this->any())->method('getValues')->will($this->returnValue([$count]));
+            $field->expects($this->any())->method('getValue')->will($this->returnValue($count));
             $documentFields[] = $field;
         }
 
@@ -61,7 +61,7 @@ class DocumentTest extends \PHPUnit_Framework_TestCase
         $count = 0;
         foreach ($this->document as $field) {
              $this->assertEquals($field->getName(), "$count");
-             $this->assertEquals($field->getValues(), [$count]);
+             $this->assertEquals($field->getValue(), $count);
              $count++;
         }
     }
@@ -77,6 +77,6 @@ class DocumentTest extends \PHPUnit_Framework_TestCase
     public function testGetField()
     {
         $field = $this->document->getField('3');
-        $this->assertEquals($field->getValues(), [3]);
+        $this->assertEquals($field->getValue(), 3);
     }
 }

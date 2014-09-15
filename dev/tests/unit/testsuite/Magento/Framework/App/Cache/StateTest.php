@@ -43,14 +43,13 @@ class StateTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $cacheType
      * @param array $typeOptions
-     * @param bool $appInstalled
      * @param bool $banAll
      * @param bool $expectedIsEnabled
      * @dataProvider isEnabledDataProvider
      */
-    public function testIsEnabled($cacheType, $typeOptions, $appInstalled, $banAll, $expectedIsEnabled)
+    public function testIsEnabled($cacheType, $typeOptions, $banAll, $expectedIsEnabled)
     {
-        $model = $this->_buildModel($typeOptions, array(), $appInstalled, $banAll);
+        $model = $this->_buildModel($typeOptions, array(), $banAll);
         $actualIsEnabled = $model->isEnabled($cacheType);
         $this->assertEquals($expectedIsEnabled, $actualIsEnabled);
     }
@@ -64,35 +63,24 @@ class StateTest extends \PHPUnit_Framework_TestCase
             'enabled' => array(
                 'cacheType' => 'cache_type',
                 'typeOptions' => array('some_type' => false, 'cache_type' => true),
-                'appInstalled' => true,
                 'banAll' => false,
                 'expectedIsEnabled' => true
             ),
             'disabled' => array(
                 'cacheType' => 'cache_type',
                 'typeOptions' => array('some_type' => true, 'cache_type' => false),
-                'appInstalled' => true,
                 'banAll' => false,
                 'expectedIsEnabled' => false
             ),
             'unknown is disabled' => array(
                 'cacheType' => 'unknown_cache_type',
                 'typeOptions' => array('some_type' => true),
-                'appInstalled' => true,
-                'banAll' => false,
-                'expectedIsEnabled' => false
-            ),
-            'disabled, when app is not installed' => array(
-                'cacheType' => 'cache_type',
-                'typeOptions' => array('cache_type' => true),
-                'appInstalled' => false,
                 'banAll' => false,
                 'expectedIsEnabled' => false
             ),
             'disabled, when all caches are banned' => array(
                 'cacheType' => 'cache_type',
                 'typeOptions' => array('cache_type' => true),
-                'appInstalled' => true,
                 'banAll' => true,
                 'expectedIsEnabled' => false
             )
@@ -104,14 +92,12 @@ class StateTest extends \PHPUnit_Framework_TestCase
      *
      * @param array|false $cacheTypeOptions
      * @param array|false $resourceTypeOptions
-     * @param bool $appInstalled
      * @param bool $banAll
      * @return \Magento\Framework\App\Cache\StateInterface
      */
     protected function _buildModel(
         $cacheTypeOptions,
         $resourceTypeOptions = false,
-        $appInstalled = true,
         $banAll = false
     ) {
         $this->_cacheFrontend = $this->getMock('Magento\Framework\Cache\FrontendInterface');
@@ -144,13 +130,9 @@ class StateTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($resourceTypeOptions)
         );
 
-        $appState = $this->getMock('Magento\Framework\App\State', array(), array(), '', false);
-        $appState->expects($this->any())->method('isInstalled')->will($this->returnValue($appInstalled));
-
         $this->_model = new \Magento\Framework\App\Cache\State(
             $this->_resource,
             $cacheFrontendPool,
-            $appState,
             $banAll
         );
 

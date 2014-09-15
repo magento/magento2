@@ -25,35 +25,20 @@
 -->
 <page mca="catalog/product/new" module="Magento_Catalog">
     <blocks>
-        <form>
-            <class>Magento\Catalog\Test\Block\Adminhtml\Product\ProductForm</class>
-            <locator>[id="page:main-container"]</locator>
-            <strategy>css selector</strategy>
-        </form>
-        <productForm>
-            <class>Magento\Catalog\Test\Block\Backend\ProductForm</class>
-            <locator>[id="page:main-container"]</locator>
-            <strategy>css selector</strategy>
-        </productForm>
-        <configurableProductForm>
-            <class>Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\ProductForm</class>
-            <locator>[id="page:main-container"]</locator>
-            <strategy>css selector</strategy>
-        </configurableProductForm>
-        <formAction>
-            <class>Magento\Catalog\Test\Block\Adminhtml\Product\FormPageActions</class>
-            <locator>.page-main-actions</locator>
-            <strategy>css selector</strategy>
-        </formAction>
-        <affectedAttributeSetForm>
-            <class>Magento\Catalog\Test\Block\Adminhtml\Product\AffectedAttributeSetForm</class>
-            <locator>#affected-attribute-set-form</locator>
-            <strategy>css selector</strategy>
-        </affectedAttributeSetForm>
         <messagesBlock>
             <class>Magento\Core\Test\Block\Messages</class>
             <locator>#messages .messages</locator>
             <strategy>css selector</strategy>
         </messagesBlock>
+        <formPageActions>
+            <class>Magento\Catalog\Test\Block\Adminhtml\Product\FormPageActions</class>
+            <locator>.page-main-actions</locator>
+            <strategy>css selector</strategy>
+        </formPageActions>
+        <productForm>
+            <class>Magento\Catalog\Test\Block\Adminhtml\Product\ProductForm</class>
+            <locator>[id="page:main-container"]</locator>
+            <strategy>css selector</strategy>
+        </productForm>
     </blocks>
 </page>

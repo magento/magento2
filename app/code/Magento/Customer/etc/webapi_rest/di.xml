@@ -27,11 +27,6 @@
      <type name="Magento\Framework\Authorization">
         <plugin name="customerAuthorization" type="Magento\Customer\Model\Plugin\CustomerAuthorization" />
     </type>
-    <type name="Magento\Customer\Model\Session">
-        <arguments>
-            <argument name="sessionName" xsi:type="string">frontend</argument>
-        </arguments>
-    </type>
     <type name="Magento\Authorization\Model\CompositeUserContext">
         <arguments>
             <argument name="userContexts" xsi:type="array">

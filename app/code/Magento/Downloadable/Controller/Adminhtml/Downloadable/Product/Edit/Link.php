@@ -98,22 +98,38 @@ class Link extends \Magento\Catalog\Controller\Adminhtml\Product\Edit
     public function execute()
     {
         $linkId = $this->getRequest()->getParam('id', 0);
+        $type = $this->getRequest()->getParam('type', 0);
         /** @var \Magento\Downloadable\Model\Link $link */
         $link = $this->_createLink()->load($linkId);
         if ($link->getId()) {
             $resource = '';
             $resourceType = '';
-            if ($link->getLinkType() == DownloadHelper::LINK_TYPE_URL) {
-                $resource = $link->getLinkUrl();
-                $resourceType = DownloadHelper::LINK_TYPE_URL;
-            } elseif ($link->getLinkType() == DownloadHelper::LINK_TYPE_FILE) {
-                $resource = $this->_objectManager->get(
-                    'Magento\Downloadable\Helper\File'
-                )->getFilePath(
-                    $this->_getLink()->getBasePath(),
-                    $link->getLinkFile()
-                );
-                $resourceType = DownloadHelper::LINK_TYPE_FILE;
+            if ($type == 'link') {
+                if ($link->getLinkType() == DownloadHelper::LINK_TYPE_URL) {
+                    $resource = $link->getLinkUrl();
+                    $resourceType = DownloadHelper::LINK_TYPE_URL;
+                } elseif ($link->getLinkType() == DownloadHelper::LINK_TYPE_FILE) {
+                    $resource = $this->_objectManager->get(
+                        'Magento\Downloadable\Helper\File'
+                    )->getFilePath(
+                        $this->_getLink()->getBasePath(),
+                        $link->getLinkFile()
+                    );
+                    $resourceType = DownloadHelper::LINK_TYPE_FILE;
+                }
+            } else {
+                if ($link->getSampleType() == DownloadHelper::LINK_TYPE_URL) {
+                    $resource = $link->getSampleUrl();
+                    $resourceType = DownloadHelper::LINK_TYPE_URL;
+                } elseif ($link->getSampleType() == DownloadHelper::LINK_TYPE_FILE) {
+                    $resource = $this->_objectManager->get(
+                        'Magento\Downloadable\Helper\File'
+                    )->getFilePath(
+                        $this->_getLink()->getBaseSamplePath(),
+                        $link->getSampleFile()
+                    );
+                    $resourceType = DownloadHelper::LINK_TYPE_FILE;
+                }
             }
             try {
                 $this->_processDownload($resource, $resourceType);
@@ -121,6 +137,5 @@ class Link extends \Magento\Catalog\Controller\Adminhtml\Product\Edit
                 $this->messageManager->addError(__('Something went wrong while getting the requested content.'));
             }
         }
-        exit(0);
     }
 }

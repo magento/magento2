@@ -126,7 +126,6 @@ class Session extends \Magento\Framework\Session\SessionManager
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param Converter $converter
      * @param CustomerAccountServiceInterface $customerAccountService
-     * @param null $sessionName
      */
     public function __construct(
         \Magento\Framework\App\Request\Http $request,
@@ -147,8 +146,7 @@ class Session extends \Magento\Framework\Session\SessionManager
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\App\Http\Context $httpContext,
         \Magento\Customer\Model\Converter $converter,
-        CustomerAccountServiceInterface $customerAccountService,
-        $sessionName = null
+        CustomerAccountServiceInterface $customerAccountService
     ) {
         $this->_coreUrl = $coreUrl;
         $this->_customerData = $customerData;
@@ -170,7 +168,7 @@ class Session extends \Magento\Framework\Session\SessionManager
             $cookieManager,
             $cookieMetadataFactory
         );
-        $this->start($sessionName);
+        $this->start();
         $this->_converter = $converter;
         $this->_eventManager->dispatch('customer_session_init', array('customer_session' => $this));
     }
@@ -395,24 +393,6 @@ class Session extends \Magento\Framework\Session\SessionManager
         try {
             $this->_customerAccountService->getCustomer($customerId);
             $this->_isCustomerIdChecked = $customerId;
-            return true;
-        } catch (\Exception $e) {
-            return false;
-        }
-    }
-
-    /**
-     * Customer authorization
-     *
-     * @param   string $username
-     * @param   string $password
-     * @return  bool
-     */
-    public function login($username, $password)
-    {
-        try {
-            $customer = $this->_customerAccountService->authenticate($username, $password);
-            $this->setCustomerDataAsLoggedIn($customer);
             return true;
         } catch (\Exception $e) {
             return false;

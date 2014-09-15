@@ -23,6 +23,8 @@
  */
 namespace Magento\Indexer\App;
 
+use Magento\Framework\App\Bootstrap;
+
 class Shell implements \Magento\Framework\AppInterface
 {
     /**
@@ -73,5 +75,13 @@ class Shell implements \Magento\Framework\AppInterface
             $this->response->setCode(0);
         }
         return $this->response;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function catchException(Bootstrap $bootstrap, \Exception $exception)
+    {
+        return false;
     }
 }

@@ -36,7 +36,7 @@ class ApiTest extends \PHPUnit_Framework_TestCase
         $sourceString = 'Ë£';
 
         // Test protected method via reflection
-        $storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface', array(), array(), '', false);
+        $storeManager = $this->getMock('Magento\Framework\StoreManagerInterface', array(), array(), '', false);
         $localeResolver = $this->getMock('\Magento\Framework\Locale\ResolverInterface', array(), array(), '', false);
         $urlBuilder = $this->getMock('Magento\Framework\UrlInterface', array(), array(), '', false);
         $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface', array(), array(), '', false);

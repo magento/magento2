@@ -96,7 +96,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
         $className = 'Magento\Framework\Object';
         $methodName = 'testMethod';
         $isSecure = false;
-        $aclResources = array('Magento_TestModule::resourceA');
+        $aclResources = array(array('Magento_TestModule::resourceA'));
         $this->_apiConfigMock->expects($this->once())
             ->method('getServiceMethodInfo')
             ->with($operationName, $requestedServices)

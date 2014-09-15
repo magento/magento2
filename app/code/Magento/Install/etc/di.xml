@@ -113,11 +113,6 @@
             <argument name="session" xsi:type="object">Magento\Install\Model\Session</argument>
         </arguments>
     </type>
-    <type name="Magento\Install\Controller\Wizard">
-        <arguments>
-            <argument name="session" xsi:type="object">Magento\Install\Model\Session</argument>
-        </arguments>
-    </type>
     <type name="Magento\Install\Model\Installer">
         <arguments>
             <argument name="session" xsi:type="object">Magento\Install\Model\Session</argument>
@@ -126,11 +121,6 @@
     <type name="Magento\Install\Model\Observer">
         <arguments>
             <argument name="session" xsi:type="object">Magento\Install\Model\Session</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Install\Model\Installer\AbstractInstaller">
-        <arguments>
-            <argument name="installer" xsi:type="object">Magento\Install\Model\Installer\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\App\AreaList">
@@ -147,9 +137,6 @@
         <arguments>
             <argument name="areaCode" xsi:type="string">adminhtml</argument>
         </arguments>
-    </type>
-    <type name="Magento\Framework\App\Action\Action">
-        <plugin name="installInitializer" type="Magento\Install\App\Action\Plugin\Install" sortOrder="5"/>
     </type>
     <type name="Magento\Install\Model\Setup">
         <arguments>

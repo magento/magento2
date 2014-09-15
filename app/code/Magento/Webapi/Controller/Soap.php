@@ -45,25 +45,34 @@ class Soap implements \Magento\Framework\App\FrontControllerInterface
 
     /**#@-*/
 
-    /** @var \Magento\Webapi\Model\Soap\Server */
+    /**
+     * @var \Magento\Webapi\Model\Soap\Server
+     */
     protected $_soapServer;
 
-    /** @var \Magento\Webapi\Model\Soap\Wsdl\Generator */
+    /**
+     * @var \Magento\Webapi\Model\Soap\Wsdl\Generator
+     */
     protected $_wsdlGenerator;
 
-    /** @var \Magento\Webapi\Controller\Soap\Request */
+    /**
+     * @var \Magento\Webapi\Controller\Soap\Request
+     */
     protected $_request;
 
-    /** @var Response */
+    /**
+     * @var Response
+     */
     protected $_response;
 
-    /** @var ErrorProcessor */
+    /**
+     * @var ErrorProcessor
+     */
     protected $_errorProcessor;
 
-    /** @var \Magento\Framework\App\State */
-    protected $_appState;
-
-    /** @var \Magento\Framework\View\LayoutInterface */
+    /**
+     * @var \Magento\Framework\View\LayoutInterface
+     */
     protected $_layout;
 
     /**
@@ -132,9 +141,6 @@ class Soap implements \Magento\Framework\App\FrontControllerInterface
         $this->areaList->getArea($this->_appState->getAreaCode())
             ->load(\Magento\Framework\App\Area::PART_TRANSLATE);
         try {
-            if (!$this->_appState->isInstalled()) {
-                throw new WebapiException(__('Magento is not yet installed'));
-            }
             if ($this->_isWsdlRequest()) {
                 $responseBody = $this->_wsdlGenerator->generate(
                     $this->_request->getRequestedServices(),

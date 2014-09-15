@@ -38,10 +38,9 @@ interface SessionManagerInterface
     /**
      * Start session
      *
-     * @param string $sessionName
      * @return SessionManagerInterface
      */
-    public function start($sessionName = null);
+    public function start();
 
     /**
      * Session write close

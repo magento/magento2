@@ -25,6 +25,7 @@
  */
 namespace Magento\Framework\App;
 
+use Magento\Framework\App;
 use Magento\Framework\Event\ManagerInterface;
 
 class Cron implements \Magento\Framework\AppInterface
@@ -81,5 +82,13 @@ class Cron implements \Magento\Framework\AppInterface
         $this->_eventManager->dispatch('default');
         $this->_response->setCode(0);
         return $this->_response;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function catchException(App\Bootstrap $bootstrap, \Exception $exception)
+    {
+        return false;
     }
 }

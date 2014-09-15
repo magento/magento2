@@ -1,0 +1,129 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
+    <referenceContainer name="content">
+        <block class="Magento\Log\Block\Adminhtml\Online" name="adminhtml.block.log.online.grid.container">
+            <block class="Magento\Backend\Block\Widget\Grid" name="adminhtml.block.log.online.grid" as="grid">
+                <arguments>
+                    <argument name="id" xsi:type="string">onlineGrid</argument>
+                    <argument name="dataSource" xsi:type="object">Magento\Log\Model\Resource\Visitor\Online\Grid\Collection</argument>
+                    <argument name="default_sort" xsi:type="string">last_activity</argument>
+                    <argument name="default_dir" xsi:type="string">DESC</argument>
+                    <argument name="save_parameters_in_session" xsi:type="string">1</argument>
+                </arguments>
+                <block class="Magento\Backend\Block\Widget\Grid\ColumnSet" as="grid.columnSet" name="adminhtml.log.online.grid.columnSet">
+                    <arguments>
+                        <argument name="rowUrl" xsi:type="array">
+                            <item name="generatorClass" xsi:type="string">Magento\Log\Model\Resource\Visitor\Online\Grid\Row\UrlGenerator</item>
+                            <item name="path" xsi:type="string">customer/index/edit</item>
+                            <item name="extraParamsTemplate" xsi:type="array">
+                                <item name="id" xsi:type="string">getCustomerId</item>
+                            </item>
+                        </argument>
+                    </arguments>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="customer_id">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">ID</argument>
+                            <argument name="width" xsi:type="string">50px</argument>
+                            <argument name="align" xsi:type="string">right</argument>
+                            <argument name="type" xsi:type="string">number</argument>
+                            <argument name="default" xsi:type="string" translate="true">n/a</argument>
+                            <argument name="index" xsi:type="string">customer_id</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="firstname">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">First Name</argument>
+                            <argument name="default" xsi:type="string">Guest</argument>
+                            <argument name="index" xsi:type="string">customer_firstname</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="lastname">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Last Name</argument>
+                            <argument name="default" xsi:type="string">n/a</argument>
+                            <argument name="index" xsi:type="string">customer_lastname</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="email">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Email</argument>
+                            <argument name="default" xsi:type="string">n/a</argument>
+                            <argument name="index" xsi:type="string">customer_email</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="ip_address">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">IP Address</argument>
+                            <argument name="default" xsi:type="string">n/a</argument>
+                            <argument name="filter" xsi:type="string">0</argument>
+                            <argument name="renderer" xsi:type="string">Magento\Log\Block\Adminhtml\Online\Grid\Renderer\Ip</argument>
+                            <argument name="index" xsi:type="string">remote_addr</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="session_start_time">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Session Start Time</argument>
+                            <argument name="default" xsi:type="string">n/a</argument>
+                            <argument name="align" xsi:type="string">left</argument>
+                            <argument name="width" xsi:type="string">200px</argument>
+                            <argument name="type" xsi:type="string">datetime</argument>
+                            <argument name="index" xsi:type="string">first_visit_at</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="last_activity">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Last Activity</argument>
+                            <argument name="default" xsi:type="string">n/a</argument>
+                            <argument name="align" xsi:type="string">left</argument>
+                            <argument name="width" xsi:type="string">200px</argument>
+                            <argument name="type" xsi:type="string">datetime</argument>
+                            <argument name="index" xsi:type="string">last_visit_at</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="type">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Type</argument>
+                            <argument name="type" xsi:type="string">options</argument>
+                            <argument name="options" xsi:type="options" model="Magento\Customer\Model\Resource\Customer\CustomersTypeOptions"/>
+                            <argument name="index" xsi:type="string">visitor_type</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="last_url">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Last URL</argument>
+                            <argument name="default" xsi:type="string">n/a</argument>
+                            <argument name="linelength" xsi:type="string">60</argument>
+                            <argument name="type" xsi:type="string">wrapline</argument>
+                            <argument name="index" xsi:type="string">last_url</argument>
+                            <argument name="renderer" xsi:type="string">Magento\Log\Block\Adminhtml\Online\Grid\Renderer\Url</argument>
+                        </arguments>
+                    </block>
+                </block>
+            </block>
+        </block>
+    </referenceContainer>
+</page>

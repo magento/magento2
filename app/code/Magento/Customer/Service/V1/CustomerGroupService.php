@@ -24,7 +24,7 @@
 namespace Magento\Customer\Service\V1;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\StoreManagerInterface;
 use Magento\Customer\Model\Group as CustomerGroupModel;
 use Magento\Customer\Model\GroupFactory;
 use Magento\Customer\Model\GroupRegistry;
@@ -58,7 +58,7 @@ class CustomerGroupService implements CustomerGroupServiceInterface
     private $_scopeConfig;
 
     /**
-     * @var StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     private $_storeManager;
 
@@ -90,7 +90,7 @@ class CustomerGroupService implements CustomerGroupServiceInterface
     /**
      * @param GroupFactory $groupFactory
      * @param ScopeConfigInterface $scopeConfig
-     * @param StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param Data\SearchResultsBuilder $searchResultsBuilder
      * @param Data\CustomerGroupBuilder $customerGroupBuilder
      * @param TaxClassServiceInterface $taxClassService
@@ -246,7 +246,7 @@ class CustomerGroupService implements CustomerGroupServiceInterface
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $storeId
             );
-        } catch (\Magento\Framework\Model\Exception $e) {
+        } catch (\Magento\Framework\App\InitException $e) {
             throw NoSuchEntityException::singleField('storeId', $storeId);
         }
         try {

@@ -33,11 +33,11 @@ use Magento\Catalog\Model\Resource\Product\Compare\Item\Collection;
 class ListCompare extends \Magento\Framework\Object
 {
     /**
-     * Log visitor
+     * Customer visitor
      *
-     * @var \Magento\Log\Model\Visitor
+     * @var \Magento\Customer\Model\Visitor
      */
-    protected $_logVisitor;
+    protected $_customerVisitor;
 
     /**
      * Customer session
@@ -74,7 +74,7 @@ class ListCompare extends \Magento\Framework\Object
      * @param \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory $itemCollectionFactory
      * @param \Magento\Catalog\Model\Resource\Product\Compare\Item $catalogProductCompareItem
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Log\Model\Visitor $logVisitor
+     * @param \Magento\Customer\Model\Visitor $customerVisitor
      * @param array $data
      */
     public function __construct(
@@ -82,14 +82,14 @@ class ListCompare extends \Magento\Framework\Object
         \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory $itemCollectionFactory,
         \Magento\Catalog\Model\Resource\Product\Compare\Item $catalogProductCompareItem,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Log\Model\Visitor $logVisitor,
+        \Magento\Customer\Model\Visitor $customerVisitor,
         array $data = array()
     ) {
         $this->_compareItemFactory = $compareItemFactory;
         $this->_itemCollectionFactory = $itemCollectionFactory;
         $this->_catalogProductCompareItem = $catalogProductCompareItem;
         $this->_customerSession = $customerSession;
-        $this->_logVisitor = $logVisitor;
+        $this->_customerVisitor = $customerVisitor;
         parent::__construct($data);
     }
 
@@ -168,7 +168,7 @@ class ListCompare extends \Magento\Framework\Object
      */
     protected function _addVisitorToItem($item)
     {
-        $item->addVisitorId($this->_logVisitor->getId());
+        $item->addVisitorId($this->_customerVisitor->getId());
         if ($this->_customerSession->isLoggedIn()) {
             $item->setCustomerId($this->_customerSession->getCustomerId());
         }

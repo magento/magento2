@@ -33,17 +33,17 @@ class QuoteRepository
     protected $quoteFactory;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $storeManager;
 
     /**
      * @param QuoteFactory $quoteFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Sales\Model\QuoteFactory $quoteFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Framework\StoreManagerInterface $storeManager
     ) {
         $this->quoteFactory = $quoteFactory;
         $this->storeManager = $storeManager;

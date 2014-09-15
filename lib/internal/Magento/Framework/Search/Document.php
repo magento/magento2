@@ -1,7 +1,5 @@
 <?php
 /**
- * Search Document
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -25,6 +23,9 @@
  */
 namespace Magento\Framework\Search;
 
+/**
+ * Search Document
+ */
 class Document implements \IteratorAggregate
 {
     /**

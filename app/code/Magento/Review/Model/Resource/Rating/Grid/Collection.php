@@ -42,7 +42,7 @@ class Collection extends \Magento\Review\Model\Resource\Rating\Collection
      * @param \Magento\Framework\Logger $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Review\Model\Resource\Rating\Option\CollectionFactory $ratingCollectionF
      * @param \Magento\Framework\Registry $coreRegistry
      * @param mixed $connection
@@ -53,7 +53,7 @@ class Collection extends \Magento\Review\Model\Resource\Rating\Collection
         \Magento\Framework\Logger $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Review\Model\Resource\Rating\Option\CollectionFactory $ratingCollectionF,
         \Magento\Framework\Registry $coreRegistry,
         $connection = null,

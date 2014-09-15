@@ -100,7 +100,7 @@ return [
                 "type" => "termFilter"
             ]
         ],
-        "aggregation" => [
+        "aggregations" => [
             "category_bucket" => [
                 "name" => "category_bucket",
                 "field" => "category",

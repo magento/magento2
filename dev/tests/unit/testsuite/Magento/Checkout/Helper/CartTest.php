@@ -88,7 +88,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $contextMock = $this->getMock('\Magento\Framework\App\Helper\Context', [], [], '', false);
         $contextMock->expects($this->any())->method('getUrlBuilder')->will($this->returnValue($this->urlBuilderMock));
         $contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->requestMock));
-        $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
+        $this->storeManagerMock = $this->getMock('\Magento\Framework\StoreManagerInterface');
         $this->coreHelperMock = $this->getMock('\Magento\Core\Helper\Data', [], [], '', false);
         $this->scopeConfigMock = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface');
         $this->cartMock = $this->getMock('\Magento\Checkout\Model\Cart', [], [], '', false);
@@ -219,7 +219,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetDeletePostJson($id, $url, $isAjax, $expectedPostData)
     {
-        $storeManager = $this->getMockForAbstractClass('\Magento\Store\Model\StoreManagerInterface');
+        $storeManager = $this->getMockForAbstractClass('\Magento\Framework\StoreManagerInterface');
         $coreData = $this->getMock('\Magento\Core\Helper\Data', [], [], '', false);
         $scopeConfig = $this->getMockForAbstractClass('\Magento\Framework\App\Config\ScopeConfigInterface');
         $checkoutCart = $this->getMock('\Magento\Checkout\Model\Cart', [], [], '', false);

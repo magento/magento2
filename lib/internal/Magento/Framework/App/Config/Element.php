@@ -35,6 +35,7 @@ class Element extends \Magento\Framework\Simplexml\Element
      * @param string $var
      * @param boolean $value
      * @return boolean
+     * @SuppressWarnings(PHPMD.ShortMethodName)
      */
     public function is($var, $value = true)
     {

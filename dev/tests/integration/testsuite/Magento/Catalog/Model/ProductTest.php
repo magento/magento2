@@ -218,7 +218,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     protected function _undo($duplicate)
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Store\Model\StoreManagerInterface'
+            'Magento\Framework\StoreManagerInterface'
         )->getStore()->setId(
             \Magento\Store\Model\Store::DEFAULT_STORE_ID
         );

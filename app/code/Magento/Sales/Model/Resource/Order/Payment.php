@@ -23,17 +23,23 @@
  */
 namespace Magento\Sales\Model\Resource\Order;
 
+use Magento\Framework\App\Resource;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\Sales\Model\Resource\Attribute;
+use Magento\Sales\Model\Increment;
+use Magento\Sales\Model\Resource\Entity as SalesResource;
+
 /**
  * Flat sales order payment resource
  */
-class Payment extends AbstractOrder
+class Payment extends SalesResource
 {
     /**
      * Serializeable field: additional_information
      *
      * @var array
      */
-    protected $_serializableFields = array('additional_information' => array(null, array()));
+    protected $_serializableFields = ['additional_information' => [null, []]];
 
     /**
      * Event prefix
@@ -41,21 +47,6 @@ class Payment extends AbstractOrder
      * @var string
      */
     protected $_eventPrefix = 'sales_order_payment_resource';
-
-    /**
-     * @param \Magento\Framework\App\Resource $resource
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Eav\Model\Entity\TypeFactory $eavEntityTypeFactory
-     */
-    public function __construct(
-        \Magento\Framework\App\Resource $resource,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Eav\Model\Entity\TypeFactory $eavEntityTypeFactory
-    ) {
-        parent::__construct($resource, $dateTime, $eventManager, $eavEntityTypeFactory);
-    }
 
     /**
      * Model initialization

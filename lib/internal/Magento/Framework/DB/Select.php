@@ -28,8 +28,6 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
 /**
  * Class for SQL SELECT generation and results.
  *
- * @method \Magento\Framework\DB\Adapter\AdapterInterface|Zend_Db_Adapter_Abstract getAdapter()
- * @property \Magento\Framework\DB\Adapter\AdapterInterface|Zend_Db_Adapter_Abstract $_adapter
  * @method \Magento\Framework\DB\Select from($name, $cols = '*', $schema = null)
  * @method \Magento\Framework\DB\Select join($name, $cond, $cols = '*', $schema = null)
  * @method \Magento\Framework\DB\Select joinInner($name, $cond, $cols = '*', $schema = null)
@@ -65,6 +63,36 @@ class Select extends \Zend_Db_Select
      * Sql straight join
      */
     const SQL_STRAIGHT_JOIN = 'STRAIGHT_JOIN';
+
+    /**
+     * FULLTEXT search in MySQL search mode "natural language"
+     */
+    const FULLTEXT_MODE_NATURAL = 'IN NATURAL LANGUAGE MODE';
+
+    /**
+     * FULLTEXT search in MySQL search mode "natural language with query expansion"
+     */
+    const FULLTEXT_MODE_NATURAL_QUERY = 'IN NATURAL LANGUAGE MODE WITH QUERY EXPANSION';
+
+    /**
+     * FULLTEXT search in MySQL search mode "boolean"
+     */
+    const FULLTEXT_MODE_BOOLEAN = 'IN BOOLEAN MODE';
+
+    /**
+     * FULLTEXT search in MySQL search mode "query expansion"
+     */
+    const FULLTEXT_MODE_QUERY = 'WITH QUERY EXPANSION';
+
+    /**
+     * FULLTEXT search in MySQL MATCH method
+     */
+    const MATCH = 'MATCH';
+
+    /**
+     * FULLTEXT search in MySQL AGAINST method
+     */
+    const AGAINST = 'AGAINST';
 
     /**
      * Class constructor
@@ -121,10 +149,53 @@ class Select extends \Zend_Db_Select
             $type = null;
         }
         if (is_array($value)) {
-            $cond = $this->_adapter->quoteInto($cond, $value);
+            $cond = $this->getAdapter()->quoteInto($cond, $value);
             $value = null;
         }
         return parent::where($cond, $value, $type);
+    }
+
+    /**
+     * Method for FULLTEXT search in Mysql, will generated MATCH ($columns) AGAINST ('$expression' $mode)
+     *
+     * @param string|string[] $columns Columns which add to MATCH ()
+     * @param string $expression Expression which add to AGAINST ()
+     * @param string $mode
+     * @return string
+     */
+    public function getMatchQuery($columns, $expression, $mode = self::FULLTEXT_MODE_NATURAL)
+    {
+        if (is_array($columns)) {
+            $columns = implode(', ', $columns);
+        }
+
+        $expression = $this->getAdapter()->quote($expression);
+
+        $condition = self::MATCH . " ({$columns}) " . self::AGAINST . " ({$expression} {$mode})";
+        return $condition;
+    }
+
+    /**
+     * Method for FULLTEXT search in Mysql, will added generated
+     * MATCH ($columns) AGAINST ('$expression' $mode) to where clause
+     *
+     * @param string|string[] $columns Columns which add to MATCH ()
+     * @param string $expression Expression which add to AGAINST ()
+     * @param bool $isCondition true=AND, false=OR
+     * @param string $mode
+     * @return $this
+     */
+    public function match($columns, $expression, $isCondition = true, $mode = self::FULLTEXT_MODE_NATURAL)
+    {
+        $fullCondition = $this->getMatchQuery($columns, $expression, $mode);
+
+        if ($isCondition) {
+            $this->where($fullCondition);
+        } else {
+            $this->orWhere($fullCondition);
+        }
+
+        return $this;
     }
 
     /**

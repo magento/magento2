@@ -28,6 +28,7 @@ namespace Magento\Backend\Test\Block\System\Config;
 
 use Mtf\Client\Element\Locator;
 use Magento\Backend\Test\Block\FormPageActions as AbstractPageActions;
+use Magento\Store\Test\Fixture\Store;
 
 /**
  * Class PageActions
@@ -45,14 +46,28 @@ class PageActions extends AbstractPageActions
     /**
      * Select store
      *
-     * @param array $websiteScope
+     * @param string $websiteScope
      * @return $this
      */
     public function selectStore($websiteScope)
     {
-        $this->_rootElement->find($this->scopeSelector, Locator::SELECTOR_CSS, 'liselect')->setValue($websiteScope);
+        $this->_rootElement->find($this->scopeSelector, Locator::SELECTOR_CSS, 'liselectstore')
+            ->setValue($websiteScope);
         $this->_rootElement->acceptAlert();
 
         return $this;
+    }
+
+    /**
+     * Check if store visible in scope dropdown
+     *
+     * @param Store $store
+     * @return bool
+     */
+    public function isStoreVisible($store)
+    {
+        $storeViews = $this->_rootElement->find($this->scopeSelector, Locator::SELECTOR_CSS, 'liselectstore')
+            ->getValues();
+        return in_array($store->getGroupId() . "/" . $store->getName(), $storeViews);
     }
 }

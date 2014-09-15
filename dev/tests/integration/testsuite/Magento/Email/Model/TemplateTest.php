@@ -83,7 +83,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($filter, $this->_model->getTemplateFilter());
         $this->assertEquals(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Store\Model\StoreManagerInterface'
+                'Magento\Framework\StoreManagerInterface'
             )->getStore()->getId(),
             $filter->getStoreId()
         );
@@ -124,7 +124,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             array(
                 'area' => 'frontend',
                 'store' => \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                    'Magento\Store\Model\StoreManagerInterface'
+                    'Magento\Framework\StoreManagerInterface'
                 )->getStore(
                     'fixturestore'
                 )->getId()
@@ -190,7 +190,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             array(
                 'area' => 'frontend',
                 'store' => \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                    'Magento\Store\Model\StoreManagerInterface'
+                    'Magento\Framework\StoreManagerInterface'
                 )->getStore(
                     'fixturestore'
                 )->getId()
@@ -230,7 +230,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     public function setDesignConfigExceptionDataProvider()
     {
         $storeId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getId();
+            ->get('Magento\Framework\StoreManagerInterface')->getStore()->getId();
         return array(
             array(array()),
             array(array('area' => 'frontend')),

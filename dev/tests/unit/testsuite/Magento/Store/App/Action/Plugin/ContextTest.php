@@ -86,11 +86,6 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     protected $requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $cookieManagerMock;
-
-    /**
      * Set up
      */
     public function setUp()
@@ -103,8 +98,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
             ['getParam'], [], '', false);
         $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager',
             ['getWebsite', '__wakeup'], [], '', false);
-        $this->storeMock = $this->getMock('Magento\Store\Model\Store',
-            ['__wakeup', 'getDefaultCurrency'], [], '', false);
+        $this->storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
         $this->currencyMock = $this->getMock('Magento\Directory\Model\Currency',
             ['getCode', '__wakeup'], [], '', false);
         $this->websiteMock = $this->getMock('Magento\Store\Model\Website',
@@ -112,15 +106,13 @@ class ContextTest extends \PHPUnit_Framework_TestCase
         $this->closureMock = function () {
             return 'ExpectedValue';
         };
-        $this->cookieManagerMock = $this->getMock('\Magento\Framework\Stdlib\CookieManager');
         $this->subjectMock = $this->getMock('Magento\Framework\App\Action\Action', [], [], '', false);
         $this->requestMock = $this->getMock('Magento\Framework\App\RequestInterface');
         $this->plugin = new \Magento\Store\App\Action\Plugin\Context(
             $this->sessionMock,
             $this->httpContextMock,
             $this->httpRequestMock,
-            $this->storeManagerMock,
-            $this->cookieManagerMock
+            $this->storeManagerMock
         );
     }
 
@@ -138,6 +130,9 @@ class ContextTest extends \PHPUnit_Framework_TestCase
         $this->storeMock->expects($this->once())
             ->method('getDefaultCurrency')
             ->will($this->returnValue($this->currencyMock));
+        $this->storeMock->expects($this->once())
+            ->method('getStoreCodeFromCookie')
+            ->will($this->returnValue('storeCookie'));
         $this->currencyMock->expects($this->once())
             ->method('getCode')
             ->will($this->returnValue('UAH'));
@@ -149,11 +144,6 @@ class ContextTest extends \PHPUnit_Framework_TestCase
             ->method('getParam')
             ->with($this->equalTo('___store'))
             ->will($this->returnValue('default'));
-
-        $this->cookieManagerMock->expects($this->once())
-            ->method('getCookie')
-            ->with($this->equalTo(\Magento\Store\Model\Store::COOKIE_NAME))
-            ->will($this->returnValue(null));
 
         $this->httpContextMock->expects($this->atLeastOnce())
             ->method('setValue')

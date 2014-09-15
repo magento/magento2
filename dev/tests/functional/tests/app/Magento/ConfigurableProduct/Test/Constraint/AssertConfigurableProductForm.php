@@ -24,17 +24,51 @@
 
 namespace Magento\ConfigurableProduct\Test\Constraint;
 
-use Mtf\Fixture\FixtureInterface;
 use Magento\Catalog\Test\Constraint\AssertProductForm;
-use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
-use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 
 /**
  * Class AssertConfigurableProductForm
- * Assert that displayed product data on edit page equals passed from fixture
+ * Assert form data equals fixture data
  */
 class AssertConfigurableProductForm extends AssertProductForm
 {
+    /**
+     * List skipped fixture fields in verify
+     *
+     * @var array
+     */
+    protected $skippedFixtureFields = [
+        'id',
+        'affected_attribute_set',
+        'checkout_data'
+    ];
+
+    /**
+     * List skipped attribute fields in verify
+     *
+     * @var array
+     */
+    protected $skippedAttributeFields = [
+        'frontend_input',
+        'attribute_code',
+        'attribute_id',
+        'is_required',
+    ];
+
+    /**
+     * List skipped option fields in verify
+     *
+     * @var array
+     */
+    protected $skippedOptionFields = [
+        'id',
+        'is_default',
+    ];
+
+    protected $skippedVariationMatrixFields = [
+        'configurable_attribute'
+    ];
+
     /**
      * Constraint severeness
      *
@@ -43,80 +77,64 @@ class AssertConfigurableProductForm extends AssertProductForm
     protected $severeness = 'high';
 
     /**
-     * Assert that displayed product data on edit page equals passed from fixture
+     * Prepares fixture data for comparison
      *
-     * @param FixtureInterface $product
-     * @param CatalogProductIndex $productGrid
-     * @param CatalogProductEdit $productPage
-     * @return void
-     */
-    public function processAssert(
-        FixtureInterface $product,
-        CatalogProductIndex $productGrid,
-        CatalogProductEdit $productPage
-    ) {
-        $productGrid->open()->getProductGrid()->searchAndOpen(['sku' => $product->getSku()]);
-
-        $form = $productPage->getForm();
-        $formData = $form->getData($product);
-        foreach (array_keys($formData['configurable_attributes_data']['matrix']) as $key) {
-            unset($formData['configurable_attributes_data']['matrix'][$key]['price']);
-        }
-
-        $fixtureData = $this->prepareFixtureData($product->getData(), $product);
-        $attributes = $fixtureData['configurable_attributes_data']['attributes_data'];
-        $matrix = $fixtureData['configurable_attributes_data']['matrix'];
-        unset($fixtureData['configurable_attributes_data'], $fixtureData['id']);
-
-        $fixtureData['configurable_attributes_data']['attributes_data'] = $this->prepareAttributes($attributes);
-        $fixtureData['configurable_attributes_data']['matrix'] = $this->prepareMatrix($matrix);
-
-        $errors = $this->verifyData($fixtureData, $formData);
-        \PHPUnit_Framework_Assert::assertEmpty($errors, $errors);
-    }
-
-    /**
-     * Preparing data attributes fixture
-     *
-     * @param array $fixtureAttribute
+     * @param array $data
+     * @param array $sortFields [optional]
      * @return array
      */
-    protected function prepareAttributes(array $fixtureAttribute)
+    protected function prepareFixtureData(array $data, array $sortFields = [])
     {
-        foreach ($fixtureAttribute as &$attribute) {
-            unset($attribute['id'], $attribute['label'], $attribute['code']);
-            foreach ($attribute['options'] as &$option) {
-                $option['pricing_value'] = number_format($option['pricing_value'], 4);
-                unset($option['id']);
+        // filter values and reset keys in attributes data
+        $attributeData = $data['configurable_attributes_data']['attributes_data'];
+        foreach ($attributeData as $attributeKey => $attribute) {
+            foreach ($attribute['options'] as $optionKey => $option) {
+                $attribute['options'][$optionKey] = array_diff_key($option, array_flip($this->skippedOptionFields));
             }
+            $attribute['options'] = $this->sortDataByPath($attribute['options'], '::label');
+            $attributeData[$attributeKey] = array_diff_key($attribute, array_flip($this->skippedAttributeFields));
         }
+        $data['configurable_attributes_data']['attributes_data'] = $this->sortDataByPath($attributeData, '::label');
 
-        return $fixtureAttribute;
+
+        // prepare and filter values, reset keys in variation matrix
+        $variationsMatrix = $data['configurable_attributes_data']['matrix'];
+        foreach ($variationsMatrix as $key => $variationMatrix) {
+            $variationMatrix['display'] = isset($variationMatrix['display']) ? $variationMatrix['display'] : 'Yes';
+            $variationsMatrix[$key] = array_diff_key($variationMatrix, array_flip($this->skippedVariationMatrixFields));
+        }
+        $data['configurable_attributes_data']['matrix'] = array_values($variationsMatrix);
+
+        return parent::prepareFixtureData($data, $sortFields);
     }
 
     /**
-     * Preparing data matrix fixture
+     * Prepares form data for comparison
      *
-     * @param array $fixtureMatrix
+     * @param array $data
+     * @param array $sortFields [optional]
      * @return array
      */
-    protected function prepareMatrix(array $fixtureMatrix)
+    protected function prepareFormData(array $data, array $sortFields = [])
     {
-        foreach ($fixtureMatrix as &$matrix) {
-            $matrix['display'] = 'Yes';
-            unset($matrix['configurable_attribute'], $matrix['associated_product_ids']);
+        // prepare attributes data
+        $attributeData = $data['configurable_attributes_data']['attributes_data'];
+        foreach ($attributeData as $attributeKey => $attribute) {
+            $attribute['options'] = $this->sortDataByPath($attribute['options'], '::label');
+            $attributeData[$attributeKey] = $attribute;
         }
+        $data['configurable_attributes_data']['attributes_data'] = $this->sortDataByPath($attributeData, '::label');
 
-        return $fixtureMatrix;
-    }
+        // filter values and reset keys in variation matrix
+        $variationsMatrix = $data['configurable_attributes_data']['matrix'];
+        foreach ($variationsMatrix as $key => $variationMatrix) {
+            $variationsMatrix[$key] = array_diff_key($variationMatrix, array_flip($this->skippedVariationMatrixFields));
+        }
+        $data['configurable_attributes_data']['matrix'] = array_values($variationsMatrix);
 
-    /**
-     * Returns a string representation of the object
-     *
-     * @return string
-     */
-    public function toString()
-    {
-        return 'Form data equal the configurable product data.';
+        foreach ($sortFields as $path) {
+            $data = $this->sortDataByPath($data, $path);
+        }
+        return $data;
     }
 }

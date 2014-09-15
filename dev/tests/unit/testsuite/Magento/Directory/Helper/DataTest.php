@@ -95,7 +95,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->_coreHelper = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
 
         $this->_store = $this->getMock('Magento\Store\Model\Store', array(), array(), '', false);
-        $storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface', array(), array(), '', false);
+        $storeManager = $this->getMock('Magento\Framework\StoreManagerInterface', array(), array(), '', false);
         $storeManager->expects($this->any())->method('getStore')->will($this->returnValue($this->_store));
 
         $currencyFactory = $this->getMock('Magento\Directory\Model\CurrencyFactory', array(), array(), '', false);

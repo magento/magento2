@@ -29,7 +29,7 @@ namespace Magento\Reports\Model\Event;
 class Observer
 {
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -54,32 +54,32 @@ class Observer
     protected $_customerSession;
 
     /**
-     * @var \Magento\Log\Model\Visitor
+     * @var \Magento\Customer\Model\Visitor
      */
-    protected $_logVisitor;
+    protected $_customerVisitor;
 
     /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Reports\Model\EventFactory $event
      * @param \Magento\Reports\Model\Product\Index\ComparedFactory $productCompFactory
      * @param \Magento\Reports\Model\Product\Index\ViewedFactory $productIndxFactory
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Log\Model\Visitor $logVisitor
+     * @param \Magento\Customer\Model\Visitor $customerVisitor
      */
     public function __construct(
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Reports\Model\EventFactory $event,
         \Magento\Reports\Model\Product\Index\ComparedFactory $productCompFactory,
         \Magento\Reports\Model\Product\Index\ViewedFactory $productIndxFactory,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Log\Model\Visitor $logVisitor
+        \Magento\Customer\Model\Visitor $customerVisitor
     ) {
         $this->_storeManager = $storeManager;
         $this->_eventFactory = $event;
         $this->_productCompFactory = $productCompFactory;
         $this->_productIndxFactory = $productIndxFactory;
         $this->_customerSession = $customerSession;
-        $this->_logVisitor = $logVisitor;
+        $this->_customerVisitor = $customerVisitor;
     }
 
     /**
@@ -99,7 +99,7 @@ class Observer
             if ($this->_customerSession->isLoggedIn()) {
                 $subjectId = $this->_customerSession->getCustomerId();
             } else {
-                $subjectId = $this->_logVisitor->getId();
+                $subjectId = $this->_customerVisitor->getId();
                 $subtype = 1;
             }
         }
@@ -134,7 +134,7 @@ class Observer
             return $this;
         }
 
-        $visitorId = $this->_logVisitor->getId();
+        $visitorId = $this->_customerVisitor->getId();
         $customerId = $this->_customerSession->getCustomerId();
         $eventModel = $this->_eventFactory->create();
         $eventModel->updateCustomerType($visitorId, $customerId);

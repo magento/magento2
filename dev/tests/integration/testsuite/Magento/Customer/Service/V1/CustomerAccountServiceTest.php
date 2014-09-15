@@ -1502,8 +1502,8 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function getValidEmailDataProvider()
     {
-        /** @var \Magento\Store\Model\StoreManagerInterface  $storeManager */
-        $storeManager = Bootstrap::getObjectManager()->get('Magento\Store\Model\StoreManagerInterface');
+        /** @var \Magento\Framework\StoreManagerInterface  $storeManager */
+        $storeManager = Bootstrap::getObjectManager()->get('Magento\Framework\StoreManagerInterface');
         $defaultWebsiteId = $storeManager->getStore()->getWebsiteId();
         return [
             'valid email' => ['customer@example.com', null],

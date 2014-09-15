@@ -72,7 +72,7 @@ class AssertProductTemplateGroupOnProductForm extends AbstractConstraint
 
         $productGrid->open();
         $productGrid->getGridPageActionBlock()->addProduct('simple');
-        $productBlockForm = $newProductPage->getForm();
+        $productBlockForm = $newProductPage->getProductForm();
 
         /**@var CatalogProductSimple $catalogProductSimple */
         $productSimple = $fixtureFactory->createByCode(
@@ -87,13 +87,13 @@ class AssertProductTemplateGroupOnProductForm extends AbstractConstraint
         $productBlockForm->fill($productSimple);
 
         \PHPUnit_Framework_Assert::assertTrue(
-            $productEdit->getForm()->isTabVisible($attributeSet->getGroup()),
+            $productEdit->getProductForm()->isTabVisible($attributeSet->getGroup()),
             "Product Group is absent on Product form tabs."
         );
 
-        $productEdit->getForm()->openCustomTab($attributeSet->getGroup());
+        $productEdit->getProductForm()->openCustomTab($attributeSet->getGroup());
         \PHPUnit_Framework_Assert::assertTrue(
-            $productEdit->getForm()->checkAttributeLabel($productAttributeOriginal),
+            $productEdit->getProductForm()->checkAttributeLabel($productAttributeOriginal),
             "Product Attribute is absent on Product form."
         );
     }

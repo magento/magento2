@@ -81,7 +81,7 @@ class Guest extends \Magento\Core\Helper\Data
     /**
      * @param App\Helper\Context $context
      * @param App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Registry $coreRegistry
@@ -98,7 +98,7 @@ class Guest extends \Magento\Core\Helper\Data
     public function __construct(
         App\Helper\Context $context,
         App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Framework\App\State $appState,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         \Magento\Framework\Registry $coreRegistry,
@@ -186,10 +186,7 @@ class Guest extends \Magento\Core\Helper\Data
 
             if (!$errors) {
                 $toCookie = base64_encode($order->getProtectCode() . ':' . $incrementId);
-                $metadata = $this->cookieMetadataFactory->createPublicCookieMetadata();
-                $metadata->setPath(self::COOKIE_PATH);
-                $metadata->setDuration(self::COOKIE_LIFETIME);
-                $this->cookieManager->setPublicCookie(self::COOKIE_NAME, $toCookie, $metadata);
+                $this->setGuestViewCookie($toCookie);
             }
         } elseif ($fromCookie) {
             $cookieData = explode(':', base64_decode($fromCookie));
@@ -201,10 +198,7 @@ class Guest extends \Magento\Core\Helper\Data
                 $order->loadByIncrementId($incrementId);
                 if ($order->getProtectCode() == $protectCode) {
                     // renew cookie
-                    $metadata = $this->cookieMetadataFactory->createPublicCookieMetadata();
-                    $metadata->setPath(self::COOKIE_PATH);
-                    $metadata->setDuration(self::COOKIE_LIFETIME);
-                    $this->cookieManager->setPublicCookie(self::COOKIE_NAME, $fromCookie, $metadata);
+                    $this->setGuestViewCookie($fromCookie);
                     $errors = false;
                 }
             }
@@ -240,5 +234,20 @@ class Guest extends \Magento\Core\Helper\Data
             'cms_page',
             array('label' => __('Order Information'), 'title' => __('Order Information'))
         );
+    }
+
+    /**
+     * Set guest-view cookie
+     *
+     * @param string $cookieValue
+     * @return void
+     */
+    private function setGuestViewCookie($cookieValue)
+    {
+        $metadata = $this->cookieMetadataFactory->createPublicCookieMetadata()
+            ->setPath(self::COOKIE_PATH)
+            ->setDuration(self::COOKIE_LIFETIME)
+            ->setHttpOnly(true);
+        $this->cookieManager->setPublicCookie(self::COOKIE_NAME, $cookieValue, $metadata);
     }
 }

@@ -46,7 +46,7 @@ class TaxCalculationServiceTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Tax\Service\V1\Data\TaxDetailsBuilder */
     private $taxDetailsBuilder;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\StoreManagerInterface */
+    /** @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\StoreManagerInterface */
     private $storeManager;
 
     /** @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Tax\Model\Calculation\CalculatorFactory */
@@ -56,7 +56,7 @@ class TaxCalculationServiceTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManager($this);
         $this->quoteDetailsBuilder = $objectManager->getObject('Magento\Tax\Service\V1\Data\QuoteDetailsBuilder');
-        $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $this->storeManager = $this->getMockBuilder('Magento\Framework\StoreManagerInterface')
             ->disableOriginalConstructor()->getMock();
         $this->calculatorFactory = $this->getMockBuilder('Magento\Tax\Model\Calculation\CalculatorFactory')
             ->disableOriginalConstructor()->getMock();

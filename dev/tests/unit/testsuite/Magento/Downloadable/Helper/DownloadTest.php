@@ -30,7 +30,14 @@ use Magento\Framework\Filesystem\Directory\ReadInterface as DirReadInterface;
 use Magento\Downloadable\Helper\File as DownloadableFile;
 
 /**
- * @runInSeparateProcess
+ * @bug https://github.com/sebastianbergmann/phpunit/issues/314
+ * Workaround: use the "require_once" below and declare "preserveGlobalState disabled" in the test class
+ */
+require_once __DIR__ . '/../../../../framework/bootstrap.php';
+
+/**
+ * @runTestsInSeparateProcesses
+ * @preserveGlobalState disabled
  */
 class DownloadTest extends \PHPUnit_Framework_TestCase
 {

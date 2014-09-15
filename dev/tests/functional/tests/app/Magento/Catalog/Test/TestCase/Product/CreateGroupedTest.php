@@ -64,7 +64,7 @@ class CreateGroupedTest extends Functional
         $manageProductsGrid->open();
         $manageProductsGrid->getGridPageActionBlock()->addProduct('grouped');
         $productForm->fill($product);
-        $createProductPage->getFormAction()->save();
+        $createProductPage->getFormPageActions()->save();
         //Verifying
         $createProductPage->getMessagesBlock()->assertSuccessMessage();
         // Flush cache

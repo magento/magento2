@@ -129,6 +129,9 @@ class CreateProductRatingEntityTest extends Injectable
      */
     public function tearDown()
     {
+        if (!($this->productRating instanceof Rating)) {
+            return;
+        }
         $filter = ['rating_code' => $this->productRating->getRatingCode()];
         $this->ratingIndex->open();
         $this->ratingIndex->getRatingGrid()->searchAndOpen($filter);

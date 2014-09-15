@@ -28,6 +28,7 @@ use Magento\Catalog\Test\Fixture;
 /**
  * Class Product Repository
  *
+ * Data for create simple product
  */
 class SimpleProduct extends Product
 {
@@ -48,14 +49,14 @@ class SimpleProduct extends Product
     /**
      * {inheritdoc}
      */
-    public function __construct(array $defaultConfig = array(), array $defaultData = array())
+    public function __construct(array $defaultConfig = [], array $defaultData = [])
     {
         parent::__construct($defaultConfig, $defaultData);
         $this->_data[self::ADVANCED_INVENTORY] = $this->getSimpleAdvancedInventory();
-        $this->_data[self::NEW_CATEGORY] = array(
+        $this->_data[self::NEW_CATEGORY] = [
             'config' => $defaultConfig,
             'data' => $this->buildSimpleWithNewCategoryData($defaultData)
-        );
+        ];
         $this->_data[self::ADVANCED_PRICING] = $this->getSimpleAdvancedPricing();
         $this->_data[self::CUSTOM_OPTIONS] = $this->getSimpleCustomOption();
         $this->_data[self::SIMPLE_WITH_MAP] = $this->getSimpleAppliedMap($defaultData);
@@ -70,18 +71,18 @@ class SimpleProduct extends Product
      */
     protected function buildSimpleWithNewCategoryData($defaultData)
     {
-        return array(
-            'category_new' => array(
-                'category_name' => array('value' => 'New category %isolation%'),
-                'parent_category' => array('value' => 'Default')
-            ),
+        return [
+            'category_new' => [
+                'category_name' => ['value' => 'New category %isolation%'],
+                'parent_category' => ['value' => 'Default']
+            ],
             'category_name' => '%category::getCategoryName%',
             'category_id' => '%category::getCategoryId%',
             'fields' => array_intersect_key(
                 $defaultData['fields'],
-                array_flip(array('name', 'sku', 'price', 'weight', 'product_website_1'))
+                array_flip(['name', 'sku', 'price', 'weight', 'product_website_1'])
             )
-        );
+        ];
     }
 
     /**
@@ -91,14 +92,14 @@ class SimpleProduct extends Product
      */
     protected function getSimpleAdvancedInventory()
     {
-        $inventory = array(
-            'data' => array(
-                'fields' => array(
-                    'inventory_manage_stock' => array('value' => 'Yes', 'input_value' => '1'),
-                    'inventory_qty' => array('value' => 1, 'group' => Fixture\Product::GROUP_PRODUCT_INVENTORY)
-                )
-            )
-        );
+        $inventory = [
+            'data' => [
+                'fields' => [
+                    'inventory_manage_stock' => ['value' => 'Yes', 'input_value' => '1'],
+                    'inventory_qty' => ['value' => 1, 'group' => Fixture\Product::GROUP_PRODUCT_INVENTORY]
+                ]
+            ]
+        ];
         $product = array_replace_recursive($this->_data['simple'], $inventory);
         unset($product['data']['fields']['qty']);
 
@@ -112,13 +113,13 @@ class SimpleProduct extends Product
      */
     protected function getSimpleAdvancedPricing()
     {
-        $pricing = array(
-            'data' => array(
-                'fields' => array(
-                    'special_price' => array('value' => '9', 'group' => Fixture\Product::GROUP_PRODUCT_PRICING)
-                )
-            )
-        );
+        $pricing = [
+            'data' => [
+                'fields' => [
+                    'special_price' => ['value' => '9', 'group' => Fixture\Product::GROUP_PRODUCT_PRICING]
+                ]
+            ]
+        ];
         $product = array_replace_recursive($this->_data['simple'], $pricing);
 
         return $product;
@@ -132,13 +133,13 @@ class SimpleProduct extends Product
     {
         return array_replace_recursive(
             parent::resetRequiredFields($productType),
-            array(
-                'data' => array(
-                    'fields' => array(
-                        'price' => array('value' => '1.99', 'group' => Fixture\Product::GROUP_PRODUCT_DETAILS)
-                    )
-                )
-            )
+            [
+                'data' => [
+                    'fields' => [
+                        'price' => ['value' => '1.99', 'group' => Fixture\Product::GROUP_PRODUCT_DETAILS]
+                    ]
+                ]
+            ]
         );
     }
 
@@ -149,30 +150,30 @@ class SimpleProduct extends Product
     {
         return array_merge_recursive(
             $this->_data['simple'],
-            array(
-                'data' => array(
-                    'fields' => array(
-                        'custom_options' => array(
-                            'value' => array(
-                                array(
+            [
+                'data' => [
+                    'fields' => [
+                        'custom_options' => [
+                            'value' => [
+                                [
                                     'title' => 'custom option drop down',
                                     'is_require' => true,
                                     'type' => 'Drop-down',
-                                    'options' => array(
-                                        array(
+                                    'options' => [
+                                        [
                                             'title' => 'Title Drop - down 1',
                                             'price' => 2.56,
                                             'price_type' => 'Fixed',
                                             'sku' => 'sku_drop_down_row_1'
-                                        )
-                                    )
-                                )
-                            ),
+                                        ]
+                                    ]
+                                ]
+                            ],
                             'group' => Fixture\Product::GROUP_CUSTOM_OPTIONS
-                        )
-                    )
-                )
-            )
+                        ]
+                    ]
+                ]
+            ]
         );
     }
 
@@ -183,28 +184,28 @@ class SimpleProduct extends Product
      */
     protected function getSimpleAppliedMap()
     {
-        $pricing = array(
-            'data' => array(
-                'fields' => array(
-                    'msrp_enabled' => array(
+        $pricing = [
+            'data' => [
+                'fields' => [
+                    'msrp_enabled' => [
                         'value' => 'Yes',
                         'input_value' => '1',
                         'group' => Fixture\Product::GROUP_PRODUCT_PRICING,
                         'input' => 'select'
-                    ),
-                    'msrp_display_actual_price_type' => array(
+                    ],
+                    'msrp_display_actual_price_type' => [
                         'value' => 'On Gesture',
                         'input_value' => '1',
                         'group' => Fixture\Product::GROUP_PRODUCT_PRICING,
                         'input' => 'select'
-                    ),
-                    'msrp' => array(
+                    ],
+                    'msrp' => [
                         'value' => '15',
                         'group' => Fixture\Product::GROUP_PRODUCT_PRICING
-                    )
-                )
-            )
-        );
+                    ]
+                ]
+            ]
+        ];
         $product = array_replace_recursive($this->_data['simple'], $pricing);
 
         return $product;

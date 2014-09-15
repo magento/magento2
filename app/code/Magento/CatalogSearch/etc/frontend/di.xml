@@ -32,7 +32,6 @@
     <virtualType name="Magento\CatalogSearch\Model\Session" type="Magento\Framework\Session\Generic">
         <arguments>
             <argument name="storage" xsi:type="object">Magento\CatalogSearch\Model\Session\Storage</argument>
-            <argument name="sessionName" xsi:type="string">frontend</argument>
         </arguments>
     </virtualType>
     <virtualType name="Magento\CatalogSearch\Block\SearchResult\ListProduct" type="Magento\Catalog\Block\Product\ListProduct">

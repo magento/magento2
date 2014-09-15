@@ -33,7 +33,7 @@ use Magento\Eav\Model\Config as EavConfig;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Type as ProductType;
 use Magento\Store\Model\Store;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\StoreManagerInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\CouldNotSaveException;
@@ -81,7 +81,7 @@ class WriteService implements WriteServiceInterface
      * @param ConfigurableAttributeFactory $configurableAttributeFactory
      * @param EavConfig $eavConfig
      * @param OptionConverter $optionConverter
-     * @param StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param ConfigurableType $productType
      */
     public function __construct(

@@ -94,7 +94,7 @@ class UpdateGroupedProductEntityTest extends Injectable
         // Steps
         $this->catalogProductIndex->open();
         $this->catalogProductIndex->getProductGrid()->searchAndOpen(['sku' => $originalProduct->getSku()]);
-        $this->catalogProductEdit->getForm()->fill($product);
-        $this->catalogProductEdit->getFormAction()->save();
+        $this->catalogProductEdit->getProductForm()->fill($product);
+        $this->catalogProductEdit->getFormPageActions()->save();
     }
 }

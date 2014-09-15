@@ -27,8 +27,10 @@
     <wrapper>store</wrapper>
     <fields>
         <group_id>
-            <input>select</input>
+            <input>optgroupselect</input>
         </group_id>
+        <name />
+        <code />
         <is_active>
             <input>select</input>
         </is_active>

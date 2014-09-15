@@ -32,7 +32,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     protected $testable;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeManager;
 
@@ -40,9 +40,9 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     {
         $logger = $this->getMockBuilder('Magento\Framework\Logger')->disableOriginalConstructor()->getMock();
         /** @var \Magento\Framework\Logger $logger */
-        $storeManager = $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+        $storeManager = $this->storeManager = $this->getMockBuilder('Magento\Framework\StoreManagerInterface')
             ->getMock();
-        /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
+        /** @var \Magento\Framework\StoreManagerInterface $storeManager */
         $this->testable = new Store($logger, $storeManager);
     }
 

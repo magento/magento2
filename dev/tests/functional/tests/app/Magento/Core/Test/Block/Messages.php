@@ -90,6 +90,24 @@ class Messages extends Block
     }
 
     /**
+     * Wait for element is visible in the page
+     *
+     * @param string $selector
+     * @param string $strategy
+     * @return bool|null
+     */
+    public function waitForElementVisible($selector, $strategy = Locator::SELECTOR_CSS)
+    {
+        $browser = $this->browser;
+        return $browser->waitUntil(
+            function () use ($browser, $selector, $strategy) {
+                $message = $browser->find($selector, $strategy);
+                return $message->isVisible() ? true : null;
+            }
+        );
+    }
+
+    /**
      * Get all error messages which are present on the page
      *
      * @return string

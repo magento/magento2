@@ -93,8 +93,10 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $data = ['some-vary-key' => 'some-vary-value'];
         $expectedCookieName = Http::COOKIE_VARY_STRING;
         $expectedCookieValue = sha1(serialize($data));
-        $publicCookieMetadataMock = $this->getMock('Magento\Framework\Stdlib\Cookie\PublicCookieMetadata');
-        $publicCookieMetadataMock->expects($this->once())
+        $sensitiveCookieMetadataMock = $this->getMockBuilder('Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $sensitiveCookieMetadataMock->expects($this->once())
             ->method('setPath')
             ->with('/')
             ->will($this->returnSelf());
@@ -107,15 +109,15 @@ class HttpTest extends \PHPUnit_Framework_TestCase
             );
 
         $this->cookieMetadataFactoryMock->expects($this->once())
-            ->method('createPublicCookieMetadata')
+            ->method('createSensitiveCookieMetadata')
             ->with()
             ->will(
-                $this->returnValue($publicCookieMetadataMock)
+                $this->returnValue($sensitiveCookieMetadataMock)
             );
 
         $this->cookieManagerMock->expects($this->once())
-            ->method('setPublicCookie')
-            ->with($expectedCookieName, $expectedCookieValue, $publicCookieMetadataMock);
+            ->method('setSensitiveCookie')
+            ->with($expectedCookieName, $expectedCookieValue, $sensitiveCookieMetadataMock);
         $this->model->sendVary();
     }
 

@@ -24,13 +24,15 @@
 namespace Magento\Bundle\Service\V1\Product\Option;
 
 use Magento\Bundle\Model\Product\Type;
+use Magento\Bundle\Service\V1\Data\Product\Link;
 use Magento\Bundle\Service\V1\Data\Product\Option;
+use Magento\Bundle\Service\V1\Product\Link\WriteService as LinkWriteService;
 use Magento\Bundle\Service\V1\Data\Product\OptionConverter;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductRepository;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\StoreManagerInterface;
 use Magento\Webapi\Exception;
 
 class WriteService implements WriteServiceInterface
@@ -53,21 +55,29 @@ class WriteService implements WriteServiceInterface
     private $storeManager;
 
     /**
+     * @var LinkWriteService
+     */
+    private $linkWriteService;
+
+    /**
      * @param ProductRepository $productRepository
      * @param Type $type
      * @param OptionConverter $optionConverter
      * @param StoreManagerInterface $storeManager
+     * @param LinkWriteService $linkWriteService
      */
     public function __construct(
         ProductRepository $productRepository,
         Type $type,
         OptionConverter $optionConverter,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        LinkWriteService $linkWriteService
     ) {
         $this->productRepository = $productRepository;
         $this->type = $type;
         $this->optionConverter = $optionConverter;
         $this->storeManager = $storeManager;
+        $this->linkWriteService = $linkWriteService;
     }
 
     /**
@@ -104,7 +114,14 @@ class WriteService implements WriteServiceInterface
             throw new CouldNotSaveException('Could not save option', [], $e);
         }
 
-        return $optionModel->getId();
+        $optionId = $optionModel->getId();
+        if (is_array($option->getProductLinks())) {
+            foreach ($option->getProductLinks() as $link) {
+                $this->linkWriteService->addChild($productSku, $optionId, $link);
+            }
+        }
+
+        return $optionId;
     }
 
     /**
@@ -124,6 +141,35 @@ class WriteService implements WriteServiceInterface
             throw new NoSuchEntityException('Requested option doesn\'t exist');
         }
         $updateOption->setStoreId($this->storeManager->getStore()->getId());
+
+        /**
+         * @var Link[] $existingProductLinks
+         */
+        $existingProductLinks = $optionModel->getProductLinks();
+        if (!is_array($existingProductLinks)) {
+            $existingProductLinks = array();
+        }
+        /**
+         * @var Link[] $newProductLinks
+         */
+        $newProductLinks = $option->getProductLinks();
+        if (is_null($newProductLinks)) {
+            $newProductLinks = array();
+        }
+        /**
+         * @var Link[] $linksToDelete
+         */
+        $linksToDelete = array_udiff($existingProductLinks, $newProductLinks, array($this, 'compareLinks'));
+        foreach ($linksToDelete as $link) {
+            $this->linkWriteService->removeChild($productSku, $option->getId(), $link->getSku());
+        }
+        /**
+         * @var Link[] $linksToAdd
+         */
+        $linksToAdd = array_udiff($newProductLinks, $existingProductLinks, array($this, 'compareLinks'));
+        foreach ($linksToAdd as $link) {
+            $this->linkWriteService->addChild($productSku, $option->getId(), $link);
+        }
 
         try {
             $updateOption->save();
@@ -155,5 +201,21 @@ class WriteService implements WriteServiceInterface
         }
 
         return $product;
+    }
+
+    /**
+     * Compare two links and determine if they are equal
+     *
+     * @param Link $firstLink
+     * @param Link $secondLink
+     * @return int
+     */
+    private function compareLinks(Link $firstLink, Link $secondLink)
+    {
+        if ($firstLink->getSku() == $secondLink->getSku()) {
+            return 0;
+        } else {
+            return 1;
+        }
     }
 }

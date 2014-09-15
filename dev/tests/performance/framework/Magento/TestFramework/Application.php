@@ -30,11 +30,6 @@ namespace Magento\TestFramework;
 class Application
 {
     /**
-     * Area code
-     */
-    const AREA_CODE = 'install';
-
-    /**
      * Configuration object
      *
      * @var \Magento\TestFramework\Performance\Config
@@ -46,7 +41,14 @@ class Application
      *
      * @var string
      */
-    protected $_installerScript;
+    protected $_installScript;
+
+    /**
+     * Path to shell uninstaller script
+     *
+     * @var string
+     */
+    protected $_uninstallScript;
 
     /**
      * @var \Magento\Framework\Shell
@@ -76,18 +78,35 @@ class Application
      * Constructor
      *
      * @param \Magento\TestFramework\Performance\Config $config
+     * @param \Magento\Framework\ObjectManager $objectManager
      * @param \Magento\Framework\Shell $shell
-     * @throws \Magento\Framework\Exception
      */
-    public function __construct(\Magento\TestFramework\Performance\Config $config, \Magento\Framework\Shell $shell)
-    {
-        $installerScript = $config->getApplicationBaseDir() . '/dev/shell/install.php';
-        if (!is_file($installerScript)) {
-            throw new \Magento\Framework\Exception("File '{$installerScript}' is not found.");
-        }
-        $this->_installerScript = realpath($installerScript);
+    public function __construct(
+        \Magento\TestFramework\Performance\Config $config,
+        \Magento\Framework\ObjectManager $objectManager,
+        \Magento\Framework\Shell $shell
+    ) {
+        $shellDir = $config->getApplicationBaseDir() . '/dev/shell';
+        $this->_objectManager = $objectManager;
+        $this->_installScript = $this->_assertPath($shellDir . '/install.php');
+        $this->_uninstallScript = $this->_assertPath($shellDir . '/uninstall.php');
         $this->_config = $config;
         $this->_shell = $shell;
+    }
+
+    /**
+     * Asserts that a file exists and returns its real path
+     *
+     * @param string $path
+     * @return string
+     * @throws \Magento\Framework\Exception
+     */
+    private function _assertPath($path)
+    {
+        if (!is_file($path)) {
+            throw new \Magento\Framework\Exception("File '{$path}' is not found.");
+        }
+        return realpath($path);
     }
 
     /**
@@ -139,7 +158,7 @@ class Application
      */
     protected function _uninstall()
     {
-        $this->_shell->execute('php -f %s -- --uninstall', array($this->_installerScript));
+        $this->_shell->execute('php -f %s', array($this->_uninstallScript));
 
         $this->_isInstalled = false;
         $this->_fixtures = array();
@@ -169,7 +188,7 @@ class Application
         }
 
         $installCmd = 'php -f %s --';
-        $installCmdArgs = array($this->_installerScript);
+        $installCmdArgs = array($this->_installScript);
         foreach ($installOptions as $optionName => $optionValue) {
             $installCmd .= " --{$optionName} %s";
             $installCmdArgs[] = $optionValue;
@@ -196,30 +215,6 @@ class Application
     }
 
     /**
-     * Bootstrap application, so it is possible to use its resources
-     *
-     * @return \Magento\TestFramework\Application
-     */
-    protected function _bootstrap()
-    {
-        $this->getObjectManager()->configure(
-            $this->getObjectManager()->get('Magento\Framework\App\ObjectManager\ConfigLoader')->load(self::AREA_CODE)
-        );
-        $this->getObjectManager()->get('Magento\Framework\Config\ScopeInterface')->setCurrentScope(self::AREA_CODE);
-        return $this;
-    }
-
-    /**
-     * Bootstrap
-     *
-     * @return Application
-     */
-    public function bootstrap()
-    {
-        return $this->_bootstrap();
-    }
-
-    /**
      * Work on application, so that it has all and only $fixtures applied. May require reinstall, if
      * excessive fixtures has been applied before.
      *
@@ -237,7 +232,6 @@ class Application
             return;
         }
 
-        $this->_bootstrap();
         foreach ($fixturesToApply as $fixtureFile) {
             $this->applyFixture($fixtureFile);
         }
@@ -274,24 +268,8 @@ class Application
      *
      * @return \Magento\Framework\ObjectManager
      */
-    public function getObjectManager()
+    protected function getObjectManager()
     {
-        if (!$this->_objectManager) {
-            $locatorFactory = new \Magento\Framework\App\ObjectManagerFactory();
-            $this->_objectManager = $locatorFactory->create(BP, $_SERVER);
-            $this->_objectManager->get('Magento\Framework\App\State')->setAreaCode(self::AREA_CODE);
-        }
         return $this->_objectManager;
-    }
-
-    /**
-     * Reset object manager
-     *
-     * @return \Magento\Framework\ObjectManager
-     */
-    public function resetObjectManager()
-    {
-        $this->_objectManager = null;
-        return $this;
     }
 }

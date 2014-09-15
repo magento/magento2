@@ -23,12 +23,17 @@
  */
 namespace Magento\Sales\Model\Resource\Order;
 
+use Magento\Framework\App\Resource;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\Sales\Model\Resource\Attribute;
+use Magento\Sales\Model\Increment as SalesIncrement;
+use Magento\Sales\Model\Resource\Entity as SalesResource;
+use Magento\Sales\Model\Resource\Order\Invoice\Grid as InvoiceGrid;
+
 /**
  * Flat sales order invoice resource
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Invoice extends AbstractOrder
+class Invoice extends SalesResource
 {
     /**
      * Event prefix
@@ -36,27 +41,6 @@ class Invoice extends AbstractOrder
      * @var string
      */
     protected $_eventPrefix = 'sales_order_invoice_resource';
-
-    /**
-     * Is grid available
-     *
-     * @var bool
-     */
-    protected $_grid = true;
-
-    /**
-     * Flag for using of increment id
-     *
-     * @var bool
-     */
-    protected $_useIncrementId = true;
-
-    /**
-     * Entity code for increment id (Eav entity code)
-     *
-     * @var string
-     */
-    protected $_entityTypeForIncrementId = 'invoice';
 
     /**
      * Model initialization
@@ -69,34 +53,19 @@ class Invoice extends AbstractOrder
     }
 
     /**
-     * Init virtual grid records for entity
-     *
-     * @return $this
+     * @param Resource $resource
+     * @param DateTime $dateTime
+     * @param Attribute $attribute
+     * @param SalesIncrement $salesIncrement
+     * @param InvoiceGrid $gridAggregator
      */
-    protected function _initVirtualGridColumns()
-    {
-        parent::_initVirtualGridColumns();
-        $adapter = $this->_getReadAdapter();
-        $checkedFirstname = $adapter->getIfNullSql('{{table}}.firstname', $adapter->quote(''));
-        $checkedLastname = $adapter->getIfNullSql('{{table}}.lastname', $adapter->quote(''));
-
-        $this->addVirtualGridColumn(
-            'billing_name',
-            'sales_flat_order_address',
-            array('billing_address_id' => 'entity_id'),
-            $adapter->getConcatSql(array($checkedFirstname, $adapter->quote(' '), $checkedLastname))
-        )->addVirtualGridColumn(
-            'order_increment_id',
-            'sales_flat_order',
-            array('order_id' => 'entity_id'),
-            'increment_id'
-        )->addVirtualGridColumn(
-            'order_created_at',
-            'sales_flat_order',
-            array('order_id' => 'entity_id'),
-            'created_at'
-        );
-
-        return $this;
+    public function __construct(
+        Resource $resource,
+        DateTime $dateTime,
+        Attribute $attribute,
+        SalesIncrement $salesIncrement,
+        InvoiceGrid $gridAggregator
+    ) {
+        parent::__construct($resource, $dateTime, $attribute, $salesIncrement, $gridAggregator);
     }
 }

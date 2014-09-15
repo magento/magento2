@@ -24,7 +24,7 @@
 namespace Magento\Bundle\Service\V1\Product\Link;
 
 use Magento\Bundle\Model\Option;
-use Magento\Bundle\Service\V1\Data\Product\Link\MetadataConverter;
+use Magento\Bundle\Service\V1\Data\Product\LinkConverter;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductRepository;
 use Magento\Webapi\Exception;
@@ -37,21 +37,21 @@ class ReadService implements ReadServiceInterface
     private $productRepository;
 
     /**
-     * @var \Magento\Bundle\Service\V1\Data\Product\Link\MetadataConverter
+     * @var \Magento\Bundle\Service\V1\Data\Product\LinkConverter
      */
-    private $metadataConverter;
+    private $linkConverter;
 
     /**
      * @param ProductRepository $productRepository
-     * @param MetadataConverter $metadataConverter
+     * @param LinkConverter $linkConverter
      */
     public function __construct(
         ProductRepository $productRepository,
-        MetadataConverter $metadataConverter
+        LinkConverter $linkConverter
     ) {
 
         $this->productRepository = $productRepository;
-        $this->metadataConverter = $metadataConverter;
+        $this->linkConverter = $linkConverter;
     }
 
     /**
@@ -69,7 +69,7 @@ class ReadService implements ReadServiceInterface
         foreach ($this->getOptions($product) as $option) {
             /** @var \Magento\Catalog\Model\Product $selection */
             foreach ($option->getSelections() as $selection) {
-                $childrenList[] = $this->metadataConverter->createDataFromModel($selection, $product);
+                $childrenList[] = $this->linkConverter->createDataFromModel($selection, $product);
             }
         }
 

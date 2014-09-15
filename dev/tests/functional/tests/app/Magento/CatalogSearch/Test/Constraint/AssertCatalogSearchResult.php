@@ -53,7 +53,7 @@ class AssertCatalogSearchResult extends AbstractConstraint
         foreach ($products as $product) {
             $name = $product->getName();
             $isProductVisible = $resultPage->getListProductBlock()->isProductVisible($name);
-            while (!$isProductVisible && $resultPage->getToolbar()->nextPage()) {
+            while (!$isProductVisible && $resultPage->getBottomToolbar()->nextPage()) {
                 $isProductVisible = $resultPage->getListProductBlock()->isProductVisible($name);
             }
 

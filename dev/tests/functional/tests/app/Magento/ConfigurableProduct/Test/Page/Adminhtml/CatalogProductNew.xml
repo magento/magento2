@@ -25,10 +25,19 @@
 -->
 <page mca="catalog/product/new">
     <blocks>
-        <configurableForm>
+        <formPageActions>
+            <renders>
+                <configurable>
+                    <class>Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\FormPageActions</class>
+                </configurable>
+            </renders>
+        </formPageActions>
+        <productForm>
+            <renders>
+                <configurable>
                     <class>Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\ProductForm</class>
-                    <locator>[id="page:main-container"]</locator>
-                    <strategy>css selector</strategy>
-        </configurableForm>
+                </configurable>
+            </renders>
+        </productForm>
     </blocks>
 </page>

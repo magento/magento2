@@ -24,6 +24,11 @@
 
 namespace Magento\Authorization\Model;
 
+use Magento\Framework\ObjectManager\Helper\Composite as CompositeHelper;
+
+/**
+ * Composite user context (implements composite pattern).
+ */
 class CompositeUserContext implements \Magento\Authorization\Model\UserContextInterface
 {
     /**
@@ -39,19 +44,12 @@ class CompositeUserContext implements \Magento\Authorization\Model\UserContextIn
     /**
      * Register user contexts.
      *
+     * @param CompositeHelper $compositeHelper
      * @param UserContextInterface[] $userContexts
      */
-    public function __construct($userContexts = [])
+    public function __construct(CompositeHelper $compositeHelper, $userContexts = [])
     {
-        $userContexts = array_filter(
-            $userContexts,
-            function ($item) {
-                return isset($item['type']) && isset($item['sortOrder']);
-            }
-        );
-
-        uasort($userContexts, array($this, 'compareContextsSortOrder'));
-
+        $userContexts = $compositeHelper->filterAndSortDeclaredComponents($userContexts);
         foreach ($userContexts as $userContext) {
             $this->add($userContext['type']);
         }
@@ -105,25 +103,5 @@ class CompositeUserContext implements \Magento\Authorization\Model\UserContextIn
             }
         }
         return $this->chosenUserContext;
-    }
-
-    /**
-     * Compare contexts sortOrder
-     *
-     * @param array $contextDataFirst
-     * @param array $contextDataSecond
-     * @return int
-     */
-    protected function compareContextsSortOrder($contextDataFirst, $contextDataSecond)
-    {
-        if ((int)$contextDataFirst['sortOrder'] == (int)$contextDataSecond['sortOrder']) {
-            return 0;
-        }
-
-        if ((int)$contextDataFirst['sortOrder'] < (int)$contextDataSecond['sortOrder']) {
-            return -1;
-        } else {
-            return 1;
-        }
     }
 }

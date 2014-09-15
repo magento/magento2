@@ -114,8 +114,8 @@ class FormTest extends \PHPUnit_Framework_TestCase
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Core/_files/store.php
      *
-     * @expectedException \Magento\Store\Model\Exception
-     * @expectedExceptionMessage Chosen cms page does not associated with any website.
+     * @expectedException \Magento\Framework\Model\Exception
+     * @expectedExceptionMessage Chosen cms page is not associated with any website.
      */
     public function testGetEntityStoresProductStoresException()
     {

@@ -29,14 +29,14 @@ use Magento\Framework\Exception\NoSuchEntityException;
 class PathProcessor
 {
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     private $storeManager;
 
     /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      */
-    public function __construct(\Magento\Store\Model\StoreManagerInterface $storeManager)
+    public function __construct(\Magento\Framework\StoreManagerInterface $storeManager)
     {
         $this->storeManager = $storeManager;
     }

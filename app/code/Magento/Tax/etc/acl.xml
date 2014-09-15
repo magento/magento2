@@ -35,12 +35,6 @@
                         </resource>
                     </resource>
                 </resource>
-
-                <resource id="Magento_Adminhtml::system">
-                    <resource id="Magento_Adminhtml::convert">
-                        <resource id="Magento_Tax::import_export" title="Import/Export Tax Rates" sortOrder="30" />
-                    </resource>
-                </resource>
             </resource>
         </resources>
     </acl>

@@ -111,8 +111,8 @@ class CreateDownloadableProductEntityTest extends Injectable
     {
         $this->catalogProductIndex->open();
         $this->catalogProductIndex->getGridPageActionBlock()->addProduct('downloadable');
-        $productBlockForm = $this->catalogProductNew->getForm();
+        $productBlockForm = $this->catalogProductNew->getProductForm();
         $productBlockForm->fill($product, null, $category);
-        $this->catalogProductNew->getFormAction()->save();
+        $this->catalogProductNew->getFormPageActions()->save();
     }
 }

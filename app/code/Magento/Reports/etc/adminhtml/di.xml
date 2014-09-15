@@ -24,11 +24,6 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <virtualType name="Magento\Reports\Model\Session">
-        <arguments>
-            <argument name="sessionName" xsi:type="string">adminhtml</argument>
-        </arguments>
-    </virtualType>
     <type name="Magento\Reports\Model\Resource\Customer\Collection">
         <arguments>
             <argument name="modelName" xsi:type="string">Magento\Customer\Model\Backend\Customer</argument>

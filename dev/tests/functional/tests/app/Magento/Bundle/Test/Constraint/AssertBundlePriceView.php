@@ -71,7 +71,7 @@ class AssertBundlePriceView extends AbstractConstraint
     protected function assertPrice(CatalogProductBundle $product, CatalogProductView $catalogProductView)
     {
         $priceData = $product->getDataFieldConfig('price')['source']->getPreset();
-        $priceBlock = $catalogProductView->getViewBlock()->getProductPriceBlock();
+        $priceBlock = $catalogProductView->getViewBlock()->getPriceBlock();
 
         $priceLow = ($product->getPriceView() == 'Price Range')
             ? $priceBlock->getPriceFrom()

@@ -66,6 +66,8 @@
     <preference for="Magento\Catalog\Service\V1\Product\CustomOptions\Data\Option\Metadata\ReaderInterface" type="Magento\Catalog\Service\V1\Product\CustomOptions\Data\Option\Metadata\Reader" />
     <preference for="Magento\Catalog\Service\V1\Product\CustomOptions\WriteServiceInterface" type="Magento\Catalog\Service\V1\Product\CustomOptions\WriteService" />
     <preference for="Magento\Catalog\Service\V1\Product\CustomOptions\Data\Option\Metadata\ConverterInterface" type="Magento\Catalog\Service\V1\Product\CustomOptions\Data\Option\Metadata\Converter\Composite" />
+    <preference for="Magento\Catalog\Service\V1\Product\ProductSaveProcessorInterface" type="Magento\Catalog\Service\V1\Product\ProductSaveProcessorComposite" />
+    <preference for="Magento\Catalog\Service\V1\Product\ProductLoadProcessorInterface" type="Magento\Catalog\Service\V1\Product\ProductLoadProcessorComposite" />
     <type name="Magento\Log\Model\Resource\Log">
         <plugin name="catalogLog" type="Magento\Catalog\Model\Plugin\Log" />
     </type>

@@ -99,7 +99,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     protected $_catalogProduct = null;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -154,7 +154,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Catalog\Model\Config $config
      * @param \Magento\Bundle\Model\Resource\Selection $bundleSelection
      * @param \Magento\Bundle\Model\OptionFactory $bundleOption
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -178,7 +178,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\Catalog\Model\Config $config,
         \Magento\Bundle\Model\Resource\Selection $bundleSelection,
         \Magento\Bundle\Model\OptionFactory $bundleOption,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         array $data = array()
     ) {
         $this->_catalogProduct = $catalogProduct;

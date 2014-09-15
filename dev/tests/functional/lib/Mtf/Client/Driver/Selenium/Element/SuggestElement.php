@@ -45,7 +45,7 @@ class SuggestElement extends Element
      *
      * @var string
      */
-    protected $searchResult = '.mage-suggest-dropdown > ul';
+    protected $searchResult = '.mage-suggest-dropdown';
 
     /**
      * Selector item of search result
@@ -95,5 +95,23 @@ class SuggestElement extends Element
         $this->_eventManager->dispatchEvent(['get_value'], [(string) $this->_locator]);
         
         return $this->find($this->suggest)->getValue();
+    }
+
+    /**
+     * Checking exist value in search result
+     *
+     * @param string $value
+     * @return bool
+     */
+    public function isExistValueInSearchResult($value)
+    {
+        $searchResult = $this->find($this->searchResult);
+
+        $this->find($this->suggest)->setValue($value);
+        $this->waitResult();
+        if (!$searchResult->isVisible()) {
+            return false;
+        }
+        return $searchResult->find(sprintf($this->resultItem, $value), Locator::SELECTOR_XPATH)->isVisible();
     }
 }

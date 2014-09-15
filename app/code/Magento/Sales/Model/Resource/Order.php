@@ -23,12 +23,21 @@
  */
 namespace Magento\Sales\Model\Resource;
 
+use Magento\Framework\Math\Random;
+use Magento\Framework\App\Resource as AppResource;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\Sales\Model\Increment as SalesIncrement;
+use Magento\Sales\Model\Resource\Entity as SalesResource;
+use Magento\Sales\Model\Resource\Order\Handler\State as StateHandler;
+use Magento\Sales\Model\Resource\Order\Handler\Address as AddressHandler;
+use Magento\Sales\Model\Resource\Order\Grid as OrderGrid;
+
 /**
  * Flat sales order resource
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Order extends \Magento\Sales\Model\Resource\Order\AbstractOrder
+class Order extends SalesResource
 {
     /**
      * Event prefix
@@ -45,25 +54,14 @@ class Order extends \Magento\Sales\Model\Resource\Order\AbstractOrder
     protected $_eventObject = 'resource';
 
     /**
-     * Is grid
-     *
-     * @var bool
+     * @var StateHandler
      */
-    protected $_grid = true;
+    protected $stateHandler;
 
     /**
-     * Use increment id
-     *
-     * @var bool
+     * @var AddressHandler
      */
-    protected $_useIncrementId = true;
-
-    /**
-     * Entity code for increment id
-     *
-     * @var string
-     */
-    protected $_entityCodeForIncrementId = 'order';
+    protected $addressHandler;
 
     /**
      * Model Initialization
@@ -76,30 +74,26 @@ class Order extends \Magento\Sales\Model\Resource\Order\AbstractOrder
     }
 
     /**
-     * Init virtual grid records for entity
-     *
-     * @return $this
+     * @param AppResource $resource
+     * @param DateTime $dateTime
+     * @param Attribute $attribute
+     * @param SalesIncrement $salesIncrement
+     * @param AddressHandler $addressHandler
+     * @param StateHandler $stateHandler
+     * @param OrderGrid $gridAggregator
      */
-    protected function _initVirtualGridColumns()
-    {
-        parent::_initVirtualGridColumns();
-        $adapter = $this->getReadConnection();
-        $ifnullFirst = $adapter->getIfNullSql('{{table}}.firstname', $adapter->quote(''));
-        $ifnullLast = $adapter->getIfNullSql('{{table}}.lastname', $adapter->quote(''));
-        $concatAddress = $adapter->getConcatSql(array($ifnullFirst, $adapter->quote(' '), $ifnullLast));
-        $this->addVirtualGridColumn(
-            'billing_name',
-            'sales_flat_order_address',
-            array('billing_address_id' => 'entity_id'),
-            $concatAddress
-        )->addVirtualGridColumn(
-            'shipping_name',
-            'sales_flat_order_address',
-            array('shipping_address_id' => 'entity_id'),
-            $concatAddress
-        );
-
-        return $this;
+    public function __construct(
+        AppResource $resource,
+        DateTime $dateTime,
+        Attribute $attribute,
+        SalesIncrement $salesIncrement,
+        AddressHandler $addressHandler,
+        StateHandler $stateHandler,
+        OrderGrid $gridAggregator
+    ) {
+        $this->stateHandler = $stateHandler;
+        $this->addressHandler = $addressHandler;
+        parent::__construct($resource, $dateTime, $attribute, $salesIncrement, $gridAggregator);
     }
 
     /**
@@ -133,21 +127,79 @@ class Order extends \Magento\Sales\Model\Resource\Order\AbstractOrder
     }
 
     /**
-     * Retrieve order_increment_id by order_id
+     * Process items dependency for new order, returns qty of affected items;
      *
-     * @param int $orderId
-     * @return string
+     * @param \Magento\Sales\Model\Order $object
+     * @return int
      */
-    public function getIncrementId($orderId)
+    protected function calculateItems(\Magento\Sales\Model\Order $object)
     {
-        $adapter = $this->getReadConnection();
-        $bind = array(':entity_id' => $orderId);
-        $select = $adapter->select()->from(
-            $this->getMainTable(),
-            array("increment_id")
-        )->where(
-            'entity_id = :entity_id'
+        $itemsCount = 0;
+        if (!$object->getId()) {
+            foreach ($object->getAllItems() as $item) {
+                /** @var  \Magento\Sales\Model\Order\Item $item */
+                $parent = $item->getQuoteParentItemId();
+                if ($parent && !$item->getParentItem()) {
+                    $item->setParentItem($object->getItemByQuoteItemId($parent));
+                } elseif (!$parent) {
+                    $itemsCount++;
+                }
+            }
+        }
+        return $itemsCount;
+    }
+
+    /**
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return $this
+     */
+    protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
+    {
+        /** @var \Magento\Sales\Model\Order $object */
+        $this->addressHandler->removeEmptyAddresses($object);
+        $this->stateHandler->check($object);
+        if (!$object->getId()) {
+            /** @var \Magento\Store\Model\Store $store */
+            $store = $object->getStore();
+            $name = [
+                $store->getWebsite()->getName(),
+                $store->getGroup()->getName(),
+                $store->getName()
+            ];
+            $object->setStoreName(implode("\n", $name));
+        }
+        $object->setTotalItemCount($this->calculateItems($object));
+        $object->setData(
+            'protect_code',
+            substr(md5(uniqid(Random::getRandomNumber(), true) . ':' . microtime(true)), 5, 6)
         );
-        return $adapter->fetchOne($select, $bind);
+        $isNewCustomer = !$object->getCustomerId() || $object->getCustomerId() === true;
+        if ($isNewCustomer && $object->getCustomer()) {
+            $object->setCustomerId($object->getCustomer()->getId());
+        }
+        return parent::_beforeSave($object);
+    }
+
+    /**
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return $this
+     */
+    protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
+    {
+        /** @var \Magento\Sales\Model\Order $object */
+        $this->addressHandler->process($object);
+        if (null !== $object->getItemsCollection()) {
+            $object->getItemsCollection()->save();
+        }
+        if (null !== $object->getPaymentsCollection()) {
+            $object->getPaymentsCollection()->save();
+        }
+        if (null !== $object->getStatusHistoryCollection()) {
+            $object->getStatusHistoryCollection()->save();
+        }
+        foreach ($object->getRelatedObjects() as $relatedObject) {
+            $relatedObject->save();
+        }
+        return parent::_afterSave($object);
     }
 }

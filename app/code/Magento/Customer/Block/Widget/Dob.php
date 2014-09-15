@@ -24,6 +24,7 @@
 namespace Magento\Customer\Block\Widget;
 
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\Service\ArrayObjectSearch;
 
 class Dob extends AbstractWidget
 {
@@ -158,8 +159,12 @@ class Dob extends AbstractWidget
         $dob = $this->_getAttribute('dob');
         if (!is_null($dob)) {
             $rules = $this->_getAttribute('dob')->getValidationRules();
-            if (isset($rules[self::MIN_DATE_RANGE_KEY])) {
-                return date("Y/m/d", $rules[self::MIN_DATE_RANGE_KEY]);
+            $minDateValue = ArrayObjectSearch::getArrayElementByName(
+                $rules,
+                self::MIN_DATE_RANGE_KEY
+            );
+            if (!is_null($minDateValue)) {
+                return date("Y/m/d", $minDateValue);
             }
         }
         return null;
@@ -175,8 +180,12 @@ class Dob extends AbstractWidget
         $dob = $this->_getAttribute('dob');
         if (!is_null($dob)) {
             $rules = $this->_getAttribute('dob')->getValidationRules();
-            if (isset($rules[self::MAX_DATE_RANGE_KEY])) {
-                return date("Y/m/d", $rules[self::MAX_DATE_RANGE_KEY]);
+            $maxDateValue = ArrayObjectSearch::getArrayElementByName(
+                $rules,
+                self::MAX_DATE_RANGE_KEY
+            );
+            if (!is_null($maxDateValue)) {
+                return date("Y/m/d", $maxDateValue);
             }
         }
         return null;

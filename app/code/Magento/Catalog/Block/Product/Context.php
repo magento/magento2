@@ -106,7 +106,7 @@ class Context extends \Magento\Framework\View\Element\Template\Context
      * @param \Magento\Framework\View\FileSystem $viewFileSystem
      * @param \Magento\Framework\View\TemplateEnginePool $enginePool
      * @param \Magento\Framework\App\State $appState
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Config $catalogConfig
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Tax\Helper\Data $taxHelper
@@ -144,7 +144,7 @@ class Context extends \Magento\Framework\View\Element\Template\Context
         \Magento\Framework\View\FileSystem $viewFileSystem,
         \Magento\Framework\View\TemplateEnginePool $enginePool,
         \Magento\Framework\App\State $appState,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Config $catalogConfig,
         \Magento\Framework\Registry $registry,
         \Magento\Tax\Helper\Data $taxHelper,

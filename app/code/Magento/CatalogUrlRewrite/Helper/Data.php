@@ -30,7 +30,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\Resource;
 use Magento\Store\Model\Store;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\StoreManagerInterface;
 use Magento\UrlRedirect\Service\V1\Data\Converter;
 use Magento\UrlRedirect\Service\V1\Data\UrlRewrite;
 
@@ -62,7 +62,7 @@ class Data
     /**
      * Store manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $storeManager;
 

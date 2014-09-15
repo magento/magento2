@@ -24,7 +24,7 @@
 namespace Magento\Sales\Model\Resource\Sale;
 
 use Magento\Core\Model\EntityFactory;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\StoreManagerInterface;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Logger;
@@ -92,7 +92,7 @@ class Collection extends \Magento\Framework\Data\Collection\Db
      * @param ManagerInterface $eventManager
      * @param Order $resource
      * @param \Magento\Store\Model\Resource\Store\CollectionFactory $storeCollectionFactory
-     * @param StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      */
     public function __construct(
         EntityFactory $entityFactory,

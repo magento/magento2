@@ -45,6 +45,5 @@
         <block class="Magento\Tax\Block\Adminhtml\Rule\Edit"/>
         <block class="Magento\Tax\Block\Adminhtml\Rule\Edit\Form" name="tax-rule-edit" template="rule/edit.phtml"/>
         <block class="Magento\Tax\Block\Adminhtml\Rate\Form" name="tax-rate-form" template="rule/rate/form.phtml"/>
-        <block class="Magento\Tax\Block\Adminhtml\Rate\ImportExport" name="tax-rate-importExport" template="importExport.phtml"/>
     </referenceContainer>
 </page>

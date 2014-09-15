@@ -177,7 +177,7 @@ class Send extends Action\Action implements IndexInterface
 
             try {
                 $scopeConfig = $this->_objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface');
-                $storeManager = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface');
+                $storeManager = $this->_objectManager->get('Magento\Framework\StoreManagerInterface');
                 foreach ($emails as $email) {
                     $transport = $this->_transportBuilder->setTemplateIdentifier(
                         $scopeConfig->getValue(

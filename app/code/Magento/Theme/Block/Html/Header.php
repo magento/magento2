@@ -132,7 +132,7 @@ class Header extends \Magento\Framework\View\Element\Template
     public function getWelcome()
     {
         if (empty($this->_data['welcome'])) {
-            if ($this->_appState->isInstalled() && $this->httpContext->getValue(Data::CONTEXT_AUTH)) {
+            if ($this->httpContext->getValue(Data::CONTEXT_AUTH)) {
                 $customerName = $this->_customerViewHelper->getCustomerName(
                     $this->_customerSession->getCustomerDataObject()
                 );

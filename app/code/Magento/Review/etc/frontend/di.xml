@@ -32,7 +32,6 @@
     <virtualType name="Magento\Review\Model\Session" type="Magento\Framework\Session\Generic">
         <arguments>
             <argument name="storage" xsi:type="object">Magento\Review\Model\Session\Storage</argument>
-            <argument name="sessionName" xsi:type="string">frontend</argument>
         </arguments>
     </virtualType>
     <type name="Magento\Review\Block\Form">

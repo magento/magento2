@@ -53,7 +53,7 @@ class Stock extends \Magento\ProductAlert\Controller\Add
             )->setProductId(
                 $product->getId()
             )->setWebsiteId(
-                $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore()->getWebsiteId()
+                $this->_objectManager->get('Magento\Framework\StoreManagerInterface')->getStore()->getWebsiteId()
             );
             $model->save();
             $this->messageManager->addSuccess(__('Alert subscription has been saved.'));

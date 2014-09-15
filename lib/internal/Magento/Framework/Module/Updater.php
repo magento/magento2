@@ -26,17 +26,9 @@
 namespace Magento\Framework\Module;
 
 use Magento\Framework\App\State;
-use Magento\Framework\Module\Updater\SetupFactory;
 
-class Updater implements \Magento\Framework\Module\UpdaterInterface
+class Updater
 {
-    /**
-     * Setup model factory
-     *
-     * @var SetupFactory
-     */
-    protected $_factory;
-
     /**
      * Flag which allow run data install/upgrade
      *
@@ -50,20 +42,6 @@ class Updater implements \Magento\Framework\Module\UpdaterInterface
      * @var \Magento\Framework\App\State
      */
     protected $_appState;
-
-    /**
-     * If it set to true, we will ignore applying scheme updates
-     *
-     * @var bool
-     */
-    protected $_skipModuleUpdate;
-
-    /**
-     * Map that contains setup model names per resource name
-     *
-     * @var array
-     */
-    protected $_resourceList;
 
     /**
      * @var ModuleListInterface
@@ -81,38 +59,29 @@ class Updater implements \Magento\Framework\Module\UpdaterInterface
     protected $_setupFactory;
 
     /**
+     * @var \Magento\Framework\Module\Manager
+     */
+    private $_moduleManager;
+
+    /**
      * @param Updater\SetupFactory $setupFactory
      * @param State $appState
      * @param ModuleListInterface $moduleList
      * @param ResourceResolverInterface $resourceResolver
-     * @param bool $skipModuleUpdate
+     * @param Manager $moduleManager
      */
     public function __construct(
         Updater\SetupFactory $setupFactory,
         State $appState,
         ModuleListInterface $moduleList,
         ResourceResolverInterface $resourceResolver,
-        $skipModuleUpdate = false
+        \Magento\Framework\Module\Manager $moduleManager
     ) {
         $this->_appState = $appState;
         $this->_moduleList = $moduleList;
         $this->_resourceResolver = $resourceResolver;
         $this->_setupFactory = $setupFactory;
-        $this->_skipModuleUpdate = $skipModuleUpdate;
-    }
-
-    /**
-     * Check whether modules updates processing should be skipped
-     *
-     * @return bool
-     */
-    protected function _shouldSkipProcessModulesUpdates()
-    {
-        if (!$this->_appState->isInstalled()) {
-            return false;
-        }
-
-        return $this->_skipModuleUpdate;
+        $this->_moduleManager = $moduleManager;
     }
 
     /**
@@ -122,21 +91,19 @@ class Updater implements \Magento\Framework\Module\UpdaterInterface
      */
     public function updateScheme()
     {
-        if ($this->_shouldSkipProcessModulesUpdates()) {
-            return;
-        }
-
         \Magento\Framework\Profiler::start('apply_db_schema_updates');
         $this->_appState->setUpdateMode(true);
 
         $afterApplyUpdates = array();
         foreach (array_keys($this->_moduleList->getModules()) as $moduleName) {
             foreach ($this->_resourceResolver->getResourceList($moduleName) as $resourceName) {
-                $setup = $this->_setupFactory->create($resourceName, $moduleName);
-                $setup->applyUpdates();
+                if (!$this->_moduleManager->isDbSchemaUpToDate($moduleName, $resourceName)) {
+                    $setup = $this->_setupFactory->create($resourceName, $moduleName);
+                    $setup->applyUpdates();
 
-                if ($setup->getCallAfterApplyAllUpdates()) {
-                    $afterApplyUpdates[] = $setup;
+                    if ($setup->getCallAfterApplyAllUpdates()) {
+                        $afterApplyUpdates[] = $setup;
+                    }
                 }
             }
         }
@@ -158,12 +125,11 @@ class Updater implements \Magento\Framework\Module\UpdaterInterface
      */
     public function updateData()
     {
-        if (!$this->_isUpdatedSchema) {
-            return;
-        }
         foreach (array_keys($this->_moduleList->getModules()) as $moduleName) {
             foreach ($this->_resourceResolver->getResourceList($moduleName) as $resourceName) {
-                $this->_setupFactory->create($resourceName, $moduleName)->applyDataUpdates();
+                if (!$this->_moduleManager->isDbDataUpToDate($moduleName, $resourceName)) {
+                    $this->_setupFactory->create($resourceName, $moduleName)->applyDataUpdates();
+                }
             }
         }
     }

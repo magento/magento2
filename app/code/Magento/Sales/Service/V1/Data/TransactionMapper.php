@@ -119,8 +119,17 @@ class TransactionMapper
     {
         /** @var TransactionBuilder $transactionBuilder */
         $transactionBuilder = $this->transactionBuilderFactory->create();
-        $transactionBuilder->populateWithArray($transactionModel->getData());
+        $transactionBuilder->setTransactionId($transactionModel->getTransactionId());
+        $transactionBuilder->setParentId($transactionModel->getParentId());
+        $transactionBuilder->setOrderId($transactionModel->getOrderId());
+        $transactionBuilder->setTxnId($transactionModel->getTxnId());
+        $transactionBuilder->setPaymentId($transactionModel->getPaymentId());
+        $transactionBuilder->setParentTxnId($transactionModel->getParentTxnId());
+        $transactionBuilder->setTxnType($transactionModel->getTxnType());
+        $transactionBuilder->setIsClosed($transactionModel->getIsClosed());
         $transactionBuilder->setAdditionalInformation($this->getAdditionalInfo($transactionModel));
+        $transactionBuilder->setCreatedAt($transactionModel->getCreatedAt());
+        $transactionBuilder->setMethod($transactionModel->getMethod());
         $transactionBuilder->setIncrementId($this->getIncrementId($transactionModel));
         $transactionBuilder->setChildTransactions($lazy ? [] : $this->getChildTransactions($transactionModel));
         return $transactionBuilder->create();

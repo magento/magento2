@@ -57,7 +57,7 @@ class Session extends \Magento\Framework\Session\SessionManager
             $cookieManager,
             $cookieMetadataFactory
         );
-        $this->start('adminhtml');
+        $this->start();
     }
 
     /**

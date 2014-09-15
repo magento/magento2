@@ -22,6 +22,9 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+use Magento\Framework\App\State as AppState;
+use Magento\Framework\App\Bootstrap;
+
 /**
  * Parse command line arguments
  */
@@ -48,13 +51,7 @@ if (empty($args)) {
     foreach ($detailedOptions as $option) {
         echo '  php -f ' . $_SERVER['argv'][0] . ' -- --' . $option . PHP_EOL;
     }
-    echo <<<INSTALLSCHEME
-Installation scheme:
-  php -f {$_SERVER['argv'][0]}  -- [--<install_option_name> "<option_value>" ...]
-Uninstallation:
-  php -f  {$_SERVER['argv'][0]} -- --uninstall
-
-INSTALLSCHEME;
+    echo "php -f {$_SERVER['argv'][0]} -- [--<install_option_name> \"<option_value>\" ...]\n";
 
     $exampleOptions = array(
         'license_agreement_accepted' => 'yes',
@@ -74,7 +71,8 @@ INSTALLSCHEME;
         'admin_password' => '1234qasd',
         'use_secure' => 'no',
         'secure_base_url' => '"https://magento.local"',
-        'cleanup_database' => ''
+        'cleanup_database' => '',
+        'bootstrap' => '{"extra":{"key":"value"}}',
     );
     echo 'Example of installation:' . PHP_EOL;
     echo '  php -f ' . $_SERVER['argv'][0] . ' --';
@@ -89,12 +87,21 @@ INSTALLSCHEME;
     exit(1);
 }
 
-define('BARE_BOOTSTRAP', 1);
-require_once __DIR__ . '/../../app/bootstrap.php';
+require __DIR__ . '/../../app/bootstrap.php';
 
-$_SERVER[\Magento\Framework\App\State::PARAM_MODE] = isset($_SERVER[\Magento\Framework\App\State::PARAM_MODE])
-    ? $_SERVER[\Magento\Framework\App\State::PARAM_MODE]
-    : \Magento\Framework\App\State::MODE_DEVELOPER;
-
-$entryPoint = new \Magento\Framework\App\EntryPoint\EntryPoint(BP, $_SERVER);
-$entryPoint->run('Magento\Install\App\Console', array('arguments' => $args));
+$params = $_SERVER;
+$params[Bootstrap::PARAM_REQUIRE_IS_INSTALLED] = false;
+if (!isset($params[AppState::PARAM_MODE])) {
+    $params[AppState::PARAM_MODE] = AppState::MODE_DEVELOPER;
+}
+if (isset($args['bootstrap'])) {
+    $extra = json_decode($args['bootstrap'], true);
+    if (!is_array($extra)) {
+        throw new \Exception("Unable to decode JSON in the parameter 'bootstrap'");
+    }
+    $params = array_replace_recursive($params, $extra);
+}
+$bootstrap = \Magento\Framework\App\Bootstrap::create(BP, $params);
+/** @var \Magento\Install\App\Console $app */
+$app = $bootstrap->createApplication('Magento\Install\App\Console', ['arguments' => $args]);
+$bootstrap->run($app);

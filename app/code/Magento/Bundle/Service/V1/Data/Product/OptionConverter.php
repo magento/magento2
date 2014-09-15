@@ -56,14 +56,16 @@ class OptionConverter
     /**
      * @param OptionModel $option
      * @param Product $product
+     * @param Link[] $productLinks
      * @return Option
      */
-    public function createDataFromModel(OptionModel $option, Product $product)
+    public function createDataFromModel(OptionModel $option, Product $product, $productLinks = null)
     {
         $this->builder->populateWithArray($option->getData())
             ->setId($option->getId())
             ->setTitle(is_null($option->getTitle()) ? $option->getDefaultTitle() : $option->getTitle())
-            ->setSku($product->getSku());
+            ->setSku($product->getSku())
+            ->setProductLinks($productLinks);
         return $this->builder->create();
     }
 

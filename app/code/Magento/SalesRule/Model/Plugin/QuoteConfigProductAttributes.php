@@ -23,7 +23,7 @@
  */
 namespace Magento\SalesRule\Model\Plugin;
 
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\StoreManagerInterface;
 use Magento\Customer\Model\Session;
 use Magento\SalesRule\Model\Resource\Rule;
 

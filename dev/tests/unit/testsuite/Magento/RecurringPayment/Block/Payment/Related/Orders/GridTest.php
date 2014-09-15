@@ -39,7 +39,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
     protected $registry;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\StoreManagerInterface | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeManager;
 
@@ -68,7 +68,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
         $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
 
         $this->registry = $this->getMock('Magento\Framework\Registry', [], [], '', false);
-        $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $this->storeManager = $this->getMock('Magento\Framework\StoreManagerInterface');
         $this->collection = $this->getMock('Magento\Sales\Model\Resource\Order\Collection', [], [], '', false);
         $this->locale = $this->getMock('Magento\Framework\Stdlib\DateTime\TimezoneInterface');
         $this->helper = $this->getMock('Magento\Core\Helper\Data', [], [], '', false);

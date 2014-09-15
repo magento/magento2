@@ -1,7 +1,5 @@
 <?php
 /**
- * Range Buckets
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -27,6 +25,9 @@ namespace Magento\Framework\Search\Request\Aggregation;
 
 use Magento\Framework\Search\Request\BucketInterface;
 
+/**
+ * Range Buckets
+ */
 class RangeBucket implements BucketInterface
 {
     /**

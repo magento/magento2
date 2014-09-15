@@ -23,6 +23,8 @@
  */
 namespace Magento\Sales\Model\Order;
 
+use Magento\Sales\Model\EntityInterface;
+
 /**
  * @method \Magento\Sales\Model\Resource\Order\Invoice _getResource()
  * @method \Magento\Sales\Model\Resource\Order\Invoice getResource()
@@ -90,7 +92,6 @@ namespace Magento\Sales\Model\Order;
  * @method \Magento\Sales\Model\Order\Invoice setBaseCurrencyCode(string $value)
  * @method string getGlobalCurrencyCode()
  * @method \Magento\Sales\Model\Order\Invoice setGlobalCurrencyCode(string $value)
- * @method string getIncrementId()
  * @method \Magento\Sales\Model\Order\Invoice setIncrementId(string $value)
  * @method string getCreatedAt()
  * @method \Magento\Sales\Model\Order\Invoice setCreatedAt(string $value)
@@ -109,7 +110,7 @@ namespace Magento\Sales\Model\Order;
  * @method float getBaseShippingInclTax()
  * @method \Magento\Sales\Model\Order\Invoice setBaseShippingInclTax(float $value)
  */
-class Invoice extends \Magento\Sales\Model\AbstractModel
+class Invoice extends \Magento\Sales\Model\AbstractModel implements EntityInterface
 {
     /**
      * Invoice states
@@ -197,11 +198,6 @@ class Invoice extends \Magento\Sales\Model\AbstractModel
     protected $_orderFactory;
 
     /**
-     * @var \Magento\Sales\Model\Resource\OrderFactory
-     */
-    protected $_orderResourceFactory;
-
-    /**
      * @var \Magento\Framework\Math\CalculatorFactory
      */
     protected $_calculatorFactory;
@@ -228,7 +224,6 @@ class Invoice extends \Magento\Sales\Model\AbstractModel
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param Invoice\Config $invoiceConfig
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
-     * @param \Magento\Sales\Model\Resource\OrderFactory $orderResourceFactory
      * @param \Magento\Framework\Math\CalculatorFactory $calculatorFactory
      * @param \Magento\Sales\Model\Resource\Order\Invoice\Item\CollectionFactory $invoiceItemCollectionFactory
      * @param Invoice\CommentFactory $invoiceCommentFactory
@@ -244,7 +239,6 @@ class Invoice extends \Magento\Sales\Model\AbstractModel
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Sales\Model\Order\Invoice\Config $invoiceConfig,
         \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Magento\Sales\Model\Resource\OrderFactory $orderResourceFactory,
         \Magento\Framework\Math\CalculatorFactory $calculatorFactory,
         \Magento\Sales\Model\Resource\Order\Invoice\Item\CollectionFactory $invoiceItemCollectionFactory,
         \Magento\Sales\Model\Order\Invoice\CommentFactory $invoiceCommentFactory,
@@ -255,7 +249,6 @@ class Invoice extends \Magento\Sales\Model\AbstractModel
     ) {
         $this->_invoiceConfig = $invoiceConfig;
         $this->_orderFactory = $orderFactory;
-        $this->_orderResourceFactory = $orderResourceFactory;
         $this->_calculatorFactory = $calculatorFactory;
         $this->_invoiceItemCollectionFactory = $invoiceItemCollectionFactory;
         $this->_invoiceCommentFactory = $invoiceCommentFactory;
@@ -344,16 +337,6 @@ class Invoice extends \Magento\Sales\Model\AbstractModel
     public function getEntityType()
     {
         return $this->entityType;
-    }
-
-    /**
-     * Retrieve the increment_id of the order
-     *
-     * @return string
-     */
-    public function getOrderIncrementId()
-    {
-        return $this->_orderResourceFactory->create()->getIncrementId($this->getOrderId());
     }
 
     /**
@@ -883,5 +866,15 @@ class Invoice extends \Magento\Sales\Model\AbstractModel
         }
 
         return parent::_afterSave();
+    }
+
+    /**
+     * Returns increment id
+     *
+     * @return string
+     */
+    public function getIncrementId()
+    {
+        return $this->getData('increment_id');
     }
 }

@@ -25,10 +25,14 @@
 namespace Magento\Bundle\Test\Block\Catalog\Product\View\Type;
 
 use Mtf\Block\Block;
+use Mtf\Client\Element;
 use Mtf\Client\Element\Locator;
-use Magento\Bundle\Test\Fixture\CatalogProductBundle;
-use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Bundle\Test\Block\Catalog\Product\View\Type\Option;
+use Magento\Catalog\Test\Page\Product\CatalogProductView;
+use Mtf\Fixture\FixtureInterface;
+use Mtf\Fixture\InjectableFixture;
+use Magento\Bundle\Test\Fixture\Bundle as BundleDataFixture;
+use Magento\Bundle\Test\Fixture\CatalogProductBundle;
 
 /**
  * Class Bundle
@@ -37,60 +41,46 @@ use Magento\Bundle\Test\Block\Catalog\Product\View\Type\Option;
 class Bundle extends Block
 {
     /**
-     * Bundle options block
+     * Selector for single option block
      *
      * @var string
      */
-    protected $bundleBlock = './div[%d]';
+    protected $optionElement = './div[contains(@class,"option")][%d]';
 
     /**
-     * Label item option
+     * Selector for title of option
      *
      * @var string
      */
-    protected $requiredOptions = '[%s(contains(@class,"required"))]';
+    protected $title = './label/span';
 
     /**
-     * Label item option
+     * Selector for required option
      *
      * @var string
      */
-    protected $optionSelect = './/select/option[@value != ""][%d][contains(text(), "%s")]';
+    protected $required = './self::*[contains(@class,"required")]';
 
     /**
-     * Label item option
+     * Selector for select element of option
      *
      * @var string
      */
-    protected $optionLabel = './/div[%d][contains(@class, "field")]//*[contains(text(), "%s")]';
+    protected $selectOption = './/div[@class="control"]/select';
 
     /**
-     * Selector DropDown type
+     * Selector for label of option value element
      *
      * @var string
      */
-    protected $typeDropDown = './/select[contains(@class,"bundle-option-select")]';
+    protected $optionLabel = './/div[@class="control"]//label[contains(@for, "options_")][%d]';
 
     /**
-     * Selector Multiselect type
+     * Selector for option of select element
      *
      * @var string
      */
-    protected $typeMultiple = './/select[contains(@class,"multiselect")]';
-
-    /**
-     * Selector RadioButton type
-     *
-     * @var string
-     */
-    protected $typeRadio = './/input[contains(@class,"radio")]';
-
-    /**
-     * Selector Checkbox type
-     *
-     * @var string
-     */
-    protected $typeCheckbox = './/input[contains(@class,"checkbox")]';
+    protected $option = './/option[%d]';
 
     /**
      * Selector bundle option block for fill
@@ -108,14 +98,171 @@ class Bundle extends Block
      */
     public function addToCart(CatalogProductBundle $product, CatalogProductView $catalogProductView)
     {
-        $fillData = $product->getDataFieldConfig('checkout_data')['source']->getPreset();
-        if (isset($fillData['bundle_options'])) {
-            $this->fillBundleOptions($fillData['bundle_options']);
-        }
-        if (isset($fillData['custom_options'])) {
-            $catalogProductView->getCustomOptionsBlock()->fillCustomOptions($product, $fillData['custom_options']);
-        }
+        $catalogProductView->getViewBlock()->fillOptions($product);
         $catalogProductView->getViewBlock()->clickAddToCart();
+    }
+
+    /**
+     * Get product options
+     *
+     * @param FixtureInterface $product
+     * @return array
+     * @throws \Exception
+     */
+    public function getOptions(FixtureInterface $product)
+    {
+        if ($product instanceof InjectableFixture) {
+            /** @var CatalogProductBundle  $product */
+            $bundleSelections = $product->getBundleSelections();
+            $bundleOptions = isset($bundleSelections['bundle_options']) ? $bundleSelections['bundle_options'] : [];
+        } else {
+            // TODO: Removed after refactoring(removed) old product fixture.
+            /** @var BundleDataFixture $product */
+            $bundleOptions = $product->getBundleOptions();
+        }
+
+        $listFormOptions = $this->getListOptions();
+        $formOptions = [];
+
+        foreach ($bundleOptions as $option) {
+            $title = $option['title'];
+            if (!isset($listFormOptions[$title])) {
+                throw new \Exception("Can't find option: \"{$title}\"");
+            }
+
+            /** @var Element $optionElement */
+            $optionElement = $listFormOptions[$title];
+            $getTypeData = 'get' . $this->optionNameConvert($option['type']) . 'Data';
+
+            $optionData = $this->$getTypeData($optionElement);
+            $optionData['title'] = $title;
+            $optionData['type'] = $option['type'];
+            $optionData['is_require'] = $optionElement->find($this->required, Locator::SELECTOR_XPATH)->isVisible()
+                ? 'Yes'
+                : 'No';
+
+            $formOptions[] = $optionData;
+        }
+
+        return $formOptions;
+    }
+
+    /**
+     * Get list options
+     *
+     * @return array
+     */
+    protected function getListOptions()
+    {
+        $options = [];
+
+        $count = 1;
+        $optionElement = $this->_rootElement->find(sprintf($this->optionElement, $count), Locator::SELECTOR_XPATH);
+        while ($optionElement->isVisible()) {
+            $title = $optionElement->find($this->title, Locator::SELECTOR_XPATH)->getText();
+            $options[$title] = $optionElement;
+
+            ++$count;
+            $optionElement = $this->_rootElement->find(sprintf($this->optionElement, $count), Locator::SELECTOR_XPATH);
+        }
+        return $options;
+    }
+
+    /**
+     * Get data of "Drop-down" option
+     *
+     * @param Element $option
+     * @return array
+     */
+    protected function getDropdownData(Element $option)
+    {
+        $select = $option->find($this->selectOption, Locator::SELECTOR_XPATH, 'select');
+        // Skip "Choose option ..."(option #1)
+        return $this->getSelectOptionsData($select, 2);
+    }
+
+    /**
+     * Get data of "Multiple" option
+     *
+     * @param Element $option
+     * @return array
+     */
+    protected function getMultipleselectData(Element $option)
+    {
+        $multiselect = $option->find($this->selectOption, Locator::SELECTOR_XPATH, 'multiselect');
+        return $this->getSelectOptionsData($multiselect, 1);
+    }
+
+    /**
+     * Get data of "Radio" option
+     *
+     * @param Element $option
+     * @return array
+     */
+    protected function getRadiobuttonsData(Element $option)
+    {
+        $listOptions = [];
+
+        $count = 1;
+        $option = $option->find(sprintf($this->optionLabel, $count), Locator::SELECTOR_XPATH);
+        while ($option->isVisible()) {
+            $listOptions[] = $this->parseOptionText($option->getText());
+            ++$count;
+            $option = $option->find(sprintf($this->optionLabel, $count), Locator::SELECTOR_XPATH);
+        }
+
+        return ['options' => $listOptions];
+    }
+
+    /**
+     * Get data of "Checkbox" option
+     *
+     * @param Element $option
+     * @return array
+     */
+    protected function getCheckboxData(Element $option)
+    {
+        return $this->getRadiobuttonsData($option);
+    }
+
+    /**
+     * Get data from option of select and multiselect
+     *
+     * @param Element $element
+     * @param int $firstOption
+     * @return array
+     */
+    protected function getSelectOptionsData(Element $element, $firstOption = 1)
+    {
+        $listOptions = [];
+
+        $count = $firstOption;
+        $selectOption = $element->find(sprintf($this->option, $count), Locator::SELECTOR_XPATH);
+        while ($selectOption->isVisible()) {
+            $listOptions[] = $this->parseOptionText($selectOption->getText());
+            ++$count;
+            $selectOption = $element->find(sprintf($this->option, $count), Locator::SELECTOR_XPATH);
+        }
+
+        return ['options' => $listOptions];
+    }
+
+    /**
+     * Parse option text to title and price
+     *
+     * @param string $optionText
+     * @return array
+     */
+    protected function parseOptionText($optionText)
+    {
+        preg_match('`^(.*?)\+ ?\$(\d.*?)$`', $optionText, $match);
+        $optionPrice = isset($match[2]) ? str_replace(',', '', $match[2]) : 0;
+        $optionTitle = isset($match[1]) ? trim($match[1]) : $optionText;
+
+        return [
+            'title' => $optionTitle,
+            'price' => $optionPrice
+        ];
     }
 
     /**
@@ -139,61 +286,14 @@ class Bundle extends Block
     }
 
     /**
-     * Get bundle item option
-     *
-     * @param array $fields
-     * @param int $index
-     * @return bool|string
-     *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     */
-    public function displayedBundleItemOption(array $fields, $index)
-    {
-        $bundleOptionBlock = $this->_rootElement->find(sprintf($this->bundleBlock, $index), Locator::SELECTOR_XPATH);
-        $option = $bundleOptionBlock->find(
-            $this->{'type' . $this->optionNameConvert($fields['type'])},
-            Locator::SELECTOR_XPATH
-        );
-        if (!$option->isVisible()) {
-            return '"' . $fields['title'] . '" Option does not equal to fixture option type.';
-        }
-
-        $formatRequired = sprintf(
-            $this->bundleBlock . $this->requiredOptions,
-            $index,
-            (($fields['required'] == 'Yes') ? '' : 'not')
-        );
-        if (!$this->_rootElement->find($formatRequired, Locator::SELECTOR_XPATH)->isVisible()) {
-            return "This Option must be " . ($fields['required'] == 'Yes') ? '' : 'not' . " required.";
-        }
-
-        foreach ($fields['assigned_products'] as $increment => $item) {
-            $isMultiAssigned = count($fields['assigned_products']) > 1;
-            $isSelectType = $fields['type'] == 'Drop-down' || $fields['type'] == 'Multiple Select';
-            $selectOptions = $isMultiAssigned && $isSelectType ? $this->optionSelect : $this->optionLabel;
-            $formatOption = sprintf($selectOptions, ++$increment, $item['name']);
-            if (!$bundleOptionBlock->find($formatOption, Locator::SELECTOR_XPATH)->isVisible()) {
-                return 'SelectOption ' . $item['name'] . ' with index '
-                . $increment . ' data is not equals with fixture SelectOption data.';
-            }
-        }
-        return true;
-    }
-
-    /**
      * Convert option name
      *
-     * @param string $optionName
+     * @param string $optionType
      * @return string
      */
-    protected function optionNameConvert($optionName)
+    protected function optionNameConvert($optionType)
     {
-        if ($end = strpos($optionName, ' ')) {
-            $optionName = substr($optionName, 0, $end);
-        } elseif ($end = strpos($optionName, '-')) {
-            $optionName = substr($optionName, 0, $end) . ucfirst(substr($optionName, ($end + 1)));
-        }
-        return $optionName;
+        $trimmedOptionType = preg_replace('/[^a-zA-Z]/', '', $optionType);
+        return ucfirst(strtolower($trimmedOptionType));
     }
 }

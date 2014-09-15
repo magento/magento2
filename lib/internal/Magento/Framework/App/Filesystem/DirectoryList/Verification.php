@@ -26,7 +26,7 @@
 namespace Magento\Framework\App\Filesystem\DirectoryList;
 
 use Magento\Framework\App\State;
-use Magento\Framework\BootstrapException;
+use Magento\Framework\App\InitException;
 use Magento\Framework\App\Filesystem;
 use Magento\Framework\Filesystem\FilesystemException;
 
@@ -86,7 +86,7 @@ class Verification
      * Create the required directories, if they don't exist, and verify write access for existing directories
      *
      * @return void
-     * @throws BootstrapException
+     * @throws InitException
      */
     public function createAndVerifyDirectories()
     {
@@ -108,7 +108,7 @@ class Verification
 
         if ($fails) {
             $dirList = implode(', ', $fails);
-            throw new BootstrapException("Cannot create or verify write access: {$dirList}");
+            throw new InitException("Cannot create or verify write access: {$dirList}");
         }
     }
 }

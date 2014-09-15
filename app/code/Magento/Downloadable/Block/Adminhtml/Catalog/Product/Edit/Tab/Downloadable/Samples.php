@@ -177,10 +177,16 @@ class Samples extends \Magento\Backend\Block\Widget
                 $fileExist = $fileHelper->ensureFileInFilesystem($file);
 
                 if ($fileExist) {
+                    $name = '<a href="' . $this->getUrl(
+                        'adminhtml/downloadable_product_edit/sample',
+                        array('id' => $item->getId(), '_secure' => true)
+                    ) . '">' . $fileHelper->getFileFromPathFile(
+                        $sampleFile
+                    ) . '</a>';
                     $tmpSampleItem['file_save'] = array(
                         array(
                             'file' => $sampleFile,
-                            'name' => $fileHelper->getFileFromPathFile($sampleFile),
+                            'name' => $name,
                             'size' => $fileHelper->getFileSize($file),
                             'status' => 'old'
                         )

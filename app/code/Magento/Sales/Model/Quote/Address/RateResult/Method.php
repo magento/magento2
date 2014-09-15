@@ -35,15 +35,15 @@ namespace Magento\Sales\Model\Quote\Address\RateResult;
 class Method extends AbstractResult
 {
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param array $data
      */
-    public function __construct(\Magento\Store\Model\StoreManagerInterface $storeManager, array $data = array())
+    public function __construct(\Magento\Framework\StoreManagerInterface $storeManager, array $data = array())
     {
         $this->_storeManager = $storeManager;
         parent::__construct($data);

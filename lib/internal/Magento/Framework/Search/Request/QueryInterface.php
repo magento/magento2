@@ -1,7 +1,5 @@
 <?php
 /**
- * Query Interface
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -25,6 +23,9 @@
  */
 namespace Magento\Framework\Search\Request;
 
+/**
+ * Query Interface
+ */
 interface QueryInterface
 {
     /**

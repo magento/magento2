@@ -95,7 +95,7 @@
         </require>
     </assertProductInCart>
     <assertProductPage module="Magento_Catalog">
-        <severeness>low</severeness>
+        <severeness>middle</severeness>
         <require>
             <catalogProductView class="Magento\Catalog\Test\Page\Product\CatalogProductView" />
             <product class="Mtf\Fixture\FixtureInterface" />
@@ -403,9 +403,6 @@
     <assertProductAttributeAbsenceInUnassignedAttributes module="Magento_Catalog">
         <severeness>low</severeness>
     </assertProductAttributeAbsenceInUnassignedAttributes>
-    <assertProductAttributeAbsenceInVariationsSearch module="Magento_Catalog">
-        <severeness>low</severeness>
-    </assertProductAttributeAbsenceInVariationsSearch>
     <assertProductDuplicateMessage module="Magento_Catalog">
         <severeness>high</severeness>
         <require>

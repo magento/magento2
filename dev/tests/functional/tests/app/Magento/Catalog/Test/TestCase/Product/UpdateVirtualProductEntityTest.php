@@ -131,7 +131,7 @@ class UpdateVirtualProductEntityTest extends Injectable
         // Steps
         $this->productGrid->open();
         $this->productGrid->getProductGrid()->searchAndOpen(['sku' => $this->product->getSku()]);
-        $this->editProductPage->getForm()->fill($product);
-        $this->editProductPage->getFormAction()->save();
+        $this->editProductPage->getProductForm()->fill($product);
+        $this->editProductPage->getFormPageActions()->save();
     }
 }

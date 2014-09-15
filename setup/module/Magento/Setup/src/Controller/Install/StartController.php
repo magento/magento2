@@ -29,6 +29,7 @@ use Magento\Module\Setup\Config;
 use Magento\Module\SetupFactory;
 use Magento\Setup\Model\AdminAccountFactory;
 use Magento\Setup\Model\Logger;
+use Magento\Config\ConfigFactory;
 use Zend\Json\Json;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
@@ -56,6 +57,11 @@ class StartController extends AbstractActionController
     protected $config;
 
     /**
+     * @var ConfigFactory
+     */
+    protected $systemConfig;
+
+    /**
      * @var AdminAccountFactory
      */
     protected $adminAccountFactory;
@@ -81,13 +87,15 @@ class StartController extends AbstractActionController
         AdminAccountFactory $adminAccountFactory,
         Logger $logger,
         Random $random,
-        Config $config
+        Config $config,
+        ConfigFactory $systemConfig
     ) {
         $this->logger = $logger;
         $this->json = $view;
         $this->moduleList = $moduleList->getModules();
         $this->setupFactory = $setupFactory;
         $this->config = $config;
+        $this->systemConfig = $systemConfig;
         $this->adminAccountFactory = $adminAccountFactory;
         $this->random = $random;
     }
@@ -112,7 +120,6 @@ class StartController extends AbstractActionController
             $setup->applyUpdates();
             $this->logger->logSuccess($moduleName);
         }
-
         $this->logger->logSuccess('Artifact');
 
         // Set data to config
@@ -120,6 +127,7 @@ class StartController extends AbstractActionController
             'web/seo/use_rewrites',
             isset($data['config']['rewrites']['allowed']) ? $data['config']['rewrites']['allowed'] : 0
         );
+
         $setup->addConfigData(
             'web/unsecure/base_url',
             isset($data['config']['address']['web']) ? $data['config']['address']['web'] : '{{unsecure_base_url}}'
@@ -163,12 +171,63 @@ class StartController extends AbstractActionController
         } else {
             $key = $data['config']['encrypt']['key'];
         }
-        $this->config->replaceTmpEncryptKey($key);
 
+        $this->config->replaceTmpEncryptKey($key);
         $this->config->replaceTmpInstallDate(date('r'));
 
-        $this->json->setVariable('success', true);
+        $phpPath = $this->phpExecutablePath();
+        exec(
+            $phpPath .
+            'php -f ' . escapeshellarg($this->systemConfig->create()->getMagentoBasePath() .
+                '/dev/shell/run_data_fixtures.php'),
+            $output,
+            $exitCode
+        );
+        if ($exitCode !== 0) {
+            $outputMsg = implode(PHP_EOL, $output);
+            $this->logger->logError(
+                new \Exception('Data Update Failed with Exit Code: ' . $exitCode . PHP_EOL . $outputMsg)
+            );
+            $this->json->setVariable('success', false);
+        } else {
+            $this->logger->logSuccess('Data Updates');
+            $this->json->setVariable('success', true);
+        }
+
         $this->json->setVariable('key', $key);
         return $this->json;
+    }
+
+    /**
+     * @return string
+     * @throws \Exception
+     */
+    private function phpExecutablePath()
+    {
+        try {
+            $phpPath = '';
+            $iniFile = fopen(php_ini_loaded_file(), 'r');
+            while ($line = fgets($iniFile)) {
+                if ((strpos($line, 'extension_dir') !== false) && (strrpos($line, ";") !==0)) {
+                    $extPath = explode("=", $line);
+                    $pathFull = explode("\"", $extPath[1]);
+                    $pathParts[1] = str_replace('\\', '/', $pathFull[1]);
+                    foreach (explode('/', $pathParts[1]) as $piece) {
+                        $phpPath .= $piece . '/';
+                        if (strpos($piece, phpversion()) !== false) {
+                            if (file_exists($phpPath.'bin')) {
+                                $phpPath .= 'bin' . '/';
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+            fclose($iniFile);
+        } catch(\Exception $e){
+            throw $e;
+        }
+
+        return $phpPath;
     }
 }

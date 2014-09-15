@@ -24,7 +24,6 @@
 
 namespace Magento\Paypal\Model\Express;
 
-use Magento\Customer\Model\Customer;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Checkout\Model\Type\Onepage;
 use Magento\Sales\Model\Quote;

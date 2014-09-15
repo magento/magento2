@@ -212,7 +212,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc
     );
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -240,7 +240,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc
      * @param \Magento\Framework\Module\ModuleListInterface $moduleList
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Centinel\Model\Service $centinelService
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Paypal\Model\ConfigFactory $configFactory
      * @param \Magento\Framework\Math\Random $mathRandom
      * @param \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
@@ -257,7 +257,7 @@ class Payflowpro extends \Magento\Payment\Model\Method\Cc
         \Magento\Framework\Module\ModuleListInterface $moduleList,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Centinel\Model\Service $centinelService,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Paypal\Model\ConfigFactory $configFactory,
         \Magento\Framework\Math\Random $mathRandom,
         \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory,

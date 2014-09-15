@@ -1,0 +1,2 @@
+"websiteOrigin/dataSet";"website/data/name";"website/data/code";"constraint"
+"custom_website";"website_upd%isolation%";"code_upd%isolation%";"assertWebsiteSuccessSaveMessage, assertWebsiteInGrid, assertWebsiteForm, assertWebsiteOnStoreForm"

@@ -26,6 +26,7 @@
 namespace Magento\Index\App;
 
 use Magento\Framework\App\Console\Response;
+use Magento\Framework\App;
 use Magento\Framework\AppInterface;
 
 class Indexer implements AppInterface
@@ -95,5 +96,13 @@ class Indexer implements AppInterface
         }
         $this->_response->setCode(0);
         return $this->_response;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function catchException(App\Bootstrap $bootstrap, \Exception $exception)
+    {
+        return false;
     }
 }

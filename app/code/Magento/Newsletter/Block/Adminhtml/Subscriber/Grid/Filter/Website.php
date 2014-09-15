@@ -46,7 +46,7 @@ class Website extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
     protected $_coreRegistry;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -59,7 +59,7 @@ class Website extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
      * @param \Magento\Backend\Block\Context $context
      * @param \Magento\Framework\DB\Helper $resourceHelper
      * @param \Magento\Store\Model\Resource\Website\CollectionFactory $websitesFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
@@ -67,7 +67,7 @@ class Website extends \Magento\Backend\Block\Widget\Grid\Column\Filter\Select
         \Magento\Backend\Block\Context $context,
         \Magento\Framework\DB\Helper $resourceHelper,
         \Magento\Store\Model\Resource\Website\CollectionFactory $websitesFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Framework\Registry $registry,
         array $data = array()
     ) {

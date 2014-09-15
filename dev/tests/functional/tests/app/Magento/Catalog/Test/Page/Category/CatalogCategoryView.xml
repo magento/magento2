@@ -40,11 +40,16 @@
             <locator>.block.filter</locator>
             <strategy>css selector</strategy>
         </layeredNavigationBlock>
-        <toolbar>
-            <class>Magento\Catalog\Test\Block\Product\ProductList\Toolbar</class>
-            <locator>.toolbar-products</locator>
-            <strategy>css selector</strategy>
-        </toolbar>
+        <topToolbar>
+            <class>Magento\Catalog\Test\Block\Product\ProductList\TopToolbar</class>
+            <locator>.//*[contains(@class,"toolbar-products")][1]</locator>
+            <strategy>xpath</strategy>
+        </topToolbar>
+        <bottomToolbar>
+            <class>Magento\Catalog\Test\Block\Product\ProductList\BottomToolbar</class>
+            <locator>.//*[contains(@class,"toolbar-products")][2]</locator>
+            <strategy>xpath</strategy>
+        </bottomToolbar>
         <titleBlock>
             <class>Magento\Theme\Test\Block\Html\Title</class>
             <locator>.page-title h1.title .base</locator>

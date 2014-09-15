@@ -100,8 +100,8 @@ class Inventory extends \Magento\Framework\App\Helper\AbstractHelper
     public function getDoFieldData($field, StockItem $dataObject)
     {
         $possibleMethods = array(
-            'get' . \Magento\Framework\Service\SimpleDataObjectConverter::snakeCaseToCamelCase($field),
-            'is' . \Magento\Framework\Service\SimpleDataObjectConverter::snakeCaseToCamelCase($field)
+            'get' . \Magento\Framework\Service\SimpleDataObjectConverter::snakeCaseToUpperCamelCase($field),
+            'is' . \Magento\Framework\Service\SimpleDataObjectConverter::snakeCaseToUpperCamelCase($field)
         );
 
         foreach ($possibleMethods as $method) {

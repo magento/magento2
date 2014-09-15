@@ -147,7 +147,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface', [], [], '', false);
+        $storeManagerMock = $this->getMock('Magento\Framework\StoreManagerInterface', [], [], '', false);
         $storeManagerMock->expects($this->any())
             ->method('getStore')
             ->will($this->returnValue(new \Magento\Framework\Object()));

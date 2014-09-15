@@ -47,7 +47,7 @@ class MetadataConfig implements MetadataServiceInterface
      * Initialize dependencies.
      *
      * @param ServiceConfigReader $serviceConfigReader
-     * @param AttributeMetadataBuilderInterface|null $attributeMetadataBuilder
+     * @param AttributeMetadataBuilderInterface $attributeMetadataBuilder
      */
     public function __construct(
         ServiceConfigReader $serviceConfigReader,

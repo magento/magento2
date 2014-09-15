@@ -91,7 +91,7 @@ class Rollback extends \Magento\Backup\Controller\Adminhtml\Index
             }
 
             if ($this->getRequest()->getParam('maintenance_mode')) {
-                if (!$this->maintenanceMode->turnOn()) {
+                if (!$this->maintenanceMode->set(true)) {
                     $response->setError(
                         __(
                             'You need more permissions to activate maintenance mode right now.'
@@ -153,7 +153,7 @@ class Rollback extends \Magento\Backup\Controller\Adminhtml\Index
         }
 
         if ($this->getRequest()->getParam('maintenance_mode')) {
-            $this->maintenanceMode->turnOff();
+            $this->maintenanceMode->set(false);
         }
 
         $this->getResponse()->representJson($response->toJson());

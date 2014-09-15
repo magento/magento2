@@ -24,6 +24,8 @@
 namespace Magento\Customer\Block\Widget;
 
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Customer\Service\V1\Data\Eav\ValidationRule;
+use Magento\Customer\Service\V1\Data\Eav\ValidationRuleBuilder;
 
 class DobTest extends \PHPUnit_Framework_TestCase
 {
@@ -340,12 +342,30 @@ class DobTest extends \PHPUnit_Framework_TestCase
      */
     public function getMinDateRangeDataProvider()
     {
+        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         return array(
             array(
-                array(Dob::MIN_DATE_RANGE_KEY => strtotime(self::MIN_DATE)),
+                array(
+                    new ValidationRule(
+                        $helper->getObject('\Magento\Customer\Service\V1\Data\Eav\ValidationRuleBuilder')
+                            ->populateWithArray(
+                                array(
+                                    'name' => Dob::MIN_DATE_RANGE_KEY,
+                                    'value' => strtotime(self::MIN_DATE)
+                                )
+                            )
+                    )
+                ),
                 date('Y/m/d', strtotime(self::MIN_DATE))
             ),
-            array(array(), null)
+            array(
+                array(
+                    new ValidationRule(
+                        $helper->getObject('\Magento\Customer\Service\V1\Data\Eav\ValidationRuleBuilder')
+                    )
+                ),
+                null
+            )
         );
     }
 
@@ -388,12 +408,30 @@ class DobTest extends \PHPUnit_Framework_TestCase
      */
     public function getMaxDateRangeDataProvider()
     {
+        $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         return array(
             array(
-                array(Dob::MAX_DATE_RANGE_KEY => strtotime(self::MAX_DATE)),
+                array(
+                    new ValidationRule(
+                        $helper->getObject('\Magento\Customer\Service\V1\Data\Eav\ValidationRuleBuilder')
+                            ->populateWithArray(
+                                array(
+                                    'name' => Dob::MAX_DATE_RANGE_KEY,
+                                    'value' => strtotime(self::MAX_DATE)
+                                )
+                            )
+                    )
+                ),
                 date('Y/m/d', strtotime(self::MAX_DATE))
             ),
-            array(array(), null)
+            array(
+                array(
+                    new ValidationRule(
+                        $helper->getObject('\Magento\Customer\Service\V1\Data\Eav\ValidationRuleBuilder')
+                    )
+                ),
+                null
+            )
         );
     }
 

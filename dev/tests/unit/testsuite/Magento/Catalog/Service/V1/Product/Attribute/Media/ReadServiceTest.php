@@ -124,7 +124,7 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->storeMock = $this->getMock('\Magento\Store\Model\Store', array(), array(), '', false);
 
-        $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
+        $this->storeManagerMock = $this->getMock('\Magento\Framework\StoreManagerInterface');
         $this->storeManagerMock->expects($this->any())->method('getStore')->will($this->returnValue($this->storeMock));
 
         $this->setFactoryMock = $this->getMock(

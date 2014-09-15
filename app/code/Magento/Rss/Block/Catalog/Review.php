@@ -44,7 +44,7 @@ class Review extends \Magento\Backend\Block\AbstractBlock
     protected $_reviewFactory;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
@@ -53,7 +53,7 @@ class Review extends \Magento\Backend\Block\AbstractBlock
      * @param \Magento\Rss\Model\RssFactory $rssFactory
      * @param \Magento\Framework\Model\Resource\Iterator $resourceIterator
      * @param \Magento\Review\Model\ReviewFactory $reviewFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param array $data
      */
     public function __construct(
@@ -61,7 +61,7 @@ class Review extends \Magento\Backend\Block\AbstractBlock
         \Magento\Rss\Model\RssFactory $rssFactory,
         \Magento\Framework\Model\Resource\Iterator $resourceIterator,
         \Magento\Review\Model\ReviewFactory $reviewFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         array $data = array()
     ) {
         $this->_rssFactory = $rssFactory;

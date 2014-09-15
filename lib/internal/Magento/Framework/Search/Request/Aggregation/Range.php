@@ -1,7 +1,5 @@
 <?php
 /**
- * Range
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -26,6 +24,7 @@
 namespace Magento\Framework\Search\Request\Aggregation;
 
 /**
+ * Range
  * @SuppressWarnings(PHPMD.ShortVariable)
  */
 class Range

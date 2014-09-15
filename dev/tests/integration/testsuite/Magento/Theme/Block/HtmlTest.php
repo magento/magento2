@@ -68,7 +68,7 @@ class HtmlTest extends \PHPUnit_Framework_TestCase
             array('scopeConfig' => $scopeConfig, 'urlBuilder' => $urlBuilder)
         );
         $storeManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Store\Model\StoreManagerInterface'
+            'Magento\Framework\StoreManagerInterface'
         );
         $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Theme\Block\Html',

@@ -97,7 +97,7 @@ class SpecialTest extends \PHPUnit_Framework_TestCase
 
         $eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface', [], [], '', false);
         $requestMock = $this->getMock('Magento\Framework\App\RequestInterface', [], [], '', false);
-        $storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $storeManagerMock = $this->getMock('Magento\Framework\StoreManagerInterface');
         $urlBuilderMock = $this->getMock('Magento\Framework\UrlInterface', [], [], '', false);
         $this->storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
         $scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface', [], [], '', false);

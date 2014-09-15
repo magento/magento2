@@ -119,12 +119,13 @@ class CreateProductReviewBackendEntityTest extends Injectable
      * Run Create Product Review Entity Backend Test
      *
      * @param ReviewInjectable $review
-     * @return void
+     * @return array
      */
     public function test(ReviewInjectable $review)
     {
         // Precondition:
-        $filter = ['id' => $review->getDataFieldConfig('entity_id')['source']->getEntity()->getId()];
+        $product = $review->getDataFieldConfig('entity_id')['source']->getEntity();
+        $filter = ['id' => $product->getId()];
         $this->review = $review;
 
         // Steps:
@@ -133,6 +134,8 @@ class CreateProductReviewBackendEntityTest extends Injectable
         $this->reviewEdit->getProductGrid()->searchAndOpen($filter);
         $this->reviewEdit->getReviewForm()->fill($this->review);
         $this->reviewEdit->getPageActions()->save();
+
+        return ['product' => $product];
     }
 
     /**
@@ -143,12 +146,11 @@ class CreateProductReviewBackendEntityTest extends Injectable
     public function tearDown()
     {
         $this->ratingIndex->open();
-        $ratingGrid = $this->ratingIndex->getRatingGrid();
-        $pageActions = $this->ratingEdit->getPageActions();
-        foreach ($this->review->getRatings() as $rating) {
-            $filter = ['rating_code' => $rating['title']];
-            $ratingGrid->searchAndOpen($filter);
-            $pageActions->delete();
+        if ($this->review instanceof ReviewInjectable) {
+            foreach ($this->review->getRatings() as $rating) {
+                $this->ratingIndex->getRatingGrid()->searchAndOpen(['rating_code' => $rating['title']]);
+                $this->ratingEdit->getPageActions()->delete();
+            }
         }
     }
 }

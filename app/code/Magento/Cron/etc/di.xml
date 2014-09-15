@@ -31,9 +31,6 @@
             <argument name="defaultReader" xsi:type="object">Magento\Store\Model\Config\Reader\DefaultReader</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\App\Cron">
-        <plugin name="application_initializer" type="Magento\Cron\App\Cron\Plugin\ApplicationInitializer" sortOrder="10"/>
-    </type>
     <type name="Magento\Backend\Model\Config\Structure\Converter">
         <plugin name="cron_backend_config_structure_converter_plugin" type="Magento\Cron\Model\Backend\Config\Structure\Converter" />
     </type>

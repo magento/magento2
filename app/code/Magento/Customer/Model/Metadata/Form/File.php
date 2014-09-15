@@ -25,6 +25,8 @@
  */
 namespace Magento\Customer\Model\Metadata\Form;
 
+use Magento\Framework\Service\ArrayObjectSearch;
+
 class File extends AbstractData
 {
     /**
@@ -147,9 +149,12 @@ class File extends AbstractData
         $label = $value['name'];
         $rules = $this->getAttribute()->getValidationRules();
         $extension = pathinfo($value['name'], PATHINFO_EXTENSION);
-
-        if (!empty($rules['file_extensions'])) {
-            $extensions = explode(',', $rules['file_extensions']);
+        $fileExtensions = ArrayObjectSearch::getArrayElementByName(
+            $rules,
+            'file_extensions'
+        );
+        if (!is_null($fileExtensions)) {
+            $extensions = explode(',', $fileExtensions);
             $extensions = array_map('trim', $extensions);
             if (!in_array($extension, $extensions)) {
                 return array(__('"%1" is not a valid file extension.', $extension));
@@ -167,9 +172,13 @@ class File extends AbstractData
             return array(__('"%1" is not a valid file.', $label));
         }
 
-        if (!empty($rules['max_file_size'])) {
+        $maxFileSize = ArrayObjectSearch::getArrayElementByName(
+            $rules,
+            'max_file_size'
+        );
+        if (!is_null($maxFileSize)) {
             $size = $value['size'];
-            if ($rules['max_file_size'] < $size) {
+            if ($maxFileSize < $size) {
                 return array(__('"%1" exceeds the allowed file size.', $label));
             }
         }

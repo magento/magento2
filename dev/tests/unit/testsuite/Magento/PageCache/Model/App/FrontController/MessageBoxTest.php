@@ -138,6 +138,10 @@ class MessageBoxTest extends \PHPUnit_Framework_TestCase
             ->method('setPath')
             ->with('/')
             ->will($this->returnValue($this->publicCookieMetadataMock));
+        $this->publicCookieMetadataMock->expects(($this->exactly($numOfCalls)))
+            ->method('setHttpOnly')
+            ->with(false)
+            ->will($this->returnValue($this->publicCookieMetadataMock));
         $this->cookieManagerMock->expects($this->exactly($numOfCalls))
             ->method('setPublicCookie')
             ->with(

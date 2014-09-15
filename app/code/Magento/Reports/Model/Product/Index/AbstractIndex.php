@@ -36,14 +36,14 @@ abstract class AbstractIndex extends \Magento\Framework\Model\AbstractModel
     protected $_countCacheKey;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
-     * @var \Magento\Log\Model\Visitor
+     * @var \Magento\Customer\Model\Visitor
      */
-    protected $_logVisitor;
+    protected $_customerVisitor;
 
     /**
      * @var \Magento\Customer\Model\Session
@@ -68,8 +68,8 @@ abstract class AbstractIndex extends \Magento\Framework\Model\AbstractModel
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Log\Model\Visitor $logVisitor
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Customer\Model\Visitor $customerVisitor
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Session\Generic $reportSession
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
@@ -81,8 +81,8 @@ abstract class AbstractIndex extends \Magento\Framework\Model\AbstractModel
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Log\Model\Visitor $logVisitor,
+        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Customer\Model\Visitor $customerVisitor,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Session\Generic $reportSession,
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
@@ -94,7 +94,7 @@ abstract class AbstractIndex extends \Magento\Framework\Model\AbstractModel
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->_storeManager = $storeManager;
         $this->dateTime = $dateTime;
-        $this->_logVisitor = $logVisitor;
+        $this->_customerVisitor = $customerVisitor;
         $this->_customerSession = $customerSession;
         $this->_reportSession = $reportSession;
         $this->_productVisibility = $productVisibility;
@@ -137,7 +137,7 @@ abstract class AbstractIndex extends \Magento\Framework\Model\AbstractModel
         if ($this->hasData('visitor_id')) {
             return $this->getData('visitor_id');
         }
-        return $this->_logVisitor->getId();
+        return $this->_customerVisitor->getId();
     }
 
     /**

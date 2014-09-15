@@ -23,7 +23,7 @@
  */
 namespace Magento\Backup\Helper;
 
-use Magento\Framework\App\State\MaintenanceMode;
+use Magento\Framework\App\MaintenanceMode;
 
 /**
  * Backup data helper

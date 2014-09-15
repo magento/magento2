@@ -76,7 +76,7 @@ class ReadService implements ReadServiceInterface
     protected $attributeFactory;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $storeManager;
 
@@ -86,7 +86,7 @@ class ReadService implements ReadServiceInterface
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media $mediaGallery
      * @param \Magento\Catalog\Model\Resource\Eav\AttributeFactory $attributeFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param MediaImageBuilder $mediaImageBuilder
      * @param \Magento\Catalog\Model\ProductRepository $productRepository
      * @param GalleryEntryBuilder $galleryEntryBuilder
@@ -97,7 +97,7 @@ class ReadService implements ReadServiceInterface
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Media $mediaGallery,
         \Magento\Catalog\Model\Resource\Eav\AttributeFactory $attributeFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         MediaImageBuilder $mediaImageBuilder,
         \Magento\Catalog\Model\ProductRepository $productRepository,
         GalleryEntryBuilder $galleryEntryBuilder

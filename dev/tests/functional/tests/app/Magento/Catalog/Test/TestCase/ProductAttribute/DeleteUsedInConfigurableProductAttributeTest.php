@@ -28,7 +28,7 @@ use Mtf\TestCase\Injectable;
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductAttributeNew;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductAttributeIndex;
-use Magento\ConfigurableProduct\Test\Fixture\CatalogProductConfigurable;
+use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProductInjectable;
 
 /**
  * Test Creation for Delete Used in Configurable ProductAttribute
@@ -81,16 +81,16 @@ class DeleteUsedInConfigurableProductAttributeTest extends Injectable
     /**
      * Run Delete used in configurable product attribute test
      *
-     * @param CatalogProductConfigurable $product
+     * @param ConfigurableProductInjectable $product
      * @return array
      */
-    public function test(CatalogProductConfigurable $product)
+    public function test(ConfigurableProductInjectable $product)
     {
         // Precondition
         $product->persist();
         /** @var CatalogProductAttribute $attribute */
-        $attribute = $product->getConfigurableAttributesData()['attributes'][0];
-
+        $attribute = $product->getDataFieldConfig('configurable_attributes_data')['source']
+            ->getAttributes()['attribute_0'];
         // Steps
         $this->attributeIndex->open();
         $this->attributeIndex->getGrid()->searchAndOpen(['attribute_code' => $attribute->getAttributeCode()]);

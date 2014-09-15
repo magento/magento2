@@ -300,6 +300,7 @@
                     <google_product_category />
                     <product_type />
                 </base_attributes>
+                <password backend_model="Magento\Backend\Model\Config\Backend\Encrypted" />
             </googleshopping>
         </google>
     </default>

@@ -39,19 +39,19 @@ class ReadService implements ReadServiceInterface
     protected $addressConverter;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $storeManager;
 
     /**
      * @param \Magento\Checkout\Service\V1\QuoteLoader $quoteLoader
      * @param AddressConverter $addressConverter
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Checkout\Service\V1\QuoteLoader $quoteLoader,
         AddressConverter $addressConverter,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Framework\StoreManagerInterface $storeManager
     ) {
         $this->quoteLoader = $quoteLoader;
         $this->addressConverter = $addressConverter;

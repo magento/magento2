@@ -58,7 +58,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_scopePullMock = $this->getMock('Magento\Framework\App\Config\ScopePool', [], [], '', false);
-        $this->_storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $this->_storeManagerMock = $this->getMock('Magento\Framework\StoreManagerInterface');
         $this->_initialConfigMock = $this->getMock('Magento\Framework\App\Config\Initial', [], [], '', false);
         $this->_collectionFactory = $this->getMock(
             'Magento\Store\Model\Resource\Config\Collection\ScopedFactory',

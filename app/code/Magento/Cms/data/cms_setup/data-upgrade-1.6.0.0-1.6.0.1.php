@@ -151,10 +151,6 @@ $pageContent = <<<EOD
             <td>The items that you have in the Compare Products list.</td>
         </tr>
         <tr>
-            <th>CURRENCY</th>
-            <td>Your preferred currency</td>
-        </tr>
-        <tr>
             <th>CUSTOMER</th>
             <td>An encrypted version of your customer id with the store.</td>
         </tr>

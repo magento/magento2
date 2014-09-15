@@ -101,16 +101,16 @@ class AttributeMetadataConverterTest extends \PHPUnit_Framework_TestCase
         $frontendInput = 'frontendInput';
         $inputFilter = 'inputFilter';
         $storeLabel = 'storeLabel';
-        $isVisible = 'isVisible';
-        $isRequired = 'isRequired';
-        $multilineCount = 'multilineCount';
+        $isVisible = true;
+        $isRequired = true;
+        $multilineCount = 0;
         $dataModel = 'dataModel';
         $frontendLabel = 'frontendLabel';
         $backendType = 'backendType';
         $note = 'note';
-        $isSystem = 'isSystem';
-        $isUserDefined = 'isUserDefined';
-        $sortOrder = 'sortOrder';
+        $isSystem = true;
+        $isUserDefined = true;
+        $sortOrder = 0;
 
         $attribute->expects($this->once())->method('getAttributeCode')->will($this->returnValue($attributeCode));
         $attribute->expects($this->once())->method('getFrontendInput')->will($this->returnValue($frontendInput));

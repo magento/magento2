@@ -177,22 +177,6 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->_model->loginById($customerId));
     }
 
-    public function testLogin()
-    {
-        $customerId = 1;
-        $username = 'TestName';
-        $password = 'TestPassword';
-
-        $customerDataMock = $this->prepareLoginDataMock($customerId);
-
-        $this->customerAccountServiceMock->expects($this->once())
-            ->method('authenticate')
-            ->with($this->equalTo($username), $this->equalTo($password))
-            ->will($this->returnValue($customerDataMock));
-
-        $this->assertTrue($this->_model->login($username, $password));
-    }
-
     /**
      * @param $customerId
      * @return \PHPUnit_Framework_MockObject_MockObject

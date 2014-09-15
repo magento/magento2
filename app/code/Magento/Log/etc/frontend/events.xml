@@ -24,22 +24,10 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
-    <event name="controller_action_predispatch">
-        <observer name="log" instance="Magento\Log\Model\Visitor" method="initByRequest" />
+    <event name="visitor_init">
+        <observer name="log" instance="Magento\Log\Model\Visitor" method="logNewVisitor" />
     </event>
-    <event name="controller_action_postdispatch">
-        <observer name="log" instance="Magento\Log\Model\Visitor" method="saveByRequest" />
-    </event>
-    <event name="customer_data_object_login">
-        <observer name="log" instance="Magento\Log\Model\Visitor" method="bindCustomerLogin" />
-    </event>
-    <event name="customer_logout">
-        <observer name="log" instance="Magento\Log\Model\Visitor" method="bindCustomerLogout" />
-    </event>
-    <event name="sales_quote_save_after">
-        <observer name="log" instance="Magento\Log\Model\Visitor" method="bindQuoteCreate" />
-    </event>
-    <event name="checkout_quote_destroy">
-        <observer name="log" instance="Magento\Log\Model\Visitor" method="bindQuoteDestroy" />
+    <event name="visitor_activity_save">
+        <observer name="log" instance="Magento\Log\Model\Visitor" method="logVisitorActivity" />
     </event>
 </config>

@@ -36,7 +36,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_storeManagerMock;
 
@@ -91,7 +91,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
 
         $eavFactoryMock = $this->getMock('Magento\Eav\Model\Entity\AttributeFactory', array(), array(), '', false);
 
-        $this->_storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $this->_storeManagerMock = $this->getMock('Magento\Framework\StoreManagerInterface');
 
         $this->_connectionMock = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',

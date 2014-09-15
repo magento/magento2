@@ -32,7 +32,6 @@
     <virtualType name="Magento\Centinel\Model\Session" type="Magento\Framework\Session\Generic">
         <arguments>
             <argument name="storage" xsi:type="object">Magento\Centinel\Model\Session\Storage</argument>
-            <argument name="sessionName" xsi:type="string">adminhtml</argument>
         </arguments>
     </virtualType>
     <type name="Magento\Centinel\Model\Service">

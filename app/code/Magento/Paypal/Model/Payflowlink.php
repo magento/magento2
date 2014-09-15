@@ -160,7 +160,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
      * @param \Magento\Framework\Module\ModuleListInterface $moduleList
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Centinel\Model\Service $centinelService
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Paypal\Model\ConfigFactory $configFactory
      * @param \Magento\Framework\Math\Random $mathRandom
      * @param \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
@@ -183,7 +183,7 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
         \Magento\Framework\Module\ModuleListInterface $moduleList,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Centinel\Model\Service $centinelService,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Paypal\Model\ConfigFactory $configFactory,
         \Magento\Framework\Math\Random $mathRandom,
         \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory,

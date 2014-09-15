@@ -42,6 +42,11 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
     protected static $reportDir = '';
 
     /**
+     * @var string
+     */
+    protected static $pathToSource = '';
+
+    /**
      * @var array
      */
     protected static $whiteList = array();
@@ -58,7 +63,8 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
      */
     public static function setUpBeforeClass()
     {
-        self::$reportDir = Utility\Files::init()->getPathToSource() . '/dev/tests/static/report';
+        self::$pathToSource = Utility\Files::init()->getPathToSource();
+        self::$reportDir = self::$pathToSource . '/dev/tests/static/report';
         if (!is_dir(self::$reportDir)) {
             mkdir(self::$reportDir, 0777);
         }
@@ -163,23 +169,59 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
     /**
      * Run mess detector on code
      *
+     * @param array $whiteList
      * @return void
+     * @dataProvider whiteListDataProvider
      */
-    public function testCodeMess()
+    public function testCodeMess($whiteList)
     {
-        $reportFile = self::$reportDir . '/phpmd_report.xml';
+        if (count($whiteList) == 1) {
+            $formattedPath = preg_replace('~/~', '_', preg_replace('~' . self::$pathToSource . '~', '', $whiteList[0]));
+        } else {
+            $formattedPath = '_app_lib';
+        }
+        $reportFile = self::$reportDir . '/phpmd_report' . $formattedPath . '.xml';
         $codeMessDetector = new CodeMessDetector(realpath(__DIR__ . '/_files/phpmd/ruleset.xml'), $reportFile);
 
         if (!$codeMessDetector->canRun()) {
             $this->markTestSkipped('PHP Mess Detector is not available.');
         }
 
-        self::setupFileLists();
         $this->assertEquals(
             PHP_PMD_TextUI_Command::EXIT_SUCCESS,
-            $codeMessDetector->run(self::$whiteList, self::$blackList),
+            $codeMessDetector->run($whiteList, self::$blackList),
             "PHP Code Mess has found error(s): See detailed report in {$reportFile}"
         );
+
+        // delete empty reports
+        unlink($reportFile);
+    }
+
+    /**
+     * To improve the test execution performance the whitelist is split into smaller parts:
+     *  - in case of dev code (tests, tools, etc) each whitelist entry is fed separately to phpmd
+     *  - app/lib code is still being executed within a single whitelist to make sure that all design
+     *    metrics (depth of inheritance, number of children, etc.) are being calculated in a correct way.
+     * @return array
+     */
+    public function whiteListDataProvider()
+    {
+        $whiteList = array();
+        $testCodePattern = '~' . self::$pathToSource . '/dev/~';
+        $nonTestCode = array();
+
+        self::setupFileLists();
+
+        foreach (self::$whiteList as $path) {
+            if (!preg_match($testCodePattern, $path)) {
+                $nonTestCode[] = $path;
+            } else {
+                $whiteList[] = array(array($path));
+            }
+        }
+        $whiteList[] = array($nonTestCode);
+
+        return $whiteList;
     }
 
     /**

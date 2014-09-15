@@ -1,7 +1,5 @@
 <?php
 /**
- * Search Request schema locator
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -25,6 +23,9 @@
  */
 namespace Magento\Framework\Search\Request\Config;
 
+/**
+ * Search Request schema locator
+ */
 class SchemaLocator implements \Magento\Framework\Config\SchemaLocatorInterface
 {
     /**

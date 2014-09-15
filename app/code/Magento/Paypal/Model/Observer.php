@@ -196,7 +196,7 @@ class Observer
                 $result = $this->_coreData->jsonDecode($controller->getResponse()->getBody('default'));
 
                 if (empty($result['error'])) {
-                    $this->_view->loadLayout('checkout_onepage_review');
+                    $this->_view->loadLayout('checkout_onepage_review', true, true, false);
                     $html = $this->_view->getLayout()->getBlock('paypal.iframe')->toHtml();
                     $result['update_section'] = array('name' => 'paypaliframe', 'html' => $html);
                     $result['redirect'] = false;

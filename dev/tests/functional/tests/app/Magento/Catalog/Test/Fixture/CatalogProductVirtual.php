@@ -72,6 +72,9 @@ class CatalogProductVirtual extends InjectableFixture
         $dataSet = '',
         $persist = false
     ) {
+        if (!isset($data['url_key']) && isset($data['name'])) {
+            $data['url_key'] = trim(strtolower(preg_replace('#[^0-9a-z%]+#i', '-', $data['name'])), '-');
+        }
         parent::__construct(
             $configuration,
             $repositoryFactory,
@@ -82,10 +85,6 @@ class CatalogProductVirtual extends InjectableFixture
             $dataSet,
             $persist
         );
-
-        if (!isset($this->data['url_key']) && isset($this->data['name'])) {
-            $this->data['url_key'] = trim(strtolower(preg_replace('#[^0-9a-z%]+#i', '-', $this->data['name'])), '-');
-        }
     }
 
     protected $dataConfig = [

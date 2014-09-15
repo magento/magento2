@@ -28,17 +28,26 @@ use Mtf\Fixture\FixtureInterface;
 
 /**
  * Class CheckoutData
+ * Data for fill product form on frontend
+ *
  * Data keys:
  *  - preset (Checkout data verification preset name)
  */
 class CheckoutData implements FixtureInterface
 {
     /**
-     * Current preset
+     * Data set configuration settings
      *
-     * @var string
+     * @var array
      */
-    protected $currentPreset;
+    protected $params;
+
+    /**
+     * Prepared dataSet data
+     *
+     * @var array
+     */
+    protected $data;
 
     /**
      * @constructor
@@ -48,9 +57,10 @@ class CheckoutData implements FixtureInterface
     public function __construct(array $params, array $data = [])
     {
         $this->params = $params;
-        $this->data = (isset($data['value']) && $data['value'] != '-') ? $data['value'] : null;
-        if (isset($data['preset'])) {
-            $this->currentPreset = $data['preset'];
+        $this->data = isset($data['preset']) ? $this->getPreset($data['preset']) : [];
+
+        if (isset($data['value'])) {
+            $this->data = array_replace_recursive($this->data, $data['value']);
         }
     }
 
@@ -90,14 +100,52 @@ class CheckoutData implements FixtureInterface
     /**
      * Return array preset
      *
+     * @param string $name
      * @return array|null
      */
-    public function getPreset()
+    protected function getPreset($name)
     {
-        $presets = [];
-        if (!isset($presets[$this->currentPreset])) {
-            return null;
-        }
-        return $presets[$this->currentPreset];
+        $presets = [
+            'MAGETWO-23062' => [
+                'custom_options' => [
+                    [
+                        'title' => 0,
+                        'value' => 0
+                    ]
+                ]
+            ],
+            'MAGETWO-23063' => [
+                'custom_options' => [
+                    [
+                        'title' => 0,
+                        'value' => 0
+                    ]
+                ]
+            ],
+            'options-suite' => [
+                'custom_options' => [
+                    [
+                        'title' => 0,
+                        'value' => 'Field value 1 %isolation%'
+                    ],
+                    [
+                        'title' => 1,
+                        'value' => 'Field value 2 %isolation%'
+                    ],
+                    [
+                        'title' => 2,
+                        'value' => 1
+                    ],
+                    [
+                        'title' => 3,
+                        'value' => 0
+                    ]
+                ]
+            ],
+            'order_default' => [
+                'qty' => 2
+            ]
+        ];
+        return isset($presets[$name]) ? $presets[$name] : null;
     }
 }

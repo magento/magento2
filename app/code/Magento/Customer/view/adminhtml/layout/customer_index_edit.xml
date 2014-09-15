@@ -30,7 +30,8 @@
     <referenceContainer name="left">
         <block class="Magento\Customer\Block\Adminhtml\Edit\Tabs" name="customer_edit_tabs">
             <block class="Magento\Customer\Block\Adminhtml\Edit\Tab\View" name="customer_edit_tab_view" template="tab/view.phtml">
-                <block class="Magento\Customer\Block\Adminhtml\Edit\Tab\View\Sales" name="sales" template="tab/view/sales.phtml" before="-"/>
+                <block class="Magento\Customer\Block\Adminhtml\Edit\Tab\View\PersonalInfo" name="personal_info" template="tab/view/personal_info.phtml"/>
+                <block class="Magento\Customer\Block\Adminhtml\Edit\Tab\View\Sales" name="sales" template="tab/view/sales.phtml"/>
                 <block class="Magento\Customer\Block\Adminhtml\Edit\Tab\View\Accordion" name="accordion"/>
             </block>
             <action method="addTab">

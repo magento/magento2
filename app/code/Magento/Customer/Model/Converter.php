@@ -28,7 +28,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Customer\Service\V1\Data\Customer as CustomerDataObject;
 use Magento\Customer\Service\V1\Data\CustomerBuilder as CustomerDataObjectBuilder;
 use Magento\Framework\Service\ExtensibleDataObjectConverter;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\StoreManagerInterface;
 
 /**
  * Customer Model converter.
@@ -48,7 +48,7 @@ class Converter
     protected $_customerFactory;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $storeManager;
 

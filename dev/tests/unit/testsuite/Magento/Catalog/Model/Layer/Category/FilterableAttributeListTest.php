@@ -52,7 +52,7 @@ class FilterableAttributeListTest extends \PHPUnit_Framework_TestCase
             '\Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory', array('create'), array(), '', false);
 
         $this->storeManagerMock = $this->getMock(
-            '\Magento\Store\Model\StoreManagerInterface', array(), array(), '', false
+            '\Magento\Framework\StoreManagerInterface', array(), array(), '', false
         );
 
         $this->layerMock = $this->getMock(

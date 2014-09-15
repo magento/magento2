@@ -64,7 +64,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected $_filterManagerMock;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_storeManagerMock;
 
@@ -76,7 +76,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->_scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->_escaperMock = $this->getMock('Magento\Framework\Escaper');
         $this->_filterManagerMock = $this->getMock('Magento\Framework\Filter\FilterManager', [], [], '', false);
-        $this->_storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface');
+        $this->_storeManagerMock = $this->getMock('Magento\Framework\StoreManagerInterface');
 
         $this->_model = new \Magento\CatalogSearch\Helper\Data(
             $this->_contextMock,

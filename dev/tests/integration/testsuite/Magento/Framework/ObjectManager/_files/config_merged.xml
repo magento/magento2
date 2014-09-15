@@ -23,9 +23,9 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <preference for="Magento\Framework\Module\UpdaterInterface" type="Magento\Framework\Module\UpdaterOne" />
-    <preference for="Magento\Framework\Module\UpdaterInterfaceTwo" type="Magento\Framework\Module\UpdaterTwo"/>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <preference for="Magento\Framework\Module\SomeInterface" type="Magento\Framework\Module\ClassOne" />
+    <preference for="Magento\Framework\Module\SomeInterfaceTwo" type="Magento\Framework\Module\ClassTwo" />
     <type name="Magento\Framework\App\Arguments\Loader" shared="false">
         <arguments>
             <argument name="customFile" xsi:type="init_parameter">Magento\Framework\App\Arguments\Loader::PARAM_CUSTOM_FILE</argument>

@@ -26,7 +26,7 @@ namespace Magento\Customer\Model;
 
 use Magento\Customer\Model\CustomerFactory;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\StoreManagerInterface;
 
 /**
  * Registry for \Magento\Customer\Model\Customer
@@ -51,7 +51,7 @@ class CustomerRegistry
     const REGISTRY_SEPARATOR = ':';
 
     /**
-     * @var StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     private $storeManager;
 

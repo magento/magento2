@@ -24,11 +24,6 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <type name="Magento\Catalog\Model\Session">
-        <arguments>
-            <argument name="sessionName" xsi:type="string">frontend</argument>
-        </arguments>
-    </type>
     <type name="Magento\Catalog\Model\Resource\Category\Collection">
         <arguments>
             <argument name="fetchStrategy" xsi:type="object">Magento\Framework\Data\Collection\Db\FetchStrategy\Cache</argument>

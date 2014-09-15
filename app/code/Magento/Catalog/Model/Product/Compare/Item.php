@@ -74,24 +74,24 @@ class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
     protected $_customerSession;
 
     /**
-     * Log visitor
+     * Customer visitor
      *
-     * @var \Magento\Log\Model\Visitor
+     * @var \Magento\Customer\Model\Visitor
      */
-    protected $_logVisitor;
+    protected $_customerVisitor;
 
     /**
      * Store manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Log\Model\Visitor $logVisitor
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Customer\Model\Visitor $customerVisitor
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Catalog\Helper\Product\Compare $catalogProductCompare
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
@@ -101,8 +101,8 @@ class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Log\Model\Visitor $logVisitor,
+        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Customer\Model\Visitor $customerVisitor,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Catalog\Helper\Product\Compare $catalogProductCompare,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
@@ -110,7 +110,7 @@ class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
         array $data = array()
     ) {
         $this->_storeManager = $storeManager;
-        $this->_logVisitor = $logVisitor;
+        $this->_customerVisitor = $customerVisitor;
         $this->_customerSession = $customerSession;
         $this->_catalogProductCompare = $catalogProductCompare;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
@@ -267,7 +267,7 @@ class Item extends \Magento\Framework\Model\AbstractModel implements \Magento\Fr
     public function getVisitorId()
     {
         if (!$this->hasData('visitor_id')) {
-            $visitorId = $this->_logVisitor->getId();
+            $visitorId = $this->_customerVisitor->getId();
             $this->setData('visitor_id', $visitorId);
         }
         return $this->getData('visitor_id');

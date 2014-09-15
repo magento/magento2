@@ -33,6 +33,7 @@ use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
  *
  *  Data keys:
  *  - presets
+ *  - attributes
  */
 class AssignedAttributes implements FixtureInterface
 {
@@ -66,13 +67,19 @@ class AssignedAttributes implements FixtureInterface
     public function __construct(FixtureFactory $fixtureFactory, array $params, array $data = [])
     {
         $this->params = $params;
-        if (isset($data['presets']) && $data['presets'] !== '-') {
+        if (isset($data['presets']) && is_string($data['presets'])) {
             $presets = explode(',', $data['presets']);
             foreach ($presets as $preset) {
                 /** @var CatalogProductAttribute $attribute */
                 $attribute = $fixtureFactory->createByCode('catalogProductAttribute', ['dataSet' => $preset]);
                 $attribute->persist();
 
+                $this->data[] = $attribute->getAttributeCode();
+                $this->attributes[] = $attribute;
+            }
+        } elseif (isset($data['attributes']) && is_array($data['attributes'])) {
+            foreach ($data['attributes'] as $attribute) {
+                /** @var CatalogProductAttribute $attribute */
                 $this->data[] = $attribute->getAttributeCode();
                 $this->attributes[] = $attribute;
             }

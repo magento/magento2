@@ -65,14 +65,11 @@ class Account extends \Magento\Framework\App\Action\Action
     /** @var \Magento\Framework\UrlFactory */
     protected $_urlFactory;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface */
+    /** @var \Magento\Framework\StoreManagerInterface */
     protected $_storeManager;
 
     /** @var \Magento\Framework\App\Config\ScopeConfigInterface */
     protected $_scopeConfig;
-
-    /** @var \Magento\Framework\App\State */
-    protected $appState;
 
     /** @var CustomerAccountServiceInterface  */
     protected $_customerAccountService;
@@ -82,9 +79,8 @@ class Account extends \Magento\Framework\App\Action\Action
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Helper\Address $addressHelper
      * @param \Magento\Framework\UrlFactory $urlFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\App\State $appState
      * @param CustomerAccountServiceInterface $customerAccountService
      */
     public function __construct(
@@ -92,9 +88,8 @@ class Account extends \Magento\Framework\App\Action\Action
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Helper\Address $addressHelper,
         \Magento\Framework\UrlFactory $urlFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\App\State $appState,
         CustomerAccountServiceInterface $customerAccountService
     ) {
         $this->_session = $customerSession;
@@ -102,7 +97,6 @@ class Account extends \Magento\Framework\App\Action\Action
         $this->_urlFactory = $urlFactory;
         $this->_storeManager = $storeManager;
         $this->_scopeConfig = $scopeConfig;
-        $this->appState = $appState;
         $this->_customerAccountService = $customerAccountService;
         parent::__construct($context);
     }
@@ -135,10 +129,6 @@ class Account extends \Magento\Framework\App\Action\Action
      */
     public function dispatch(RequestInterface $request)
     {
-        if (!$this->appState->isInstalled()) {
-            parent::dispatch($request);
-        }
-
         if (!$this->getRequest()->isDispatched()) {
             parent::dispatch($request);
         }

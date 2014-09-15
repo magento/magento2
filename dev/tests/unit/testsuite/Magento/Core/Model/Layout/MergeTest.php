@@ -88,7 +88,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
 
         $this->_store = $this->getMock('Magento\Store\Model\Store', array(), array(), '', false);
         $this->_store->expects($this->any())->method('getId')->will($this->returnValue(20));
-        $storeManager = $this->getMockForAbstractClass('Magento\Store\Model\StoreManagerInterface');
+        $storeManager = $this->getMockForAbstractClass('Magento\Framework\StoreManagerInterface');
         $storeManager->expects($this->once())->method('getStore')->with(null)->will($this->returnValue($this->_store));
 
         $this->_resource = $this->getMock('Magento\Core\Model\Resource\Layout\Update', array(), array(), '', false);
@@ -292,31 +292,25 @@ class MergeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(self::FIXTURE_LAYOUT_XML, $this->_model->asString());
     }
 
-    public function testLoadDbAppInstalled()
+    public function testLoadDbApp()
     {
-        $this->_appState->expects($this->any())->method('isInstalled')->will($this->returnValue(true));
-        $this->_resource->expects($this->once())->method('fetchUpdatesByHandle')
-            ->with('fixture_handle', $this->_theme, $this->_store)
-            ->will($this->returnValue(self::FIXTURE_LAYOUT_XML));
-
+        $this->_resource->expects(
+            $this->once()
+        )->method(
+            'fetchUpdatesByHandle'
+        )->with(
+            'fixture_handle',
+            $this->_theme,
+            $this->_store
+        )->will(
+            $this->returnValue(self::FIXTURE_LAYOUT_XML)
+        );
         $this->assertEmpty($this->_model->getHandles());
         $this->assertEmpty($this->_model->asString());
         $handles = array('fixture_handle');
         $this->_model->load($handles);
         $this->assertEquals($handles, $this->_model->getHandles());
         $this->assertXmlStringEqualsXmlString(self::FIXTURE_LAYOUT_XML, $this->_model->asString());
-    }
-
-    public function testLoadDbAppNotInstalled()
-    {
-        $this->_appState->expects($this->any())->method('isInstalled')->will($this->returnValue(false));
-        $this->_resource->expects($this->never())->method('fetchUpdatesByHandle');
-        $this->assertEmpty($this->_model->getHandles());
-        $this->assertEmpty($this->_model->asString());
-        $handles = array('fixture_handle');
-        $this->_model->load($handles);
-        $this->assertEquals($handles, $this->_model->getHandles());
-        $this->assertEmpty($this->_model->asString());
     }
 
     public function testGetFileLayoutUpdatesXml()

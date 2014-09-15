@@ -50,9 +50,9 @@ class Repository
     private $design;
 
     /**
-     * @var \Magento\Framework\View\Design\Theme\Provider
+     * @var \Magento\Framework\View\Design\Theme\ListInterface
      */
-    private $themeProvider;
+    private $themeList;
 
     /**
      * @var \Magento\Framework\View\Asset\Source
@@ -72,18 +72,18 @@ class Repository
     /**
      * @param \Magento\Framework\UrlInterface $baseUrl
      * @param \Magento\Framework\View\DesignInterface $design
-     * @param \Magento\Framework\View\Design\Theme\Provider $themeProvider
+     * @param \Magento\Framework\View\Design\Theme\ListInterface $themeList
      * @param \Magento\Framework\View\Asset\Source $assetSource
      */
     public function __construct(
         \Magento\Framework\UrlInterface $baseUrl,
         \Magento\Framework\View\DesignInterface $design,
-        \Magento\Framework\View\Design\Theme\Provider $themeProvider,
+        \Magento\Framework\View\Design\Theme\ListInterface $themeList,
         \Magento\Framework\View\Asset\Source $assetSource
     ) {
         $this->baseUrl = $baseUrl;
         $this->design = $design;
-        $this->themeProvider = $themeProvider;
+        $this->themeList = $themeList;
         $this->assetSource = $assetSource;
     }
 
@@ -117,7 +117,7 @@ class Repository
         }
 
         if ($theme) {
-            $params['themeModel'] = $this->themeProvider->getThemeModel($theme, $area);
+            $params['themeModel'] = $this->themeList->getThemeByFullPath($area . '/' . $theme);
             if (!$params['themeModel']) {
                 throw new \UnexpectedValueException("Could not find theme '$theme' for area '$area'");
             }

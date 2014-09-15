@@ -401,7 +401,8 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         /** Execute SUT */
         $result = $this->_model->saveBilling($customerData, $customerAddressId);
         $validationErrors = array(
-            '"First Name" is a required value.'
+            '"First Name" is a required value.',
+            '"First Name" length must be equal or greater than 1 characters.'
         );
         $this->assertEquals(
             array('error' => 1, 'message' => $validationErrors),
@@ -513,7 +514,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
 
         /** Execute SUT */
         $result = $this->_model->saveBilling($customerData, $customerAddressId);
-        $validationErrors = 'Please correct this email address: "invalidemail".';
+        $validationErrors = '"Email" is not a valid email address.';
         $this->assertEquals(
             array('error' => -1, 'message' => $validationErrors),
             $result,
