@@ -984,7 +984,7 @@ class Store extends AbstractModel implements
      */
     public function roundPrice($price)
     {
-        return round($price, 2);
+        return round($price, 4);
     }
 
     /**
