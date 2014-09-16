@@ -39,9 +39,15 @@ class Concat extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
      */
     public function render(\Magento\Framework\Object $row)
     {
-        $dataArr = array();
-        foreach ($this->getColumn()->getIndex() as $index) {
-            if ($data = $row->getData($index)) {
+        $dataArr = [];
+        $methods = $this->getColumn()->getGetter() ? $this->getColumn()->getGetter() : $this->getColumn()->getIndex();
+        foreach ($methods as $m) {
+            if (true === is_callable([$row, $m])) {
+                $data = call_user_func(array($row, $m), $this->getColumn());
+            } else {
+                $data = $row->getData($m);
+            }
+            if (false === empty($data)) {
                 $dataArr[] = $data;
             }
         }
