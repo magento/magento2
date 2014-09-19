@@ -51,6 +51,11 @@ class Builder
     protected $_cache;
 
     /**
+     * @var \Magento\Framework\AclFactory
+     */
+    protected $_aclFactory;
+
+    /**
      * @param \Magento\Framework\AclFactory $aclFactory
      * @param \Magento\Framework\Acl\CacheInterface $cache
      * @param \Magento\Framework\Acl\LoaderInterface $roleLoader

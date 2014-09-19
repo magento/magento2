@@ -37,7 +37,6 @@ interface ReadServiceInterface
      */
     public function getMethod($cartId);
 
-
     /**
      * Get list of applicable shipping methods for quote
      *

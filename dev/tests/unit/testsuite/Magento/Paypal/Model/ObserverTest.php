@@ -133,58 +133,6 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    /**
-     * @param object $methodInstance
-     * @param bool $isAllowed
-     * @param bool $isAvailable
-     * @dataProvider restrictAdminBillingAgreementUsageDataProvider
-     */
-    public function testRestrictAdminBillingAgreementUsage($methodInstance, $isAllowed, $isAvailable)
-    {
-        $this->_event->setMethodInstance($methodInstance);
-        $this->_authorization->expects(
-            $this->any()
-        )->method(
-            'isAllowed'
-        )->with(
-            'Magento_Paypal::use'
-        )->will(
-            $this->returnValue($isAllowed)
-        );
-        $result = new \stdClass();
-        $result->isAvailable = true;
-        $this->_event->setResult($result);
-        $this->_model->restrictAdminBillingAgreementUsage($this->_observer);
-        $this->assertEquals($isAvailable, $result->isAvailable);
-    }
-
-    public function restrictAdminBillingAgreementUsageDataProvider()
-    {
-        return array(
-            array(new \stdClass(), false, true),
-            array(
-                $this->getMockForAbstractClass(
-                    'Magento\Paypal\Model\Payment\Method\Billing\AbstractAgreement',
-                    array(),
-                    '',
-                    false
-                ),
-                true,
-                true
-            ),
-            array(
-                $this->getMockForAbstractClass(
-                    'Magento\Paypal\Model\Payment\Method\Billing\AbstractAgreement',
-                    array(),
-                    '',
-                    false
-                ),
-                false,
-                false
-            )
-        );
-    }
-
     public function testAddBillingAgreementToSessionNoData()
     {
         $payment = $this->getMock('Magento\Sales\Model\Order\Payment', array(), array(), '', false);

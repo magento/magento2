@@ -24,6 +24,7 @@
 namespace Magento\Sales\Block\Adminhtml\Order\Create;
 
 use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * Create order form header
@@ -41,11 +42,10 @@ class Header extends AbstractCreate
     protected $_customerViewHelper;
 
     /**
-     * Initialize dependencies.
-     *
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Model\Session\Quote $sessionQuote
      * @param \Magento\Sales\Model\AdminOrder\Create $orderCreate
+     * @param PriceCurrencyInterface $priceCurrency
      * @param CustomerAccountServiceInterface $customerAccountService
      * @param \Magento\Customer\Helper\View $customerViewHelper
      * @param array $data
@@ -54,13 +54,14 @@ class Header extends AbstractCreate
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Model\Session\Quote $sessionQuote,
         \Magento\Sales\Model\AdminOrder\Create $orderCreate,
+        PriceCurrencyInterface $priceCurrency,
         CustomerAccountServiceInterface $customerAccountService,
         \Magento\Customer\Helper\View $customerViewHelper,
         array $data = array()
     ) {
         $this->_customerAccountService = $customerAccountService;
         $this->_customerViewHelper = $customerViewHelper;
-        parent::__construct($context, $sessionQuote, $orderCreate, $data);
+        parent::__construct($context, $sessionQuote, $orderCreate, $priceCurrency, $data);
     }
 
     /**

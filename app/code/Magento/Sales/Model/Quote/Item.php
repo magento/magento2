@@ -199,6 +199,7 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
+     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param \Magento\Sales\Model\Status\ListFactory $statusListFactory
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param Item\OptionFactory $itemOptionFactory
@@ -214,6 +215,7 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Catalog\Model\ProductFactory $productFactory,
+        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         \Magento\Sales\Model\Status\ListFactory $statusListFactory,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
         \Magento\Sales\Model\Quote\Item\OptionFactory $itemOptionFactory,
@@ -228,7 +230,15 @@ class Item extends \Magento\Sales\Model\Quote\Item\AbstractItem
         $this->_itemOptionFactory = $itemOptionFactory;
         $this->_compareHelper = $compareHelper;
         $this->stockItemService = $stockItemService;
-        parent::__construct($context, $registry, $productFactory, $resource, $resourceCollection, $data);
+        parent::__construct(
+            $context,
+            $registry,
+            $productFactory,
+            $priceCurrency,
+            $resource,
+            $resourceCollection,
+            $data
+        );
     }
 
     /**

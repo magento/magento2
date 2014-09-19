@@ -42,12 +42,16 @@ class Decimal extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
     protected $_resource;
 
     /**
-     * Construct
-     *
-     * @param \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface
+     */
+    protected $priceCurrency;
+
+    /**
+     * @param ItemFactory $filterItemFactory
      * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Layer $layer
      * @param \Magento\Catalog\Model\Resource\Layer\Filter\DecimalFactory $filterDecimalFactory
+     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param array $data
      */
     public function __construct(
@@ -55,10 +59,12 @@ class Decimal extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
         \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Layer $layer,
         \Magento\Catalog\Model\Resource\Layer\Filter\DecimalFactory $filterDecimalFactory,
+        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         array $data = array()
     ) {
         $this->_resource = $filterDecimalFactory->create();
         $this->_requestVar = 'decimal';
+        $this->priceCurrency = $priceCurrency;
         parent::__construct($filterItemFactory, $storeManager, $layer, $data);
     }
 
@@ -130,8 +136,8 @@ class Decimal extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      */
     protected function _renderItemLabel($range, $value)
     {
-        $from = $this->_storeManager->getStore()->formatPrice(($value - 1) * $range, false);
-        $to = $this->_storeManager->getStore()->formatPrice($value * $range, false);
+        $from = $this->priceCurrency->format(($value - 1) * $range, false);
+        $to = $this->priceCurrency->format($value * $range, false);
         return __('%1 - %2', $from, $to);
     }
 

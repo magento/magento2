@@ -57,6 +57,11 @@ class AdminTest extends \PHPUnit_Framework_TestCase
      */
     protected $adminHelper;
 
+    /**
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $priceCurrency;
+
     protected function setUp()
     {
         $this->contextMock = $this->getMockBuilder('Magento\Framework\App\Helper\Context')
@@ -68,6 +73,7 @@ class AdminTest extends \PHPUnit_Framework_TestCase
         $this->salesConfigMock = $this->getMockBuilder('Magento\Sales\Model\Config')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->priceCurrency = $this->getMockBuilder('\Magento\Framework\Pricing\PriceCurrencyInterface')->getMock();
 
         $this->adminHelper = (new ObjectManager($this))->getObject(
             'Magento\Sales\Helper\Admin',
@@ -75,6 +81,7 @@ class AdminTest extends \PHPUnit_Framework_TestCase
                 'context' => $this->contextMock,
                 'storeManager' => $this->storeManagerMock,
                 'salesConfig' => $this->salesConfigMock,
+                'priceCurrency' => $this->priceCurrency,
             ]
         );
 
@@ -123,8 +130,8 @@ class AdminTest extends \PHPUnit_Framework_TestCase
         $this->storeManagerMock->expects($this->any())
             ->method('getStore')
             ->will($this->returnValue($storeMock));
-        $storeMock->expects($this->any())
-            ->method('formatPrice')
+        $this->priceCurrency->expects($this->any())
+            ->method('format')
             ->will($this->returnValue('storeFormattedPrice'));
         $dataObject = $this->orderMock;
         if (!$dataObjectIsOrder) {
@@ -171,8 +178,8 @@ class AdminTest extends \PHPUnit_Framework_TestCase
         $this->storeManagerMock->expects($this->any())
             ->method('getStore')
             ->will($this->returnValue($storeMock));
-        $storeMock->expects($this->any())
-            ->method('formatPrice')
+        $this->priceCurrency->expects($this->any())
+            ->method('format')
             ->will($this->returnValue('storeFormattedPrice'));
         $dataObject = $this->orderMock;
         if (!$dataObjectIsOrder) {

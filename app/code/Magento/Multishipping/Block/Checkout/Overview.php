@@ -23,6 +23,7 @@
  */
 namespace Magento\Multishipping\Block\Checkout;
 
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Model\Quote\Address;
 
 /**
@@ -179,7 +180,7 @@ class Overview extends \Magento\Sales\Block\Items\AbstractItems
      */
     public function formatPrice($price)
     {
-        return $this->getQuote()->getStore()->formatPrice($price);
+        return $this->pirceCurrency->format($price, true, PriceCurrencyInterface::DEFAULT_PRECISION, $this->getQuote()->getStore());
     }
 
     /**

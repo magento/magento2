@@ -33,7 +33,7 @@
     </type>
     <type name="Magento\Widget\Model\Config\Data">
         <arguments>
-            <argument name="reader" xsi:type="object">Magento\Widget\Model\Config\Reader</argument>
+            <argument name="reader" xsi:type="object">Magento\Widget\Model\Config\Reader\Proxy</argument>
             <argument name="cacheId" xsi:type="string">widget_config</argument>
         </arguments>
     </type>

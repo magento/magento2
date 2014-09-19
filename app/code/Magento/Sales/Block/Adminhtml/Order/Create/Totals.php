@@ -23,6 +23,8 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create;
 
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+
 /**
  * Adminhtml sales order create totals block
  *
@@ -62,6 +64,7 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Model\Session\Quote $sessionQuote
      * @param \Magento\Sales\Model\AdminOrder\Create $orderCreate
+     * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Sales\Helper\Data $salesData
      * @param \Magento\Sales\Model\Config $salesConfig
      * @param array $data
@@ -70,13 +73,14 @@ class Totals extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Model\Session\Quote $sessionQuote,
         \Magento\Sales\Model\AdminOrder\Create $orderCreate,
+        PriceCurrencyInterface $priceCurrency,
         \Magento\Sales\Helper\Data $salesData,
         \Magento\Sales\Model\Config $salesConfig,
         array $data = array()
     ) {
         $this->_salesData = $salesData;
         $this->_salesConfig = $salesConfig;
-        parent::__construct($context, $sessionQuote, $orderCreate, $data);
+        parent::__construct($context, $sessionQuote, $orderCreate, $priceCurrency, $data);
     }
 
     /**

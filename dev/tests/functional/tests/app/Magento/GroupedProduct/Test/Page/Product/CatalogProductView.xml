@@ -25,10 +25,12 @@
 -->
 <page mca="catalog/product/view">
     <blocks>
-        <groupedViewBlock>
-            <class>Magento\GroupedProduct\Test\Block\Catalog\Product\View</class>
-            <locator>.product-info-main</locator>
-            <strategy>css selector</strategy>
-        </groupedViewBlock>
+        <viewBlock>
+            <renders>
+                <grouped>
+                    <class>Magento\GroupedProduct\Test\Block\Catalog\Product\View</class>
+                </grouped>
+            </renders>
+        </viewBlock>
     </blocks>
 </page>

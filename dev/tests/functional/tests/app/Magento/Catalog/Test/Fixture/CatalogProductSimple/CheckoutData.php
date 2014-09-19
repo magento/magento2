@@ -57,7 +57,7 @@ class CheckoutData implements FixtureInterface
     public function __construct(array $params, array $data = [])
     {
         $this->params = $params;
-        $this->data = isset($data['preset']) ? $this->getPreset($data['preset']) : [];
+        $this->data =  isset($data['preset']) ? $this->getPreset($data['preset']) : [];
 
         if (isset($data['value'])) {
             $this->data = array_replace_recursive($this->data, $data['value']);
@@ -77,7 +77,7 @@ class CheckoutData implements FixtureInterface
     /**
      * Return prepared data set
      *
-     * @param int $key [optional]
+     * @param string $key [optional]
      * @return mixed
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -106,46 +106,81 @@ class CheckoutData implements FixtureInterface
     protected function getPreset($name)
     {
         $presets = [
-            'MAGETWO-23062' => [
-                'custom_options' => [
-                    [
-                        'title' => 0,
-                        'value' => 0
+            'with_two_custom_option' => [
+                'options' => [
+                    'custom_options' => [
+                        [
+                            'title' => 'attribute_key_0',
+                            'value' => 'option_key_0'
+                        ],
+                        [
+                            'title' => 'attribute_key_1',
+                            'value' => 'Content option %isolation%',
+                        ]
                     ]
-                ]
-            ],
-            'MAGETWO-23063' => [
-                'custom_options' => [
-                    [
-                        'title' => 0,
-                        'value' => 0
-                    ]
+                ],
+                'cartItem' => [
+                    'price' => 340,
+                    'qty' => 1,
+                    'subtotal' => 340
                 ]
             ],
             'options-suite' => [
-                'custom_options' => [
-                    [
-                        'title' => 0,
-                        'value' => 'Field value 1 %isolation%'
-                    ],
-                    [
-                        'title' => 1,
-                        'value' => 'Field value 2 %isolation%'
-                    ],
-                    [
-                        'title' => 2,
-                        'value' => 1
-                    ],
-                    [
-                        'title' => 3,
-                        'value' => 0
+                'options' => [
+                    'custom_options' => [
+                        [
+                            'title' => 'attribute_key_0',
+                            'value' => 'Field value 1 %isolation%'
+                        ],
+                        [
+                            'title' => 'attribute_key_1',
+                            'value' => 'Field value 2 %isolation%'
+                        ],
+                        [
+                            'title' => 'attribute_key_2',
+                            'value' => 'option_key_1'
+                        ],
+                        [
+                            'title' => 'attribute_key_3',
+                            'value' => 'option_key_0'
+                        ]
+                    ]
+                ]
+            ],
+            'drop_down_with_one_option_fixed_price' => [
+                'options' => [
+                    'custom_options' => [
+                        [
+                            'title' => 'attribute_key_0',
+                            'value' => 'option_key_0'
+                        ]
+                    ]
+                ]
+            ],
+            'drop_down_with_one_option_percent_price' => [
+                'options' => [
+                    'custom_options' => [
+                        [
+                            'title' => 'attribute_key_0',
+                            'value' => 'option_key_0'
+                        ]
                     ]
                 ]
             ],
             'order_default' => [
-                'qty' => 2
+                'options' => [
+                    'qty' => 1
+                ]
+            ],
+            'order_big_qty' => [
+                'options' => [
+                    'qty' => 2
+                ],
+                'cartItem' => [
+                    'qty' => 2
+                ]
             ]
         ];
-        return isset($presets[$name]) ? $presets[$name] : null;
+        return isset($presets[$name]) ? $presets[$name] : [];
     }
 }

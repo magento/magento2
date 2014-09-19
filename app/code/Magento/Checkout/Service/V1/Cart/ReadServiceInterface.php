@@ -30,6 +30,7 @@ interface ReadServiceInterface
     /**
      * Retrieve information about cart represented by given ID
      *
+     * Access level: admin
      * @param int $cartId
      * @return \Magento\Checkout\Service\V1\Data\Cart
      * @throws \Magento\Framework\Exception\NoSuchEntityException
@@ -37,19 +38,21 @@ interface ReadServiceInterface
     public function getCart($cartId);
 
     /**
+     * Retrieve information about cart of provided customer
+     *
+     * @param int $customerId
+     * @return \Magento\Checkout\Service\V1\Data\Cart
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function getCartForCustomer($customerId);
+
+    /**
      * Retrieve list of carts that match given search criteria
+     *
+     * Access level: admin
      *
      * @param \Magento\Framework\Service\V1\Data\SearchCriteria $searchCriteria
      * @return \Magento\Checkout\Service\V1\Data\CartSearchResults
      */
     public function getCartList(SearchCriteria $searchCriteria);
-
-    /**
-     * Retrieve quote totals data
-     *
-     * @param int $cartId
-     * @return \Magento\Checkout\Service\V1\Data\Cart\Totals
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     */
-    public function getTotals($cartId);
 }

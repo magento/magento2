@@ -29,6 +29,11 @@ namespace Magento\Catalog\Pricing\Price;
 interface CustomOptionPriceInterface
 {
     /**
+     * Flag to indicate the price is for configuration option of a product
+     */
+    const CONFIGURATION_OPTION_FLAG = 'configuration_option_flag';
+
+    /**
      * Return calculated options
      *
      * @return array

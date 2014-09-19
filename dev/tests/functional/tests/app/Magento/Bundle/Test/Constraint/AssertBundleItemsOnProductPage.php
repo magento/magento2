@@ -26,7 +26,7 @@ namespace Magento\Bundle\Test\Constraint;
 
 use Mtf\Client\Browser;
 use Mtf\Constraint\AbstractAssertForm;
-use Magento\Bundle\Test\Fixture\CatalogProductBundle;
+use Magento\Bundle\Test\Fixture\BundleProduct;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 
 /**
@@ -46,13 +46,13 @@ class AssertBundleItemsOnProductPage extends AbstractAssertForm
      * Assert that displayed product bundle items data on product page equals passed from fixture preset
      *
      * @param CatalogProductView $catalogProductView
-     * @param CatalogProductBundle $product
+     * @param BundleProduct $product
      * @param Browser $browser
      * @return void
      */
     public function processAssert(
         CatalogProductView $catalogProductView,
-        CatalogProductBundle $product,
+        BundleProduct $product,
         Browser $browser
     ) {
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
@@ -75,10 +75,10 @@ class AssertBundleItemsOnProductPage extends AbstractAssertForm
     /**
      * Prepare bundle options
      *
-     * @param CatalogProductBundle $product
+     * @param BundleProduct $product
      * @return array
      */
-    protected function prepareBundleOptions(CatalogProductBundle $product)
+    protected function prepareBundleOptions(BundleProduct $product)
     {
         $bundleSelections = $product->getBundleSelections();
         $bundleOptions = isset($bundleSelections['bundle_options']) ? $bundleSelections['bundle_options'] : [];

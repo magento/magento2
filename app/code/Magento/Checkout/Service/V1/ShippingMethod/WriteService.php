@@ -23,6 +23,7 @@
  */
 namespace Magento\Checkout\Service\V1\ShippingMethod;
 
+use \Magento\Sales\Model\QuoteRepository;
 use \Magento\Framework\Exception\CouldNotSaveException;
 use \Magento\Framework\Exception\NoSuchEntityException;
 use \Magento\Framework\Exception\InputException;
@@ -36,28 +37,20 @@ class WriteService implements WriteServiceInterface
     protected $addressFactory;
 
     /**
-     * @var \Magento\Checkout\Service\V1\QuoteLoader
+     * @var QuoteRepository
      */
-    protected $quoteLoader;
+    protected $quoteRepository;
 
     /**
-     * @var \Magento\Framework\StoreManagerInterface
-     */
-    protected $storeManager;
-
-    /**
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Sales\Model\Quote\AddressFactory $addressFactory
-     * @param \Magento\Checkout\Service\V1\QuoteLoader $quoteLoader
+     * @param QuoteRepository $quoteRepository
      */
     public function __construct(
-        \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Sales\Model\Quote\AddressFactory $addressFactory,
-        \Magento\Checkout\Service\V1\QuoteLoader $quoteLoader
+        QuoteRepository $quoteRepository
     ) {
         $this->addressFactory = $addressFactory;
-        $this->quoteLoader = $quoteLoader;
-        $this->storeManager = $storeManager;
+        $this->quoteRepository = $quoteRepository;
     }
 
     /**
@@ -66,7 +59,7 @@ class WriteService implements WriteServiceInterface
     public function setMethod($cartId, $carrierCode, $methodCode)
     {
         /** @var \Magento\Sales\Model\Quote $quote */
-        $quote = $this->quoteLoader->load($cartId, $this->storeManager->getStore()->getId());
+        $quote = $this->quoteRepository->get($cartId);
         if (0 == $quote->getItemsCount()) {
             throw new InputException('Shipping method is not applicable for empty cart');
         }

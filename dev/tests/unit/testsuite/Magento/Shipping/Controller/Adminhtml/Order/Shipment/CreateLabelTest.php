@@ -72,7 +72,7 @@ class CreateLabelTest extends \PHPUnit_Framework_TestCase
     {
         $this->shipmentLoaderMock = $this->getMock(
             'Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader',
-            ['setOrderId', 'setShipmentId', 'setShipment', 'setTracking', 'load'],
+            ['setOrderId', 'setShipmentId', 'setShipment', 'setTracking', 'load', '__wakeup'],
             [],
             '',
             false
@@ -84,25 +84,37 @@ class CreateLabelTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', ['getParam'], [], '', false);
-        $this->responseMock = $this->getMock('Magento\Framework\App\Response\Http', ['representJson'], [], '', false);
+        $this->requestMock = $this->getMock(
+            'Magento\Framework\App\Request\Http',
+            ['getParam', '__wakeup'],
+            [],
+            '',
+            false
+        );
+        $this->responseMock = $this->getMock(
+            'Magento\Framework\App\Response\Http',
+            ['representJson', '__wakeup'],
+            [],
+            '',
+            false
+        );
         $this->objectManagerMock = $this->getMock(
             'Magento\Framework\ObjectManager',
-            ['create', 'get', 'configure'],
+            ['create', 'get', 'configure', '__wakeup'],
             [],
             '',
             false
         );
         $this->messageManagerMock = $this->getMock(
             'Magento\Framework\Message\Manager',
-            ['addSuccess', 'addError'],
+            ['addSuccess', 'addError', '__wakeup'],
             [],
             '',
             false
         );
         $this->labelGenerator = $this->getMock(
             'Magento\Shipping\Model\Shipping\LabelGenerator',
-            ['create'],
+            ['create', '__wakeup'],
             [],
             '',
             false
@@ -110,7 +122,7 @@ class CreateLabelTest extends \PHPUnit_Framework_TestCase
 
         $contextMock = $this->getMock(
             'Magento\Backend\App\Action\Context',
-            ['getRequest', 'getResponse', 'getMessageManager', 'getActionFlag', 'getObjectManager'],
+            ['getRequest', 'getResponse', 'getMessageManager', 'getActionFlag', 'getObjectManager', '__wakeup'],
             [],
             '',
             false
@@ -214,7 +226,7 @@ class CreateLabelTest extends \PHPUnit_Framework_TestCase
     {
         $logerMock = $this->getMock(
             'Magento\Framework\Logger',
-            ['logException'],
+            ['logException', '__wakeup'],
             [],
             '',
             false

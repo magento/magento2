@@ -26,7 +26,7 @@ namespace Magento\Bundle\Test\TestCase;
 
 use Mtf\TestCase\Injectable;
 use Magento\Catalog\Test\Fixture\CatalogCategory;
-use Magento\Bundle\Test\Fixture\CatalogProductBundle;
+use Magento\Bundle\Test\Fixture\BundleProduct;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew;
 
@@ -93,11 +93,11 @@ class CreateBundleProductEntityTest extends Injectable
     /**
      * Test create bundle product
      *
-     * @param CatalogProductBundle $product
+     * @param BundleProduct $product
      * @param CatalogCategory $category
      * @return void
      */
-    public function test(CatalogProductBundle $product, CatalogCategory $category)
+    public function test(BundleProduct $product, CatalogCategory $category)
     {
         $this->catalogProductIndex->open();
         $this->catalogProductIndex->getGridPageActionBlock()->addProduct('bundle');

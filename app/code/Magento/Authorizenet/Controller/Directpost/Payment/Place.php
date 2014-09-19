@@ -27,13 +27,6 @@ namespace Magento\Authorizenet\Controller\Directpost\Payment;
 class Place extends \Magento\Authorizenet\Controller\Directpost\Payment
 {
     /**
-     * @return \Magento\Checkout\Model\Session
-     */
-    protected function _getCheckout()
-    {
-        return $this->_objectManager->get('Magento\Checkout\Model\Session');
-    }
-    /**
      * Send request to authorize.net
      *
      * @return void

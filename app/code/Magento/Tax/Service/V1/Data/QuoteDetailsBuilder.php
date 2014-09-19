@@ -164,6 +164,17 @@ class QuoteDetailsBuilder extends \Magento\Framework\Service\Data\AbstractExtens
     }
 
     /**
+     * Set quote items
+     *
+     * @param int $customerTaxClassId
+     * @return $this
+     */
+    public function setCustomerTaxClassId($customerTaxClassId)
+    {
+        return $this->_set(QuoteDetails::CUSTOMER_TAX_CLASS_ID, $customerTaxClassId);
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function _setDataValues(array $data)

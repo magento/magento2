@@ -25,17 +25,38 @@
 namespace Magento\Downloadable\Test\Constraint;
 
 use Mtf\Client\Browser;
-use Mtf\Constraint\AbstractConstraint;
+use Mtf\Constraint\AbstractAssertForm;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
-use Magento\Downloadable\Test\Fixture\CatalogProductDownloadable;
+use Magento\Downloadable\Test\Fixture\DownloadableProductInjectable;
 
 /**
  * Class AssertDownloadableLinksData
  *
  * Assert that Link block for downloadable product on front-end
  */
-class AssertDownloadableLinksData extends AbstractConstraint
+class AssertDownloadableLinksData extends AbstractAssertForm
 {
+    /**
+     * List downloadable link fields for verify
+     *
+     * @var array
+     */
+    protected $downloadableLinksField = [
+        'title',
+        'downloadable'
+    ];
+
+    /**
+     * List fields of downloadable link for verify
+     *
+     * @var array
+     */
+    protected $linkField = [
+        'title',
+        'links_purchased_separately',
+        'price'
+    ];
+    
     /**
      * Constraint severeness
      *
@@ -46,78 +67,61 @@ class AssertDownloadableLinksData extends AbstractConstraint
     /**
      * Assert Link block for downloadable product on front-end
      *
-     * @param CatalogProductView $downloadableProductView
-     * @param CatalogProductDownloadable $product
+     * @param CatalogProductView $catalogProductView
+     * @param DownloadableProductInjectable $product
      * @param Browser $browser
      * @return void
      */
     public function processAssert(
-        CatalogProductView $downloadableProductView,
-        CatalogProductDownloadable $product,
+        CatalogProductView $catalogProductView,
+        DownloadableProductInjectable $product,
         Browser $browser
     ) {
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
-        $linksBlock = $downloadableProductView->getDownloadableViewBlock()->getDownloadableLinksBlock();
-        $fields = $product->getData();
-        // Title for for Link block
-        \PHPUnit_Framework_Assert::assertEquals(
-            $linksBlock->getTitleForLinkBlock(),
-            $fields['downloadable_links']['title'],
-            'Title for for Link block for downloadable product on front-end is not correct.'
-        );
 
-        $this->sortDownloadableArray($fields['downloadable_links']['downloadable']['link']);
-
-        foreach ($fields['downloadable_links']['downloadable']['link'] as $index => $link) {
-            $index++;
-            // Titles for each links
-            // Links are displaying according to Sort Order
-            \PHPUnit_Framework_Assert::assertEquals(
-                $linksBlock->getItemTitle($index),
-                $link['title'],
-                'Link item ' . $index . ' with title "' . $link['title'] . '" is not visible.'
-            );
-
-            // If Links can be Purchase Separately, check-nob is presented near each link
-            // If Links CANNOT be Purchase Separately, check-nob is not presented near each link
-            if ($fields['downloadable_links']['links_purchased_separately'] == "Yes") {
-                \PHPUnit_Framework_Assert::assertTrue(
-                    $linksBlock->isVisibleItemCheckbox($index),
-                    'Item ' . $index . ' link block CANNOT be Purchase Separately.'
-                );
-                // Price is equals passed according to fixture
-                $link['price'] = sprintf('$%1.2f', $link['price']);
-                \PHPUnit_Framework_Assert::assertEquals(
-                    $linksBlock->getItemPrice($index),
-                    $link['price'],
-                    'Link item ' . $index . ' price is not visible.'
-                );
-            } elseif ($fields['downloadable_links']['links_purchased_separately'] == "No") {
-                \PHPUnit_Framework_Assert::assertFalse(
-                    $linksBlock->isVisibleItemCheckbox($index),
-                    'Item ' . $index . ' link block can be Purchase Separately.'
-                );
-            }
-        }
+        $fixtureDownloadableLinks = $this->prepareFixtureData($product);
+        $pageOptions = $catalogProductView->getViewBlock()->getOptions($product);
+        $pageDownloadableLinks = $this->preparePageData($pageOptions['downloadable_options']['downloadable_links']);
+        $error = $this->verifyData($fixtureDownloadableLinks, $pageDownloadableLinks);
+        \PHPUnit_Framework_Assert::assertEmpty($error, $error);
     }
 
     /**
-     * Sort downloadable links array
+     * Prepare fixture data for verify
      *
-     * @param array $fields
+     * @param DownloadableProductInjectable $product
      * @return array
      */
-    protected function sortDownloadableArray(&$fields)
+    protected function prepareFixtureData(DownloadableProductInjectable $product)
     {
-        usort(
-            $fields,
-            function ($a, $b) {
-                if ($a['sort_order'] == $b['sort_order']) {
-                    return 0;
-                }
-                return ($a['sort_order'] < $b['sort_order']) ? -1 : 1;
-            }
-        );
+        $data = $this->sortDataByPath($product->getDownloadableLinks(), 'downloadable/link::sort_order');
+
+        foreach ($data['downloadable']['link'] as $key => $link) {
+            $link['links_purchased_separately'] = $data['links_purchased_separately'];
+            $link = array_intersect_key($link, array_flip($this->linkField));
+
+            $data['downloadable']['link'][$key] = $link;
+        }
+        $data = array_intersect_key($data, array_flip($this->downloadableLinksField));
+
+        return $data;
+    }
+
+    /**
+     * Prepare page data for verify
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function preparePageData(array $data)
+    {
+        foreach ($data['downloadable']['link'] as $key => $link) {
+            $link = array_intersect_key($link, array_flip($this->linkField));
+            $data['downloadable']['link'][$key] = $link;
+        }
+        $data = array_intersect_key($data, array_flip($this->downloadableLinksField));
+
+        return $data;
     }
 
     /**

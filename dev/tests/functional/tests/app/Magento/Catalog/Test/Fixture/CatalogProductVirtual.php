@@ -88,6 +88,7 @@ class CatalogProductVirtual extends InjectableFixture
     }
 
     protected $dataConfig = [
+        'type_id' => 'virtual',
         'create_url_params' => [
             'type' => 'virtual',
             'set' => '4',
@@ -583,6 +584,13 @@ class CatalogProductVirtual extends InjectableFixture
         'group' => 'websites',
     ];
 
+    protected $checkout_data = [
+        'attribute_code' => 'checkout_data',
+        'backend_type' => 'virtual',
+        'group' => null,
+        'source' => 'Magento\Catalog\Test\Fixture\CatalogProductVirtual\CheckoutData',
+    ];
+
     public function getCategoryIds()
     {
         return $this->getData('category_ids');
@@ -871,5 +879,10 @@ class CatalogProductVirtual extends InjectableFixture
     public function getWebsiteIds()
     {
         return $this->getData('website_ids');
+    }
+
+    public function getCheckoutData()
+    {
+        return $this->getData('checkout_data');
     }
 }

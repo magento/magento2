@@ -28,6 +28,7 @@ use Magento\Framework\Pricing\Adjustment\AdjustmentInterface;
 use Magento\Framework\Pricing\Object\SaleableInterface;
 use Magento\Weee\Helper\Data as WeeeHelper;
 use Magento\Tax\Pricing\Adjustment as TaxAdjustment;
+use Magento\Catalog\Pricing\Price\CustomOptionPriceInterface;
 
 /**
  * Weee pricing adjustment
@@ -107,10 +108,14 @@ class Adjustment implements AdjustmentInterface
      *
      * @param float $amount
      * @param SaleableInterface $saleableItem
+     * @param null|array $context
      * @return float
      */
-    public function extractAdjustment($amount, SaleableInterface $saleableItem)
+    public function extractAdjustment($amount, SaleableInterface $saleableItem, $context = [])
     {
+        if (isset($context[CustomOptionPriceInterface::CONFIGURATION_OPTION_FLAG])) {
+            return 0;
+        }
         return $this->getAmount($saleableItem);
     }
 
@@ -119,10 +124,14 @@ class Adjustment implements AdjustmentInterface
      *
      * @param float $amount
      * @param SaleableInterface $saleableItem
+     * @param null|array $context
      * @return float
      */
-    public function applyAdjustment($amount, SaleableInterface $saleableItem)
+    public function applyAdjustment($amount, SaleableInterface $saleableItem, $context = [])
     {
+        if (isset($context[CustomOptionPriceInterface::CONFIGURATION_OPTION_FLAG])) {
+            return $amount;
+        }
         return $amount + $this->getAmount($saleableItem);
     }
 

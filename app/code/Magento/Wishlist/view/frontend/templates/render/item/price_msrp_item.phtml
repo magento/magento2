@@ -42,7 +42,6 @@
     $_msrpPrice = '';
 ?>
 <div class="price-box msrp">
-    <?php $_price = $this->helper('Magento\Catalog\Helper\Data')->getTaxPrice($_product, $_product->getMsrp()) ?>
     <?php if($_product->getMsrp()): ?>
         <?php $_msrpPrice = $_coreHelper->currency($_product->getMsrp(),true,false) ?>
         <span class="old-price" ><?php echo $_msrpPrice ?></span>

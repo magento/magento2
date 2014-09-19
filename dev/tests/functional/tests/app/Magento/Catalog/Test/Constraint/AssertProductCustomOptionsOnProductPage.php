@@ -111,10 +111,10 @@ class AssertProductCustomOptionsOnProductPage extends AbstractAssertForm
 
         $actualPrice = null;
         if ($this->isPrice) {
-            $prices = $catalogProductView->getViewBlock()->getPriceBlock()->getPrice();
-            $actualPrice = isset($prices['price_special_price'])
-                ? $prices['price_special_price']
-                : $prices['price_regular_price'];
+            $priceBlock = $catalogProductView->getViewBlock()->getPriceBlock();
+            $specialPrice = $priceBlock->getSpecialPrice();
+            $price = $priceBlock->getPrice();
+            $actualPrice = $specialPrice ? $specialPrice : $price;
         }
         $fixtureCustomOptions = $this->prepareOptions($product, $actualPrice);
         $formCustomOptions = $catalogProductView->getViewBlock()->getOptions($product)['custom_options'];

@@ -28,7 +28,7 @@ use Mtf\Client\Element\Locator;
 use Magento\Bundle\Test\Block\Catalog\Product\View\Type\Bundle;
 use Mtf\Fixture\FixtureInterface;
 use Mtf\Fixture\InjectableFixture;
-use Magento\Bundle\Test\Fixture\CatalogProductBundle;
+use Magento\Bundle\Test\Fixture\BundleProduct;
 
 /**
  * Class View
@@ -100,9 +100,11 @@ class View extends \Magento\Catalog\Test\Block\Product\View
     public function fillOptions(FixtureInterface $product)
     {
         if ($product instanceof InjectableFixture) {
-            /** @var \Magento\Bundle\Test\Fixture\CatalogProductBundle $product */
+            /** @var \Magento\Bundle\Test\Fixture\BundleProduct $product */
             $checkoutData = $product->getCheckoutData();
-            $bundleCheckoutData = isset($checkoutData['bundle_options']) ? $checkoutData['bundle_options'] : [];
+            $bundleCheckoutData = isset($checkoutData['options']['bundle_options'])
+                ? $checkoutData['options']['bundle_options']
+                : [];
         } else {
             // TODO: Removed after refactoring(removed) old product fixture.
             /** @var \Magento\Bundle\Test\Fixture\BundleFixed $product */

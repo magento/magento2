@@ -23,6 +23,8 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Creditmemo\Create;
 
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+
 class Adjustments extends \Magento\Backend\Block\Template
 {
     /**
@@ -40,16 +42,24 @@ class Adjustments extends \Magento\Backend\Block\Template
     protected $_taxConfig;
 
     /**
+     * @var PriceCurrencyInterface
+     */
+    protected $priceCurrency;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Tax\Model\Config $taxConfig
+     * @param PriceCurrencyInterface $priceCurrency
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Tax\Model\Config $taxConfig,
+        PriceCurrencyInterface $priceCurrency,
         array $data = array()
     ) {
         $this->_taxConfig = $taxConfig;
+        $this->priceCurrency = $priceCurrency;
         parent::__construct($context, $data);
     }
 
@@ -93,7 +103,7 @@ class Adjustments extends \Magento\Backend\Block\Template
         } else {
             $shipping = $source->getBaseShippingAmount();
         }
-        return $this->_storeManager->getStore()->roundPrice($shipping) * 1;
+        return $this->priceCurrency->round($shipping) * 1;
     }
 
     /**

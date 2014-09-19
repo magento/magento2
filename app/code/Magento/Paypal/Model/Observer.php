@@ -67,11 +67,6 @@ class Observer
     protected $_view;
 
     /**
-     * @var \Magento\Framework\AuthorizationInterface
-     */
-    protected $_authorization;
-
-    /**
      * @var \Magento\Paypal\Model\Billing\AgreementFactory
      */
     protected $_agreementFactory;
@@ -98,7 +93,6 @@ class Observer
      * @param \Magento\Framework\Logger $logger
      * @param Report\SettlementFactory $settlementFactory
      * @param \Magento\Framework\App\ViewInterface $view
-     * @param \Magento\Framework\AuthorizationInterface $authorization
      * @param \Magento\Paypal\Model\Billing\AgreementFactory $agreementFactory
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Paypal\Helper\Shortcut\Factory $shortcutFactory
@@ -110,7 +104,6 @@ class Observer
         \Magento\Framework\Logger $logger,
         \Magento\Paypal\Model\Report\SettlementFactory $settlementFactory,
         \Magento\Framework\App\ViewInterface $view,
-        \Magento\Framework\AuthorizationInterface $authorization,
         \Magento\Paypal\Model\Billing\AgreementFactory $agreementFactory,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Paypal\Helper\Shortcut\Factory $shortcutFactory
@@ -121,7 +114,6 @@ class Observer
         $this->_logger = $logger;
         $this->_settlementFactory = $settlementFactory;
         $this->_view = $view;
-        $this->_authorization = $authorization;
         $this->_agreementFactory = $agreementFactory;
         $this->_checkoutSession = $checkoutSession;
         $this->_shortcutFactory = $shortcutFactory;
@@ -208,25 +200,6 @@ class Observer
         }
 
         return $this;
-    }
-
-    /**
-     * Block admin ability to use customer billing agreements
-     *
-     * @param EventObserver $observer
-     * @return void
-     */
-    public function restrictAdminBillingAgreementUsage($observer)
-    {
-        $event = $observer->getEvent();
-        $methodInstance = $event->getMethodInstance();
-        if ($methodInstance instanceof \Magento\Paypal\Model\Payment\Method\Billing\AbstractAgreement &&
-            false == $this->_authorization->isAllowed(
-                'Magento_Paypal::use'
-            )
-        ) {
-            $event->getResult()->isAvailable = false;
-        }
     }
 
     /**

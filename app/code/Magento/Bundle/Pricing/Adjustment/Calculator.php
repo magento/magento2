@@ -31,6 +31,7 @@ use Magento\Bundle\Pricing\Price\BundleSelectionFactory;
 use Magento\Framework\Pricing\Adjustment\Calculator as CalculatorBase;
 use Magento\Bundle\Model\Product\Price;
 use Magento\Bundle\Pricing\Price\BundleOptionPrice;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Tax\Service\V1\TaxCalculationServiceInterface;
 use Magento\Store\Model\Store;
 use Magento\Tax\Helper\Data as TaxHelper;
@@ -61,23 +62,31 @@ class Calculator implements BundleCalculatorInterface
      * @var TaxHelper
      */
     protected $taxHelper;
+
+    /**
+     * @var PriceCurrencyInterface
+     */
+    protected $priceCurrency;
+
     /**
      * @param CalculatorBase $calculator
      * @param AmountFactory $amountFactory
      * @param BundleSelectionFactory $bundleSelectionFactory
      * @param TaxHelper $taxHelper
-     * @return Calculator
+     * @param PriceCurrencyInterface $priceCurrency
      */
     public function __construct(
         CalculatorBase $calculator,
         AmountFactory $amountFactory,
         BundleSelectionFactory $bundleSelectionFactory,
-        TaxHelper $taxHelper
+        TaxHelper $taxHelper,
+        PriceCurrencyInterface $priceCurrency
     ) {
         $this->calculator = $calculator;
         $this->amountFactory = $amountFactory;
         $this->selectionFactory = $bundleSelectionFactory;
         $this->taxHelper = $taxHelper;
+        $this->priceCurrency = $priceCurrency;
     }
 
     /**
@@ -86,9 +95,10 @@ class Calculator implements BundleCalculatorInterface
      * @param float|string $amount
      * @param SaleableInterface $saleableItem
      * @param null|string $exclude
+     * @param null|array $context
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
      */
-    public function getAmount($amount, SaleableInterface $saleableItem, $exclude = null)
+    public function getAmount($amount, SaleableInterface $saleableItem, $exclude = null, $context = [])
     {
         return $this->getOptionsAmount($saleableItem, $exclude, true, $amount);
     }
@@ -273,9 +283,9 @@ class Calculator implements BundleCalculatorInterface
         foreach ($amountList as $itemAmount) {
             if ($roundingMethod != TaxCalculationServiceInterface::CALC_TOTAL_BASE) {
                 //We need to round the individual selection first
-                $fullAmount += $store->roundPrice($itemAmount->getValue());
+                $fullAmount += $this->priceCurrency->round($itemAmount->getValue());
                 foreach ($itemAmount->getAdjustmentAmounts() as $code => $adjustment) {
-                    $adjustment = $store->roundPrice($adjustment);
+                    $adjustment = $this->priceCurrency->round($adjustment);
                     $adjustments[$code] = isset($adjustments[$code]) ? $adjustments[$code] + $adjustment : $adjustment;
                 }
             } else {

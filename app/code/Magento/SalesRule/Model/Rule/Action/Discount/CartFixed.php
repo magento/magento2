@@ -72,25 +72,25 @@ class CartFixed extends AbstractDiscount
         if ($cartRules[$rule->getId()] > 0) {
             $store = $quote->getStore();
             if ($ruleTotals['items_count'] <= 1) {
-                $quoteAmount = $store->convertPrice($cartRules[$rule->getId()]);
+                $quoteAmount = $this->priceCurrency->convert($cartRules[$rule->getId()], $store);
                 $baseDiscountAmount = min($baseItemPrice * $qty, $cartRules[$rule->getId()]);
             } else {
                 $discountRate = $baseItemPrice * $qty / $ruleTotals['base_items_price'];
                 $maximumItemDiscount = $rule->getDiscountAmount() * $discountRate;
-                $quoteAmount = $store->convertPrice($maximumItemDiscount);
+                $quoteAmount = $this->priceCurrency->convert($maximumItemDiscount, $store);
 
                 $baseDiscountAmount = min($baseItemPrice * $qty, $maximumItemDiscount);
                 $this->validator->decrementRuleItemTotalsCount($rule->getId());
             }
 
-            $baseDiscountAmount = $store->roundPrice($baseDiscountAmount);
+            $baseDiscountAmount = $this->priceCurrency->round($baseDiscountAmount);
 
             $cartRules[$rule->getId()] -= $baseDiscountAmount;
 
-            $discountData->setAmount($store->roundPrice(min($itemPrice * $qty, $quoteAmount)));
+            $discountData->setAmount($this->priceCurrency->round(min($itemPrice * $qty, $quoteAmount)));
             $discountData->setBaseAmount($baseDiscountAmount);
             $discountData->setOriginalAmount(min($itemOriginalPrice * $qty, $quoteAmount));
-            $discountData->setBaseOriginalAmount($store->roundPrice($baseItemOriginalPrice));
+            $discountData->setBaseOriginalAmount($this->priceCurrency->round($baseItemOriginalPrice));
         }
         $address->setCartFixedRules($cartRules);
 

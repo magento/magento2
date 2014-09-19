@@ -52,9 +52,10 @@ class Calculator implements CalculatorInterface
      * @param float|string $amount
      * @param SaleableInterface $saleableItem
      * @param null|bool|string $exclude
+     * @param null|array $context
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
      */
-    public function getAmount($amount, SaleableInterface $saleableItem, $exclude = null)
+    public function getAmount($amount, SaleableInterface $saleableItem, $exclude = null, $context = [])
     {
         $baseAmount = $fullAmount = $amount;
         $adjustments = [];
@@ -65,9 +66,9 @@ class Calculator implements CalculatorInterface
                 $toExclude = true;
             }
             if ($adjustment->isIncludedInBasePrice()) {
-                $adjust = $adjustment->extractAdjustment($baseAmount, $saleableItem);
+                $adjust = $adjustment->extractAdjustment($baseAmount, $saleableItem, $context);
                 $baseAmount -= $adjust;
-                $fullAmount = $adjustment->applyAdjustment($fullAmount, $saleableItem);
+                $fullAmount = $adjustment->applyAdjustment($fullAmount, $saleableItem, $context);
                 $adjust = $fullAmount - $baseAmount;
                 if (!$toExclude) {
                     $adjustments[$code] = $adjust;
@@ -76,7 +77,7 @@ class Calculator implements CalculatorInterface
                 if ($toExclude) {
                     continue;
                 }
-                $newAmount = $adjustment->applyAdjustment($fullAmount, $saleableItem);
+                $newAmount = $adjustment->applyAdjustment($fullAmount, $saleableItem, $context);
                 $adjust = $newAmount - $fullAmount;
                 $adjustments[$code] = $adjust;
                 $fullAmount = $newAmount;

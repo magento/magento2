@@ -25,6 +25,11 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
     <preference for="Magento\Eav\Model\Entity\Setup\PropertyMapperInterface" type="Magento\Eav\Model\Entity\Setup\PropertyMapper\Composite" />
+    <type name="Magento\Eav\Model\Entity\Attribute\Config">
+        <arguments>
+            <argument name="reader" xsi:type="object">Magento\Eav\Model\Entity\Attribute\Config\Reader\Proxy</argument>
+        </arguments>
+    </type>
     <type name="Magento\Eav\Model\Resource\Helper">
         <arguments>
             <argument name="modulePrefix" xsi:type="string">eav</argument>

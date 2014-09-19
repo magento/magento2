@@ -31,6 +31,7 @@
 namespace Magento\Catalog\Block\Product\View;
 
 use Magento\Catalog\Model\Product;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 class Attributes extends \Magento\Framework\View\Element\Template
 {
@@ -47,15 +48,23 @@ class Attributes extends \Magento\Framework\View\Element\Template
     protected $_coreRegistry = null;
 
     /**
+     * @var PriceCurrencyInterface
+     */
+    protected $priceCurrency;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Registry $registry
+     * @param PriceCurrencyInterface $priceCurrency
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\Registry $registry,
+        PriceCurrencyInterface $priceCurrency,
         array $data = array()
     ) {
+        $this->priceCurrency = $priceCurrency;
         $this->_coreRegistry = $registry;
         parent::__construct($context, $data);
     }
@@ -92,7 +101,7 @@ class Attributes extends \Magento\Framework\View\Element\Template
                 } elseif ((string)$value == '') {
                     $value = __('No');
                 } elseif ($attribute->getFrontendInput() == 'price' && is_string($value)) {
-                    $value = $this->_storeManager->getStore()->convertPrice($value, true);
+                    $value = $this->priceCurrency->convertAndFormat($value);
                 }
 
                 if (is_string($value) && strlen($value)) {

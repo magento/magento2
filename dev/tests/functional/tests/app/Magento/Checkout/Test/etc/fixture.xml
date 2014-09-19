@@ -26,7 +26,7 @@
 <fixture>
     <cart module="Magento_Checkout">
         <type>flat</type>
-        <entity_type>sales_flat_quote_item</entity_type>
+        <entity_type>sales_flat_quote</entity_type>
         <collection>Magento\Checkout\Model\Resource\Cart</collection>
     </cart>
 </fixture>

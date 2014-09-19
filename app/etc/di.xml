@@ -135,11 +135,6 @@
             <argument name="mode" xsi:type="init_parameter">Magento\Framework\App\State::PARAM_MODE</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Module\Plugin\DbStatusValidator">
-        <arguments>
-            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
-        </arguments>
-    </type>
     <type name="Magento\Framework\App\Arguments\ValidationState">
         <arguments>
             <argument name="appMode" xsi:type="init_parameter">Magento\Framework\App\State::PARAM_MODE</argument>
@@ -208,6 +203,7 @@
     <type name="Magento\Framework\App\ObjectManager\ConfigLoader">
         <arguments>
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
+            <argument name="reader" xsi:type="object">Magento\Framework\ObjectManager\Config\Reader\Dom\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\App\ObjectManager\ConfigCache">
@@ -223,19 +219,20 @@
     <type name="Magento\Framework\Cache\Config\Data">
         <arguments>
             <argument name="cacheId" xsi:type="string">config_cache</argument>
+            <argument name="reader" xsi:type="object">Magento\Framework\Cache\Config\Reader\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Interception\Config\Config">
         <arguments>
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
-            <argument name="reader" xsi:type="object">Magento\Framework\ObjectManager\Config\Reader\Dom</argument>
+            <argument name="reader" xsi:type="object">Magento\Framework\ObjectManager\Config\Reader\Dom\Proxy</argument>
             <argument name="cacheId" xsi:type="string">interception</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Interception\PluginList\PluginList">
         <arguments>
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
-            <argument name="reader" xsi:type="object">Magento\Framework\ObjectManager\Config\Reader\Dom</argument>
+            <argument name="reader" xsi:type="object">Magento\Framework\ObjectManager\Config\Reader\Dom\Proxy</argument>
             <argument name="cacheId" xsi:type="string">plugin-list</argument>
             <argument name="scopePriorityScheme" xsi:type="array">
                 <item name="first" xsi:type="string">global</item>
@@ -249,6 +246,7 @@
     </type>
     <type name="Magento\Framework\App\Resource\Config">
         <arguments>
+            <argument name="reader" xsi:type="object">Magento\Framework\App\Resource\Config\Reader\Proxy</argument>
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config\Proxy</argument>
             <argument name="initialResources" xsi:type="init_parameter">Magento\Framework\App\Resource\Config::PARAM_INITIAL_RESOURCES</argument>
         </arguments>
@@ -389,6 +387,7 @@
                 <item name="proxy" xsi:type="string">\Magento\Framework\ObjectManager\Code\Generator\Proxy</item>
                 <item name="interceptor" xsi:type="string">\Magento\Framework\Interception\Code\Generator\Interceptor</item>
                 <item name="decorator" xsi:type="string">\Magento\Framework\Interception\Code\Generator\Decorator</item>
+                <item name="logger" xsi:type="string">\Magento\Framework\ObjectManager\Profiler\Code\Generator\Logger</item>
             </argument>
         </arguments>
     </type>
@@ -431,10 +430,14 @@
             </argument>
         </arguments>
     </virtualType>
-
     <type name="Magento\Framework\Search\Request\Config">
         <arguments>
             <argument name="reader" xsi:type="object">Magento\Framework\Search\Config\Reader\Filesystem</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Module\ModuleList">
+        <arguments>
+            <argument name="reader" xsi:type="object">Magento\Framework\Module\Declaration\Reader\Filesystem\Proxy</argument>
         </arguments>
     </type>
 </config>

@@ -179,6 +179,17 @@ class ItemBuilder extends \Magento\Framework\Service\Data\AbstractExtensibleObje
     }
 
     /**
+     * Set tax class id
+     *
+     * @param string $code
+     * @return $this
+     */
+    public function setTaxClassId($code)
+    {
+        return $this->_set(Item::KEY_TAX_CLASS_ID, $code);
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function _setDataValues(array $data)

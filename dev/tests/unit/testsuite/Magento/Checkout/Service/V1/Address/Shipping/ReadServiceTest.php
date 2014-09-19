@@ -35,35 +35,25 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $quoteLoaderMock;
+    protected $quoteRepositoryMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $converterMock;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $storeManagerMock;
-
     protected function setUp()
     {
-        $this->quoteLoaderMock = $this->getMock('\Magento\Checkout\Service\V1\QuoteLoader', [], [], '', false);
-        $this->storeManagerMock = $this->getMock('\Magento\Framework\StoreManagerInterface');
+        $this->quoteRepositoryMock = $this->getMock('\Magento\Sales\Model\QuoteRepository', [], [], '', false);
         $this->converterMock = $this->getMock('\Magento\Checkout\Service\V1\Address\Converter', [], [], '', false);
 
-        $storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
-        $storeMock->expects($this->any())->method('getId')->will($this->returnValue(123));
-        $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($storeMock));
-
-        $this->service = new ReadService($this->quoteLoaderMock, $this->converterMock, $this->storeManagerMock);
+        $this->service = new ReadService($this->quoteRepositoryMock, $this->converterMock);
     }
 
     public function testGetAddress()
     {
         $quoteMock = $this->getMock('\Magento\Sales\Model\Quote', [], [], '', false);
-        $this->quoteLoaderMock->expects($this->once())->method('load')->with('cartId', '123')->will(
+        $this->quoteRepositoryMock->expects($this->once())->method('get')->with('cartId')->will(
             $this->returnValue($quoteMock)
         );
 
@@ -84,7 +74,7 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
     public function testGetAddressOfQuoteWithVirtualProducts()
     {
         $quoteMock = $this->getMock('\Magento\Sales\Model\Quote', [], [], '', false);
-        $this->quoteLoaderMock->expects($this->once())->method('load')->with('cartId', '123')->will(
+        $this->quoteRepositoryMock->expects($this->once())->method('get')->with('cartId')->will(
             $this->returnValue($quoteMock)
         );
 

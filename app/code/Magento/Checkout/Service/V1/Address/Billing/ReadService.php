@@ -29,9 +29,9 @@ use \Magento\Checkout\Service\V1\Address\Converter as AddressConverter;
 class ReadService implements ReadServiceInterface
 {
     /**
-     * @var \Magento\Checkout\Service\V1\QuoteLoader
+     * @var \Magento\Sales\Model\QuoteRepository
      */
-    protected $quoteLoader;
+    protected $quoteRepository;
 
     /**
      * @var AddressConverter
@@ -39,23 +39,15 @@ class ReadService implements ReadServiceInterface
     protected $addressConverter;
 
     /**
-     * @var \Magento\Framework\StoreManagerInterface
-     */
-    protected $storeManager;
-
-    /**
-     * @param \Magento\Checkout\Service\V1\QuoteLoader $quoteLoader
+     * @param \Magento\Sales\Model\QuoteRepository $quoteRepository
      * @param AddressConverter $addressConverter
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
      */
     public function __construct(
-        \Magento\Checkout\Service\V1\QuoteLoader $quoteLoader,
-        AddressConverter $addressConverter,
-        \Magento\Framework\StoreManagerInterface $storeManager
+        \Magento\Sales\Model\QuoteRepository $quoteRepository,
+        AddressConverter $addressConverter
     ) {
-        $this->quoteLoader = $quoteLoader;
+        $this->quoteRepository = $quoteRepository;
         $this->addressConverter = $addressConverter;
-        $this->storeManager = $storeManager;
     }
 
     /**
@@ -63,10 +55,8 @@ class ReadService implements ReadServiceInterface
      */
     public function getAddress($cartId)
     {
-        $storeId = $this->storeManager->getStore()->getId();
-
         /** @var  \Magento\Sales\Model\Quote\Address $address */
-        $address = $this->quoteLoader->load($cartId, $storeId)->getBillingAddress();
+        $address = $this->quoteRepository->get($cartId)->getBillingAddress();
         return $this->addressConverter->convertModelToDataObject($address);
     }
 }

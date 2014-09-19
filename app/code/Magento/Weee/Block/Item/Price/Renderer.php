@@ -27,6 +27,7 @@ use Magento\Weee\Model\Tax as WeeeDisplayConfig;
 use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\Sales\Model\Order\Invoice\Item as InvoiceItem;
 use Magento\Sales\Model\Order\CreditMemo\Item as CreditMemoItem;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * Item price render block
@@ -43,17 +44,19 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Tax\Helper\Data $taxHelper
+     * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Weee\Helper\Data $weeeHelper
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Tax\Helper\Data $taxHelper,
+        PriceCurrencyInterface $priceCurrency,
         \Magento\Weee\Helper\Data $weeeHelper,
         array $data = array()
     ) {
         $this->weeeHelper = $weeeHelper;
-        parent::__construct($context, $taxHelper, $data);
+        parent::__construct($context, $taxHelper, $priceCurrency, $data);
         $this->_isScopePrivate = true;
     }
 

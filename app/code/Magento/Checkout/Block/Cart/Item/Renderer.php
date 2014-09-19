@@ -23,6 +23,7 @@
  */
 namespace Magento\Checkout\Block\Cart\Item;
 
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Model\Quote\Item;
 use Magento\Catalog\Pricing\Price\ConfiguredPriceInterface;
 
@@ -88,12 +89,18 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
     protected $_imageHelper;
 
     /**
+     * @var PriceCurrencyInterface
+     */
+    protected $priceCurrency;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Catalog\Helper\Product\Configuration $productConfig
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param \Magento\Core\Helper\Url $urlHelper
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @param PriceCurrencyInterface $priceCurrency
      * @param array $data
      */
     public function __construct(
@@ -103,8 +110,10 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
         \Magento\Catalog\Helper\Image $imageHelper,
         \Magento\Core\Helper\Url $urlHelper,
         \Magento\Framework\Message\ManagerInterface $messageManager,
+        PriceCurrencyInterface $priceCurrency,
         array $data = array()
     ) {
+        $this->priceCurrency = $priceCurrency;
         $this->_imageHelper = $imageHelper;
         $this->_urlHelper = $urlHelper;
         $this->_productConfig = $productConfig;
@@ -515,9 +524,9 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
      */
     public function convertPrice($amount, $format = false)
     {
-        $store = $this->_storeManager->getStore();
-
-        return $store->convertPrice($amount, $format);
+        return $format
+            ? $this->priceCurrency->convertAndFormat($amount)
+            : $this->priceCurrency->convert($amount);
     }
 
     /**
@@ -596,7 +605,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
      * @param Item\AbstractItem $item
      * @return string
      */
-    public function getRowtotalExclTaxHtml(\Magento\Sales\Model\Quote\Item\AbstractItem  $item)
+    public function getRowTotalExclTaxHtml(\Magento\Sales\Model\Quote\Item\AbstractItem  $item)
     {
         /** @var Renderer $block */
         $block = $this->getLayout()->getBlock('checkout.onepage.review.item.price.rowtotal.excl');
@@ -610,7 +619,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements \Mage
      * @param Item\AbstractItem $item
      * @return string
      */
-    public function getRowtotalInclTaxHtml(\Magento\Sales\Model\Quote\Item\AbstractItem  $item)
+    public function getRowTotalInclTaxHtml(\Magento\Sales\Model\Quote\Item\AbstractItem  $item)
     {
         /** @var Renderer $block */
         $block = $this->getLayout()->getBlock('checkout.onepage.review.item.price.rowtotal.incl');

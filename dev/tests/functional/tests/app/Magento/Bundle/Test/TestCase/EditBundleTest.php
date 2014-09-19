@@ -138,6 +138,12 @@ class EditBundleTest extends Functional
         //Verification on product detail page
         $productViewBlock = $productPage->getViewBlock();
         $this->assertSame($product->getName(), $productViewBlock->getProductName());
-        $this->assertEquals($product->getProductPrice(), $productViewBlock->getProductPrice());
+        $this->assertEquals(
+            $product->getProductPrice(),
+            [
+                'price_from' => $productViewBlock->getPriceBlock()->getPriceFrom(),
+                'price_to' => $productViewBlock->getPriceBlock()->getPriceTo()
+            ]
+        );
     }
 }

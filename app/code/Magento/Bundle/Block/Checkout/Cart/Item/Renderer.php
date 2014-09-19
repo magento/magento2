@@ -24,6 +24,7 @@
 namespace Magento\Bundle\Block\Checkout\Cart\Item;
 
 use Magento\Bundle\Helper\Catalog\Product\Configuration;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * Shopping cart item render block
@@ -51,6 +52,7 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
      * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param \Magento\Core\Helper\Url $urlHelper
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
+     * @param PriceCurrencyInterface $priceCurrency
      * @param Configuration $bundleProdConfigur
      * @param array $data
      */
@@ -61,6 +63,7 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
         \Magento\Catalog\Helper\Image $imageHelper,
         \Magento\Core\Helper\Url $urlHelper,
         \Magento\Framework\Message\ManagerInterface $messageManager,
+        PriceCurrencyInterface $priceCurrency,
         Configuration $bundleProdConfigur,
         array $data = array()
     ) {
@@ -72,6 +75,7 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
             $imageHelper,
             $urlHelper,
             $messageManager,
+            $priceCurrency,
             $data
         );
         $this->_isScopePrivate = true;

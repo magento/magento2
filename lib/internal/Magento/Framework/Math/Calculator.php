@@ -36,20 +36,16 @@ class Calculator
     protected $_delta = 0.0;
 
     /**
-     * Store instance
-     *
-     * @var \Magento\Framework\App\ScopeInterface|null
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|null
      */
-    protected $_scope = null;
+    protected $priceCurrency;
 
     /**
-     * Initialize calculator
-     *
-     * @param \Magento\Framework\App\ScopeInterface $scope
+     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      */
-    public function __construct(\Magento\Framework\App\ScopeInterface $scope)
+    public function __construct(\Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency)
     {
-        $this->_scope = $scope;
+        $this->priceCurrency = $priceCurrency;
     }
 
     /**
@@ -67,7 +63,7 @@ class Calculator
                 $this->_delta = -$this->_delta;
             }
             $price += $this->_delta;
-            $roundedPrice = $this->_scope->roundPrice($price);
+            $roundedPrice = $this->priceCurrency->round($price);
             $this->_delta = $price - $roundedPrice;
             if ($negative) {
                 $this->_delta = -$this->_delta;

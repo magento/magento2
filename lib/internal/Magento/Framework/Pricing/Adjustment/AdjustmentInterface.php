@@ -58,18 +58,20 @@ interface AdjustmentInterface
      *
      * @param float $amount
      * @param SaleableInterface $saleableItem
+     * @param null|array $context
      * @return float
      */
-    public function extractAdjustment($amount, SaleableInterface $saleableItem);
+    public function extractAdjustment($amount, SaleableInterface $saleableItem, $context = []);
 
     /**
      * Apply adjustment amount and return result value
      *
      * @param float $amount
      * @param SaleableInterface $saleableItem
+     * @param null|array $context
      * @return float
      */
-    public function applyAdjustment($amount, SaleableInterface $saleableItem);
+    public function applyAdjustment($amount, SaleableInterface $saleableItem, $context = []);
 
     /**
      * Check if adjustment should be excluded from calculations along with the given adjustment

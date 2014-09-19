@@ -36,16 +36,10 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\TestFramework\Helper\ObjectManager
      */
     protected $objectManager;
-
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $storeManagerMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $quoteLoaderMock;
+    protected $quoteRepositoryMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -65,8 +59,7 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->quoteLoaderMock = $this->getMock('\Magento\Checkout\Service\V1\QuoteLoader', [], [], '', false);
-        $this->storeManagerMock = $this->getMock('\Magento\Framework\StoreManagerInterface');
+        $this->quoteRepositoryMock = $this->getMock('\Magento\Sales\Model\QuoteRepository', [], [], '', false);
         $this->quoteMethodConverterMock = $this->getMock(
             '\Magento\Checkout\Service\V1\Data\Cart\PaymentMethod\Converter', [], [], '', false
         );
@@ -78,8 +71,7 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
         $this->service = $this->objectManager->getObject(
             '\Magento\Checkout\Service\V1\PaymentMethod\ReadService',
             [
-                'quoteLoader' => $this->quoteLoaderMock,
-                'storeManager' => $this->storeManagerMock,
+                'quoteRepository' => $this->quoteRepositoryMock,
                 'quoteMethodConverter' => $this->quoteMethodConverterMock,
                 'paymentMethodConverter' => $this->paymentMethodConverterMock,
                 'methodList' => $this->methodListMock,
@@ -90,19 +82,14 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
     public function testGetPaymentIfPaymentMethodNotSet()
     {
         $cartId = 11;
-        $storeId = 12;
-        $storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
-        $storeMock->expects($this->once())->method('getId')->will($this->returnValue($storeId));
-        $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($storeMock));
-
         $quoteMock = $this->getMock('\Magento\Sales\Model\Quote', [], [], '', false);
         $paymentMock = $this->getMock('\Magento\Sales\Model\Quote\Payment', [], [], '', false);
         $quoteMock->expects($this->once())->method('getPayment')->will($this->returnValue($paymentMock));
         $paymentMock->expects($this->once())->method('getId')->will($this->returnValue(null));
 
-        $this->quoteLoaderMock->expects($this->once())
-            ->method('load')
-            ->with($cartId, $storeId)
+        $this->quoteRepositoryMock->expects($this->once())
+            ->method('get')
+            ->with($cartId)
             ->will($this->returnValue($quoteMock));
 
         $this->assertNull($this->service->getPayment($cartId));
@@ -111,10 +98,6 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
     public function testGetPaymentSuccess()
     {
         $cartId = 11;
-        $storeId = 12;
-        $storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
-        $storeMock->expects($this->once())->method('getId')->will($this->returnValue($storeId));
-        $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($storeMock));
 
         $paymentMock = $this->getMock('\Magento\Sales\Model\Quote\Payment', [], [], '', false);
         $paymentMock->expects($this->once())->method('getId')->will($this->returnValue(1));
@@ -122,9 +105,9 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
         $quoteMock = $this->getMock('\Magento\Sales\Model\Quote', [], [], '', false);
         $quoteMock->expects($this->once())->method('getPayment')->will($this->returnValue($paymentMock));
 
-        $this->quoteLoaderMock->expects($this->once())
-            ->method('load')
-            ->with($cartId, $storeId)
+        $this->quoteRepositoryMock->expects($this->once())
+            ->method('get')
+            ->with($cartId)
             ->will($this->returnValue($quoteMock));
 
         $paymentMethodMock = $this->getMock('\Magento\Checkout\Service\V1\Data\Cart\PaymentMethod', [], [], '', false);
@@ -140,16 +123,11 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
     public function testGetList()
     {
         $cartId = 10;
-        $storeId = 12;
-        $storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
-        $storeMock->expects($this->once())->method('getId')->will($this->returnValue($storeId));
-        $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($storeMock));
-
         $quoteMock = $this->getMock('\Magento\Sales\Model\Quote', [], [], '', false);
 
-        $this->quoteLoaderMock->expects($this->once())
-            ->method('load')
-            ->with($cartId, $storeId)
+        $this->quoteRepositoryMock->expects($this->once())
+            ->method('get')
+            ->with($cartId)
             ->will($this->returnValue($quoteMock));
 
         $methodList = [
@@ -176,4 +154,3 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->service->getList($cartId));
     }
 }
- 

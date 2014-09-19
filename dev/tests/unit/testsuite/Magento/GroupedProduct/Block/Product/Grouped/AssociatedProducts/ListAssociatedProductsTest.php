@@ -60,6 +60,11 @@ class ListAssociatedProductsTest extends \PHPUnit_Framework_TestCase
      */
     protected $block;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Pricing\PriceCurrencyInterface
+     */
+    protected $priceCurrency;
+
     protected function setUp()
     {
         $this->contextMock = $this->getMock('Magento\Backend\Block\Template\Context', array(), array(), '', false);
@@ -83,7 +88,9 @@ class ListAssociatedProductsTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->storeManagerMock)
         );
 
-        $this->block = new ListAssociatedProducts($this->contextMock, $this->registryMock);
+        $this->priceCurrency = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')->getMock();
+
+        $this->block = new ListAssociatedProducts($this->contextMock, $this->registryMock, $this->priceCurrency);
     }
 
     /**
@@ -92,10 +99,10 @@ class ListAssociatedProductsTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAssociatedProducts()
     {
-        $this->storeMock->expects(
+        $this->priceCurrency->expects(
             $this->any()
         )->method(
-            'formatPrice'
+            'format'
         )->with(
             '1.00',
             false

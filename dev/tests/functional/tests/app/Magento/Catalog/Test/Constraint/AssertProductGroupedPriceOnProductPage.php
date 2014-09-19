@@ -113,10 +113,7 @@ class AssertProductGroupedPriceOnProductPage extends AbstractConstraint implemen
     protected function getGroupedPrice(View $view, FixtureInterface $product)
     {
         $fields = $product->getData();
-        $groupPrice['onPage'] = $view->getProductPrice();
-        $groupPrice['onPage'] = isset($groupPrice['onPage']['price_special_price'])
-            ? $groupPrice['onPage']['price_special_price']
-            : null;
+        $groupPrice['onPage'] = $view->getPriceBlock()->getSpecialPrice();
         $groupPrice['fixture'] = number_format(
             $fields['group_price'][array_search($this->customerGroup, $fields['group_price'])]['price'],
             2

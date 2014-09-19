@@ -23,13 +23,22 @@
  */
 namespace Magento\Sales\Model\Quote\Address\Total;
 
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+
 class Shipping extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
 {
     /**
-     * Set shipping code
+     * @var PriceCurrencyInterface
      */
-    public function __construct()
-    {
+    protected $priceCurrency;
+
+    /**
+     * @param PriceCurrencyInterface $priceCurrency
+     */
+    public function __construct(
+        PriceCurrencyInterface $priceCurrency
+    ) {
+        $this->priceCurrency = $priceCurrency;
         $this->setCode('shipping');
     }
 
@@ -153,7 +162,7 @@ class Shipping extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
         if ($method) {
             foreach ($address->getAllShippingRates() as $rate) {
                 if ($rate->getCode() == $method) {
-                    $amountPrice = $address->getQuote()->getStore()->convertPrice($rate->getPrice(), false);
+                    $amountPrice = $this->priceCurrency->convert($rate->getPrice(), $address->getQuote()->getStore());
                     $this->_setAmount($amountPrice);
                     $this->_setBaseAmount($rate->getPrice());
                     $shippingDescription = $rate->getCarrierTitle() . ' - ' . $rate->getMethodTitle();

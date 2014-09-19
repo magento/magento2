@@ -34,23 +34,19 @@ class TaxTest extends \PHPUnit_Framework_TestCase
      *
      * @param \Magento\Sales\Model\Order $source
      * @param array $getCalculatedTax
-     * @param array $getShippingTax
      * @param array $expectedResult
      *
      * @dataProvider getFullTaxInfoDataProvider
      */
-    public function testGetFullTaxInfo($source, $getCalculatedTax, $getShippingTax, $expectedResult)
+    public function testGetFullTaxInfo($source, $getCalculatedTax, $expectedResult)
     {
         $taxHelperMock = $this->getMockBuilder('Magento\Tax\Helper\Data')
-            ->setMethods(array('getCalculatedTaxes', 'getShippingTax'))
+            ->setMethods(array('getCalculatedTaxes'))
             ->disableOriginalConstructor()
             ->getMock();
         $taxHelperMock->expects($this->any())
             ->method('getCalculatedTaxes')
             ->will($this->returnValue($getCalculatedTax));
-        $taxHelperMock->expects($this->any())
-            ->method('getShippingTax')
-            ->will($this->returnValue($getShippingTax));
 
         $mockObject = $this->getMockBuilder('Magento\Sales\Block\Adminhtml\Order\Totals\Tax')
             ->setConstructorArgs($this->_getConstructArguments($taxHelperMock))
@@ -98,17 +94,13 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             'tax' => 'tax',
             'shipping_tax' => 'shipping_tax'
         );
-        $getShippingTax = array(
-            'shipping_tax' => 'shipping_tax',
-            'shipping_and_handing' => 'shipping_and_handing'
-        );
 
         return array(
             'source is not an instance of \Magento\Sales\Model\Order' =>
-                array($notAnInstanceOfASalesModelOrder, $getCalculatedTax, $getShippingTax, array()),
+                array($notAnInstanceOfASalesModelOrder, $getCalculatedTax, array()),
             'source is an instance of \Magento\Sales\Model\Order and has reasonable data' =>
-                array($salesModelOrderMock, $getCalculatedTax, $getShippingTax, array('tax' => 'tax',
-                'shipping_tax' => 'shipping_tax', 'shipping_and_handing' => 'shipping_and_handing'))
+                array($salesModelOrderMock, $getCalculatedTax, array('tax' => 'tax',
+                'shipping_tax' => 'shipping_tax'))
         );
     }
 }

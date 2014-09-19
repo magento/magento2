@@ -61,6 +61,7 @@ class AssertConfigurableProductForm extends AssertProductForm
      * @var array
      */
     protected $skippedOptionFields = [
+        'admin',
         'id',
         'is_default',
     ];
@@ -89,6 +90,9 @@ class AssertConfigurableProductForm extends AssertProductForm
         $attributeData = $data['configurable_attributes_data']['attributes_data'];
         foreach ($attributeData as $attributeKey => $attribute) {
             foreach ($attribute['options'] as $optionKey => $option) {
+                if (isset($option['admin'])) {
+                    $option['label'] = $option['admin'];
+                }
                 $attribute['options'][$optionKey] = array_diff_key($option, array_flip($this->skippedOptionFields));
             }
             $attribute['options'] = $this->sortDataByPath($attribute['options'], '::label');

@@ -38,17 +38,7 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $quoteLoaderMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $storeManagerMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $storeMock;
+    protected $quoteRepositoryMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -78,10 +68,14 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->quoteLoaderMock = $this->getMock('\Magento\Checkout\Service\V1\QuoteLoader', [], [], '', false);
-        $this->storeManagerMock = $this->getMock('\Magento\Framework\StoreManagerInterface');
-        $this->methodBuilderMock =
-            $this->getMock('\Magento\Checkout\Service\V1\Data\Cart\ShippingMethodBuilder', [], [], '', false);
+        $this->quoteRepositoryMock = $this->getMock('\Magento\Sales\Model\QuoteRepository', [], [], '', false);
+        $this->methodBuilderMock = $this->getMock(
+            '\Magento\Checkout\Service\V1\Data\Cart\ShippingMethodBuilder',
+            ['populateWithArray', 'create'],
+            [],
+            '',
+            false
+        );
         $this->storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
         $this->quoteMock = $this->getMock(
             '\Magento\Sales\Model\Quote',
@@ -123,8 +117,7 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
         $this->service = $this->objectManager->getObject(
             '\Magento\Checkout\Service\V1\ShippingMethod\ReadService',
             [
-                'quoteLoader' => $this->quoteLoaderMock,
-                'storeManager' => $this->storeManagerMock,
+                'quoteRepository' => $this->quoteRepositoryMock,
                 'methodBuilder' => $this->methodBuilderMock,
                 'converter' => $this->converterMock,
             ]
@@ -137,13 +130,9 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetMethodWhenShippingAddressIsNotSet()
     {
-        $storeId = 12;
         $cartId = 666;
-
-        $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($this->storeMock));
-        $this->storeMock->expects($this->once())->method('getId')->will($this->returnValue($storeId));
-        $this->quoteLoaderMock->expects($this->once())
-            ->method('load')->with($cartId, $storeId)->will($this->returnValue($this->quoteMock));
+        $this->quoteRepositoryMock->expects($this->once())
+            ->method('get')->with($cartId)->will($this->returnValue($this->quoteMock));
         $this->quoteMock->expects($this->once())
             ->method('getShippingAddress')->will($this->returnValue($this->shippingAddressMock));
         $this->shippingAddressMock->expects($this->once())->method('getCountryId')->will($this->returnValue(null));
@@ -157,13 +146,9 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetMethodWhenShippingMethodIsInvalid()
     {
-        $storeId = 12;
         $cartId = 884;
-
-        $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($this->storeMock));
-        $this->storeMock->expects($this->once())->method('getId')->will($this->returnValue($storeId));
-        $this->quoteLoaderMock->expects($this->once())
-            ->method('load')->with($cartId, $storeId)->will($this->returnValue($this->quoteMock));
+        $this->quoteRepositoryMock->expects($this->once())
+            ->method('get')->with($cartId)->will($this->returnValue($this->quoteMock));
         $this->quoteMock->expects($this->once())
             ->method('getShippingAddress')->will($this->returnValue($this->shippingAddressMock));
         $this->shippingAddressMock->expects($this->once())->method('getCountryId')->will($this->returnValue(34));
@@ -176,14 +161,10 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMethod()
     {
-        $storeId = 12;
         $cartId = 666;
         $countryId = 1;
-
-        $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($this->storeMock));
-        $this->storeMock->expects($this->once())->method('getId')->will($this->returnValue($storeId));
-        $this->quoteLoaderMock->expects($this->once())
-            ->method('load')->with($cartId, $storeId)->will($this->returnValue($this->quoteMock));
+        $this->quoteRepositoryMock->expects($this->once())
+            ->method('get')->with($cartId)->will($this->returnValue($this->quoteMock));
         $this->quoteMock->expects($this->once())
             ->method('getShippingAddress')->will($this->returnValue($this->shippingAddressMock));
         $this->shippingAddressMock->expects($this->any())
@@ -212,15 +193,28 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
         $this->service->getMethod($cartId);
     }
 
+    public function testGetMethodIfMethodIsNotSet()
+    {
+        $cartId = 666;
+        $countryId = 1;
+
+        $this->quoteRepositoryMock->expects($this->once())
+            ->method('get')->with($cartId)->will($this->returnValue($this->quoteMock));
+        $this->quoteMock->expects($this->once())
+            ->method('getShippingAddress')->will($this->returnValue($this->shippingAddressMock));
+        $this->shippingAddressMock->expects($this->any())
+            ->method('getCountryId')->will($this->returnValue($countryId));
+        $this->shippingAddressMock->expects($this->any())
+            ->method('getShippingMethod')->will($this->returnValue(null));
+
+        $this->assertNull($this->service->getMethod($cartId));
+    }
+
     public function testGetListForVirtualCart()
     {
-        $storeId = 12;
         $cartId = 834;
-
-        $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($this->storeMock));
-        $this->storeMock->expects($this->once())->method('getId')->will($this->returnValue($storeId));
-        $this->quoteLoaderMock->expects($this->once())
-            ->method('load')->with($cartId, $storeId)->will($this->returnValue($this->quoteMock));
+        $this->quoteRepositoryMock->expects($this->once())
+            ->method('get')->with($cartId)->will($this->returnValue($this->quoteMock));
         $this->quoteMock->expects($this->once())
             ->method('isVirtual')->will($this->returnValue(true));
 
@@ -229,13 +223,9 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testGetListForEmptyCart()
     {
-        $storeId = 12;
         $cartId = 834;
-
-        $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($this->storeMock));
-        $this->storeMock->expects($this->once())->method('getId')->will($this->returnValue($storeId));
-        $this->quoteLoaderMock->expects($this->once())
-            ->method('load')->with($cartId, $storeId)->will($this->returnValue($this->quoteMock));
+        $this->quoteRepositoryMock->expects($this->once())
+            ->method('get')->with($cartId)->will($this->returnValue($this->quoteMock));
         $this->quoteMock->expects($this->once())
             ->method('isVirtual')->will($this->returnValue(false));
         $this->quoteMock->expects($this->once())
@@ -250,13 +240,9 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetListWhenShippingAddressIsNotSet()
     {
-        $storeId = 12;
         $cartId = 834;
-
-        $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($this->storeMock));
-        $this->storeMock->expects($this->once())->method('getId')->will($this->returnValue($storeId));
-        $this->quoteLoaderMock->expects($this->once())
-            ->method('load')->with($cartId, $storeId)->will($this->returnValue($this->quoteMock));
+        $this->quoteRepositoryMock->expects($this->once())
+            ->method('get')->with($cartId)->will($this->returnValue($this->quoteMock));
         $this->quoteMock->expects($this->once())
             ->method('isVirtual')->will($this->returnValue(false));
         $this->quoteMock->expects($this->once())
@@ -270,13 +256,9 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testGetList()
     {
-        $storeId = 12;
         $cartId = 834;
-
-        $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($this->storeMock));
-        $this->storeMock->expects($this->once())->method('getId')->will($this->returnValue($storeId));
-        $this->quoteLoaderMock->expects($this->once())
-            ->method('load')->with($cartId, $storeId)->will($this->returnValue($this->quoteMock));
+        $this->quoteRepositoryMock->expects($this->once())
+            ->method('get')->with($cartId)->will($this->returnValue($this->quoteMock));
         $this->quoteMock->expects($this->once())
             ->method('isVirtual')->will($this->returnValue(false));
         $this->quoteMock->expects($this->once())

@@ -114,12 +114,13 @@ abstract class AbstractPrice implements PriceInterface
     /**
      * @param float $amount
      * @param null|bool|string $exclude
+     * @param null|array $context
      * @return AmountInterface|bool|float
      */
-    public function getCustomAmount($amount = null, $exclude = null)
+    public function getCustomAmount($amount = null, $exclude = null, $context = [])
     {
         $amount = (null === $amount) ? $this->getValue() : $amount;
-        return $this->calculator->getAmount($amount, $this->product, $exclude);
+        return $this->calculator->getAmount($amount, $this->product, $exclude, $context);
     }
 
     /**

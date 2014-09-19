@@ -54,12 +54,6 @@
         </arguments>
     </type>
     <virtualType name="Magento\Bundle\Pricing\Adjustment\Collection" type="Magento\Framework\Pricing\Adjustment\Collection">
-        <arguments>
-            <argument name="adjustments" xsi:type="array">
-                <item name="tax" xsi:type="const">Magento\Tax\Pricing\Adjustment::ADJUSTMENT_CODE</item>
-                <item name="weee" xsi:type="const">Magento\Weee\Pricing\Adjustment::ADJUSTMENT_CODE</item>
-            </argument>
-        </arguments>
     </virtualType>
     <preference for="Magento\Bundle\Pricing\Adjustment\BundleCalculatorInterface" type="Magento\Bundle\Pricing\Adjustment\Calculator" />
     <virtualType name="Magento\Bundle\Pricing\PriceInfo" type="Magento\Framework\Pricing\PriceInfo\Base">

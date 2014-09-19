@@ -23,6 +23,8 @@
  */
 namespace Magento\RecurringPayment\Model\Quote\Total;
 
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+
 /**
  * Total model for recurring payments
  */
@@ -50,6 +52,20 @@ abstract class AbstractRecurring extends \Magento\Sales\Model\Quote\Address\Tota
     protected $_paymentDataKey = null;
 
     /**
+     * @var PriceCurrencyInterface
+     */
+    protected $priceCurrency;
+
+    /**
+     * @param PriceCurrencyInterface $priceCurrency
+     */
+    public function __construct(
+        PriceCurrencyInterface $priceCurrency
+    ) {
+        $this->priceCurrency = $priceCurrency;
+    }
+
+    /**
      * Collect recurring item parameters and copy to the address items
      *
      * @param \Magento\Sales\Model\Quote\Address $address
@@ -65,7 +81,10 @@ abstract class AbstractRecurring extends \Magento\Sales\Model\Quote\Address\Tota
                 if (!empty($paymentData[$this->_paymentDataKey])) {
                     $item->setData(
                         $this->_itemRowTotalKey,
-                        $address->getQuote()->getStore()->convertPrice($paymentData[$this->_paymentDataKey])
+                        $this->priceCurrency->convert(
+                            $paymentData[$this->_paymentDataKey],
+                            $address->getQuote()->getStore()
+                        )
                     );
                     $this->_afterCollectSuccess($address, $item);
                 }

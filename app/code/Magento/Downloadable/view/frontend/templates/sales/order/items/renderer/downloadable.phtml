@@ -113,12 +113,4 @@
     <td class="col subtotal" data-th="<?php echo $this->escapeHtml(__('Subtotal')); ?>">
         <?php echo $this->getItemRowTotalHtml(); ?>
     </td>
-    <?php /*
-        <?php if ($this->helper('Magento\Tax\Helper\Data')->displaySalesBothPrices() || $this->helper('Magento\Tax\Helper\Data')->displaySalesPriceExclTax()): ?>
-        <th class="a-right"><?php echo $this->getOrder()->formatPrice($this->getItem()->getRowTotal()) ?></th>
-        <?php endif; ?>
-        <?php if ($this->helper('Magento\Tax\Helper\Data')->displaySalesBothPrices() || $this->helper('Magento\Tax\Helper\Data')->displaySalesPriceInclTax()): ?>
-        <th class="a-right"><?php echo $this->getOrder()->formatPrice($this->helper('Magento\Checkout\Helper\Data')->getSubtotalInclTax($this->getItem())); ?></th>
-        <?php endif; ?>
-    */ ?>
 </tr>

@@ -312,15 +312,6 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->model->getDefaultCurrencyCode(), $this->model->getDefaultCurrency()->getCode());
     }
 
-    /**
-     * @todo refactor \Magento\Store\Model\Store::getPriceFilter, it can return two different types
-     */
-    public function testGetPriceFilter()
-    {
-        $this->model->load('default');
-        $this->assertInstanceOf('Magento\Directory\Model\Currency\Filter', $this->model->getPriceFilter());
-    }
-
     public function testIsCanDelete()
     {
         $this->assertFalse($this->model->isCanDelete());

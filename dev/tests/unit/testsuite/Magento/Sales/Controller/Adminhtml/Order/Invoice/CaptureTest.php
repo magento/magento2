@@ -169,7 +169,7 @@ class CaptureTest extends \PHPUnit_Framework_TestCase
 
         $orderMock = $this->getMockBuilder('Magento\Sales\Model\Order')
             ->disableOriginalConstructor()
-            ->setMethods(['setIsInProcess'])
+            ->setMethods(['setIsInProcess', '__wakeup'])
             ->getMock();
 
         $invoiceMock = $this->getMockBuilder('Magento\Sales\Model\Order\Invoice')

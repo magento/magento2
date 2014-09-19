@@ -90,7 +90,7 @@ class DeleteUsedInConfigurableProductAttributeTest extends Injectable
         $product->persist();
         /** @var CatalogProductAttribute $attribute */
         $attribute = $product->getDataFieldConfig('configurable_attributes_data')['source']
-            ->getAttributes()['attribute_0'];
+            ->getAttributes()['attribute_key_0'];
         // Steps
         $this->attributeIndex->open();
         $this->attributeIndex->getGrid()->searchAndOpen(['attribute_code' => $attribute->getAttributeCode()]);

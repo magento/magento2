@@ -64,12 +64,12 @@ $_item = $this->getItem();
     <td class="col qty"><span class="qty"><?php echo $_item->getQty() ?></span></td>
     <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartPriceExclTax() || $this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices()): ?>
     <td class="col subtotal excl tax">
-        <?php echo $this->getRowtotalExclTaxHtml($_item); ?>
+        <?php echo $this->getRowTotalExclTaxHtml($_item); ?>
     </td>
     <?php endif; ?>
     <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartPriceInclTax() || $this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices()): ?>
     <td class="col subtotal incl tax">
-        <?php echo $this->getRowtotalInclTaxHtml($_item); ?>
+        <?php echo $this->getRowTotalInclTaxHtml($_item); ?>
     </td>
     <?php endif; ?>
 </tr>

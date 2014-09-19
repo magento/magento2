@@ -28,7 +28,7 @@ use Mtf\TestCase\Injectable;
 use Magento\Catalog\Test\Fixture\CatalogCategory;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
-use Magento\Downloadable\Test\Fixture\CatalogProductDownloadable;
+use Magento\Downloadable\Test\Fixture\DownloadableProductInjectable;
 
 /**
  * Test Creation for Create DownloadableProductEntity
@@ -103,11 +103,11 @@ class CreateDownloadableProductEntityTest extends Injectable
     /**
      * Test create downloadable product
      *
-     * @param CatalogProductDownloadable $product
+     * @param DownloadableProductInjectable $product
      * @param CatalogCategory $category
      * @return void
      */
-    public function testCreateDownloadableProduct(CatalogProductDownloadable $product, CatalogCategory $category)
+    public function testCreateDownloadableProduct(DownloadableProductInjectable $product, CatalogCategory $category)
     {
         $this->catalogProductIndex->open();
         $this->catalogProductIndex->getGridPageActionBlock()->addProduct('downloadable');

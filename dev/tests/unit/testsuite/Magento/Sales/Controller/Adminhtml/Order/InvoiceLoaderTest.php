@@ -99,7 +99,7 @@ class InvoiceLoaderTest extends \PHPUnit_Framework_TestCase
 
         $orderMock = $this->getMockBuilder('Magento\Sales\Model\Order')
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'getId'])
+            ->setMethods(['load', 'getId', '__wakeup'])
             ->getMock();
         $orderMock->expects($this->once())
             ->method('load')
@@ -119,7 +119,7 @@ class InvoiceLoaderTest extends \PHPUnit_Framework_TestCase
 
         $orderMock = $this->getMockBuilder('Magento\Sales\Model\Order')
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'getId', 'canInvoice'])
+            ->setMethods(['load', 'getId', 'canInvoice', '__wakeup'])
             ->getMock();
         $orderMock->expects($this->once())
             ->method('load')
@@ -149,7 +149,7 @@ class InvoiceLoaderTest extends \PHPUnit_Framework_TestCase
 
         $orderMock = $this->getMockBuilder('Magento\Sales\Model\Order')
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'getId', 'canInvoice'])
+            ->setMethods(['load', 'getId', 'canInvoice', '__wakeup'])
             ->getMock();
         $orderMock->expects($this->once())
             ->method('load')
@@ -168,7 +168,7 @@ class InvoiceLoaderTest extends \PHPUnit_Framework_TestCase
 
         $serviceOrderMock = $this->getMockBuilder('Magento\Sales\Model\Service\Order')
             ->disableOriginalConstructor()
-            ->setMethods(['prepareInvoice'])
+            ->setMethods(['prepareInvoice', '__wakeup'])
             ->getMock();
         $serviceOrderMock->expects($this->once())
             ->method('prepareInvoice')
@@ -194,7 +194,7 @@ class InvoiceLoaderTest extends \PHPUnit_Framework_TestCase
 
         $invoiceMock = $this->getMockBuilder('Magento\Sales\Model\Order\Invoice')
             ->disableOriginalConstructor()
-            ->setMethods(['load', 'getId'])
+            ->setMethods(['load', 'getId', '__wakeup'])
             ->getMock();
         $invoiceMock->expects($this->once())
             ->method('load')

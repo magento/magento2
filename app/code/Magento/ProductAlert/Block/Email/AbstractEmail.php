@@ -23,6 +23,8 @@
  */
 namespace Magento\ProductAlert\Block\Email;
 
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+
 /**
  * Product Alert Abstract Email Block
  *
@@ -50,15 +52,23 @@ abstract class AbstractEmail extends \Magento\Framework\View\Element\Template
     protected $_maliciousCode;
 
     /**
+     * @var PriceCurrencyInterface
+     */
+    protected $priceCurrency;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Filter\Input\MaliciousCode $maliciousCode
+     * @param PriceCurrencyInterface $priceCurrency
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\Filter\Input\MaliciousCode $maliciousCode,
+        PriceCurrencyInterface $priceCurrency,
         array $data = array()
     ) {
+        $this->priceCurrency = $priceCurrency;
         $this->_maliciousCode = $maliciousCode;
         parent::__construct($context, $data);
     }
@@ -117,7 +127,9 @@ abstract class AbstractEmail extends \Magento\Framework\View\Element\Template
      */
     public function formatPrice($price, $format = true, $includeContainer = true)
     {
-        return $this->getStore()->convertPrice($price, $format, $includeContainer);
+        return $format
+            ? $this->priceCurrency->convertAndFormat($price, $includeContainer)
+            : $this->priceCurrency->convert($price);
     }
 
     /**

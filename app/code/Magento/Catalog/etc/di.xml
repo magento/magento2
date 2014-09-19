@@ -356,12 +356,6 @@
         </arguments>
     </type>
     <type name="Magento\Framework\Pricing\Adjustment\Collection">
-        <arguments>
-            <argument name="adjustments" xsi:type="array">
-                <item name="tax" xsi:type="const">Magento\Tax\Pricing\Adjustment::ADJUSTMENT_CODE</item>
-                <item name="weee" xsi:type="const">Magento\Weee\Pricing\Adjustment::ADJUSTMENT_CODE</item>
-            </argument>
-        </arguments>
     </type>
     <type name="Magento\Catalog\Model\Product\ReservedAttributeList">
         <arguments>
@@ -485,6 +479,21 @@
     <type name="Magento\Catalog\Service\V1\ProductService">
         <arguments>
             <argument name="searchResultsBuilder" xsi:type="object" shared="false">Magento\Catalog\Service\V1\Data\Product\SearchResultsBuilder</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\ProductTypes\Config">
+        <arguments>
+            <argument name="reader" xsi:type="object">Magento\Catalog\Model\ProductTypes\Config\Reader\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Attribute\Config\Data">
+        <arguments>
+            <argument name="reader" xsi:type="object">Magento\Catalog\Model\Attribute\Config\Reader\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\ProductOptions\Config">
+        <arguments>
+            <argument name="reader" xsi:type="object">Magento\Catalog\Model\ProductOptions\Config\Reader\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\CatalogInventory\Model\Config\Backend\ShowOutOfStock">

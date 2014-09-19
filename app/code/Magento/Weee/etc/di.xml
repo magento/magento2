@@ -44,6 +44,14 @@
         </arguments>
     </type>
 
+    <type name="Magento\Framework\Pricing\Adjustment\Collection">
+        <arguments>
+            <argument name="adjustments" xsi:type="array">
+                <item name="weee" xsi:type="const">Magento\Weee\Pricing\Adjustment::ADJUSTMENT_CODE</item>
+            </argument>
+        </arguments>
+    </type>
+
     <type name="Magento\Framework\Pricing\Adjustment\Pool">
         <arguments>
             <argument name="adjustments" xsi:type="array">

@@ -25,14 +25,15 @@
 namespace Magento\GroupedProduct\Test\Constraint;
 
 use Mtf\Client\Browser;
-use Mtf\Constraint\AbstractConstraint;
+use Mtf\Constraint\AbstractAssertForm;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
-use Magento\GroupedProduct\Test\Fixture\CatalogProductGrouped;
+use Magento\GroupedProduct\Test\Fixture\GroupedProductInjectable;
 
 /**
  * Class AssertGroupedProductsDefaultQty
+ * Assert that default qty for sub products in grouped product displays according to dataset on product page
  */
-class AssertGroupedProductsDefaultQty extends AbstractConstraint
+class AssertGroupedProductsDefaultQty extends AbstractAssertForm
 {
     /**
      * Constraint severeness
@@ -42,29 +43,41 @@ class AssertGroupedProductsDefaultQty extends AbstractConstraint
     protected $severeness = 'low';
 
     /**
-     * Assert that default qty for sub products in grouped product displays according to dataset on product page.
+     * Assert that default qty for sub products in grouped product displays according to dataset on product page
      *
      * @param CatalogProductView $groupedProductView
-     * @param CatalogProductGrouped $product
+     * @param GroupedProductInjectable $product
      * @param Browser $browser
      * @return void
      */
     public function processAssert(
         CatalogProductView $groupedProductView,
-        CatalogProductGrouped $product,
+        GroupedProductInjectable $product,
         Browser $browser
     ) {
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
-        $groupedBlock = $groupedProductView->getGroupedViewBlock()->getGroupedProductBlock();
-        $groupedProduct = $product->getData();
+        $associatedProducts = $product->getAssociated();
+        $fixtureQtyData = [];
+        $pageOptions = $groupedProductView->getViewBlock()->getOptions($product);
+        $pageQtyData = [];
 
-        foreach ($groupedProduct['associated']['assigned_products'] as $item) {
-            \PHPUnit_Framework_Assert::assertEquals(
-                $groupedBlock->getQty($item['id']),
-                $item['qty'],
-                'Default qty for sub product "' . $item['name'] . '" in grouped product according to dataset.'
-            );
+        foreach ($associatedProducts['assigned_products'] as $productData) {
+            $fixtureQtyData[] = [
+                'name' => $productData['name'],
+                'qty' => $productData['qty']
+            ];
         }
+        foreach ($pageOptions['grouped_options'] as $productData) {
+            $pageQtyData[] = [
+                'name' => $productData['name'],
+                'qty' => $productData['qty']
+            ];
+        }
+        $fixtureQtyData = $this->sortDataByPath($fixtureQtyData, '::name');
+        $pageQtyData = $this->sortDataByPath($pageQtyData, '::name');
+
+        $error = $this->verifyData($fixtureQtyData, $pageQtyData);
+        \PHPUnit_Framework_Assert::assertEmpty($error, $error);
     }
 
     /**

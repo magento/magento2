@@ -92,7 +92,7 @@ class CancelTest extends \PHPUnit_Framework_TestCase
     {
         $this->creditmemoMock = $this->getMockBuilder('Magento\Sales\Model\Order\Creditmemo')
             ->disableOriginalConstructor()
-            ->setMethods(['getInvoice', 'getOrder', 'cancel', 'getId'])
+            ->setMethods(['getInvoice', 'getOrder', 'cancel', 'getId', '__wakeUp'])
             ->getMock();
         $titleMock = $this->getMockBuilder('Magento\Framework\App\Action\Title')
             ->disableOriginalConstructor()

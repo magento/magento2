@@ -57,4 +57,13 @@
     <assertProductInCartResult module="Magento_Reports">
         <severeness>low</severeness>
     </assertProductInCartResult>
+    <assertOrderedProductResult module="Magento_Reports">
+        <severeness>low</severeness>
+    </assertOrderedProductResult>
+    <assertBestsellerReportResult module="Magento_Reports">
+        <severeness>low</severeness>
+    </assertBestsellerReportResult>
+    <assertCouponReportResult  module="Magento_Reports">
+        <severeness>low</severeness>
+    </assertCouponReportResult>
 </constraint>

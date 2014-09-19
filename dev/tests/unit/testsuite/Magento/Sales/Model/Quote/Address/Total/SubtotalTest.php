@@ -89,10 +89,19 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
             ->method('getStockItem')
             ->will($this->returnValue($stockItemDoMock));
 
+        $priceCurrency = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')->getMock();
+        $priceCurrency->expects($this->any())
+            ->method('convert')
+            ->willReturn(1231313);
+            //@todo this is a wrong test and it does not check methods. Any digital value will be correct
+
         /** @var \Magento\Sales\Model\Quote\Item|\PHPUnit_Framework_MockObject_MockObject $quoteItem */
         $quoteItem = $this->objectManager->getObject(
             'Magento\Sales\Model\Quote\Item',
-            ['stockItemService' => $stockItemServiceMock]
+            [
+                'stockItemService' => $stockItemServiceMock,
+                'priceCurrency'    => $priceCurrency,
+            ]
         );
         /** @var \Magento\Sales\Model\Quote\Address|\PHPUnit_Framework_MockObject_MockObject $address */
         $address = $this->getMock(

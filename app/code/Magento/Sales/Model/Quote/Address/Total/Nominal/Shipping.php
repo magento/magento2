@@ -79,7 +79,9 @@ class Shipping extends \Magento\Sales\Model\Quote\Address\Total\Shipping
                 $address->requestShippingRates($item);
                 $baseAmount = $item->getBaseShippingAmount();
                 if ($baseAmount) {
-                    $item->setShippingAmount($address->getQuote()->getStore()->convertPrice($baseAmount, false));
+                    $item->setShippingAmount(
+                        $this->priceCurrency->convert($baseAmount, $address->getQuote()->getStore())
+                    );
                 }
             }
         }

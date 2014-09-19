@@ -122,12 +122,12 @@ class Price implements FixtureInterface
     public function getPreset()
     {
         $presets = [
-            'MAGETWO-23062' => [
+            'drop_down_with_one_option_fixed_price' => [
                 'category_price' => '100.00',
                 'product_price' => '100.00',
                 'cart_price' => '130.00'
             ],
-            'MAGETWO-23063' => [
+            'drop_down_with_one_option_percent_price' => [
                 'category_price' => '100.00',
                 'product_price' => '100.00',
                 'cart_price' => '140.00'

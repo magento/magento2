@@ -110,6 +110,11 @@
             <argument name="cacheLifetime" xsi:type="string">86400</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Event\Config\Data">
+        <arguments>
+            <argument name="reader" xsi:type="object">Magento\Framework\Event\Config\Reader\Proxy</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Acl\Cache">
         <arguments>
             <argument name="cacheKey" xsi:type="string">global_acl_resources</argument>
@@ -119,7 +124,7 @@
     <type name="Magento\Core\Model\Theme\Collection" shared="false" />
     <type name="Magento\Core\Model\Layout\Merge">
         <arguments>
-            <argument name="fileSource" xsi:type="object">Magento\Framework\View\Layout\File\Collector\Aggregated</argument>
+            <argument name="fileSource" xsi:type="object">Magento\Framework\View\Layout\File\Collector\Aggregated\Proxy</argument>
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Layout</argument>
         </arguments>
     </type>
@@ -277,6 +282,11 @@
             <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\App\Config\Initial">
+        <arguments>
+            <argument name="reader" xsi:type="object">Magento\Framework\App\Config\Initial\Reader\Proxy</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\App\Config\Initial\SchemaLocator">
         <arguments>
             <argument name="moduleName" xsi:type="string">Magento_Core</argument>
@@ -285,6 +295,11 @@
     <type name="Magento\Framework\App\Config\Initial\Reader">
         <arguments>
             <argument name="converter" xsi:type="object">Magento\Framework\App\Config\Initial\Converter</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\Route\Config">
+        <arguments>
+            <argument name="reader" xsi:type="object">Magento\Framework\App\Route\Config\Reader\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Core\App\Router\Base">
@@ -333,7 +348,7 @@
     </type>
     <type name="Magento\Framework\Object\Copy\Config\Data">
         <arguments>
-            <argument name="reader" xsi:type="object">Magento\Framework\Object\Copy\Config\Reader</argument>
+            <argument name="reader" xsi:type="object">Magento\Framework\Object\Copy\Config\Reader\Proxy</argument>
             <argument name="cacheId" xsi:type="string">fieldset_config</argument>
         </arguments>
     </type>
@@ -418,6 +433,11 @@
     </type>
     <type name="Magento\Framework\App\FrontController">
         <plugin name="install" type="Magento\Framework\Module\Plugin\DbStatusValidator" sortOrder="40"/>
+    </type>
+    <type name="Magento\Framework\Module\Plugin\DbStatusValidator">
+        <arguments>
+            <argument name="cache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
+        </arguments>
     </type>
     <type name="Magento\Framework\App\Action\Action">
         <plugin name="storeCheck" type="Magento\Store\App\Action\Plugin\StoreCheck" sortOrder="10"/>

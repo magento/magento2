@@ -2806,5 +2806,8 @@ return array(
         '\Magento\Framework\Service\Data\AbstractObjectBuilder',
         'Magento\Framework\Service\Data\AbstractSimpleObjectBuilder'
     ],
+    ['Magento\Catalog\Block\Product'],
     ['\Magento\Sales\Model\Observer'],
+    ['\Magento\Checkout\Service\V1\QuoteLoader', '\Magento\Sales\Model\QuoteRepository'],
+    ['Magento\PageCache\Model\Observer']
 );

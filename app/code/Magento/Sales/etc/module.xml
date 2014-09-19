@@ -51,6 +51,7 @@
             <module name="Magento_Wishlist"/>
             <module name="Magento_Email"/>
             <module name="Magento_Shipping"/>
+            <module name="Magento_Authorization"/>
         </depends>
     </module>
 </config>

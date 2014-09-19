@@ -23,6 +23,8 @@
  */
 namespace Magento\Payment\Model\Method;
 
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+
 /**
  * Free payment method
  */
@@ -52,20 +54,16 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
     protected $_code = 'free';
 
     /**
-     * Store manager
-     *
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var PriceCurrencyInterface
      */
-    protected $_storeManager;
+    protected $priceCurrency;
 
     /**
-     * Construct
-     *
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Logger\AdapterFactory $logAdapterFactory
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param PriceCurrencyInterface $priceCurrency
      * @param array $data
      */
     public function __construct(
@@ -73,11 +71,11 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Logger\AdapterFactory $logAdapterFactory,
-        \Magento\Framework\StoreManagerInterface $storeManager,
+        PriceCurrencyInterface $priceCurrency,
         array $data = array()
     ) {
         parent::__construct($eventManager, $paymentData, $scopeConfig, $logAdapterFactory, $data);
-        $this->_storeManager = $storeManager;
+        $this->priceCurrency = $priceCurrency;
     }
 
     /**
@@ -90,7 +88,7 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
     {
         return parent::isAvailable(
             $quote
-        ) && !empty($quote) && $this->_storeManager->getStore()->roundPrice(
+        ) && !empty($quote) && $this->priceCurrency->round(
             $quote->getGrandTotal()
         ) == 0;
     }

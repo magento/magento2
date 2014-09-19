@@ -23,6 +23,8 @@
  */
 namespace Magento\Sales\Model\Order\Creditmemo\Total;
 
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+
 /**
  * Order creditmemo shipping total calculation model
  */
@@ -39,16 +41,24 @@ class Shipping extends AbstractTotal
     protected $_taxConfig;
 
     /**
+     * @var PriceCurrencyInterface
+     */
+    protected $priceCurrency;
+
+    /**
      * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Tax\Model\Config $taxConfig
+     * @param PriceCurrencyInterface $priceCurrency
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Tax\Model\Config $taxConfig,
+        PriceCurrencyInterface $priceCurrency,
         array $data = array()
     ) {
         parent::__construct($data);
+        $this->priceCurrency = $priceCurrency;
         $this->_storeManager = $storeManager;
         $this->_taxConfig = $taxConfig;
     }
@@ -76,19 +86,19 @@ class Shipping extends AbstractTotal
          * Using has magic method to allow setting 0 as shipping amount.
          */
         if ($creditmemo->hasBaseShippingAmount()) {
-            $baseShippingAmount = $this->_storeManager->getStore()->roundPrice($creditmemo->getBaseShippingAmount());
+            $baseShippingAmount = $this->priceCurrency->round($creditmemo->getBaseShippingAmount());
             if ($isShippingInclTax && $baseShippingInclTax != 0) {
                 $part = $baseShippingAmount / $baseShippingInclTax;
-                $shippingInclTax = $this->_storeManager->getStore()->roundPrice($shippingInclTax * $part);
+                $shippingInclTax = $this->priceCurrency->round($shippingInclTax * $part);
                 $baseShippingInclTax = $baseShippingAmount;
-                $baseShippingAmount = $this->_storeManager->getStore()->roundPrice($baseShipping * $part);
+                $baseShippingAmount = $this->priceCurrency->round($baseShipping * $part);
             }
             /*
              * Rounded allowed shipping refund amount is the highest acceptable shipping refund amount.
              * Shipping refund amount shouldn't cause errors, if it doesn't exceed that limit.
              * Note: ($x < $y + 0.0001) means ($x <= $y) for floats
              */
-            if ($baseShippingAmount < $this->_storeManager->getStore()->roundPrice($baseAllowedAmount) + 0.0001) {
+            if ($baseShippingAmount < $this->priceCurrency->round($baseAllowedAmount) + 0.0001) {
                 /*
                  * Shipping refund amount should be equated to allowed refund amount,
                  * if it exceeds that limit.
@@ -101,7 +111,7 @@ class Shipping extends AbstractTotal
                     if ($baseShipping != 0) {
                         $shipping = $shipping * $baseShippingAmount / $baseShipping;
                     }
-                    $shipping = $this->_storeManager->getStore()->roundPrice($shipping);
+                    $shipping = $this->priceCurrency->round($shipping);
                     $baseShipping = $baseShippingAmount;
                 }
             } else {
@@ -115,8 +125,8 @@ class Shipping extends AbstractTotal
                 $allowedTaxAmount = $order->getShippingTaxAmount() - $order->getShippingTaxRefunded();
                 $baseAllowedTaxAmount = $order->getBaseShippingTaxAmount() - $order->getBaseShippingTaxRefunded();
 
-                $shippingInclTax = $this->_storeManager->getStore()->roundPrice($allowedAmount + $allowedTaxAmount);
-                $baseShippingInclTax = $this->_storeManager->getStore()->roundPrice(
+                $shippingInclTax = $this->priceCurrency->round($allowedAmount + $allowedTaxAmount);
+                $baseShippingInclTax = $this->priceCurrency->round(
                     $baseAllowedAmount + $baseAllowedTaxAmount
                 );
             }

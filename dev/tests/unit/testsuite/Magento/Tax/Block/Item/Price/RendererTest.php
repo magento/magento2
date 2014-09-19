@@ -38,10 +38,16 @@ class RendererTest extends \PHPUnit_Framework_TestCase
      */
     protected $taxHelper;
 
+    /**
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $priceCurrency;
+
     protected function setUp()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
 
+        $this->priceCurrency = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')->getMock();
         $this->taxHelper = $this->getMockBuilder('\Magento\Tax\Helper\Data')
             ->disableOriginalConstructor()
             ->setMethods([
@@ -58,6 +64,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
             '\Magento\Tax\Block\Item\Price\Renderer',
             [
                 'taxHelper' => $this->taxHelper,
+                'priceCurrency' => $this->priceCurrency,
                 'data' => [
                     'zone' => Render::ZONE_CART,
                 ]
@@ -234,8 +241,8 @@ class RendererTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['formatPrice', '__wakeup'])
             ->getMock();
 
-        $storeMock->expects($this->once())
-            ->method('formatPrice')
+        $this->priceCurrency->expects($this->once())
+            ->method('format')
             ->with($price, true)
             ->will($this->returnValue($formattedPrice));
 
@@ -259,7 +266,6 @@ class RendererTest extends \PHPUnit_Framework_TestCase
 
         $orderMock = $this->getMockBuilder('\Magento\Sales\Model\Order')
             ->disableOriginalConstructor()
-            ->setMethods(['formatPrice', '__wakeup'])
             ->getMock();
 
         $orderMock->expects($this->once())

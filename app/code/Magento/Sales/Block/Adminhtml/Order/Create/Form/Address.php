@@ -25,6 +25,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create\Form;
 
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Customer\Service\V1\Data\AddressConverter;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * Order create address form
@@ -77,6 +78,7 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Model\Session\Quote $sessionQuote
      * @param \Magento\Sales\Model\AdminOrder\Create $orderCreate
+     * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
@@ -92,6 +94,7 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Model\Session\Quote $sessionQuote,
         \Magento\Sales\Model\AdminOrder\Create $orderCreate,
+        PriceCurrencyInterface $priceCurrency,
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
@@ -107,7 +110,7 @@ class Address extends \Magento\Sales\Block\Adminhtml\Order\Create\Form\AbstractF
         $this->_customerFormFactory = $customerFormFactory;
         $this->_addressService = $addressService;
         $this->_addressHelper = $addressHelper;
-        parent::__construct($context, $sessionQuote, $orderCreate, $formFactory, $data);
+        parent::__construct($context, $sessionQuote, $orderCreate, $priceCurrency, $formFactory, $data);
     }
 
     /**

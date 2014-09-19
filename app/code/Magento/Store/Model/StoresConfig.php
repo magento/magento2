@@ -25,7 +25,6 @@
 namespace Magento\Store\Model;
 
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\StoreManagerInterface;
 
 class StoresConfig
 {

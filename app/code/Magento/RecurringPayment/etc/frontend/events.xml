@@ -25,6 +25,6 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
     <event name="catalog_product_type_prepare_full_options">
-        <observer name="recurring_payment_prepare_options" instance="Magento\RecurringPayment\Model\Observer" method="prepareProductRecurringPaymentOptions" />
+        <observer name="recurring_payment_prepare_options" instance="Magento\RecurringPayment\Model\Observer\PrepareProductRecurringPaymentOptions" method="execute" />
     </event>
 </config>

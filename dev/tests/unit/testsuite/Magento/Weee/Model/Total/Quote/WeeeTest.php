@@ -28,6 +28,11 @@ use Magento\Tax\Model\Calculation;
 class WeeeTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Pricing\PriceCurrencyInterface
+     */
+    protected $priceCurrency;
+
+    /**
      * Setup tax helper with an array of methodName, returnValue
      *
      * @param array $taxConfig
@@ -141,8 +146,10 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
         );
 
         $quoteMock = $this->getMock('Magento\Sales\Model\Quote', [], [], '', false);
-        $storeMock = $this->getMock('Magento\Store\Model\Store', ['__wakeup', 'convertPrice'], [], '', false);
-        $storeMock->expects($this->any())->method('convertPrice')->will($this->returnArgument(0));
+        $storeMock = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
+        $this->priceCurrency = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')->getMock();
+        $this->priceCurrency->expects($this->any())->method('round')->willReturnArgument(0);
+        $this->priceCurrency->expects($this->any())->method('convert')->willReturnArgument(0);
         $quoteMock->expects($this->any())->method('getStore')->will($this->returnValue($storeMock));
 
         $addressMock->expects($this->any())->method('getAllNonNominalItems')->will($this->returnValue([$itemMock]));
@@ -201,6 +208,7 @@ class WeeeTest extends \PHPUnit_Framework_TestCase
             'taxData' => $taxHelper,
             'calculation' => $calculator,
             'weeeData' => $weeeHelper,
+            'priceCurrency' => $this->priceCurrency,
         ];
 
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);

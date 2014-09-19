@@ -33,7 +33,7 @@
     </type>
     <virtualType name="Magento\Payment\Model\Config\Data" type="Magento\Framework\Config\Data">
         <arguments>
-            <argument name="reader" xsi:type="object">Magento\Payment\Model\Config\Reader</argument>
+            <argument name="reader" xsi:type="object">Magento\Payment\Model\Config\Reader\Proxy</argument>
             <argument name="cacheId" xsi:type="string">payment_config</argument>
         </arguments>
     </virtualType>

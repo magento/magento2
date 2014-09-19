@@ -84,6 +84,11 @@ class UtilityTest extends \PHPUnit_Framework_TestCase
      */
     protected $utility;
 
+    /**
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $priceCurrency;
+
     public function setUp()
     {
         $this->usageFactory = $this->getMock(
@@ -174,11 +179,14 @@ class UtilityTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $this->priceCurrency = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')->getMock();
+
         $this->utility = new Utility(
             $this->usageFactory,
             $this->couponFactory,
             $this->customerFactory,
-            $this->objectFactory
+            $this->objectFactory,
+            $this->priceCurrency
         );
     }
 
@@ -492,9 +500,9 @@ class UtilityTest extends \PHPUnit_Framework_TestCase
             ->method('getQuote')
             ->will($this->returnValue($this->quote));
 
-        $store = $this->getMock('Magento\Store\Model\Store', ['roundPrice', '__wakeup'], [], '', false);
-        $store->expects($this->any())
-            ->method('roundPrice')
+        $store = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
+        $this->priceCurrency->expects($this->any())
+            ->method('round')
             ->will($this->returnValueMap([
                         [$discountAmount, $roundedDiscount],
                         [$baseDiscountAmount, $roundedBaseDiscount],

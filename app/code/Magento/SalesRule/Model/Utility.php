@@ -24,6 +24,8 @@
 
 namespace Magento\SalesRule\Model;
 
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+
 /**
  * Class Utility
  *
@@ -62,21 +64,29 @@ class Utility
     protected $objectFactory;
 
     /**
+     * @var PriceCurrencyInterface
+     */
+    protected $priceCurrency;
+
+    /**
      * @param Resource\Coupon\UsageFactory $usageFactory
      * @param CouponFactory $couponFactory
      * @param Rule\CustomerFactory $customerFactory
      * @param \Magento\Framework\ObjectFactory $objectFactory
+     * @param PriceCurrencyInterface $priceCurrency
      */
     public function __construct (
         \Magento\SalesRule\Model\Resource\Coupon\UsageFactory $usageFactory,
         \Magento\SalesRule\Model\CouponFactory $couponFactory,
         \Magento\SalesRule\Model\Rule\CustomerFactory $customerFactory,
-        \Magento\Framework\ObjectFactory $objectFactory
+        \Magento\Framework\ObjectFactory $objectFactory,
+        PriceCurrencyInterface $priceCurrency
     ) {
         $this->couponFactory = $couponFactory;
         $this->customerFactory = $customerFactory;
         $this->usageFactory = $usageFactory;
         $this->objectFactory = $objectFactory;
+        $this->priceCurrency = $priceCurrency;
     }
 
     /**
@@ -207,12 +217,13 @@ class Utility
             $discountAmount += $delta;
             $baseDiscountAmount += $baseDelta;
 
-            $this->_roundingDeltas[$percentKey] = $discountAmount - $store->roundPrice($discountAmount);
-            $this->_baseRoundingDeltas[$percentKey] = $baseDiscountAmount - $store->roundPrice($baseDiscountAmount);
+            $this->_roundingDeltas[$percentKey] = $discountAmount - $this->priceCurrency->round($discountAmount);
+            $this->_baseRoundingDeltas[$percentKey] = $baseDiscountAmount
+                - $this->priceCurrency->round($baseDiscountAmount);
         }
 
-        $discountData->setAmount($store->roundPrice($discountAmount));
-        $discountData->setBaseAmount($store->roundPrice($baseDiscountAmount));
+        $discountData->setAmount($this->priceCurrency->round($discountAmount));
+        $discountData->setBaseAmount($this->priceCurrency->round($baseDiscountAmount));
 
         return $this;
     }

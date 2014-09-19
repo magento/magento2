@@ -23,6 +23,8 @@
  */
 namespace Magento\Sales\Model\Quote\Address\Total;
 
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+
 class Tax extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
 {
     /**
@@ -50,18 +52,26 @@ class Tax extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
     protected $_calculation;
 
     /**
+     * @var PriceCurrencyInterface
+     */
+    protected $priceCurrency;
+
+    /**
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Tax\Model\Calculation $calculation
+     * @param PriceCurrencyInterface $priceCurrency
      */
     public function __construct(
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Tax\Model\Calculation $calculation
+        \Magento\Tax\Model\Calculation $calculation,
+        PriceCurrencyInterface $priceCurrency
     ) {
         $this->_taxData = $taxData;
         $this->_scopeConfig = $scopeConfig;
         $this->_calculation = $calculation;
+        $this->priceCurrency = $priceCurrency;
         $this->setCode('tax');
     }
 
@@ -200,8 +210,8 @@ class Tax extends \Magento\Sales\Model\Quote\Address\Total\AbstractTotal
                     $shippingBaseTax = $address->getBaseShippingTaxAmount();
                 }
 
-                $shippingTax = $store->roundPrice($shippingTax);
-                $shippingBaseTax = $store->roundPrice($shippingBaseTax);
+                $shippingTax = $this->priceCurrency->round($shippingTax);
+                $shippingBaseTax = $this->priceCurrency->round($shippingBaseTax);
 
                 $address->setTaxAmount($address->getTaxAmount() + $shippingTax);
                 $address->setBaseTaxAmount($address->getBaseTaxAmount() + $shippingBaseTax);

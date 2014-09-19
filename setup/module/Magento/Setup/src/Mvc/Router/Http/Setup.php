@@ -37,12 +37,7 @@ use Zend\Mvc\Router\Http\RouteMatch;
 class Setup extends ZendRegex
 {
     /**
-     * factory(): defined by RouteInterface interface.
-     *
-     * @see    \Zend\Mvc\Router\RouteInterface::factory()
-     * @param  array|Traversable $options
-     * @return Regex
-     * @throws \Zend\Mvc\Router\Exception\InvalidArgumentException
+     * {@inheritdoc}
      */
     public static function factory($options = array())
     {
@@ -74,18 +69,15 @@ class Setup extends ZendRegex
     }
 
     /**
-     * match(): defined by RouteInterface interface.
-     *
-     * @param  Request $request
-     * @param  int $pathOffset
-     * @return RouteMatch|null
+     * {@inheritdoc}
      */
-    public function match(Request $request, $pathOffset = null)
+    public function match(Request $request, $pathOffset = 0)
     {
         if (!method_exists($request, 'getUri')) {
             return null;
         }
 
+        /** @var  $uri \Zend\Uri\Http */
         $uri  = $request->getUri();
         $path = $uri->getPath();
 
@@ -100,10 +92,7 @@ class Setup extends ZendRegex
             }
         }
 
-        $chunks = explode('/', ltrim($path, '/'));
-        if ($pathOffset !== null) {
-            array_shift($chunks); // Extract 'module name' part
-        }
+        $chunks = explode('/', substr(ltrim($path, '/'), $pathOffset));
         array_shift($chunks); // Extract 'lang' part
         array_pop($chunks); // Extract 'controller' part
 

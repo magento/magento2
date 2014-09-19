@@ -44,6 +44,7 @@
             <module name="Magento_Wishlist"/>
             <module name="Magento_PageCache"/>
             <module name="Magento_Theme"/>
+            <module name="Magento_Authorization"/>
         </depends>
     </module>
 </config>

@@ -47,7 +47,11 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->paymentMethodBuilderMock = $this->getMock(
-            '\Magento\Checkout\Service\V1\Data\Cart\PaymentMethodBuilder', [], [], '', false
+            '\Magento\Checkout\Service\V1\Data\Cart\PaymentMethodBuilder',
+            ['populateWithArray', 'create'],
+            [],
+            '',
+            false
         );
 
         $this->converter = $this->objectManager->getObject(

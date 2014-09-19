@@ -60,6 +60,11 @@ class CartFixedTest extends \PHPUnit_Framework_TestCase
      */
     protected $model;
 
+    /**
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $priceCurrency;
+
     protected function setUp()
     {
         $this->rule = $this->getMock('Magento\Framework\Object', null, array(), 'Rule', true);
@@ -86,7 +91,8 @@ class CartFixedTest extends \PHPUnit_Framework_TestCase
             false
         );
         $dataFactory->expects($this->any())->method('create')->will($this->returnValue($this->data));
-        $this->model = new CartFixed($this->validator, $dataFactory);
+        $this->priceCurrency = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')->getMock();
+        $this->model = new CartFixed($this->validator, $dataFactory, $this->priceCurrency);
     }
 
     /**
@@ -98,8 +104,8 @@ class CartFixedTest extends \PHPUnit_Framework_TestCase
 
         $this->address->expects($this->any())->method('getCartFixedRules')->will($this->returnValue(array()));
         $store = $this->getMock('Magento\Store\Model\Store', array(), array(), '', false);
-        $store->expects($this->atLeastOnce())->method('convertPrice')->will($this->returnArgument(0));
-        $store->expects($this->atLeastOnce())->method('roundPrice')->will($this->returnArgument(0));
+        $this->priceCurrency->expects($this->atLeastOnce())->method('convert')->will($this->returnArgument(0));
+        $this->priceCurrency->expects($this->atLeastOnce())->method('round')->will($this->returnArgument(0));
         $this->quote->expects($this->any())->method('getStore')->will($this->returnValue($store));
 
         /** validators data */

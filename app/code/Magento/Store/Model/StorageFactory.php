@@ -24,8 +24,6 @@
 namespace Magento\Store\Model;
 
 use Magento\Framework\Profiler;
-use Magento\Store\Model\Store;
-use Magento\Framework\StoreManagerInterface;
 
 class StorageFactory
 {

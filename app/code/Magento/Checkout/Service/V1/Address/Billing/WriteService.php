@@ -26,9 +26,8 @@ namespace Magento\Checkout\Service\V1\Address\Billing;
 
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Logger;
-use \Magento\Checkout\Service\V1\QuoteLoader;
+use \Magento\Sales\Model\QuoteRepository;
 use \Magento\Sales\Model\Quote\AddressFactory;
-use Magento\Framework\StoreManagerInterface;
 use \Magento\Checkout\Service\V1\Address\Converter;
 use \Magento\Checkout\Service\V1\Address\Validator;
 
@@ -50,40 +49,32 @@ class WriteService implements WriteServiceInterface
     protected $quoteAddressFactory;
 
     /**
-     * @var StoreManagerInterface
-     */
-    protected $storeManager;
-
-    /**
      * @var Converter
      */
     protected $addressConverter;
 
     /**
-     * @var QuoteLoader
+     * @var QuoteRepository
      */
-    protected $quoteLoader;
+    protected $quoteRepository;
 
     /**
-     * @param QuoteLoader $quoteLoader
-     * @param StoreManagerInterface $storeManager
+     * @param QuoteRepository $quoteRepository
      * @param Converter $addressConverter
      * @param Validator $addressValidator
      * @param AddressFactory $quoteAddressFactory
      * @param Logger $logger
      */
     public function __construct(
-        QuoteLoader $quoteLoader,
-        StoreManagerInterface $storeManager,
+        QuoteRepository $quoteRepository,
         Converter $addressConverter,
         Validator $addressValidator,
         AddressFactory $quoteAddressFactory,
         Logger $logger
     ) {
         $this->addressValidator = $addressValidator;
-        $this->storeManager = $storeManager;
         $this->logger = $logger;
-        $this->quoteLoader = $quoteLoader;
+        $this->quoteRepository = $quoteRepository;
         $this->quoteAddressFactory = $quoteAddressFactory;
         $this->addressConverter = $addressConverter;
     }
@@ -94,7 +85,7 @@ class WriteService implements WriteServiceInterface
     public function setAddress($cartId, $addressData)
     {
         /** @var \Magento\Sales\Model\Quote $quote */
-        $quote = $this->quoteLoader->load($cartId, $this->storeManager->getStore()->getId());
+        $quote = $this->quoteRepository->get($cartId);
         /** @var \Magento\Sales\Model\Quote\Address $address */
         $address = $this->quoteAddressFactory->create();
         $this->addressValidator->validate($addressData);

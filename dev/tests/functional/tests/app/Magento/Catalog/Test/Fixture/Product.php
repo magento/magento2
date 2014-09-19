@@ -380,4 +380,14 @@ class Product extends DataFixture
     {
         return $this->getData('fields/msrp/value');
     }
+
+    /**
+     * Get checkout data for fill options of product
+     *
+     * @return array|null
+     */
+    public function getCheckoutData()
+    {
+        return $this->getData('fields/checkout_data');
+    }
 }

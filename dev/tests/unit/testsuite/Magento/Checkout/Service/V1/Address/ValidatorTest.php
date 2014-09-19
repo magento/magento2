@@ -84,8 +84,13 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         ;
         $this->customerMock = $this->getMock('\Magento\Customer\Model\Customer', [], [], '', false);
 
+        $builder = $this->getMock(
+            '\Magento\Checkout\Service\V1\Data\Cart\Address\RegionBuilder', ['create'], [], '', false
+        );
+
         $this->addressDataBuilder = $this->objectManager->getObject(
-            '\Magento\Checkout\Service\V1\Data\Cart\AddressBuilder'
+            '\Magento\Checkout\Service\V1\Data\Cart\AddressBuilder',
+            ['regionBuilder' => $builder]
         );
 
         $this->model = $this->objectManager->getObject(

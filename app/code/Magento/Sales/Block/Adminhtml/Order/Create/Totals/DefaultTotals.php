@@ -23,6 +23,8 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create\Totals;
 
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+
 /**
  * Default Total Row Renderer
  *
@@ -36,6 +38,12 @@ class DefaultTotals extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals
      * @var string
      */
     protected $_template = 'Magento_Sales::order/create/totals/default.phtml';
+
+    /**
+     * @var PriceCurrencyInterface
+     */
+    protected $priceCurrency;
+
 
     /**
      * Retrieve quote session object
@@ -65,6 +73,11 @@ class DefaultTotals extends \Magento\Sales\Block\Adminhtml\Order\Create\Totals
      */
     public function formatPrice($value)
     {
-        return $this->getStore()->formatPrice($value);
+        return $this->priceCurrency->format(
+            $value,
+            true,
+            PriceCurrencyInterface::DEFAULT_PRECISION,
+            $this->getStore()
+        );
     }
 }

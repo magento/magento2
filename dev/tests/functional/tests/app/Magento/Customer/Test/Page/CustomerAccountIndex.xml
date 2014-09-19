@@ -55,5 +55,10 @@
             <locator>.block.compare</locator>
             <strategy>css selector</strategy>
         </compareProductsBlock>
+        <additionalAddressBlock>
+            <class>Magento\Customer\Test\Block\Account\AddressesAdditional</class>
+            <locator>.block-addresses-list</locator>
+            <strategy>css selector</strategy>
+        </additionalAddressBlock>
     </blocks>
 </page>

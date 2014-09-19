@@ -43,7 +43,7 @@ class ToFixed extends AbstractDiscount
         $itemOriginalPrice = $this->validator->getItemOriginalPrice($item);
         $baseItemOriginalPrice = $this->validator->getItemBaseOriginalPrice($item);
 
-        $quoteAmount = $store->convertPrice($rule->getDiscountAmount());
+        $quoteAmount = $this->priceCurrency->convert($rule->getDiscountAmount(), $store);
 
         $discountData->setAmount($qty * ($itemPrice - $quoteAmount));
         $discountData->setBaseAmount($qty * ($baseItemPrice - $rule->getDiscountAmount()));

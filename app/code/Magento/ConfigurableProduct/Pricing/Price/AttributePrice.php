@@ -31,6 +31,8 @@ use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\PriceModifierInterface;
 use Magento\Framework\Pricing\Amount\AmountInterface;
+use Magento\Catalog\Pricing\Price\CustomOptionPriceInterface;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * Class PriceOptions
@@ -51,19 +53,27 @@ class AttributePrice extends AbstractPrice implements AttributePriceInterface
     protected $storeManager;
 
     /**
+     * @var PriceCurrencyInterface
+     */
+    protected $priceCurrency;
+
+    /**
      * @param Product $saleableItem
      * @param float $quantity
      * @param CalculatorInterface $calculator
      * @param PriceModifierInterface $modifier
      * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param PriceCurrencyInterface $priceCurrency
      */
     public function __construct(
         Product $saleableItem,
         $quantity,
         CalculatorInterface $calculator,
         PriceModifierInterface $modifier,
-        \Magento\Framework\StoreManagerInterface $storeManager
+        \Magento\Framework\StoreManagerInterface $storeManager,
+        PriceCurrencyInterface $priceCurrency
     ) {
+        $this->priceCurrency = $priceCurrency;
         $this->priceModifier = $modifier;
         $this->storeManager = $storeManager;
         parent::__construct($saleableItem, $quantity, $calculator);
@@ -139,34 +149,32 @@ class AttributePrice extends AbstractPrice implements AttributePriceInterface
      * Get Option Value including price rule
      *
      * @param array $value
-     * @param string $exclude
      * @return AmountInterface
      */
     public function getOptionValueModified(
-        array $value = [],
-        $exclude = \Magento\Weee\Pricing\Adjustment::ADJUSTMENT_CODE
+        array $value = []
     ) {
         $pricingValue = $this->getPricingValue($value);
         $this->product->setParentId(true);
         $amount = $this->priceModifier->modifyPrice($pricingValue, $this->product);
 
-        return $this->calculator->getAmount(floatval($amount), $this->product, $exclude);
+        $context = [CustomOptionPriceInterface::CONFIGURATION_OPTION_FLAG => true];
+        return $this->calculator->getAmount(floatval($amount), $this->product, null, $context);
     }
 
     /**
      * Get Option Value Amount with no Catalog Rules
      *
      * @param array $value
-     * @param string $exclude
      * @return AmountInterface
      */
     public function getOptionValueAmount(
-        array $value = [],
-        $exclude = \Magento\Weee\Pricing\Adjustment::ADJUSTMENT_CODE
+        array $value = []
     ) {
         $amount = $this->getPricingValue($value);
 
-        return $this->calculator->getAmount(floatval($amount), $this->product, $exclude);
+        $context = [CustomOptionPriceInterface::CONFIGURATION_OPTION_FLAG => true];
+        return $this->calculator->getAmount(floatval($amount), $this->product, null, $context);
     }
 
     /**
@@ -265,9 +273,9 @@ class AttributePrice extends AbstractPrice implements AttributePriceInterface
             return 0;
         }
 
-        $price = $this->storeManager->getStore()->convertPrice($price);
+        $price = $this->priceCurrency->convert($price);
         if ($round) {
-            $price = $this->storeManager->getStore()->roundPrice($price);
+            $price = $this->priceCurrency->round($price);
         }
 
         return $price;

@@ -25,7 +25,7 @@ namespace Magento\Sales\Model\Resource\Order;
 
 use Magento\Framework\Model\Exception;
 use Magento\Framework\App\Resource;
-use Magento\Framework\Logger;
+use Magento\Framework\Logger as LogWriter;
 
 /**
  * Order status resource model
@@ -57,11 +57,11 @@ class Status extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * Class constructor
      *
      * @param \Magento\Framework\App\Resource $resource
-     * @param Logger $logger
+     * @param LogWriter $logger
      */
     public function __construct(
         Resource $resource,
-        Logger $logger
+        LogWriter $logger
     ) {
         $this->logger = $logger;
         parent::__construct($resource);

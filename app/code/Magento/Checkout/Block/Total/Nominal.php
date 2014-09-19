@@ -38,6 +38,33 @@ class Nominal extends \Magento\Checkout\Block\Total\DefaultTotal
     protected $_template = 'total/nominal.phtml';
 
     /**
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface
+     */
+    protected $priceCurrency;
+
+    /**
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Magento\Catalog\Helper\Data $catalogData
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Sales\Model\Config $salesConfig
+     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Magento\Catalog\Helper\Data $catalogData,
+        \Magento\Customer\Model\Session $customerSession,
+        \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Sales\Model\Config $salesConfig,
+        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
+        array $data = array()
+    ) {
+        $this->priceCurrency = $priceCurrency;
+        parent::__construct($context, $catalogData, $customerSession, $checkoutSession, $salesConfig, $data);
+    }
+
+    /**
      * Getter for a quote item name
      *
      * @param \Magento\Sales\Model\Quote\Item\AbstractItem $quoteItem
@@ -111,7 +138,7 @@ class Nominal extends \Magento\Checkout\Block\Total\DefaultTotal
      */
     public function formatPrice($amount)
     {
-        return $this->_store->formatPrice($amount, false);
+        return $this->priceCurrency->format($amount, false);
     }
 
     /**

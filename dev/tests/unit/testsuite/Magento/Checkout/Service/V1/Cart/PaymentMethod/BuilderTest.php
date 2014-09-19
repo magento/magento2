@@ -55,7 +55,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $paymentMethodMock->expects($this->once())->method('__toArray')->will($this->returnValue($paymentData));
         $paymentMethodMock->expects($this->once())
             ->method('getPaymentDetails')
-            ->will($this->returnValue(['paymentDetailsTest']));
+            ->will($this->returnValue(serialize(['paymentDetailsTest'])));
 
         $paymentMock = $this->getMock('\Magento\Sales\Model\Quote\Payment', [], [], '', false);
         $paymentMock->expects($this->once())

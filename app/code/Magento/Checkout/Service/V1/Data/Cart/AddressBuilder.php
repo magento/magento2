@@ -90,7 +90,7 @@ class AddressBuilder extends AbstractExtensibleObjectBuilder
             if (!is_array($data[Address::KEY_REGION])) {
                 // Region data has been submitted as individual keys of Address object. Let's extract it.
                 $regionData = array();
-                foreach (array(Region::KEY_REGION, Region::KEY_REGION_CODE, Region::KEY_REGION_ID) as $attrCode) {
+                foreach (array(Region::REGION, Region::REGION_CODE, Region::REGION_ID) as $attrCode) {
                     if (isset($data[$attrCode])) {
                         $regionData[$attrCode] = $data[$attrCode];
                     }

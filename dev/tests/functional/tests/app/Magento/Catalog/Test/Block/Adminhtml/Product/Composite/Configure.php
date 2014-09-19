@@ -37,6 +37,13 @@ use Mtf\Fixture\FixtureInterface;
 class Configure extends Form
 {
     /**
+     * Selector for quantity field
+     *
+     * @var string
+     */
+    protected $qty = '[name="qty"]';
+
+    /**
      * Fill options for the product
      *
      * @param FixtureInterface $product
@@ -45,11 +52,11 @@ class Configure extends Form
     public function fillOptions(FixtureInterface $product)
     {
         $productOptions = $product->getCheckoutData();
-        if (!empty($productOptions['configurable_options'])) {
+        if (!empty($productOptions['options']['configurable_options'])) {
             $configurableAttributesData = $product->getData('fields/configurable_attributes_data/value');
             $checkoutData = [];
 
-            foreach ($productOptions['configurable_options'] as $optionData) {
+            foreach ($productOptions['options']['configurable_options'] as $optionData) {
                 $titleKey = $optionData['title'];
                 $valueKey = $optionData['value'];
 
@@ -69,7 +76,12 @@ class Configure extends Form
                 );
                 $select->setValue($option['value']);
             }
-            $this->_rootElement->find('.ui-dialog-buttonset button:nth-of-type(2)')->click();
         }
+
+        if (isset($productOptions['options']['qty'])) {
+            $this->_rootElement->find($this->qty)->setValue($productOptions['options']['qty']);
+        }
+
+        $this->_rootElement->find('.ui-dialog-buttonset button:nth-of-type(2)')->click();
     }
 }

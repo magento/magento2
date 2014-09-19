@@ -24,6 +24,7 @@
 namespace Magento\Sales\Model;
 
 use Magento\Directory\Model\Currency;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Resource\Order\Address\Collection;
 use Magento\Sales\Model\Resource\Order\Creditmemo\Collection as CreditmemoCollection;
@@ -547,6 +548,11 @@ class Order extends \Magento\Sales\Model\AbstractModel implements EntityInterfac
     protected $_trackCollectionFactory;
 
     /**
+     * @var PriceCurrencyInterface
+     */
+    protected $priceCurrency;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
@@ -569,6 +575,7 @@ class Order extends \Magento\Sales\Model\AbstractModel implements EntityInterfac
      * @param Resource\Order\Shipment\CollectionFactory $shipmentCollectionFactory
      * @param Resource\Order\Creditmemo\CollectionFactory $memoCollectionFactory
      * @param Resource\Order\Shipment\Track\CollectionFactory $trackCollectionFactory
+     * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -596,6 +603,7 @@ class Order extends \Magento\Sales\Model\AbstractModel implements EntityInterfac
         \Magento\Sales\Model\Resource\Order\Shipment\CollectionFactory $shipmentCollectionFactory,
         \Magento\Sales\Model\Resource\Order\Creditmemo\CollectionFactory $memoCollectionFactory,
         \Magento\Sales\Model\Resource\Order\Shipment\Track\CollectionFactory $trackCollectionFactory,
+        PriceCurrencyInterface $priceCurrency,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
@@ -619,6 +627,7 @@ class Order extends \Magento\Sales\Model\AbstractModel implements EntityInterfac
         $this->_shipmentCollectionFactory = $shipmentCollectionFactory;
         $this->_memoCollectionFactory = $memoCollectionFactory;
         $this->_trackCollectionFactory = $trackCollectionFactory;
+        $this->priceCurrency = $priceCurrency;
         parent::__construct($context, $registry, $localeDate, $dateTime, $resource, $resourceCollection, $data);
     }
 
@@ -847,7 +856,7 @@ class Order extends \Magento\Sales\Model\AbstractModel implements EntityInterfac
          * for this we have additional diapason for 0
          * TotalPaid - contains amount, that were not rounded.
          */
-        if (abs($this->getStore()->roundPrice($this->getTotalPaid()) - $this->getTotalRefunded()) < .0001) {
+        if (abs($this->priceCurrency->round($this->getTotalPaid()) - $this->getTotalRefunded()) < .0001) {
             return false;
         }
 
@@ -1590,7 +1599,7 @@ class Order extends \Magento\Sales\Model\AbstractModel implements EntityInterfac
     }
 
     /**
-     * @return array
+     * @return \Magento\Sales\Model\Order\Item[]
      */
     public function getAllItems()
     {
@@ -1945,7 +1954,7 @@ class Order extends \Magento\Sales\Model\AbstractModel implements EntityInterfac
     public function getTotalDue()
     {
         $total = $this->getGrandTotal() - $this->getTotalPaid();
-        $total = $this->_storeManager->getStore($this->getStoreId())->roundPrice($total);
+        $total = $this->priceCurrency->round($total);
         return max($total, 0);
     }
 
@@ -1957,7 +1966,7 @@ class Order extends \Magento\Sales\Model\AbstractModel implements EntityInterfac
     public function getBaseTotalDue()
     {
         $total = $this->getBaseGrandTotal() - $this->getBaseTotalPaid();
-        $total = $this->_storeManager->getStore($this->getStoreId())->roundPrice($total);
+        $total = $this->priceCurrency->round($total);
         return max($total, 0);
     }
 

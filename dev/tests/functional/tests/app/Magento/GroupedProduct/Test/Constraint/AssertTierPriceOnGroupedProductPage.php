@@ -24,12 +24,14 @@
 
 namespace Magento\GroupedProduct\Test\Constraint;
 
-use Magento\GroupedProduct\Test\Fixture\CatalogProductGrouped;
+use Mtf\Client\Browser;
+use Magento\GroupedProduct\Test\Fixture\GroupedProductInjectable;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Catalog\Test\Constraint\AssertProductTierPriceOnProductPage;
 
 /**
  * Class AssertTierPriceOnGroupedProductPage
+ * Assert that displayed grouped price on grouped product page equals passed from fixture
  */
 class AssertTierPriceOnGroupedProductPage extends AbstractAssertPriceOnGroupedProductPage
 {
@@ -58,15 +60,17 @@ class AssertTierPriceOnGroupedProductPage extends AbstractAssertPriceOnGroupedPr
      * Assert that displayed grouped price on grouped product page equals passed from fixture
      *
      * @param CatalogProductView $catalogProductView
-     * @param CatalogProductGrouped $product
+     * @param GroupedProductInjectable $product
      * @param AssertProductTierPriceOnProductPage $tierPrice
+     * @param Browser $browser
      * @return void
      */
     public function processAssert(
         CatalogProductView $catalogProductView,
-        CatalogProductGrouped $product,
-        AssertProductTierPriceOnProductPage $tierPrice
+        GroupedProductInjectable $product,
+        AssertProductTierPriceOnProductPage $tierPrice,
+        Browser $browser
     ) {
-        $this->processAssertPrice($product, $catalogProductView, $tierPrice, 'Tier');
+        $this->processAssertPrice($product, $catalogProductView, $tierPrice, $browser, 'Tier');
     }
 }

@@ -78,6 +78,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getPriceInfo', 'getPriceType', '__wakeup', 'getStore'])
             ->disableOriginalConstructor()
             ->getMock();
+        $priceCurrency = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')->getMock();
         $priceInfo = $this->getMock('Magento\Framework\Pricing\PriceInfo\Base', [], [], '', false);
         $priceInfo->expects($this->any())->method('getPrice')->will(
             $this->returnCallback(
@@ -94,7 +95,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
         $store = $this->getMockBuilder('Magento\Store\Model\Store')
             ->disableOriginalConstructor()
             ->getMock();
-        $store->expects($this->any())->method('roundPrice')->will($this->returnArgument(0));
+        $priceCurrency->expects($this->any())->method('round')->will($this->returnArgument(0));
 
         $this->saleableItem->expects($this->any())->method('getStore')->will($this->returnValue($store));
 
@@ -128,7 +129,8 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
                 'calculator' => $this->baseCalculator,
                 'amountFactory' => $this->amountFactory,
                 'bundleSelectionFactory' => $this->selectionFactory,
-                'taxHelper' => $this->taxData
+                'taxHelper' => $this->taxData,
+                'priceCurrency' => $priceCurrency,
             ]
         );
     }

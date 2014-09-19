@@ -36,15 +36,23 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_storeManager;
 
     /**
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface
+     */
+    protected $priceCurrency;
+
+    /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Sales\Model\Config $salesConfig
+     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Framework\StoreManagerInterface $storeManager,
-        \Magento\Sales\Model\Config $salesConfig
+        \Magento\Sales\Model\Config $salesConfig,
+        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
     ) {
+        $this->priceCurrency = $priceCurrency;
         $this->_storeManager = $storeManager;
         $this->_salesConfig = $salesConfig;
         parent::__construct($context);
@@ -100,7 +108,7 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
                 $res = '<strong>' . $res . '</strong>';
             }
         } else {
-            $res = $this->_storeManager->getStore()->formatPrice($price);
+            $res = $this->priceCurrency->format($price);
             if ($strong) {
                 $res = '<strong>' . $res . '</strong>';
             }

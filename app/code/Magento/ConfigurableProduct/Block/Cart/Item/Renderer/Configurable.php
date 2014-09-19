@@ -38,36 +38,6 @@ class Configurable extends Renderer implements IdentityInterface
     const CONFIG_THUMBNAIL_SOURCE = 'checkout/cart/configurable_product_image';
 
     /**
-     * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Catalog\Helper\Product\Configuration $productConfig
-     * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Catalog\Helper\Image $imageHelper
-     * @param \Magento\Core\Helper\Url $urlHelper
-     * @param \Magento\Framework\Message\ManagerInterface $messageManager
-     * @param array $data
-     */
-    public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Catalog\Helper\Product\Configuration $productConfig,
-        \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Catalog\Helper\Image $imageHelper,
-        \Magento\Core\Helper\Url $urlHelper,
-        \Magento\Framework\Message\ManagerInterface $messageManager,
-        array $data = array()
-    ) {
-        parent::__construct(
-            $context,
-            $productConfig,
-            $checkoutSession,
-            $imageHelper,
-            $urlHelper,
-            $messageManager,
-            $data
-        );
-        $this->_isScopePrivate = true;
-    }
-
-    /**
      * Get item configurable child product
      *
      * @return \Magento\Catalog\Model\Product

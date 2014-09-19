@@ -36,15 +36,23 @@ abstract class AbstractDiscount implements DiscountInterface
     protected $validator;
 
     /**
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface
+     */
+    protected $priceCurrency;
+
+    /**
      * @param \Magento\SalesRule\Model\Validator $validator
-     * @param \Magento\SalesRule\Model\Rule\Action\Discount\DataFactory $discountDataFactory
+     * @param DataFactory $discountDataFactory
+     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      */
     public function __construct(
         \Magento\SalesRule\Model\Validator $validator,
-        \Magento\SalesRule\Model\Rule\Action\Discount\DataFactory $discountDataFactory
+        \Magento\SalesRule\Model\Rule\Action\Discount\DataFactory $discountDataFactory,
+        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
     ) {
         $this->validator = $validator;
         $this->discountFactory = $discountDataFactory;
+        $this->priceCurrency = $priceCurrency;
     }
 
     /**

@@ -93,38 +93,38 @@ class ConfigurableAttributesData implements FixtureInterface
     protected $presets = [
         'default' => [
             'attributes_data' => [
-                'attribute_0' => [
+                'attribute_key_0' => [
                     'options' => [
-                        'option_0' => [
+                        'option_key_0' => [
                             'pricing_value' => 12.00,
                             'include' => 'Yes',
                             'is_percent' => 'No'
                         ],
-                        'option_1' => [
+                        'option_key_1' => [
                             'pricing_value' => 20.00,
                             'include' => 'Yes',
                             'is_percent' => 'No'
                         ],
-                        'option_2' => [
+                        'option_key_2' => [
                             'pricing_value' => 18.00,
                             'include' => 'Yes',
                             'is_percent' => 'No'
                         ],
                     ]
                 ],
-                'attribute_1' => [
+                'attribute_key_1' => [
                     'options' => [
-                        'option_0' => [
+                        'option_key_0' => [
                             'pricing_value' => 42.00,
                             'include' => 'Yes',
                             'is_percent' => 'No'
                         ],
-                        'option_1' => [
+                        'option_key_1' => [
                             'pricing_value' => 40.00,
                             'include' => 'Yes',
                             'is_percent' => 'No'
                         ],
-                        'option_2' => [
+                        'option_key_2' => [
                             'pricing_value' => 48.00,
                             'include' => 'Yes',
                             'is_percent' => 'No'
@@ -136,59 +136,59 @@ class ConfigurableAttributesData implements FixtureInterface
 
             ],
             'attributes' => [
-                'attribute_0' => 'catalogProductAttribute::attribute_type_dropdown',
-                'attribute_1' => 'catalogProductAttribute::attribute_type_dropdown'
+                'attribute_key_0' => 'catalogProductAttribute::attribute_type_dropdown',
+                'attribute_key_1' => 'catalogProductAttribute::attribute_type_dropdown'
             ],
             'matrix' => [
-                'attribute_0:option_0 attribute_1:option_0' => [
+                'attribute_key_0:option_key_0 attribute_key_1:option_key_0' => [
                     'quantity_and_stock_status' => [
                         'qty' => 10
                     ],
                     'weight' => 1
                 ],
-                'attribute_0:option_0 attribute_1:option_1' => [
+                'attribute_key_0:option_key_0 attribute_key_1:option_key_1' => [
                     'quantity_and_stock_status' => [
                         'qty' => 10
                     ],
                     'weight' => 1
                 ],
-                'attribute_0:option_0 attribute_1:option_2' => [
+                'attribute_key_0:option_key_0 attribute_key_1:option_key_2' => [
                     'quantity_and_stock_status' => [
                         'qty' => 10
                     ],
                     'weight' => 1
                 ],
-                'attribute_0:option_1 attribute_1:option_0' => [
+                'attribute_key_0:option_key_1 attribute_key_1:option_key_0' => [
                     'quantity_and_stock_status' => [
                         'qty' => 10
                     ],
                     'weight' => 1
                 ],
-                'attribute_0:option_1 attribute_1:option_1' => [
+                'attribute_key_0:option_key_1 attribute_key_1:option_key_1' => [
                     'quantity_and_stock_status' => [
                         'qty' => 10
                     ],
                     'weight' => 1
                 ],
-                'attribute_0:option_1 attribute_1:option_2' => [
+                'attribute_key_0:option_key_1 attribute_key_1:option_key_2' => [
                     'quantity_and_stock_status' => [
                         'qty' => 10
                     ],
                     'weight' => 1
                 ],
-                'attribute_0:option_2 attribute_1:option_0' => [
+                'attribute_key_0:option_key_2 attribute_key_1:option_key_0' => [
                     'quantity_and_stock_status' => [
                         'qty' => 10
                     ],
                     'weight' => 1
                 ],
-                'attribute_0:option_2 attribute_1:option_1' => [
+                'attribute_key_0:option_key_2 attribute_key_1:option_key_1' => [
                     'quantity_and_stock_status' => [
                         'qty' => 10
                     ],
                     'weight' => 1
                 ],
-                'attribute_0:option_2 attribute_1:option_2' => [
+                'attribute_key_0:option_key_2 attribute_key_1:option_key_2' => [
                     'quantity_and_stock_status' => [
                         'qty' => 10
                     ],
@@ -198,9 +198,9 @@ class ConfigurableAttributesData implements FixtureInterface
         ],
         'one_variation' => [
             'attributes_data' => [
-                'attribute_0' => [
+                'attribute_key_0' => [
                     'options' => [
-                        'option_0' => [
+                        'option_key_0' => [
                             'pricing_value' => 12.00,
                             'include' => 'Yes',
                             'is_percent' => 'No'
@@ -208,32 +208,31 @@ class ConfigurableAttributesData implements FixtureInterface
                     ]
                 ]
             ],
-            'products' => [
-
-            ],
+            'products' => [],
             'attributes' => [
-                'attribute_0' => 'catalogProductAttribute::attribute_type_dropdown_one_option'
+                'attribute_key_0' => 'catalogProductAttribute::attribute_type_dropdown_one_option'
             ],
             'matrix' => [
-                'attribute_0:option_0' => [
+                'attribute_key_0:option_key_0' => [
+                    'display' => 'Yes',
                     'quantity_and_stock_status' => [
                         'qty' => 10
                     ],
                     'weight' => 1
-                ],
+                ]
             ]
         ],
         'two_options' => [
             'attributes_data' => [
-                'attribute_0' => [
+                'attribute_key_0' => [
                     'options' => [
-                        'option_0' => [
+                        'option_key_0' => [
                             'label' => 'option_1_%isolation%',
                             'pricing_value' => 1,
                             'is_percent' => 'Yes',
                             'include' => 'Yes'
                         ],
-                        'option_1' => [
+                        'option_key_1' => [
                             'label' => 'option_2_%isolation%',
                             'pricing_value' => 2,
                             'is_percent' => 'Yes',
@@ -243,18 +242,18 @@ class ConfigurableAttributesData implements FixtureInterface
                 ]
             ],
             'attributes' => [
-                'attribute_0' => 'catalogProductAttribute::attribute_type_dropdown_two_options',
+                'attribute_key_0' => 'catalogProductAttribute::attribute_type_dropdown_two_options',
             ],
             'products' => [],
             'matrix' => [
-                'attribute_0:option_0' => [
+                'attribute_key_0:option_key_0' => [
                     'display' => 'Yes',
                     'quantity_and_stock_status' => [
                         'qty' => 10
                     ],
                     'weight' => 1
                 ],
-                'attribute_0:option_1' => [
+                'attribute_key_0:option_key_1' => [
                     'display' => 'Yes',
                     'quantity_and_stock_status' => [
                         'qty' => 20
@@ -265,20 +264,20 @@ class ConfigurableAttributesData implements FixtureInterface
         ],
         'two_new_options' => [
             'attributes_data' => [
-                'attribute_0' => [
+                'attribute_key_0' => [
                     'frontend_label' => 'two_new_options_title_%isolation%',
                     'frontend_input' => 'Dropdown',
                     'label' => 'two_new_options_title_%isolation%',
                     'is_required' => 'No',
                     'options' => [
-                        'option_0' => [
-                            'label' => 'option_1_%isolation%',
+                        'option_key_0' => [
+                            'label' => 'option_key_1_%isolation%',
                             'pricing_value' => 1,
                             'is_percent' => 'No',
                             'include' => 'Yes'
                         ],
-                        'option_1' => [
-                            'label' => 'option_2_%isolation%',
+                        'option_key_1' => [
+                            'label' => 'option_key_2_%isolation%',
                             'pricing_value' => 2,
                             'is_percent' => 'No',
                             'include' => 'Yes',
@@ -289,14 +288,14 @@ class ConfigurableAttributesData implements FixtureInterface
             'attributes' => [],
             'products' => [],
             'matrix' => [
-                'attribute_0:option_0' => [
+                'attribute_key_0:option_key_0' => [
                     'display' => 'Yes',
                     'quantity_and_stock_status' => [
                         'qty' => 10
                     ],
                     'weight' => 1
                 ],
-                'attribute_0:option_1' => [
+                'attribute_key_0:option_key_1' => [
                     'display' => 'Yes',
                     'quantity_and_stock_status' => [
                         'qty' => 20
@@ -307,16 +306,16 @@ class ConfigurableAttributesData implements FixtureInterface
         ],
         'two_options_with_assigned_product' => [
             'attributes_data' => [
-                'attribute_0' => [
+                'attribute_key_0' => [
                     'options' => [
-                        'option_0' => [
-                            'label' => 'option_1_%isolation%',
+                        'option_key_0' => [
+                            'label' => 'option_key_1_%isolation%',
                             'pricing_value' => 1,
                             'is_percent' => 'Yes',
                             'include' => 'Yes'
                         ],
-                        'option_1' => [
-                            'label' => 'option_2_%isolation%',
+                        'option_key_1' => [
+                            'label' => 'option_key_2_%isolation%',
                             'pricing_value' => 2,
                             'is_percent' => 'Yes',
                             'include' => 'Yes',
@@ -325,21 +324,21 @@ class ConfigurableAttributesData implements FixtureInterface
                 ]
             ],
             'attributes' => [
-                'attribute_0' => 'catalogProductAttribute::attribute_type_dropdown_two_options',
+                'attribute_key_0' => 'catalogProductAttribute::attribute_type_dropdown_two_options',
             ],
             'products' => [
-                'attribute_0:option_0' => 'catalogProductSimple::default',
-                'attribute_0:option_1' => 'catalogProductSimple::default'
+                'attribute_key_0:option_key_0' => 'catalogProductSimple::default',
+                'attribute_key_0:option_key_1' => 'catalogProductSimple::default'
             ],
             'matrix' => [
-                'attribute_0:option_0' => [
+                'attribute_key_0:option_key_0' => [
                     'display' => 'Yes',
                     'quantity_and_stock_status' => [
                         'qty' => 10
                     ],
                     'weight' => 1
                 ],
-                'attribute_0:option_1' => [
+                'attribute_key_0:option_key_1' => [
                     'display' => 'Yes',
                     'quantity_and_stock_status' => [
                         'qty' => 20
@@ -420,7 +419,7 @@ class ConfigurableAttributesData implements FixtureInterface
             $options = [];
 
             foreach ($attributeData['options'] as $key => $option) {
-                $options['option_' . $key] = $option;
+                $options['option_key_' . $key] = $option;
             }
             $attributeData['options'] = $options;
 
@@ -617,6 +616,7 @@ class ConfigurableAttributesData implements FixtureInterface
             'options',
         ];
         $optionFields = [
+            'admin',
             'label',
             'pricing_value',
             'is_percent',

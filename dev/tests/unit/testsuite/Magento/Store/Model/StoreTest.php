@@ -375,40 +375,6 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    public function testGetPriceFilter()
-    {
-        /** @var \Magento\Store\Model\Store $model */
-        $model = $this->objectManagerHelper->getObject('Magento\Store\Model\Store');
-        $model->setData('base_currency', false);
-        $model->setData('current_currency', false);
-        $model->setData('default_currency', false);
-        $this->assertInstanceOf('\Magento\Framework\Filter\Sprintf', $model->getPriceFilter());
-
-        $filter = $this->getMock('\Magento\Directory\Model\Currency\Filter', [], [], '', false);
-
-        $defaultCurrency = $this->getMock('\Magento\Directory\Model\Currency', [], [], '', false);
-        $defaultCurrency->expects($this->any())->method('getFilter')->will($this->returnValue($filter));
-
-        $model = $this->objectManagerHelper->getObject('Magento\Store\Model\Store');
-        $model->setData('base_currency', false);
-        $model->setData('current_currency', false);
-        $model->setData('default_currency', $defaultCurrency);
-        $this->assertEquals($filter, $model->getPriceFilter());
-
-        $filter->expects($this->any())->method('setRate')->with(2.1)->will($this->returnSelf());
-
-        $currentCurrency = $this->getMock('\Magento\Directory\Model\Currency', [], [], '', false);
-        $currentCurrency->expects($this->any())->method('getFilter')->will($this->returnValue($filter));
-
-        $baseCurrency = $this->getMock('\Magento\Directory\Model\Currency', [], [], '', false);
-        $baseCurrency->expects($this->any())->method('getRate')->with($currentCurrency)->will($this->returnValue(2.1));
-
-        $model = $this->objectManagerHelper->getObject('Magento\Store\Model\Store');
-        $model->setData('base_currency', $baseCurrency);
-        $model->setData('current_currency', $currentCurrency);
-        $this->assertEquals($filter, $model->getPriceFilter());
-    }
-
     /**
      * @dataProvider getBaseCurrencyDataProvider
      *

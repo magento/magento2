@@ -23,6 +23,7 @@
  */
 namespace Magento\Tax\Block\Item\Price;
 
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Tax\Helper\Data as TaxHelper;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Framework\Object as MagentoObject;
@@ -62,17 +63,23 @@ class Renderer extends \Magento\Framework\View\Element\Template
     protected $zone = null;
 
     /**
-     * Constructor
-     *
+     * @var PriceCurrencyInterface
+     */
+    protected $priceCurrency;
+
+    /**
      * @param Context $context
      * @param TaxHelper $taxHelper
+     * @param PriceCurrencyInterface $priceCurrency
      * @param array $data
      */
     public function __construct(
         Context $context,
         TaxHelper $taxHelper,
+        PriceCurrencyInterface $priceCurrency,
         array $data = array()
     ) {
+        $this->priceCurrency = $priceCurrency;
         $this->taxHelper = $taxHelper;
         if (isset($data['zone'])) {
             $this->zone = $data['zone'];
@@ -196,7 +203,12 @@ class Renderer extends \Magento\Framework\View\Element\Template
     {
         $item = $this->getItem();
         if ($item instanceof QuoteItem) {
-            return $item->getStore()->formatPrice($price);
+            return $this->priceCurrency->format(
+                $price,
+                true,
+                PriceCurrencyInterface::DEFAULT_PRECISION,
+                $item->getStore()
+            );
         } elseif ($item instanceof OrderItem) {
             return $item->getOrder()->formatPrice($price);
         } else {

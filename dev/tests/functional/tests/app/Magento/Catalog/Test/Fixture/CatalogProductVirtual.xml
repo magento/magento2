@@ -449,6 +449,12 @@
             <default_value>Main Website</default_value>
             <group>websites</group>
         </website_ids>
+        <checkout_data>
+            <attribute_code>checkout_data</attribute_code>
+            <backend_type>virtual</backend_type>
+            <group />
+            <source>Magento\Catalog\Test\Fixture\CatalogProductVirtual\CheckoutData</source>
+        </checkout_data>
     </fields>
     <data_set>
         <sku></sku>
@@ -458,6 +464,9 @@
         <tax_class_id></tax_class_id>
     </data_set>
     <data_config>
+        <type_id>
+            <type>virtual</type>
+        </type_id>
         <create_url_params>
             <type>virtual</type>
             <set>4</set>

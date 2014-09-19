@@ -75,7 +75,9 @@ class View extends \Magento\Catalog\Test\Block\Product\View
                         'title' => $option['label']
                     ];
                 }
+                $attributesData[$attributeKey]['options'] = array_values($attributesData[$attributeKey]['options']);
             }
+            $attributesData = array_values($attributesData);
         } else {
             // TODO: Removed after refactoring(removed) old product fixture.
             /** @var ConfigurableProduct $product */
@@ -98,8 +100,8 @@ class View extends \Magento\Catalog\Test\Block\Product\View
             }
         }
 
-        $configurableCheckoutData = isset($checkoutData['configurable_options'])
-            ? $checkoutData['configurable_options']
+        $configurableCheckoutData = isset($checkoutData['options']['configurable_options'])
+            ? $checkoutData['options']['configurable_options']
             : [];
         $checkoutOptionsData = $this->prepareCheckoutData($attributesData, $configurableCheckoutData);
         $this->getCustomOptionsBlock()->fillCustomOptions($checkoutOptionsData);

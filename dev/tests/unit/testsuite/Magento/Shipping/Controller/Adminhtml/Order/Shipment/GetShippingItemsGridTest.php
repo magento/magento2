@@ -57,28 +57,28 @@ class GetShippingItemsGridTest extends \PHPUnit_Framework_TestCase
     {
         $this->requestMock = $this->getMock(
             'Magento\Framework\App\Request\Http',
-            ['getParam'],
+            ['getParam', '__wakeup'],
             [],
             '',
             false
         );
         $this->shipmentLoaderMock = $this->getMock(
             'Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader',
-            ['setOrderId', 'setShipmentId', 'setShipment', 'setTracking', 'load'],
+            ['setOrderId', 'setShipmentId', 'setShipment', 'setTracking', 'load', '__wakeup'],
             [],
             '',
             false
         );
         $this->viewMock = $this->getMock(
             'Magento\Backend\Model\View',
-            ['getLayout', 'renderLayout'],
+            ['getLayout', 'renderLayout', '__wakeup'],
             [],
             '',
             false
         );
         $this->responseMock = $this->getMock(
             'Magento\Framework\App\Response\Http',
-            ['setBody'],
+            ['setBody', '__wakeup'],
             [],
             '',
             false
@@ -86,7 +86,7 @@ class GetShippingItemsGridTest extends \PHPUnit_Framework_TestCase
 
         $contextMock = $this->getMock(
             'Magento\Backend\App\Action\Context',
-            ['getRequest', 'getResponse', 'getView'],
+            ['getRequest', 'getResponse', 'getView', '__wakeup'],
             [],
             '',
             false

@@ -23,6 +23,8 @@
  */
 namespace Magento\Paypal\Block\Express;
 
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+
 /**
  * Paypal Express Onepage checkout block
  *
@@ -65,19 +67,25 @@ class Review extends \Magento\Framework\View\Element\Template
     protected $_taxHelper;
 
     /**
-     * Initialize dependencies.
-     *
+     * @var PriceCurrencyInterface
+     */
+    protected $priceCurrency;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Tax\Helper\Data $taxHelper
      * @param \Magento\Customer\Model\Address\Config $addressConfig
+     * @param PriceCurrencyInterface $priceCurrency
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Tax\Helper\Data $taxHelper,
         \Magento\Customer\Model\Address\Config $addressConfig,
+        PriceCurrencyInterface $priceCurrency,
         array $data = array()
     ) {
+        $this->priceCurrency = $priceCurrency;
         $this->_taxHelper = $taxHelper;
         $this->_addressConfig = $addressConfig;
         parent::__construct($context, $data);
@@ -228,7 +236,12 @@ class Review extends \Magento\Framework\View\Element\Template
      */
     protected function _formatPrice($price)
     {
-        return $this->_quote->getStore()->convertPrice($price, true);
+        return $this->priceCurrency->convertAndFormat(
+            $price,
+            true,
+            PriceCurrencyInterface::DEFAULT_PRECISION,
+            $this->_quote->getStore()
+        );
     }
 
     /**

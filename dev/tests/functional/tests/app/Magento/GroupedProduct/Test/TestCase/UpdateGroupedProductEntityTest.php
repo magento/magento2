@@ -27,7 +27,7 @@ namespace Magento\GroupedProduct\Test\TestCase;
 use Mtf\TestCase\Injectable;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
-use Magento\GroupedProduct\Test\Fixture\CatalogProductGrouped;
+use Magento\GroupedProduct\Test\Fixture\GroupedProductInjectable;
 
 /**
  * Test Creation for Update GroupedProductEntity
@@ -82,11 +82,11 @@ class UpdateGroupedProductEntityTest extends Injectable
     /**
      * Test update grouped product
      *
-     * @param CatalogProductGrouped $product
-     * @param CatalogProductGrouped $originalProduct
+     * @param GroupedProductInjectable $product
+     * @param GroupedProductInjectable $originalProduct
      * @return void
      */
-    public function test(CatalogProductGrouped $product, CatalogProductGrouped $originalProduct)
+    public function test(GroupedProductInjectable $product, GroupedProductInjectable $originalProduct)
     {
         // Precondition
         $originalProduct->persist();

@@ -79,4 +79,12 @@ interface PriceCurrencyInterface
         $store = null,
         $currency = null
     );
+
+    /**
+     * Round price
+     *
+     * @param float $price
+     * @return float
+     */
+    public function round($price);
 }

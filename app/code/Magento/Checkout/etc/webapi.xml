@@ -67,6 +67,12 @@
             <resource ref="Magento_Catalog::products" />
         </resources>
     </route>
+    <route url="/V1/customer/:customerId/cart" method="GET">
+        <service class="Magento\Checkout\Service\V1\Cart\ReadServiceInterface" method="getCartForCustomer"/>
+        <resources>
+            <resource ref="Magento_Catalog::products" />
+        </resources>
+    </route>
     <route url="/V1/carts" method="PUT">
         <service class="Magento\Checkout\Service\V1\Cart\ReadServiceInterface" method="getCartList"/>
         <resources>
@@ -152,7 +158,13 @@
         </resources>
     </route>
     <route url="/V1/carts/:cartId/totals" method="GET">
-        <service class="Magento\Checkout\Service\V1\Cart\ReadServiceInterface" method="getTotals"/>
+        <service class="Magento\Checkout\Service\V1\Cart\TotalsServiceInterface" method="getTotals"/>
+        <resources>
+            <resource ref="Magento_Sales::sales" />
+        </resources>
+    </route>
+    <route url="/V1/carts/:cartId/order" method="PUT">
+        <service class="Magento\Checkout\Service\V1\Cart\WriteServiceInterface" method="order"/>
         <resources>
             <resource ref="Magento_Sales::sales" />
         </resources>

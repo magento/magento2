@@ -61,7 +61,6 @@ class CreateProductAttributeEntityTest extends Injectable
         CatalogProductAttributeNew $attributeNew,
         CatalogAttributeSet $productTemplate
     ) {
-        $this->markTestIncomplete('MAGETWO-27282');
         //Precondition
         $productTemplate->persist();
 

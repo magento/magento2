@@ -1,3 +1,34 @@
+0.1.0-alpha96
+=============
+ * Framework improvements:
+   * Increased unit tests code coverage for Magento_Persistent, Magento_GiftMessage, Magento_Checkout modules
+ * Modularity:
+   * Removed module dependency on the Weee module
+ * Fixed Bugs:
+   * Fixed an issue in composer installation where Magento/Framework marshaling did not work
+   * Fixed an issue where shipping tax was included twice in tax details
+   * Renamed the getDistinct method in Tax Model
+   * Fixed an issue where it was impossible to reorder and create a new order in the Admin panel if some fields of the order were specified incorrectly and the page was reloaded
+   * Fixed an issue where the Configure link was not displayed in the Product Requiring Attention section
+   * Fixed an issue where Magento could only be installed in the host root directory
+   * Fixed an issue where no proper error message was displayed if vendor directory did not exist in the setup tool
+   * Fixed an issue where a fatal error was thrown during checkout with multiple addresses
+   * Fixed an issue where integration tests failed if prefixes for tables were used
+ * Checkout API:
+   * Created Customer Shopping Cart Service
+ * Price template refactoring
+   * Introduced a single interface for price and tax calculation logic
+ * Functional tests:
+   * Add products to shopping cart
+   * Bestseller products report
+   * Cancel created order
+   * Delete customer address
+   * Hold created order
+   * Ordered products report
+   * Sales coupon report
+ * GitHub requests:
+   * [#662] (https://github.com/magento/magento2/issues/662) -- Composer Installation
+
 0.1.0-alpha95
 =============
  * Modularity
@@ -57,8 +88,8 @@
    * Configuration scope of items' InStock status on order cancellation
    * Creating the new customer in admin
  * GitHub requests:
-   * #621 -- Parse error: syntax error, unexpected T_OBJECT_OPERATOR
-   * #651 -- Multishipping checkout add/edit address page issue
+   * [#621] (https://github.com/magento/magento2/issues/621) -- Parse error: syntax error, unexpected T_OBJECT_OPERATOR
+   * [#651] (https://github.com/magento/magento2/issues/651) -- Multishipping checkout add/edit address page issue
 
 0.1.0-alpha94
 =============

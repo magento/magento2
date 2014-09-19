@@ -44,36 +44,20 @@ class PriceTest extends \PHPUnit_Framework_TestCase
      */
     protected $store;
 
+    /**
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $priceCurrency;
+
     protected function setUp()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
 
-        $this->store = $this->getMockBuilder('Magento\Store\Model\Store')
-            ->disableOriginalConstructor()
-            ->setMethods(['convertPrice', '__wakeup'])
-            ->getMock();
-
-        $this->quote = $this->getMockBuilder('Magento\Sales\Model\Quote')
-            ->disableOriginalConstructor()
-            ->setMethods(['getStore', '__wakeup'])
-            ->getMock();
-
-        $this->quote->expects($this->once())
-            ->method('getStore')
-            ->will($this->returnValue($this->store));
-
-        $checkoutSession = $this->getMockBuilder('\Magento\Checkout\Model\Session')
-            ->disableOriginalConstructor()
-            ->setMethods(['getQuote', '__wakeup'])
-            ->getMock();
-
-        $checkoutSession->expects($this->once())
-            ->method('getQuote')
-            ->will($this->returnValue($this->quote));
+        $this->priceCurrency = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')->getMock();
 
         $this->priceObj = $objectManager->getObject(
             '\Magento\Checkout\Block\Shipping\Price',
-            ['checkoutSession' => $checkoutSession]
+            ['priceCurrency'   => $this->priceCurrency]
         );
     }
 
@@ -90,10 +74,10 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             ->method('getPrice')
             ->will($this->returnValue($shippingPrice));
 
-        $this->store->expects($this->once())
-            ->method('convertPrice')
+        $this->priceCurrency->expects($this->once())
+            ->method('convertAndFormat')
             ->with($shippingPrice, true, true)
-            ->will($this->returnValue($convertedPrice));
+            ->willReturn($convertedPrice);
 
         $this->priceObj->setShippingRate($shippingRateMock);
         $this->assertEquals($convertedPrice, $this->priceObj->getShippingPrice());

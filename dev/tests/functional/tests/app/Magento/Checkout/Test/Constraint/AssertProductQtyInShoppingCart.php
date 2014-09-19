@@ -24,15 +24,18 @@
 
 namespace Magento\Checkout\Test\Constraint;
 
-use Mtf\Constraint\AbstractConstraint;
+use Mtf\Constraint\AbstractAssertForm;
 use Magento\Checkout\Test\Page\CheckoutCart;
+use Mtf\Fixture\FixtureInterface;
 use Magento\Checkout\Test\Fixture\Cart;
+use Magento\Checkout\Test\Fixture\Cart\Items;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 
 /**
  * Class AssertProductQtyInShoppingCart
+ * Assert that quantity in the shopping cart is equals to expected quantity from data set
  */
-class AssertProductQtyInShoppingCart extends AbstractConstraint
+class AssertProductQtyInShoppingCart extends AbstractAssertForm
 {
     /**
      * Constraint severeness
@@ -46,22 +49,38 @@ class AssertProductQtyInShoppingCart extends AbstractConstraint
      *
      * @param CheckoutCart $checkoutCart
      * @param Cart $cart
-     * @param CatalogProductSimple $product
      * @return void
      */
     public function processAssert(
         CheckoutCart $checkoutCart,
-        Cart $cart,
-        CatalogProductSimple $product
+        Cart $cart
     ) {
         $checkoutCart->open();
-        $cartProductQty = $checkoutCart->getCartBlock()->getCartItem($product)->getQty();
-        \PHPUnit_Framework_Assert::assertEquals(
-            $cartProductQty,
-            $cart->getQty(),
-            'Shopping cart product qty: \'' . $cartProductQty
-            . '\' not equals with qty from data set: \'' . $cart->getQty() . '\''
-        );
+        /** @var Items $sourceProducts */
+        $sourceProducts = $cart->getDataFieldConfig('items')['source'];
+        $products = $sourceProducts->getProducts();
+        $items = $cart->getItems();
+        $productsData = [];
+        $cartData = [];
+
+        foreach ($items as $key => $item) {
+            /** @var CatalogProductSimple $product */
+            $product = $products[$key];
+            $productName = $product->getName();
+            /** @var FixtureInterface $item */
+            $checkoutItem = $item->getData();
+            $cartItem = $checkoutCart->getCartBlock()->getCartItem($product);
+
+            $productsData[$productName] = [
+                'qty' => $checkoutItem['qty']
+            ];
+            $cartData[$productName] = [
+                'qty' => $cartItem->getQty()
+            ];
+        }
+
+        $error = $this->verifyData($productsData, $cartData, true);
+        \PHPUnit_Framework_Assert::assertEmpty($error, $error);
     }
 
     /**

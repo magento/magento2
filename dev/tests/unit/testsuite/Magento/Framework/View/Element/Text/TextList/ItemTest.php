@@ -56,6 +56,11 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider toHtmlDataProvider
+     *
+     * @param array $liParams
+     * @param string $attrName
+     * @param string $attrValue
+     * @param string $innerText
      */
     public function testToHtml($liParams, $attrName, $attrValue, $innerText)
     {
@@ -75,7 +80,8 @@ class ItemTest extends \PHPUnit_Framework_TestCase
                 'attrName' => 'class',
                 'attrValue' => 'some-css-class',
                 'innerText' => 'text',
-            ], [
+            ],
+            [
                 'liParams' => 'class="some-css-class"',
                 'attrName' => 'class',
                 'attrValue' => 'some-css-class',

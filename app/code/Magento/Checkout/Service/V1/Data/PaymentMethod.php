@@ -24,6 +24,9 @@
 
 namespace Magento\Checkout\Service\V1\Data;
 
+/**
+ * @codeCoverageIgnore
+ */
 class PaymentMethod extends \Magento\Framework\Service\Data\AbstractExtensibleObject
 {
     const CODE = 'code';

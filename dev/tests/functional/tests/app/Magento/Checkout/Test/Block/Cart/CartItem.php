@@ -24,49 +24,30 @@
 
 namespace Magento\Checkout\Test\Block\Cart;
 
-use Mtf\Block\Block;
 use Mtf\Client\Element\Locator;
 
 /**
  * Class CartItem
  * Product item block on checkout page
  */
-class CartItem extends Block
+class CartItem extends AbstractCartItem
 {
-    /**
-     *  Selector for options block
-     *
-     * @var string
-     */
-    protected $optionsBlock = './/dl[@class="cart-item-options"]';
-
-    /**
-     * Selector for unit price
-     *
-     * @var string
-     */
-    protected $price = './/td[@class="col price"]/*[@class="excl tax"]/span';
-
-    /**
-     * Quantity input selector
-     *
-     * @var string
-     */
-    protected $qty = './/input[@type="number" and @title="Qty"]';
-
-    /**
-     * Cart item sub-total xpath selector
-     *
-     * @var string
-     */
-    protected $subtotalPrice = './/td[@class="col subtotal"]//*[@class="excl tax"]//span[@class="price"]';
-
     /**
      * Get bundle options
      *
      * @var string
      */
     protected $bundleOptions = './/dl[contains(@class, "cart-item-options")]/dd[%d]/span[@class="price"][%d]';
+
+    /**
+     * Get product name
+     *
+     * @return string
+     */
+    protected function getProductName()
+    {
+        $this->_rootElement->find($this->productName)->getText();
+    }
 
     /**
      * Get product price
@@ -76,7 +57,7 @@ class CartItem extends Block
     public function getPrice()
     {
         $cartProductPrice = $this->_rootElement->find($this->price, Locator::SELECTOR_XPATH)->getText();
-        return $this->escapeCurrency($cartProductPrice);
+        return str_replace(',', '', $this->escapeCurrency($cartProductPrice));
     }
 
     /**
@@ -108,19 +89,7 @@ class CartItem extends Block
     public function getSubtotalPrice()
     {
         $price = $this->_rootElement->find($this->subtotalPrice, Locator::SELECTOR_XPATH)->getText();
-        return $this->escapeCurrency($price);
-    }
-
-    /**
-     * Method that escapes currency symbols
-     *
-     * @param string $price
-     * @return string
-     */
-    protected function escapeCurrency($price)
-    {
-        preg_match("/^\\D*\\s*([\\d,\\.]+)\\s*\\D*$/", $price, $matches);
-        return (isset($matches[1])) ? $matches[1] : null;
+        return str_replace(',', '', $this->escapeCurrency($price));
     }
 
     /**
@@ -131,10 +100,22 @@ class CartItem extends Block
     public function getOptions()
     {
         $optionsBlock = $this->_rootElement->find($this->optionsBlock, Locator::SELECTOR_XPATH);
-        if (!$optionsBlock->isVisible()) {
-            return '';
+        $options = [];
+
+        if ($optionsBlock->isVisible()) {
+            $titles = $optionsBlock->find('./dt', Locator::SELECTOR_XPATH)->getElements();
+            $values = $optionsBlock->find('./dd', Locator::SELECTOR_XPATH)->getElements();
+
+            foreach ($titles as $key => $title) {
+                $value = $values[$key]->getText();
+                $options[] = [
+                    'title' => $title->getText(),
+                    'value' => $this->escapeCurrencyForOption($value)
+                ];
+            }
         }
-        return $optionsBlock->getText();
+
+        return $options;
     }
 
     /**
@@ -177,5 +158,16 @@ class CartItem extends Block
     {
         $formatPrice = sprintf($this->bundleOptions, $index, $itemIndex);
         return trim($this->_rootElement->find($formatPrice, Locator::SELECTOR_XPATH)->getText(), $currency);
+    }
+
+    /**
+     * Escape currency in option label
+     *
+     * @param string $label
+     * @return string
+     */
+    protected function escapeCurrencyForOption($label)
+    {
+        return preg_replace('/^(\d+) x (\w+) \W([\d\.,]+)$/', '$1 x $2 $3', $label);
     }
 }

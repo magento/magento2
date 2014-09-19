@@ -48,6 +48,7 @@
     <preference for="\Magento\Checkout\Service\V1\Address\Billing\ReadServiceInterface" type="Magento\Checkout\Service\V1\Address\Billing\ReadService" />
     <preference for="\Magento\Checkout\Service\V1\Address\Billing\WriteServiceInterface" type="Magento\Checkout\Service\V1\Address\Billing\WriteService" />
     <preference for="Magento\Checkout\Service\V1\Cart\ReadServiceInterface" type="Magento\Checkout\Service\V1\Cart\ReadService" />
+    <preference for="Magento\Checkout\Service\V1\Cart\TotalsServiceInterface" type="Magento\Checkout\Service\V1\Cart\TotalsService" />
     <preference for="\Magento\Checkout\Service\V1\Cart\WriteServiceInterface" type="Magento\Checkout\Service\V1\Cart\WriteService" />
     <preference for="Magento\Checkout\Service\V1\ShippingMethod\WriteServiceInterface" type="Magento\Checkout\Service\V1\ShippingMethod\WriteService" />
     <preference for="Magento\Checkout\Service\V1\Coupon\ReadServiceInterface" type="Magento\Checkout\Service\V1\Coupon\ReadService" />

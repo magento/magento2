@@ -93,14 +93,20 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
     protected $_scopeConfig;
 
     /**
-     * @param \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface
+     */
+    protected $priceCurrency;
+
+    /**
+     * @param ItemFactory $filterItemFactory
      * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Layer $layer
      * @param \Magento\Catalog\Model\Resource\Layer\Filter\PriceFactory $filterPriceFactory
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Catalog\Model\Layer\Filter\Price\Algorithm $priceAlgorithm
+     * @param Price\Algorithm $priceAlgorithm
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param array $data
      */
     public function __construct(
@@ -112,8 +118,10 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
         \Magento\Catalog\Model\Layer\Filter\Price\Algorithm $priceAlgorithm,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         array $data = array()
     ) {
+        $this->priceCurrency = $priceCurrency;
         $this->_resource = $filterPriceFactory->create();
         $this->_customerSession = $customerSession;
         $this->_priceAlgorithm = $priceAlgorithm;
@@ -238,9 +246,8 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      */
     protected function _renderItemLabel($range, $value)
     {
-        $store = $this->_storeManager->getStore();
-        $fromPrice = $store->formatPrice(($value - 1) * $range);
-        $toPrice = $store->formatPrice($value * $range);
+        $fromPrice = $this->priceCurrency->format(($value - 1) * $range);
+        $toPrice = $this->priceCurrency->format($value * $range);
 
         return __('%1 - %2', $fromPrice, $toPrice);
     }
@@ -254,8 +261,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      */
     protected function _renderRangeLabel($fromPrice, $toPrice)
     {
-        $store = $this->_storeManager->getStore();
-        $formattedFromPrice = $store->formatPrice($fromPrice);
+        $formattedFromPrice = $this->priceCurrency->format($fromPrice);
         if ($toPrice === '') {
             return __('%1 and above', $formattedFromPrice);
         } elseif ($fromPrice == $toPrice && $this->_scopeConfig->getValue(
@@ -268,7 +274,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
             if ($fromPrice != $toPrice) {
                 $toPrice -= .01;
             }
-            return __('%1 - %2', $formattedFromPrice, $store->formatPrice($toPrice));
+            return __('%1 - %2', $formattedFromPrice, $this->priceCurrency->format($toPrice));
         }
     }
 

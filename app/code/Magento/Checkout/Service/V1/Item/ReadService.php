@@ -27,7 +27,7 @@ namespace Magento\Checkout\Service\V1\Item;
 class ReadService implements ReadServiceInterface
 {
     /**
-     * @var \Magento\Checkout\Service\V1\QuoteLoader
+     * @var \Magento\Sales\Model\QuoteRepository
      */
     protected $quoteRepository;
 

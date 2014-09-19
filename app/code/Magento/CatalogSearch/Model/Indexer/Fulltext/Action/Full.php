@@ -23,6 +23,8 @@
  */
 namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Action;
 
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+
 class Full
 {
     /**
@@ -145,6 +147,11 @@ class Full
     protected $fulltextResource;
 
     /**
+     * @var PriceCurrencyInterface
+     */
+    protected $priceCurrency;
+
+    /**
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param \Magento\Eav\Model\Config $eavConfig
@@ -159,6 +166,7 @@ class Full
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\CatalogSearch\Model\Resource\Fulltext $fulltextResource
+     * @param PriceCurrencyInterface $priceCurrency
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
@@ -174,7 +182,8 @@ class Full
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\CatalogSearch\Model\Resource\Fulltext $fulltextResource
+        \Magento\CatalogSearch\Model\Resource\Fulltext $fulltextResource,
+        PriceCurrencyInterface $priceCurrency
     ) {
         $this->resource = $resource;
         $this->catalogProductType = $catalogProductType;
@@ -190,6 +199,7 @@ class Full
         $this->localeResolver = $localeResolver;
         $this->localeDate = $localeDate;
         $this->fulltextResource = $fulltextResource;
+        $this->priceCurrency = $priceCurrency;
     }
 
     /**
@@ -746,7 +756,7 @@ class Full
         } else {
             $inputType = $attribute->getFrontend()->getInputType();
             if ($inputType == 'price') {
-                $value = $this->storeManager->getStore($storeId)->roundPrice($value);
+                $value = $this->priceCurrency->round($value);
             }
         }
 

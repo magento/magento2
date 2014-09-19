@@ -24,15 +24,18 @@
 
 namespace Magento\Checkout\Test\Constraint;
 
-use Mtf\Constraint\AbstractConstraint;
+use Mtf\Constraint\AbstractAssertForm;
 use Magento\Checkout\Test\Page\CheckoutCart;
+use Mtf\Fixture\FixtureInterface;
 use Magento\Checkout\Test\Fixture\Cart;
+use Magento\Checkout\Test\Fixture\Cart\Items;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 
 /**
  * Class AssertSubtotalInShoppingCart
+ * Assert that subtotal total in the shopping cart is equals to expected total from data set
  */
-class AssertSubtotalInShoppingCart extends AbstractConstraint
+class AssertSubtotalInShoppingCart extends AbstractAssertForm
 {
     /**
      * Constraint severeness
@@ -46,22 +49,36 @@ class AssertSubtotalInShoppingCart extends AbstractConstraint
      *
      * @param CheckoutCart $checkoutCart
      * @param Cart $cart
-     * @param CatalogProductSimple $product
      * @return void
      */
-    public function processAssert(
-        CheckoutCart $checkoutCart,
-        Cart $cart,
-        CatalogProductSimple $product
-    ) {
+    public function processAssert(CheckoutCart $checkoutCart, Cart $cart)
+    {
         $checkoutCart->open();
-        $cartProductSubtotal = $checkoutCart->getCartBlock()->getCartItem($product)->getSubtotalPrice();
-        \PHPUnit_Framework_Assert::assertEquals(
-            $cartProductSubtotal,
-            $cart->getRowTotal(),
-            'Shopping cart subtotal: \'' . $cartProductSubtotal
-            . '\' not equals with total from data set: \'' . $cart->getRowTotal() . '\''
-        );
+        /** @var Items $sourceProducts */
+        $sourceProducts = $cart->getDataFieldConfig('items')['source'];
+        $products = $sourceProducts->getProducts();
+        $items = $cart->getItems();
+        $productsData = [];
+        $cartData = [];
+
+        foreach ($items as $key => $item) {
+            /** @var CatalogProductSimple $product */
+            $product = $products[$key];
+            $productName = $product->getName();
+            /** @var FixtureInterface $item */
+            $checkoutItem = $item->getData();
+            $cartItem = $checkoutCart->getCartBlock()->getCartItem($product);
+
+            $productsData[$productName] = [
+                'subtotal' => $checkoutItem['subtotal']
+            ];
+            $cartData[$productName] = [
+                'subtotal' => $cartItem->getSubtotalPrice()
+            ];
+        }
+
+        $error = $this->verifyData($productsData, $cartData, true);
+        \PHPUnit_Framework_Assert::assertEmpty($error, $error);
     }
 
     /**

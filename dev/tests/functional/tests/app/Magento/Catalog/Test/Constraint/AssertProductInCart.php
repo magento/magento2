@@ -29,6 +29,7 @@ use Mtf\Fixture\FixtureInterface;
 use Mtf\Constraint\AbstractConstraint;
 use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
+use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 
 /**
  * Class AssertProductInCart
@@ -76,9 +77,12 @@ class AssertProductInCart extends AbstractConstraint
      */
     protected function assertOnShoppingCart(FixtureInterface $product, CheckoutCart $checkoutCart)
     {
+        /** @var CatalogProductSimple $product */
         $customOptions = $product->getCustomOptions();
         $checkoutData = $product->getCheckoutData();
-        $checkoutCustomOptions = isset($checkoutData['custom_options']) ? $checkoutData['custom_options'] : [];
+        $checkoutCustomOptions = isset($checkoutData['options']['custom_options'])
+            ? $checkoutData['options']['custom_options']
+            : [];
         $fixturePrice = $product->getPrice();
         $groupPrice = $product->getGroupPrice();
         $specialPrice = $product->getSpecialPrice();
@@ -95,8 +99,8 @@ class AssertProductInCart extends AbstractConstraint
         $fixtureActualPrice = $fixturePrice;
 
         foreach ($checkoutCustomOptions as $checkoutOption) {
-            $attributeKey = $checkoutOption['title'];
-            $optionKey = $checkoutOption['value'];
+            $attributeKey = str_replace('attribute_key_', '', $checkoutOption['title']);
+            $optionKey = str_replace('option_key_', '', $checkoutOption['value']);
             $option = $customOptions[$attributeKey]['options'][$optionKey];
 
             if ('Fixed' == $option['price_type']) {
@@ -107,7 +111,7 @@ class AssertProductInCart extends AbstractConstraint
         }
 
         \PHPUnit_Framework_Assert::assertEquals(
-            number_format($fixtureActualPrice, 2),
+            $fixtureActualPrice,
             $formPrice,
             'Product price in shopping cart is not correct.'
         );

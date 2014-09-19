@@ -47,13 +47,19 @@ class PriceTest extends \PHPUnit_Framework_TestCase
      */
     protected $taxHelper;
 
+    /**
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $priceCurrency;
+
     protected function setUp()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
 
+        $this->priceCurrency = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')->getMock();
+
         $this->store = $this->getMockBuilder('Magento\Store\Model\Store')
             ->disableOriginalConstructor()
-            ->setMethods(['convertPrice', '__wakeup'])
             ->getMock();
 
         $this->quote = $this->getMockBuilder('Magento\Sales\Model\Quote')
@@ -86,6 +92,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             [
                 'checkoutSession' => $checkoutSession,
                 'taxHelper' => $this->taxHelper,
+                'priceCurrency' => $this->priceCurrency,
             ]
         );
     }
@@ -118,10 +125,10 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             ->method('getShippingPrice')
             ->will($this->returnValue($shippingPriceExclTax));
 
-        $this->store->expects($this->once())
-            ->method('convertPrice')
-            ->with($shippingPriceExclTax, true, true)
-            ->will($this->returnValue($convertedPrice));
+        $this->priceCurrency->expects($this->once())
+            ->method('convertAndFormat')
+            ->with($this->logicalOr($shippingPriceExclTax, true, $this->store))
+            ->willReturn($convertedPrice);
 
         $this->priceObj->setShippingRate($shippingRateMock);
         $this->assertEquals($convertedPrice, $this->priceObj->getShippingPriceExclTax());
@@ -139,9 +146,9 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             ->method('getShippingPrice')
             ->will($this->returnValue($shippingPriceInclTax));
 
-        $this->store->expects($this->once())
-            ->method('convertPrice')
-            ->with($shippingPriceInclTax, true, true)
+        $this->priceCurrency->expects($this->once())
+            ->method('convertAndFormat')
+            ->with($this->logicalOr($shippingPriceInclTax, true, $this->store))
             ->will($this->returnValue($convertedPrice));
 
         $this->priceObj->setShippingRate($shippingRateMock);

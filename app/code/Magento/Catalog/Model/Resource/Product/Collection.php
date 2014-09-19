@@ -209,9 +209,9 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
     /**
      * Catalog data
      *
-     * @var \Magento\Catalog\Helper\Data
+     * @var \Magento\Framework\Module\Manager
      */
-    protected $_catalogData = null;
+    protected $moduleManager = null;
 
     /**
      * Core store config
@@ -269,7 +269,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
      * @param \Magento\Catalog\Model\Resource\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Framework\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Helper\Data $catalogData
+     * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
@@ -292,7 +292,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
         \Magento\Catalog\Model\Resource\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Framework\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Helper\Data $catalogData,
+        \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,
@@ -302,7 +302,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
         \Magento\Framework\Stdlib\DateTime $dateTime,
         $connection = null
     ) {
-        $this->_catalogData = $catalogData;
+        $this->moduleManager = $moduleManager;
         $this->_catalogProductFlatState = $catalogProductFlatState;
         $this->_scopeConfig = $scopeConfig;
         $this->_productOptionFactory = $productOptionFactory;
@@ -1346,7 +1346,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
 
             return $this;
         }
-        if (!$this->_catalogData->isModuleEnabled('Magento_CatalogRule')) {
+        if (!$this->moduleManager->isEnabled('Magento_CatalogRule')) {
             return $this;
         }
         $wId = $this->_storeManager->getWebsite()->getId();

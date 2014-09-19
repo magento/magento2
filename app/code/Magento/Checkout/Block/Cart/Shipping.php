@@ -23,6 +23,8 @@
  */
 namespace Magento\Checkout\Block\Cart;
 
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+
 class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
 {
     /**
@@ -55,12 +57,18 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
     protected $_carrierFactory;
 
     /**
+     * @var PriceCurrencyInterface
+     */
+    protected $priceCurrency;
+
+    /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Directory\Block\Data $directoryBlock
      * @param \Magento\Sales\Model\Quote\Address\CarrierFactoryInterface $carrierFactory
+     * @param PriceCurrencyInterface $priceCurrency
      * @param array $data
      */
     public function __construct(
@@ -70,8 +78,10 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Directory\Block\Data $directoryBlock,
         \Magento\Sales\Model\Quote\Address\CarrierFactoryInterface $carrierFactory,
+        PriceCurrencyInterface $priceCurrency,
         array $data = array()
     ) {
+        $this->priceCurrency = $priceCurrency;
         $this->_directoryBlock = $directoryBlock;
         $this->_carrierFactory = $carrierFactory;
         parent::__construct($context, $catalogData, $customerSession, $checkoutSession, $data);
@@ -230,7 +240,12 @@ class Shipping extends \Magento\Checkout\Block\Cart\AbstractCart
      */
     public function formatPrice($price)
     {
-        return $this->getQuote()->getStore()->convertPrice($price, true);
+        return $this->priceCurrency->convertAndFormat(
+            $price,
+            true,
+            PriceCurrencyInterface::DEFAULT_PRECISION,
+            $this->getQuote()->getStore()
+        );
     }
 
     /**

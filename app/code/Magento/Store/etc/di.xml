@@ -31,6 +31,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\App\Config\ScopePool">
+        <arguments>
+            <argument name="readerPool" xsi:type="object">Magento\Store\Model\Config\Reader\ReaderPool\Proxy</argument>
+        </arguments>
+    </type>
     <type name="Magento\Store\Model\Config\Reader\Website">
         <arguments>
             <argument name="scopePool" xsi:type="object">Magento\Framework\App\Config\ScopePool\Proxy</argument>

@@ -26,6 +26,7 @@
 namespace Magento\ConfigurableProduct\Block\Product\View\Type;
 
 use Magento\Customer\Helper\Session\CurrentCustomer;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -64,12 +65,18 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     protected $helper;
 
     /**
+     * @var PriceCurrencyInterface
+     */
+    protected $priceCurrency;
+
+    /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Framework\Stdlib\ArrayUtils $arrayUtils
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\ConfigurableProduct\Helper\Data $helper
      * @param \Magento\Catalog\Helper\Product $catalogProduct
      * @param CurrentCustomer $currentCustomer
+     * @param PriceCurrencyInterface $priceCurrency
      * @param array $data
      */
     public function __construct(
@@ -79,8 +86,10 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
         \Magento\ConfigurableProduct\Helper\Data $helper,
         \Magento\Catalog\Helper\Product $catalogProduct,
         CurrentCustomer $currentCustomer,
+        PriceCurrencyInterface $priceCurrency,
         array $data = array()
     ) {
+        $this->priceCurrency = $priceCurrency;
         $this->helper = $helper;
         $this->jsonEncoder = $jsonEncoder;
         $this->catalogProduct = $catalogProduct;
@@ -226,9 +235,9 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
             return 0;
         }
 
-        $price = $this->getCurrentStore()->convertPrice($price);
+        $price = $this->priceCurrency->convert($price);
         if ($round) {
-            $price = $this->getCurrentStore()->roundPrice($price);
+            $price = $this->priceCurrency->round($price);
         }
 
         return $price;

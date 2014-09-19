@@ -29,7 +29,7 @@
         <require>
             <catalogCategoryView class="Magento\Catalog\Test\Page\Category\CatalogCategoryView" />
             <cmsIndex class="Magento\Cms\Test\Page\CmsIndex" />
-            <product class="Magento\Bundle\Test\Fixture\CatalogProductBundle" />
+            <product class="Magento\Bundle\Test\Fixture\BundleProduct" />
             <category class="Magento\Catalog\Test\Fixture\Category" />
         </require>
     </assertBundleInCategory>

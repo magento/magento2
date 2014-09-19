@@ -49,6 +49,13 @@
             <argument name="taxData" xsi:type="object">Magento\Tax\Helper\Data\Proxy</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Pricing\Adjustment\Collection">
+        <arguments>
+            <argument name="adjustments" xsi:type="array">
+                <item name="tax" xsi:type="const">Magento\Tax\Pricing\Adjustment::ADJUSTMENT_CODE</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Pricing\Adjustment\Pool">
         <arguments>
             <argument name="adjustments" xsi:type="array">

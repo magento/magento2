@@ -37,9 +37,9 @@
         <observer name="magento_recurringpayment" instance="Magento\RecurringPayment\Model\Observer\PaymentAvailabilityObserver" method="observe" />
     </event>
     <event name="catalog_product_collection_load_after">
-        <observer name="magento_recurringpayment" instance="Magento\RecurringPayment\Model\Observer" method="unserializeProductRecurringPayment" />
+        <observer name="magento_recurringpayment" instance="Magento\RecurringPayment\Model\Observer\UnserializeProductRecurringPayment" method="execute" />
     </event>
     <event name="sales_quote_item_set_product">
-        <observer name="magento_recurringpayment" instance="Magento\RecurringPayment\Model\Observer" method="setIsRecurringToQuote" />
+        <observer name="magento_recurringpayment" instance="Magento\RecurringPayment\Model\Observer\SetIsRecurringToQuote" method="execute" />
     </event>
 </config>

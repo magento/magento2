@@ -30,8 +30,14 @@ class AclTest extends \PHPUnit_Framework_TestCase
      */
     protected $_model;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     protected $_aclMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     protected $_aclBuilderMock;
 
     protected function setUp()

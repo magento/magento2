@@ -23,6 +23,7 @@
  */
 namespace Magento\Checkout\Helper;
 
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Store\Model\Store;
 use Magento\Sales\Model\Quote\Item\AbstractItem;
 
@@ -70,6 +71,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $inlineTranslation;
 
     /**
+     * @var PriceCurrencyInterface
+     */
+    protected $priceCurrency;
+
+    /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\StoreManagerInterface $storeManager
@@ -77,6 +83,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
+     * @param PriceCurrencyInterface $priceCurrency
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
@@ -85,7 +92,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Mail\Template\TransportBuilder $transportBuilder,
-        \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
+        \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
+        PriceCurrencyInterface $priceCurrency
     ) {
         $this->_scopeConfig = $scopeConfig;
         $this->_storeManager = $storeManager;
@@ -93,6 +101,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_localeDate = $localeDate;
         $this->_transportBuilder = $transportBuilder;
         $this->inlineTranslation = $inlineTranslation;
+        $this->priceCurrency = $priceCurrency;
         parent::__construct($context);
     }
 
@@ -122,7 +131,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function formatPrice($price)
     {
-        return $this->getQuote()->getStore()->formatPrice($price);
+        return $this->priceCurrency->format(
+            $price,
+            true,
+            PriceCurrencyInterface::DEFAULT_PRECISION,
+            $this->getQuote()->getStore()
+        );
     }
 
     /**
@@ -132,7 +146,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function convertPrice($price, $format = true)
     {
-        return $this->getQuote()->getStore()->convertPrice($price, $format);
+        return $format
+            ? $this->priceCurrency->convertAndFormat($price)
+            : $this->priceCurrency->convert($price);
     }
 
     /**
@@ -162,7 +178,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $qty = $item->getQty() ? $item->getQty() : ($item->getQtyOrdered() ? $item->getQtyOrdered() : 1);
         $taxAmount = $item->getTaxAmount() + $item->getDiscountTaxCompensation();
         $price = floatval($qty) ? ($item->getRowTotal() + $taxAmount) / $qty : 0;
-        return $this->_storeManager->getStore()->roundPrice($price);
+        return $this->priceCurrency->round($price);
     }
 
     /**
@@ -189,7 +205,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $qty = $item->getQty() ? $item->getQty() : ($item->getQtyOrdered() ? $item->getQtyOrdered() : 1);
         $taxAmount = $item->getBaseTaxAmount() + $item->getBaseDiscountTaxCompensation();
         $price = floatval($qty) ? ($item->getBaseRowTotal() + $taxAmount) / $qty : 0;
-        return $this->_storeManager->getStore()->roundPrice($price);
+        return $this->priceCurrency->round($price);
     }
 
     /**

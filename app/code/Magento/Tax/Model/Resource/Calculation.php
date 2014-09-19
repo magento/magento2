@@ -108,7 +108,7 @@ class Calculation extends \Magento\Framework\Model\Resource\Db\AbstractDb
      * @param  int $ruleId
      * @return array
      */
-    public function getDistinct($field, $ruleId)
+    public function getCalculationsById($field, $ruleId)
     {
         $select = $this->_getReadAdapter()->select();
         $select->from($this->getMainTable(), $field)->where('tax_calculation_rule_id = ?', (int)$ruleId);

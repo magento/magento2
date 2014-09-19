@@ -52,12 +52,18 @@ class GridTest extends \PHPUnit_Framework_TestCase
     protected $itemMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Pricing\PriceCurrencyInterface
+     */
+    protected $priceCurrency;
+
+    /**
      * Initialize required data
      */
     protected function setUp()
     {
         $orderCreateMock = $this->getMock('Magento\Sales\Model\AdminOrder\Create', ['__wakeup'], [], '', false);
         $taxData = $this->getMockBuilder('Magento\Tax\Helper\Data')->disableOriginalConstructor()->getMock();
+        $this->priceCurrency = $this->getMockBuilder('\Magento\Framework\Pricing\PriceCurrencyInterface')->getMock();
         $coreData = $this->getMockBuilder('Magento\Core\Helper\Data')->disableOriginalConstructor()->getMock();
         $sessionMock = $this->getMockBuilder('Magento\Backend\Model\Session\Quote')
             ->disableOriginalConstructor()
@@ -71,9 +77,11 @@ class GridTest extends \PHPUnit_Framework_TestCase
 
         $storeMock = $this->getMockBuilder('Magento\Store\Model\Store')
             ->disableOriginalConstructor()
-            ->setMethods(array('__wakeup', 'convertPrice'))
+            ->setMethods(array('__wakeup'))
             ->getMock();
-        $storeMock->expects($this->any())->method('convertPrice')->will($this->returnArgument(0));
+        $this->priceCurrency->expects($this->any())
+            ->method('convertAndFormat')
+            ->will($this->returnArgument(0));
         $quoteMock->expects($this->any())->method('getStore')->will($this->returnValue($storeMock));
         $sessionMock->expects($this->any())->method('getQuote')->will($this->returnValue($quoteMock));
         $wishlistFactoryMock = $this->getMockBuilder('Magento\Wishlist\Model\WishlistFactory')
@@ -104,6 +112,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
                 'taxData' => $taxData,
                 'sessionQuote' => $sessionMock,
                 'orderCreate' => $orderCreateMock,
+                'priceCurrency' => $this->priceCurrency,
                 'coreData' => $coreData,
                 'stockItemService' => $this->stockItemService
             )

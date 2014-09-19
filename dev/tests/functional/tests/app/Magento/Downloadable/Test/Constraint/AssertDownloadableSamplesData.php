@@ -25,17 +25,36 @@
 namespace Magento\Downloadable\Test\Constraint;
 
 use Mtf\Client\Browser;
-use Mtf\Constraint\AbstractConstraint;
+use Mtf\Constraint\AbstractAssertForm;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
-use Magento\Downloadable\Test\Fixture\CatalogProductDownloadable;
+use Magento\Downloadable\Test\Fixture\DownloadableProductInjectable;
 
 /**
  * Class AssertDownloadableSamplesData
  *
  * Assert that Sample block for downloadable product on front-end
  */
-class AssertDownloadableSamplesData extends AbstractConstraint
+class AssertDownloadableSamplesData extends AbstractAssertForm
 {
+    /**
+     * List downloadable sample links fields for verify
+     *
+     * @var array
+     */
+    protected $downloadableSampleField = [
+        'title',
+        'downloadable'
+    ];
+
+    /**
+     * List fields of downloadable sample link for verify
+     *
+     * @var array
+     */
+    protected $linkField = [
+        'title',
+    ];
+
     /**
      * Constraint severeness
      *
@@ -47,56 +66,58 @@ class AssertDownloadableSamplesData extends AbstractConstraint
      * Assert Sample block for downloadable product on front-end
      *
      * @param CatalogProductView $productView
-     * @param CatalogProductDownloadable $product
+     * @param DownloadableProductInjectable $product
      * @param Browser $browser
      * @return void
      */
     public function processAssert(
         CatalogProductView $productView,
-        CatalogProductDownloadable $product,
+        DownloadableProductInjectable $product,
         Browser $browser
     ) {
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
-        $sampleBlock = $productView->getDownloadableViewBlock()->getDownloadableSamplesBlock();
-        $fields = $product->getData();
 
-        // Title for for sample block
-        \PHPUnit_Framework_Assert::assertEquals(
-            $sampleBlock->getTitleForSampleBlock(),
-            $fields['downloadable_sample']['title'],
-            'Title for for Samples block for downloadable product on front-end is not correct.'
-        );
-
-        $this->sortDownloadableArray($fields['downloadable_sample']['downloadable']['sample']);
-
-        foreach ($fields['downloadable_sample']['downloadable']['sample'] as $index => $sample) {
-            // Titles for each sample
-            // Samples are displaying according to Sort Order
-            \PHPUnit_Framework_Assert::assertEquals(
-                $sampleBlock->getItemTitle(++$index),
-                $sample['title'],
-                'Sample item ' . $index . ' with title "' . $sample['title'] . '" is not visible.'
-            );
-        }
+        $fixtureSampleLinks = $this->prepareFixtureData($product);
+        $pageOptions = $productView->getViewBlock()->getOptions($product);
+        $pageSampleLinks = $this->preparePageData($pageOptions['downloadable_options']['downloadable_sample']);
+        $error = $this->verifyData($fixtureSampleLinks, $pageSampleLinks);
+        \PHPUnit_Framework_Assert::assertEmpty($error, $error);
     }
 
     /**
-     * Sort downloadable sample array
+     * Prepare fixture data for verify
      *
-     * @param array $fields
+     * @param DownloadableProductInjectable $product
      * @return array
      */
-    protected function sortDownloadableArray(&$fields)
+    protected function prepareFixtureData(DownloadableProductInjectable $product)
     {
-        usort(
-            $fields,
-            function ($a, $b) {
-                if ($a['sort_order'] == $b['sort_order']) {
-                    return 0;
-                }
-                return ($a['sort_order'] < $b['sort_order']) ? -1 : 1;
-            }
-        );
+        $data = $this->sortDataByPath($product->getDownloadableSample(), 'downloadable/sample::sort_order');
+
+        foreach ($data['downloadable']['sample'] as $key => $link) {
+            $link = array_intersect_key($link, array_flip($this->linkField));
+            $data['downloadable']['sample'][$key] = $link;
+        }
+        $data = array_intersect_key($data, array_flip($this->downloadableSampleField));
+
+        return $data;
+    }
+
+    /**
+     * Prepare page data for verify
+     *
+     * @param array $data
+     * @return array
+     */
+    protected function preparePageData(array $data)
+    {
+        foreach ($data['downloadable']['sample'] as $key => $link) {
+            $link = array_intersect_key($link, array_flip($this->linkField));
+            $data['downloadable']['sample'][$key] = $link;
+        }
+        $data = array_intersect_key($data, array_flip($this->downloadableSampleField));
+
+        return $data;
     }
 
     /**

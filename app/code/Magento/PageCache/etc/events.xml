@@ -25,55 +25,53 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
     <event name="core_layout_render_element">
-        <observer name="pagecache" instance="Magento\PageCache\Model\Observer" method="processLayoutRenderElement" />
+        <observer name="pagecache" instance="Magento\PageCache\Model\Observer\ProcessLayoutRenderElement" method="execute" />
     </event>
     <event name="clean_cache_by_tags">
-        <observer name="invalidate_builtin" instance="Magento\PageCache\Model\Observer" method="flushCacheByTags" />
+        <observer name="invalidate_builtin" instance="Magento\PageCache\Model\Observer\FlushCacheByTags" method="execute" />
     </event>
     <event name="clean_cache_after_reindex">
-        <observer name="reindex_cache_flush" instance="Magento\PageCache\Model\Observer" method="invalidateCache" />
+        <observer name="reindex_cache_flush" instance="Magento\PageCache\Model\Observer\InvalidateCache" method="execute" />
     </event>
     <event name="adminhtml_cache_flush_system">
-        <observer name="flush_system_pagecache" instance="Magento\PageCache\Model\Observer" method="flushAllCache" />
+        <observer name="flush_system_pagecache" instance="Magento\PageCache\Model\Observer\FlushAllCache" method="execute" />
     </event>
     <event name="adminhtml_cache_flush_all">
-        <observer name="magento_all_pagecache" instance="Magento\PageCache\Model\Observer" method="flushAllCache" />
+        <observer name="magento_all_pagecache" instance="Magento\PageCache\Model\Observer\FlushAllCache" method="execute" />
     </event>
     <event name="adminhtml_cache_refresh_type">
-        <observer name="flush_all_pagecache" instance="Magento\PageCache\Model\Observer" method="flushAllCache" />
+        <observer name="flush_all_pagecache" instance="Magento\PageCache\Model\Observer\FlushAllCache" method="execute" />
     </event>
     <event name="clean_media_cache_after">
-        <observer name="flush_all_pagecache" instance="Magento\PageCache\Model\Observer" method="invalidateCache" />
+        <observer name="flush_all_pagecache" instance="Magento\PageCache\Model\Observer\InvalidateCache" method="execute" />
     </event>
     <event name="clean_catalog_images_cache_after">
-        <observer name="flush_all_pagecache" instance="Magento\PageCache\Model\Observer" method="invalidateCache" />
+        <observer name="flush_all_pagecache" instance="Magento\PageCache\Model\Observer\InvalidateCache" method="execute" />
     </event>
     <event name="assigned_theme_changed">
-        <observer name="flush_all_pagecache" instance="Magento\PageCache\Model\Observer" method="flushCacheByTags" />
+        <observer name="flush_all_pagecache" instance="Magento\PageCache\Model\Observer\FlushCacheByTags" method="execute" />
     </event>
     <event name="assign_theme_to_stores_after">
-        <observer name="flush_all_pagecache" instance="Magento\PageCache\Model\Observer" method="invalidateCache" />
+        <observer name="flush_all_pagecache" instance="Magento\PageCache\Model\Observer\InvalidateCache" method="execute" />
     </event>
     <event name="controller_action_postdispatch_adminhtml_system_currency_saveRates">
-        <observer name="flush_all_pagecache" instance="Magento\PageCache\Model\Observer" method="invalidateCache" />
+        <observer name="flush_all_pagecache" instance="Magento\PageCache\Model\Observer\InvalidateCache" method="execute" />
     </event>
     <event name="controller_action_postdispatch_adminhtml_system_config_save">
-        <observer name="flush_all_pagecache" instance="Magento\PageCache\Model\Observer" method="invalidateCache" />
+        <observer name="flush_all_pagecache" instance="Magento\PageCache\Model\Observer\InvalidateCache" method="execute" />
     </event>
     <event name="controller_action_postdispatch_catalog_product_save">
-        <observer name="flush_all_pagecache" instance="Magento\PageCache\Model\Observer" method="flushCacheByTags" />
+        <observer name="flush_all_pagecache" instance="Magento\PageCache\Model\Observer\FlushCacheByTags" method="execute" />
     </event>
     <event name="controller_action_postdispatch_adminhtml_system_currencysymbol_save">
-        <observer name="flush_all_pagecache" instance="Magento\PageCache\Model\Observer" method="invalidateCache" />
+        <observer name="flush_all_pagecache" instance="Magento\PageCache\Model\Observer\InvalidateCache" method="execute" />
     </event>
     <event name="model_save_commit_after">
-        <observer name="flush_cache_after_model_save"
-                  instance="Magento\PageCache\Model\Observer"
-                  method="flushCacheByTags" />
+        <observer name="flush_cache_after_model_save" instance="Magento\PageCache\Model\Observer\FlushCacheByTags" method="execute" />
     </event>
     <event name="controller_action_predispatch">
         <observer name="register_form_key"
-                  instance="Magento\PageCache\Model\Observer"
-                  method="registerFormKeyFromCookie" />
+                  instance="Magento\PageCache\Model\Observer\RegisterFormKeyFromCookie"
+                  method="execute" />
     </event>
 </config>

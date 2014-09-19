@@ -112,9 +112,6 @@ class DefaultTotal extends \Magento\Framework\Object
     {
         $fontSize = $this->getFontSize() ? $this->getFontSize() : 7;
         $taxClassAmount = $this->_taxHelper->getCalculatedTaxes($this->getOrder());
-        $shippingTax = $this->_taxHelper->getShippingTax($this->getOrder());
-        $taxClassAmount = array_merge($shippingTax, $taxClassAmount);
-
         if (!empty($taxClassAmount)) {
             foreach ($taxClassAmount as &$tax) {
                 $percent = $tax['percent'] ? ' (' . $tax['percent'] . '%)' : '';

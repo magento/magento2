@@ -37,6 +37,8 @@ class QuoteDetails extends \Magento\Framework\Service\Data\AbstractExtensibleObj
 
     const KEY_ITEMS = 'items';
 
+    const CUSTOMER_TAX_CLASS_ID = 'customer_tax_class_id';
+
     const KEY_CUSTOMER_ID = 'customer_id';
     /**#@-*/
 
@@ -88,5 +90,15 @@ class QuoteDetails extends \Magento\Framework\Service\Data\AbstractExtensibleObj
     public function getItems()
     {
         return $this->_get(self::KEY_ITEMS);
+    }
+
+    /**
+     * Get customer tax class id
+     *
+     * @return int
+     */
+    public function getCustomerTaxClassId()
+    {
+        return $this->_get(self::CUSTOMER_TAX_CLASS_ID);
     }
 }

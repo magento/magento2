@@ -59,4 +59,24 @@
         <area>adminhtml</area>
         <class>Magento\Reports\Test\Page\Adminhtml\ShopCartProductReport</class>
     </shopCartProductReport>
+    <orderedProductsReport>
+        <mca>reports/report_product/sold/</mca>
+        <area>adminhtml</area>
+        <class>Magento\Reports\Test\Page\Adminhtml\OrderedProductsReport</class>
+    </orderedProductsReport>
+    <bestsellers>
+        <mca>reports/report_sales/bestsellers</mca>
+        <area>adminhtml</area>
+        <class>Magento\Reports\Test\Page\Adminhtml\Bestsellers</class>
+    </bestsellers>
+    <statistics>
+        <mca>reports/report_statistics</mca>
+        <area>adminhtml</area>
+        <class>Magento\Reports\Test\Page\Adminhtml\Statistics</class>
+    </statistics>
+    <salesCouponReportView>
+        <mca>reports/report_sales/coupons</mca>
+        <area>adminhtml</area>
+        <class>Magento\Reports\Test\Page\Adminhtml\SalesCouponReportView</class>
+    </salesCouponReportView>
 </page>

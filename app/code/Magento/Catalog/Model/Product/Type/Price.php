@@ -26,6 +26,7 @@ namespace Magento\Catalog\Model\Product\Type;
 
 use Magento\Catalog\Model\Product;
 use Magento\Store\Model\Store;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 /**
  * Product type price model
@@ -76,26 +77,32 @@ class Price
     protected $_ruleFactory;
 
     /**
-     * Construct
-     *
+     * @var PriceCurrencyInterface
+     */
+    protected $priceCurrency;
+
+    /**
      * @param \Magento\CatalogRule\Model\Resource\RuleFactory $ruleFactory
      * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param PriceCurrencyInterface $priceCurrency
      */
     public function __construct(
         \Magento\CatalogRule\Model\Resource\RuleFactory $ruleFactory,
         \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Framework\Event\ManagerInterface $eventManager
+        \Magento\Framework\Event\ManagerInterface $eventManager,
+        PriceCurrencyInterface $priceCurrency
     ) {
         $this->_ruleFactory = $ruleFactory;
         $this->_storeManager = $storeManager;
         $this->_localeDate = $localeDate;
         $this->_customerSession = $customerSession;
         $this->_eventManager = $eventManager;
+        $this->priceCurrency = $priceCurrency;
     }
 
     /**
@@ -383,13 +390,12 @@ class Price
         $price = $product->getTierPrice($qty);
         if (is_array($price)) {
             foreach (array_keys($price) as $index) {
-                $price[$index]['formated_price'] = $this->_storeManager->getStore()->convertPrice(
-                    $price[$index]['website_price'],
-                    true
+                $price[$index]['formated_price'] = $this->priceCurrency->convertAndFormat(
+                    $price[$index]['website_price']
                 );
             }
         } else {
-            $price = $this->_storeManager->getStore()->formatPrice($price);
+            $price = $this->priceCurrency->format($price);
         }
 
         return $price;
@@ -403,7 +409,7 @@ class Price
      */
     public function getFormatedPrice($product)
     {
-        return $this->_storeManager->getStore()->formatPrice($product->getFinalPrice());
+        return $this->priceCurrency->format($product->getFinalPrice());
     }
 
     /**

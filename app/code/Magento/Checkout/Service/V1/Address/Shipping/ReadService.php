@@ -30,9 +30,9 @@ use \Magento\Framework\Exception\NoSuchEntityException;
 class ReadService implements ReadServiceInterface
 {
     /**
-     * @var \Magento\Checkout\Service\V1\QuoteLoader
+     * @var \Magento\Sales\Model\QuoteRepository
      */
-    protected $quoteLoader;
+    protected $quoteRepository;
 
     /**
      * @var AddressConverter
@@ -40,23 +40,15 @@ class ReadService implements ReadServiceInterface
     protected $addressConverter;
 
     /**
-     * @var \Magento\Framework\StoreManagerInterface
-     */
-    protected $storeManager;
-
-    /**
-     * @param \Magento\Checkout\Service\V1\QuoteLoader $quoteLoader
+     * @param \Magento\Sales\Model\QuoteRepository $quoteRepository
      * @param AddressConverter $addressConverter
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
      */
     public function __construct(
-        \Magento\Checkout\Service\V1\QuoteLoader $quoteLoader,
-        AddressConverter $addressConverter,
-        \Magento\Framework\StoreManagerInterface $storeManager
+        \Magento\Sales\Model\QuoteRepository $quoteRepository,
+        AddressConverter $addressConverter
     ) {
-        $this->quoteLoader = $quoteLoader;
+        $this->quoteRepository = $quoteRepository;
         $this->addressConverter = $addressConverter;
-        $this->storeManager = $storeManager;
     }
 
     /**
@@ -64,10 +56,8 @@ class ReadService implements ReadServiceInterface
      */
     public function getAddress($cartId)
     {
-        $storeId = $this->storeManager->getStore()->getId();
-
         /** @var \Magento\Sales\Model\Quote $quote */
-        $quote = $this->quoteLoader->load($cartId, $storeId);
+        $quote = $this->quoteRepository->get($cartId);
         if ($quote->isVirtual()) {
             throw new NoSuchEntityException(
                 'Cart contains virtual product(s) only. Shipping address is not applicable'

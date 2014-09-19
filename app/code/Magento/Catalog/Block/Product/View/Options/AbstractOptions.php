@@ -30,6 +30,8 @@
  */
 namespace Magento\Catalog\Block\Product\View\Options;
 
+use Magento\Catalog\Pricing\Price\CustomOptionPriceInterface;
+
 abstract class AbstractOptions extends \Magento\Framework\View\Element\Template
 {
     /**
@@ -155,7 +157,8 @@ abstract class AbstractOptions extends \Magento\Framework\View\Element\Template
         $priceStr = $sign;
 
         $customOptionPrice = $this->getProduct()->getPriceInfo()->getPrice('custom_option_price');
-        $optionAmount = $customOptionPrice->getCustomAmount($value['pricing_value']);
+        $context = [CustomOptionPriceInterface::CONFIGURATION_OPTION_FLAG => true];
+        $optionAmount = $customOptionPrice->getCustomAmount($value['pricing_value'], null, $context);
         $priceStr .= $this->getLayout()->getBlock('product.price.render.default')->renderAmount(
             $optionAmount,
             $customOptionPrice,

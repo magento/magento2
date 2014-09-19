@@ -24,23 +24,17 @@
 
 namespace Magento\Checkout\Service\V1\PaymentMethod;
 
-use \Magento\Checkout\Service\V1\QuoteLoader;
-use Magento\Framework\StoreManagerInterface;
+use \Magento\Sales\Model\QuoteRepository;
 use \Magento\Checkout\Service\V1\Data\Cart\PaymentMethod\Builder;
 use \Magento\Framework\Exception\State\InvalidTransitionException;
-use \Magento\Payment\Model\MethodList;
+use \Magento\Payment\Model\Checks\ZeroTotal;
 
 class WriteService implements WriteServiceInterface
 {
     /**
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var QuoteRepository
      */
-    protected $storeManager;
-
-    /**
-     * @var QuoteLoader
-     */
-    protected $quoteLoader;
+    protected $quoteRepository;
 
     /**
      * @var Builder
@@ -48,24 +42,21 @@ class WriteService implements WriteServiceInterface
     protected $paymentMethodBuilder;
 
     /**
-     * @var \Magento\Payment\Model\Checks\ZeroTotal
+     * @var ZeroTotal
      */
     protected $zeroTotalValidator;
 
     /**
-     * @param QuoteLoader $quoteLoader
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param QuoteRepository $quoteRepository
      * @param Builder $paymentMethodBuilder
-     * @param \Magento\Payment\Model\Checks\ZeroTotal $zeroTotalValidator
+     * @param ZeroTotal $zeroTotalValidator
      */
     public function __construct(
-        QuoteLoader $quoteLoader,
-        StoreManagerInterface $storeManager,
+        QuoteRepository $quoteRepository,
         Builder $paymentMethodBuilder,
-        \Magento\Payment\Model\Checks\ZeroTotal $zeroTotalValidator
+        ZeroTotal $zeroTotalValidator
     ) {
-        $this->storeManager = $storeManager;
-        $this->quoteLoader = $quoteLoader;
+        $this->quoteRepository = $quoteRepository;
         $this->paymentMethodBuilder = $paymentMethodBuilder;
         $this->zeroTotalValidator = $zeroTotalValidator;
     }
@@ -75,7 +66,7 @@ class WriteService implements WriteServiceInterface
      */
     public function set(\Magento\Checkout\Service\V1\Data\Cart\PaymentMethod $method, $cartId)
     {
-        $quote = $this->quoteLoader->load($cartId, $this->storeManager->getStore()->getId());
+        $quote = $this->quoteRepository->get($cartId);
 
         $payment = $this->paymentMethodBuilder->build($method, $quote);
         if ($quote->isVirtual()) {

@@ -105,26 +105,30 @@ class LinksPurchasedSeparatelyTest extends Functional
 
         $frontendHomePage->open();
         $frontendHomePage->getTopmenu()->selectCategoryByName($product->getCategoryName());
-
         $productListBlock = $categoryPage->getListProductBlock();
         $this->assertTrue($productListBlock->isProductVisible($product->getName()));
-        $productListBlock->openProductViewPage($product->getName());
 
-        $productViewBlock = $productPage->getDownloadableViewBlock();
+        $productListBlock->openProductViewPage($product->getName());
+        $productViewBlock = $productPage->getViewBlock();
         $this->assertEquals($product->getName(), $productViewBlock->getProductName());
         $this->assertEquals(
-            sprintf('%1.2f', $product->getProductPrice()),
-            $productViewBlock->getProductPrice()['price_regular_price']
+            number_format($product->getProductPrice(), 2),
+            $productViewBlock->getPriceBlock()->getPrice()
         );
 
-        $this->assertEquals(
-            $productPage->getDownloadableViewBlock()->getDownloadableLinksBlock()->getItemTitle(1),
-            $product->getData('fields/downloadable_links/value/downloadable/link/0/title')
-        );
-
-        $this->assertEquals(
-            sprintf('$%1.2f', $product->getData('fields/downloadable_links/value/downloadable/link/0/price')),
-            $productPage->getDownloadableViewBlock()->getDownloadableLinksBlock()->getItemPrice(1)
-        );
+        $productDownloadableLinks = $product->getData('fields/downloadable_links/value/downloadable/link');
+        $pageOptions = $productViewBlock->getOptions($product);
+        $pageDownloadableOptions = $pageOptions['downloadable_options']['downloadable_links'];
+        $pageDownloadableLinks = $pageDownloadableOptions['downloadable']['link'];
+        foreach ($productDownloadableLinks as $key => $link) {
+            $this->assertEquals(
+                $pageDownloadableLinks[$key]['title'],
+                $link['title']
+            );
+            $this->assertEquals(
+                $pageDownloadableLinks[$key]['price'],
+                $link['price']
+            );
+        }
     }
 }

@@ -35,17 +35,19 @@ namespace Magento\Sales\Model\Quote\Address\RateResult;
 class Method extends AbstractResult
 {
     /**
-     * @var \Magento\Framework\StoreManagerInterface
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface
      */
-    protected $_storeManager;
+    protected $priceCurrency;
 
     /**
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param array $data
      */
-    public function __construct(\Magento\Framework\StoreManagerInterface $storeManager, array $data = array())
-    {
-        $this->_storeManager = $storeManager;
+    public function __construct(
+        \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
+        array $data = array()
+    ) {
+        $this->priceCurrency = $priceCurrency;
         parent::__construct($data);
     }
 
@@ -57,7 +59,7 @@ class Method extends AbstractResult
      */
     public function setPrice($price)
     {
-        $this->setData('price', $this->_storeManager->getStore()->roundPrice($price));
+        $this->setData('price', $this->priceCurrency->round($price));
         return $this;
     }
 }

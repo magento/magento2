@@ -31,7 +31,7 @@ use Mtf\Fixture\FixtureInterface;
 use Mtf\Fixture\InjectableFixture;
 
 /**
- * Class Custom Options
+ * Class CustomOptions
  * Form of custom options product
  */
 class CustomOptions extends Form

@@ -97,9 +97,9 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
             Address::KEY_ID => 2,
             Address::KEY_CUSTOMER_ID => 3,
             Address::KEY_REGION => [
-                Region::KEY_REGION => 'Alabama',
-                Region::KEY_REGION_ID => 4,
-                Region::KEY_REGION_CODE => 'aa',
+                Region::REGION => 'Alabama',
+                Region::REGION_ID => 4,
+                Region::REGION_CODE => 'aa',
             ],
             Address::KEY_STREET => 'street',
             Address::KEY_COMPANY => 'company',

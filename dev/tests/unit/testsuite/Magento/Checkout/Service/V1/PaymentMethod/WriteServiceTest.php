@@ -40,12 +40,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $storeManagerMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $quoteLoaderMock;
+    protected $quoteRepositoryMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -65,8 +60,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->quoteLoaderMock = $this->getMock('\Magento\Checkout\Service\V1\QuoteLoader', [], [], '', false);
-        $this->storeManagerMock = $this->getMock('\Magento\Framework\StoreManagerInterface');
+        $this->quoteRepositoryMock = $this->getMock('\Magento\Sales\Model\QuoteRepository', [], [], '', false);
         $this->paymentMethodBuilderMock = $this->getMock(
             '\Magento\Checkout\Service\V1\Data\Cart\PaymentMethod\Builder', [], [], '', false
         );
@@ -76,8 +70,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
         $this->service = $this->objectManager->getObject(
             '\Magento\Checkout\Service\V1\PaymentMethod\WriteService',
             [
-                'quoteLoader' => $this->quoteLoaderMock,
-                'storeManager' => $this->storeManagerMock,
+                'quoteRepository' => $this->quoteRepositoryMock,
                 'paymentMethodBuilder' => $this->paymentMethodBuilderMock,
                 'methodList' => $this->methodListMock,
                 'zeroTotalValidator' => $this->validatorMock,
@@ -92,10 +85,6 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
     public function testSetVirtualQuotePaymentThrowsExceptionIfBillingAdressNotSet()
     {
         $cartId = 11;
-        $storeId = 12;
-        $storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
-        $storeMock->expects($this->once())->method('getId')->will($this->returnValue($storeId));
-        $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($storeMock));
 
         $paymentsCollectionMock = $this->getMock(
             '\Magento\Eav\Model\Entity\Collection\AbstractCollection', [], [], '', false
@@ -110,9 +99,9 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
         $billingAddressMock = $this->getMock('\Magento\Sales\Model\Quote\Address', [], [], '', false);
         $quoteMock->expects($this->any())->method('getBillingAddress')->will($this->returnValue($billingAddressMock));
 
-        $this->quoteLoaderMock->expects($this->once())
-            ->method('load')
-            ->with($cartId, $storeId)
+        $this->quoteRepositoryMock->expects($this->once())
+            ->method('get')
+            ->with($cartId)
             ->will($this->returnValue($quoteMock));
 
         $paymentMethodMock = $this->getMock('\Magento\Checkout\Service\V1\Data\Cart\PaymentMethod', [], [], '', false);
@@ -123,12 +112,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
     public function testSetVirtualQuotePaymentSuccess()
     {
         $cartId = 11;
-        $storeId = 12;
         $paymentId = 13;
-        $storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
-        $storeMock->expects($this->once())->method('getId')->will($this->returnValue($storeId));
-        $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($storeMock));
-
         $paymentsCollectionMock = $this->getMock(
             '\Magento\Eav\Model\Entity\Collection\AbstractCollection', [], [], '', false
         );
@@ -164,9 +148,9 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
 
         $quoteMock->expects($this->once())->method('getPayment')->will($this->returnValue($paymentMock));
 
-        $this->quoteLoaderMock->expects($this->once())
-            ->method('load')
-            ->with($cartId, $storeId)
+        $this->quoteRepositoryMock->expects($this->once())
+            ->method('get')
+            ->with($cartId)
             ->will($this->returnValue($quoteMock));
 
         $paymentMethodMock = $this->getMock('\Magento\Checkout\Service\V1\Data\Cart\PaymentMethod', [], [], '', false);
@@ -188,10 +172,6 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
     public function testSetVirtualQuotePaymentFail()
     {
         $cartId = 11;
-        $storeId = 12;
-        $storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
-        $storeMock->expects($this->once())->method('getId')->will($this->returnValue($storeId));
-        $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($storeMock));
 
         $paymentsCollectionMock = $this->getMock(
             '\Magento\Eav\Model\Entity\Collection\AbstractCollection', [], [], '', false
@@ -229,9 +209,9 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
 
         $quoteMock->expects($this->never())->method('getPayment');
 
-        $this->quoteLoaderMock->expects($this->once())
-            ->method('load')
-            ->with($cartId, $storeId)
+        $this->quoteRepositoryMock->expects($this->once())
+            ->method('get')
+            ->with($cartId)
             ->will($this->returnValue($quoteMock));
 
         $paymentMethodMock = $this->getMock('\Magento\Checkout\Service\V1\Data\Cart\PaymentMethod', [], [], '', false);
@@ -253,11 +233,6 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
     public function testSetNotVirtualQuotePaymentThrowsExceptionIfShippingAddressNotSet()
     {
         $cartId = 11;
-        $storeId = 12;
-        $storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
-        $storeMock->expects($this->once())->method('getId')->will($this->returnValue($storeId));
-        $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($storeMock));
-
         $quoteMock = $this->getMock(
             '\Magento\Sales\Model\Quote',
             ['__wakeup', 'getPaymentsCollection', 'isVirtual', 'getShippingAddress'], [], '', false
@@ -275,9 +250,9 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
             ->method('getShippingAddress')
             ->will($this->returnValue($this->getMock('\Magento\Sales\Model\Quote\Address', [], [], '', false)));
 
-        $this->quoteLoaderMock->expects($this->once())
-            ->method('load')
-            ->with($cartId, $storeId)
+        $this->quoteRepositoryMock->expects($this->once())
+            ->method('get')
+            ->with($cartId)
             ->will($this->returnValue($quoteMock));
 
         $paymentMethodMock = $this->getMock('\Magento\Checkout\Service\V1\Data\Cart\PaymentMethod', [], [], '', false);
@@ -294,11 +269,7 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
     public function testSetNotVirtualQuotePaymentSuccess()
     {
         $cartId = 11;
-        $storeId = 12;
         $paymentId = 13;
-        $storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
-        $storeMock->expects($this->once())->method('getId')->will($this->returnValue($storeId));
-        $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($storeMock));
 
         $paymentsCollectionMock = $this->getMock(
             '\Magento\Eav\Model\Entity\Collection\AbstractCollection', [], [], '', false
@@ -336,9 +307,9 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
 
         $quoteMock->expects($this->once())->method('getPayment')->will($this->returnValue($paymentMock));
 
-        $this->quoteLoaderMock->expects($this->once())
-            ->method('load')
-            ->with($cartId, $storeId)
+        $this->quoteRepositoryMock->expects($this->once())
+            ->method('get')
+            ->with($cartId)
             ->will($this->returnValue($quoteMock));
 
         $paymentMethodMock = $this->getMock('\Magento\Checkout\Service\V1\Data\Cart\PaymentMethod', [], [], '', false);

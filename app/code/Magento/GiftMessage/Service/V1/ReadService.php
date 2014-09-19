@@ -39,11 +39,6 @@ class ReadService implements ReadServiceInterface
     protected $messageFactory;
 
     /**
-     * @var \Magento\GiftMessage\Service\V1\Data\MessageBuilder
-     */
-    protected $builder;
-
-    /**
      * @var \Magento\GiftMessage\Service\V1\Data\MessageMapper
      */
     protected $messageMapper;
@@ -51,18 +46,15 @@ class ReadService implements ReadServiceInterface
     /**
      * @param \Magento\Sales\Model\QuoteRepository $quoteRepository
      * @param \Magento\GiftMessage\Model\MessageFactory $messageFactory
-     * @param Data\MessageBuilder $builder
      * @param \Magento\GiftMessage\Service\V1\Data\MessageMapper $messageMapper
      */
     public function __construct(
         \Magento\Sales\Model\QuoteRepository $quoteRepository,
         \Magento\GiftMessage\Model\MessageFactory $messageFactory,
-        \Magento\GiftMessage\Service\V1\Data\MessageBuilder $builder,
         \Magento\GiftMessage\Service\V1\Data\MessageMapper $messageMapper
     ) {
         $this->quoteRepository = $quoteRepository;
         $this->messageFactory = $messageFactory;
-        $this->builder = $builder;
         $this->messageMapper = $messageMapper;
     }
 

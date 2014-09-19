@@ -24,6 +24,7 @@
 namespace Magento\Weee\Model;
 
 use Magento\Catalog\Model\Product;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Store\Model\Website;
 use Magento\Customer\Model\Converter as CustomerConverter;
 use Magento\Tax\Model\Calculation;
@@ -100,6 +101,11 @@ class Tax extends \Magento\Framework\Model\AbstractModel
     protected $weeeConfig;
 
     /**
+     * @var PriceCurrencyInterface
+     */
+    protected $priceCurrency;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory
@@ -107,9 +113,10 @@ class Tax extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Tax\Model\CalculationFactory $calculationFactory
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\Weee\Model\Resource\Tax $resource
+     * @param Resource\Tax $resource
      * @param CustomerConverter $customerConverter
-     * @param \Magento\Weee\Model\Config $weeeConfig
+     * @param Config $weeeConfig
+     * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
@@ -124,6 +131,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
         \Magento\Weee\Model\Resource\Tax $resource,
         CustomerConverter $customerConverter,
         \Magento\Weee\Model\Config $weeeConfig,
+        PriceCurrencyInterface $priceCurrency,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
@@ -134,6 +142,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
         $this->_taxData = $taxData;
         $this->customerConverter = $customerConverter;
         $this->weeeConfig = $weeeConfig;
+        $this->priceCurrency = $priceCurrency;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -289,7 +298,7 @@ class Tax extends \Magento\Framework\Model\AbstractModel
                 $value = $this->getResource()->getReadConnection()->fetchOne($attributeSelect);
                 if ($value) {
                     if ($discountPercent) {
-                        $value = $this->_storeManager->getStore()->roundPrice(
+                        $value = $this->priceCurrency->round(
                             $value - $value * $discountPercent / 100
                         );
                     }
@@ -307,23 +316,23 @@ class Tax extends \Magento\Framework\Model\AbstractModel
                         if ($this->_taxData->priceIncludesTax($store)) {
                             $amountInclTax = $value / (100 + $defaultPercent) * (100 + $currentPercent);
                             //round the "golden price"
-                            $amountInclTax = $store->roundPrice($amountInclTax);
+                            $amountInclTax = $this->priceCurrency->round($amountInclTax);
                             $taxAmount = $amountInclTax - $amountInclTax / (100 + $currentPercent) * 100;
-                            $taxAmount = $store->roundPrice($taxAmount);
+                            $taxAmount = $this->priceCurrency->round($taxAmount);
                         } else {
                             $appliedRates = $this->_calculationFactory->create()->getAppliedRates($rateRequest);
                             if (count($appliedRates) > 1) {
                                 $taxAmount = 0;
                                 foreach ($appliedRates as $appliedRate) {
                                     $taxRate = $appliedRate['percent'];
-                                    $taxAmount += $this->_storeManager->getStore()->roundPrice($value * $taxRate / 100);
+                                    $taxAmount += $this->priceCurrency->round($value * $taxRate / 100);
                                 }
                             } else {
-                                $taxAmount = $this->_storeManager->getStore()->roundPrice(
+                                $taxAmount = $this->priceCurrency->round(
                                     $value * $currentPercent / 100
                                 );
                             }
-                            $taxAmount = $store->roundPrice($value * $currentPercent / 100);
+                            $taxAmount = $this->priceCurrency->round($value * $currentPercent / 100);
                         }
                     }
 

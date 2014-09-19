@@ -45,11 +45,6 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $builderMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $messageMapperMock;
 
     /**
@@ -86,7 +81,6 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
             [],
             '',
             false);
-        $this->builderMock = $this->getMock('\Magento\GiftMessage\Service\V1\Data\MessageBuilder', [], [], '', false);
         $this->messageMapperMock = $this->getMock(
             '\Magento\GiftMessage\Service\V1\Data\MessageMapper',
             [
@@ -122,7 +116,6 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
             [
                 'quoteRepository' => $this->quoteRepositoryMock,
                 'messageFactory' => $this->messageFactoryMock,
-                'builderMock' => $this->builderMock,
                 'messageMapper' => $this->messageMapperMock,
             ]
         );

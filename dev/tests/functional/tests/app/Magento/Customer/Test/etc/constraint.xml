@@ -136,4 +136,12 @@
     <assertMassActionSuccessUpdateMessage module="Magento_Customer">
         <severeness>low</severeness>
     </assertMassActionSuccessUpdateMessage>
+    <assertAddressDeletedFrontend module="Magento_Customer">
+        <severeness>low</severeness>
+        <require />
+    </assertAddressDeletedFrontend>
+    <assertAddressDeletedBackend module="Magento_Customer">
+        <severeness>low</severeness>
+        <require />
+    </assertAddressDeletedBackend>
 </constraint>

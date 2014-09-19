@@ -30,17 +30,106 @@ class CartMapperTest extends \PHPUnit_Framework_TestCase
      */
     protected $mapper;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $totalsBuilder;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $cartBuilder;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $customerBuilder;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $customerMapper;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $totalsMapper;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $currencyMapper;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $itemTotalsMapper;
+
     protected function setUp()
     {
-        $this->mapper = new \Magento\Checkout\Service\V1\Data\CartMapper();
+        $this->totalsBuilder = $this->getMock(
+            '\Magento\Checkout\Service\V1\Data\Cart\TotalsBuilder',
+            ['populateWithArray', 'setItems', 'create'],
+            [],
+            '',
+            false
+        );
+        $this->cartBuilder = $this->getMock(
+            '\Magento\Checkout\Service\V1\Data\CartBuilder',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->customerBuilder = $this->getMock(
+            '\Magento\Checkout\Service\V1\Data\Cart\CustomerBuilder',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->customerMapper = $this->getMock(
+            '\Magento\Checkout\Service\V1\Data\Cart\CustomerMapper',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->totalsMapper = $this->getMock('\Magento\Checkout\Service\V1\Data\Cart\TotalsMapper', [], [], '', false);
+        $this->currencyMapper = $this->getMock(
+            '\Magento\Checkout\Service\V1\Data\Cart\CurrencyMapper',
+            ['extractDto'],
+            [],
+            '',
+            false
+        );
+        $this->itemTotalsMapper = $this->getMock(
+            '\Magento\Checkout\Service\V1\Data\Cart\Totals\ItemMapper',
+            ['extractDto'],
+            [],
+            '',
+            false
+        );
+
+        $this->mapper = new \Magento\Checkout\Service\V1\Data\CartMapper(
+            $this->totalsBuilder,
+            $this->cartBuilder,
+            $this->customerBuilder,
+            $this->customerMapper,
+            $this->totalsMapper,
+            $this->currencyMapper,
+            $this->itemTotalsMapper
+        );
     }
 
     public function testMap()
     {
         $methods = ['getId', 'getStoreId', 'getCreatedAt','getUpdatedAt', 'getConvertedAt', 'getIsActive',
             'getIsVirtual', 'getItemsCount', 'getItemsQty', 'getCheckoutMethod', 'getReservedOrderId', 'getOrigOrderId',
-            '__wakeUp'];
+            'getAllItems', '__wakeUp'];
         $quoteMock = $this->getMock('Magento\Sales\Model\Quote', $methods, [], '', false);
+        $itemMock = $this->getMock('Magento\Sales\Model\Quote\Item', [], [], '', false);
+        $quoteMock->expects($this->once())->method('getAllItems')->will($this->returnValue([$itemMock]));
         $expected = [
             Cart::ID => 12,
             Cart::STORE_ID => 1,
@@ -72,7 +161,28 @@ class CartMapperTest extends \PHPUnit_Framework_TestCase
         foreach ($expectedMethods as $method => $value) {
             $quoteMock->expects($this->once())->method($method)->will($this->returnValue($value));
         }
+        $this->customerMapper->expects($this->once())->method('map')->with($quoteMock)
+            ->will($this->returnValue(['testCustomer']));
+        $this->customerBuilder->expects($this->once())->method('populateWithArray')->with(['testCustomer']);
+        $this->customerBuilder->expects($this->once())->method('create')->will($this->returnValue('customer'));
 
-        $this->assertEquals($expected, $this->mapper->map($quoteMock));
+        $this->totalsMapper->expects($this->once())->method('map')->with($quoteMock)
+            ->will($this->returnValue(['testTotals']));
+        $this->totalsBuilder->expects($this->once())->method('populateWithArray')->with(['testTotals']);
+        $this->totalsBuilder->expects($this->once())->method('create')->will($this->returnValue('totals'));
+
+        $this->itemTotalsMapper->expects($this->once())->method('extractDto')->with($itemMock)
+            ->will($this->returnValue('mappedItem'));
+
+        $this->totalsBuilder->expects($this->once())->method('setItems')->with(['mappedItem']);
+
+        $this->currencyMapper->expects($this->once())->method('extractDto')->with($quoteMock)
+            ->will($this->returnValue('currency'));
+
+        $this->cartBuilder->expects($this->once())->method('populateWithArray')->with($expected);
+        $this->cartBuilder->expects($this->once())->method('setCustomer')->with('customer');
+        $this->cartBuilder->expects($this->once())->method('setTotals')->with('totals');
+        $this->cartBuilder->expects($this->once())->method('setCurrency')->with('currency');
+        $this->mapper->map($quoteMock);
     }
 }

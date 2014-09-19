@@ -27,6 +27,11 @@ namespace Magento\Persistent\Controller\Index;
 class SaveMethod extends \Magento\Persistent\Controller\Index
 {
     /**
+     * @var \Magento\Persistent\Model\QuoteManager
+     */
+    protected $quoteManager;
+
+    /**
      * Save onepage checkout method to be register
      *
      * @return void
@@ -39,7 +44,7 @@ class SaveMethod extends \Magento\Persistent\Controller\Index
                 $this->_customerSession->setCustomerId(null)->setCustomerGroupId(null);
             }
 
-            $this->_persistentObserver->setQuoteGuest();
+            $this->quoteManager->setGuest();
         }
 
         $checkoutUrl = $this->_redirect->getRefererUrl();

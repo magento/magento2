@@ -26,7 +26,7 @@ namespace Magento\Bundle\Test\Constraint;
 
 use Magento\Cms\Test\Page\CmsIndex;
 use Mtf\Constraint\AbstractConstraint;
-use Magento\Bundle\Test\Fixture\CatalogProductBundle;
+use Magento\Bundle\Test\Fixture\BundleProduct;
 use Magento\Catalog\Test\Fixture\CatalogCategory;
 use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
 
@@ -47,14 +47,14 @@ class AssertBundleInCategory extends AbstractConstraint
      *
      * @param CatalogCategoryView $catalogCategoryView
      * @param CmsIndex $cmsIndex
-     * @param CatalogProductBundle $product
+     * @param BundleProduct $product
      * @param CatalogCategory $category
      * @return void
      */
     public function processAssert(
         CatalogCategoryView $catalogCategoryView,
         CmsIndex $cmsIndex,
-        CatalogProductBundle $product,
+        BundleProduct $product,
         CatalogCategory $category
     ) {
         //Open category view page
@@ -68,11 +68,11 @@ class AssertBundleInCategory extends AbstractConstraint
     /**
      * Verify product price on category view page
      *
-     * @param CatalogProductBundle $bundle
+     * @param BundleProduct $bundle
      * @param CatalogCategoryView $catalogCategoryView
      * @return void
      */
-    protected function assertPrice(CatalogProductBundle $bundle, CatalogCategoryView $catalogCategoryView)
+    protected function assertPrice(BundleProduct $bundle, CatalogCategoryView $catalogCategoryView)
     {
         $priceData = $bundle->getDataFieldConfig('price')['source']->getPreset();
         //Price from/to verification

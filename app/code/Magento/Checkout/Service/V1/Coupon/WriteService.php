@@ -34,9 +34,9 @@ use Magento\Framework\Exception\CouldNotSaveException;
 class WriteService implements WriteServiceInterface
 {
     /**
-     * @var \Magento\Checkout\Service\V1\QuoteLoader
+     * @var \Magento\Sales\Model\QuoteRepository
      */
-    protected $quoteLoader;
+    protected $quoteRepository;
 
     /**
      * @var CouponBuilder
@@ -44,23 +44,15 @@ class WriteService implements WriteServiceInterface
     protected $couponBuilder;
 
     /**
-     * @var \Magento\Framework\StoreManagerInterface
-     */
-    protected $storeManager;
-
-    /**
-     * @param \Magento\Checkout\Service\V1\QuoteLoader $quoteLoader
+     * @param \Magento\Sales\Model\QuoteRepository $quoteRepository
      * @param CouponBuilder $couponBuilder
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
      */
     public function __construct(
-        \Magento\Checkout\Service\V1\QuoteLoader $quoteLoader,
-        CouponBuilder $couponBuilder,
-        \Magento\Framework\StoreManagerInterface $storeManager
+        \Magento\Sales\Model\QuoteRepository $quoteRepository,
+        CouponBuilder $couponBuilder
     ) {
-        $this->quoteLoader = $quoteLoader;
+        $this->quoteRepository = $quoteRepository;
         $this->couponBuilder = $couponBuilder;
-        $this->storeManager = $storeManager;
     }
 
     /**
@@ -68,9 +60,8 @@ class WriteService implements WriteServiceInterface
      */
     public function set($cartId, \Magento\Checkout\Service\V1\Data\Cart\Coupon $couponCodeData)
     {
-        $storeId = $this->storeManager->getStore()->getId();
         /** @var  \Magento\Sales\Model\Quote $quote */
-        $quote = $this->quoteLoader->load($cartId, $storeId);
+        $quote = $this->quoteRepository->get($cartId);
         if (!$quote->getItemsCount()) {
             throw new NoSuchEntityException("Cart $cartId doesn't contain products");
         }
@@ -94,9 +85,8 @@ class WriteService implements WriteServiceInterface
      */
     public function delete($cartId)
     {
-        $storeId = $this->storeManager->getStore()->getId();
         /** @var  \Magento\Sales\Model\Quote $quote */
-        $quote = $this->quoteLoader->load($cartId, $storeId);
+        $quote = $this->quoteRepository->get($cartId);
         if (!$quote->getItemsCount()) {
             throw new NoSuchEntityException("Cart $cartId doesn't contain products");
         }

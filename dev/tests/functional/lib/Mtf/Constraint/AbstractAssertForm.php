@@ -196,15 +196,19 @@ abstract class AbstractAssertForm extends AbstractConstraint
      * Sort multidimensional array by key
      *
      * @param array $data
-     * @param string $key
+     * @param string $orderKey
      * @return array
      */
-    protected function sortMultidimensionalArray(array $data, $key)
+    protected function sortMultidimensionalArray(array $data, $orderKey)
     {
         $result = [];
-        foreach ($data as $value) {
-            $sortKey = is_numeric($value[$key]) ? floatval($value[$key]) : $value[$key];
-            $result[$sortKey] = $value;
+        foreach ($data as $key => $value) {
+            if (isset($value[$orderKey])) {
+                $orderValue = is_numeric($value[$orderKey]) ? floatval($value[$orderKey]) : $value[$orderKey];
+                $result[$orderValue] = $value;
+            } else {
+                $result[$key] = $value;
+            }
         }
 
         ksort($result);

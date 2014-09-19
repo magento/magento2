@@ -40,6 +40,7 @@
             <module name="Magento_Payment"/>
             <module name="Magento_Sales"/>
             <module name="Magento_Theme"/>
+            <module name="Magento_CatalogInventory"/>
         </depends>
     </module>
 </config>

@@ -155,4 +155,15 @@ class PriceCurrency implements \Magento\Framework\Pricing\PriceCurrencyInterface
         }
         return $store;
     }
+
+    /**
+     * Round price
+     *
+     * @param float $price
+     * @return float
+     */
+    public function round($price)
+    {
+        return round($price, 2);
+    }
 }

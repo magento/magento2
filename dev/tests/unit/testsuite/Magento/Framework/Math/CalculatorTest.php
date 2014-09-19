@@ -33,18 +33,18 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject
      */
-    protected $_scopeMock;
+    protected $priceCurrency;
 
     public function setUp()
     {
-        $this->_scopeMock = $this->getMock('Magento\Store\Model\Store', array(), array(), '', false);
-        $this->_scopeMock->expects($this->any())
-            ->method('roundPrice')
+        $this->priceCurrency = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')->getMock();
+        $this->priceCurrency->expects($this->any())
+            ->method('round')
             ->will($this->returnCallback(function ($argument) {
                 return round($argument, 2);
             }));
 
-        $this->_model = new \Magento\Framework\Math\Calculator($this->_scopeMock);
+        $this->_model = new \Magento\Framework\Math\Calculator($this->priceCurrency);
     }
 
     /**

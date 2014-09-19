@@ -121,7 +121,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 array(),
                 '',
                 false
-            )
+            ),
+            'priceCurrency' => $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')->getMock()
         );
         $childItem = $objectManagerHelper->getObject('Magento\Sales\Model\Quote\Item', $arguments);
         $childItem->setData('product', $childProduct);

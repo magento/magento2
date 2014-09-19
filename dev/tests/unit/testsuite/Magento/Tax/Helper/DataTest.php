@@ -27,10 +27,7 @@ namespace Magento\Tax\Helper;
 use Magento\TestFramework\Helper\ObjectManager;
 use Magento\Tax\Service\V1\Data\OrderTaxDetails\AppliedTax;
 use Magento\Tax\Service\V1\Data\OrderTaxDetails\Item;
-use Magento\Tax\Service\V1\Data\OrderTaxDetails\AppliedTaxBuilder;
-use Magento\Tax\Service\V1\Data\OrderTaxDetails\ItemBuilder;
 use Magento\Tax\Service\V1\Data\OrderTaxDetails;
-use Magento\Tax\Service\V1\Data\OrderTaxDetailsBuilder;
 /**
  * Test tax helper
  */
@@ -48,6 +45,9 @@ class DataTest extends \PHPUnit_Framework_TestCase
     /** @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Registry */
     private $coreRegistry;
 
+    /** @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Pricing\PriceCurrencyInterface */
+    private $priceCurrency;
+
     public function setUp()
     {
         $objectManager = new ObjectManager($this);
@@ -61,11 +61,21 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getOrderTaxDetails'])
             ->getMock();
 
+        $this->priceCurrency = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')->getMock();
+        $this->priceCurrency->expects($this->any())
+            ->method('round')
+            ->will($this->returnCallback(
+                function ($argument) {
+                    return round($argument, 2);
+                }
+            ));
+
         $this->taxHelper = $objectManager->getObject(
             'Magento\Tax\Helper\Data',
             [
                 'coreRegistry' => $this->coreRegistry,
                 'orderTaxService' => $this->orderTaxService,
+                'priceCurrency' => $this->priceCurrency,
             ]
         );
 
@@ -93,15 +103,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         /** @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\Store */
         $store = $this->getMockBuilder('\Magento\Store\Model\Store')
             ->disableOriginalConstructor()
-            ->setMethods(['roundPrice', '__wakeup'])
             ->getMock();
-        $store->expects($this->any())
-            ->method('roundPrice')
-            ->will($this->returnCallback(
-                function ($argument) {
-                    return round($argument, 2);
-                }
-            ));
 
         $objectManager = new ObjectManager($this);
         $this->orderTaxDetailsBuilder = $objectManager->getObject('Magento\Tax\Service\V1\Data\OrderTaxDetailsBuilder');
@@ -214,14 +216,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->method('registry')
             ->with('current_invoice')
             ->will($this->returnValue($invoice));
-        $this->coreRegistry->expects($this->at(2))
-            ->method('registry')
-            ->with('current_invoice')
-            ->will($this->returnValue($invoice));
-        $this->coreRegistry->expects($this->at(3))
-            ->method('registry')
-            ->with('current_invoice')
-            ->will($this->returnValue($invoice));
         $this->commonTestGetCalculatedTaxesInvoiceCreditmemo($source, $orderTaxDetails, $expectedResults);
     }
 
@@ -246,18 +240,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->method('registry')
             ->with('current_creditmemo')
             ->will($this->returnValue($creditmemo));
-        $this->coreRegistry->expects($this->at(3))
-            ->method('registry')
-            ->with('current_invoice')
-            ->will($this->returnValue(null));
-        $this->coreRegistry->expects($this->at(4))
-            ->method('registry')
-            ->with('current_creditmemo')
-            ->will($this->returnValue($creditmemo));
-        $this->coreRegistry->expects($this->at(5))
-            ->method('registry')
-            ->with('current_creditmemo')
-            ->will($this->returnValue($creditmemo));
         $this->commonTestGetCalculatedTaxesInvoiceCreditmemo($source, $orderTaxDetails, $expectedResults);
     }
 
@@ -270,15 +252,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         /** @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\Store */
         $store = $this->getMockBuilder('\Magento\Store\Model\Store')
             ->disableOriginalConstructor()
-            ->setMethods(['roundPrice', '__wakeup'])
             ->getMock();
-        $store->expects($this->any())
-            ->method('roundPrice')
-            ->will($this->returnCallback(
-                function ($argument) {
-                    return round($argument, 2);
-                }
-            ));
 
         $objectManager = new ObjectManager($this);
         $this->orderTaxDetailsBuilder = $objectManager->getObject('Magento\Tax\Service\V1\Data\OrderTaxDetailsBuilder');
@@ -421,6 +395,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             'qty_not_changed' => [
                 'source' => new \Magento\Framework\Object(
                         [
+                            'shipping_tax_amount' => '2.6',
                             'id' => '19',
                             'store' => $store,
                         ]
@@ -460,8 +435,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
                     [
                         'tax_amount' => '2.6',
                         'base_tax_amount' => '5.21',
-                        'title' => 'Shipping & Handling Tax',
-                        'percent' => '',
+                        'title' => 'Shipping',
+                        'percent' => '21',
                     ],
                     [
                         'title' => 'US-CA-*-Rate 1',

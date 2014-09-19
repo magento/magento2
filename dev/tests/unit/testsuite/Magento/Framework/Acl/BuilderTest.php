@@ -78,17 +78,6 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    protected function tearDown()
-    {
-        unset($this->_aclMock);
-        unset($this->_aclFactoryMock);
-        unset($this->_ruleLoader);
-        unset($this->_roleLoader);
-        unset($this->_resourceLoader);
-        unset($this->_model);
-        unset($this->_aclCacheMock);
-    }
-
     public function testGetAclUsesLoadersProvidedInConfigurationToPopulateAclIfCacheIsEmpty()
     {
         $this->_aclCacheMock->expects($this->at(1))->method('has')->will($this->returnValue(false));

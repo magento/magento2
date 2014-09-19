@@ -76,6 +76,11 @@ class AttributePriceTest extends \PHPUnit_Framework_TestCase
     protected $attributeMock;
 
     /**
+     * @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $priceCurrency;
+
+    /**
      * Test setUp
      */
     protected function setUp()
@@ -114,12 +119,14 @@ class AttributePriceTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->priceCurrency = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')->getMock();
         $this->attribute = new AttributePrice(
             $this->saleableItemMock,
             $qty,
             $this->calculatorMock,
             $this->priceModifier,
-            $this->storeManagerMock
+            $this->storeManagerMock,
+            $this->priceCurrency
         );
     }
 
@@ -131,7 +138,8 @@ class AttributePriceTest extends \PHPUnit_Framework_TestCase
             $qty,
             $this->calculatorMock,
             $this->priceModifier,
-            $this->storeManagerMock
+            $this->storeManagerMock,
+            $this->priceCurrency
         );
         $this->assertInstanceOf('Magento\ConfigurableProduct\Pricing\Price\AttributePrice', $object);
     }
@@ -223,8 +231,8 @@ class AttributePriceTest extends \PHPUnit_Framework_TestCase
         $storeMock = $this->getMockBuilder('Magento\Store\Model\Store')
             ->disableOriginalConstructor()
             ->getMock();
-        $storeMock->expects($this->once())
-            ->method('convertPrice')
+        $this->priceCurrency->expects($this->once())
+            ->method('convert')
             ->with($this->equalTo($modifiedValue))
             ->will($this->returnArgument(0));
 
@@ -309,7 +317,8 @@ class AttributePriceTest extends \PHPUnit_Framework_TestCase
             ->with(
                 $this->equalTo(55),
                 $this->equalTo($this->saleableItemMock),
-                $this->equalTo(\Magento\Weee\Pricing\Adjustment::ADJUSTMENT_CODE)
+                null,
+                [\Magento\Catalog\Pricing\Price\CustomOptionPriceInterface::CONFIGURATION_OPTION_FLAG => true]
             )
             ->will($this->returnValue(57.55));
         $this->assertEquals(
@@ -341,7 +350,8 @@ class AttributePriceTest extends \PHPUnit_Framework_TestCase
             ->with(
                 $this->equalTo(77.67),
                 $this->equalTo($this->saleableItemMock),
-                $this->equalTo(\Magento\Weee\Pricing\Adjustment::ADJUSTMENT_CODE)
+                null,
+                [\Magento\Catalog\Pricing\Price\CustomOptionPriceInterface::CONFIGURATION_OPTION_FLAG => true]
             )
             ->will($this->returnValue(80.99));
         $this->assertEquals(

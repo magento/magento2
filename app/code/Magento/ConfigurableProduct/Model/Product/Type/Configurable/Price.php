@@ -26,6 +26,7 @@
 namespace Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 
 use Magento\Catalog\Model\Product\PriceModifierInterface;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 
 class Price extends \Magento\Catalog\Model\Product\Type\Price
 {
@@ -40,6 +41,7 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param PriceCurrencyInterface $priceCurrency
      * @param PriceModifierInterface $priceModifier
      */
     public function __construct(
@@ -48,10 +50,11 @@ class Price extends \Magento\Catalog\Model\Product\Type\Price
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Event\ManagerInterface $eventManager,
+        PriceCurrencyInterface $priceCurrency,
         PriceModifierInterface $priceModifier
     ) {
         $this->priceModifier = $priceModifier;
-        parent::__construct($ruleFactory, $storeManager, $localeDate, $customerSession, $eventManager);
+        parent::__construct($ruleFactory, $storeManager, $localeDate, $customerSession, $eventManager, $priceCurrency);
     }
 
     /**

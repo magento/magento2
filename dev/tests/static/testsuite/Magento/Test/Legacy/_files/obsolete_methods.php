@@ -1918,4 +1918,8 @@ return array(
     ['loadByTags', 'Magento\UrlRewrite\Model\UrlRewrite'],
     ['getMethodFormBlock', 'Magento\Centinel\Helper\Data'],
     ['login', 'Magento\Customer\Model\Session'],
+    ['roundPrice', 'Magento\Store\Model\Store', 'Magento\Framework\Pricing\PriceCurrencyInterface::round'],
+    ['formatPrice', 'Magento\Store\Model\Store', 'Magento\Framework\Pricing\PriceCurrencyInterface::format'],
+    ['convertPrice', 'Magento\Store\Model\Store', 'Magento\Framework\Pricing\PriceCurrencyInterface::convert'],
+    ['getPriceFilter', 'Magento\Store\Model\Store'],
 );

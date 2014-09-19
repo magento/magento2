@@ -29,6 +29,9 @@ use Magento\Framework\Service\Data\ObjectFactory;
 use Magento\Framework\Service\V1\Data\AbstractSearchResultsBuilder;
 use Magento\Framework\Service\V1\Data\SearchCriteriaBuilder;
 
+/**
+ * @codeCoverageIgnore
+ */
 class CartSearchResultsBuilder extends AbstractSearchResultsBuilder
 {
     /**

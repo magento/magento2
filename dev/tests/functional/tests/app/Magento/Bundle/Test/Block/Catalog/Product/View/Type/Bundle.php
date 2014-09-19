@@ -32,7 +32,7 @@ use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Mtf\Fixture\FixtureInterface;
 use Mtf\Fixture\InjectableFixture;
 use Magento\Bundle\Test\Fixture\Bundle as BundleDataFixture;
-use Magento\Bundle\Test\Fixture\CatalogProductBundle;
+use Magento\Bundle\Test\Fixture\BundleProduct;
 
 /**
  * Class Bundle
@@ -73,7 +73,7 @@ class Bundle extends Block
      *
      * @var string
      */
-    protected $optionLabel = './/div[@class="control"]//label[contains(@for, "options_")][%d]';
+    protected $optionLabel = './/div[@class="control"]//label[.//*[@class="product-name"]]';
 
     /**
      * Selector for option of select element
@@ -92,11 +92,11 @@ class Bundle extends Block
     /**
      * Fill bundle option on frontend add click "Add to cart" button
      *
-     * @param CatalogProductBundle $product
+     * @param BundleProduct $product
      * @param CatalogProductView $catalogProductView
      * @return void
      */
-    public function addToCart(CatalogProductBundle $product, CatalogProductView $catalogProductView)
+    public function addToCart(BundleProduct $product, CatalogProductView $catalogProductView)
     {
         $catalogProductView->getViewBlock()->fillOptions($product);
         $catalogProductView->getViewBlock()->clickAddToCart();
@@ -112,7 +112,7 @@ class Bundle extends Block
     public function getOptions(FixtureInterface $product)
     {
         if ($product instanceof InjectableFixture) {
-            /** @var CatalogProductBundle  $product */
+            /** @var BundleProduct  $product */
             $bundleSelections = $product->getBundleSelections();
             $bundleOptions = isset($bundleSelections['bundle_options']) ? $bundleSelections['bundle_options'] : [];
         } else {
@@ -182,7 +182,7 @@ class Bundle extends Block
     }
 
     /**
-     * Get data of "Multiple" option
+     * Get data of "Multiple select" option
      *
      * @param Element $option
      * @return array
@@ -190,11 +190,18 @@ class Bundle extends Block
     protected function getMultipleselectData(Element $option)
     {
         $multiselect = $option->find($this->selectOption, Locator::SELECTOR_XPATH, 'multiselect');
-        return $this->getSelectOptionsData($multiselect, 1);
+        $data = $this->getSelectOptionsData($multiselect, 1);
+
+        foreach ($data['options'] as $key => $option) {
+            $option['title'] = trim(preg_replace('/^[\d]+ x/', '', $option['title']));
+            $data['options'][$key] = $option;
+        }
+
+        return $data;
     }
 
     /**
-     * Get data of "Radio" option
+     * Get data of "Radio buttons" option
      *
      * @param Element $option
      * @return array
@@ -202,13 +209,12 @@ class Bundle extends Block
     protected function getRadiobuttonsData(Element $option)
     {
         $listOptions = [];
+        $optionLabels = $option->find($this->optionLabel, Locator::SELECTOR_XPATH)->getElements();
 
-        $count = 1;
-        $option = $option->find(sprintf($this->optionLabel, $count), Locator::SELECTOR_XPATH);
-        while ($option->isVisible()) {
-            $listOptions[] = $this->parseOptionText($option->getText());
-            ++$count;
-            $option = $option->find(sprintf($this->optionLabel, $count), Locator::SELECTOR_XPATH);
+        foreach ($optionLabels as $optionLabel) {
+            if ($optionLabel->isVisible()) {
+                $listOptions[] = $this->parseOptionText($optionLabel->getText());
+            }
         }
 
         return ['options' => $listOptions];
@@ -222,7 +228,14 @@ class Bundle extends Block
      */
     protected function getCheckboxData(Element $option)
     {
-        return $this->getRadiobuttonsData($option);
+        $data =  $this->getRadiobuttonsData($option);
+
+        foreach ($data['options'] as $key => $option) {
+            $option['title'] = trim(preg_replace('/^[\d]+ x/', '', $option['title']));
+            $data['options'][$key] = $option;
+        }
+
+        return $data;
     }
 
     /**

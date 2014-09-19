@@ -124,12 +124,23 @@ class CreateConfigurableTest extends Functional
             'Product name does not correspond to specified.'
         );
         $price = $product->getProductPrice();
-        $blockPrice = $productViewBlock->getProductPrice();
+        $priceOnPage = $productViewBlock->getPriceBlock()->getPrice();
         $this->assertEquals(
             number_format($price, 2),
-            number_format($blockPrice['price_regular_price'], 2),
+            number_format($priceOnPage, 2),
             'Product price does not correspond to specified.'
         );
-        $this->assertTrue($productViewBlock->verifyProductOptions($product), 'Added configurable options are absent');
+
+        $pageOptions = $productViewBlock->getOptions($product);
+        $configurableOptions = [];
+        foreach ($pageOptions['configurable_options'] as $attribute) {
+            $configurableOption = [];
+            foreach ($attribute['options'] as $option) {
+                $configurableOption[] = $option['title'];
+            }
+
+            $configurableOptions[$attribute['title']] = $configurableOption;
+        }
+        $this->assertEquals($product->getConfigurableOptions(), $configurableOptions);
     }
 }

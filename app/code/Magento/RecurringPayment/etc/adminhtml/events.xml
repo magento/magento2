@@ -25,9 +25,9 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
     <event name="adminhtml_catalog_product_form_prepare_excluded_field_list">
-        <observer name="magento_recurringpayment" instance="Magento\RecurringPayment\Model\Observer" method="addFormExcludedAttribute"/>
+        <observer name="magento_recurringpayment" instance="Magento\RecurringPayment\Model\Observer\AddFormExcludedAttribute" method="execute"/>
     </event>
     <event name="adminhtml_catalog_product_edit_prepare_form">
-        <observer name="magento_recurringpayment" instance="Magento\RecurringPayment\Model\Observer" method="setFormRecurringElementRenderer"/>
+        <observer name="magento_recurringpayment" instance="Magento\RecurringPayment\Model\Observer\SetFormRecurringElementRenderer" method="execute"/>
     </event>
 </config>

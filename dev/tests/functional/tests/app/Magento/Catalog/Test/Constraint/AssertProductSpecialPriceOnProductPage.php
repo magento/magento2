@@ -89,10 +89,7 @@ class AssertProductSpecialPriceOnProductPage extends AbstractConstraint implemen
         $block = ''
     ) {
         $fields = $product->getData();
-        $specialPrice = $catalogProductView->{'get' . $block . 'ViewBlock'}()->getProductPrice();
-        $specialPrice = (isset($specialPrice['price_special_price']))
-            ? $specialPrice['price_special_price']
-            : null;
+        $specialPrice = $catalogProductView->getViewBlock()->getPriceBlock()->getSpecialPrice();
         if (isset($fields['special_price'])) {
             \PHPUnit_Framework_Assert::assertEquals(
                 number_format($fields['special_price'], 2),

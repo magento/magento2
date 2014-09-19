@@ -64,9 +64,9 @@ class Converter
             Address::KEY_ID => $address->getId(),
             Address::KEY_CUSTOMER_ID => $address->getCustomerId(),
             Address::KEY_REGION => array(
-                Region::KEY_REGION => $address->getRegion(),
-                Region::KEY_REGION_ID => $address->getRegionId(),
-                Region::KEY_REGION_CODE => $address->getRegionCode()
+                Region::REGION => $address->getRegion(),
+                Region::REGION_ID => $address->getRegionId(),
+                Region::REGION_CODE => $address->getRegionCode()
             ),
             Address::KEY_STREET => $address->getStreet(),
             Address::KEY_COMPANY => $address->getCompany(),

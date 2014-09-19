@@ -54,23 +54,21 @@ class Index extends \Magento\Framework\App\Action\Action
      *
      * @var \Magento\Persistent\Model\Observer
      */
-    protected $_persistentObserver;
+    protected $quoteManager;
 
     /**
-     * Construct
-     *
      * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Persistent\Model\Observer $persistentObserver
+     * @param \Magento\Persistent\Model\QuoteManager $quoteManager
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
-        \Magento\Persistent\Model\Observer $persistentObserver,
+        \Magento\Persistent\Model\QuoteManager $quoteManager,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Customer\Model\Session $customerSession
     ) {
-        $this->_persistentObserver = $persistentObserver;
+        $this->quoteManager = $quoteManager;
         $this->_checkoutSession = $checkoutSession;
         $this->_customerSession = $customerSession;
         parent::__construct($context);

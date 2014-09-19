@@ -49,6 +49,13 @@ class Payment extends \Magento\Framework\App\Action\Action
         parent::__construct($context);
     }
 
+    /**
+     * @return \Magento\Checkout\Model\Session
+     */
+    protected function _getCheckout()
+    {
+        return $this->_objectManager->get('Magento\Checkout\Model\Session');
+    }
 
     /**
      * Get session model

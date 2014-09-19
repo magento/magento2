@@ -35,7 +35,6 @@
             <module name="Magento_Eav"/>
             <module name="Magento_Cron"/>
             <module name="Magento_Theme"/>
-            <module name="Magento_Weee"/>
             <module name="Magento_Reports"/>
             <module name="Magento_CatalogSearch"/>
             <module name="Magento_Sales"/>
@@ -45,8 +44,6 @@
             <module name="Magento_Backup"/>
             <module name="Magento_Email"/>
             <module name="Magento_Customer"/>
-            <module name="Magento_Tax"/>
-            <module name="Magento_Checkout"/>
             <module name="Magento_UrlRewrite"/>
             <module name="Magento_Translation"/>
         </depends>

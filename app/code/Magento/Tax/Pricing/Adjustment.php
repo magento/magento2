@@ -102,9 +102,10 @@ class Adjustment implements AdjustmentInterface
      *
      * @param float $amount
      * @param SaleableInterface $saleableItem
+     * @param null|array $context
      * @return float
      */
-    public function extractAdjustment($amount, SaleableInterface $saleableItem)
+    public function extractAdjustment($amount, SaleableInterface $saleableItem, $context = [])
     {
         if ($this->taxHelper->priceIncludesTax()) {
             $adjustedAmount = $this->catalogHelper->getTaxPrice(
@@ -130,9 +131,10 @@ class Adjustment implements AdjustmentInterface
      *
      * @param float $amount
      * @param SaleableInterface $saleableItem
+     * @param null|array $context
      * @return float
      */
-    public function applyAdjustment($amount, SaleableInterface $saleableItem)
+    public function applyAdjustment($amount, SaleableInterface $saleableItem, $context = [])
     {
         return $this->catalogHelper->getTaxPrice(
             $saleableItem,

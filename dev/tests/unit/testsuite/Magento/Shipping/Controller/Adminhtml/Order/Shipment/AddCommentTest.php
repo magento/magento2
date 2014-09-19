@@ -77,35 +77,35 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
     {
         $this->shipmentLoaderMock = $this->getMock(
             'Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader',
-            ['setOrderId', 'setShipmentId', 'setShipment', 'setTracking', 'load'],
+            ['setOrderId', 'setShipmentId', 'setShipment', 'setTracking', 'load', '__wakeup'],
             [],
             '',
             false
         );
         $this->shipmentSenderMock = $this->getMock(
             'Magento\Sales\Model\Order\Email\Sender\ShipmentSender',
-            ['send'],
+            ['send', '__wakeup'],
             [],
             '',
             false
         );
         $this->requestMock = $this->getMock(
             'Magento\Framework\App\Request\Http',
-            ['getParam', 'getPost', 'setParam'],
+            ['getParam', 'getPost', 'setParam', '__wakeup'],
             [],
             '',
             false
         );
         $this->responseMock = $this->getMock(
             'Magento\Framework\App\Response\Http',
-            ['setBody', 'representJson'],
+            ['setBody', 'representJson', '__wakeup'],
             [],
             '',
             false
         );
         $this->titleMock = $this->getMock(
             'Magento\Framework\App\Action\Title',
-            ['add'],
+            ['add', '__wakeup'],
             [],
             '',
             false
@@ -119,14 +119,14 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
         );
         $this->viewMock = $this->getMock(
             'Magento\Backend\Model\View',
-            ['getLayout', 'loadLayout'],
+            ['getLayout', 'loadLayout', '__wakeup'],
             [],
             '',
             false
         );
         $this->objectManagerMock = $this->getMock(
             'Magento\Framework\ObjectManager',
-            ['create', 'get', 'configure'],
+            ['create', 'get', 'configure', '__wakeup'],
             [],
             '',
             false
@@ -134,7 +134,7 @@ class AddCommentTest extends \PHPUnit_Framework_TestCase
 
         $contextMock = $this->getMock(
             'Magento\Backend\App\Action\Context',
-            ['getRequest', 'getResponse', 'getTitle', 'getView', 'getObjectManager'],
+            ['getRequest', 'getResponse', 'getTitle', 'getView', 'getObjectManager', '__wakeup'],
             [],
             '',
             false

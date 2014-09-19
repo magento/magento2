@@ -24,6 +24,7 @@
 namespace Magento\Catalog\Test\Block\Product;
 
 use Mtf\Block\Block;
+use Mtf\Client\Element;
 use Mtf\Client\Element\Locator;
 
 /**
@@ -33,46 +34,36 @@ use Mtf\Client\Element\Locator;
 class Price extends Block
 {
     /**
-     * This member holds the class name of the old price block.
+     * Mapping for different type of price
      *
-     * @var string
+     * @var array
      */
-    protected $oldPriceClass = '.old-price';
-
-    /**
-     * This member holds the class name of the price block that contains the actual price value.
-     *
-     * @var string
-     */
-    protected $priceClass = '.price';
-
-    /**
-     * This member holds the class name of the regular price block.
-     *
-     * @var string
-     */
-    protected $regularPriceClass = '.price-final_price';
-
-    /**
-     * This member holds the class name of the special price block.
-     *
-     * @var string
-     */
-    protected $specialPriceClass = '.special-price';
-
-    /**
-     * Minimum Advertised Price
-     *
-     * @var string
-     */
-    protected $priceMap = '.old.price .price .price';
-
-    /**
-     * Actual Price
-     *
-     * @var string
-     */
-    protected $actualPrice = '.actual.price .price';
+    protected $mapTypePrices = [
+        'price' => [
+            'selector' => '.price .price'
+        ],
+        'old_price' => [
+            'selector' => '.old-price .price'
+        ],
+        'map_old_price' => [
+            'selector' => '.old.price .price'
+        ],
+        'actual_price' => [
+            'selector' => '.actual.price .price'
+        ],
+        'special_price' => [
+            'selector' => '.special-price .price'
+        ],
+        'final_price' => [
+            'selector' => '.price-final_price .price'
+        ],
+        'price_from' => [
+            'selector' => 'p.price-from .price'
+        ],
+        'price_to' => [
+            'selector' => 'p.price-to .price'
+        ]
+    ];
 
     /**
      * 'Add to Cart' button
@@ -82,6 +73,13 @@ class Price extends Block
     protected $addToCart = '.action.tocart';
 
     /**
+     * Minimum Advertised Price
+     *
+     * @var string
+     */
+    protected $priceMap = '.old.price .price .price';
+
+    /**
      * 'Close' button
      *
      * @var string
@@ -89,52 +87,92 @@ class Price extends Block
     protected $closeMap = '//section[@class="page main"]//div[@class="ui-dialog-buttonset"]//button';
 
     /**
-     * Price from selector
-     *
-     * @var string
-     */
-    protected $priceFromSelector = 'p.price-from span.price';
-
-    /**
-     * Price to selector
-     *
-     * @var string
-     */
-    protected $priceToSelector = 'p.price-to span.price';
-
-    /**
-     * Getting prices
+     * This method returns the price represented by the block
      *
      * @param string $currency
-     * @return array
+     * @return string
      */
     public function getPrice($currency = '$')
     {
-        //@TODO it have to rewrite when will be possibility to divide it to different blocks(by product type)
-        $prices = explode("\n", trim($this->_rootElement->getText()));
-        if (count($prices) === 1) {
-            $prices[0] = str_replace(',', '', $prices[0]);
-            return ['price_regular_price' => trim($prices[0], $currency)];
-        }
-        return $this->formatPricesData($prices, $currency);
+        return $this->getTypePrice('price', $currency);
     }
 
     /**
-     * Formatting data prices
+     * Get actual Price value on frontend
      *
-     * @param array $prices
      * @param string $currency
-     * @return array
+     *
+     * @return array|float
      */
-    private function formatPricesData(array $prices, $currency = '$')
+    public function getActualPrice($currency = '$')
     {
-        $formatted = [];
-        foreach ($prices as $price) {
-            list($name, $price) = explode($currency, $price);
-            $name = str_replace(' ', '_', trim(preg_replace('#[^0-9a-z]+#i', ' ', strtolower($name)), ' '));
-            $formatted['price_' . $name] = str_replace(',', '', $price);
-        }
-        return $formatted;
+        return $this->getTypePrice('actual_price', $currency);
+    }
+
+    /**
+     * This method returns the old price represented by the block
+     *
+     * @param string $currency
+     * @return string
+     */
+    public function getOldPrice($currency = '$')
+    {
+        return $this->getTypePrice('old_price', $currency);
+    }
+
+    /**
+     * This method returns the final price represented by the block
+     *
+     * @param string $currency
+     * @return string
+     */
+    public function getFinalPrice($currency = '$')
+    {
+        return $this->getTypePrice('final_price', $currency);
+    }
+
+    /**
+     * This method returns the old price represented by the block
+     *
+     * @param string $currency
+     * @return string
+     */
+    public function getMapOldPrice($currency = '$')
+    {
+        return $this->getTypePrice('map_old_price', $currency);
+    }
+
+    /**
+     * This method returns the special price represented by the block
+     *
+     * @param string $currency
+     * @return string
+     */
+    public function getSpecialPrice($currency = '$')
+    {
+        return $this->getTypePrice('special_price', $currency);
+    }
+
+    /**
+     * Get price from
+     *
+     * @param string $currency
+     * @return string
+     */
+    public function getPriceFrom($currency = '$')
+    {
+        return $this->getTypePrice('price_from', $currency);
+    }
+
+    /**
+     * Get price to
+     *
+     * @param string $currency
+     * @return string
+     */
+    public function getPriceTo($currency = '$')
+    {
+        return $this->getTypePrice('price_to', $currency);
     }
 
     /**
@@ -147,15 +185,15 @@ class Price extends Block
     public function getEffectivePrice()
     {
         // if a special price is available, then return that
-        $priceElement = $this->_rootElement->find($this->specialPriceClass, Locator::SELECTOR_CSS);
+        $priceElement = $this->getTypePriceElement('special_price');
         if (!$priceElement->isVisible()) {
-            $priceElement = $this->_rootElement->find($this->regularPriceClass, Locator::SELECTOR_CSS);
+            $priceElement = $this->getTypePriceElement('price');
             if (!$priceElement->isVisible()) {
-                $priceElement = $this->_rootElement->find($this->oldPriceClass, Locator::SELECTOR_CSS);
+                $priceElement = $this->getTypePriceElement('old_price');
             }
         }
         // return the actual value of the price
-        return $priceElement->find($this->priceClass, Locator::SELECTOR_CSS)->getText();
+        return $this->escape($priceElement->getText());
     }
 
     /**
@@ -166,26 +204,12 @@ class Price extends Block
     public function getRegularPrice()
     {
         // either return the old price (implies special price display or a regular price
-        $priceElement = $this->_rootElement->find($this->oldPriceClass, Locator::SELECTOR_CSS);
+        $priceElement = $this->getTypePriceElement('old_price');
         if (!$priceElement->isVisible()) {
-            $priceElement = $this->_rootElement->find($this->regularPriceClass, Locator::SELECTOR_CSS);
+            $priceElement = $this->getTypePriceElement('price');
         }
         // return the actual value of the price
-        $element = $priceElement->find($this->priceClass, Locator::SELECTOR_CSS);
-        $price = preg_replace('#[^\d\.\s]+#umis', '', $element->getText());
-        return number_format(trim($price), 2);
-    }
-
-    /**
-     * This method returns the special price represented by the block.
-     *
-     * @return string
-     */
-    public function getSpecialPrice()
-    {
-        $element = $this->_rootElement->find($this->specialPriceClass, Locator::SELECTOR_CSS)
-            ->find($this->priceClass, Locator::SELECTOR_CSS);
-        $price = preg_replace('#[^\d\.\s]+#umis', '', $element->getText());
+        $price = preg_replace('#[^\d\.\s]+#umis', '', $priceElement->getText());
         return number_format(trim($price), 2);
     }
 
@@ -196,7 +220,7 @@ class Price extends Block
      */
     public function isRegularPriceVisible()
     {
-        return $this->_rootElement->find($this->regularPriceClass, Locator::SELECTOR_CSS)->isVisible();
+        return $this->getTypePriceElement('price')->isVisible();
     }
 
     /**
@@ -206,34 +230,7 @@ class Price extends Block
      */
     public function isSpecialPriceVisible()
     {
-        return $this->_rootElement->find($this->specialPriceClass, Locator::SELECTOR_CSS)->isVisible();
-    }
-
-    /**
-     * Get Minimum Advertised Price value
-     *
-     * @return array|string
-     */
-    public function getOldPrice()
-    {
-        return $this->_rootElement->find($this->priceMap, Locator::SELECTOR_CSS)->getText();
-    }
-
-    /**
-     * Get actual Price value on frontend
-     *
-     * @param string $currency
-     *
-     * @return array|float
-     */
-    public function getActualPrice($currency = '$')
-    {
-        //@TODO it have to rewrite when will be possibility to divide it to different blocks(by product type)
-        $prices = explode("\n", trim($this->_rootElement->find($this->actualPrice, Locator::SELECTOR_CSS)->getText()));
-        if (count($prices) == 1) {
-            return floatval(trim($prices[0], $currency));
-        }
-        return $this->formatPricesData($prices, $currency);
+        return $this->getTypePriceElement('special_price')->isVisible();
     }
 
     /**
@@ -258,24 +255,42 @@ class Price extends Block
     }
 
     /**
-     * Get price from
+     * Get specify type price
      *
-     * @param string $currency
-     * @return string
+     * @param string $type
+     * @param string $currency [optional]
+     * @return string|null
      */
-    public function getPriceFrom($currency = '$')
+    protected function getTypePrice($type, $currency = '$')
     {
-        return trim($this->_rootElement->find($this->priceFromSelector)->getText(), $currency);
+        $typePriceElement = $this->getTypePriceElement($type);
+        return $typePriceElement->isVisible() ? $this->escape($typePriceElement->getText(), $currency) : null;
     }
 
     /**
-     * Get price to
+     * Get specify type price element
      *
+     * @param string $type
+     * @return Element
+     */
+    protected function getTypePriceElement($type)
+    {
+        $mapTypePrice = $this->mapTypePrices[$type];
+        return $this->_rootElement->find(
+            $mapTypePrice['selector'],
+            isset($mapTypePrice['strategy']) ? $mapTypePrice['strategy'] : Locator::SELECTOR_CSS
+        );
+    }
+
+    /**
+     * Escape currency and separator for price
+     *
+     * @param string $price
      * @param string $currency
      * @return string
      */
-    public function getPriceTo($currency = '$')
+    protected function escape($price, $currency = '$')
     {
-        return trim($this->_rootElement->find($this->priceToSelector)->getText(), $currency);
+        return str_replace([',', $currency], '', $price);
     }
 }

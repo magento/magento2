@@ -42,11 +42,17 @@ class AssertGroupedPriceOnBundleProductPage extends AssertProductGroupedPriceOnP
      */
     protected function getGroupedPrice(View $view, FixtureInterface $product)
     {
-        $groupPrice['onPage'] = $view->getProductPrice();
+        $groupPrice = [
+            'onPage' => [
+                'price_regular_price' => $view->getPriceBlock()->getPrice(),
+                'price_from' => $view->getPriceBlock()->getPriceFrom(),
+            ],
+            'fixture' => $product->getDataFieldConfig('price')['source']->getPreset()['price_from']
+        ];
+
         $groupPrice['onPage'] = isset($groupPrice['onPage']['price_regular_price'])
             ? str_replace('As low as $', '', $groupPrice['onPage']['price_regular_price'])
             : str_replace('$', '', $groupPrice['onPage']['price_from']);
-        $groupPrice['fixture'] = $product->getDataFieldConfig('price')['source']->getPreset()['price_from'];
 
         return $groupPrice;
     }

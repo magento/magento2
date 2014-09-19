@@ -37,32 +37,25 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $quoteLoaderMock;
+    protected $quoteRepositoryMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $couponBuilderMock;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $storeManagerMock;
-
     protected function setUp()
     {
         $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->quoteLoaderMock = $this->getMock('\Magento\Checkout\Service\V1\QuoteLoader', [], [], '', false);
-        $this->storeManagerMock = $this->getMock('\Magento\Framework\StoreManagerInterface');
+        $this->quoteRepositoryMock = $this->getMock('\Magento\Sales\Model\QuoteRepository', [], [], '', false);
         $this->couponBuilderMock = $this->getMock(
             '\Magento\Checkout\Service\V1\Data\Cart\CouponBuilder', [], [], '', false
         );
         $this->service = $objectManager->getObject(
             '\Magento\Checkout\Service\V1\Coupon\ReadService',
             [
-                'quoteLoader' => $this->quoteLoaderMock,
+                'quoteRepository' => $this->quoteRepositoryMock,
                 'couponBuilder' => $this->couponBuilderMock,
-                'storeManager' => $this->storeManagerMock
             ]
         );
     }
@@ -70,18 +63,14 @@ class ReadServiceTest extends \PHPUnit_Framework_TestCase
     public function testGetCoupon()
     {
         $cartId = 11;
-        $storeId = 12;
         $couponCode = 'test_coupon_code';
-        $storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
-        $storeMock->expects($this->once())->method('getId')->will($this->returnValue($storeId));
-        $this->storeManagerMock->expects($this->once())->method('getStore')->will($this->returnValue($storeMock));
 
         $quoteMock = $this->getMock('\Magento\Sales\Model\Quote', ['getCouponCode', '__wakeup'], [], '', false);
         $quoteMock->expects($this->any())->method('getCouponCode')->will($this->returnValue($couponCode));
 
-        $this->quoteLoaderMock->expects($this->once())
-            ->method('load')
-            ->with($cartId, $storeId)
+        $this->quoteRepositoryMock->expects($this->once())
+            ->method('get')
+            ->with($cartId)
             ->will($this->returnValue($quoteMock));
 
         $data = [Coupon::COUPON_CODE => $couponCode];

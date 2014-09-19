@@ -24,7 +24,6 @@
 
 namespace Magento\Catalog\Test\TestCase\Product;
 
-use Mtf\Client\Browser;
 use Mtf\Factory\Factory;
 use Mtf\TestCase\Functional;
 use Magento\Catalog\Test\Fixture\SimpleProduct;
@@ -128,7 +127,7 @@ class EditSimpleProductTest extends Functional
 
         $productViewBlock = $productPage->getViewBlock();
         $this->assertEquals($productEdited->getName(), $productViewBlock->getProductName());
-        $price = $productViewBlock->getProductPrice();
-        $this->assertEquals(number_format($productEdited->getProductPrice(), 2), $price['price_regular_price']);
+        $price = $productViewBlock->getPriceBlock()->getPrice();
+        $this->assertEquals(number_format($productEdited->getProductPrice(), 2), $price);
     }
 }

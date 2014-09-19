@@ -111,6 +111,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Customer\Model\Address\Config">
+        <arguments>
+            <argument name="reader" xsi:type="object">Magento\Customer\Model\Address\Config\Reader\Proxy</argument>
+        </arguments>
+    </type>
     <type name="Magento\Customer\Model\Visitor">
         <arguments>
             <argument name="ignoredUserAgents" xsi:type="array">

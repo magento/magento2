@@ -45,6 +45,7 @@ class DownloadableProduct extends Product
     {
         parent::_initData();
         $this->_dataConfig = array(
+            'type_id' => 'downloadable',
             'constraint' => 'Success',
             'grid_filter' => array('name'),
             'create_url_params' => array(

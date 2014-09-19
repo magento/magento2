@@ -65,8 +65,13 @@ class ShippingMethodConverterTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager =new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->builderMock =
-            $this->getMock('\Magento\Checkout\Service\V1\Data\Cart\ShippingMethodBuilder', [], [], '', false);
+        $this->builderMock = $this->getMock(
+            '\Magento\Checkout\Service\V1\Data\Cart\ShippingMethodBuilder',
+            ['populateWithArray', 'create'],
+            [],
+            '',
+            false
+        );
         $this->storeManagerMock = $this->getMock('\Magento\Framework\StoreManagerInterface');
         $this->currencyMock = $this->getMock('\Magento\Directory\Model\Currency', [], [], '', false);
         $this->shippingMethodMock =

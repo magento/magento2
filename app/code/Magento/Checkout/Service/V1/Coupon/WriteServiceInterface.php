@@ -23,9 +23,6 @@
  */
 namespace Magento\Checkout\Service\V1\Coupon;
 
-/**
- * Interface WriteServiceInterface
- */
 interface WriteServiceInterface
 {
     /**

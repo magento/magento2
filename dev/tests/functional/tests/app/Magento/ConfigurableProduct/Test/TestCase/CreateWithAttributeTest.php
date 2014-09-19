@@ -205,15 +205,23 @@ class CreateWithAttributeTest extends Functional
             $productViewBlock->getProductName(),
             'Product name does not correspond to specified.'
         );
-        $price = $productViewBlock->getProductPrice();
+        $price = $productViewBlock->getPriceBlock()->getPrice();
         $this->assertEquals(
             number_format($product->getProductPrice(), 2),
-            $price['price_regular_price'],
+            $price,
             'Product price does not correspond to specified.'
         );
-        $this->assertTrue(
-            $productViewBlock->verifyProductOptions($variations),
-            'Added configurable options are absent.'
-        );
+
+        $pageOptions = $productViewBlock->getOptions($variations);
+        $configurableOptions = [];
+        foreach ($pageOptions['configurable_options'] as $attribute) {
+            $configurableOption = [];
+            foreach ($attribute['options'] as $option) {
+                $configurableOption[] = $option['title'];
+            }
+
+            $configurableOptions[$attribute['title']] = $configurableOption;
+        }
+        $this->assertEquals($variations->getConfigurableOptions(), $configurableOptions);
     }
 }

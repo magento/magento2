@@ -24,24 +24,18 @@
 
 namespace Magento\Checkout\Service\V1\PaymentMethod;
 
-use \Magento\Checkout\Service\V1\QuoteLoader;
-use Magento\Framework\StoreManagerInterface;
+use \Magento\Sales\Model\QuoteRepository;
+use \Magento\Framework\StoreManagerInterface;
 use Magento\Checkout\Service\V1\Data\Cart\PaymentMethod\Converter as QuoteMethodConverter;
 use Magento\Checkout\Service\V1\Data\PaymentMethod\Converter as PaymentMethodConverter;
 use \Magento\Payment\Model\MethodList;
-use \Magento\Framework\Exception\State\InvalidTransitionException;
 
 class ReadService implements ReadServiceInterface
 {
     /**
-     * @var StoreManagerInterface
+     * @var QuoteRepository
      */
-    protected $storeManager;
-
-    /**
-     * @var QuoteLoader
-     */
-    protected $quoteLoader;
+    protected $quoteRepository;
 
     /**
      * @var QuoteMethodConverter
@@ -59,21 +53,18 @@ class ReadService implements ReadServiceInterface
     protected $methodList;
 
     /**
-     * @param QuoteLoader $quoteLoader
-     * @param StoreManagerInterface $storeManager
+     * @param QuoteRepository $quoteRepository
      * @param QuoteMethodConverter $quoteMethodConverter
      * @param PaymentMethodConverter $paymentMethodConverter
      * @param MethodList $methodList
      */
     public function __construct(
-        QuoteLoader $quoteLoader,
-        StoreManagerInterface $storeManager,
+        QuoteRepository $quoteRepository,
         QuoteMethodConverter $quoteMethodConverter,
         PaymentMethodConverter $paymentMethodConverter,
         MethodList $methodList
     ) {
-        $this->storeManager = $storeManager;
-        $this->quoteLoader = $quoteLoader;
+        $this->quoteRepository = $quoteRepository;
         $this->quoteMethodConverter = $quoteMethodConverter;
         $this->paymentMethodConverter = $paymentMethodConverter;
         $this->methodList = $methodList;
@@ -85,8 +76,7 @@ class ReadService implements ReadServiceInterface
     public function getPayment($cartId)
     {
         /** @var \Magento\Sales\Model\Quote $quote */
-        $quote = $this->quoteLoader->load($cartId, $this->storeManager->getStore()->getId());
-
+        $quote = $this->quoteRepository->get($cartId);
         $payment = $quote->getPayment();
         if (!$payment->getId()) {
             return null;
@@ -101,7 +91,7 @@ class ReadService implements ReadServiceInterface
     {
         $output = [];
         /** @var \Magento\Sales\Model\Quote $quote */
-        $quote = $this->quoteLoader->load($cartId, $this->storeManager->getStore()->getId());
+        $quote = $this->quoteRepository->get($cartId);
         foreach ($this->methodList->getAvailableMethods($quote) as $method) {
             $output[] = $this->paymentMethodConverter->toDataObject($method);
         }

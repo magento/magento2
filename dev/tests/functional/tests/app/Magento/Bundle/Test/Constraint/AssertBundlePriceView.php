@@ -26,7 +26,7 @@ namespace Magento\Bundle\Test\Constraint;
 
 use Mtf\Client\Browser;
 use Mtf\Constraint\AbstractConstraint;
-use Magento\Bundle\Test\Fixture\CatalogProductBundle;
+use Magento\Bundle\Test\Fixture\BundleProduct;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 
 /**
@@ -46,13 +46,13 @@ class AssertBundlePriceView extends AbstractConstraint
      *
      * @param CatalogProductView $catalogProductView
      * @param Browser $browser
-     * @param CatalogProductBundle $product
+     * @param BundleProduct $product
      * @return void
      */
     public function processAssert(
         CatalogProductView $catalogProductView,
         Browser $browser,
-        CatalogProductBundle $product
+        BundleProduct $product
     ) {
         //Open product view page
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
@@ -64,11 +64,11 @@ class AssertBundlePriceView extends AbstractConstraint
     /**
      * Assert prices on the product view Page
      *
-     * @param CatalogProductBundle $product
+     * @param BundleProduct $product
      * @param CatalogProductView $catalogProductView
      * @return void
      */
-    protected function assertPrice(CatalogProductBundle $product, CatalogProductView $catalogProductView)
+    protected function assertPrice(BundleProduct $product, CatalogProductView $catalogProductView)
     {
         $priceData = $product->getDataFieldConfig('price')['source']->getPreset();
         $priceBlock = $catalogProductView->getViewBlock()->getPriceBlock();

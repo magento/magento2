@@ -25,7 +25,6 @@
 namespace Magento\Downloadable\Test\Block\Catalog\Product\View;
 
 use Mtf\Block\Block;
-use Mtf\Client\Element\Locator;
 
 /**
  * Class Samples
@@ -39,34 +38,41 @@ class Samples extends Block
      *
      * @var string
      */
-    protected $titleForSampleBlock = '//dt[contains(@class,"samples title")]';
+    protected $titleBlock = '.samples.title';
 
     /**
-     * Title selector item sample
+     * Title selector item sample link
      *
      * @var string
      */
-    protected $titleForList = '//dd[contains(@class,"sample item")][%d]/a';
+    protected $linkTitle = '.sample.link';
 
     /**
      * Get title for Samples block
      *
      * @return string
      */
-    public function getTitleForSampleBlock()
+    public function getTitle()
     {
-        return $this->_rootElement->find($this->titleForSampleBlock, Locator::SELECTOR_XPATH)->getText();
+        return $this->_rootElement->find($this->titleBlock)->getText();
     }
 
     /**
-     * Get title for item sample on data list
+     * Get sample links
      *
-     * @param int $index
-     * @return string
+     * @return array
      */
-    public function getItemTitle($index)
+    public function getLinks()
     {
-        $formatTitle = sprintf($this->titleForList, $index);
-        return $this->_rootElement->find($formatTitle, Locator::SELECTOR_XPATH)->getText();
+        $links = $this->_rootElement->find($this->linkTitle)->getElements();
+        $linksData = [];
+
+        foreach ($links as $link) {
+            $linksData[] = [
+                'title' => $link->getText()
+            ];
+        }
+
+        return $linksData;
     }
 }

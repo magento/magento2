@@ -23,6 +23,8 @@
  */
 namespace Magento\Sales\Model\Order;
 
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+
 /**
  * Order payment information
  *
@@ -205,14 +207,20 @@ class Payment extends \Magento\Payment\Model\Info
     protected $_storeManager;
 
     /**
+     * @var PriceCurrencyInterface
+     */
+    protected $priceCurrency;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Sales\Model\Service\OrderFactory $serviceOrderFactory
-     * @param \Magento\Sales\Model\Order\Payment\TransactionFactory $transactionFactory
+     * @param Payment\TransactionFactory $transactionFactory
      * @param \Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory $transactionCollectionFactory
      * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -226,10 +234,12 @@ class Payment extends \Magento\Payment\Model\Info
         \Magento\Sales\Model\Order\Payment\TransactionFactory $transactionFactory,
         \Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory $transactionCollectionFactory,
         \Magento\Framework\StoreManagerInterface $storeManager,
+        PriceCurrencyInterface $priceCurrency,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
+        $this->priceCurrency = $priceCurrency;
         $this->_serviceOrderFactory = $serviceOrderFactory;
         $this->_transactionFactory = $transactionFactory;
         $this->_transactionCollectionFactory = $transactionCollectionFactory;
@@ -1513,7 +1523,7 @@ class Payment extends \Magento\Payment\Model\Info
      */
     protected function _formatAmount($amount, $asFloat = false)
     {
-        $amount = $this->_storeManager->getStore()->roundPrice($amount);
+        $amount = $this->priceCurrency->round($amount);
         return !$asFloat ? (string)$amount : $amount;
     }
 
