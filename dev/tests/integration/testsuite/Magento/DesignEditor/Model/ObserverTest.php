@@ -39,13 +39,15 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
      */
     public function testCleanJs($area, $designMode, $expectedAssets)
     {
+        /** @var \Magento\Framework\Registry $registry */
+        $registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\Registry'
+        );
+        $registry->register('vde_design_mode', $designMode);
+
         $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Framework\View\LayoutInterface'
         );
-        /** @var $headBlock \Magento\Theme\Block\Html\Head */
-        $headBlock = $layout->createBlock('Magento\Theme\Block\Html\Head', 'head');
-        $headBlock->setData('vde_design_mode', $designMode);
-
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var \Magento\Framework\View\Asset\Repository $assetRepo */
@@ -63,7 +65,9 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
 
         foreach ($fixtureAssets as $asset) {
             $pageAssets->add(
-                $asset['file'], $assetRepo->createAsset($asset['file']), $asset['params']
+                $asset['file'],
+                $assetRepo->createAsset($asset['file']),
+                $asset['params']
             );
         }
 

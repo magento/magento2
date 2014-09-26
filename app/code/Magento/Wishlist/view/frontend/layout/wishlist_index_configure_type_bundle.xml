@@ -24,11 +24,9 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
-    <referenceBlock name="body.class">
-        <action method="addBodyClass">
-            <argument name="value" xsi:type="string">type-bundle</argument>
-        </action>
-    </referenceBlock>
+    <body>
+        <attribute name="class" value="type-bundle"/>
+    </body>
     <referenceBlock name="product.info">
         <block class="Magento\Catalog\Block\Product\View" name="bundle.summary" as="form_top" template="Magento_Bundle::catalog/product/view/summary.phtml">
             <block class="Magento\Catalog\Pricing\Render" name="product.price.render.bundle.customization">

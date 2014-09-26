@@ -58,6 +58,7 @@ class View extends \Magento\Catalog\Block\Product\View
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param \Magento\Customer\Model\Session $customerSession
      * @param TaxCalculationServiceInterface $taxCalculationService
+     * @param \Magento\Framework\View\Page\Config $pageConfig
      * @param \Magento\Review\Model\Resource\Review\CollectionFactory $collectionFactory
      * @param array $data
      */

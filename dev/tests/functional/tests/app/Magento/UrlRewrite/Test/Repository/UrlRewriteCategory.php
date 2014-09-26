@@ -44,6 +44,7 @@ class UrlRewriteCategory extends AbstractRepository
         $this->_data['default'] = [
             'config' => $defaultConfig,
             'data' => [
+                'url_rewrite_type' => 'For category',
                 'fields' => [
                     'request_path' => [
                         'value' => '%rewritten_category_request_path%',
@@ -55,7 +56,7 @@ class UrlRewriteCategory extends AbstractRepository
             ],
         ];
         $this->_data['category_with_permanent_redirect'] = $this->_data['default'];
-        $this->_data['category_with_permanent_redirect']['data']['fields']['options'] = [
+        $this->_data['category_with_permanent_redirect']['data']['fields']['redirect_type'] = [
             'value' => 'Permanent (301)',
         ];
     }

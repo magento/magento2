@@ -90,9 +90,7 @@ class Breadcrumbs extends \Magento\Framework\View\Element\Template
                 $title[] = $breadcrumb['label'];
             }
 
-            if ($headBlock = $this->getLayout()->getBlock('head')) {
-                $headBlock->setTitle(join($this->getTitleSeparator(), array_reverse($title)));
-            }
+            $this->pageConfig->setTitle(join($this->getTitleSeparator(), array_reverse($title)));
         }
         return parent::_prepareLayout();
     }

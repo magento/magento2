@@ -1,0 +1,9 @@
+<!-- ko ifnot: 'items' in option  -->
+    <option data-bind="attr: { label: option.label, value: option.value }"></option>
+<!-- /ko -->
+<!-- ko if: 'items' in option  -->
+    <optgroup data-bind="attr: { label: option.label }"></optgroup>
+    <!-- ko foreach: { data: option.items, as: 'option' } -->
+        <!-- ko template: 'ui/filter/store/item' --><!-- /ko -->
+    <!-- /ko -->
+<!-- /ko -->

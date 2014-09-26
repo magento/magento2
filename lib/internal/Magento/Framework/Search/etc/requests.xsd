@@ -121,6 +121,7 @@
         <xs:sequence>
           <xs:element type="match" name="match" minOccurs="1" maxOccurs="unbounded" />
         </xs:sequence>
+        <xs:attribute type="xs:string" name="value" use="required" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -155,6 +156,7 @@
   <xs:complexType name="filter" abstract="true">
     <xs:attribute type="xs:string" name="name" use="required" />
   </xs:complexType>
+
   <xs:complexType name="termFilter">
     <xs:complexContent>
       <xs:extension base="filter">
@@ -234,7 +236,6 @@
     <xs:simpleContent>
       <xs:extension base="xs:string">
         <xs:attribute type="xs:string" name="field" use="required" />
-        <xs:attribute type="xs:string" name="value" use="required" />
         <xs:attribute type="xs:byte" name="boost" use="optional" />
       </xs:extension>
     </xs:simpleContent>

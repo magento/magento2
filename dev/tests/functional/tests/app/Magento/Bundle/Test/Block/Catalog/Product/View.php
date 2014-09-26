@@ -110,7 +110,9 @@ class View extends \Magento\Catalog\Test\Block\Product\View
             /** @var \Magento\Bundle\Test\Fixture\BundleFixed $product */
             $bundleCheckoutData = $product->getSelectionData();
         }
-        $this->_rootElement->find($this->customizeButton)->click();
+        if (!$this->getBundleBlock()->isVisible()) {
+            $this->_rootElement->find($this->customizeButton)->click();
+        }
         $this->getBundleBlock()->fillBundleOptions($bundleCheckoutData);
 
         parent::fillOptions($product);

@@ -29,5 +29,8 @@
             <block class="Magento\Sales\Block\Order\Info\Buttons" as="buttons" name="sales.order.info.buttons" cacheable="false"/>
         </block>
     </referenceContainer>
+    <referenceContainer name="sales.order.info.buttons">
+        <block class="Magento\Sales\Block\Order\Info\Buttons\Rss" as="buttons.rss" name="sales.order.info.buttons.rss" cacheable="false"/>
+    </referenceContainer>
     <update handle="sales_order_guest_info_links"/>
 </page>

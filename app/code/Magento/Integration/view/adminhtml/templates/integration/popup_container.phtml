@@ -45,7 +45,7 @@ require([
      * Confirm dialog for delete integration action
      */
     $(function () {
-        $('#integrationGrid_table').on('click', 'button#delete', function (e) {
+        $('div#integrationGrid').on('click', 'button#delete', function (e) {
             $('#integration-delete-container').dialog({
                 modal: true,
                 autoOpen: true,
@@ -53,7 +53,7 @@ require([
                 minHeight: 200,
                 minWidth: 300,
                 dialogClass: "no-close",
-                position: {at: 'top'},
+                position: {at: 'center'},
                 buttons: {
                     Cancel: function () {
                         $(this).dialog("close");

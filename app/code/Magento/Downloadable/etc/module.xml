@@ -43,6 +43,7 @@
             <module name="Magento_Wishlist"/>
             <module name="Magento_GiftMessage"/>
             <module name="Magento_CatalogInventory"/>
+            <module name="Magento_Msrp" />
         </depends>
     </module>
 </config>

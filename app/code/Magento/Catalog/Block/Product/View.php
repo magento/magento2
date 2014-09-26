@@ -32,14 +32,6 @@ use Magento\Tax\Service\V1\TaxCalculationServiceInterface;
 class View extends AbstractProduct implements \Magento\Framework\View\Block\IdentityInterface
 {
     /**
-     * Default MAP renderer type
-     *
-     * @var string
-     * @deprecated
-     */
-    protected $_mapRenderer = 'msrp_item';
-
-    /**
      * Magento string lib
      *
      * @var \Magento\Framework\Stdlib\String
@@ -141,39 +133,31 @@ class View extends AbstractProduct implements \Magento\Framework\View\Block\Iden
         if (!$product) {
             return parent::_prepareLayout();
         }
-        $headBlock = $this->getLayout()->getBlock('head');
-        if ($headBlock) {
-            $title = $product->getMetaTitle();
-            if ($title) {
-                $headBlock->setTitle($title);
-            }
-            $keyword = $product->getMetaKeyword();
-            $currentCategory = $this->_coreRegistry->registry('current_category');
-            if ($keyword) {
-                $headBlock->setKeywords($keyword);
-            } elseif ($currentCategory) {
-                $headBlock->setKeywords($product->getName());
-            }
-            $description = $product->getMetaDescription();
-            if ($description) {
-                $headBlock->setDescription($description);
-            } else {
-                $headBlock->setDescription($this->string->substr($product->getDescription(), 0, 255));
-            }
-            //@todo: move canonical link to separate block
-            $childBlockName = 'magento-page-head-product-canonical-link';
-            if ($this->_productHelper->canUseCanonicalTag() && !$headBlock->getChildBlock($childBlockName)) {
-                $params = array('_ignore_category' => true);
-                $headBlock->addChild(
-                    $childBlockName,
-                    'Magento\Theme\Block\Html\Head\Link',
-                    array(
-                        'url' => $product->getUrlModel()->getUrl($product, $params),
-                        'properties' => array('attributes' => array('rel' => 'canonical'))
-                    )
-                );
-            }
+
+        $title = $product->getMetaTitle();
+        if ($title) {
+            $this->pageConfig->setTitle($title);
         }
+        $keyword = $product->getMetaKeyword();
+        $currentCategory = $this->_coreRegistry->registry('current_category');
+        if ($keyword) {
+            $this->pageConfig->setKeywords($keyword);
+        } elseif ($currentCategory) {
+            $this->pageConfig->setKeywords($product->getName());
+        }
+        $description = $product->getMetaDescription();
+        if ($description) {
+            $this->pageConfig->setDescription($description);
+        } else {
+            $this->pageConfig->setDescription($this->string->substr($product->getDescription(), 0, 255));
+        }
+        if ($this->_productHelper->canUseCanonicalTag()) {
+            $this->pageConfig->addRemotePageAsset(
+                $product->getUrlModel()->getUrl($product, ['_ignore_category' => true]),
+                ['attributes' => array('rel' => 'canonical')]
+            );
+        }
+
         $pageMainTitle = $this->getLayout()->getBlock('page.main.title');
         if ($pageMainTitle) {
             $pageMainTitle->setPageTitle($product->getName());

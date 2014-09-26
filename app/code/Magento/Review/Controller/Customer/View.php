@@ -37,7 +37,7 @@ class View extends \Magento\Review\Controller\Customer
         if ($navigationBlock = $this->_view->getLayout()->getBlock('customer_account_navigation')) {
             $navigationBlock->setActive('review/customer');
         }
-        $this->_view->getLayout()->getBlock('head')->setTitle(__('Review Details'));
+        $this->_view->getPage()->getConfig()->setTitle(__('Review Details'));
         $this->_view->renderLayout();
     }
 }

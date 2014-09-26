@@ -1,7 +1,5 @@
 <?php
 /**
- * Unit test for model \Magento\User\Model\User
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -24,11 +22,13 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Test class for \Magento\User\Model\User testing
- */
 namespace Magento\User\Model;
 
+/**
+ * Test class for \Magento\User\Model\User testing
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class UserTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\User\Model\User */
@@ -40,29 +40,32 @@ class UserTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Core\Helper\Data */
     protected $_coreData;
 
-    /** @var \Magento\Framework\Mail\Template\TransportBuilder|PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Mail\Template\TransportBuilder|\PHPUnit_Framework_MockObject_MockObject */
     protected $_transportBuilderMock;
 
-    /** @var \Magento\Framework\Model\Context|PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject */
     protected $_contextMock;
 
-    /** @var \Magento\User\Model\Resource\User|PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\User\Model\Resource\User|\PHPUnit_Framework_MockObject_MockObject */
     protected $_resourceMock;
 
-    /** @var \Magento\Framework\Data\Collection\Db|PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Data\Collection\Db|\PHPUnit_Framework_MockObject_MockObject */
     protected $_collectionMock;
 
-    /** @var \Magento\Framework\Mail\TransportInterface|PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Mail\TransportInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $_transportMock;
 
     /** @var \Magento\Framework\StoreManagerInterface|PHPUnit_Framework_MockObject_MockObject */
     protected $_storeManagerMock;
 
-    /** @var \Magento\Store\Model\Store|PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject */
     protected $_storetMock;
 
     /** @var \Magento\Backend\App\ConfigInterface */
     protected $_configMock;
+
+    /** @var \Magento\Framework\Encryption\EncryptorInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $_encryptorMock;
 
     /**
      * Set required values
@@ -141,6 +144,10 @@ class UserTest extends \PHPUnit_Framework_TestCase
             array()
         )->getMock();
 
+        $this->_encryptorMock = $this->getMockBuilder('Magento\Framework\Encryption\EncryptorInterface')
+            ->setMethods(['validateHash'])
+            ->getMockForAbstractClass();
+
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
         $this->_model = $helper->getObject(
             'Magento\User\Model\User',
@@ -156,7 +163,8 @@ class UserTest extends \PHPUnit_Framework_TestCase
                 'roleFactory' => $roleFactoryMock,
                 'transportBuilder' => $this->_transportBuilderMock,
                 'storeManager' => $this->_storeManagerMock,
-                'config' => $this->_configMock
+                'config' => $this->_configMock,
+                'encryptor' => $this->_encryptorMock
             )
         );
     }
@@ -338,5 +346,62 @@ class UserTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertInstanceOf('\Magento\User\Model\User', $this->_model->sendPasswordResetConfirmationEmail());
+    }
+
+    public function testVerifyIdentity()
+    {
+        $password = 'password';
+        $this->_encryptorMock
+            ->expects($this->once())
+            ->method('validateHash')
+            ->with($password, $this->_model->getPassword())
+            ->will($this->returnValue(true));
+        $this->_model->setIsActive(true);
+        $this->_resourceMock->expects($this->once())->method('hasAssigned2Role')->will($this->returnValue(true));
+        $this->assertTrue(
+            $this->_model->verifyIdentity($password),
+            'Identity verification failed while should have passed.'
+        );
+    }
+
+    public function testVerifyIdentityFailure()
+    {
+        $password = 'password';
+        $this->_encryptorMock
+            ->expects($this->once())
+            ->method('validateHash')
+            ->with($password, $this->_model->getPassword())
+            ->will($this->returnValue(false));
+        $this->assertFalse(
+            $this->_model->verifyIdentity($password),
+            'Identity verification passed while should have failed.'
+        );
+    }
+
+    public function testVerifyIdentityInactiveRecord()
+    {
+        $password = 'password';
+        $this->_encryptorMock
+            ->expects($this->once())
+            ->method('validateHash')
+            ->with($password, $this->_model->getPassword())
+            ->will($this->returnValue(true));
+        $this->_model->setIsActive(false);
+        $this->setExpectedException('Magento\Backend\Model\Auth\Exception', 'This account is inactive.');
+        $this->_model->verifyIdentity($password);
+    }
+
+    public function testVerifyIdentityNoAssignedRoles()
+    {
+        $password = 'password';
+        $this->_encryptorMock
+            ->expects($this->once())
+            ->method('validateHash')
+            ->with($password, $this->_model->getPassword())
+            ->will($this->returnValue(true));
+        $this->_model->setIsActive(true);
+        $this->_resourceMock->expects($this->once())->method('hasAssigned2Role')->will($this->returnValue(false));
+        $this->setExpectedException('Magento\Backend\Model\Auth\Exception', 'Access denied.');
+        $this->_model->verifyIdentity($password);
     }
 }

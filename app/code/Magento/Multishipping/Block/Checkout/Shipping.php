@@ -87,9 +87,7 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
      */
     protected function _prepareLayout()
     {
-        if ($headBlock = $this->getLayout()->getBlock('head')) {
-            $headBlock->setTitle(__('Shipping Methods') . ' - ' . $headBlock->getDefaultTitle());
-        }
+        $this->pageConfig->setTitle(__('Shipping Methods') . ' - ' . $this->pageConfig->getDefaultTitle());
         return parent::_prepareLayout();
     }
 

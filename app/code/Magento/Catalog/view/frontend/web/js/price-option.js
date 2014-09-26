@@ -106,9 +106,12 @@ define([
                 var skipIds = [],
                     priceSelectors = [
                         '#product-price-' + this.options.priceConfig.productId,
+                        '#product-price-copy-' + this.options.priceConfig.productId,
                         '#bundle-price-' + this.options.priceConfig.productId,
                         '#price-including-tax-product-price-' + this.options.priceConfig.productId,
+                        '#price-including-tax-product-price-copy-' + this.options.priceConfig.productId,
                         '#price-excluding-tax-product-price-' + this.options.priceConfig.productId,
+                        '#price-excluding-tax-product-price-copy-' + this.options.priceConfig.productId,
                         '#old-price-' + this.options.priceConfig.productId
                     ],
                     getOptionPrices = this._getOptionPrices(),

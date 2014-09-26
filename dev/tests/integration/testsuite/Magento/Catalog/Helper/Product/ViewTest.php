@@ -107,7 +107,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $pageConfig = $this->objectManager->get('Magento\Framework\View\Page\Config');
         $bodyClass = $pageConfig->getElementAttribute(
             \Magento\Framework\View\Page\Config::ELEMENT_TYPE_BODY,
-            'classes'
+            \Magento\Framework\View\Page\Config::BODY_ATTRIBUTE_CLASS
         );
         $this->assertContains("product-{$uniqid}", $bodyClass);
         $handles = $this->_layout->getUpdate()->getHandles();

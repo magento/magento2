@@ -26,29 +26,24 @@
 <fixture class="Magento\UrlRewrite\Test\Fixture\UrlRewrite">
     <module>Magento_Backend</module>
     <type>virtual</type>
-    <entity_type>core_url_rewrite</entity_type>
-    <collection>Magento\UrlRewrite\Model\Resource\UrlRewrite\Collection</collection>
+    <entity_type>url_rewrite</entity_type>
+    <collection>Magento\UrlRewrite\Model\Resource\UrlRewriteCollection</collection>
     <identifier>request_path</identifier>
     <fields>
         <id>
             <attribute_code>id</attribute_code>
             <backend_type>virtual</backend_type>
         </id>
-        <id_path>
-            <attribute_code>id_path</attribute_code>
-            <backend_type>virtual</backend_type>
-            <source>Magento\UrlRewrite\Test\Fixture\UrlRewrite\IdPath</source>
-        </id_path>
         <store_id>
             <attribute_code>store_id</attribute_code>
             <backend_type>virtual</backend_type>
         </store_id>
-        <options>
-            <attribute_code>options</attribute_code>
-            <backend_type>varchar</backend_type>
+        <redirect_type>
+            <attribute_code>redirect_type</attribute_code>
+            <backend_type>int</backend_type>
             <is_required>0</is_required>
             <input>select</input>
-        </options>
+        </redirect_type>
         <request_path>
             <attribute_code>request_path</attribute_code>
             <backend_type>varchar</backend_type>

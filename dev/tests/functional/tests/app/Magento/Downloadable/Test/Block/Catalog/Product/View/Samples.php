@@ -38,14 +38,14 @@ class Samples extends Block
      *
      * @var string
      */
-    protected $titleBlock = '.samples.title';
+    protected $titleBlock = '.item-title';
 
     /**
      * Title selector item sample link
      *
      * @var string
      */
-    protected $linkTitle = '.sample.link';
+    protected $linkTitle = '.item-link';
 
     /**
      * Get title for Samples block

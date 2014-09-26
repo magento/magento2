@@ -1,0 +1,2 @@
+"products";"qty";"constraint"
+"groupedProductInjectable::three_simple_products";"-";"assertProductQtyInShoppingCart, assertProductsIsAbsentInWishlist"

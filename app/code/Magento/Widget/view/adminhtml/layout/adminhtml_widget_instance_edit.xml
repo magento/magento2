@@ -24,26 +24,11 @@
  */
 -->
 <page layout="admin-2columns-left" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
-    <referenceBlock name="head">
-        <action method="setCanLoadExtJs">
-            <argument name="flag" xsi:type="string">1</argument>
-        </action>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="prototype-window-js">
-            <arguments>
-                <argument name="file" xsi:type="string">prototype/window.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Css" name="prototype-windows-themes-default-css">
-            <arguments>
-                <argument name="file" xsi:type="string">prototype/windows/themes/default.css</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Css" name="magento-core-prototype-magento-css">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Core::prototype/magento.css</argument>
-            </arguments>
-        </block>
-    </referenceBlock>
+    <head>
+        <link src="prototype/window.js"/>
+        <css src="prototype/windows/themes/default.css"/>
+        <css src="Magento_Core::prototype/magento.css"/>
+    </head>
     <referenceContainer name="content">
         <block class="Magento\Widget\Block\Adminhtml\Widget\Instance\Edit" name="widget_instance_edit"/>
     </referenceContainer>

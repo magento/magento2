@@ -24,30 +24,28 @@
 namespace Magento\CmsUrlRewrite\Model;
 
 use Magento\Framework\Event\Observer as EventObserver;
-use Magento\CmsUrlRewrite\Service\V1\CmsPageUrlGeneratorInterface;
-use Magento\UrlRedirect\Service\V1\UrlSaveInterface;
-use Magento\Framework\Model\Exception;
+use Magento\UrlRewrite\Model\UrlPersistInterface;
 
 class Observer
 {
     /**
-     * @var CmsPageUrlGeneratorInterface
+     * @var CmsPageUrlRewriteGenerator
      */
-    protected $urlGenerator;
+    protected $cmsPageUrlRewriteGenerator;
 
     /**
-     * @var \Magento\UrlRedirect\Service\V1\UrlSaveInterface
+     * @var UrlPersistInterface
      */
-    protected $urlSave;
+    protected $urlPersist;
 
     /**
-     * @param CmsPageUrlGeneratorInterface $urlGenerator
-     * @param UrlSaveInterface $urlSave
+     * @param CmsPageUrlRewriteGenerator $cmsPageUrlRewriteGenerator
+     * @param UrlPersistInterface $urlPersist
      */
-    public function __construct(CmsPageUrlGeneratorInterface $urlGenerator, UrlSaveInterface $urlSave)
+    public function __construct(CmsPageUrlRewriteGenerator $cmsPageUrlRewriteGenerator, UrlPersistInterface $urlPersist)
     {
-        $this->urlGenerator = $urlGenerator;
-        $this->urlSave = $urlSave;
+        $this->cmsPageUrlRewriteGenerator = $cmsPageUrlRewriteGenerator;
+        $this->urlPersist = $urlPersist;
     }
 
     /**
@@ -55,22 +53,14 @@ class Observer
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
-     * @throws Exception|\Exception
      */
     public function processUrlRewriteSaving(EventObserver $observer)
     {
         /** @var $cmsPage \Magento\Cms\Model\Page */
         $cmsPage = $observer->getEvent()->getObject();
-        if ($cmsPage->getOrigData('identifier') !== $cmsPage->getData('identifier')) {
-            $urls = $this->urlGenerator->generate($cmsPage);
-            try {
-                $this->urlSave->save($urls);
-            } catch (\Exception $e) {
-                if ($e->getCode() === 23000) { // Integrity constraint violation: 1062 Duplicate entry
-                    throw new Exception(__('A page URL key for specified store already exists.'));
-                }
-                throw $e;
-            }
+        if ($cmsPage->dataHasChangedFor('identifier')) {
+            $urls = $this->cmsPageUrlRewriteGenerator->generate($cmsPage);
+            $this->urlPersist->replace($urls);
         }
     }
 }

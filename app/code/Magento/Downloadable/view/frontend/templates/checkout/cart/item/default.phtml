@@ -24,8 +24,11 @@
 ?>
 <?php
 $_item = $this->getItem();
-$isVisibleProduct = $_item->getProduct()->isVisibleInSiteVisibility();
-$canApplyMsrp = $this->helper('Magento\Catalog\Helper\Data')->canApplyMsrp($_item->getProduct(), \Magento\Catalog\Model\Product\Attribute\Source\Msrp\Type::TYPE_BEFORE_ORDER_CONFIRM);
+$product = $_item->getProduct();
+$isVisibleProduct = $product->isVisibleInSiteVisibility();
+/** @var \Magento\Msrp\Helper\Data $helper */
+$helper = $this->helper('Magento\Msrp\Helper\Data');
+$canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinimalPriceLessMsrp($product);
 ?>
 <?php echo $this->getChildHtml('item_extra') ?>
 <tbody class="cart item">
@@ -36,7 +39,7 @@ $canApplyMsrp = $this->helper('Magento\Catalog\Helper\Data')->canApplyMsrp($_ite
                    title="<?php echo $this->escapeHtml($this->getProductName()) ?>"
                    class="product photo product-item-photo">
             <?php endif; ?>
-            <?php echo $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image')->init($_item->getProduct(), 'cart_page_product_thumbnail')->toHtml(); ?>
+            <?php echo $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image')->init($product, 'cart_page_product_thumbnail')->toHtml(); ?>
             <?php if ($this->hasProductUrl()):?></a><?php endif;?>
             <div class="product details product-item-details">
                 <strong class="product name product-item-name">
@@ -79,17 +82,15 @@ $canApplyMsrp = $this->helper('Magento\Catalog\Helper\Data')->canApplyMsrp($_ite
         </td>
     <?php if ($canApplyMsrp): ?>
         <td class="col msrp">
-            <span class="cart price">
+            <span class="cart-price">
                 <span class="msrp notice"><?php echo __('See price before order confirmation.'); ?></span>
                 <?php $helpLinkId = 'cart-msrp-help-' . $_item->getId(); ?>
                 <a id="<?php echo $helpLinkId ?>" href="#" class="action help map"><?php echo __("What's this?"); ?></a>
                 <script type="text/javascript">
-require(['prototype'], function(){
-
-    Catalog.Map.addHelpLink($('<?php echo $helpLinkId ?>'), "<?php echo __("What's this?") ?>");
-                
-});
-</script>
+                    require(['prototype'], function () {
+                        Catalog.Map.addHelpLink($('<?php echo $helpLinkId ?>'), "<?php echo __("What's this?") ?>");
+                    });
+                </script>
             </span>
             <?php $cols++; ?>
         </td>

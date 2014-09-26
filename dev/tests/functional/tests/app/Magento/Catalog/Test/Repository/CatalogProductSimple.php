@@ -87,6 +87,7 @@ class CatalogProductSimple extends AbstractRepository
             'attribute_set_id' => ['dataSet' => 'default'],
             'price' => ['value' => 100, 'preset' => '-'],
             'website_ids' => ['Main Website'],
+            'checkout_data' => ['preset' => 'two_products']
         ];
 
         $this->_data['40_dollar_product'] = [
@@ -192,6 +193,15 @@ class CatalogProductSimple extends AbstractRepository
             'website_ids' => ['Main Website'],
         ];
 
+        $this->_data['product_with_special_price'] = [
+            'sku' => 'simple_product_with_special_price_and_category%isolation%',
+            'name' => 'Simple with Special Price 1$ off %isolation%',
+            'attribute_set_id' => ['dataSet' => 'default'],
+            'price' => ['value' => 10, 'preset' => ''],
+            'special_price' => 9,
+            'website_ids' => ['Main Website'],
+        ];
+
         $this->_data['adc_123_simple_for_advancedsearch'] = [
             'name' => 'adc_123',
             'sku' => 'adc_123',
@@ -203,6 +213,38 @@ class CatalogProductSimple extends AbstractRepository
             ],
             'weight' => 1.0000,
             'description' => '<p>dfj_full</p>',
+            'status' => 'Product online',
+            'website_ids' => ['Main Website'],
+            'visibility' => 'Catalog, Search',
+        ];
+
+        $this->_data['product_with_weight_0_1'] = [
+            'name' => 'Simple with Weight 0.1 %isolation%',
+            'sku' => 'adc_123',
+            'price' => ['value' => 100.00, 'preset' => '-'],
+            'tax_class_id' => ['dataSet' => 'None'],
+            'quantity_and_stock_status' => [
+                'qty' => 666.0000,
+                'is_in_stock' => 'In Stock',
+            ],
+            'weight' => 0.1,
+            'description' => '<p>Simple with Weight 0.1</p>',
+            'status' => 'Product online',
+            'website_ids' => ['Main Website'],
+            'visibility' => 'Catalog, Search',
+        ];
+
+        $this->_data['product_with_weight_150_1'] = [
+            'name' => 'Simple with Weight 150.1 %isolation%',
+            'sku' => 'adc_123',
+            'price' => ['value' => 100.00, 'preset' => '-'],
+            'tax_class_id' => ['dataSet' => 'None'],
+            'quantity_and_stock_status' => [
+                'qty' => 666.0000,
+                'is_in_stock' => 'In Stock',
+            ],
+            'weight' => 150.1,
+            'description' => '<p>Simple with Weight 150.1</p>',
             'status' => 'Product online',
             'website_ids' => ['Main Website'],
             'visibility' => 'Catalog, Search',
@@ -283,7 +325,7 @@ class CatalogProductSimple extends AbstractRepository
         $this->_data['with_all_custom_option'] = [
             'type_id' => 'simple',
             'attribute_set_id' => ['dataSet' => 'default'],
-            'name' => 'Simple Product %isolation%',
+            'name' => 'Simple Product With Custom Option %isolation%',
             'sku' => 'sku_simple_product_%isolation%',
             'price' => ['value' => 300, 'preset' => '-'],
             'weight' => 1,

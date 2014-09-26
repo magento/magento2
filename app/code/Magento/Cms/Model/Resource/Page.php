@@ -53,31 +53,23 @@ class Page extends \Magento\Framework\Model\Resource\Db\AbstractDb
     protected $dateTime;
 
     /**
-     * @var \Magento\Framework\Filter\FilterManager
-     */
-    protected $filter;
-
-    /**
      * Construct
      *
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param \Magento\Framework\Filter\FilterManager $filter
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
         \Magento\Framework\StoreManagerInterface $storeManager,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Framework\Filter\FilterManager $filter
+        \Magento\Framework\Stdlib\DateTime $dateTime
     ) {
         parent::__construct($resource);
         $this->_date = $date;
         $this->_storeManager = $storeManager;
         $this->dateTime = $dateTime;
-        $this->filter = $filter;
     }
 
     /**
@@ -125,14 +117,6 @@ class Page extends \Magento\Framework\Model\Resource\Db\AbstractDb
             $object->setData($field, $this->dateTime->formatDate($value));
         }
 
-        if (!$object->getData('identifier')) {
-            $object->setData('identifier', $this->filter->translitUrl($object->getData('title')));
-        }
-
-        if (!$this->getIsUniquePageToStores($object)) {
-            throw new \Magento\Framework\Model\Exception(__('A page URL key for specified store already exists.'));
-        }
-
         if (!$this->isValidPageIdentifier($object)) {
             throw new \Magento\Framework\Model\Exception(__('The page URL key contains capital letters or disallowed symbols.'));
         }
@@ -141,7 +125,6 @@ class Page extends \Magento\Framework\Model\Resource\Db\AbstractDb
             throw new \Magento\Framework\Model\Exception(__('The page URL key cannot be made of only numbers.'));
         }
 
-        // modify create / update dates
         if ($object->isObjectNew() && !$object->hasCreationTime()) {
             $object->setCreationTime($this->_date->gmtDate());
         }
@@ -284,33 +267,6 @@ class Page extends \Magento\Framework\Model\Resource\Db\AbstractDb
         }
 
         return $select;
-    }
-
-    /**
-     * Check for unique of identifier of page to selected store(s).
-     *
-     * @param \Magento\Framework\Model\AbstractModel $object
-     * @return bool
-     */
-    public function getIsUniquePageToStores(\Magento\Framework\Model\AbstractModel $object)
-    {
-        if ($this->_storeManager->hasSingleStore() || !$object->hasStores()) {
-            $stores = array(\Magento\Store\Model\Store::DEFAULT_STORE_ID);
-        } else {
-            $stores = (array)$object->getData('stores');
-        }
-
-        $select = $this->_getLoadByIdentifierSelect($object->getData('identifier'), $stores);
-
-        if ($object->getId()) {
-            $select->where('cps.page_id <> ?', $object->getId());
-        }
-
-        if ($this->_getWriteAdapter()->fetchRow($select)) {
-            return false;
-        }
-
-        return true;
     }
 
     /**

@@ -88,7 +88,7 @@ class Filesystem implements ReaderInterface
         ConverterInterface $converter,
         SchemaLocatorInterface $schemaLocator,
         $fileName,
-        $domDocumentClass = 'Magento\Config\Dom',
+        $domDocumentClass = '\Magento\Framework\Config\Dom',
         $idAttributes = array()
     ) {
         $this->fileResolver = $fileResolver;
@@ -122,7 +122,7 @@ class Filesystem implements ReaderInterface
      */
     protected function readFiles($fileList)
     {
-        /** @var \Magento\Config\Dom $configMerger */
+        /** @var \Magento\Framework\Config\Dom $configMerger */
         $configMerger = null;
         foreach ($fileList as $key => $content) {
             try {
@@ -131,7 +131,7 @@ class Filesystem implements ReaderInterface
                 } else {
                     $configMerger->merge($content);
                 }
-            } catch (\Magento\Config\Dom\ValidationException $e) {
+            } catch (\Magento\Framework\Config\Dom\ValidationException $e) {
                 throw new \Exception("Invalid XML in file " . $key . ":\n" . $e->getMessage());
             }
         }
@@ -154,13 +154,13 @@ class Filesystem implements ReaderInterface
      *
      * @param string $mergerClass
      * @param string $initialContents
-     * @return \Magento\Config\Dom
+     * @return \Magento\Framework\Config\Dom
      * @throws \UnexpectedValueException
      */
     protected function createConfigMerger($mergerClass, $initialContents)
     {
         $result = new $mergerClass($initialContents, $this->idAttributes, null, $this->schemaFile);
-        if (!$result instanceof \Magento\Config\Dom) {
+        if (!$result instanceof \Magento\Framework\Config\Dom) {
             throw new \UnexpectedValueException(
                 "Instance of the DOM config merger is expected, got {$mergerClass} instead."
             );

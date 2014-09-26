@@ -28,8 +28,20 @@
  */
 namespace Magento\Sitemap\Helper;
 
+use Magento\Store\Model\ScopeInterface;
+
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
+    /**
+     * Config path to sitemap valid paths
+     */
+    const XML_PATH_SITEMAP_VALID_PATHS = 'sitemap/file/valid_paths';
+
+    /**
+     * Config path to valid file paths
+     */
+    const XML_PATH_PUBLIC_FILES_VALID_PATHS = 'general/file/public_files_valid_paths';
+
     /**#@+
      * Limits xpath config settings
      */
@@ -98,7 +110,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->_scopeConfig->getValue(
             self::XML_PATH_MAX_LINES,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $storeId
         );
     }
@@ -113,7 +125,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->_scopeConfig->getValue(
             self::XML_PATH_MAX_FILE_SIZE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $storeId
         );
     }
@@ -128,7 +140,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return (string)$this->_scopeConfig->getValue(
             self::XML_PATH_CATEGORY_CHANGEFREQ,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $storeId
         );
     }
@@ -143,7 +155,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return (string)$this->_scopeConfig->getValue(
             self::XML_PATH_PRODUCT_CHANGEFREQ,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $storeId
         );
     }
@@ -158,7 +170,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return (string)$this->_scopeConfig->getValue(
             self::XML_PATH_PAGE_CHANGEFREQ,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $storeId
         );
     }
@@ -173,7 +185,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return (string)$this->_scopeConfig->getValue(
             self::XML_PATH_CATEGORY_PRIORITY,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $storeId
         );
     }
@@ -188,7 +200,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return (string)$this->_scopeConfig->getValue(
             self::XML_PATH_PRODUCT_PRIORITY,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $storeId
         );
     }
@@ -203,7 +215,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return (string)$this->_scopeConfig->getValue(
             self::XML_PATH_PAGE_PRIORITY,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $storeId
         );
     }
@@ -218,7 +230,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->_scopeConfig->getValue(
             self::XML_PATH_SUBMISSION_ROBOTS,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $storeId
         );
     }
@@ -233,8 +245,21 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return (string)$this->_scopeConfig->getValue(
             self::XML_PATH_PRODUCT_IMAGES_INCLUDE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $storeId
+        );
+    }
+
+    /**
+     * Get list valid paths for generate a sitemap XML file
+     *
+     * @return string[]
+     */
+    public function getValidPaths()
+    {
+        return array_merge(
+            $this->_scopeConfig->getValue(self::XML_PATH_SITEMAP_VALID_PATHS, ScopeInterface::SCOPE_STORE),
+            $this->_scopeConfig->getValue(self::XML_PATH_PUBLIC_FILES_VALID_PATHS, ScopeInterface::SCOPE_STORE)
         );
     }
 }

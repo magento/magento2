@@ -23,19 +23,20 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<requests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Search/etc/search_request_merged.xsd">
+<requests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Search/etc/search_request_merged.xsd">
     <request query="quick_search_container" index="product">
         <dimensions>
-            <dimension name="scope" value="%scope_placeholder%" />
+            <dimension name="scope" value="default"/>
         </dimensions>
         <queries>
-            <query xsi:type="matchQuery" name="quick_search_container">
-                <match field="name" value="$search_term" boost="1" />
-                <match field="sku" value="$search_term" boost="1" />
-                <match field="description" value="$search_term" boost="1" />
-                <match field="short_description" value="$search_term" boost="1" />
-                <match field="price" value="$search_term" boost="1" />
-                <match field="tax_class" value="$search_term" boost="1" />
+            <query xsi:type="matchQuery" value="$search_term" name="quick_search_container">
+                <match field="name" boost="1" />
+                <match field="sku" boost="1" />
+                <match field="description" boost="1" />
+                <match field="short_description" boost="1" />
+                <match field="price" boost="1" />
+                <match field="tax_class" boost="1" />
             </query>
         </queries>
         <from>10</from>
@@ -43,42 +44,25 @@
     </request>
     <request query="advanced_search_container" index="product">
         <dimensions>
-            <dimension name="scope" value="%scope_placeholder%" />
+            <dimension name="scope" value="default" />
         </dimensions>
         <queries>
             <query xsi:type="boolQuery" name="advanced_search_container" boost="1">
-                <queryReference clause="should" ref="name_query" />
                 <queryReference clause="should" ref="sku_query" />
-                <queryReference clause="should" ref="description_query" />
-                <queryReference clause="should" ref="short_description_query" />
                 <queryReference clause="should" ref="price_query" />
-                <queryReference clause="should" ref="tax_class_query" />
             </query>
-            <query xsi:type="matchQuery" name="name_query">
-                <match field="name" value="$name" boost="1" />
-            </query>
-            <query xsi:type="filteredQuery" name="sku_query">
+            <query name="sku_query" xsi:type="filteredQuery">
                 <filterReference ref="sku_query_filter" />
             </query>
-            <query xsi:type="matchQuery" name="description_query">
-                <match field="description" value="$description" boost="1" />
-            </query>
-            <query xsi:type="matchQuery" name="short_description_query">
-                <match field="short_description" value="$short_description" boost="1" />
-            </query>
-            <query xsi:type="filteredQuery" name="price_query">
+            <query name="price_query" xsi:type="filteredQuery">
                 <filterReference ref="price_query_filter" />
-            </query>
-            <query xsi:type="filteredQuery" name="tax_class_query">
-                <filterReference ref="tax_class_query_filter" />
             </query>
         </queries>
         <filters>
             <filter xsi:type="termFilter" name="sku_query_filter" field="sku" value="$sku" />
             <filter xsi:type="rangeFilter" name="price_query_filter" field="price" from="$price_from" to="$price_to" />
-            <filter xsi:type="termFilter" name="tax_class_query_filter" field="tax_class" value="$tax_class" />
         </filters>
-        <from>10</from>
+        <from>0</from>
         <size>10</size>
     </request>
 </requests>

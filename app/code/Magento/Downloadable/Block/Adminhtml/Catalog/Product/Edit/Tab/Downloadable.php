@@ -160,11 +160,8 @@ class Downloadable extends \Magento\Backend\Block\Widget implements \Magento\Bac
      */
     protected function _toHtml()
     {
-        $accordion = $this->getLayout()->createBlock(
-            'Magento\Backend\Block\Widget\Accordion'
-        )->setId(
-            $this->accordionBlockId
-        );
+        $accordion = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Accordion')
+            ->setId($this->accordionBlockId);
         $accordion->addItem(
             'samples',
             array(

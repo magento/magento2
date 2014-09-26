@@ -25,10 +25,13 @@
 -->
 <page layout="3columns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <!-- Temporary solution -->
-    <block class="Magento\Theme\Block\Html\Head" name="head" as="head" before="-">
+    <block name="require.js" class="Magento\Framework\View\Element\Template" template="Magento_Theme::js/require_js.phtml" />
+    <referenceContainer name="after.body.start">
+        <block class="Magento\Translation\Block\Js" name="translate" template="Magento_Translation::translate.phtml"/>
         <block class="Magento\Framework\View\Element\Js\Cookie" name="js_cookies" template="Magento_Theme::js/cookie.phtml"/>
-    </block>
-    <block class="Magento\Theme\Block\Html\Body" name="body.class"/>
+        <block class="Magento\Theme\Block\Html\Notices" name="global_notices" template="html/notices.phtml"/>
+    </referenceContainer>
+
     <referenceBlock name="top.links">
         <block class="Magento\Theme\Block\Html\Header" name="header" as="header" before="-">
             <arguments>
@@ -36,10 +39,6 @@
             </arguments>
         </block>
     </referenceBlock>
-
-    <referenceContainer name="after.body.start">
-        <block class="Magento\Theme\Block\Html\Notices" name="global_notices" template="html/notices.phtml"/>
-    </referenceContainer>
 
     <referenceContainer name="header.container">
         <container name="header.panel" label="Page Header Panel" htmlTag="div" htmlClass="panel header">
@@ -87,15 +86,17 @@
         <container name="page.bottom" label="Before Page Footer" htmlTag="div" htmlClass="content"/>
     </referenceContainer>
     <referenceContainer name="footer-container">
-        <container name="footer" as="footer" label="Page Footer" htmlTag="div" htmlClass="footer content">
-            <block class="Magento\Store\Block\Switcher" name="store_switcher" as="store_switcher" template="switch/stores.phtml"/>
-            <block class="Magento\Framework\View\Element\Html\Links" name="footer_links">
-                <arguments>
-                    <argument name="css_class" xsi:type="string">footer links</argument>
-                </arguments>
-            </block>
-            <block class="Magento\Theme\Block\Html\Footer" name="copyright" template="html/copyright.phtml"/>
-            <block class="Magento\Framework\View\Element\Template" name="report.bugs" template="Magento_Theme::html/bugreport.phtml" />
+        <container name="footer.wrapper" as="footer-wrapper" label="Page Footer Wrapper" htmlTag="div" htmlClass="page-footer">
+            <container name="footer" as="footer" label="Page Footer" htmlTag="div" htmlClass="footer content">
+                <block class="Magento\Store\Block\Switcher" name="store_switcher" as="store_switcher" template="switch/stores.phtml"/>
+                <block class="Magento\Framework\View\Element\Html\Links" name="footer_links">
+                    <arguments>
+                        <argument name="css_class" xsi:type="string">footer links</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Theme\Block\Html\Footer" name="copyright" template="html/copyright.phtml"/>
+                <block class="Magento\Framework\View\Element\Template" name="report.bugs" template="Magento_Theme::html/bugreport.phtml" />
+            </container>
         </container>
     </referenceContainer>
 

@@ -32,4 +32,4 @@ $builder = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
 $customerGroupBuilder = $builder->setCode('custom_group')->setTaxClassId(3);
 
 $customerGroup = new Magento\Customer\Service\V1\Data\CustomerGroup($customerGroupBuilder);
-$customerGroupService->saveGroup($customerGroup);
+$customerGroupService->createGroup($customerGroup);

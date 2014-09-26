@@ -30,6 +30,11 @@
             <locator>//div[contains(@class, "column main")]</locator>
             <strategy>xpath</strategy>
         </cartBlock>
+        <cartEmptyBlock>
+            <class>Magento\Checkout\Test\Block\Cart\CartEmpty</class>
+            <locator>.cart-empty</locator>
+            <strategy>css selector</strategy>
+        </cartEmptyBlock>
         <messagesBlock>
             <class>Magento\Core\Test\Block\Messages</class>
             <locator>.messages .messages</locator>

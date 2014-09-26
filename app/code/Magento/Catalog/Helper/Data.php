@@ -23,13 +23,10 @@
  */
 namespace Magento\Catalog\Helper;
 
-use Magento\Catalog\Model\Product\Attribute\Source\Msrp\Type;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Tax\Service\V1\Data\QuoteDetailsBuilder;
 use Magento\Tax\Service\V1\Data\QuoteDetails\ItemBuilder as QuoteDetailsItemBuilder;
 use Magento\Tax\Service\V1\Data\TaxClassKey;
-use Magento\Tax\Service\V1\Data\TaxClassKeyBuilder;
-use Magento\Tax\Service\V1\TaxCalculationServiceInterface;
 use Magento\Customer\Model\Address\Converter as AddressConverter;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Tax\Model\Config;
@@ -45,26 +42,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     const XML_PATH_PRICE_SCOPE = 'catalog/price/scope';
 
-    const XML_PATH_SEO_SAVE_HISTORY = 'catalog/seo/save_rewrites_history';
-
     const CONFIG_USE_STATIC_URLS = 'cms/wysiwyg/use_static_urls_in_catalog';
 
     const CONFIG_PARSE_URL_DIRECTIVES = 'catalog/frontend/parse_url_directives';
 
     const XML_PATH_DISPLAY_PRODUCT_COUNT = 'catalog/layered_navigation/display_product_count';
-
-    /**
-     * Minimum advertise price constants
-     */
-    const XML_PATH_MSRP_ENABLED = 'sales/msrp/enabled';
-
-    const XML_PATH_MSRP_DISPLAY_ACTUAL_PRICE_TYPE = 'sales/msrp/display_price_type';
-
-    const XML_PATH_MSRP_APPLY_TO_ALL = 'sales/msrp/apply_for_all';
-
-    const XML_PATH_MSRP_EXPLANATION_MESSAGE = 'sales/msrp/explanation_message';
-
-    const XML_PATH_MSRP_EXPLANATION_MESSAGE_WHATS_THIS = 'sales/msrp/explanation_message_whats_this';
 
     /**
      * Cache context
@@ -83,13 +65,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @var string
      */
     protected $_categoryPath;
-
-    /**
-     * Array of product types that MAP enabled
-     *
-     * @var array
-     */
-    protected $_mapApplyToProductType = null;
 
     /**
      * Currently selected store ID if applicable
@@ -158,23 +133,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_categoryFactory;
 
     /**
-     * Eav attribute factory
-     *
-     * @var \Magento\Catalog\Model\Resource\Eav\AttributeFactory
-     */
-    protected $_eavAttributeFactory;
-
-    /**
      * Template filter factory
      *
      * @var \Magento\Catalog\Model\Template\Filter\Factory
      */
     protected $_templateFilterFactory;
-
-    /**
-     * @var \Magento\Framework\Escaper
-     */
-    protected $_escaper;
 
     /**
      * Tax class key builder
@@ -232,7 +195,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Catalog\Model\Resource\Eav\AttributeFactory $eavAttributeFactory
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Framework\StoreManagerInterface $storeManager
@@ -243,7 +205,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Catalog\Model\Template\Filter\Factory $templateFilterFactory
-     * @param \Magento\Framework\Escaper $escaper
      * @param string $templateFilterModel
      * @param TaxClassKeyBuilder $taxClassKeyBuilder
      * @param Config $taxConfig
@@ -256,7 +217,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
-        \Magento\Catalog\Model\Resource\Eav\AttributeFactory $eavAttributeFactory,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Framework\StoreManagerInterface $storeManager,
@@ -267,7 +227,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Catalog\Model\Template\Filter\Factory $templateFilterFactory,
-        \Magento\Framework\Escaper $escaper,
         $templateFilterModel,
         \Magento\Tax\Service\V1\Data\TaxClassKeyBuilder $taxClassKeyBuilder,
         \Magento\Tax\Model\Config $taxConfig,
@@ -278,7 +237,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         AddressConverter $addressConverter,
         PriceCurrencyInterface $priceCurrency
     ) {
-        $this->_eavAttributeFactory = $eavAttributeFactory;
         $this->_categoryFactory = $categoryFactory;
         $this->_productFactory = $productFactory;
         $this->_storeManager = $storeManager;
@@ -290,7 +248,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_scopeConfig = $scopeConfig;
         $this->_coreRegistry = $coreRegistry;
         $this->_templateFilterModel = $templateFilterModel;
-        $this->_escaper = $escaper;
         $this->_taxClassKeyBuilder = $taxClassKeyBuilder;
         $this->_taxConfig = $taxConfig;
         $this->_quoteDetailsBuilder = $quoteDetailsBuilder;
@@ -467,21 +424,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * Indicate whether to save URL Rewrite History or not (create redirects to old URLs)
-     *
-     * @param int $storeId Store View
-     * @return bool
-     */
-    public function shouldSaveUrlRewritesHistory($storeId = null)
-    {
-        return $this->_scopeConfig->isSetFlag(
-            self::XML_PATH_SEO_SAVE_HISTORY,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $storeId
-        );
-    }
-
-    /**
      * Check if the store is configured to use static URLs for media
      *
      * @return bool
@@ -520,187 +462,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * Check if Minimum Advertised Price is enabled
-     *
-     * @return bool
-     */
-    public function isMsrpEnabled()
-    {
-        return (bool)$this->_scopeConfig->getValue(
-            self::XML_PATH_MSRP_ENABLED,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $this->_storeId
-        );
-    }
-
-    /**
-     * Return MAP display actual type
-     *
-     * @return null|string
-     */
-    public function getMsrpDisplayActualPriceType()
-    {
-        return $this->_scopeConfig->getValue(
-            self::XML_PATH_MSRP_DISPLAY_ACTUAL_PRICE_TYPE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $this->_storeId
-        );
-    }
-
-    /**
-     * Check if MAP apply to all products
-     *
-     * @return bool
-     */
-    public function isMsrpApplyToAll()
-    {
-        return (bool) $this->_scopeConfig->getValue(
-            self::XML_PATH_MSRP_APPLY_TO_ALL,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $this->_storeId
-        );
-    }
-
-    /**
-     * Return MAP explanation message
-     *
-     * @return string
-     */
-    public function getMsrpExplanationMessage()
-    {
-        return $this->_escaper->escapeHtml(
-            $this->_scopeConfig->getValue(
-                self::XML_PATH_MSRP_EXPLANATION_MESSAGE,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                $this->_storeId
-            ),
-            array('b', 'br', 'strong', 'i', 'u', 'p', 'span')
-        );
-    }
-
-    /**
-     * Return MAP explanation message for "Whats This" window
-     *
-     * @return string
-     */
-    public function getMsrpExplanationMessageWhatsThis()
-    {
-        return $this->_escaper->escapeHtml(
-            $this->_scopeConfig->getValue(
-                self::XML_PATH_MSRP_EXPLANATION_MESSAGE_WHATS_THIS,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                $this->_storeId
-            ),
-            array('b', 'br', 'strong', 'i', 'u', 'p', 'span')
-        );
-    }
-
-    /**
-     * Check if can apply Minimum Advertise price to product
-     * in specific visibility
-     *
-     * @param int|\Magento\Catalog\Model\Product $product
-     * @param int $visibility Check displaying price in concrete place (by default generally)
-     * @param bool $checkAssociatedItems
-     * @return bool
-     */
-    public function canApplyMsrp($product, $visibility = null, $checkAssociatedItems = true)
-    {
-        if (!$this->isMsrpEnabled()) {
-            return false;
-        }
-
-        if (is_numeric($product)) {
-            /** @var \Magento\Catalog\Model\Product $product */
-            $product = $this->_productFactory->create()->setStoreId(
-                $this->_storeManager->getStore()->getId()
-            )->load(
-                $product
-            );
-        }
-
-        if (!$this->canApplyMsrpToProductType($product)) {
-            return false;
-        }
-
-        $result = $product->getMsrpEnabled();
-        if ($result == Type\Enabled::MSRP_ENABLE_USE_CONFIG) {
-            $result = $this->isMsrpApplyToAll();
-        }
-
-        if (!$product->hasMsrpEnabled() && $this->isMsrpApplyToAll()) {
-            $result = true;
-        }
-
-        if ($result && $visibility !== null) {
-            $productVisibility = $product->getMsrpDisplayActualPriceType();
-            if ($productVisibility == Type\Price::TYPE_USE_CONFIG) {
-                $productVisibility = $this->getMsrpDisplayActualPriceType();
-            }
-            $result = $productVisibility == $visibility;
-        }
-
-        if ($product->getTypeInstance()->isComposite($product)
-            && $checkAssociatedItems
-            && (!$result || $visibility !== null)
-        ) {
-            $resultInOptions = $product->getTypeInstance()->isMapEnabledInOptions($product, $visibility);
-            if ($resultInOptions !== null) {
-                $result = $resultInOptions;
-            }
-        }
-
-        return $result;
-    }
-
-    /**
-     * Check whether MAP applied to product Product Type
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return bool
-     */
-    public function canApplyMsrpToProductType($product)
-    {
-        if ($this->_mapApplyToProductType === null) {
-            /** @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
-            $attribute = $this->_eavAttributeFactory->create()->loadByCode(
-                \Magento\Catalog\Model\Product::ENTITY,
-                'msrp_enabled'
-            );
-            $this->_mapApplyToProductType = $attribute->getApplyTo();
-        }
-        return empty($this->_mapApplyToProductType) || in_array($product->getTypeId(), $this->_mapApplyToProductType);
-    }
-
-    /**
-     * Get MAP message for price
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return string
-     */
-    public function getMsrpPriceMessage($product)
-    {
-        $message = "";
-        if ($this->canApplyMsrp($product, Type::TYPE_IN_CART)) {
-            $message = __('To see product price, add this item to your cart. You can always remove it later.');
-        } elseif ($this->canApplyMsrp($product, Type::TYPE_BEFORE_ORDER_CONFIRM)) {
-            $message = __('See price before order confirmation.');
-        }
-        return $message;
-    }
-
-    /**
-     * Check is product need gesture to show price
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return bool
-     */
-    public function isShowPriceOnGesture($product)
-    {
-        return $this->canApplyMsrp($product, Type::TYPE_ON_GESTURE);
-    }
-
-    /**
      * Whether to display items count for each filter option
      * @param int $storeId Store view ID
      * @return bool
@@ -720,10 +481,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param   \Magento\Catalog\Model\Product $product
      * @param   float $price inputted product price
      * @param   bool $includingTax return price include tax flag
-     * @param   null|Address $shippingAddress
-     * @param   null|Address $billingAddress
+     * @param   null|\Magento\Customer\Model\Address\AbstractAddress $shippingAddress
+     * @param   null|\Magento\Customer\Model\Address\AbstractAddress $billingAddress
      * @param   null|int $ctc customer tax class
-     * @param   null|string|bool|int|Store $store
+     * @param   null|string|bool|int|\Magento\Store\Model\Store $store
      * @param   bool $priceIncludesTax flag what price parameter contain tax
      * @param   bool $roundPrice
      * @return  float

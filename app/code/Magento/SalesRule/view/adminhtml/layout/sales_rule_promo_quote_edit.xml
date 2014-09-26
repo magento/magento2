@@ -24,14 +24,6 @@
  */
 -->
 <page layout="admin-2columns-left" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
-    <referenceBlock name="head">
-        <action method="setCanLoadExtJs">
-            <argument name="flag" xsi:type="string">1</argument>
-        </action>
-        <action method="setCanLoadRulesJs">
-            <argument name="flag" xsi:type="string">1</argument>
-        </action>
-    </referenceBlock>
     <referenceContainer name="left">
         <block class="Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tabs" name="promo_quote_edit_tabs">
             <block class="Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Main" name="promo_quote_edit_tab_main"/>

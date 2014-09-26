@@ -1,0 +1,3 @@
+"products";"qty";"constraint"
+"bundleProduct::bundle_dynamic_product";"2";"assertProductQtyInShoppingCart, assertProductsIsAbsentInWishlist"
+"bundleProduct::bundle_fixed_product";"2";"assertProductQtyInShoppingCart, assertProductsIsAbsentInWishlist"

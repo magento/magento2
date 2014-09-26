@@ -67,7 +67,7 @@ class DateTime
             $result = date_default_timezone_set($timezone);
         }
         if ($result === true) {
-            $offset = gmmktime(0, 0, 0, 1, 2, 1970) - mktime(0, 0, 0, 1, 2, 1970);
+            $offset = (int)date('Z');
         }
         if ($timezone !== null) {
             date_default_timezone_set($oldZone);

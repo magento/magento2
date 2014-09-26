@@ -42,7 +42,7 @@
         </titleBlock>
         <footerBlock>
             <class>Magento\Theme\Test\Block\Html\Footer</class>
-            <locator>footer.page.footer</locator>
+            <locator>footer.page-footer</locator>
             <strategy>css selector</strategy>
         </footerBlock>
         <linksBlock>
@@ -70,5 +70,10 @@
             <locator>.switcher.currency</locator>
             <strategy>css selector</strategy>
         </currencyBlock>
+        <cmsPageBlock>
+            <class>Magento\Cms\Test\Block\Page</class>
+            <locator>.page.main</locator>
+            <strategy>css selector</strategy>
+        </cmsPageBlock>
     </blocks>
 </page>

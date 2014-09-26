@@ -30,6 +30,8 @@ namespace Magento\Backend\Block\System\Account\Edit;
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
+    const IDENTITY_VERIFICATION_PASSWORD_FIELD = 'current_password';
+
     /**
      * @var \Magento\Backend\Model\Auth\Session
      */
@@ -142,7 +144,26 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             )
         );
 
-        $form->setValues($user->getData());
+        $verificationFieldset = $form->addFieldset(
+            'current_user_verification_fieldset',
+            ['legend' => __('Current User Identity Verification')]
+        );
+        $verificationFieldset->addField(
+            self::IDENTITY_VERIFICATION_PASSWORD_FIELD,
+            'password',
+            array(
+                'name' => self::IDENTITY_VERIFICATION_PASSWORD_FIELD,
+                'label' => __('Your Password'),
+                'id' => self::IDENTITY_VERIFICATION_PASSWORD_FIELD,
+                'title' => __('Your Password'),
+                'class' => 'input-text validate-current-password required-entry',
+                'required' => true
+            )
+        );
+
+        $data = $user->getData();
+        unset($data[self::IDENTITY_VERIFICATION_PASSWORD_FIELD]);
+        $form->setValues($data);
         $form->setAction($this->getUrl('adminhtml/system_account/save'));
         $form->setMethod('post');
         $form->setUseContainer(true);

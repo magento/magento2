@@ -489,7 +489,7 @@ class AbstractAddress extends \Magento\Framework\Model\AbstractModel
         }
 
         if (!\Zend_Validate::is($this->getTelephone(), 'NotEmpty')) {
-            $errors[] = __('Please enter the telephone number.');
+            $errors[] = __('Please enter the phone number.');
         }
 
         $_havingOptionalZip = $this->_directoryData->getCountriesWithOptionalZip();

@@ -30,118 +30,107 @@ namespace Magento\Framework\Session;
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \Magento\TestFramework\Helper\ObjectManager
+     */
+    protected $helper;
+
+    /**
      * @var \Magento\Framework\Session\Config
      */
     protected $config;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_configMock;
+    protected $configMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\String
+     * @var \Magento\Framework\ValidatorFactory | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_stringHelperMock;
+    protected $validatorFactoryMock;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface
+     * @var \Magento\Framework\Validator\ValidatorInterface | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_requestMock;
+    protected $validatorMock;
 
     /**
-     * @var \Magento\Framework\App\Filesystem
+     * @var \Magento\Framework\App\Request\Http | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_filesystem;
+    protected $requestMock;
+
+    /**
+     * @var \Magento\Framework\App\Filesystem | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $filesystem;
 
     protected function setUp()
     {
-        $this->_configMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
+        $this->helper = new \Magento\TestFramework\Helper\ObjectManager($this);
 
-        $this->_stringHelperMock = $this->getMock('\Magento\Framework\Stdlib\String', array(), array(), '', false, false);
-        $this->_requestMock = $this->getMock(
-            '\Magento\Framework\App\Request\Http',
-            array('getBasePath', 'isSecure', 'getHttpHost'),
-            array(),
-            '',
-            false,
-            false
-        );
-        $this->_requestMock->expects($this->atLeastOnce())->method('getBasePath')->will($this->returnValue('/'));
-        $this->_requestMock->expects(
-            $this->atLeastOnce()
-        )->method(
-            'getHttpHost'
-        )->will(
-            $this->returnValue('init.host')
-        );
-        $this->_filesystem = $this->getMock('\Magento\Framework\App\Filesystem', array(), array(), '', false, false);
-
-        $this->config = new \Magento\Framework\Session\Config(
-            $this->_configMock,
-            $this->_stringHelperMock,
-            $this->_requestMock,
-            $this->_filesystem,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            \Magento\Framework\Session\SaveHandlerInterface::DEFAULT_HANDLER,
-            __DIR__
-        );
+        $this->validatorMock = $this->getMockBuilder('Magento\Framework\Validator\ValidatorInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->validatorMock->expects($this->any())
+            ->method('isValid')
+            ->willReturn(true);
     }
 
-    public function testSetOptionsWrongType()
+    public function testSetOptionsInvalidValue()
     {
-        $this->setExpectedException(
-            '\InvalidArgumentException',
-            'Parameter provided to Magento\Framework\Session\Config::setOptions must be an array or Traversable'
-        );
+        $this->getModel($this->validatorMock);
+        $preVal = $this->config->getOptions();
         $this->config->setOptions('');
+        $this->assertEquals($preVal, $this->config->getOptions());
     }
 
     /**
      * @dataProvider optionsProvider
      */
-    public function testSetOptionsTranslatesUnderscoreSeparatedKeys($option, $getter, $value)
+    public function testSetOptions($option, $getter, $value)
     {
-        $options = array($option => $value);
+        $this->getModel($this->validatorMock);
+        $options = [$option => $value];
         $this->config->setOptions($options);
         $this->assertSame($value, $this->config->{$getter}());
     }
 
     public function optionsProvider()
     {
-        return array(
-            array('save_path', 'getSavePath', __DIR__),
-            array('name', 'getName', 'FOOBAR'),
-            array('save_handler', 'getSaveHandler', 'user'),
-            array('gc_probability', 'getGcProbability', 42),
-            array('gc_divisor', 'getGcDivisor', 3),
-            array('gc_maxlifetime', 'getGcMaxlifetime', 180),
-            array('serialize_handler', 'getSerializeHandler', 'php_binary'),
-            array('cookie_lifetime', 'getCookieLifetime', 180),
-            array('cookie_path', 'getCookiePath', '/foo/bar'),
-            array('cookie_domain', 'getCookieDomain', 'framework.zend.com'),
-            array('cookie_secure', 'getCookieSecure', true),
-            array('cookie_httponly', 'getCookieHttpOnly', true),
-            array('use_cookies', 'getUseCookies', false),
-            array('use_only_cookies', 'getUseOnlyCookies', true),
-            array('referer_check', 'getRefererCheck', 'foobar'),
-            array('entropy_file', 'getEntropyFile', __FILE__),
-            array('entropy_length', 'getEntropyLength', 42),
-            array('cache_limiter', 'getCacheLimiter', 'private'),
-            array('cache_expire', 'getCacheExpire', 42),
-            array('use_trans_sid', 'getUseTransSid', true),
-            array('hash_function', 'getHashFunction', 'md5'),
-            array('hash_bits_per_character', 'getHashBitsPerCharacter', 5),
-            array('url_rewriter_tags', 'getUrlRewriterTags', 'a=href')
-        );
+        return [
+            ['save_path', 'getSavePath', __DIR__],
+            ['name', 'getName', 'FOOBAR'],
+            ['save_handler', 'getSaveHandler', 'user'],
+            ['gc_probability', 'getGcProbability', 42],
+            ['gc_divisor', 'getGcDivisor', 3],
+            ['gc_maxlifetime', 'getGcMaxlifetime', 180],
+            ['serialize_handler', 'getSerializeHandler', 'php_binary'],
+            ['cookie_lifetime', 'getCookieLifetime', 180],
+            ['cookie_path', 'getCookiePath', '/foo/bar'],
+            ['cookie_domain', 'getCookieDomain', 'framework.zend.com'],
+            ['cookie_secure', 'getCookieSecure', true],
+            ['cookie_httponly', 'getCookieHttpOnly', true],
+            ['use_cookies', 'getUseCookies', false],
+            ['use_only_cookies', 'getUseOnlyCookies', true],
+            ['referer_check', 'getRefererCheck', 'foobar'],
+            ['entropy_file', 'getEntropyFile', __FILE__],
+            ['entropy_length', 'getEntropyLength', 42],
+            ['cache_limiter', 'getCacheLimiter', 'private'],
+            ['cache_expire', 'getCacheExpire', 42],
+            ['use_trans_sid', 'getUseTransSid', true],
+            ['hash_function', 'getHashFunction', 'md5'],
+            ['hash_bits_per_character', 'getHashBitsPerCharacter', 5],
+            ['url_rewriter_tags', 'getUrlRewriterTags', 'a=href']
+        ];
     }
 
     public function testGetOptions()
     {
+        $this->getModel($this->validatorMock);
         $appStateProperty = new \ReflectionProperty('Magento\Framework\Session\Config', 'options');
         $appStateProperty->setAccessible(true);
         $original = $appStateProperty->getValue($this->config);
-        $valueForTest = array('test' => 'test2');
+        $valueForTest = ['test' => 'test2'];
         $appStateProperty->setValue($this->config, $valueForTest);
         $this->assertEquals($valueForTest, $this->config->getOptions());
         $this->assertEquals($valueForTest, $this->config->toArray());
@@ -152,12 +141,14 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testNameIsMutable()
     {
+        $this->getModel($this->validatorMock);
         $this->config->setName('FOOBAR');
         $this->assertEquals('FOOBAR', $this->config->getName());
     }
 
     public function testSaveHandlerDefaultsToIniSettings()
     {
+        $this->getModel($this->validatorMock);
         $this->assertSame(
             ini_get('session.save_handler'),
             $this->config->getSaveHandler(),
@@ -167,39 +158,56 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testSaveHandlerIsMutable()
     {
+        $this->getModel($this->validatorMock);
         $this->config->setSaveHandler('user');
         $this->assertEquals('user', $this->config->getSaveHandler());
     }
 
     public function testCookieLifetimeIsMutable()
     {
+        $this->getModel($this->validatorMock);
         $this->config->setCookieLifetime(20);
         $this->assertEquals(20, $this->config->getCookieLifetime());
     }
 
     public function testCookieLifetimeCanBeZero()
     {
+        $this->getModel($this->validatorMock);
         $this->config->setCookieLifetime(0);
         $this->assertEquals(0, ini_get('session.cookie_lifetime'));
     }
 
-    public function testSettingInvalidCookieLifetimeRaisesException()
+    public function testSettingInvalidCookieLifetime()
     {
-        $this->setExpectedException('\InvalidArgumentException', 'Invalid cookie_lifetime; must be numeric');
+        $validatorMock = $this->getMockBuilder('Magento\Framework\Validator\ValidatorInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $validatorMock->expects($this->any())
+            ->method('isValid')
+            ->willReturn(false);
+        $this->getModel($validatorMock);
+        $preVal = $this->config->getCookieLifetime();
         $this->config->setCookieLifetime('foobar_bogus');
+        $this->assertEquals($preVal, $this->config->getCookieLifetime());
     }
 
-    public function testSettingInvalidCookieLifetimeRaisesException2()
+    public function testSettingInvalidCookieLifetime2()
     {
-        $this->setExpectedException(
-            '\InvalidArgumentException',
-            'Invalid cookie_lifetime; must be a positive integer or zero'
-        );
+        $validatorMock = $this->getMockBuilder('Magento\Framework\Validator\ValidatorInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $validatorMock->expects($this->any())
+            ->method('isValid')
+            ->willReturn(false);
+        $this->getModel($validatorMock);
+        $preVal = $this->config->getCookieLifetime();
         $this->config->setCookieLifetime(-1);
+        $this->assertEquals($preVal, $this->config->getCookieLifetime());
     }
 
     public function testWrongMethodCall()
     {
+        $this->getModel($this->validatorMock);
         $this->setExpectedException(
             '\BadMethodCallException',
             'Method "methodThatNotExist" does not exist in Magento\Framework\Session\Config'
@@ -209,11 +217,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testCookieSecureDefaultsToIniSettings()
     {
+        $this->getModel($this->validatorMock);
         $this->assertSame((bool)ini_get('session.cookie_secure'), $this->config->getCookieSecure());
     }
 
     public function testCookieSecureIsMutable()
     {
+        $this->getModel($this->validatorMock);
         $value = ini_get('session.cookie_secure') ? false : true;
         $this->config->setCookieSecure($value);
         $this->assertEquals($value, $this->config->getCookieSecure());
@@ -221,38 +231,55 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testCookieDomainIsMutable()
     {
+        $this->getModel($this->validatorMock);
         $this->config->setCookieDomain('example.com');
         $this->assertEquals('example.com', $this->config->getCookieDomain());
     }
 
     public function testCookieDomainCanBeEmpty()
     {
+        $this->getModel($this->validatorMock);
         $this->config->setCookieDomain('');
         $this->assertEquals('', $this->config->getCookieDomain());
     }
 
-    public function testSettingInvalidCookieDomainRaisesException()
+    public function testSettingInvalidCookieDomain()
     {
-        $this->setExpectedException('\InvalidArgumentException', 'Invalid cookie domain: must be a string');
+        $validatorMock = $this->getMockBuilder('Magento\Framework\Validator\ValidatorInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $validatorMock->expects($this->any())
+            ->method('isValid')
+            ->willReturn(false);
+        $this->getModel($validatorMock);
+        $preVal = $this->config->getCookieDomain();
         $this->config->setCookieDomain(24);
+        $this->assertEquals($preVal, $this->config->getCookieDomain());
     }
 
-    public function testSettingInvalidCookieDomainRaisesException2()
+    public function testSettingInvalidCookieDomain2()
     {
-        $this->setExpectedException(
-            '\InvalidArgumentException',
-            'does not match the expected structure for a DNS hostname'
-        );
+        $validatorMock = $this->getMockBuilder('Magento\Framework\Validator\ValidatorInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $validatorMock->expects($this->any())
+            ->method('isValid')
+            ->willReturn(false);
+        $this->getModel($validatorMock);
+        $preVal = $this->config->getCookieDomain();
         $this->config->setCookieDomain('D:\\WINDOWS\\System32\\drivers\\etc\\hosts');
+        $this->assertEquals($preVal, $this->config->getCookieDomain());
     }
 
     public function testCookieHttpOnlyDefaultsToIniSettings()
     {
+        $this->getModel($this->validatorMock);
         $this->assertSame((bool)ini_get('session.cookie_httponly'), $this->config->getCookieHttpOnly());
     }
 
     public function testCookieHttpOnlyIsMutable()
     {
+        $this->getModel($this->validatorMock);
         $value = ini_get('session.cookie_httponly') ? false : true;
         $this->config->setCookieHttpOnly($value);
         $this->assertEquals($value, $this->config->getCookieHttpOnly());
@@ -260,11 +287,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testUseCookiesDefaultsToIniSettings()
     {
+        $this->getModel($this->validatorMock);
         $this->assertSame((bool)ini_get('session.use_cookies'), $this->config->getUseCookies());
     }
 
     public function testUseCookiesIsMutable()
     {
+        $this->getModel($this->validatorMock);
         $value = ini_get('session.use_cookies') ? false : true;
         $this->config->setUseCookies($value);
         $this->assertEquals($value, (bool)$this->config->getUseCookies());
@@ -272,11 +301,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testUseOnlyCookiesDefaultsToIniSettings()
     {
+        $this->getModel($this->validatorMock);
         $this->assertSame((bool)ini_get('session.use_only_cookies'), $this->config->getUseOnlyCookies());
     }
 
     public function testUseOnlyCookiesIsMutable()
     {
+        $this->getModel($this->validatorMock);
         $value = ini_get('session.use_only_cookies') ? false : true;
         $this->config->setOption('use_only_cookies', $value);
         $this->assertEquals($value, (bool)$this->config->getOption('use_only_cookies'));
@@ -284,54 +315,162 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testRefererCheckDefaultsToIniSettings()
     {
+        $this->getModel($this->validatorMock);
         $this->assertSame(ini_get('session.referer_check'), $this->config->getRefererCheck());
     }
 
     public function testRefererCheckIsMutable()
     {
+        $this->getModel($this->validatorMock);
         $this->config->setOption('referer_check', 'FOOBAR');
         $this->assertEquals('FOOBAR', $this->config->getOption('referer_check'));
     }
 
     public function testRefererCheckMayBeEmpty()
     {
+        $this->getModel($this->validatorMock);
         $this->config->setOption('referer_check', '');
         $this->assertEquals('', $this->config->getOption('referer_check'));
     }
 
     public function testSetSavePath()
     {
+        $this->getModel($this->validatorMock);
         $this->config->setSavePath('some_save_path');
         $this->assertEquals($this->config->getOption('save_path'), 'some_save_path');
     }
 
-    public function testSetLifetimePath()
+    /**
+     * @param bool $isValidSame
+     * @param bool $isValid
+     * @param array $expected
+     * @dataProvider constructorDataProvider
+     */
+    public function testConstructor($isValidSame, $isValid, $expected)
     {
-        $getValueReturnMap = [
-            [
-                'test_web/test_cookie/test_cookie_lifetime', 'store', null, 7200
+        $validatorMock = $this->getMockBuilder('Magento\Framework\Validator\ValidatorInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        if ($isValidSame) {
+            $validatorMock->expects($this->any())
+                ->method('isValid')
+                ->willReturn($isValid);
+        } else {
+            for ($x=0; $x<6; $x++) {
+                if ($x % 2 == 0 ) {
+                    $validatorMock->expects($this->at($x))
+                        ->method('isValid')
+                        ->willReturn(false);
+                } else {
+                    $validatorMock->expects($this->at($x))
+                        ->method('isValid')
+                        ->willReturn(true);
+                }
+            }
+        }
+
+        $this->getModel($validatorMock);
+
+        $this->assertEquals($expected, $this->config->getOptions());
+    }
+
+    public function constructorDataProvider()
+    {
+        return [
+            'all valid' => [
+                true,
+                true,
+                [
+                    'session.save_handler' => 'files',
+                    'session.save_path' => null,
+                    'session.cache_limiter' => 'files',
+                    'session.cookie_lifetime' => 7200,
+                    'session.cookie_path' => '/',
+                    'session.cookie_domain' => 'init.host',
+                    'session.cookie_httponly'=> false,
+                ]
             ],
-            [
-                'web/cookie/cookie_path', 'store', null, ''
+            'all invalid' => [
+                true,
+                false,
+                [
+                    'session.save_handler' => 'files',
+                    'session.save_path' => null,
+                    'session.cache_limiter' => 'files',
+                    'session.cookie_httponly'=> false,
+                ]
+            ],
+            'invalid_valid' => [
+                false,
+                true,
+                [
+                    'session.save_handler' => 'files',
+                    'session.save_path' => null,
+                    'session.cache_limiter' => 'files',
+                    'session.cookie_lifetime' => 3600,
+                    'session.cookie_path' => '/',
+                    'session.cookie_domain' => 'init.host',
+                    'session.cookie_httponly'=> false,
+                ]
             ],
         ];
+    }
 
-        $this->_configMock
-            ->method('getValue')
-            ->will($this->returnValueMap($getValueReturnMap));
-
-        $config = new \Magento\Framework\Session\Config(
-            $this->_configMock,
-            $this->_stringHelperMock,
-            $this->_requestMock,
-            $this->_filesystem,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            \Magento\Framework\Session\SaveHandlerInterface::DEFAULT_HANDLER,
-            __DIR__,
-            null,
-            'test_web/test_cookie/test_cookie_lifetime'
+    /**
+     * Get test model
+     *
+     * @param $validator
+     * @return Config
+     */
+    protected function getModel($validator)
+    {
+        $this->requestMock = $this->getMock(
+            '\Magento\Framework\App\Request\Http',
+            ['getBasePath', 'isSecure', 'getHttpHost'],
+            [],
+            '',
+            false,
+            false
+        );
+        $this->requestMock->expects($this->atLeastOnce())->method('getBasePath')->will($this->returnValue('/'));
+        $this->requestMock->expects(
+            $this->atLeastOnce()
+        )->method(
+            'getHttpHost'
+        )->will(
+            $this->returnValue('init.host')
         );
 
-        $this->assertEquals(7200, $config->getCookieLifetime());
+        $this->validatorFactoryMock = $this->getMockBuilder('Magento\Framework\ValidatorFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->validatorFactoryMock->expects($this->any())
+            ->method('setInstanceName')
+            ->willReturnSelf();
+        $this->validatorFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($validator);
+
+        $this->configMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
+        $getValueReturnMap = [
+            ['test_web/test_cookie/test_cookie_lifetime', 'store', null, 7200],
+            ['web/cookie/cookie_path', 'store', null, ''],
+        ];
+        $this->configMock->method('getValue')
+            ->will($this->returnValueMap($getValueReturnMap));
+
+        $this->config = $this->helper->getObject(
+            'Magento\Framework\Session\Config',
+            [
+                'scopeConfig' => $this->configMock,
+                'validatorFactory' => $this->validatorFactoryMock,
+                'scopeType' => \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                'cacheLimiter' => \Magento\Framework\Session\SaveHandlerInterface::DEFAULT_HANDLER,
+                'lifetimePath' => 'test_web/test_cookie/test_cookie_lifetime',
+                'request' => $this->requestMock,
+            ]
+
+        );
+        return $this->config;
     }
 }

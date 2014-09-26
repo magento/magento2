@@ -96,4 +96,11 @@
     <type name="Magento\Sales\Controller\OrderInterface">
         <plugin name="authentication" type="\Magento\Sales\Controller\Order\Plugin\Authentication"/>
     </type>
+    <type name="Magento\Framework\App\Rss\RssManagerInterface">
+        <arguments>
+            <argument name="dataProviders" xsi:type="array">
+                <item name="order_status" xsi:type="string">Magento\Sales\Model\Rss\OrderStatus</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

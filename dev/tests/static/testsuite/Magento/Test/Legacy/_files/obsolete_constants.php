@@ -195,7 +195,6 @@ return array(
         'Magento\Framework\Locale',
         'Magento_Core_Model_LocaleInterface::XML_PATH_DEFAULT_TIMEZONE'
     ),
-    array('XML_PATH_INDEXER_DATA', 'Magento\Index\Model\Process'),
     array('XML_PATH_INSTALL_DATE', 'Mage_Core_Model_App', 'Mage_Core_Model_Config_Primary::XML_PATH_INSTALL_DATE'),
     array('XML_PATH_LOCALE_INHERITANCE', 'Mage_Core_Model_Translate'),
     array('XML_PATH_PRODUCT_ATTRIBUTES', 'Magento\Wishlist\Model\Config'),
@@ -378,6 +377,16 @@ return array(
         'XML_PATH_PUBLIC_FILES_VALID_PATHS',
         '\Magento\Core\Helper\Data',
         '\Magento\Catalog\Helper\Catalog::XML_PATH_PUBLIC_FILES_VALID_PATHS'
+    ),
+    array(
+        'XML_PATH_PUBLIC_FILES_VALID_PATHS',
+        'Magento\Catalog\Helper\Catalog',
+        '\Magento\Sitemap\Helper\Data::XML_PATH_PUBLIC_FILES_VALID_PATHS'
+    ),
+    array(
+        'XML_PATH_SITEMAP_VALID_PATHS',
+        '\Magento\Catalog\Helper\Catalog',
+        '\Magento\Sitemap\Helper\Data::XML_PATH_SITEMAP_VALID_PATHS'
     ),
     array('TYPE_PHYSICAL', '\Magento\Core\Model\Theme', '\Magento\Framework\View\Design\ThemeInterface::TYPE_PHYSICAL'),
     array('TYPE_VIRTUAL', '\Magento\Core\Model\Theme', '\Magento\Framework\View\Design\ThemeInterface::TYPE_VIRTUAL'),

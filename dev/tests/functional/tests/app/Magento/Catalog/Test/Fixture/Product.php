@@ -33,7 +33,7 @@ class Product extends DataFixture
      * Attribute set for mapping data into ui tabs
      */
     const GROUP_PRODUCT_DETAILS     = 'product-details';
-    const GROUP_ADVANCED_SEO        = 'search-optimization';
+    const GROUP_ADVANCED_SEO        = 'search-engine-optimization';
     const GROUP_PRODUCT_WEBSITE     = 'websites';
     const GROUP_PRODUCT_INVENTORY   = 'advanced-inventory';
     const GROUP_PRODUCT_PRICING     = 'advanced-pricing';

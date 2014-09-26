@@ -53,10 +53,10 @@
 @font-rem-ratio: unit(@font-size-root * 16/100);
 //base font size value in <b>px</b>:
 @font-size-base: unit((@font-size-root / 100) * 16 * @font-size-base-ratio, px); // Also used in: @loader-text-font-size
-@font-size-xl: ceil(1.5 * @font-size-base);
-@font-size-l: ceil(1.25 * @font-size-base);
-@font-size-s: ceil(0.85 * @font-size-base);  // Also used in: Breadcrumbs and in Small button
-@font-size-xs: floor(0.75 * @font-size-base);
+@font-size-xl: ceil(1.5 * @font-size-base);  // 21
+@font-size-l: ceil(1.25 * @font-size-base);  // 18
+@font-size-s: ceil(0.85 * @font-size-base);  // 12 Also used in: Breadcrumbs and in Small button
+@font-size-xs: floor(0.75 * @font-size-base);  // 11
 
 @font-weight-base: 400;
 @font-weight-light: 300;
@@ -281,7 +281,7 @@
 @layout-width: ''; // for the fixed width layout
 @layout-max-width: 1280px;
 @layout-indent: 20px;
-@layout-width-xs-indent: 10px;
+@layout-width-xs-indent: 15px;
 
 // Classnames defining different layouts
 @layout-class-1column: page-layout-1column;

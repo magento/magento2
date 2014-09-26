@@ -24,11 +24,9 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
-    <referenceBlock name="root">
-        <action method="addBodyClass">
-            <argument name="class" xsi:type="string">page-with-filter</argument>
-        </action>
-    </referenceBlock>
+    <body>
+        <attribute name="class" value="page-with-filter"/>
+    </body>
     <referenceContainer name="sidebar.main">
         <block class="Magento\LayeredNavigation\Block\Navigation\Category" name="catalog.leftnav" before="-" template="layer/view.phtml">
             <block class="Magento\LayeredNavigation\Block\Navigation\State\Category" name="catalog.navigation.state" as="state" />

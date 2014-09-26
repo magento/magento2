@@ -24,6 +24,9 @@
  */
 -->
 <constraint>
+    <assertCartIsEmpty module="Magento_Checkout">
+        <severeness>middle</severeness>
+    </assertCartIsEmpty>
     <assertPriceInShoppingCart module="Magento_Checkout">
         <severeness>low</severeness>
     </assertPriceInShoppingCart>

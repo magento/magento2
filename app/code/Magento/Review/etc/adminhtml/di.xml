@@ -44,4 +44,11 @@
             <argument name="session" xsi:type="object">Magento\Backend\Model\Session</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\App\Rss\RssManagerInterface">
+        <arguments>
+            <argument name="dataProviders" xsi:type="array">
+                <item name="review" xsi:type="string">Magento\Review\Block\Adminhtml\Rss</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

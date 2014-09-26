@@ -41,7 +41,7 @@
             </block>
         </block>
     </referenceContainer>
-    <referenceBlock name="head">
+    <referenceContainer name="after.body.start">
         <block class="Magento\Framework\View\Element\Js\Components" name="head.components" as="components" template="Magento_Paypal::js/components.phtml"/>
-    </referenceBlock>
+    </referenceContainer>
 </page>

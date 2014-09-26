@@ -45,9 +45,9 @@ class EditShipping extends \Magento\Multishipping\Controller\Checkout\Address
                 $this->_url->getUrl('*/*/*')
             );
 
-            if ($headBlock = $this->_view->getLayout()->getBlock('head')) {
-                $headBlock->setTitle($addressForm->getTitle() . ' - ' . $headBlock->getDefaultTitle());
-            }
+            $this->_view->getPage()->getConfig()->setTitle(
+                $addressForm->getTitle() . ' - ' . $this->_view->getPage()->getConfig()->getDefaultTitle()
+            );
 
             if ($this->_getCheckout()->getCustomerDefaultShippingAddress()) {
                 $addressForm->setBackUrl($this->_url->getUrl('*/checkout/shipping'));

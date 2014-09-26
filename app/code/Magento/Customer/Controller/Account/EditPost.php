@@ -135,7 +135,7 @@ class EditPost extends \Magento\Customer\Controller\Account
 
             try {
                 $this->_customerDetailsBuilder->setCustomer($customer);
-                $this->_customerAccountService->updateCustomer($this->_customerDetailsBuilder->create());
+                $this->_customerAccountService->updateCustomer($customerId, $this->_customerDetailsBuilder->create());
             } catch (AuthenticationException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (InputException $e) {

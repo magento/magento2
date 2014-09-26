@@ -312,7 +312,7 @@ class AbstractAddressTest extends \PHPUnit_Framework_TestCase
             ),
             'telephone' => array(
                 array_merge(array_diff_key($data, array('telephone' => '')), array('country_id' => $countryId++)),
-                array('Please enter the telephone number.')
+                array('Please enter the phone number.')
             ),
             'postcode' => array(
                 array_merge(array_diff_key($data, array('postcode' => '')), array('country_id' => $countryId++)),

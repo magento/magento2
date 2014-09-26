@@ -27,7 +27,7 @@
  */
 ?>
 <?php if ($this->getTotals()): ?>
-    <?php $_colspan = $this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices() ? 5 : 3; ?>
+    <?php $_colspan = 3; ?>
     <?php echo $this->renderTotals(null, $_colspan); ?>
     <?php echo $this->renderTotals('footer', $_colspan); ?>
     <?php if ($this->needDisplayBaseGrandtotal()):?>

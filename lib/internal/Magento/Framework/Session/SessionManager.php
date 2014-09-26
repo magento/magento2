@@ -526,7 +526,7 @@ class SessionManager implements SessionManagerInterface
             if ($result === false) {
                 $error = error_get_last();
                 throw new \InvalidArgumentException(
-                    sprintf('"%s" is not a valid sessions-related ini setting. %s', $option, $error['message'])
+                    sprintf('Failed to set ini option "%s" to value "%s". %s', $option, $value, $error['message'])
                 );
             }
         }

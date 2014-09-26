@@ -40,7 +40,6 @@
                 <arguments>
                     <argument name="price_render" xsi:type="string">product.price.render.default</argument>
                     <argument name="price_type_code" xsi:type="string">link_price</argument>
-                    <argument name="display_msrp_help_message" xsi:type="string">1</argument>
                 </arguments>
             </block>
         </block>

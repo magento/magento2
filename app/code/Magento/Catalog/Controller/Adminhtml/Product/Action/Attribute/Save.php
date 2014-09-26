@@ -183,8 +183,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
 
                 $this->messageManager->addNotice(
                     __(
-                        'Please refresh "Catalog URL Rewrites" and "Product Attributes" in System -> ' .
-                        '<a href="%1">Index Management</a>.',
+                        'Please refresh "Product EAV" in System -> <a href="%1">Index Management</a>.',
                         $this->getUrl('adminhtml/process/list')
                     )
                 );

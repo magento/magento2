@@ -24,11 +24,7 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
-    <referenceBlock name="head">
-        <block class="Magento\Theme\Block\Html\Head\Css" name="magento-paypal-styles-css">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Paypal::styles.css</argument>
-            </arguments>
-        </block>
-    </referenceBlock>
+    <head>
+        <css src="Magento_Paypal::styles.css"/>
+    </head>
 </page>

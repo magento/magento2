@@ -186,12 +186,15 @@ class View extends Block
      */
     public function addToCart(FixtureInterface $product)
     {
-        /** @var CatalogProductSimple $product */
-        $checkoutData = $product->getCheckoutData();
+        $checkoutData = null;
+        if ($product instanceof InjectableFixture) {
+            /** @var CatalogProductSimple $product */
+            $checkoutData = $product->getCheckoutData();
+        }
 
         $this->fillOptions($product);
-        if (isset($checkoutData['qty'])) {
-            $this->_rootElement->find($this->qty)->setValue($checkoutData['qty']);
+        if (isset($checkoutData['options']['qty'])) {
+            $this->_rootElement->find($this->qty)->setValue($checkoutData['options']['qty']);
         }
         $this->clickAddToCart();
     }
@@ -216,6 +219,17 @@ class View extends Block
     {
         $this->_rootElement->find($this->qty, Locator::SELECTOR_CSS)->setValue($qty);
         $this->clickAddToCart();
+    }
+
+    /**
+     * Set quantity
+     *
+     * @param int $qty
+     * @return void
+     */
+    public function setQty($qty)
+    {
+        $this->_rootElement->find($this->qty, Locator::SELECTOR_CSS)->setValue($qty);
     }
 
     /**
@@ -333,10 +347,6 @@ class View extends Block
             }
 
             $this->getCustomOptionsBlock()->fillCustomOptions($checkoutCustomOptions);
-        }
-
-        if (isset($checkoutData['options']['qty'])) {
-            $this->_rootElement->find($this->qty)->setValue($checkoutData['options']['qty']);
         }
     }
 

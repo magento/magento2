@@ -187,13 +187,6 @@
             <default_value>4</default_value>
             <input>select</input>
         </msrp_display_actual_price_type>
-        <msrp_enabled>
-            <attribute_code>msrp_enabled</attribute_code>
-            <backend_type>varchar</backend_type>
-            <is_required>0</is_required>
-            <default_value>2</default_value>
-            <input>select</input>
-        </msrp_enabled>
         <name>
             <attribute_code>name</attribute_code>
             <backend_type>varchar</backend_type>

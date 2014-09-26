@@ -102,14 +102,7 @@ class Uploader extends \Magento\Backend\Block\Widget
      */
     protected function _prepareLayout()
     {
-        $head = $this->getLayout()->getBlock('head');
-        if ($head) {
-            $head->addChild(
-                'jquery-fileUploader-css-jquery-fileupload-ui-css',
-                'Magento\Theme\Block\Html\Head\Css',
-                array('file' => 'jquery/fileUploader/css/jquery.fileupload-ui.css')
-            );
-        }
+        $this->pageConfig->addPageAsset('jquery/fileUploader/css/jquery.fileupload-ui.css');
         return parent::_prepareLayout();
     }
 

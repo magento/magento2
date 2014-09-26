@@ -1,0 +1,80 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * @var \Magento\Ui\Listing\View $this
+ */
+
+?>
+
+<?php if (true): ?>
+    <script>
+        var allowLocalCache = true;
+    </script>
+    <script data-mage-apply='{"Magento_Ui/js/listing/utils/provider": ""}' type="application/json">
+        <?php
+            echo $this->getRenderContext()
+                ->getConfigurationBuilder()
+                    ->toJson($this->getRenderContext()->getStorage(), $this->getName());
+        ?>
+    </script>
+    <script data-mage-apply='{"Magento_Ui/js/listing/grid": ""}' type="application/json">
+        <?php echo $this->getConfigurationBuilder()->toJson($this->getConfiguration()); ?>
+    </script>
+    <?php echo $this->getChildHtml('listing_head'); ?>
+    <div class="grid">
+        <?php echo $this->getChildHtml('listing_before'); ?>
+        <div data-bind="scope: '<?php echo $this->getParentName(); ?>:<?php echo $this->getName(); ?>'">
+            <!-- ko template: getTemplate() --><!-- /ko -->
+        </div>
+        <?php echo $this->getChildHtml('listing_after'); ?>
+    </div>
+    <div data-role="spinner" class="grid-loading-mask">
+        <div class="grid-loader"></div>
+    </div>
+<?php else: ?>
+    <div class="grid" data-mage-apply='{"Magento_Ui/js/listing/utils/provider": ""}'>
+        <?php echo $this->getChildHtml('listing_before'); ?>
+        <table>
+            <thead>
+            <tr>
+                <?php foreach ($this->getMeta()['fields'] as $name => $field): $field['name'] = $name; ?>
+                    <th><?php echo $this->renderElementLabel($field['data_type'], $field); ?></th>
+                <?php endforeach; ?>
+            </tr>
+            </thead>
+            <tbody>
+            <?php foreach ($this->getCollectionItems() as $item): ?>
+            <tr>
+                <?php foreach ($this->getMeta()['fields'] as $name => $field): $field['name'] = $name; $field['data_object'] = $item; ?>
+                <td><?php echo $this->renderElement($field['data_type'], $field); ?></td>
+                <?php endforeach; ?>
+            </tr>
+        <?php endforeach; ?>
+            </tbody>
+        </table>
+        <?php echo $this->getChildHtml('listing_after'); ?>
+    </div>
+<?php endif; ?>

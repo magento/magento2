@@ -85,14 +85,18 @@ class WishlistProvider implements WishlistProviderInterface
             }
             $customerId = $this->customerSession->getCustomerId();
             $wishlist = $this->wishlistFactory->create();
+
+            if (!$wishlistId && !$customerId) {
+                return $wishlist;
+            }
+
             if ($wishlistId) {
                 $wishlist->load($wishlistId);
-            } else {
+            } elseif ($customerId) {
                 $wishlist->loadByCustomerId($customerId, true);
             }
 
             if (!$wishlist->getId() || $wishlist->getCustomerId() != $customerId) {
-                $wishlist = null;
                 throw new \Magento\Framework\Exception\NoSuchEntityException(
                     __("The requested wish list doesn't exist.")
                 );

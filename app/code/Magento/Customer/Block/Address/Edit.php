@@ -137,9 +137,7 @@ class Edit extends \Magento\Directory\Block\Data
             )->create();
         }
 
-        if ($headBlock = $this->getLayout()->getBlock('head')) {
-            $headBlock->setTitle($this->getTitle());
-        }
+        $this->pageConfig->setTitle($this->getTitle());
 
         if ($postedData = $this->_customerSession->getAddressFormData(true)) {
             if (!empty($postedData['region_id']) || !empty($postedData['region'])) {

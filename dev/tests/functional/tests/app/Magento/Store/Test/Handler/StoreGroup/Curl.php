@@ -33,7 +33,7 @@ use Mtf\Handler\Curl as AbstractCurl;
 
 /**
  * Class Curl
- * Curl handler for creating Store Group.
+ * Curl handler for creating Store Group
  */
 class Curl extends AbstractCurl implements StoreGroupInterface
 {
@@ -47,9 +47,9 @@ class Curl extends AbstractCurl implements StoreGroupInterface
     public function persist(FixtureInterface $fixture = null)
     {
         $data = $this->prepareData($fixture);
-        $url = $_ENV['app_backend_url'] . 'admin/system_store/save/';
+        $url = $_ENV['app_backend_url'] . 'admin/system_store/save';
         $curl = new BackendDecorator(new CurlTransport(), new Config());
-        $curl->write(CurlInterface::POST, $url, '1.0', [], $data);
+        $curl->write(CurlInterface::POST, $url, '1.1', [], $data);
         $response = $curl->read();
         $curl->close();
         if (!strpos($response, 'data-ui-id="messages-message-success"')) {
@@ -97,11 +97,16 @@ class Curl extends AbstractCurl implements StoreGroupInterface
     {
         $categoryId = $fixture->getDataFieldConfig('root_category_id')['source']->getCategory()->getId();
         $websiteId = $fixture->getDataFieldConfig('website_id')['source']->getWebsite()->getWebsiteId();
-        $data['group']['name'] = $fixture->getName();
-        $data['group']['root_category_id'] = $categoryId;
-        $data['group']['website_id'] = $websiteId;
-        $data['store_action'] = isset($data['store_action']) ? $data['store_action'] : 'add';
-        $data['store_type'] = isset($data['store_type']) ? $data['store_type'] : 'group';
+        $data = [
+            'group' => [
+                'name' => $fixture->getName(),
+                'root_category_id' => $categoryId,
+                'website_id' => $websiteId,
+                'group_id' => $fixture->hasData('group_id') ? $fixture->getGroupId() : ''
+            ],
+            'store_action' => 'add',
+            'store_type' => 'group'
+        ];
 
         return $data;
     }

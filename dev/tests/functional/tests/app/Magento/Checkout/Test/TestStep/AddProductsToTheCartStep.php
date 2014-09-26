@@ -105,7 +105,7 @@ class AddProductsToTheCartStep implements TestStepInterface
 
         foreach ($this->products as $product) {
             $this->browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
-            $this->catalogProductView->getViewBlock()->clickAddToCart();
+            $this->catalogProductView->getViewBlock()->addToCart($product);
         }
     }
 }

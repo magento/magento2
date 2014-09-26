@@ -49,4 +49,16 @@ class OptionBuilder extends \Magento\Framework\Service\Data\AbstractExtensibleOb
     {
         return $this->_set(Option::VALUE, $value);
     }
+
+
+    /**
+     * Set nested options
+     *
+     * @param \Magento\Customer\Service\V1\Data\Eav\Option[] $options
+     * @return $this
+     */
+    public function setOptions($options)
+    {
+        return $this->_set(Option::OPTIONS, $options);
+    }
 }

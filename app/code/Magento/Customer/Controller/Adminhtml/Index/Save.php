@@ -159,7 +159,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                     $customer
                 )->setAddresses($addresses)->create();
                 if ($isExistingCustomer) {
-                    $this->_customerAccountService->updateCustomer($customerDetails);
+                    $this->_customerAccountService->updateCustomer($customerId, $customerDetails);
                 } else {
                     $customer = $this->_customerAccountService->createCustomer($customerDetails);
                     $customerId = $customer->getId();

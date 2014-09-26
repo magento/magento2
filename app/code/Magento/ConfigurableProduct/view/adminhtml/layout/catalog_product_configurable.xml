@@ -25,13 +25,9 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <update handle="catalog_product_superconfig_config"/>
-    <referenceBlock name="head">
-        <block class="Magento\Theme\Block\Html\Head\Css" name="magento-grouped-product-css-grouped-product-css">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_ConfigurableProduct::css/configurable-product.css</argument>
-            </arguments>
-        </block>
-    </referenceBlock>
+    <head>
+        <css src="Magento_ConfigurableProduct::css/configurable-product.css"/>
+    </head>
     <referenceBlock name="product_tabs">
         <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config" name="admin.product.edit.tab.super.config.grid.container">
             <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config" template="Magento_ConfigurableProduct::catalog/product/edit/super/generator.phtml" name="product-variations-generator" as="generator">

@@ -72,4 +72,7 @@
             <argument name="entityId" xsi:type="object">Magento\Framework\Search\ProductEntityMetadata</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Search\Request\Config\FilesystemReader">
+        <plugin name="catalogSearchDynamicFields"  type="Magento\CatalogSearch\Model\Search\ReaderPlugin" />
+    </type>
 </config>

@@ -1,7 +1,5 @@
 <?php
 /**
- * Default implementation of application action controller
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -28,6 +26,11 @@ namespace Magento\Framework\App\Action;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 
+/**
+ * Default implementation of application action controller
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Action extends AbstractAction
 {
     /**

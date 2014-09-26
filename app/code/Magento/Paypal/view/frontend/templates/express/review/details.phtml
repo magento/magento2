@@ -26,25 +26,19 @@
  * @see \Magento\Paypal\Block\Express\Review\Details
  */
 ?>
-<table id="details-table" class="data table paypal review items">
-    <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices()): $colspan = $rowspan = 2; else: $colspan = $rowspan = 1; endif; ?>
+<table id="details-table" class="data table table-paypal-review-items">
+    <caption class="table caption"><?php echo __('Items in Your Shopping Cart') ?></caption>
     <thead>
     <tr>
-        <th rowspan="<?php echo $rowspan ?>" class="col name"><?php echo __('Product Name') ?></th>
-        <th colspan="<?php echo $colspan ?>" class="col price"><?php echo __('Price') ?></th>
-        <th rowspan="<?php echo $rowspan ?>" class="col qty"><?php echo __('Qty') ?></th>
-        <th colspan="<?php echo $colspan ?>" class="col subtotal"><?php echo __('Subtotal') ?></th>
+        <th class="col name"><?php echo __('Product Name') ?></th>
+        <th class="col price"><?php echo __('Price') ?></th>
+        <th class="col qty"><?php echo __('Qty') ?></th>
+        <th class="col subtotal"><?php echo __('Subtotal') ?></th>
     </tr>
-    <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices()): ?>
-        <tr>
-            <th class="col price excl tax"><?php echo $this->helper('Magento\Tax\Helper\Data')->getIncExcTaxLabel(false) ?></th>
-            <th class="col price incl tax"><?php echo $this->helper('Magento\Tax\Helper\Data')->getIncExcTaxLabel(true) ?></th>
-            <th class="col subtotal excl tax"><?php echo $this->helper('Magento\Tax\Helper\Data')->getIncExcTaxLabel(false) ?></th>
-            <th class="col subtotal incl tax"><?php echo $this->helper('Magento\Tax\Helper\Data')->getIncExcTaxLabel(true) ?></th>
-        </tr>
-    <?php endif; ?>
     </thead>
-    <?php echo $this->getChildHtml('totals'); ?>
+    <tfoot>
+        <?php echo $this->getChildHtml('totals'); ?>
+    </tfoot>
     <tbody>
     <?php foreach ($this->getItems() as $_item): ?>
         <?php echo $this->getItemHtml($_item) ?>

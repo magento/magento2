@@ -655,16 +655,6 @@ class DefaultPrice extends \Magento\Catalog\Model\Resource\Product\Indexer\Abstr
     }
 
     /**
-     * Register data required by product type process in event object
-     *
-     * @param \Magento\Index\Model\Event $event
-     * @return void
-     */
-    public function registerEvent(\Magento\Index\Model\Event $event)
-    {
-    }
-
-    /**
      * Retrieve temporary index table name
      *
      * @param string $table

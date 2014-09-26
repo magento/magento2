@@ -20,9 +20,6 @@ dev/tests/integration/testsuite/Magento/Test/Tools/I18n/Code/Dictionary/_files/s
 dev/tests/integration/testsuite/Magento/Test/Tools/I18n/Code/Dictionary/_files/source/app/code/Magento/SecondModule/Model/Model.php
 dev/tests/integration/testsuite/Magento/Test/Tools/I18n/Code/Dictionary/_files/source/not_magento_dir/Model.php
 dev/tests/integration/testsuite/Magento/Test/Tools/I18n/Code/Dictionary/_files/source/app/code/Magento/FirstModule/Helper/Helper.php
-dev/tests/static/framework/PHP/CodeSniffer/Standards/Zend/Sniffs/Debug/CodeAnalyzerSniff.php
-dev/tests/static/framework/PHP/CodeSniffer/Standards/Zend/Sniffs/Files/ClosingTagSniff.php
-dev/tests/static/framework/PHP/CodeSniffer/Standards/Zend/Sniffs/NamingConventions/ValidVariableNameSniff.php
 dev/tests/static/testsuite/Magento/Test/Php/Exemplar/CodeMessTest/phpmd/input/coupling.php
 dev/tests/static/testsuite/Magento/Test/Php/Exemplar/CodeMessTest/phpmd/input/cyclomatic_complexity.php
 dev/tests/static/testsuite/Magento/Test/Php/Exemplar/CodeMessTest/phpmd/input/descendant_count.php

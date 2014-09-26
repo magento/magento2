@@ -100,6 +100,28 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     }
 
     /**
+     * Retrieve Option values array by ids
+     *
+     * @param string|array $ids
+     * @param bool $withEmpty Add empty option to array
+     * @return array
+     */
+    public function getSpecificOptions($ids, $withEmpty = true)
+    {
+        $options = $this->_attrOptionCollectionFactory->create()
+            ->setPositionOrder('asc')
+            ->setAttributeFilter($this->getAttribute()->getId())
+            ->addFieldToFilter('main_table.option_id', array('in' => $ids))
+            ->setStoreFilter($this->getAttribute()->getStoreId())
+            ->load()
+            ->toOptionArray();
+        if ($withEmpty) {
+            array_unshift($options, array('label' => '', 'value' => ''));
+        }
+        return $options;
+    }
+
+    /**
      * Get a text for option value
      *
      * @param string|integer $value
@@ -113,7 +135,7 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
             $value = explode(',', $value);
         }
 
-        $options = $this->getAllOptions(false);
+        $options = $this->getSpecificOptions($value, false);
 
         if ($isMultiple) {
             $values = array();

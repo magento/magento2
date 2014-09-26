@@ -236,15 +236,15 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
         if (!empty($this->storesWithInvalidDisplaySettings) && !$this->taxConfig->isWrongDisplaySettingsIgnored()) {
             $messageDetails .= '<strong>';
             $messageDetails .= __('Warning tax configuration can result in rounding errors. ');
-            $messageDetails .= '</strong><br>';
+            $messageDetails .= '</strong><p>';
             $messageDetails .= __('Store(s) affected: ');
             $messageDetails .= implode(', ', $this->storesWithInvalidDisplaySettings);
-            $messageDetails .= '<br><div style="text-align:right">';
+            $messageDetails .= '</p><p>';
             $messageDetails .= __(
                 'Click on the link to <a href="%1">ignore this notification</a>',
                 $this->getIgnoreTaxNotificationUrl('price_display')
             );
-            $messageDetails .= "</div><br>";
+            $messageDetails .= "</p>";
         }
 
         if (!empty($this->storesWithInvalidDiscountSettings) && !$this->taxConfig->isWrongDiscountSettingsIgnored()) {
@@ -253,23 +253,24 @@ class Notifications implements \Magento\Framework\Notification\MessageInterface
                 'Warning tax discount configuration might result in different discounts
                                 than a customer might expect. '
             );
-            $messageDetails .= '</strong><br>';
+            $messageDetails .= '</strong><p>';
             $messageDetails .= __('Store(s) affected: ');
             $messageDetails .= implode(', ', $this->storesWithInvalidDiscountSettings);
-            $messageDetails .= '<br><div style="text-align:right">';
+            $messageDetails .= '</p><p>';
             $messageDetails .= __(
                 'Click on the link to <a href="%1">ignore this notification</a>',
                 $this->getIgnoreTaxNotificationUrl('discount')
             );
-            $messageDetails .= "</div><br>";
+            $messageDetails .= "</p>";
         }
 
-        $messageDetails .= '<br>';
+        $messageDetails .= '<p>';
         $messageDetails .= __('Please see <a href="%1">documentation</a> for more details. ', $this->getInfoUrl());
         $messageDetails .= __(
             'Click here to go to <a href="%1">Tax Configuration</a> and change your settings.',
             $this->getManageUrl()
         );
+        $messageDetails .= '</p>';
 
         return $messageDetails;
     }

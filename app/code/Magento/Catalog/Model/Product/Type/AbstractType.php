@@ -1036,18 +1036,6 @@ abstract class AbstractType
     }
 
     /**
-     * Check if Minimum advertise price is enabled at least in one option
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @param int $visibility
-     * @return bool
-     */
-    public function isMapEnabledInOptions($product, $visibility = null)
-    {
-        return false;
-    }
-
-    /**
      * Determine presence of weight for product type
      *
      * @return bool
@@ -1077,5 +1065,14 @@ abstract class AbstractType
     public function getIdentities(\Magento\Catalog\Model\Product $product)
     {
         return array();
+    }
+
+    /**
+     * @param \Magento\Catalog\Model\Product\Type\AbstractType $product
+     * @return array
+     */
+    public function getAssociatedProducts($product)
+    {
+        return [];
     }
 }

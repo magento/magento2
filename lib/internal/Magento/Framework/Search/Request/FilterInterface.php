@@ -37,6 +37,8 @@ interface FilterInterface
 
     const TYPE_RANGE = 'rangeFilter';
 
+    const TYPE_WILDCARD = 'wildcardFilter';
+
     /**#@-*/
 
     /**

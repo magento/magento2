@@ -107,9 +107,6 @@ Element 'dimensions': Missing child element(s). Expected is ( dimension )
 Element 'queryReference': The attribute 'ref' is required but missing.
 Element 'filterReference': The attribute 'ref' is required but missing.
 Element 'filter': The attribute 'field' is required but missing.
-Element 'filter': The attribute 'value' is required but missing.
-Element 'filterReference': The attribute 'clause' is required but missing.
-Element 'filterReference': The attribute 'ref' is required but missing.
 Element 'bucket': Missing child element(s). Expected is ( metrics ).
 Element 'metric', attribute 'type': [facet 'enumeration'] " .
                 "The value 'sumasdasd' is not an element of the set {'sum', 'count', 'min', 'max'}.

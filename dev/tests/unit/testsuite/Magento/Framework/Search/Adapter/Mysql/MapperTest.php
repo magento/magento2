@@ -25,6 +25,7 @@ namespace Magento\Framework\Search\Adapter\Mysql;
 
 use Magento\Framework\App\Resource;
 use Magento\Framework\App\Resource\Config;
+use Magento\Framework\Search\Request\Query\Bool;
 use Magento\Framework\Search\Request\Query\Filter;
 use Magento\Framework\Search\Request\QueryInterface;
 use Magento\TestFramework\Helper\ObjectManager;
@@ -34,10 +35,12 @@ use Magento\TestFramework\Helper\ObjectManager;
  */
 class MapperTest extends \PHPUnit_Framework_TestCase
 {
+
     /**
      * @var \Magento\Framework\Search\Adapter\Mysql\Dimensions|\PHPUnit_Framework_MockObject_MockObject
      */
     private $dimensionsBuilder;
+
     /**
      * @var \Magento\Framework\Search\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -171,7 +174,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
                 $this->equalTo($this->scoreBuilder),
                 $this->equalTo($this->select),
                 $this->equalTo($query),
-                $this->equalTo(Mapper::BOOL_MUST)
+                $this->equalTo(Bool::QUERY_CONDITION_MUST)
             )
             ->will($this->returnValue($this->select));
 

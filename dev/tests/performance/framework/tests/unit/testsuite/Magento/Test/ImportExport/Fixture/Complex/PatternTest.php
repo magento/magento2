@@ -54,14 +54,9 @@ class PatternTest extends \PHPUnit_Framework_TestCase
         $result = array(0 => array(array(array(
             'id' => '%s',
             'name' => 'Static',
-            // @codingStandardsIgnoreStart
-            /**
-             * PHP_CodeSniffer bug - http://pear.php.net/bugs/bug.php?id=19290 (fixed in 1.4.0)
-             */
             'calculated' => function ($index) {
                 return $index * 10;
             }
-            // @codingStandardsIgnoreEnd
         ),
             array('name' => 'xxx %s'),
             array('name' => 'yyy %s')

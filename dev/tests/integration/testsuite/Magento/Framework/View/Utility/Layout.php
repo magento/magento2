@@ -27,6 +27,9 @@
  */
 namespace Magento\Framework\View\Utility;
 
+/**
+ * Class Layout
+ */
 class Layout
 {
     /**
@@ -34,6 +37,9 @@ class Layout
      */
     protected $_testCase;
 
+    /**
+     * @param \PHPUnit_Framework_TestCase $testCase
+     */
     public function __construct(\PHPUnit_Framework_TestCase $testCase)
     {
         $this->_testCase = $testCase;
@@ -50,7 +56,7 @@ class Layout
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Framework\View\File\Factory $fileFactory */
         $fileFactory = $objectManager->get('Magento\Framework\View\File\Factory');
-        $files = array();
+        $files = [];
         foreach ((array)$layoutUpdatesFile as $filename) {
             $files[] = $fileFactory->create($filename, 'Magento_View');
         }
@@ -65,7 +71,7 @@ class Layout
         $cache = $this->_testCase->getMockForAbstractClass('Magento\Framework\Cache\FrontendInterface');
         return $objectManager->create(
             'Magento\Framework\View\Layout\ProcessorInterface',
-            array('fileSource' => $fileSource, 'cache' => $cache)
+            ['fileSource' => $fileSource, 'cache' => $cache]
         );
     }
 
@@ -76,9 +82,9 @@ class Layout
      * @param array $args
      * @return \Magento\Framework\View\Layout|\PHPUnit_Framework_MockObject_MockObject
      */
-    public function getLayoutFromFixture($layoutUpdatesFile, array $args = array())
+    public function getLayoutFromFixture($layoutUpdatesFile, array $args = [])
     {
-        $layout = $this->_testCase->getMock('Magento\Framework\View\Layout', array('getUpdate'), $args);
+        $layout = $this->_testCase->getMock('Magento\Framework\View\Layout', ['getUpdate'], $args);
         $layoutUpdate = $this->getLayoutUpdateFromFixture($layoutUpdatesFile);
         $layoutUpdate->asSimplexml();
         $layout->expects(
@@ -99,21 +105,24 @@ class Layout
     public function getLayoutDependencies()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        return array(
+        return [
             'processorFactory' => $objectManager->get('Magento\Framework\View\Layout\ProcessorFactory'),
             'logger' => $objectManager->get('Magento\Framework\Logger'),
             'eventManager' => $objectManager->get('Magento\Framework\Event\ManagerInterface'),
-            'blockFactory' => $objectManager->create('Magento\Framework\View\Element\BlockFactory', array()),
-            'structure' => $objectManager->create('Magento\Framework\Data\Structure', array()),
+            'uiComponentFactory' => $objectManager->get('Magento\Framework\View\Element\UiComponentFactory'),
+            'blockFactory' => $objectManager->create('Magento\Framework\View\Element\BlockFactory', []),
+            'structure' => $objectManager->create('Magento\Framework\Data\Structure', []),
             'argumentParser' => $objectManager->get('Magento\Framework\View\Layout\Argument\Parser'),
             'argumentInterpreter' => $objectManager->get('layoutArgumentInterpreter'),
-            'scheduledStructure' => $objectManager->create('Magento\Framework\View\Layout\ScheduledStructure', array()),
+            'scheduledStructure' => $objectManager->create('Magento\Framework\View\Layout\ScheduledStructure', []),
             'scopeConfig' => $objectManager->create('Magento\Framework\App\Config\ScopeConfigInterface'),
             'appState' => $objectManager->get('Magento\Framework\App\State'),
             'messageManager' => $objectManager->get('Magento\Framework\Message\ManagerInterface'),
             'themeResolver' => $objectManager->get('Magento\Framework\View\Design\Theme\ResolverInterface'),
             'scopeResolver' => $objectManager->get('Magento\Framework\App\ScopeResolverInterface'),
+            'pageConfigReader' => $objectManager->get('Magento\Framework\View\Page\Config\Reader'),
+            'pageConfigGenerator' => $objectManager->get('Magento\Framework\View\Page\Config\Generator'),
             'scopeType' => \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-        );
+        ];
     }
 }

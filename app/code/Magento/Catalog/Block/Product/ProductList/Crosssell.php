@@ -30,13 +30,6 @@ namespace Magento\Catalog\Block\Product\ProductList;
 class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
 {
     /**
-     * Default MAP renderer type
-     *
-     * @var string
-     */
-    protected $_mapRenderer = 'msrp_item';
-
-    /**
      * Crosssell item collection
      *
      * @var \Magento\Catalog\Model\Resource\Product\Link\Product\Collection

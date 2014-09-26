@@ -24,7 +24,7 @@
 
 .form.wishlist.items {
     .actions-toolbar {
-        &:extend(.reset-left-margin all);
+        &:extend(.abstract-reset-left-margin all);
     }
 }
 
@@ -114,7 +114,7 @@
     .actions {
         margin: 7px 0;
         .action.delete {
-            &:extend(.remove-button-for-blocks all);
+            &:extend(.abstract-remove-button-for-blocks all);
             position: absolute;
             right: 0;
             top: 0;
@@ -135,6 +135,15 @@
     .sidebar-additional & {
         .subtitle {
             display: none;
+        }
+    }
+    .minilist {
+        .price {
+            display: inline;
+            padding: 0;
+        }
+        .weee:before {
+            display: inline-block;
         }
     }
 }

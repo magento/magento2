@@ -133,13 +133,6 @@ class Grid extends \Magento\Backend\Block\Widget
     protected $_varTotals;
 
     /**
-     * RSS list
-     *
-     * @var \Magento\Framework\Object[]
-     */
-    protected $_rssLists = array();
-
-    /**
      * @var string
      */
     protected $_template = 'Magento_Backend::widget/grid.phtml';
@@ -201,12 +194,6 @@ class Grid extends \Magento\Backend\Block\Widget
         );
 
         $this->setData('use_ajax', $this->hasData('use_ajax') ? (bool)$this->getData('use_ajax') : false);
-
-        if ($this->hasData('rssList') && is_array($this->getData('rssList'))) {
-            foreach ($this->getData('rssList') as $item) {
-                $this->addRssList($item['url'], $item['label']);
-            }
-        }
     }
 
     /**
@@ -694,42 +681,6 @@ class Grid extends \Magento\Backend\Block\Widget
     public function setDefaultFilter($filter)
     {
         $this->_defaultFilter = $filter;
-        return $this;
-    }
-
-    /**
-     * Retrieve rss lists types
-     *
-     * @return \Magento\Framework\Object[]|false
-     */
-    public function getRssLists()
-    {
-        return empty($this->_rssLists) ? false : $this->_rssLists;
-    }
-
-    /**
-     * Add new rss list to grid
-     *
-     * @param   string $url
-     * @param   string $label
-     * @return  $this
-     */
-    public function addRssList($url, $label)
-    {
-        $this->_rssLists[] = new \Magento\Framework\Object(
-            array('url' => $this->getUrl($url, array('_nosecret' => true)), 'label' => $label)
-        );
-        return $this;
-    }
-
-    /**
-     * Clear rss list in grid
-     *
-     * @return  $this
-     */
-    public function clearRss()
-    {
-        $this->_rssLists = array();
         return $this;
     }
 

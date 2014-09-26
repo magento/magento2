@@ -108,51 +108,6 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->_helper->canShow($category));
     }
 
-    /**
-     * @magentoAppIsolation enabled
-     */
-    public function testGetCategoryUrlSuffixDefault()
-    {
-        $this->assertEquals('.html', $this->_helper->getCategoryUrlSuffix());
-    }
-
-    /**
-     * @magentoConfigFixture current_store catalog/seo/category_url_suffix .htm
-     * @magentoAppIsolation enabled
-     */
-    public function testGetCategoryUrlSuffix()
-    {
-        $this->assertEquals('.htm', $this->_helper->getCategoryUrlSuffix());
-    }
-
-    /**
-     * @magentoAppIsolation enabled
-     */
-    public function testGetCategoryUrlPathDefault()
-    {
-        $this->assertEquals(
-            'http://example.com/category',
-            $this->_helper->getCategoryUrlPath('http://example.com/category.html')
-        );
-
-        $this->assertEquals(
-            'http://example.com/category/',
-            $this->_helper->getCategoryUrlPath('http://example.com/category.html/', true)
-        );
-    }
-
-    /**
-     * @magentoConfigFixture current_store catalog/seo/category_url_suffix .htm
-     * @magentoAppIsolation enabled
-     */
-    public function testGetCategoryUrlPath()
-    {
-        $this->assertEquals(
-            'http://example.com/category.html',
-            $this->_helper->getCategoryUrlPath('http://example.com/category.html')
-        );
-    }
-
     public function testCanUseCanonicalTagDefault()
     {
         $this->assertEquals(0, $this->_helper->canUseCanonicalTag());

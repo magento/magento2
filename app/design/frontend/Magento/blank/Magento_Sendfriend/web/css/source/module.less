@@ -24,7 +24,7 @@
 
 
 .form.send.friend {
-    &:extend(.add-recipients all);
+    &:extend(.abstract-add-recipients all);
 }
 
 .action.mailto.friend {
@@ -47,6 +47,6 @@
 //--------------------------------------
 .responsive(@break) when (@break = @screen-m) {
     .form.send.friend {
-        &:extend(.add-recipients-desktop all);
+        &:extend(.abstract-add-recipients-desktop all);
     }
 }

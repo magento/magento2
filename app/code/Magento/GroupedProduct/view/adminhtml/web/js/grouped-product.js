@@ -25,7 +25,8 @@ define([
     "jquery",
     "jquery/ui",
     "mage/translate",
-    "jquery/template"
+    "jquery/template",
+    "mage/adminhtml/grid"
 ], function($){
     'use strict';
     $.widget('mage.groupedProduct', {

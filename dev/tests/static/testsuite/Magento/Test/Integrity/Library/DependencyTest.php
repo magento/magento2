@@ -52,45 +52,37 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
         return array('Magento');
     }
 
-    /**
-     * Test check dependencies in library from application
-     *
-     * @test
-     * @dataProvider libraryDataProvider
-     */
-    public function testCheckDependencies($file)
+    public function testCheckDependencies()
     {
-        $fileReflection = new FileReflection($file);
-        $tokens = new Tokens($fileReflection->getContents(), new ParserFactory());
-        $tokens->parseContent();
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+            /**
+             * @param string $file
+             */
+            function ($file) {
+                $fileReflection = new FileReflection($file);
+                $tokens = new Tokens($fileReflection->getContents(), new ParserFactory());
+                $tokens->parseContent();
 
-        $dependencies = array_merge((new Injectable())->getDependencies($fileReflection), $tokens->getDependencies());
+                $dependencies = array_merge(
+                    (new Injectable())->getDependencies($fileReflection),
+                    $tokens->getDependencies()
+                );
 
-        foreach ($dependencies as $dependency) {
-            if (preg_match(
-                '#^(\\\\|)' . implode('|', $this->getForbiddenNamespaces()) . '\\\\#',
-                $dependency
-            ) && !file_exists(
-                BP . '/lib/internal/' . str_replace('\\', '/', $dependency) . '.php'
-            )
-            ) {
-                $this->errors[$fileReflection->getFileName()][] = $dependency;
-            }
-        }
+                $pattern = '#^(\\\\|)' . implode('|', $this->getForbiddenNamespaces()) . '\\\\#';
+                foreach ($dependencies as $dependency) {
+                    $filePath = BP . '/lib/internal/' . str_replace('\\', '/', $dependency) . '.php';
+                    if (preg_match($pattern, $dependency) && !file_exists($filePath)) {
+                        $this->errors[$fileReflection->getFileName()][] = $dependency;
+                    }
+                }
 
-        if ($this->hasErrors()) {
-            $this->fail($this->getFailMessage());
-        }
-    }
-
-    /**
-     * Check if error not empty
-     *
-     * @return bool
-     */
-    protected function hasErrors()
-    {
-        return !empty($this->errors);
+                if (!empty($this->errors)) {
+                    $this->fail($this->getFailMessage());
+                }
+            },
+            $this->libraryDataProvider()
+        );
     }
 
     /**

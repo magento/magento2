@@ -24,7 +24,15 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <type name="Magento\Framework\App\FrontController">
-        <plugin name="urlRewrite" type="Magento\UrlRewrite\App\FrontController\Plugin\UrlRewrite" sortOrder="60"/>
+    <type name="Magento\Framework\App\RouterList">
+        <arguments>
+            <argument name="routerList" xsi:type="array">
+                <item name="urlrewrite" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\UrlRewrite\Controller\Router</item>
+                    <item name="disable" xsi:type="boolean">false</item>
+                    <item name="sortOrder" xsi:type="string">40</item>
+                </item>
+            </argument>
+        </arguments>
     </type>
 </config>

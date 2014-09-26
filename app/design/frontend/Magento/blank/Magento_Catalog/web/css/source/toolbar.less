@@ -48,7 +48,7 @@
         margin-bottom: @indent-xl-base;
         text-align: center;
         padding: 0 @indent-s-base;
-        &:extend(.add-clearfix all);
+        &:extend(.abstract-add-clearfix all);
         .pages {
             display: none;
             .products.wrapper ~ & {
@@ -121,7 +121,7 @@
             display: none;
         }
         &-label {
-            .visually-hidden;
+            &:extend(.abstract-visually-hidden-desktop-s all);
         }
         &-mode {
             float: left;

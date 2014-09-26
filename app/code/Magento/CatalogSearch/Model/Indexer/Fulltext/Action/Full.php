@@ -152,9 +152,15 @@ class Full
     protected $priceCurrency;
 
     /**
+     * @var \Magento\Framework\Search\Request\Config
+     */
+    private $searchRequestConfig;
+
+    /**
      * @param \Magento\Framework\App\Resource $resource
      * @param \Magento\Catalog\Model\Product\Type $catalogProductType
      * @param \Magento\Eav\Model\Config $eavConfig
+     * @param \Magento\Framework\Search\Request\Config $searchRequestConfig
      * @param \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus
      * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $productAttributeCollectionFactory
      * @param \Magento\CatalogSearch\Model\Resource\EngineProvider $engineProvider
@@ -172,6 +178,7 @@ class Full
         \Magento\Framework\App\Resource $resource,
         \Magento\Catalog\Model\Product\Type $catalogProductType,
         \Magento\Eav\Model\Config $eavConfig,
+        \Magento\Framework\Search\Request\Config $searchRequestConfig,
         \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus,
         \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $productAttributeCollectionFactory,
         \Magento\CatalogSearch\Model\Resource\EngineProvider $engineProvider,
@@ -188,6 +195,7 @@ class Full
         $this->resource = $resource;
         $this->catalogProductType = $catalogProductType;
         $this->eavConfig = $eavConfig;
+        $this->searchRequestConfig = $searchRequestConfig;
         $this->catalogProductStatus = $catalogProductStatus;
         $this->productAttributeCollectionFactory = $productAttributeCollectionFactory;
         $this->eventManager = $eventManager;
@@ -260,6 +268,7 @@ class Full
         foreach ($storeIds as $storeId) {
             $this->rebuildStoreIndex($storeId, $productIds);
         }
+        $this->searchRequestConfig->reset();
     }
 
     /**

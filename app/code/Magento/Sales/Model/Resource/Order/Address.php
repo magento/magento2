@@ -95,7 +95,7 @@ class Address extends \Magento\Sales\Model\Resource\Entity
             'lastname' => __('Last Name'),
             'region_id' => __('State/Province'),
             'street' => __('Street Address'),
-            'telephone' => __('Telephone'),
+            'telephone' => __('Phone Number'),
             'postcode' => __('Zip/Postal Code')
         );
         asort($attributes);

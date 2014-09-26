@@ -93,6 +93,9 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     protected $_appState;
 
+    /** @var \Magento\Msrp\Helper\Data  */
+    protected $msrpData;
+
     /**
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
@@ -108,6 +111,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus
      * @param \Magento\Framework\App\State $appState
+     * @param \Magento\Msrp\Helper\Data $msrpData
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -127,12 +131,14 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus,
         \Magento\Framework\App\State $appState,
+        \Magento\Msrp\Helper\Data $msrpData,
         array $data = array()
     ) {
         $this->productLinks = $catalogProductLink;
         $this->_storeManager = $storeManager;
         $this->_catalogProductStatus = $catalogProductStatus;
         $this->_appState = $appState;
+        $this->msrpData = $msrpData;
         parent::__construct(
             $productFactory,
             $catalogProductOption,
@@ -480,5 +486,20 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
             throw new \Exception('Custom options for grouped product type are not supported');
         }
         return parent::beforeSave($product);
+    }
+
+    /**
+     * @param \Magento\Catalog\Model\Product $product
+     * @return int
+     */
+    public function getChildrenMsrp(\Magento\Catalog\Model\Product $product)
+    {
+        $prices = [];
+        foreach ($this->getAssociatedProducts($product) as $item) {
+            if ($item->getMsrp() !== null) {
+                $prices[] = $item->getMsrp();
+            }
+        }
+        return min($prices);
     }
 }

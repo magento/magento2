@@ -25,28 +25,24 @@
 -->
 <mapping strict="0">
     <fields>
-        <type>
-            <selector>[name='is_system']</selector>
-        </type>
-        <id_path/>
         <store_id>
-            <selector>[name='store_id']</selector>
+            <selector>[name=store_id]</selector>
             <input>selectstore</input>
         </store_id>
-        <options>
-            <selector>[name='options']</selector>
+        <redirect_type>
+            <selector>[name=redirect_type]</selector>
             <input>select</input>
-        </options>
+        </redirect_type>
         <request_path>
-            <selector>[name='request_path']</selector>
+            <selector>[name=request_path]</selector>
             <input>text</input>
         </request_path>
         <target_path>
-            <selector>[name='target_path']</selector>
+            <selector>[name=target_path]</selector>
             <input>text</input>
         </target_path>
         <description>
-            <selector>[name='description']</selector>
+            <selector>[name=description]</selector>
             <input>text</input>
         </description>
         <redirect/>

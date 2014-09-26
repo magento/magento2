@@ -44,24 +44,16 @@ class Edit extends \Magento\Backend\Block\Template
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\Cms\Model\Wysiwyg\Config
-     */
-    protected $_wysiwygConfig;
-
-    /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
      * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig,
         \Magento\Framework\Registry $registry,
         array $data = array()
     ) {
         $this->_coreRegistry = $registry;
-        $this->_wysiwygConfig = $wysiwygConfig;
         parent::__construct($context, $data);
     }
 
@@ -123,11 +115,6 @@ class Edit extends \Magento\Backend\Block\Template
      */
     protected function _prepareLayout()
     {
-        // Load Wysiwyg on demand and Prepare layout
-        if ($this->_wysiwygConfig->isEnabled()) {
-            $this->getLayout()->getBlock('head')->setCanLoadTinyMce(true);
-        }
-
         $this->getToolbar()->addChild(
             'back_button',
             'Magento\Backend\Block\Widget\Button',

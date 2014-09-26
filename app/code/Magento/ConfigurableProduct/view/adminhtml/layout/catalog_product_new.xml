@@ -29,13 +29,9 @@
         <block class="Magento\ConfigurableProduct\Block\Product\Configurable\AttributeSelector" template="product/configurable/affected-attribute-set-selector/js.phtml"/>
         <block class="Magento\Framework\View\Element\Template" template="Magento_ConfigurableProduct::product/configurable/stock/disabler.phtml"/>
     </referenceContainer>
-    <referenceBlock name="head">
-        <block class="Magento\Theme\Block\Html\Head\Css" name="magento-configurableproduct-product-product-css">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_ConfigurableProduct::product/product.css</argument>
-            </arguments>
-        </block>
-    </referenceBlock>
+    <head>
+        <css src="Magento_ConfigurableProduct::product/product.css"/>
+    </head>
     <referenceContainer name="content">
         <block class="Magento\Framework\View\Element\Template" name="affected-attribute-set-form" template="Magento_ConfigurableProduct::product/configurable/affected-attribute-set-selector/form.phtml"/>
     </referenceContainer>

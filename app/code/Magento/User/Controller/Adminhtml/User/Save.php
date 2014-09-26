@@ -50,6 +50,7 @@ class Save extends \Magento\User\Controller\Adminhtml\User
             $model->setRoleId($uRoles[0]);
         }
 
+        /** @var $currentUser \Magento\User\Model\User */
         $currentUser = $this->_objectManager->get('Magento\Backend\Model\Auth\Session')->getUser();
         if ($userId == $currentUser->getId() && $this->_objectManager->get(
             'Magento\Framework\Locale\Validator'
@@ -64,15 +65,29 @@ class Save extends \Magento\User\Controller\Adminhtml\User
             );
         }
 
+        /** Before updating admin user data, ensure that password of current admin user is entered and is correct */
+        $currentUserPasswordField = \Magento\User\Block\User\Edit\Tab\Main::CURRENT_USER_PASSWORD_FIELD;
+        $isCurrentUserPasswordValid = isset($data[$currentUserPasswordField])
+            && !empty($data[$currentUserPasswordField]) && is_string($data[$currentUserPasswordField]);
         try {
+            if (!($isCurrentUserPasswordValid && $currentUser->verifyIdentity($data[$currentUserPasswordField]))) {
+                throw new \Magento\Backend\Model\Auth\Exception(
+                    __('You have entered an invalid password for current user.')
+                );
+            }
             $model->save();
             $this->messageManager->addSuccess(__('You saved the user.'));
             $this->_getSession()->setUserData(false);
             $this->_redirect('adminhtml/*/');
         } catch (\Magento\Framework\Model\Exception $e) {
             $this->messageManager->addMessages($e->getMessages());
+            if ($e->getMessage()) {
+                $this->messageManager->addError($e->getMessage());
+            }
             $this->_getSession()->setUserData($data);
-            $this->_redirect('adminhtml/*/edit', array('_current' => true));
+            $arguments = $model->getId() ? ['user_id' => $model->getId()] : [];
+            $arguments = array_merge($arguments, ['_current' => true]);
+            $this->_redirect('adminhtml/*/edit', $arguments);
         }
     }
 }

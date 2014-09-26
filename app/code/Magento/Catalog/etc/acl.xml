@@ -33,11 +33,6 @@
                         <resource id="Magento_Catalog::categories" title="Categories" sortOrder="20" />
                     </resource>
                 </resource>
-                <resource id="Magento_Adminhtml::marketing">
-                    <resource id="Magento_Adminhtml::marketing_seo">
-                        <resource id="Magento_Catalog::urlrewrite" title="URL Redirects" sortOrder="20" />
-                    </resource>
-                </resource>
                 <resource id="Magento_Adminhtml::stores">
                     <resource id="Magento_Adminhtml::stores_settings">
                         <resource id="Magento_Adminhtml::config">

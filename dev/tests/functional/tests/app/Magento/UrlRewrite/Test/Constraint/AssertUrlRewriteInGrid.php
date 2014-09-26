@@ -25,7 +25,7 @@
 namespace Magento\UrlRewrite\Test\Constraint;
 
 use Magento\UrlRewrite\Test\Fixture\UrlRewrite;
-use Magento\UrlRewrite\Test\Page\Adminhtml\UrlrewriteIndex;
+use Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteIndex;
 use Mtf\Constraint\AbstractConstraint;
 
 /**
@@ -44,17 +44,17 @@ class AssertUrlRewriteInGrid extends AbstractConstraint
     /**
      * Assert that url rewrite category in grid
      *
-     * @param UrlrewriteIndex $urlRewriteIndex
+     * @param UrlRewriteIndex $urlRewriteIndex
      * @param UrlRewrite $urlRewrite
      * @return void
      */
-    public function processAssert(UrlrewriteIndex $urlRewriteIndex, UrlRewrite $urlRewrite)
+    public function processAssert(UrlRewriteIndex $urlRewriteIndex, UrlRewrite $urlRewrite)
     {
         $urlRewriteIndex->open();
         $filter = ['request_path' => $urlRewrite->getRequestPath()];
         \PHPUnit_Framework_Assert::assertTrue(
-            $urlRewriteIndex->getUrlRedirectGrid()->isRowVisible($filter),
-            'URL Redirect with request path \'' . $urlRewrite->getRequestPath() . '\' is absent in grid.'
+            $urlRewriteIndex->getUrlRewriteGrid()->isRowVisible($filter),
+            'URL Rewrite with request path \'' . $urlRewrite->getRequestPath() . '\' is absent in grid.'
         );
     }
 
@@ -65,6 +65,6 @@ class AssertUrlRewriteInGrid extends AbstractConstraint
      */
     public function toString()
     {
-        return 'URL Redirect is present in grid.';
+        return 'URL Rewrite is present in grid.';
     }
 }

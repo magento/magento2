@@ -105,7 +105,7 @@ require([
                            <?php else: ?>
                                 <input name="estimate_method" type="radio" value="<?php echo $_rate->getCode() ?>" id="s_method_<?php echo $_rate->getCode() ?>"<?php if($_rate->getCode()===$this->getAddressShippingMethod()) echo ' checked="checked"' ?> class="radio" />
                                 <label class="label" for="s_method_<?php echo $_rate->getCode() ?>">
-                                    <span><?php echo $this->escapeHtml($_rate->getMethodTitle()) ?></span>
+                                    <?php echo $this->escapeHtml($_rate->getMethodTitle()) ?>
                                     <?php echo $this->getShippingPriceHtml($_rate) ?>
                                 </label>
                            <?php endif ?>

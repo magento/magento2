@@ -35,7 +35,6 @@ class Edit extends \Magento\Backend\Controller\Adminhtml\System\Design
 
         $this->_view->loadLayout();
         $this->_setActiveMenu('Magento_Backend::system_design_schedule');
-        $this->_view->getLayout()->getBlock('head')->setCanLoadExtJs(true);
 
         $id = (int)$this->getRequest()->getParam('id');
         $design = $this->_objectManager->create('Magento\Framework\App\DesignInterface');

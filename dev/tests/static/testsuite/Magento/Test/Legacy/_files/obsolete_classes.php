@@ -364,7 +364,6 @@ return array(
     ),
     array(
         'Mage_Adminhtml_Model_System_Config_Backend_Seo_Product',
-        'Magento\Catalog\Model\Config\Backend\Seo\Product'
     ),
     array(
         'Mage_Adminhtml_Model_System_Config_Backend_Serialized_Array',
@@ -1632,8 +1631,6 @@ return array(
         'Magento\GroupedProduct\Block\Cart\Item\Renderer\Grouped'
     ),
     array('Magento\Log\Model\EntryPoint\Shell', 'Magento\Log\App\Shell'),
-    array('Magento\Index\Model\EntryPoint\Shell', 'Magento\Index\App\Shell'),
-    array('Magento\Index\Model\EntryPoint\Indexer', 'Magento\Index\App\Indexer'),
     array('Magento\Core\Model\Config\Modules\Reader', 'Magento\Framework\Module\Dir\Reader'),
     array('Magento\Framework\Data\Form\Factory', 'Magento\Framework\Data\FormFactory'),
     array('Magento\Framework\App\Cache\Config', 'Magento\Framework\Cache\Config'),
@@ -2271,7 +2268,7 @@ return array(
     array('Magento\Backend\Helper\Media\Js'),
     array(
         'Magento\Core\Model\Resource\Url\Rewrite\Collection',
-        'Magento\UrlRewrite\Model\Resource\UrlRewrite\Collection'
+        'Magento\UrlRewrite\Model\Resource\UrlRewriteCollection'
     ),
     array(
         'Magento\Core\Model\Resource\Url\Rewrite',
@@ -2340,7 +2337,7 @@ return array(
     ['Magento\Core\Model\Store\Storage\DefaultStorage', 'Magento\Store\Model\Storage\DefaultStorage'],
     ['Magento\Core\Model\Store\StorageFactory', 'Magento\Store\Model\StorageFactory'],
     ['Magento\Core\Model\StoreManager', 'Magento\Store\Model\StoreManager'],
-    ['Magento\Core\Model\StoreManagerInterface', 'Magento\Framework\StoreManagerInterface'],
+    ['Magento\Store\Model\StoreManagerInterface', 'Magento\Framework\StoreManagerInterface'],
     ['Magento\Core\Model\System\Store', 'Magento\Store\Model\System\Store'],
     ['Magento\Core\Model\Website', 'Magento\Store\Model\Website'],
     ['Magento\Core\Model\Website\Factory', 'Magento\Store\Model\WebsiteFactory'],
@@ -2796,6 +2793,8 @@ return array(
     ['Magento\Framework\App\State\MaintenanceMode', 'Magento\Framework\App\MaintenanceMode'],
     ['Magento\Framework\Error\Handler', 'Magento\Framework\App\ErrorHandler'],
     ['Magento\Framework\Error\HandlerInterface', 'Magento\Framework\App\ErrorHandler'],
+    ['Magento\Index'],
+    ['Magento\Catalog\Model\Resource\Product\Indexer\Eav'],
     ['\Magento\Framework\Service\Data\Eav\AbstractObject', 'Magento\Framework\Service\Data\AbstractExtensibleObject'],
     ['\Magento\Framework\Service\Data\AbstractObject', 'Magento\Framework\Service\Data\AbstractSimpleObject'],
     [
@@ -2809,5 +2808,28 @@ return array(
     ['Magento\Catalog\Block\Product'],
     ['\Magento\Sales\Model\Observer'],
     ['\Magento\Checkout\Service\V1\QuoteLoader', '\Magento\Sales\Model\QuoteRepository'],
-    ['Magento\PageCache\Model\Observer']
+    ['Magento\PageCache\Model\Observer'],
+    ['Magento\Rss\Block\Order\Info\Buttons\Rss'],
+    ['Magento\Rss\Block\Order\NewOrder'],
+    ['Magento\Rss\Block\Order\Status'],
+    ['Magento\Rss\Controller\Adminhtml\Order\NewAction'],
+    ['Magento\Rss\Controller\Order\Status'],
+    ['Magento\Rss\Helper\Order'],
+    ['Magento\Rss\Block\Order\Details', 'Magento\Sales\Block\Order\Details'],
+    ['Magento\Rss\Model\Resource\Order', 'Magento\Sales\Model\Resource\Order\Rss\OrderStatus'],
+    ['Magento\Rss\Block\Catalog\AbstractCatalog'],
+    ['Magento\Rss\Block\Catalog\NewCatalog'],
+    ['Magento\Rss\Block\Catalog\Review'],
+    ['Magento\Rss\Block\AbstractBlock'],
+    ['Magento\Rss\Block\ListBlock'],
+    ['Magento\Rss\Controller\Adminhtml\Catalog\Notifystock'],
+    ['Magento\Rss\Controller\Adminhtml\Catalog\Review'],
+    ['Magento\Rss\Controller\Catalog\Category'],
+    ['Magento\Rss\Controller\Catalog\NewAction'],
+    ['Magento\Rss\Controller\Catalog\Salesrule'],
+    ['Magento\Rss\Controller\Catalog\Special'],
+    ['Magento\Rss\Controller\Index\Nofeed'],
+    ['Magento\Rss\Controller\Catalog'],
+    ['Magento\Wishlist\Block\Rss'],
+    ['Magento\Wishlist\Controller\Index\Rss'],
 );

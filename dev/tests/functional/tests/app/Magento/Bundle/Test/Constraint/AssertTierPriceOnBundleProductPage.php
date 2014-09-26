@@ -58,12 +58,12 @@ class AssertTierPriceOnBundleProductPage extends AssertProductTierPriceOnProduct
     /**
      * Assertion that tier prices are displayed correctly
      *
+     * @param Browser $browser
      * @param CatalogProductView $catalogProductView
      * @param FixtureInterface $product
-     * @param Browser $browser
      * @return void
      */
-    public function processAssert(CatalogProductView $catalogProductView, FixtureInterface $product, Browser $browser)
+    public function processAssert(Browser $browser, CatalogProductView $catalogProductView, FixtureInterface $product)
     {
         //Open product view page
         $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');

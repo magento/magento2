@@ -81,7 +81,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Catalog\Model\Product\Visibility $visibility
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param array $data
-     * 
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -383,8 +383,9 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
             )
         );
 
-        if ($this->_catalogData->isModuleEnabled('Magento_Rss')) {
-            $this->addRssList('rss/catalog/notifystock', __('Notify Low Stock RSS'));
+        $block = $this->getLayout()->getBlock('grid.bottom.links');
+        if ($block) {
+            $this->setChild('grid.bottom.links', $block);
         }
 
         return parent::_prepareColumns();

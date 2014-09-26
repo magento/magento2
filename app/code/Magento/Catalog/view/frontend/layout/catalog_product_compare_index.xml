@@ -32,5 +32,4 @@
     <referenceContainer name="content">
         <block class="Magento\Catalog\Block\Product\Compare\ListCompare" name="catalog.compare.list" template="product/compare/list.phtml"/>
     </referenceContainer>
-    <update handle="MAP_popup"/>
 </page>

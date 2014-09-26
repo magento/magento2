@@ -389,8 +389,18 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->will($this->returnValueMap([
                 ['catalog/price/scope', ScopeInterface::SCOPE_STORE, 'scope_code', $priceScope],
-                ['currency/options/base', \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT, null, 'USD'],
-                ['currency/options/base', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, 'scope_code', 'UAH'],
+                [
+                    \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE,
+                    \Magento\Framework\App\ScopeInterface::SCOPE_DEFAULT,
+                    null,
+                    'USD'
+                ],
+                [
+                    \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_BASE,
+                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                    'scope_code',
+                    'UAH'
+                ],
             ]));
 
         $currency = $this->getMock('\Magento\Directory\Model\Currency', [], [], '', false);
@@ -422,7 +432,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             [1, 'UAH'],
         ];
     }
-    
+
     public function testGetAllowedCurrencies()
     {
         $currencyPath = 'cur/ren/cy/path';

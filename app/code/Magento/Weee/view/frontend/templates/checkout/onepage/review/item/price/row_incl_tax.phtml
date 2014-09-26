@@ -30,27 +30,27 @@ $_weeeHelper = $this->helper('Magento\Weee\Helper\Data');
 ?>
 <?php $_incl = $_item->getRowTotalInclTax(); ?>
 <?php if ($this->displayPriceWithWeeeDetails()): ?>
-    <span class="cart tax total" data-tax-toggle='{"itemTaxId" : "#subtotal-item-tax-details<?php echo $_item->getId(); ?>"}'>
+    <span class="cart-tax-total" data-tax-toggle='{"itemTaxId" : "#subtotal-item-tax-details<?php echo $_item->getId(); ?>"}'>
 <?php else: ?>
-    <span class="cart price">
+    <span class="cart-price">
 <?php endif; ?>
 <?php echo $this->formatPrice($this->getRowDisplayPriceInclTax()); ?>
     </span>
 
 <?php if ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item)): ?>
-    <div class="cart tax info" id="subtotal-item-tax-details<?php echo $_item->getId(); ?>" style="display:none;">
+    <span class="cart-tax-info" id="subtotal-item-tax-details<?php echo $_item->getId(); ?>" style="display: none;">
         <?php if ($this->displayPriceWithWeeeDetails()): ?>
             <?php foreach ($this->helper('Magento\Weee\Helper\Data')->getApplied($_item) as $tax): ?>
-                <span class="weee"><?php echo $tax['title']; ?>: <?php echo $this->formatPrice($tax['row_amount_incl_tax'],true,true); ?></span>
+                <span class="weee" data-label="<?php echo $tax['title']; ?>"><?php echo $this->formatPrice($tax['row_amount_incl_tax'],true,true); ?></span>
             <?php endforeach; ?>
         <?php endif; ?>
-    </div>
+    </span>
 
     <?php if ($this->displayFinalPrice()): ?>
-        <div class="cart tax total" data-tax-toggle='{"itemTaxId" : "#subtotal-item-tax-details<?php echo $_item->getId(); ?>"}'>
-            <span class="weee"><?php echo __('Total incl. tax'); ?>:<br />
+        <span class="cart-tax-total" data-tax-toggle='{"itemTaxId" : "#subtotal-item-tax-details<?php echo $_item->getId(); ?>"}'>
+            <span class="weee" data-label="<?php echo __('Total incl. tax'); ?>">
                 <?php echo $this->formatPrice($this->getFinalRowDisplayPriceInclTax()); ?>
             </span>
-        </div>
+        </span>
     <?php endif; ?>
 <?php endif; ?>

@@ -286,6 +286,7 @@ class ConditionsElement extends AbstractElement
             $value = $param->find('select', Locator::SELECTOR_CSS, 'select');
             if ($value->isVisible()) {
                 $value->setValue($rule);
+                $this->click();
                 continue;
             }
             $value = $param->find('input');

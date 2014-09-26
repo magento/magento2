@@ -76,13 +76,6 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($instance, $this->_model->getUrlInstance());
     }
 
-    public function testGetUrlRewrite()
-    {
-        $rewrite = $this->_model->getUrlRewrite();
-        $this->assertInstanceOf('Magento\UrlRewrite\Model\UrlRewrite', $rewrite);
-        $this->assertSame($rewrite, $this->_model->getUrlRewrite());
-    }
-
     public function testGetTreeModel()
     {
         $model = $this->_model->getTreeModel();

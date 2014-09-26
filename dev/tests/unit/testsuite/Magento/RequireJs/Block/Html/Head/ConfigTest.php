@@ -41,20 +41,47 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     private $fileManager;
 
+    /**
+     * @var \Magento\Framework\View\Page\Config|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $pageConfig;
+
+    /**
+     * @var Config
+     */
+    protected $blockConfig;
+
     protected function setUp()
     {
         $this->context = $this->getMock('\Magento\Framework\View\Element\Context', array(), array(), '', false);
         $this->config = $this->getMock('\Magento\Framework\RequireJs\Config', array(), array(), '', false);
         $this->fileManager = $this->getMock('\Magento\RequireJs\Model\FileManager', array(), array(), '', false);
+        $this->pageConfig = $this->getMock('\Magento\Framework\View\Page\Config', array(), array(), '', false);
     }
 
-    public function testGetAsset()
+    public function testSetLayout()
     {
+        $filePath = 'require_js_fie_path';
         $asset = $this->getMockForAbstractClass('\Magento\Framework\View\Asset\LocalInterface');
+        $asset->expects($this->atLeastOnce())
+            ->method('getFilePath')
+            ->willReturn($filePath);
         $this->fileManager->expects($this->once())->method('createRequireJsAsset')->will($this->returnValue($asset));
-        $object = new Config($this->context, $this->config, $this->fileManager);;
-        $this->assertSame($asset, $object->getAsset());
-        $this->assertSame($asset, $object->getAsset(), 'Asset is supposed to be cached in-memory');
+        $layout = $this->getMock('Magento\Framework\View\LayoutInterface');
+
+        $assetCollection = $this->getMockBuilder('Magento\Framework\View\Asset\GroupedCollection')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $assetCollection->expects($this->once())
+            ->method('add')
+            ->with($filePath, $asset);
+        $this->pageConfig->expects($this->atLeastOnce())
+            ->method('getAssetCollection')
+            ->willReturn($assetCollection);
+
+        $object = new Config($this->context, $this->config, $this->fileManager, $this->pageConfig);
+        $object->setLayout($layout);
+
     }
 
     public function testToHtml()
@@ -70,7 +97,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ))
         ;
         $this->config->expects($this->once())->method('getBaseConfig')->will($this->returnValue('the config data'));
-        $object = new Config($this->context, $this->config, $this->fileManager);;
+        $object = new Config($this->context, $this->config, $this->fileManager, $this->pageConfig);
         $html = $object->toHtml();
         $expectedFormat = <<<expected
 <script type="text/javascript">

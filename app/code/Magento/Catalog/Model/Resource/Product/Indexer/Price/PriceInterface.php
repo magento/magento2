@@ -44,12 +44,4 @@ interface PriceInterface
      * @return $this
      */
     public function reindexEntity($entityIds);
-
-    /**
-     * Register data required by product type process in event object
-     *
-     * @param \Magento\Index\Model\Event $event
-     * @return void
-     */
-    public function registerEvent(\Magento\Index\Model\Event $event);
 }

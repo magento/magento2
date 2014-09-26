@@ -24,9 +24,5 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Module/etc/module.xsd">
-    <module name="Magento_RequireJs" schema_version="1.0.0.0" active="true">
-        <depends>
-            <module name="Magento_Theme"/>
-        </depends>
-    </module>
+    <module name="Magento_RequireJs" schema_version="1.0.0.0" active="true"/>
 </config>

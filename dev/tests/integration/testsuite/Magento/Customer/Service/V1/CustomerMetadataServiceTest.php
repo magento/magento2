@@ -69,6 +69,52 @@ class CustomerMetadataServiceTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    public function testGetNestedOptionsCustomAttributesMetadata()
+    {
+        $nestedOptionsAttribute = 'store_id';
+        $customAttributesMetadata = $this->_service->getAttributeMetadata($nestedOptionsAttribute);
+        $options = $customAttributesMetadata->getOptions();
+        $nestedOptionExists = false;
+        foreach ($options as $option) {
+            if (strpos($option->getLabel(), 'Main Website Store') !== false) {
+                $this->assertNotEmpty($option->getOptions());
+                //Check nested option
+                $this->assertTrue(strpos($option->getOptions()[0]->getLabel(), 'Default Store View') !== false);
+                $nestedOptionExists = true;
+            }
+        }
+        if (!$nestedOptionExists) {
+            $this->fail('Nested attribute options were expected.');
+        }
+    }
+
+    /**
+     * @magentoDataFixture Magento/Customer/_files/attribute_user_defined_custom_attribute.php
+     */
+    public function testGetCustomAttributesMetadataWithAttributeNamedCustomAttribute()
+    {
+        $customAttributesMetadata = $this->_service->getCustomAttributesMetadata();
+        $customAttributeCode = 'custom_attribute';
+        $customAttributeFound = false;
+        $customAttributesCode = 'custom_attributes';
+        $customAttributesFound = false;
+        foreach ($customAttributesMetadata as $attribute) {
+            if ($attribute->getAttributeCode() == $customAttributeCode) {
+                $customAttributeFound = true;
+            }
+            if ($attribute->getAttributeCode() == $customAttributesCode) {
+                $customAttributesFound = true;
+            }
+        }
+        if (!$customAttributeFound) {
+            $this->fail("Custom attribute declared in the config not found.");
+        }
+        if (!$customAttributesFound) {
+            $this->fail("Custom attributes declared in the config not found.");
+        }
+        $this->assertCount(5, $customAttributesMetadata, "Invalid number of attributes returned.");
+    }
+
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
      */

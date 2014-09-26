@@ -40,11 +40,15 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     const CONTEXT_STORE = 'store';
 
+    /**#@+
+     * Paths for various config settings
+     */
+    const XML_PATH_DEFAULT_LOCALE = 'general/locale/code';
+    const XML_PATH_DEFAULT_TIMEZONE = 'general/locale/timezone';
     const XML_PATH_DEFAULT_COUNTRY = 'general/country/default';
-
     const XML_PATH_DEV_ALLOW_IPS = 'dev/restrict/allow_ips';
-
     const XML_PATH_CONNECTION_TYPE = 'global/resources/default_setup/connection/type';
+    /**#@- */
 
     /**
      * Const for correct dividing decimal values
@@ -211,7 +215,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $types = array();
         foreach ($this->_cacheConfig->getTypes() as $type => $node) {
-            $types[$type] = $node['label'];
+            if (array_key_exists('label', $node)) {
+                $types[$type] = $node['label'];
+            }
         }
         return $types;
     }

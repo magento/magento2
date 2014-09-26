@@ -33,10 +33,12 @@ use Magento\Store\Test\Fixture\StoreGroup;
 /**
  * Test Creation for CreateStoreEntity (Store Management)
  *
+ * Test Flow:
+ *
  * Preconditions:
  * 1. Create Store Group
  *
- * Test Flow:
+ * Steps:
  * 1. Open Backend
  * 2. Go to Stores -> All Stores
  * 3. Click "Create Store View" button

@@ -149,6 +149,7 @@ class Form extends FormInterface
      */
     protected function addNewTaxRates($taxRule)
     {
+        $this->waitForElementVisible($this->taxRateBlock);
         $taxRateBlock = $this->_rootElement->find($this->taxRateBlock, Locator::SELECTOR_CSS, 'multiselectlist');
         /** @var \Magento\Tax\Test\Block\Adminhtml\Rule\Edit\TaxRate $taxRateForm */
         $taxRateForm = $this->blockFactory->create(

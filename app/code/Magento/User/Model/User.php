@@ -571,15 +571,8 @@ class User extends AbstractModel implements StorageInterface
             );
             $this->loadByUsername($username);
             $sensitive = $config ? $username == $this->getUsername() : true;
-
-            if ($sensitive && $this->getId() && $this->_encryptor->validateHash($password, $this->getPassword())) {
-                if ($this->getIsActive() != '1') {
-                    throw new \Magento\Backend\Model\Auth\Exception(__('This account is inactive.'));
-                }
-                if (!$this->hasAssigned2Role($this->getId())) {
-                    throw new \Magento\Backend\Model\Auth\Exception(__('Access denied.'));
-                }
-                $result = true;
+            if ($sensitive && $this->getId()) {
+                $result = $this->verifyIdentity($password);
             }
 
             $this->_eventManager->dispatch(
@@ -593,6 +586,28 @@ class User extends AbstractModel implements StorageInterface
 
         if (!$result) {
             $this->unsetData();
+        }
+        return $result;
+    }
+
+    /**
+     * Ensure that provided password matches the current user password. Check if the current user account is active.
+     *
+     * @param string $password
+     * @return bool
+     * @throws \Magento\Backend\Model\Auth\Exception
+     */
+    public function verifyIdentity($password)
+    {
+        $result = false;
+        if ($this->_encryptor->validateHash($password, $this->getPassword())) {
+            if ($this->getIsActive() != '1') {
+                throw new \Magento\Backend\Model\Auth\Exception(__('This account is inactive.'));
+            }
+            if (!$this->hasAssigned2Role($this->getId())) {
+                throw new \Magento\Backend\Model\Auth\Exception(__('Access denied.'));
+            }
+            $result = true;
         }
         return $result;
     }

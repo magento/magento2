@@ -27,6 +27,7 @@ namespace Magento\Catalog\Block\Product;
  * Test class for \Magento\Catalog\Block\Product\Abstract.
  *
  * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
+ * @magentoAppArea frontend
  */
 class AbstractTest extends \PHPUnit_Framework_TestCase
 {
@@ -88,9 +89,15 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $this->_block->setProduct($this->_product);
     }
 
+    /**
+     * @magentoDataFixture Magento/CatalogUrlRewrite/_files/product_simple.php
+     * @magentoAppIsolation enabled
+     */
     public function testGetAddToCartUrl()
     {
-        $url = $this->_block->getAddToCartUrl($this->_product);
+        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+        $product->load(1);
+        $url = $this->_block->getAddToCartUrl($product);
         $this->assertStringEndsWith('?options=cart', $url);
         $this->assertStringMatchesFormat('%ssimple-product.html%s', $url);
     }
@@ -146,9 +153,17 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Image Alt Text', $this->_block->getImageLabel());
     }
 
+    /**
+     * @magentoDataFixture Magento/CatalogUrlRewrite/_files/product_simple.php
+     * @magentoAppIsolation enabled
+     */
     public function testGetProductUrl()
     {
-        $this->assertStringEndsWith('simple-product.html', $this->_block->getProductUrl($this->_product));
+        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\Catalog\Model\Product');
+        $product->load(1);
+
+        $this->assertStringEndsWith('simple-product.html', $this->_block->getProductUrl($product));
     }
 
     public function testHasProductUrl()

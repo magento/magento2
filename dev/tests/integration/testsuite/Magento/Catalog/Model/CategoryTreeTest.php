@@ -110,11 +110,15 @@ class CategoryTreeTest extends \PHPUnit_Framework_TestCase
         $this->_model->move(100, 0);
     }
 
+    /**
+     * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories.php
+     * @magentoAppIsolation enabled
+     */
     public function testGetUrlPath()
     {
         $this->assertNull($this->_model->getUrlPath());
-        $this->_model->load(5);
-        $this->assertEquals('category-1/category-1-1/category-1-1-1.html', $this->_model->getUrlPath());
+        $this->_model->load(4);
+        $this->assertEquals('category-1/category-1-1', $this->_model->getUrlPath());
     }
 
     public function testGetParentCategory()

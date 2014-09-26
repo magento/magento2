@@ -1,0 +1,65 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * @var \Magento\Ui\Paging\View $this
+ */
+
+?>
+<?php if (true): ?>
+    <script data-mage-apply='{"Magento_Ui/js/listing/paging" : ""}' type="application/json">
+        <?php echo $this->getConfigurationBuilder()->toJson($this->getConfiguration()); ?>
+    </script>
+    <div data-bind="scope: '<?php echo $this->getParentName(); ?>:<?php echo $this->getName(); ?>'" class="pager">
+        <!-- ko template: 'ui/pagination' --><!-- /ko -->
+    </div>
+<?php else: ?>
+    <div class="pager" data-mage-apply='{"Magento_Ui/js/listing/paging" : ""}'>
+        <span data-part="left">
+            <span class="pages-total-found">Total <strong data-bind-="text: totalCount"><?php echo $this->getTotalCount(); ?></strong> records</span>
+            <label class="view-pages">
+                View
+                <?php echo $this->renderElement('select', (array)$this->getOptions()); ?>
+                per page.
+            </label>
+        </span>
+        <span data-part="right">
+            <span data-bind-="css: { disabled: isFirst() }, click: prev" class="action-previous">
+                <span>Previous page</span>
+            </span>
+            <?php echo $this->renderElement('input', [
+                    'type' => 'text',
+                    'css_classes' => 'input-text page'
+                ]); ?>
+            <span class="pages-total">
+                of
+                <span data-bind-="text: pages" style="vertical-align: top;"><?php echo $this->getTotalPages() ?></span>
+            </span>
+            <span data-bind-="css: { disabled: isLast() }, click: next" class="action-next">
+                <span>Next page</span>
+            </span>
+        </span>
+    </div>
+<?php endif; ?>

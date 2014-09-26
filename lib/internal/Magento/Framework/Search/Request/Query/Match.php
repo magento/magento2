@@ -31,9 +31,18 @@ use Magento\Framework\Search\Request\QueryInterface;
 class Match implements QueryInterface
 {
     /**
+     * Name
+     *
      * @var string
      */
     protected $name;
+
+    /**
+     * Value
+     *
+     * @var string
+     */
+    protected $value;
 
     /**
      * Boost
@@ -46,8 +55,8 @@ class Match implements QueryInterface
      * Match query array
      * Possible structure:
      * array(
-     *     ['field' => 'some_field', 'value' => 'some_value', 'boost' => 'some_boost'],
-     *     ['field' => 'some_field', 'value' => 'some_value', 'boost' => 'some_boost'],
+     *     ['field' => 'some_field', 'boost' => 'some_boost'],
+     *     ['field' => 'some_field', 'boost' => 'some_boost'],
      * )
      *
      * @var array
@@ -56,14 +65,24 @@ class Match implements QueryInterface
 
     /**
      * @param string $name
+     * @param string $value
      * @param int|null $boost
      * @param array $matches
      */
-    public function __construct($name, $boost, array $matches)
+    public function __construct($name, $value, $boost, array $matches)
     {
         $this->name = $name;
+        $this->value = $value;
         $this->boost = $boost;
         $this->matches = $matches;
+    }
+
+    /**
+     * @return string
+     */
+    public function getValue()
+    {
+        return $this->value;
     }
 
     /**

@@ -24,6 +24,31 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <preference for="Magento\CatalogUrlRewrite\Service\V1\ProductUrlGeneratorInterface" type="Magento\CatalogUrlRewrite\Service\V1\ProductUrlGenerator"/>
-    <preference for="Magento\CatalogUrlRewrite\Service\V1\CategoryUrlGeneratorInterface" type="Magento\CatalogUrlRewrite\Service\V1\CategoryUrlGenerator"/>
+    <type name="Magento\Store\Model\Resource\Store">
+        <plugin name="store_plugin" type="Magento\CatalogUrlRewrite\Model\Category\Plugin\Store\View"/>
+    </type>
+    <type name="Magento\Store\Model\Resource\Group">
+        <plugin name="group_plugin" type="Magento\CatalogUrlRewrite\Model\Category\Plugin\Store\Group"/>
+    </type>
+    <type name="Magento\Catalog\Model\Category">
+        <plugin name="category_delete_plugin" type="Magento\CatalogUrlRewrite\Model\Category\Plugin\Category\Remove"/>
+    </type>
+    <type name="Magento\CatalogImportExport\Model\Import\Product">
+        <plugin name="import_save_plugin" type="Magento\CatalogUrlRewrite\Model\Product\Plugin\Import"/>
+    </type>
+    <type name="Magento\Catalog\Model\Resource\Category">
+        <plugin name="category_move_plugin" type="Magento\CatalogUrlRewrite\Model\Category\Plugin\Category\Move"/>
+    </type>
+    <type name="Magento\UrlRewrite\Model\StorageInterface">
+        <plugin name="storage_plugin" type="Magento\CatalogUrlRewrite\Model\Category\Plugin\Storage"/>
+    </type>
+    <type name="Magento\Catalog\Block\Adminhtml\Category\Tab\Attributes">
+        <plugin name="category_form_url_key_plugin" type="Magento\CatalogUrlRewrite\Plugin\Catalog\Block\Adminhtml\Category\Tab\Attributes"/>
+    </type>
+    <type name="Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Attributes">
+        <plugin name="product_form_url_key_plugin" type="Magento\CatalogUrlRewrite\Plugin\Catalog\Block\Adminhtml\Product\Edit\Tab\Attributes"/>
+    </type>
+    <type name="Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper">
+        <plugin name="product_save_rewrites_history_plugin" type="Magento\CatalogUrlRewrite\Plugin\Catalog\Controller\Adminhtml\Product\Initialization\Helper"/>
+    </type>
 </config>

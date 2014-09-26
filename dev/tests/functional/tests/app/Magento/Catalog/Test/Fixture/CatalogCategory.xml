@@ -156,6 +156,11 @@
             <backend_type>virtual</backend_type>
             <group>general_information</group>
         </is_active>
+        <is_anchor>
+            <attribute_code>is_anchor</attribute_code>
+            <backend_type>virtual</backend_type>
+            <group>general_information</group>
+        </is_anchor>
         <url_key>
             <attribute_code>url_key</attribute_code>
             <backend_type>virtual</backend_type>

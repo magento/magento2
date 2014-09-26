@@ -51,25 +51,29 @@ $_item = $this->getItem();
             <?php echo $addtInfoBlock->setItem($_item)->toHtml() ?>
         <?php endif;?>
     </td>
-    <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartPriceExclTax() || $this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices()): ?>
-    <td class="col price excl tax" data-th="<?php echo $this->escapeHtml(__('Price'));?>">
-        <?php echo $this->getUnitPriceExclTaxHtml($_item); ?>
+    <td class="col price" data-th="<?php echo $this->escapeHtml(__('Price'));?>">
+        <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartPriceInclTax() || $this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices()): ?>
+            <span class="price-including-tax" data-label="<?php echo $this->escapeHtml(__('Incl. Tax'));?>">
+                <?php echo $this->getUnitPriceInclTaxHtml($_item); ?>
+            </span>
+        <?php endif; ?>
+        <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartPriceExclTax() || $this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices()): ?>
+            <span class="price-excluding-tax" data-label="<?php echo $this->escapeHtml(__('Excl. Tax'));?>">
+                <?php echo $this->getUnitPriceExclTaxHtml($_item); ?>
+            </span>
+        <?php endif; ?>
     </td>
-    <?php endif; ?>
-    <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartPriceInclTax() || $this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices()): ?>
-    <td class="col price incl tax">
-        <?php echo $this->getUnitPriceInclTaxHtml($_item); ?>
+    <td class="col qty" data-th="<?php echo $this->escapeHtml(__('Qty'));?>"><span class="qty"><?php echo $_item->getQty() ?></span></td>
+    <td class="col subtotal" data-th="<?php echo $this->escapeHtml(__('Subtotal'));?>">
+        <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartPriceInclTax() || $this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices()): ?>
+            <span class="price-including-tax" data-label="<?php echo $this->escapeHtml(__('Incl. Tax'));?>">
+                <?php echo $this->getRowTotalInclTaxHtml($_item); ?>
+            </span>
+        <?php endif; ?>
+        <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartPriceExclTax() || $this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices()): ?>
+            <span class="price-excluding-tax" data-label="<?php echo $this->escapeHtml(__('Excl. Tax'));?>">
+                <?php echo $this->getRowTotalExclTaxHtml($_item); ?>
+            </span>
+        <?php endif; ?>
     </td>
-    <?php endif; ?>
-    <td class="col qty"><span class="qty"><?php echo $_item->getQty() ?></span></td>
-    <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartPriceExclTax() || $this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices()): ?>
-    <td class="col subtotal excl tax">
-        <?php echo $this->getRowTotalExclTaxHtml($_item); ?>
-    </td>
-    <?php endif; ?>
-    <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartPriceInclTax() || $this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices()): ?>
-    <td class="col subtotal incl tax">
-        <?php echo $this->getRowTotalInclTaxHtml($_item); ?>
-    </td>
-    <?php endif; ?>
 </tr>

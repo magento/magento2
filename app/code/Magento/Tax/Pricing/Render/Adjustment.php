@@ -62,20 +62,15 @@ class Adjustment extends AbstractAdjustment
     {
         if ($this->displayBothPrices()) {
             if ($this->getZone() !== \Magento\Framework\Pricing\Render::ZONE_ITEM_OPTION) {
-                $this->amountRender->setPriceDisplayLabel(__('Excl. Tax'));
+                $this->amountRender->setPriceDisplayLabel(__('Incl. Tax'));
             }
-            $this->amountRender->setPriceWrapperCss('price-excluding-tax');
+            $this->amountRender->setPriceWrapperCss('price-including-tax');
             $this->amountRender->setPriceId(
-                $this->buildIdWithPrefix('price-excluding-tax-')
-            );
-            $this->amountRender->setDisplayValue(
-                $this->amountRender->getDisplayValue() -
-                $this->amountRender->getAmount()->getAdjustmentAmount($this->getAdjustmentCode())
+                $this->buildIdWithPrefix('price-including-tax-')
             );
         } elseif ($this->displayPriceExcludingTax()) {
             $this->amountRender->setDisplayValue(
-                $this->amountRender->getDisplayValue() -
-                $this->amountRender->getAmount()->getAdjustmentAmount($this->getAdjustmentCode())
+                $this->amountRender->getAmount()->getValue($this->getAdjustmentCode())
             );
         }
         return $this->toHtml();
@@ -105,12 +100,16 @@ class Adjustment extends AbstractAdjustment
     /**
      * Obtain display amount excluding tax
      *
+     * @param bool $includeContainer
      * @return string
      */
-    public function getDisplayAmountExclTax()
+    public function getDisplayAmountExclTax($includeContainer = false)
     {
         // todo use 'excludeWith' method instead hard-coded list here
-        return $this->convertAndFormatCurrency($this->amountRender->getAmount()->getValue(['tax', 'weee']), false);
+        return $this->convertAndFormatCurrency(
+            $this->amountRender->getAmount()->getValue(['tax', 'weee']),
+            $includeContainer
+        );
     }
 
     /**

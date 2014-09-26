@@ -24,11 +24,7 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../app/code/Magento/Core/etc/page.xsd">
-    <referenceBlock name="head">
-        <block class="Magento\Theme\Block\Html\Head\Css" name="css-styles-css">
-            <arguments>
-                <argument name="file" xsi:type="string">css/styles.css</argument>
-            </arguments>
-        </block>
-    </referenceBlock>
+    <head>
+        <css src="css/styles.css" />
+    </head>
 </page>

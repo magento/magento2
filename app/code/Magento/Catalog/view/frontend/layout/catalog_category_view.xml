@@ -94,5 +94,7 @@
             </arguments>
         </block>
     </referenceContainer>
-    <update handle="MAP_popup"/>
+    <referenceBlock name="page.main.title">
+        <block class="Magento\Catalog\Block\Category\Rss\Link" name="rss.link" template="Magento_Catalog::category/rss.phtml"/>
+    </referenceBlock>
 </page>

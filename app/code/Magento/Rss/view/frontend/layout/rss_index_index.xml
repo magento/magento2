@@ -30,6 +30,6 @@
         </action>
     </referenceBlock>
     <referenceContainer name="content">
-        <block class="Magento\Rss\Block\ListBlock" name="rss.list" template="list.phtml"/>
+        <block class="Magento\Rss\Block\Feeds" name="rss.feeds"/>
     </referenceContainer>
 </page>

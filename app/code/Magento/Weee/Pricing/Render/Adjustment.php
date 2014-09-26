@@ -139,14 +139,25 @@ class Adjustment extends AbstractAdjustment
     }
 
     /**
-     * Render Weee tax attributes
+     * Render Weee tax attributes name
+     *
+     * @param \Magento\Framework\Object $attribute
+     * @return string
+     */
+    public function renderWeeeTaxAttributeName(\Magento\Framework\Object $attribute)
+    {
+        return $attribute->getData('name');
+    }
+
+    /**
+     * Render Weee tax attributes value
      *
      * @param \Magento\Framework\Object $attribute
      * @return string
      */
     public function renderWeeeTaxAttribute(\Magento\Framework\Object $attribute)
     {
-        return $attribute->getData('name') . ': ' . $this->convertAndFormatCurrency($attribute->getData('amount'));
+        return $this->convertAndFormatCurrency($attribute->getData('amount'));
     }
 
     /**

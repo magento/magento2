@@ -28,17 +28,17 @@ $_item = $this->getItem();
 ?>
 
 <?php if ($this->displayPriceInclTax() || $this->displayBothPrices()): ?>
-    <span class="incl tax" data-th="<?php echo $this->escapeHtml(__('Incl. Tax')); ?>">
+    <span class="price-including-tax" data-label="<?php echo $this->escapeHtml(__('Incl. Tax')); ?>">
         <?php $_incl = $_item->getPriceInclTax(); ?>
-        <span class="cart price">
+        <span class="cart-price">
             <?php echo $this->formatPrice($_incl) ?>
         </span>
     </span>
 <?php endif; ?>
 
 <?php if ($this->displayPriceExclTax() || $this->displayBothPrices()): ?>
-    <span class="excl tax" data-th="<?php echo $this->escapeHtml(__('Excl. Tax')); ?>">
-        <span class="cart price">
+    <span class="price-excluding-tax" data-label="<?php echo $this->escapeHtml(__('Excl. Tax')); ?>">
+        <span class="cart-price">
             <?php echo $this->formatPrice($this->getItemDisplayPriceExclTax()) ?>
         </span>
     </span>

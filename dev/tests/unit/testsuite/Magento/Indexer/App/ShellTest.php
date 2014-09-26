@@ -26,7 +26,7 @@ namespace Magento\Indexer\App;
 class ShellTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Index\App\Shell
+     * @var \Magento\Indexer\App\Shell
      */
     protected $entryPoint;
 

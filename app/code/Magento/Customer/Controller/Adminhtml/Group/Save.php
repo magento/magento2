@@ -68,7 +68,11 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Group
                 $this->_customerGroupBuilder->setTaxClassId($taxClass);
                 $customerGroup = $this->_customerGroupBuilder->create();
 
-                $id = $this->_groupService->saveGroup($customerGroup);
+                if (!is_null($id)) {
+                    $this->_groupService->updateGroup($id, $customerGroup);
+                } else {
+                    $id = $this->_groupService->createGroup($customerGroup);
+                }
                 $this->messageManager->addSuccess(__('The customer group has been saved.'));
                 $this->getResponse()->setRedirect($this->getUrl('customer/group'));
                 return;

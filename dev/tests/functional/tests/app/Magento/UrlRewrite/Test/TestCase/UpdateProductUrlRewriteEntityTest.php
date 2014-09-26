@@ -26,8 +26,8 @@ namespace Magento\UrlRewrite\Test\TestCase;
 
 use Mtf\TestCase\Injectable;
 use Magento\UrlRewrite\Test\Fixture\UrlRewrite;
-use Magento\UrlRewrite\Test\Page\Adminhtml\UrlrewriteIndex;
-use Magento\UrlRewrite\Test\Page\Adminhtml\UrlrewriteEdit;
+use Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteIndex;
+use Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteEdit;
 use Mtf\Fixture\FixtureFactory;
 
 /**
@@ -47,7 +47,7 @@ use Mtf\Fixture\FixtureFactory;
  * 4. Fill data according to dataset
  * 5. Perform all assertions
  *
- * @group URL_Rewrites_(PS)
+ * @group URL_Rewrites_(MX)
  * @ZephyrId MAGETWO-24819
  */
 class UpdateProductUrlRewriteEntityTest extends Injectable
@@ -55,27 +55,27 @@ class UpdateProductUrlRewriteEntityTest extends Injectable
     /**
      * Url rewrite index page
      *
-     * @var UrlrewriteIndex
+     * @var UrlRewriteIndex
      */
     protected $urlRewriteIndex;
 
     /**
      * Url rewrite edit page
      *
-     * @var UrlrewriteEdit
+     * @var UrlRewriteEdit
      */
     protected $urlRewriteEdit;
 
     /**
      * Prepare dataSets and pages
      *
-     * @param UrlrewriteIndex $urlRewriteIndex
-     * @param UrlrewriteEdit $urlRewriteEdit
+     * @param UrlRewriteIndex $urlRewriteIndex
+     * @param UrlRewriteEdit $urlRewriteEdit
      * @return array
      */
     public function __inject(
-        UrlrewriteIndex $urlRewriteIndex,
-        UrlrewriteEdit $urlRewriteEdit
+        UrlRewriteIndex $urlRewriteIndex,
+        UrlRewriteEdit $urlRewriteEdit
     ) {
         $this->urlRewriteIndex = $urlRewriteIndex;
         $this->urlRewriteEdit = $urlRewriteEdit;
@@ -104,7 +104,7 @@ class UpdateProductUrlRewriteEntityTest extends Injectable
         //Steps
         $this->urlRewriteIndex->open();
         $filter = ['request_path' => $productRedirect->getRequestPath()];
-        $this->urlRewriteIndex->getUrlRedirectGrid()->searchAndOpen($filter);
+        $this->urlRewriteIndex->getUrlRewriteGrid()->searchAndOpen($filter);
         $this->urlRewriteEdit->getFormBlock()->fill($urlRewrite);
         $this->urlRewriteEdit->getPageMainActions()->save();
     }

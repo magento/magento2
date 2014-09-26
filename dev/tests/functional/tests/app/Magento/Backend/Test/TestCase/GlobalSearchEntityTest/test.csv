@@ -1,0 +1,6 @@
+"description";"search/data/query";"constraint";"issue"
+"search existed product and order created with this product";"orderInjectable::default::product::name";"assertGlobalSearchProductName, assertGlobalSearchOrderId";"Bug: MAGETWO-28448"
+"search with 2 sign return no results";":)";"assertGlobalSearchNoRecordsFound";""
+"search product by sku";"orderInjectable::default::product::sku";"assertGlobalSearchProductName";""
+"search existed customer";"customerInjectable::johndoe_unique::lastname";"assertGlobalSearchCustomerName";""
+"search order (by order id)";"orderInjectable::default::id";"assertGlobalSearchOrderId";""

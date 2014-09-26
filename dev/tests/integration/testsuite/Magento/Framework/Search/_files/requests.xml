@@ -26,196 +26,284 @@
 <requests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <request query="one_match" index="catalogsearch_fulltext">
         <dimensions>
-            <dimension name="scope" value="default" />
+            <dimension name="scope" value="default"/>
         </dimensions>
         <queries>
             <query xsi:type="boolQuery" name="one_match" boost="2">
-                <queryReference clause="must" ref="fulltext_search_query" />
+                <queryReference clause="must" ref="fulltext_search_query"/>
             </query>
 
-            <query xsi:type="matchQuery" name="fulltext_search_query" boost="5">
-                <match field="data_index" value="%request.title%" boost="2" />
+            <query xsi:type="matchQuery" name="fulltext_search_query" value="$fulltext_search_query$" boost="5">
+                <match field="data_index" boost="2"/>
             </query>
         </queries>
         <from>10</from>
         <size>10</size>
     </request>
-    <request query="one_match_filters" index="catalogsearch_fulltext">
+    <request query="one_wildcard" index="catalogsearch_fulltext">
         <dimensions>
-            <dimension name="scope" value="default" />
+            <dimension name="scope" value="default"/>
         </dimensions>
         <queries>
-            <query xsi:type="boolQuery" name="one_match_filters" boost="2">
-                <queryReference clause="must" ref="fulltext_search_query" />
-                <queryReference clause="must" ref="fulltext_search_query2" />
-            </query>
-
-            <query xsi:type="matchQuery" name="fulltext_search_query" boost="5">
-                <match field="data_index" value="%request.title%" boost="2" />
-            </query>
-
-            <query xsi:type="filteredQuery" name="fulltext_search_query2">
-                <filterReference ref="pid" />
+            <query xsi:type="filteredQuery" name="one_wildcard" boost="2">
+                <filterReference clause="must" ref="wildcard_filter"/>
             </query>
         </queries>
         <filters>
-            <filter xsi:type="boolFilter" name="pid">
-                <filterReference clause="should" ref="pidm" />
-                <filterReference clause="should" ref="pidsh" />
+            <filter xsi:type="wildcardFilter" name="wildcard_filter" value="$wildcard_filter$" field="data_index"/>
+        </filters>
+        <from>10</from>
+        <size>10</size>
+    </request>
+    <request query="one_match_filters" index="catalogsearch_fulltext">
+        <dimensions>
+            <dimension name="scope" value="default"/>
+        </dimensions>
+        <queries>
+            <query xsi:type="boolQuery" name="one_match_filters" boost="2">
+                <queryReference clause="must" ref="fulltext_search_query"/>
+                <queryReference clause="must" ref="filtered_query"/>
+                <queryReference clause="must" ref="filtered_query_rm"/>
+                <queryReference clause="must" ref="filtered_query_filter_rm"/>
+            </query>
+            <query xsi:type="matchQuery" name="fulltext_search_query" value="$fulltext_search_query$" boost="5">
+                <match field="data_index" boost="2"/>
+            </query>
+            <query xsi:type="filteredQuery" name="filtered_query">
+                <filterReference ref="pid"/>
+            </query>
+            <query xsi:type="filteredQuery" name="filtered_query_rm">
+                <queryReference ref="fulltext_search_query_rm"/>
+            </query>
+            <query xsi:type="filteredQuery" name="filtered_query_filter_rm">
+                <filterReference ref="bool_filter_rm"/>
+            </query>
+            <query xsi:type="matchQuery" value="$not_bind$" name="fulltext_search_query_rm">
+                <match field="some"/>
+            </query>
+        </queries>
+        <filters>
+            <filter xsi:type="boolFilter" name="bool_filter_rm">
+                <filterReference clause="must" ref="term_rm"/>
+                <filterReference clause="must" ref="range_rm"/>
             </filter>
-            <filter name="pidm" xsi:type="rangeFilter" field="product_id" from="%pidm_from%" to="%pidm_to%" />
-            <filter name="pidsh" xsi:type="termFilter" field="product_id" value="%pidsh%" />
+            <filter name="range_rm" xsi:type="rangeFilter" field="product_id" from="$not_bind$" to="$not_bind$"/>
+            <filter name="term_rm" xsi:type="termFilter" field="product_id" value="$not_bind$"/>
+            <filter xsi:type="boolFilter" name="pid">
+                <filterReference clause="should" ref="pidm"/>
+                <filterReference clause="should" ref="pidsh"/>
+            </filter>
+            <filter name="pidm" xsi:type="rangeFilter" field="product_id" from="$pidm_from$" to="$pidm_to$"/>
+            <filter name="pidsh" xsi:type="termFilter" field="product_id" value="$pidsh$"/>
         </filters>
         <from>10</from>
         <size>10</size>
     </request>
     <request query="range_filter" index="catalogsearch_fulltext">
         <dimensions>
-            <dimension name="scope" value="default" />
+            <dimension name="scope" value="default"/>
         </dimensions>
         <queries>
             <query xsi:type="filteredQuery" name="range_filter">
-                <filterReference ref="range_filter" />
+                <filterReference ref="range_filter"/>
             </query>
         </queries>
         <filters>
             <filter name="range_filter"
                     xsi:type="rangeFilter"
                     field="product_id"
-                    from="%request.product_id.from%"
-                    to="%request.product_id.to%" />
+                    from="$range_filter_from$"
+                    to="$range_filter_to$"/>
         </filters>
         <from>10</from>
         <size>10</size>
     </request>
     <request query="range_filter_without_from_field" index="catalogsearch_fulltext">
         <dimensions>
-            <dimension name="scope" value="default" />
+            <dimension name="scope" value="default"/>
         </dimensions>
         <queries>
             <query xsi:type="filteredQuery" name="range_filter_without_from_field">
-                <filterReference ref="range_filter_without_from_field" />
+                <filterReference ref="range_filter_without_from_field"/>
             </query>
         </queries>
         <filters>
             <filter name="range_filter_without_from_field"
                     xsi:type="rangeFilter"
                     field="product_id"
-                    to="%request.product_id.to%" />
+                    to="$range_filter_to$"/>
         </filters>
         <from>10</from>
         <size>10</size>
     </request>
     <request query="range_filter_without_to_field" index="catalogsearch_fulltext">
         <dimensions>
-            <dimension name="scope" value="default" />
+            <dimension name="scope" value="default"/>
         </dimensions>
         <queries>
             <query xsi:type="filteredQuery" name="range_filter_without_to_field">
-                <filterReference ref="range_filter_without_to_field" />
+                <filterReference ref="range_filter_without_to_field"/>
             </query>
         </queries>
         <filters>
             <filter name="range_filter_without_to_field"
                     xsi:type="rangeFilter"
                     field="product_id"
-                    from="%request.product_id.from%" />
+                    from="$range_filter_from$"/>
         </filters>
         <from>10</from>
         <size>10</size>
     </request>
     <request query="term_filter" index="catalogsearch_fulltext">
         <dimensions>
-            <dimension name="scope" value="default" />
+            <dimension name="scope" value="default"/>
         </dimensions>
         <queries>
             <query xsi:type="filteredQuery" name="term_filter">
-                <filterReference ref="term_filter" />
+                <filterReference ref="term_filter"/>
             </query>
         </queries>
         <filters>
-            <filter name="term_filter" xsi:type="termFilter" field="product_id" value="%request.product_id%" />
+            <filter name="term_filter" xsi:type="termFilter" field="product_id" value="$request.product_id$"/>
         </filters>
         <from>10</from>
         <size>10</size>
     </request>
     <request query="bool_filter" index="catalogsearch_fulltext">
         <dimensions>
-            <dimension name="scope" value="default" />
+            <dimension name="scope" value="default"/>
         </dimensions>
         <queries>
             <query xsi:type="filteredQuery" name="bool_filter">
-                <filterReference ref="bool_filter" />
+                <filterReference ref="bool_filter"/>
             </query>
         </queries>
         <filters>
             <filter xsi:type="boolFilter" name="bool_filter">
-                <filterReference clause="must" ref="must_range_filter1" />
-                <filterReference clause="should" ref="should_term_filter1" />
-                <filterReference clause="should" ref="should_term_filter2" />
-                <filterReference clause="not" ref="not_term_filter1" />
-                <filterReference clause="not" ref="not_term_filter2" />
+                <filterReference clause="must" ref="must_range_filter1"/>
+                <filterReference clause="should" ref="should_term_filter1"/>
+                <filterReference clause="should" ref="should_term_filter2"/>
+                <filterReference clause="should" ref="should_term_filter3"/>
+                <filterReference clause="should" ref="should_term_filter4"/>
+                <filterReference clause="not" ref="not_term_filter1"/>
+                <filterReference clause="not" ref="not_term_filter2"/>
             </filter>
             <filter name="must_range_filter1"
                     xsi:type="rangeFilter"
                     field="product_id"
-                    from="%request.must.range_filter1.from%"
-                    to="%request.must.range_filter1.to%" />
+                    from="$must_range_filter1_from$"
+                    to="$must_range_filter1_to$"/>
             <filter name="should_term_filter1"
                     xsi:type="termFilter"
                     field="product_id"
-                    value="%request.should.term_filter1%" />
+                    value="$should_term_filter1$"/>
             <filter name="should_term_filter2"
                     xsi:type="termFilter"
                     field="product_id"
-                    value="%request.should.term_filter2%" />
+                    value="$should_term_filter2$"/>
             <filter name="should_term_filter3"
                     xsi:type="termFilter"
                     field="product_id"
-                    value="%request.should.term_filter3%" />
+                    value="$should_term_filter3$"/>
             <filter name="should_term_filter4"
                     xsi:type="termFilter"
                     field="product_id"
-                    value="%request.should.term_filter4%" />
+                    value="$should_term_filter4$"/>
             <filter name="not_term_filter1"
                     xsi:type="termFilter"
                     field="product_id"
-                    value="%request.not.term_filter1%" />
+                    value="$not_term_filter1$"/>
             <filter name="not_term_filter2"
                     xsi:type="termFilter"
                     field="product_id"
-                    value="%request.not.term_filter2%" />
+                    value="$not_term_filter2$"/>
+        </filters>
+        <from>10</from>
+        <size>10</size>
+    </request>
+    <request query="bool_filter_with_nested_bool_filter" index="catalogsearch_fulltext">
+        <dimensions>
+            <dimension name="scope" value="default"/>
+        </dimensions>
+        <queries>
+            <query xsi:type="filteredQuery" name="bool_filter_with_nested_bool_filter">
+                <filterReference ref="bool_filter_with_nested_bool_filter"/>
+            </query>
+        </queries>
+        <filters>
+            <filter xsi:type="boolFilter" name="bool_filter_with_nested_bool_filter">
+                <filterReference clause="not" ref="not_range_filter"/>
+                <filterReference clause="not" ref="not_bool_filter"/>
+            </filter>
+            <filter xsi:type="boolFilter" name="not_bool_filter">
+                <filterReference clause="not" ref="nested_not_term_filter"/>
+            </filter>
+            <filter name="not_range_filter"
+                    xsi:type="rangeFilter"
+                    field="product_id"
+                    from="$not_range_filter_from$"
+                    to="$not_range_filter_to$"/>
+            <filter name="nested_not_term_filter"
+                    xsi:type="termFilter"
+                    field="product_id"
+                    value="$nested_not_term_filter$"/>
+        </filters>
+        <from>10</from>
+        <size>10</size>
+    </request>
+    <request query="bool_filter_with_range_in_nested_negative_filter" index="catalogsearch_fulltext">
+        <dimensions>
+            <dimension name="scope" value="default"/>
+        </dimensions>
+        <queries>
+            <query xsi:type="filteredQuery" name="bool_filter_with_range_in_nested_negative_filter">
+                <filterReference ref="bool_filter_with_range_in_nested_negative_filter"/>
+            </query>
+        </queries>
+        <filters>
+            <filter xsi:type="boolFilter" name="bool_filter_with_range_in_nested_negative_filter">
+                <filterReference clause="not" ref="not_bool_filter"/>
+            </filter>
+            <filter xsi:type="boolFilter" name="not_bool_filter">
+                <filterReference clause="must" ref="nested_must_range_filter"/>
+            </filter>
+            <filter name="nested_must_range_filter"
+                    xsi:type="rangeFilter"
+                    field="product_id"
+                    from="$nested_must_range_filter_from$"
+                    to="$nested_must_range_filter_to$"/>
         </filters>
         <from>10</from>
         <size>10</size>
     </request>
     <request query="advanced_search_test" index="catalogsearch_fulltext">
         <dimensions>
-            <dimension name="scope" value="default" />
+            <dimension name="scope" value="default"/>
         </dimensions>
         <queries>
             <query xsi:type="boolQuery" name="advanced_search_test" boost="1">
-                <queryReference clause="should" ref="name_query" />
-                <queryReference clause="should" ref="description_query" />
-                <queryReference clause="should" ref="query_filter" />
+                <queryReference clause="should" ref="name_query"/>
+                <queryReference clause="should" ref="description_query"/>
+                <queryReference clause="should" ref="query_filter"/>
             </query>
-            <query xsi:type="matchQuery" name="name_query">
-                <match field="data_index" value="%request.name%" boost="1" />
+            <query xsi:type="matchQuery" name="name_query" value="$name_query$">
+                <match field="data_index" boost="1"/>
             </query>
-            <query xsi:type="matchQuery" name="description_query">
-                <match field="data_index" value="%request.description%" boost="1" />
+            <query xsi:type="matchQuery" name="description_query" value="$description$">
+                <match field="data_index" boost="1"/>
             </query>
             <query xsi:type="filteredQuery" name="query_filter">
-                <filterReference ref="filter" />
+                <filterReference ref="filter"/>
             </query>
         </queries>
         <filters>
             <filter xsi:type="boolFilter" name="filter">
-                <filterReference clause="must" ref="store_filter" />
-                <filterReference clause="must" ref="product_id_filter" />
+                <filterReference clause="must" ref="store_filter"/>
+                <filterReference clause="must" ref="product_id_filter"/>
             </filter>
-            <filter name="store_filter" xsi:type="termFilter" field="store_id" value="%request.store_id%" />
-            <filter name="product_id_filter" xsi:type="rangeFilter" field="product_id" from="%request.from_product_id%" to="%request.to_product_id%" />
+            <filter name="store_filter" xsi:type="termFilter" field="store_id" value="$store_filter$"/>
+            <filter name="product_id_filter" xsi:type="rangeFilter" field="product_id" from="$request.from_product_id$"
+                    to="$request.to_product_id$"/>
         </filters>
         <from>10</from>
         <size>10</size>

@@ -32,47 +32,25 @@ class DimensionsTest extends \PHPUnit_Framework_TestCase
 
     /** @var \Magento\TestFramework\Helper\ObjectManager */
     private $objectManager;
-    /** @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject */
-    private $adapter;
-    /** @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject */
-    private $resource;
+
     /** @var \Magento\Framework\App\ScopeInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $scope;
+
     /** @var \Magento\Framework\App\ScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject */
     private $scopeResolver;
+
     /** @var \Magento\Framework\Search\Request\Dimension|\PHPUnit_Framework_MockObject_MockObject */
     private $dimension;
+
     /** @var DimensionsBuilder */
     private $builder;
+
+    /** @var  \Magento\Framework\Search\Adapter\Mysql\ConditionManager|\PHPUnit_Framework_MockObject_MockObject */
+    private $conditionManager;
 
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-
-        $this->adapter = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
-            ->disableOriginalConstructor()
-            ->setMethods(['quote', 'quoteIdentifier'])
-            ->getMockForAbstractClass();
-
-        $escapeValueCallback = function ($value) {
-            return '`' . $value . '`';
-        };
-
-        $this->adapter->expects($this->once())
-            ->method('quote')
-            ->will($this->returnCallback($escapeValueCallback));
-        $this->adapter->expects($this->once())
-            ->method('quoteIdentifier')
-            ->will($this->returnCallback($escapeValueCallback));
-
-        $this->resource = $this->getMockBuilder('\Magento\Framework\App\Resource')
-            ->disableOriginalConstructor()
-            ->setMethods(['getConnection'])
-            ->getMock();
-        $this->resource->expects($this->once())
-            ->method('getConnection')
-            ->with(\Magento\Framework\App\Resource::DEFAULT_READ_RESOURCE)
-            ->will($this->returnValue($this->adapter));
 
         $this->scope = $this->getMockBuilder('\Magento\Framework\App\ScopeInterface')
             ->disableOriginalConstructor()
@@ -89,10 +67,24 @@ class DimensionsTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getName', 'getValue'])
             ->getMock();
 
+        $this->conditionManager = $this->getMockBuilder('\Magento\Framework\Search\Adapter\Mysql\ConditionManager')
+            ->disableOriginalConstructor()
+            ->setMethods(['generateCondition'])
+            ->getMock();
+        $this->conditionManager->expects($this->any())
+            ->method('generateCondition')
+            ->will(
+                $this->returnCallback(
+                    function ($field, $operator, $value) {
+                        return sprintf('`%s` %s `%s`', $field, $operator, $value);
+                    }
+                )
+            );
+
         $this->builder = $this->objectManager->getObject(
             '\Magento\Framework\Search\Adapter\Mysql\Dimensions',
             [
-                'resource' => $this->resource,
+                'conditionManager' => $this->conditionManager,
                 'scopeResolver' => $this->scopeResolver
             ]
         );

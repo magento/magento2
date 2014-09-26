@@ -25,18 +25,10 @@
 -->
 <page layout="admin-2columns-left" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <update handle="editor"/>
-    <referenceBlock name="head">
-        <block class="Magento\Theme\Block\Html\Head\Css" name="jquery-fileuploader-css-jquery-fileupload-ui-css">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/fileUploader/css/jquery.fileupload-ui.css</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-catalog-js-bootstrap-category-edit-js">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Catalog::js/bootstrap/category-edit.js</argument>
-            </arguments>
-        </block>
-    </referenceBlock>
+    <head>
+        <css src="jquery/fileUploader/css/jquery.fileupload-ui.css"/>
+        <link src="Magento_Catalog::js/bootstrap/category-edit.js"/>
+    </head>
     <referenceContainer name="page.main.actions">
         <block class="Magento\Backend\Block\Store\Switcher" name="category.store.switcher" template="Magento_Backend::store/switcher.phtml">
             <!--<arguments>-->
@@ -60,5 +52,4 @@
     <referenceBlock name="head.components">
         <block class="Magento\Framework\View\Element\Js\Components" name="catalog_category_page_head_components" template="Magento_Catalog::js/components.phtml"/>
     </referenceBlock>
-
 </page>

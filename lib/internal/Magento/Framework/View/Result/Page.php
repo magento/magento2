@@ -36,19 +36,12 @@ use Magento\Framework\App\ResponseInterface;
  * and a guaranteed handle that stands for page layout (a wireframe of a page)
  *
  * Page result is a more specific implementation of a generic layout response
+ *
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Page extends Layout
 {
-    /**
-     * Default template
-     */
-    const DEFAULT_ROOT_TEMPLATE = 'Magento_Theme::root.phtml';
-
-    /**
-     * @var string
-     */
-    protected $pageType;
-
     /**
      * @var string
      */
@@ -60,26 +53,31 @@ class Page extends Layout
     protected $pageConfig;
 
     /**
+     * @var \Magento\Framework\View\Page\Config\Renderer
+     */
+    protected $pageConfigRenderer;
+
+    /**
      * Constructor
      *
      * @param View\Element\Template\Context $context
      * @param View\LayoutFactory $layoutFactory
      * @param \Magento\Framework\Translate\InlineInterface $translateInline
-     * @param View\Page\Config $pageConfig
-     * @param string $pageType
+     * @param \Magento\Framework\View\Page\Config\Renderer $pageConfigRenderer
+     * @param string $template
      * @param array $data
      */
     public function __construct(
         View\Element\Template\Context $context,
         View\LayoutFactory $layoutFactory,
         \Magento\Framework\Translate\InlineInterface $translateInline,
-        View\Page\Config $pageConfig,
-        $pageType,
+        View\Page\Config\Renderer $pageConfigRenderer,
+        $template,
         array $data = array()
     ) {
-        $this->pageConfig = $pageConfig;
-        $this->pageType = $pageType;
         parent::__construct($context, $layoutFactory, $translateInline, $data);
+        $this->pageConfigRenderer = $pageConfigRenderer;
+        $this->_template = $template;
     }
 
     /**
@@ -93,7 +91,6 @@ class Page extends Layout
         if ($update->isLayoutDefined()) {
             $update->removeHandle('default');
         }
-        $this->setTemplate(self::DEFAULT_ROOT_TEMPLATE);
         return $this;
     }
 
@@ -120,7 +117,7 @@ class Page extends Layout
             $pageHandles[] = $handle . '_' . $key . '_' . $value;
         }
         // Do not sort array going into add page handles. Ensure default layout handle is added first.
-        return $this->getLayout()->getUpdate()->addPageHandles($pageHandles);
+        return $this->getLayout()->getUpdate()->addHandle($pageHandles);
     }
 
     /**
@@ -140,16 +137,18 @@ class Page extends Layout
     public function renderResult(ResponseInterface $response)
     {
         if ($this->getConfig()->getPageLayout()) {
-            $layout = $this->getLayout();
             $config = $this->getConfig();
 
-            $this->assign('headContent', $layout->getBlock('head')->toHtml());
             $this->addDefaultBodyClasses();
-            $this->assign('bodyClasses', $config->getElementAttribute($config::ELEMENT_TYPE_BODY, 'classes'));
-            $this->assign('bodyAttributes', $config->getElementAttribute($config::ELEMENT_TYPE_BODY, 'attributes'));
-            $this->assign('htmlAttributes', $config->getElementAttribute($config::ELEMENT_TYPE_HTML, 'attributes'));
+            $this->assign([
+                'requireJs' => $this->_layout->getBlock('require.js')->toHtml(),
+                'headContent' => $this->pageConfigRenderer->renderHeadContent(),
+                'htmlAttributes' => $this->pageConfigRenderer->renderElementAttributes($config::ELEMENT_TYPE_HTML),
+                'headAttributes' => $this->pageConfigRenderer->renderElementAttributes($config::ELEMENT_TYPE_HEAD),
+                'bodyAttributes' => $this->pageConfigRenderer->renderElementAttributes($config::ELEMENT_TYPE_BODY)
+            ]);
 
-            $output = $layout->getOutput();
+            $output = $this->_layout->getOutput();
             $this->translateInline->processResponseBody($output);
             $this->assign('layoutContent', $output);
             $response->appendBody($this->toHtml());
@@ -166,11 +165,10 @@ class Page extends Layout
      */
     protected function addDefaultBodyClasses()
     {
-        $config = $this->getConfig();
-        $config->addBodyClass($this->_request->getFullActionName('-'));
+        $this->pageConfig->addBodyClass($this->_request->getFullActionName('-'));
         $pageLayout = $this->pageConfig->getPageLayout();
         if ($pageLayout) {
-            $config->addBodyClass('page-layout-' . $pageLayout);
+            $this->pageConfig->addBodyClass('page-layout-' . $pageLayout);
         }
         return $this;
     }

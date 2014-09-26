@@ -25,27 +25,16 @@
 /** @var $this \Magento\Tax\Block\Item\Price\Renderer */
 ?>
 <?php $_item = $this->getItem() ?>
-<div class="pricing details<?php echo $this->displayBothPrices() ? ' complex' : ''; ?>">
-<?php if ($this->displayPriceExclTax() || $this->displayBothPrices()): ?>
-    <div class="rate">
-    <?php if ($this->displayBothPrices()): ?>
-        <span class="label excl tax"><?php echo __('Excl. Tax'); ?></span>
-    <?php else: ?>
-        <span class="label display"><?php echo __('Price'); ?></span>
-    <?php endif; ?>
-        <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($_item->getCalculationPrice()) ?>
-    <?php endif; ?>
-    </div>
-
+<div class="price-container">
+    <span class="price-label"><?php echo __('Price')?></span>
     <?php if ($this->displayPriceInclTax() || $this->displayBothPrices()): ?>
-    <?php $_incl = $this->helper('Magento\Checkout\Helper\Data')->getPriceInclTax($_item); ?>
-    <div class="rate">
-        <?php if ($this->displayBothPrices()): ?>
-            <span class="label tax incl"><?php echo __('Incl. Tax'); ?></span>
-        <?php else: ?>
-            <span class="label display"><?php echo __('Price'); ?></span>
-        <?php endif; ?>
-            <span class="value display"><?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($_incl) ?></span>
-    </div>
-<?php endif; ?>
+        <span class="price-wrapper price-including-tax" data-label="<?php echo __('Incl. Tax')?>">
+            <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($_incl) ?>
+        </span>
+    <?php endif; ?>
+    <?php if ($this->displayPriceExclTax() || $this->displayBothPrices()): ?>
+        <span class="price-wrapper price-excluding-tax" data-label="<?php echo __('Excl. Tax')?>">
+            <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($_item->getCalculationPrice()) ?>
+        </span>
+    <?php endif; ?>
 </div>

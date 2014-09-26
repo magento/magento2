@@ -24,13 +24,9 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
-    <referenceBlock name="head">
-        <block class="Magento\Theme\Block\Html\Head\Css" name="magento-core-prototype-magento-css">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Core::prototype/magento.css</argument>
-            </arguments>
-        </block>
-    </referenceBlock>
+    <head>
+        <css src="Magento_Core::prototype/magento.css"/>
+    </head>
     <referenceBlock name="order_item_extra_info">
         <block class="Magento\GiftMessage\Block\Adminhtml\Sales\Order\View\Giftoptions" name="gift_options_link" template="sales/order/view/giftoptions.phtml">
             <block class="Magento\GiftMessage\Block\Adminhtml\Sales\Order\View\Items" name="gift_options_item_data" template="sales/order/view/items.phtml"/>

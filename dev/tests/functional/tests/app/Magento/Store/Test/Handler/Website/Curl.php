@@ -33,14 +33,14 @@ use Mtf\Handler\Curl as AbstractCurl;
 
 /**
  * Class Curl
- * Curl handler for creating Website.
+ * Curl handler for creating Website
  */
 class Curl extends AbstractCurl implements WebsiteInterface
 {
     /**
      * POST request for creating Website
      *
-     * @param FixtureInterface $fixture
+     * @param FixtureInterface|null $fixture [optional]
      * @return array
      * @throws \Exception
      */
@@ -49,7 +49,7 @@ class Curl extends AbstractCurl implements WebsiteInterface
         $data = $this->prepareData($fixture);
         $url = $_ENV['app_backend_url'] . 'admin/system_store/save/';
         $curl = new BackendDecorator(new CurlTransport(), new Config());
-        $curl->write(CurlInterface::POST, $url, '1.0', [], $data);
+        $curl->write(CurlInterface::POST, $url, '1.1', [], $data);
         $response = $curl->read();
         $curl->close();
         if (!strpos($response, 'data-ui-id="messages-message-success"')) {
@@ -81,7 +81,7 @@ class Curl extends AbstractCurl implements WebsiteInterface
         preg_match('/' . $expectedUrl . '([0-9]*)\/(.)*>' . $websiteName . '<\/a>/', $response, $matches);
 
         if (empty($matches)) {
-            throw new \Exception('Cannot find website id');
+            throw new \Exception('Cannot find website id.');
         }
 
         return intval($matches[1]);
@@ -95,9 +95,12 @@ class Curl extends AbstractCurl implements WebsiteInterface
      */
     protected function prepareData(FixtureInterface $fixture)
     {
-        $data['website']= $fixture->getData();
-        $data['store_action'] = isset($data['store_action']) ? $data['store_action'] : 'add';
-        $data['store_type'] = isset($data['store_type']) ? $data['store_type'] : 'website';
+        $data = [
+            'website' => $fixture->getData(),
+            'store_action' => 'add',
+            'store_type' => 'website'
+        ];
+        $data['website']['website_id'] = isset($data['website']['website_id']) ? $data['website']['website_id'] : '';
 
         return $data;
     }

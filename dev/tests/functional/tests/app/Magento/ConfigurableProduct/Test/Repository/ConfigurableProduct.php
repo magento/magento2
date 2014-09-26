@@ -92,12 +92,6 @@ class ConfigurableProduct extends Product
         $pricing = array(
             'data' => array(
                 'fields' => array(
-                    'msrp_enabled' => array(
-                        'value' => 'Yes',
-                        'input_value' => '1',
-                        'group' => ConfigurableProductFixture::GROUP_PRODUCT_PRICING,
-                        'input' => 'select'
-                    ),
                     'msrp_display_actual_price_type' => array(
                         'value' => 'On Gesture',
                         'input_value' => '1',

@@ -56,7 +56,7 @@ class AssertUrlRewriteCategoryRedirect extends AbstractConstraint
         Browser $browser
     ) {
         $browser->open($_ENV['app_frontend_url'] . $urlRewrite->getRequestPath());
-        $url = $urlRewrite->getOptions() == 'No'
+        $url = $urlRewrite->getRedirectType() == 'No'
             ? $urlRewrite->getRequestPath()
             : $category->getUrlKey() . '.html';
 

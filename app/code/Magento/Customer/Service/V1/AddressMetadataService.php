@@ -85,6 +85,9 @@ class AddressMetadataService implements AddressMetadataServiceInterface
             $attributes[$attribute->getAttributeCode()] = $this->attributeMetadataConverter
                 ->createMetadataAttribute($attribute);
         }
+        if (empty($attributes)) {
+            throw NoSuchEntityException::singleField('formCode', $formCode);
+        }
         return $attributes;
     }
 
@@ -95,7 +98,7 @@ class AddressMetadataService implements AddressMetadataServiceInterface
     {
         /** @var AbstractAttribute $attribute */
         $attribute = $this->attributeMetadataDataProvider->getAttribute(self::ENTITY_TYPE_ADDRESS, $attributeCode);
-        if ($attribute) {
+        if ($attribute && ($attributeCode === 'id' || !is_null($attribute->getId()))) {
             $attributeMetadata = $this->attributeMetadataConverter->createMetadataAttribute($attribute);
             return $attributeMetadata;
         } else {
@@ -142,7 +145,11 @@ class AddressMetadataService implements AddressMetadataServiceInterface
     {
         $customAttributes = [];
         if (!$this->addressDataObjectMethods) {
-            $this->addressDataObjectMethods = array_flip(get_class_methods($dataObjectClassName));
+            $dataObjectMethods = array_flip(get_class_methods($dataObjectClassName));
+            $baseClassDataObjectMethods = array_flip(
+                get_class_methods('Magento\Framework\Service\Data\AbstractExtensibleObject')
+            );
+            $this->addressDataObjectMethods = array_diff_key($dataObjectMethods, $baseClassDataObjectMethods);
         }
         foreach ($this->getAllAttributesMetadata() as $attributeMetadata) {
             $attributeCode = $attributeMetadata->getAttributeCode();

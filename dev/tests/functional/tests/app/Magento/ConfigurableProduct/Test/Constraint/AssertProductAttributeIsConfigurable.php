@@ -72,7 +72,7 @@ class AssertProductAttributeIsConfigurable extends AbstractConstraint
         $productGrid->getGridPageActionBlock()->addProduct('configurable');
 
         $productConfigurable = $fixtureFactory->createByCode(
-            'catalogProductConfigurable',
+            'configurableProductInjectable',
             [
                 'dataSet' => 'default',
                 'data' => [
@@ -88,7 +88,7 @@ class AssertProductAttributeIsConfigurable extends AbstractConstraint
 
         $productBlockForm = $newProductPage->getProductForm();
         $productBlockForm->fill($productConfigurable);
-
+        $productBlockForm->openTab('variations');
         \PHPUnit_Framework_Assert::assertTrue(
             $productBlockForm->checkAttributeInSearchAttributeForm($this->attribute),
             "Product attribute is absent on the product page."

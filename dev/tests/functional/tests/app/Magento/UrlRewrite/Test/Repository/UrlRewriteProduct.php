@@ -56,7 +56,7 @@ class UrlRewriteProduct extends AbstractRepository
             ],
         ];
         $this->_data['product_with_temporary_redirect'] = $this->_data['default'];
-        $this->_data['product_with_temporary_redirect']['data']['fields']['options'] = [
+        $this->_data['product_with_temporary_redirect']['data']['fields']['redirect_type'] = [
             'value' => 'Temporary (302)',
         ];
     }

@@ -39,10 +39,17 @@ class MatchTest extends \PHPUnit_Framework_TestCase
         $this->objectManager = Bootstrap::getObjectManager();
     }
 
-    public function testBuildQuery()
+    /**
+     * @param string $conditionType
+     * @param string $expectedSuffix
+     * @dataProvider buildQueryProvider
+     */
+    public function testBuildQuery($conditionType, $expectedSuffix)
     {
-        $expectedSql = "SELECT `table`.* FROM `table` WHERE (MATCH (with_boost) AGAINST ('-wb' IN BOOLEAN MODE)) " .
-            "AND (MATCH (without_boost) AGAINST ('-wob' IN BOOLEAN MODE))";
+        $expectedScoreCondition = "(MATCH (with_boost, without_boost) AGAINST ('{$expectedSuffix}someValue' " .
+            "IN BOOLEAN MODE) * 3.14) AS global_score";
+        $expectedSql = "SELECT `someTable`.* FROM `someTable` WHERE (MATCH (with_boost, without_boost) " .
+            "AGAINST ('{$expectedSuffix}someValue' IN BOOLEAN MODE))";
 
         /** @var \Magento\Framework\Search\Adapter\Mysql\ScoreBuilder $scoreBuilder */
         $scoreBuilder = $this->objectManager->create('Magento\Framework\Search\Adapter\Mysql\ScoreBuilder');
@@ -54,9 +61,10 @@ class MatchTest extends \PHPUnit_Framework_TestCase
             [
                 'name' => 'Match query',
                 'boost' => 3.14,
+                'value' => 'someValue',
                 'matches' => [
-                    ['field' => 'with_boost', 'value' => 'wb', 'boost' => 2.15],
-                    ['field' => 'without_boost', 'value' => 'wob']
+                    ['field' => 'with_boost', 'boost' => 2.15],
+                    ['field' => 'without_boost']
                 ]
             ]
         );
@@ -64,9 +72,22 @@ class MatchTest extends \PHPUnit_Framework_TestCase
         $resource = $this->objectManager->create('Magento\Framework\App\Resource');
         /** @var \Magento\Framework\DB\Select $select */
         $select = $resource->getConnection(Config::DEFAULT_SETUP_CONNECTION)->select();
-        $select->from('table');
+        $select->from('someTable');
 
-        $resultSelect = $match->build($scoreBuilder, $select, $query, Bool::QUERY_CONDITION_NOT);
+        $resultSelect = $match->build($scoreBuilder, $select, $query, $conditionType);
+        $this->assertEquals($expectedScoreCondition, $scoreBuilder->build());
         $this->assertEquals($expectedSql, $resultSelect->assemble());
+    }
+
+    /**
+     * @return array
+     */
+    public function buildQueryProvider()
+    {
+        return [
+            [Bool::QUERY_CONDITION_MUST, '+'],
+            [Bool::QUERY_CONDITION_SHOULD, ''],
+            [Bool::QUERY_CONDITION_NOT, '-']
+        ];
     }
 }

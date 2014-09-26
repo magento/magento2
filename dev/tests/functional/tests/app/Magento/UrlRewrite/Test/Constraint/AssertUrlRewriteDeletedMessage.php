@@ -24,7 +24,7 @@
 
 namespace Magento\UrlRewrite\Test\Constraint;
 
-use Magento\UrlRewrite\Test\Page\Adminhtml\UrlrewriteIndex;
+use Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteIndex;
 use Mtf\Constraint\AbstractConstraint;
 
 /**
@@ -48,10 +48,10 @@ class AssertUrlRewriteDeletedMessage extends AbstractConstraint
     /**
      * Assert that delete message is displayed
      *
-     * @param UrlrewriteIndex $index
+     * @param UrlRewriteIndex $index
      * @return void
      */
-    public function processAssert(UrlrewriteIndex $index)
+    public function processAssert(UrlRewriteIndex $index)
     {
         $actualMessage = $index->getMessagesBlock()->getSuccessMessages();
         \PHPUnit_Framework_Assert::assertEquals(

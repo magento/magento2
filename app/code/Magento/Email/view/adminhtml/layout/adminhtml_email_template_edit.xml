@@ -24,11 +24,7 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
-     <referenceBlock name="head">
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-email-js-bootstrap-js">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Email::js/bootstrap.js</argument>
-            </arguments>
-        </block>
-    </referenceBlock>
+    <head>
+        <link src="Magento_Email::js/bootstrap.js"/>
+    </head>
 </page>

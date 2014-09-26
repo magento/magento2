@@ -55,6 +55,10 @@ class Element extends \Magento\Framework\Simplexml\Element
 
     const TYPE_MOVE = 'move';
 
+    const TYPE_UI_COMPONENT = 'ui_component';
+
+    const TYPE_HEAD = 'head';
+
     /**#@-*/
 
     /**#@+
@@ -84,6 +88,7 @@ class Element extends \Magento\Framework\Simplexml\Element
             case self::TYPE_RENDERER:
             case self::TYPE_TEMPLATE:
             case self::TYPE_DATA:
+            case self::TYPE_UI_COMPONENT:
                 $this->prepareBlock();
                 break;
             case self::TYPE_REFERENCE_BLOCK:

@@ -41,7 +41,6 @@ class Price extends AbstractCart
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param PriceCurrencyInterface $priceCurrency
@@ -49,14 +48,13 @@ class Price extends AbstractCart
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $checkoutSession,
         PriceCurrencyInterface $priceCurrency,
         array $data = array()
     ) {
         $this->priceCurrency = $priceCurrency;
-        parent::__construct($context, $catalogData, $customerSession, $checkoutSession, $data);
+        parent::__construct($context, $customerSession, $checkoutSession, $data);
     }
 
 

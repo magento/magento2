@@ -31,16 +31,6 @@ namespace Magento\Catalog\Helper;
 class Catalog extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
-     * Config path to valid file paths
-     */
-    const XML_PATH_PUBLIC_FILES_VALID_PATHS = 'general/file/public_files_valid_paths';
-
-    /**
-     * Config path to sitemap valid paths
-     */
-    const XML_PATH_SITEMAP_VALID_PATHS = 'general/file/sitemap_generate_valid_paths';
-
-    /**
      * Attribute Tab block name for product edit
      *
      * @var string
@@ -117,18 +107,5 @@ class Catalog extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $this->_categoryAttributeTabBlock = $attributeTabBlock;
         return $this;
-    }
-
-    /**
-     * Get list valid paths for generate a sitemap XML file
-     *
-     * @return array
-     */
-    public function getSitemapValidPaths()
-    {
-        return array_merge(
-            $this->_scopeConfig->getValue(self::XML_PATH_SITEMAP_VALID_PATHS, \Magento\Store\Model\ScopeInterface::SCOPE_STORE),
-            $this->_scopeConfig->getValue(self::XML_PATH_PUBLIC_FILES_VALID_PATHS, \Magento\Store\Model\ScopeInterface::SCOPE_STORE)
-        );
     }
 }

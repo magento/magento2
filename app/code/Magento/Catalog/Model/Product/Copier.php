@@ -25,6 +25,8 @@
  */
 namespace Magento\Catalog\Model\Product;
 
+use Magento\UrlRewrite\Model\Storage\DuplicateEntryException;
+
 class Copier
 {
     /**
@@ -71,7 +73,19 @@ class Copier
         $duplicate->setStoreId(\Magento\Store\Model\Store::DEFAULT_STORE_ID);
 
         $this->copyConstructor->build($product, $duplicate);
-        $duplicate->save();
+        $isDuplicateSaved = false;
+        do {
+            $urlKey = $duplicate->getUrlKey();
+            $urlKey = preg_match('/(.*)-(\d+)$/', $urlKey, $matches)
+                ? $matches[1] . '-' . ($matches[2] + 1)
+                : $urlKey . '-1';
+            $duplicate->setUrlKey($urlKey);
+            try {
+                $duplicate->save();
+                $isDuplicateSaved = true;
+            } catch (DuplicateEntryException $e) {
+            }
+        } while (!$isDuplicateSaved);
 
         $product->getOptionInstance()->duplicate($product->getId(), $duplicate->getId());
         $product->getResource()->duplicate($product->getId(), $duplicate->getId());

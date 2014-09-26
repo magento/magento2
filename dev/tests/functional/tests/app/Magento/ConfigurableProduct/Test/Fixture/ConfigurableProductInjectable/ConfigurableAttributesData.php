@@ -227,7 +227,7 @@ class ConfigurableAttributesData implements FixtureInterface
                 'attribute_key_0' => [
                     'options' => [
                         'option_key_0' => [
-                            'label' => 'option_1_%isolation%',
+                            'label' => 'option_key_1_%isolation%',
                             'pricing_value' => 1,
                             'is_percent' => 'Yes',
                             'include' => 'Yes'
@@ -346,7 +346,110 @@ class ConfigurableAttributesData implements FixtureInterface
                     'weight' => 2
                 ]
             ]
-        ]
+        ],
+        'color_and_size' => [
+            'attributes_data' => [
+                'attribute_key_0' => [
+                    'options' => [
+                        'option_key_0' => [
+                            'pricing_value' => 0.00,
+                            'include' => 'Yes',
+                            'is_percent' => 'No'
+                        ],
+                        'option_key_1' => [
+                            'pricing_value' => 0.00,
+                            'include' => 'Yes',
+                            'is_percent' => 'No'
+                        ],
+                    ]
+                ],
+                'attribute_key_1' => [
+                    'options' => [
+                        'option_key_0' => [
+                            'pricing_value' => 5.00,
+                            'include' => 'Yes',
+                            'is_percent' => 'No'
+                        ],
+                        'option_key_1' => [
+                            'pricing_value' => 10.00,
+                            'include' => 'Yes',
+                            'is_percent' => 'No'
+                        ],
+                    ]
+                ]
+            ],
+            'products' => [
+
+            ],
+            'attributes' => [
+                'attribute_key_0' => 'catalogProductAttribute::color',
+                'attribute_key_1' => 'catalogProductAttribute::size',
+            ],
+            'matrix' => [
+                'attribute_key_0:option_key_0 attribute_key_1:option_key_0' => [
+                    'quantity_and_stock_status' => [
+                        'qty' => 100
+                    ],
+                    'weight' => 1
+                ],
+                'attribute_key_0:option_key_0 attribute_key_1:option_key_1' => [
+                    'quantity_and_stock_status' => [
+                        'qty' => 100
+                    ],
+                    'weight' => 1
+                ],
+                'attribute_key_0:option_key_1 attribute_key_1:option_key_0' => [
+                    'quantity_and_stock_status' => [
+                        'qty' => 100
+                    ],
+                    'weight' => 1
+                ],
+                'attribute_key_0:option_key_1 attribute_key_1:option_key_1' => [
+                    'quantity_and_stock_status' => [
+                        'qty' => 100
+                    ],
+                    'weight' => 1
+                ],
+            ]
+        ],
+        'size' => [
+            'attributes_data' => [
+                'attribute_key_0' => [
+                    'options' => [
+                        'option_key_0' => [
+                            'pricing_value' => 0.00,
+                            'include' => 'Yes',
+                            'is_percent' => 'No'
+                        ],
+                        'option_key_1' => [
+                            'pricing_value' => 0.00,
+                            'include' => 'Yes',
+                            'is_percent' => 'No'
+                        ],
+                    ]
+                ]
+            ],
+            'products' => [
+
+            ],
+            'attributes' => [
+                'attribute_key_0' => 'catalogProductAttribute::size',
+            ],
+            'matrix' => [
+                'attribute_key_0:option_key_0' => [
+                    'quantity_and_stock_status' => [
+                        'qty' => 10
+                    ],
+                    'weight' => 1
+                ],
+                'attribute_key_0:option_key_1' => [
+                    'quantity_and_stock_status' => [
+                        'qty' => 10
+                    ],
+                    'weight' => 1
+                ],
+            ]
+        ],
     ];
 
 

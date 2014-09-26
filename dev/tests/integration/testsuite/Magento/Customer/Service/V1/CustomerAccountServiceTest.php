@@ -558,7 +558,7 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
         );
         $this->_customerBuilder->populateWithArray($newCustomer);
         $this->_customerDetailsBuilder->setCustomer($this->_customerBuilder->create());
-        $this->_customerAccountService->updateCustomer($this->_customerDetailsBuilder->create());
+        $this->_customerAccountService->updateCustomer($customerId, $this->_customerDetailsBuilder->create());
 
         $newCustomerDetails = $this->_customerAccountService->getCustomerDetails($customerId);
         $this->assertEquals($firstName, $newCustomerDetails->getCustomer()->getFirstname());
@@ -586,7 +586,7 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
         $this->_customerDetailsBuilder
             ->setCustomer($customerDetails->getCustomer())
             ->setAddresses([$this->_addressBuilder->create(), $addresses[1]]);
-        $this->_customerAccountService->updateCustomer($this->_customerDetailsBuilder->create());
+        $this->_customerAccountService->updateCustomer($customerId, $this->_customerDetailsBuilder->create());
 
         $newCustomerDetails = $this->_customerAccountService->getCustomerDetails($customerId);
         $this->assertEquals(2, count($newCustomerDetails->getAddresses()));
@@ -613,7 +613,7 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
         $this->_customerDetailsBuilder
             ->setCustomer($customerDetails->getCustomer())->setAddresses([$addresses[1]]);
 
-        $this->_customerAccountService->updateCustomer($this->_customerDetailsBuilder->create());
+        $this->_customerAccountService->updateCustomer($customerId, $this->_customerDetailsBuilder->create());
 
         $newCustomerDetails = $this->_customerAccountService->getCustomerDetails($customerId);
         $this->assertEquals(1, count($newCustomerDetails->getAddresses()));
@@ -631,7 +631,7 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
         $customerDetails = $this->_customerAccountService->getCustomerDetails($customerId);
         $this->_customerDetailsBuilder->setCustomer($customerDetails->getCustomer())
             ->setAddresses([]);
-        $this->_customerAccountService->updateCustomer($this->_customerDetailsBuilder->create());
+        $this->_customerAccountService->updateCustomer($customerId, $this->_customerDetailsBuilder->create());
 
         $newCustomerDetails = $this->_customerAccountService->getCustomerDetails($customerId);
         $this->assertEquals(0, count($newCustomerDetails->getAddresses()));
@@ -662,7 +662,7 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
         $this->_customerBuilder->populateWithArray($customerData);
         $modifiedCustomer = $this->_customerBuilder->create();
         $customerDetails = $this->_customerDetailsBuilder->setCustomer($modifiedCustomer)->create();
-        $this->_customerAccountService->updateCustomer($customerDetails);
+        $this->_customerAccountService->updateCustomer($existingCustId, $customerDetails);
         $customerAfter = $this->_customerAccountService->getCustomer($existingCustId);
         $this->assertEquals($email, $customerAfter->getEmail());
         $this->assertEquals($firstName, $customerAfter->getFirstname());
@@ -719,7 +719,7 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
         $modifiedCustomer = $this->_customerBuilder->create();
 
         $customerDetails = $this->_customerDetailsBuilder->setCustomer($modifiedCustomer)->create();
-        $this->_customerAccountService->updateCustomer($customerDetails);
+        $this->_customerAccountService->updateCustomer($existingCustId, $customerDetails);
         $customerAfter = $this->_customerAccountService->getCustomer($existingCustId);
         $this->assertEquals($email, $customerAfter->getEmail());
         $this->assertEquals($firstName, $customerAfter->getFirstname());
@@ -785,7 +785,7 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
         $this->_customerBuilder->populateWithArray($customerData);
         $modifiedCustomer = $this->_customerBuilder->create();
         $customerDetails = $this->_customerDetailsBuilder->setCustomer($modifiedCustomer)->create();
-        $this->_customerAccountService->updateCustomer($customerDetails);
+        $this->_customerAccountService->updateCustomer($existingCustId, $customerDetails);
         $customerAfter = $this->_customerAccountService->getCustomer($existingCustId);
         $this->assertEquals($email, $customerAfter->getEmail());
         $this->assertEquals($firstName, $customerAfter->getFirstname());
@@ -1029,7 +1029,7 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
         $customerDetails = $this->_customerDetailsBuilder->setCustomer($newCustomerEntity)->create();
         /** @var \Magento\Framework\Math\Random $mathRandom */
         $password = $this->_objectManager->get('Magento\Framework\Math\Random')->getRandomString(
-            CustomerAccountServiceInterface::DEFAULT_PASSWORD_LENGTH
+            CustomerAccountServiceInterface::MIN_PASSWORD_LENGTH
         );
         /** @var \Magento\Framework\Encryption\EncryptorInterface $encryptor */
         $encryptor = $this->_objectManager->get('Magento\Framework\Encryption\EncryptorInterface');
@@ -1115,7 +1115,7 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
         $this->_customerBuilder->populate($customer);
         $this->_customerBuilder->setFirstname('Tested');
         $customerDetails = $this->_customerDetailsBuilder->setCustomer($this->_customerBuilder->create())->create();
-        $this->_customerAccountService->updateCustomer($customerDetails);
+        $this->_customerAccountService->updateCustomer($customer->getId(), $customerDetails);
 
         $customer = $this->_customerAccountService->getCustomer($customer->getId());
 
@@ -1556,7 +1556,7 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
         $this->_customerDetailsBuilder->setCustomer(($this->_customerBuilder->create()))
             ->setAddresses([$this->_addressBuilder->create(), $addresses[1]]);
 
-        $this->_customerAccountService->updateCustomerDetailsByEmail(
+        $this->_customerAccountService->updateCustomerByEmail(
             $email,
             $this->_customerDetailsBuilder->create(),
             $websiteId
@@ -1595,7 +1595,7 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
         );
         $this->_customerBuilder->populateWithArray($customerData);
         $this->_customerDetailsBuilder->setCustomer(($this->_customerBuilder->create()))->setAddresses([]);
-        $this->_customerAccountService->updateCustomerDetailsByEmail($email, $this->_customerDetailsBuilder->create());
+        $this->_customerAccountService->updateCustomerByEmail($email, $this->_customerDetailsBuilder->create());
 
     }
 

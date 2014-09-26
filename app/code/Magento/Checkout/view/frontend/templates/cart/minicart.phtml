@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
-
 /** @var $this \Magento\Checkout\Block\Cart\Sidebar */
 ?>
 <?php if ($this->getInList()): ?>
@@ -68,18 +67,7 @@
                 <?php if ($_cartQty || $this->getAllowCartLink()): ?>
                     <?php $isPossibleOnepageCheckout = $_cartQty && $this->isPossibleOnepageCheckout() ?>
                     <?php if ($isPossibleOnepageCheckout): ?>
-                        <div class="subtotal">
-                            <?php if ($this->canApplyMsrp()): ?>
-                            <span class="mark msrp">
-                                <?php echo __('Order total will be displayed before you submit the order'); ?>
-                            </span>
-                            <?php else: ?>
-                                <span class="mark">
-                                    <?php echo __('Cart Subtotal') ?>
-                                </span>
-                                <?php echo $this->getTotalsHtml() ?>
-                            <?php endif ?>
-                        </div>
+                        <?php echo $this->getChildHtml('subtotal'); ?>
                     <?php endif; ?>
                     <?php echo $this->getChildHtml('minicart_info') ?>
                     <div class="actions">

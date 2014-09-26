@@ -441,7 +441,7 @@ class Setup extends \Magento\Eav\Model\Entity\Setup
                     ),
                     'telephone' => array(
                         'type' => 'varchar',
-                        'label' => 'Telephone',
+                        'label' => 'Phone Number',
                         'input' => 'text',
                         'sort_order' => 120,
                         'validate_rules' => 'a:2:{s:15:"max_text_length";i:255;s:15:"min_text_length";i:1;}',

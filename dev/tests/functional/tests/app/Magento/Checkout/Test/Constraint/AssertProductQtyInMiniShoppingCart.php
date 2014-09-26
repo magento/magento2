@@ -24,15 +24,18 @@
 
 namespace Magento\Checkout\Test\Constraint;
 
-use Mtf\Constraint\AbstractConstraint;
+use Mtf\Constraint\AbstractAssertForm;
 use Magento\Cms\Test\Page\CmsIndex;
+use Mtf\Fixture\FixtureInterface;
 use Magento\Checkout\Test\Fixture\Cart;
+use Magento\Checkout\Test\Fixture\Cart\Items;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 
 /**
  * Class AssertProductQtyInMiniShoppingCart
+ * Assert that product quantity in the mini shopping cart is equals to expected quantity from data set
  */
-class AssertProductQtyInMiniShoppingCart extends AbstractConstraint
+class AssertProductQtyInMiniShoppingCart extends AbstractAssertForm
 {
     /**
      * Constraint severeness
@@ -46,21 +49,37 @@ class AssertProductQtyInMiniShoppingCart extends AbstractConstraint
      *
      * @param CmsIndex $cmsIndex
      * @param Cart $cart
-     * @param CatalogProductSimple $product
      * @return void
      */
     public function processAssert(
         CmsIndex $cmsIndex,
-        Cart $cart,
-        CatalogProductSimple $product
+        Cart $cart
     ) {
-        $productQtyInMiniCart = $cmsIndex->open()->getCartSidebarBlock()->getProductQty($product->getName());
-        \PHPUnit_Framework_Assert::assertEquals(
-            $productQtyInMiniCart,
-            $cart->getQty(),
-            'Mini shopping cart product qty: \'' . $productQtyInMiniCart
-            . '\' not equals with qty from data set: \'' . $cart->getQty() . '\''
-        );
+        $cmsIndex->open();
+        /** @var Items $sourceProducts */
+        $sourceProducts = $cart->getDataFieldConfig('items')['source'];
+        $products = $sourceProducts->getProducts();
+        $items = $cart->getItems();
+        $productsData = [];
+        $miniCartData = [];
+
+        foreach ($items as $key => $item) {
+            /** @var CatalogProductSimple $product */
+            $product = $products[$key];
+            $productName = $product->getName();
+            /** @var FixtureInterface $item */
+            $checkoutItem = $item->getData();
+
+            $productsData[$productName] = [
+                'qty' => $checkoutItem['qty']
+            ];
+            $miniCartData[$productName] = [
+                'qty' => $cmsIndex->getCartSidebarBlock()->getProductQty($productName)
+            ];
+        }
+
+        $error = $this->verifyData($productsData, $miniCartData, true);
+        \PHPUnit_Framework_Assert::assertEmpty($error, $error);
     }
 
     /**

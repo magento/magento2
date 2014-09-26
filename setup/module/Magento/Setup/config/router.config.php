@@ -22,6 +22,8 @@
  * @license   http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
+use Magento\Setup\Controller\ConsoleController;
+
 return [
     'route_manager' => [
         'invokables' => [
@@ -56,4 +58,5 @@ return [
             ],
         ],
     ],
+    'console' => ['router' => ['routes' => ConsoleController::getRouterConfig()]],
 ];

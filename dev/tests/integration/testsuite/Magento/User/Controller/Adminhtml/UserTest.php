@@ -23,6 +23,8 @@
  */
 namespace Magento\User\Controller\Adminhtml;
 
+use Magento\TestFramework\Bootstrap;
+
 /**
  * @magentoAppArea adminhtml
  */
@@ -68,20 +70,7 @@ class UserTest extends \Magento\Backend\Utility\Controller
     /**
      * @magentoDbIsolation enabled
      */
-    public function testSaveAction()
-    {
-        $this->_createNew();
-        $this->assertSessionMessages(
-            $this->equalTo(array('You saved the user.')),
-            \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
-        );
-        $this->assertRedirect($this->stringContains('backend/admin/user/index/'));
-    }
-
-    /**
-     * Create new user through dispatching save action
-     */
-    private function _createNew()
+    public function testSaveActionMissingCurrentAdminPassword()
     {
         $fixture = uniqid();
         $this->getRequest()->setPost(
@@ -95,6 +84,33 @@ class UserTest extends \Magento\Backend\Utility\Controller
             )
         );
         $this->dispatch('backend/admin/user/save');
+        $this->assertSessionMessages($this->equalTo(array('You have entered an invalid password for current user.')));
+        $this->assertRedirect($this->stringContains('backend/admin/user/edit'));
+    }
+
+    /**
+     * @magentoDbIsolation enabled
+     */
+    public function testSaveAction()
+    {
+        $fixture = uniqid();
+        $this->getRequest()->setPost(
+            array(
+                'username' => $fixture,
+                'email' => "{$fixture}@example.com",
+                'firstname' => 'First',
+                'lastname' => 'Last',
+                'password' => 'password_with_1_number',
+                'password_confirmation' => 'password_with_1_number',
+                \Magento\User\Block\User\Edit\Tab\Main::CURRENT_USER_PASSWORD_FIELD => Bootstrap::ADMIN_PASSWORD
+            )
+        );
+        $this->dispatch('backend/admin/user/save');
+        $this->assertSessionMessages(
+            $this->equalTo(array('You saved the user.')),
+            \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
+        );
+        $this->assertRedirect($this->stringContains('backend/admin/user/index/'));
     }
 
     /**
@@ -143,7 +159,8 @@ class UserTest extends \Magento\Backend\Utility\Controller
                 'firstname' => 'First',
                 'lastname' => 'Last',
                 'password' => $passwordPair['password'],
-                'password_confirmation' => $passwordPair['password_confirmation']
+                'password_confirmation' => $passwordPair['password_confirmation'],
+                \Magento\User\Block\User\Edit\Tab\Main::CURRENT_USER_PASSWORD_FIELD => Bootstrap::ADMIN_PASSWORD
             );
             $data[] = array($postData, $passwordPair['is_correct']);
         }

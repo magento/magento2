@@ -58,6 +58,10 @@ class Curl extends AbstractCurl implements CatalogCategoryInterface
             'Yes' => 1,
             'No' => 0,
         ],
+        'is_anchor' => [
+            'Yes' => 1,
+            'No' => 0,
+        ],
         'include_in_menu' => [
             'Yes' => 1,
             'No' => 0,

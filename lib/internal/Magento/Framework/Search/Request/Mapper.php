@@ -23,8 +23,8 @@
  */
 namespace Magento\Framework\Search\Request;
 
-use Magento\Framework\Search\Request\Query\Filter;
 use Magento\Framework\Exception\StateException;
+use Magento\Framework\Search\Request\Query\Filter;
 
 class Mapper
 {
@@ -89,14 +89,6 @@ class Mapper
     }
 
     /**
-     * @return QueryInterface
-     */
-    public function getRootQuery()
-    {
-        return $this->rootQuery;
-    }
-
-    /**
      * Get Query Interface by name
      *
      * @param string $queryName
@@ -138,6 +130,7 @@ class Mapper
                     'Magento\Framework\Search\Request\Query\Match',
                     [
                         'name' => $query['name'],
+                        'value' => $query['value'],
                         'boost' => isset($query['boost']) ? $query['boost'] : 1,
                         'matches' => $query['match']
                     ]
@@ -180,36 +173,6 @@ class Mapper
     }
 
     /**
-     * Aggregate Queries by clause
-     *
-     * @param array $data
-     * @return array
-     */
-    private function aggregateQueriesByType($data)
-    {
-        $list = [];
-        foreach ($data as $value) {
-            $list[$value['clause']][$value['ref']] = $this->mapQuery($value['ref']);
-        }
-        return $list;
-    }
-
-    /**
-     * Aggregate Filters by clause
-     *
-     * @param array $data
-     * @return array
-     */
-    private function aggregateFiltersByType($data)
-    {
-        $list = [];
-        foreach ($data as $value) {
-            $list[$value['clause']][$value['ref']] = $this->mapFilter($value['ref']);
-        }
-        return $list;
-    }
-
-    /**
      * Convert array to Filter instance
      *
      * @param string $filterName
@@ -246,10 +209,19 @@ class Mapper
                         'name' => $filter['name'],
                         'field' => $filter['field'],
                         'from' => isset($filter['from']) ? $filter['from'] : null,
-                        'to' => isset($filter['to']) ? $filter['to'] : null,
+                        'to' => isset($filter['to']) ? $filter['to'] : null
                     ]
                 );
-
+                break;
+            case FilterInterface::TYPE_WILDCARD:
+                $filter = $this->objectManager->create(
+                    'Magento\Framework\Search\Request\Filter\Wildcard',
+                    [
+                        'name' => $filter['name'],
+                        'field' => $filter['field'],
+                        'value' => $filter['value']
+                    ]
+                );
                 break;
             case FilterInterface::TYPE_BOOL:
                 $aggregatedByType = $this->aggregateFiltersByType($filter['filterReference']);
@@ -265,6 +237,36 @@ class Mapper
                 throw new \InvalidArgumentException('Invalid filter type');
         }
         return $filter;
+    }
+
+    /**
+     * Aggregate Filters by clause
+     *
+     * @param array $data
+     * @return array
+     */
+    private function aggregateFiltersByType($data)
+    {
+        $list = [];
+        foreach ($data as $value) {
+            $list[$value['clause']][$value['ref']] = $this->mapFilter($value['ref']);
+        }
+        return $list;
+    }
+
+    /**
+     * Aggregate Queries by clause
+     *
+     * @param array $data
+     * @return array
+     */
+    private function aggregateQueriesByType($data)
+    {
+        $list = [];
+        foreach ($data as $value) {
+            $list[$value['clause']][$value['ref']] = $this->mapQuery($value['ref']);
+        }
+        return $list;
     }
 
     /**
@@ -287,15 +289,6 @@ class Mapper
     }
 
     /**
-     * @return void
-     * @throws StateException
-     */
-    private function validateFilters()
-    {
-        $this->validateNotUsed($this->filters, $this->mappedFilters, 'Filter %1 is not used in request hierarchy');
-    }
-
-    /**
      * @param array $elements
      * @param string[] $mappedElements
      * @param string $errorMessage
@@ -312,6 +305,23 @@ class Mapper
     }
 
     /**
+     * @return void
+     * @throws StateException
+     */
+    private function validateFilters()
+    {
+        $this->validateNotUsed($this->filters, $this->mappedFilters, 'Filter %1 is not used in request hierarchy');
+    }
+
+    /**
+     * @return QueryInterface
+     */
+    public function getRootQuery()
+    {
+        return $this->rootQuery;
+    }
+
+    /**
      * Build BucketInterface[] from array
      *
      * @return array
@@ -322,11 +332,11 @@ class Mapper
         $buckets = array();
         foreach ($this->aggregations as $bucketData) {
             $arguments =
-            [
-                'name' => $bucketData['name'],
-                'field' => $bucketData['field'],
-                'metrics' => $this->mapMetrics($bucketData['metric'])
-            ];
+                [
+                    'name' => $bucketData['name'],
+                    'field' => $bucketData['field'],
+                    'metrics' => $this->mapMetrics($bucketData['metric'])
+                ];
             switch ($bucketData['type']) {
                 case BucketInterface::TYPE_TERM:
                     $bucket = $this->objectManager->create(

@@ -24,21 +24,17 @@
 
 return [
     'modules' => [
-        'Magento\Composer',
         'Magento\Config',
         'Magento\Filesystem',
-        'Magento\Locale',
-        'Magento\Module',
         'Magento\Setup',
-        'Magento\Framework',
     ],
     'module_listener_options' => [
         'module_paths' => [
-            './module',
-            './vendor',
+            __DIR__ . '/../module',
+            __DIR__ . '/../vendor',
         ],
         'config_glob_paths' => array(
-            'config/autoload/{,*.}{global,local}.php',
+            __DIR__ . '/autoload/{,*.}{global,local}.php',
         ),
     ],
 ];

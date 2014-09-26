@@ -40,7 +40,7 @@
         .form-field();
         &.no-label {
             > .label {
-                .visually-hidden();
+                &:extend(.abstract-visually-hidden all);
             }
         }
         &.choice {
@@ -97,7 +97,7 @@ select:focus ~ .tooltip .tooltip-content {
 .responsive(@break) when (@break = @screen-m) {
     .fieldset {
         .legend {
-            &:extend(.margin-for-forms-desktop all);
+            &:extend(.abstract-margin-for-forms-desktop all);
         }
         > .field {
             .form-field-type-revert();

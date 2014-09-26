@@ -30,6 +30,8 @@ namespace Magento\User\Block\User\Edit\Tab;
  */
 class Main extends \Magento\Backend\Block\Widget\Form\Generic
 {
+    const CURRENT_USER_PASSWORD_FIELD = 'current_password';
+
     /**
      * @var \Magento\Backend\Model\Auth\Session
      */
@@ -76,17 +78,17 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
         $form = $this->_formFactory->create();
         $form->setHtmlIdPrefix('user_');
 
-        $fieldset = $form->addFieldset('base_fieldset', array('legend' => __('Account Information')));
+        $baseFieldset = $form->addFieldset('base_fieldset', array('legend' => __('Account Information')));
 
         if ($model->getUserId()) {
-            $fieldset->addField('user_id', 'hidden', array('name' => 'user_id'));
+            $baseFieldset->addField('user_id', 'hidden', array('name' => 'user_id'));
         } else {
             if (!$model->hasData('is_active')) {
                 $model->setIsActive(1);
             }
         }
 
-        $fieldset->addField(
+        $baseFieldset->addField(
             'username',
             'text',
             array(
@@ -98,7 +100,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
             )
         );
 
-        $fieldset->addField(
+        $baseFieldset->addField(
             'firstname',
             'text',
             array(
@@ -110,7 +112,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
             )
         );
 
-        $fieldset->addField(
+        $baseFieldset->addField(
             'lastname',
             'text',
             array(
@@ -122,7 +124,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
             )
         );
 
-        $fieldset->addField(
+        $baseFieldset->addField(
             'email',
             'text',
             array(
@@ -142,9 +144,9 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
             $passwordLabel = __('New Password');
         }
         $confirmationLabel = __('Password Confirmation');
-        $this->_addPasswordFields($fieldset, $passwordLabel, $confirmationLabel, $isNewObject);
+        $this->_addPasswordFields($baseFieldset, $passwordLabel, $confirmationLabel, $isNewObject);
 
-        $fieldset->addField(
+        $baseFieldset->addField(
             'interface_locale',
             'select',
             array(
@@ -157,7 +159,7 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
         );
 
         if ($this->_authSession->getUser()->getId() != $model->getUserId()) {
-            $fieldset->addField(
+            $baseFieldset->addField(
                 'is_active',
                 'select',
                 array(
@@ -172,12 +174,30 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic
             );
         }
 
-        $fieldset->addField('user_roles', 'hidden', array('name' => 'user_roles', 'id' => '_user_roles'));
+        $baseFieldset->addField('user_roles', 'hidden', array('name' => 'user_roles', 'id' => '_user_roles'));
+
+
+
+        $currentUserVerificationFieldset = $form->addFieldset(
+            'current_user_verification_fieldset',
+            ['legend' => __('Current User Identity Verification')]
+        );
+        $currentUserVerificationFieldset->addField(
+            self::CURRENT_USER_PASSWORD_FIELD,
+            'password',
+            array(
+                'name' => self::CURRENT_USER_PASSWORD_FIELD,
+                'label' => __('Your Password'),
+                'id' => self::CURRENT_USER_PASSWORD_FIELD,
+                'title' => __('Your Password'),
+                'class' => 'input-text validate-current-password required-entry',
+                'required' => true
+            )
+        );
 
         $data = $model->getData();
-
         unset($data['password']);
-
+        unset($data[self::CURRENT_USER_PASSWORD_FIELD]);
         $form->setValues($data);
 
         $this->setForm($form);

@@ -54,6 +54,7 @@ class Condition extends \Magento\GoogleShopping\Model\Attribute\DefaultAttribute
         $availableConditions = array(self::CONDITION_NEW, self::CONDITION_USED, self::CONDITION_REFURBISHED);
 
         $mapValue = $this->getProductAttributeValue($product);
+        $mapValue = !is_null($mapValue) ? mb_convert_case($mapValue, MB_CASE_LOWER) : $mapValue;
         if (!is_null($mapValue) && in_array($mapValue, $availableConditions)) {
             $condition = $mapValue;
         } else {

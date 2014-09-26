@@ -33,6 +33,20 @@ use Mtf\Client\Element\Locator;
 class CartItem extends AbstractCartItem
 {
     /**
+     * Selector for "Edit" button
+     *
+     * @var string
+     */
+    protected $edit = '.action.edit';
+
+    /**
+     * Selector for "Remove item" button
+     *
+     * @var string
+     */
+    protected $removeItem = '.action.delete';
+
+    /**
      * Get bundle options
      *
      * @var string
@@ -158,6 +172,26 @@ class CartItem extends AbstractCartItem
     {
         $formatPrice = sprintf($this->bundleOptions, $index, $itemIndex);
         return trim($this->_rootElement->find($formatPrice, Locator::SELECTOR_XPATH)->getText(), $currency);
+    }
+
+    /**
+     * Edit product item in cart
+     *
+     * @return void
+     */
+    public function edit()
+    {
+        $this->_rootElement->find($this->edit)->click();
+    }
+
+    /**
+     * Remove product item from cart
+     *
+     * @return void
+     */
+    public function removeItem()
+    {
+        $this->_rootElement->find($this->removeItem)->click();
     }
 
     /**

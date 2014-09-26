@@ -24,11 +24,11 @@
 
 namespace Magento\Translation\Block;
 
-use Magento\Framework\View\Element\BlockInterface;
+use Magento\Framework\View\Element\Template;
 use \Magento\Translation\Model\Js as DataProvider;
 use \Magento\Framework\Translate\InlineInterface as InlineTranslator;
 
-class Js
+class Js extends \Magento\Framework\View\Element\Template
 {
     /**
      * Data provider model
@@ -45,27 +45,29 @@ class Js
     protected $translateInline;
 
     /**
+     * @param Template\Context $context
      * @param DataProvider $dataProvider
      * @param InlineTranslator $translateInline
+     * @param array $data
      */
     public function __construct(
+        Template\Context $context,
         DataProvider $dataProvider,
-        InlineTranslator $translateInline
+        InlineTranslator $translateInline,
+        array $data = array()
     ) {
+        parent::__construct($context, $data);
         $this->dataProvider = $dataProvider;
         $this->translateInline = $translateInline;
     }
 
     /**
-     * Render js translation
-     *
      * @return string
      */
-    public function render()
+    public function getTranslatedJson()
     {
         $json = \Zend_Json::encode($this->dataProvider->getTranslateData());
         $this->translateInline->processResponseBody($json, false);
-        $script = 'require(["jquery", "mage/translate"], function($){ $.mage.translate.add(' . $json . '); })';
-        return '<script type="text/javascript">//<![CDATA[' . "\n{$script}\n" . '//]]></script>';
+        return $json;
     }
 }

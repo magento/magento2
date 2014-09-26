@@ -24,13 +24,11 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
+    <body>
+        <attribute name="class" value="type-configurable"/>
+    </body>
     <referenceBlock name="head.components">
         <block class="Magento\Framework\View\Element\Js\Components" name="configurableproduct_product_view_head_components" template="Magento_ConfigurableProduct::js/components.phtml"/>
-    </referenceBlock>
-    <referenceBlock name="body.class">
-        <action method="addBodyClass">
-            <argument name="value" xsi:type="string">type-configurable</argument>
-        </action>
     </referenceBlock>
     <referenceContainer name="product.info.type">
         <block class="Magento\ConfigurableProduct\Block\Product\View\Type\Configurable" name="product.info.configurable" as="product_type_data" template="Magento_Catalog::product/view/type/default.phtml"/>

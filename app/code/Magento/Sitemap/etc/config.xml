@@ -52,6 +52,13 @@
             <search_engines>
                 <submission_robots>0</submission_robots>
             </search_engines>
+            <file>
+                <valid_paths>
+                    <available>
+                        <any_path>/*/*.xml</any_path>
+                    </available>
+                </valid_paths>
+            </file>
         </sitemap>
     </default>
 </config>

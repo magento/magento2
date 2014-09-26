@@ -46,20 +46,6 @@ $this->updateAttribute(
 );
 
 $this->updateAttribute(
-    \Magento\Catalog\Model\Product::ENTITY,
-    'msrp_enabled',
-    'frontend_input_renderer',
-    'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Msrp\Enabled'
-);
-
-$this->updateAttribute(
-    \Magento\Catalog\Model\Product::ENTITY,
-    'msrp_display_actual_price_type',
-    'frontend_input_renderer',
-    'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Msrp\Price'
-);
-
-$this->updateAttribute(
     \Magento\Catalog\Model\Category::ENTITY,
     'available_sort_by',
     'frontend_input_renderer',

@@ -27,7 +27,6 @@
     <referenceBlock name="head.components">
         <block class="Magento\Framework\View\Element\Js\Components" name="pagecache_page_head_components" template="Magento_PageCache::js/components.phtml"/>
     </referenceBlock>
-    <referenceBlock name="head"></referenceBlock>
     <referenceContainer name="content">
         <block class="Magento\PageCache\Block\Javascript" template="Magento_PageCache::javascript.phtml" name="pageCache" as="pageCache"/>
     </referenceContainer>

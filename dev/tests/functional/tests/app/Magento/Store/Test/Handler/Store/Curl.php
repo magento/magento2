@@ -33,7 +33,7 @@ use Mtf\Handler\Curl as AbstractCurl;
 
 /**
  * Class Curl
- * Curl handler for creating Store view.
+ * Curl handler for creating Store view
  */
 class Curl extends AbstractCurl implements StoreInterface
 {
@@ -71,7 +71,7 @@ class Curl extends AbstractCurl implements StoreInterface
         $data = $this->prepareData($fixture);
         $url = $_ENV['app_backend_url'] . $this->saveUrl;
         $curl = new BackendDecorator(new CurlTransport(), new Config());
-        $curl->write(CurlInterface::POST, $url, '1.0', [], $data);
+        $curl->write(CurlInterface::POST, $url, '1.1', [], $data);
         $response = $curl->read();
         $curl->close();
         if (!strpos($response, 'data-ui-id="messages-message-success"')) {
@@ -89,10 +89,13 @@ class Curl extends AbstractCurl implements StoreInterface
      */
     protected function prepareData(FixtureInterface $fixture)
     {
-        $data['store'] = $this->replaceMappingData($fixture->getData());
-        $data['store_action'] = isset($data['store_action']) ? $data['store_action'] : 'add';
-        $data['store_type'] = isset($data['store_type']) ? $data['store_type'] : 'store';
+        $data = [
+            'store' => $this->replaceMappingData($fixture->getData()),
+            'store_action' => 'add',
+            'store_type' => 'store',
+        ];
         $data['store']['group_id'] = $fixture->getDataFieldConfig('group_id')['source']->getStoreGroup()->getGroupId();
+        $data['store']['store_id'] = isset($data['store']['store_id']) ? $data['store']['store_id'] : '';
 
         return $data;
     }

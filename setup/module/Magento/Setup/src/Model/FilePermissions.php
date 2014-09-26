@@ -131,4 +131,16 @@ class FilePermissions
         }
         return true;
     }
+
+    /**
+     * Checks if has file permission or not
+     *
+     * @return array
+     */
+    public function checkPermission()
+    {
+        $required = $this->getRequired();
+        $current = $this->getCurrent();
+        return array_diff($required, $current);
+    }
 }

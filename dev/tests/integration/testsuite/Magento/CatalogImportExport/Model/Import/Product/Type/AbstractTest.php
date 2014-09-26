@@ -63,25 +63,24 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     public function prepareAttributesWithDefaultValueForSaveDataProvider()
     {
         return array(
-            'Updating existing product with attributes that don\'t have default values' => array(
+            'Updating existing product with attributes that do not have default values' => array(
                 array('sku' => 'simple_product_1', 'price' => 55, '_attribute_set' => 'Default', '_type' => 'simple'),
                 false,
                 array('price' => 55)
             ),
-            'Updating existing product with attributes that do have default values' => array(
+            'Updating existing product with attributes that have default values' => array(
                 array(
                     'sku' => 'simple_product_2',
                     'price' => 65,
                     '_attribute_set' => 'Default',
                     '_type' => 'simple',
                     'visibility' => 1,
-                    'msrp_enabled' => 'Yes',
                     'tax_class_id' => ''
                 ),
                 false,
-                array('price' => 65, 'visibility' => 1, 'msrp_enabled' => 1, 'tax_class_id' => '')
+                array('price' => 65, 'visibility' => 1, 'tax_class_id' => '')
             ),
-            'Adding new product with attributes that don\'t have default values' => array(
+            'Adding new product with attributes that do not have default values' => array(
                 array(
                     'sku' => 'simple_product_3',
                     '_store' => '',
@@ -109,11 +108,10 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
                     'short_description' => 'a',
                     'visibility' => 1,
                     'options_container' => 'container2',
-                    'msrp_enabled' => 2,
-                    'msrp_display_actual_price_type' => 4
+                    'msrp_display_actual_price_type' => 0
                 )
             ),
-            'Adding new product with attributes that do have default values' => array(
+            'Adding new product with attributes that have default values' => array(
                 array(
                     'sku' => 'simple_product_4',
                     '_store' => '',
@@ -129,7 +127,6 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
                     'description' => 'a',
                     'short_description' => 'a',
                     'visibility' => 2,
-                    'msrp_enabled' => 'Yes',
                     'msrp_display_actual_price_type' => 'In Cart'
                 ),
                 true,
@@ -143,7 +140,6 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
                     'short_description' => 'a',
                     'visibility' => 2,
                     'options_container' => 'container2',
-                    'msrp_enabled' => 1,
                     'msrp_display_actual_price_type' => 2
                 )
             )

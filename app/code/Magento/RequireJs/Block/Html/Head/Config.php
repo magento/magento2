@@ -24,12 +24,10 @@
 
 namespace Magento\RequireJs\Block\Html\Head;
 
-use Magento\Theme\Block\Html\Head\AssetBlockInterface;
-
 /**
  * Block responsible for including RequireJs config on the page
  */
-class Config extends \Magento\Framework\View\Element\AbstractBlock implements AssetBlockInterface
+class Config extends \Magento\Framework\View\Element\AbstractBlock
 {
     /**
      * @var \Magento\Framework\RequireJs\Config
@@ -42,38 +40,40 @@ class Config extends \Magento\Framework\View\Element\AbstractBlock implements As
     private $fileManager;
 
     /**
-     * @var \Magento\Framework\View\Asset\LocalInterface
+     * @var \Magento\Framework\View\Page\Config
      */
-    private $asset;
+    protected $pageConfig;
 
     /**
      * @param \Magento\Framework\View\Element\Context $context
      * @param \Magento\Framework\RequireJs\Config $config
      * @param \Magento\RequireJs\Model\FileManager $fileManager
+     * @param \Magento\Framework\View\Page\Config $pageConfig
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Context $context,
         \Magento\Framework\RequireJs\Config $config,
         \Magento\RequireJs\Model\FileManager $fileManager,
+        \Magento\Framework\View\Page\Config $pageConfig,
         array $data = array()
     ) {
         parent::__construct($context, $data);
         $this->config = $config;
         $this->fileManager = $fileManager;
+        $this->pageConfig = $pageConfig;
     }
 
     /**
      * Include RequireJs configuration as an asset on the page
      *
-     * @return \Magento\Framework\View\Asset\LocalInterface
+     * @return $this
      */
-    public function getAsset()
+    protected function _prepareLayout()
     {
-        if (!$this->asset) {
-            $this->asset = $this->fileManager->createRequireJsAsset();
-        }
-        return $this->asset;
+        $asset = $this->fileManager->createRequireJsAsset();
+        $this->pageConfig->getAssetCollection()->add($asset->getFilePath(), $asset);
+        return parent::_prepareLayout();
     }
 
     /**

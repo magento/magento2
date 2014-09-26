@@ -35,6 +35,7 @@
             <email />
             <password />
             <password_confirmation />
+            <current_password />
             <is_active>
                 <input>select</input>
             </is_active>

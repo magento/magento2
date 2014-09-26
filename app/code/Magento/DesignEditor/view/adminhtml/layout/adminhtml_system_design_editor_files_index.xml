@@ -25,7 +25,6 @@
 -->
 <page layout="admin-2columns-left" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <remove name="footer"/>
-    <remove name="head"/>
     <referenceContainer name="left">
         <block class="Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Files\Content" name="editor_files.js" template="Magento_DesignEditor::editor/tools/files/js.phtml"/>
         <block class="Magento\DesignEditor\Block\Adminhtml\Editor\Tools\Files\Tree" name="editor_files.tree" template="Magento_DesignEditor::editor/tools/files/tree.phtml"/>

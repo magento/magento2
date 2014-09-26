@@ -37,6 +37,8 @@ class Option extends \Magento\Framework\Service\Data\AbstractExtensibleObject
 
     const VALUE = 'value';
 
+    const OPTIONS = 'options';
+
     /**
      * Get option label
      *
@@ -50,10 +52,20 @@ class Option extends \Magento\Framework\Service\Data\AbstractExtensibleObject
     /**
      * Get option value
      *
-     * @return string
+     * @return string|null
      */
     public function getValue()
     {
         return $this->_get(self::VALUE);
+    }
+
+    /**
+     * Get nested options
+     *
+     * @return \Magento\Customer\Service\V1\Data\Eav\Option[]|null
+     */
+    public function getOptions()
+    {
+        return $this->_get(self::OPTIONS);
     }
 }

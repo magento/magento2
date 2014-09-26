@@ -44,42 +44,50 @@
                 </strong>
                 <address><?php echo $_address->format('html') ?></address>
             </div>
-            <div class="box method">
-                <strong class="subtitle">
+            <div class="box box-order-shipping-method">
+                <strong class="box-title">
                     <span><?php echo __('Shipping Method') ?></span>
                 </strong>
-                <?php if (!($_shippingRateGroups = $this->getShippingRates($_address))): ?>
-                    <p><?php echo __('Sorry, no quotes are available for this order at this time.') ?></p>
-                <?php else: ?>
-                <dl class="sp-methods items methods">
-                    <?php $_sole = count($_shippingRateGroups) == 1; foreach ($_shippingRateGroups as $code => $_rates): ?>
-                        <dt class="item title"><?php echo $this->escapeHtml($this->getCarrierName($code)) ?></dt>
-                        <dd class="item content options">
-                            <?php $_sole = $_sole && count($_rates) == 1; foreach ($_rates as $_rate): ?>
-                                <div class="field choice">
-                                   <?php if ($_rate->getErrorMessage()): ?>
-                                            <strong><?php echo $this->escapeHtml($_rate->getCarrierTitle()) ?>: <?php echo $this->escapeHtml($_rate->getErrorMessage()) ?></strong>
-                                       <?php else: ?>
-                                            <?php if ($_sole) : ?>
-                                            <input type="radio" name="shipping_method[<?php echo $_address->getId() ?>]" value="<?php echo $this->escapeHtml($_rate->getCode()) ?>" id="s_method_<?php echo $_address->getId() ?>_<?php echo $_rate->getCode() ?>" class="radio solo method" checked="checked"/>
-                                            <?php else: ?>
-                                            <input type="radio" name="shipping_method[<?php echo $_address->getId() ?>]" value="<?php echo $_rate->getCode() ?>" id="s_method_<?php echo $_address->getId() ?>_<?php echo $_rate->getCode() ?>"<?php if($_rate->getCode()===$this->getAddressShippingMethod($_address)) echo ' checked="checked"' ?> class="radio" />
-                                            <?php endif; ?>
-                                            <label for="s_method_<?php echo $_address->getId() ?>_<?php echo $_rate->getCode() ?>"><?php echo $this->escapeHtml($_rate->getMethodTitle()) ?>
-                                            <?php $_excl = $this->getShippingPrice($_address, $_rate->getPrice(), $this->helper('Magento\Tax\Helper\Data')->displayShippingPriceIncludingTax()); ?>
-                                            <?php $_incl = $this->getShippingPrice($_address, $_rate->getPrice(), true); ?>
-                                            <?php echo $_excl; ?>
-                                            <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingBothPrices() && $_incl != $_excl): ?>
-                                                (<?php echo __('Incl. Tax'); ?> <?php echo $_incl; ?>)
-                                            <?php endif; ?>
-                                            </label>
-                                   <?php endif ?>
-                                </div>
-                            <?php endforeach; ?>
-                        </dd>
-                    <?php endforeach; ?>
-                </dl>
-                <?php endif; ?>
+                <div class="box-content">
+                    <?php if (!($_shippingRateGroups = $this->getShippingRates($_address))): ?>
+                        <p><?php echo __('Sorry, no quotes are available for this order at this time.') ?></p>
+                    <?php else: ?>
+                    <dl class="sp-methods items methods">
+                        <?php $_sole = count($_shippingRateGroups) == 1; foreach ($_shippingRateGroups as $code => $_rates): ?>
+                            <dt class="item-title"><?php echo $this->escapeHtml($this->getCarrierName($code)) ?></dt>
+                            <dd class="item-content options">
+                                <?php $_sole = $_sole && count($_rates) == 1; foreach ($_rates as $_rate): ?>
+                                    <div class="field choice">
+                                       <?php if ($_rate->getErrorMessage()): ?>
+                                                <strong><?php echo $this->escapeHtml($_rate->getCarrierTitle()) ?>: <?php echo $this->escapeHtml($_rate->getErrorMessage()) ?></strong>
+                                           <?php else: ?>
+                                                <?php if ($_sole) : ?>
+                                                <input type="radio" name="shipping_method[<?php echo $_address->getId() ?>]" value="<?php echo $this->escapeHtml($_rate->getCode()) ?>" id="s_method_<?php echo $_address->getId() ?>_<?php echo $_rate->getCode() ?>" class="radio solo method" checked="checked"/>
+                                                <?php else: ?>
+                                                <input type="radio" name="shipping_method[<?php echo $_address->getId() ?>]" value="<?php echo $_rate->getCode() ?>" id="s_method_<?php echo $_address->getId() ?>_<?php echo $_rate->getCode() ?>"<?php if($_rate->getCode()===$this->getAddressShippingMethod($_address)) echo ' checked="checked"' ?> class="radio" />
+                                                <?php endif; ?>
+                                                <label for="s_method_<?php echo $_address->getId() ?>_<?php echo $_rate->getCode() ?>"><?php echo $this->escapeHtml($_rate->getMethodTitle()) ?>
+                                                <?php $_excl = $this->getShippingPrice($_address, $_rate->getPrice(), $this->helper('Magento\Tax\Helper\Data')->displayShippingPriceIncludingTax()); ?>
+                                                <?php $_incl = $this->getShippingPrice($_address, $_rate->getPrice(), true); ?>
+                                                <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingBothPrices() && $_incl != $_excl): ?>
+                                                <span class="price-including-tax" data-label="<?php echo __('Incl. Tax'); ?>">
+                                                <?php endif; ?>
+                                                    <?php echo $_incl; ?>
+                                                <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingBothPrices() && $_incl != $_excl): ?>
+                                                </span>
+                                                <?php endif; ?>
+                                                <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingBothPrices() && $_incl != $_excl): ?>
+                                                    <span class="price-excluding-tax" data-label="<?php echo __('Excl. Tax'); ?>"><?php echo $_excl; ?></span>
+                                                <?php endif; ?>
+                                                </label>
+                                       <?php endif ?>
+                                    </div>
+                                <?php endforeach; ?>
+                            </dd>
+                        <?php endforeach; ?>
+                    </dl>
+                    <?php endif; ?>
+                </div>
             </div>
             <div class="box items">
                 <strong class="subtitle">

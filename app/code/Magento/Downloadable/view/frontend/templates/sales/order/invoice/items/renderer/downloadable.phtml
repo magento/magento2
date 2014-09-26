@@ -78,7 +78,7 @@
         <?php echo $this->getItemPriceHtml(); ?>
     </td>
     <td class="col qty" data-th="<?php echo $this->escapeHtml(__('Qty Invoiced')); ?>">
-        <span class="qty summary" data-th="<?php echo $this->escapeHtml(__('Qty Invoiced')); ?>"><?php echo $_item->getQty()*1 ?></span>
+        <span class="qty summary" data-label="<?php echo $this->escapeHtml(__('Qty Invoiced')); ?>"><?php echo $_item->getQty()*1 ?></span>
     </td>
     <td class="col subtotal" data-th="<?php echo $this->escapeHtml(__('Subtotal')); ?>">
         <?php echo $this->getItemRowTotalHtml(); ?>

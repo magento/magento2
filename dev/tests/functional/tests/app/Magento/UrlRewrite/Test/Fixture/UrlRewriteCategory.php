@@ -90,6 +90,16 @@ class UrlRewriteCategory extends DataFixture
     }
 
     /**
+     * Retrieve URL rewrite type
+     *
+     * @return string
+     */
+    public function getUrlRewriteType()
+    {
+        return $this->getData('url_rewrite_type');
+    }
+
+    /**
      * Initialize fixture data
      */
     protected function _initData()

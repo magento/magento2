@@ -56,12 +56,18 @@ class Feed extends \Magento\Framework\Model\AbstractModel
     protected $_inboxFactory;
 
     /**
+     * @var \Magento\Framework\HTTP\Adapter\CurlFactory
+     */
+    protected $curlFactory;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Backend\App\ConfigInterface $backendConfig
      * @param \Magento\AdminNotification\Model\InboxFactory $inboxFactory
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
+     * @param \Magento\Framework\HTTP\Adapter\curlFactory $curlFactory
      * @param array $data
      */
     public function __construct(
@@ -69,6 +75,7 @@ class Feed extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Registry $registry,
         \Magento\Backend\App\ConfigInterface $backendConfig,
         \Magento\AdminNotification\Model\InboxFactory $inboxFactory,
+        \Magento\Framework\HTTP\Adapter\CurlFactory $curlFactory,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
@@ -76,6 +83,7 @@ class Feed extends \Magento\Framework\Model\AbstractModel
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->_backendConfig = $backendConfig;
         $this->_inboxFactory = $inboxFactory;
+        $this->curlFactory = $curlFactory;
     }
 
     /**
@@ -116,15 +124,19 @@ class Feed extends \Magento\Framework\Model\AbstractModel
 
         $feedXml = $this->getFeedData();
 
+        $installDate = $this->_appState->getInstallDate();
+
         if ($feedXml && $feedXml->channel && $feedXml->channel->item) {
             foreach ($feedXml->channel->item as $item) {
-                $feedData[] = array(
-                    'severity' => (int)$item->severity,
-                    'date_added' => $this->getDate((string)$item->pubDate),
-                    'title' => (string)$item->title,
-                    'description' => (string)$item->description,
-                    'url' => (string)$item->link
-                );
+                if ($installDate <= strtotime((string)$item->pubDate)) {
+                    $feedData[] = array(
+                        'severity' => (int)$item->severity,
+                        'date_added' => $this->getDate((string)$item->pubDate),
+                        'title' => (string)$item->title,
+                        'description' => (string)$item->description,
+                        'url' => (string)$item->link
+                    );
+                }
             }
 
             if ($feedData) {
@@ -185,7 +197,7 @@ class Feed extends \Magento\Framework\Model\AbstractModel
      */
     public function getFeedData()
     {
-        $curl = new \Magento\Framework\HTTP\Adapter\Curl();
+        $curl = $this->curlFactory->create();
         $curl->setConfig(array('timeout' => 2));
         $curl->write(\Zend_Http_Client::GET, $this->getFeedUrl(), '1.0');
         $data = $curl->read();

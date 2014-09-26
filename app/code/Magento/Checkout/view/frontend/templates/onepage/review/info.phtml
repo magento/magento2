@@ -31,19 +31,11 @@
         <caption>Order Review</caption>
         <thead>
             <tr>
-                <th rowspan="<?php echo $rowspan ?>" class="col item"><?php echo __('Product Name') ?></th>
-                <th colspan="<?php echo $colspan ?>" class="col price"><?php echo __('Price') ?></th>
-                <th rowspan="<?php echo $rowspan ?>" class="col qty"><?php echo __('Qty') ?></th>
-                <th colspan="<?php echo $colspan ?>" class="col subtotal"><?php echo __('Subtotal') ?></th>
+                <th class="col item"><?php echo __('Product Name') ?></th>
+                <th class="col price"><?php echo __('Price') ?></th>
+                <th class="col qty"><?php echo __('Qty') ?></th>
+                <th class="col subtotal"><?php echo __('Subtotal') ?></th>
             </tr>
-            <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices()): ?>
-            <tr>
-                <th class="col price excl tax"><?php echo $this->helper('Magento\Tax\Helper\Data')->getIncExcTaxLabel(false) ?></th>
-                <th class="col price incl tax"><?php echo $this->helper('Magento\Tax\Helper\Data')->getIncExcTaxLabel(true) ?></th>
-                <th class="col subtotal excl tax"><?php echo $this->helper('Magento\Tax\Helper\Data')->getIncExcTaxLabel(false) ?></th>
-                <th class="col subtotal incl tax"><?php echo $this->helper('Magento\Tax\Helper\Data')->getIncExcTaxLabel(true) ?></th>
-            </tr>
-            <?php endif; ?>
         </thead>
         <tfoot>
             <?php echo $this->getChildHtml('totals'); ?>

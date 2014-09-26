@@ -36,7 +36,7 @@ class MaintenanceModeTest extends \PHPUnit_Framework_TestCase
      */
     protected $flagDir ;
 
-    protected function setUp()
+    protected function setup()
     {
         $this->flagDir = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\WriteInterface');
         $filesystem = $this->getMock('Magento\Framework\App\Filesystem', [], [], '', false);
@@ -55,7 +55,37 @@ class MaintenanceModeTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->model->isOn());
     }
 
-    public function testSetMaintenanceModeOn()
+    public function testisOnWithoutIP()
+    {
+        $mapisExist = [
+            [MaintenanceMode::FLAG_FILENAME, true],
+            [MaintenanceMode::IP_FILENAME, false]
+        ];
+        $this->flagDir->expects($this->exactly(2))->method('isExist')
+            ->will(($this->returnValueMap($mapisExist)));
+        $this->assertTrue($this->model->isOn());
+    }
+
+    public function testisOnWithIP()
+    {
+        $mapisExist = [
+            [MaintenanceMode::FLAG_FILENAME, true],
+            [MaintenanceMode::IP_FILENAME, true]
+        ];
+        $this->flagDir->expects($this->exactly(2))->method('isExist')
+            ->will(($this->returnValueMap($mapisExist)));
+        $this->assertFalse($this->model->isOn());
+    }
+
+    public function testisOnWithIPNoMaintenance()
+    {
+        $this->flagDir->expects($this->once())->method('isExist')
+            ->with(MaintenanceMode::FLAG_FILENAME)
+            ->willReturn(false);
+        $this->assertFalse($this->model->isOn());
+    }
+
+    public function testMaintenanceModeOn()
     {
         $this->flagDir->expects($this->at(0))->method('isExist')->with(MaintenanceMode::FLAG_FILENAME)
             ->will($this->returnValue(false));
@@ -71,7 +101,7 @@ class MaintenanceModeTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->model->isOn());
     }
 
-    public function testSetMaintenanceModeOff()
+    public function testMaintenanceModeOff()
     {
         $this->flagDir->expects($this->at(0))->method('isExist')->with(MaintenanceMode::FLAG_FILENAME)
             ->will($this->returnValue(true));
@@ -86,11 +116,11 @@ class MaintenanceModeTest extends \PHPUnit_Framework_TestCase
 
     public function testSetAddresses()
     {
-        $mapIsExist = [
+        $mapisExist = [
             [MaintenanceMode::FLAG_FILENAME, true],
             [MaintenanceMode::IP_FILENAME, true]
         ];
-        $this->flagDir->expects($this->any())->method('isExist')->will($this->returnValueMap($mapIsExist));
+        $this->flagDir->expects($this->any())->method('isExist')->will($this->returnValueMap($mapisExist));
         $this->flagDir->expects($this->any())->method('writeFile')
             ->with(MaintenanceMode::IP_FILENAME)
             ->will($this->returnValue(true));
@@ -105,12 +135,12 @@ class MaintenanceModeTest extends \PHPUnit_Framework_TestCase
 
     public function testSetSingleAddresses()
     {
-        $mapIsExist = [
+        $mapisExist = [
             [MaintenanceMode::FLAG_FILENAME, true],
             [MaintenanceMode::IP_FILENAME, true]
         ];
-        $this->flagDir->expects($this->any())->method('isExist')->will($this->returnValueMap($mapIsExist));
-        $this->flagDir->expects($this->any())->method('delete')->will($this->returnValueMap($mapIsExist));
+        $this->flagDir->expects($this->any())->method('isExist')->will($this->returnValueMap($mapisExist));
+        $this->flagDir->expects($this->any())->method('delete')->will($this->returnValueMap($mapisExist));
 
         $this->flagDir->expects($this->any())->method('writeFile')
             ->will($this->returnValue(10));
@@ -125,12 +155,12 @@ class MaintenanceModeTest extends \PHPUnit_Framework_TestCase
 
     public function testOnSetMultipleAddresses()
     {
-        $mapIsExist = [
+        $mapisExist = [
             [MaintenanceMode::FLAG_FILENAME, true],
             [MaintenanceMode::IP_FILENAME, true]
         ];
-        $this->flagDir->expects($this->any())->method('isExist')->will($this->returnValueMap($mapIsExist));
-        $this->flagDir->expects($this->any())->method('delete')->will($this->returnValueMap($mapIsExist));
+        $this->flagDir->expects($this->any())->method('isExist')->will($this->returnValueMap($mapisExist));
+        $this->flagDir->expects($this->any())->method('delete')->will($this->returnValueMap($mapisExist));
 
         $this->flagDir->expects($this->any())->method('writeFile')
             ->will($this->returnValue(10));
@@ -148,12 +178,12 @@ class MaintenanceModeTest extends \PHPUnit_Framework_TestCase
 
     public function testOffSetMultipleAddresses()
     {
-        $mapIsExist = [
+        $mapisExist = [
             [MaintenanceMode::FLAG_FILENAME, false],
             [MaintenanceMode::IP_FILENAME, true]
         ];
-        $this->flagDir->expects($this->any())->method('isExist')->will($this->returnValueMap($mapIsExist));
-        $this->flagDir->expects($this->any())->method('delete')->will($this->returnValueMap($mapIsExist));
+        $this->flagDir->expects($this->any())->method('isExist')->will($this->returnValueMap($mapisExist));
+        $this->flagDir->expects($this->any())->method('delete')->will($this->returnValueMap($mapisExist));
 
         $this->flagDir->expects($this->any())->method('readFile')
             ->with(MaintenanceMode::IP_FILENAME)

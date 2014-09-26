@@ -59,7 +59,7 @@ interface CustomerGroupServiceInterface
     /**
      * Get a customer group by group ID.
      *
-     * @param int $groupId
+     * @param string $groupId
      * @throws \Magento\Framework\Exception\NoSuchEntityException If $groupId is not found
      * @return \Magento\Customer\Service\V1\Data\CustomerGroup
      */
@@ -68,7 +68,7 @@ interface CustomerGroupServiceInterface
     /**
      * Get default group
      *
-     * @param int $storeId Defaults the current store
+     * @param string $storeId Defaults the current store
      * @throws \Magento\Framework\Exception\NoSuchEntityException If default group for $storeId is not found
      * @return \Magento\Customer\Service\V1\Data\CustomerGroup
      */
@@ -77,29 +77,42 @@ interface CustomerGroupServiceInterface
     /**
      * Check if the group can be deleted
      *
-     * @param int $groupId
+     * @param string $groupId
      * @throws \Magento\Framework\Exception\NoSuchEntityException If group is not found
      * @return bool True, if this group can be deleted
      */
     public function canDelete($groupId);
 
     /**
-     * Save group
+     * Create group
      *
+     * @param \Magento\Customer\Service\V1\Data\CustomerGroup $group
+     * @throws \Magento\Framework\Exception\InputException If there is a problem with the input
+     * @throws \Magento\Framework\Exception\State\InvalidTransitionException
+     *      If saving customer group with customer group code that is used by an existing customer group
+     * @throws \Magento\Framework\Model\Exception If something goes wrong during save
+     * @return int customer group ID
+     */
+    public function createGroup(\Magento\Customer\Service\V1\Data\CustomerGroup $group);
+
+    /**
+     * Update group
+     *
+     * @param string $groupId
      * @param \Magento\Customer\Service\V1\Data\CustomerGroup $group
      * @throws \Magento\Framework\Exception\InputException If there is a problem with the input
      * @throws \Magento\Framework\Exception\NoSuchEntityException If a group ID is sent but the group does not exist
      * @throws \Magento\Framework\Exception\State\InvalidTransitionException
      *      If saving customer group with customer group code that is used by an existing customer group
      * @throws \Magento\Framework\Model\Exception If something goes wrong during save
-     * @return int customer group ID
+     * @return bool True if this group was updated
      */
-    public function saveGroup(\Magento\Customer\Service\V1\Data\CustomerGroup $group);
+    public function updateGroup($groupId, \Magento\Customer\Service\V1\Data\CustomerGroup $group);
 
     /**
      * Delete group
      *
-     * @param int $groupId
+     * @param string $groupId
      * @throws \Magento\Framework\Exception\NoSuchEntityException If $groupId is not found
      * @throws \Magento\Framework\Exception\StateException Thrown if cannot delete group
      * @throws \Exception If something goes wrong during delete

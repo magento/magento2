@@ -47,17 +47,8 @@
             display: inline-block;
         }
     }
-    .col {
-        &.price,
-        &.subtotal {
-            &:extend(.abstract-incl-excl-tax all);
-        }
-    }
-    .cart-tax-total {
-        &:extend(.abstract-tax-total all);
-    }
     .items-qty {
-        &:extend(.reset-list all);
+        &:extend(.abstract-reset-list all);
         .item {
             white-space: nowrap;
         }
@@ -78,6 +69,7 @@
                 }
             }
         }
+
         .item.options {
             dt {
                 margin: 0;
@@ -173,6 +165,17 @@
 }
 
 //
+//    Guest order view page
+//--------------------------------------
+.sales-guest-view {
+    .column.main {
+        .block:not(.widget) {
+            &:extend(.abstract-account-blocks all);
+        }
+    }
+}
+
+//
 //    Mobile
 //--------------------------------------
 .responsive-smaller(@break) when (@break = @screen-s) {
@@ -198,8 +201,8 @@
                 .col {
                     &.price,
                     &.subtotal {
-                        .tax,
-                        .incl.tax + .excl.tax,
+                        .price-including-tax,
+                        .price-excluding-tax,
                         .weee {
                             display: inline-block;
                         }
@@ -249,7 +252,7 @@
             }
         }
         .toolbar {
-            &:extend(.add-clearfix-desktop all);
+            &:extend(.abstract-add-clearfix-desktop all);
             .pages {
                 float: right;
             }
@@ -283,6 +286,23 @@
             .mark,
             .amount {
                 text-align: right;
+            }
+        }
+    }
+
+    //
+    //    Guest order view page
+    //--------------------------------------
+    .sales-guest-view {
+        .column.main {
+            .block:not(.widget) {
+                .block-content {
+                    &:extend(.abstract-add-clearfix-desktop all);
+                    .box {
+                        &:extend(.abstract-blocks-2columns all);
+                        margin-bottom: @indent-base;
+                    }
+                }
             }
         }
     }

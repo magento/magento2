@@ -26,11 +26,17 @@
 
 <?php $_excl = $this->getShippingPriceExclTax(); ?>
 <?php $_incl = $this->getShippingPriceInclTax(); ?>
-<?php if ($this->displayShippingPriceInclTax()): ?>
-    <?php echo $_incl; ?>
+<?php if ($this->displayShippingPriceExclTax()): ?>
+    <span class="price"><?php echo $_excl; ?></span>
 <?php else: ?>
-    <?php echo $_excl; ?>
+<?php if ($this->displayShippingBothPrices() && $_incl != $_excl): ?>
+    <span class="price-including-tax" data-label="<?php echo __('Incl. Tax'); ?>">
+<?php endif; ?>
+    <span class="price"><?php echo $_incl; ?></span>
+<?php if ($this->displayShippingBothPrices() && $_incl != $_excl): ?>
+    </span>
+<?php endif; ?>
 <?php endif; ?>
 <?php if ($this->displayShippingBothPrices() && $_incl != $_excl): ?>
-    (<?php echo __('Incl. Tax'); ?> <?php echo $_incl; ?>)
+    <span class="price-excluding-tax" data-label="<?php echo __('Excl. Tax'); ?>"><span class="price"><?php echo $_excl; ?></span></span>
 <?php endif; ?>

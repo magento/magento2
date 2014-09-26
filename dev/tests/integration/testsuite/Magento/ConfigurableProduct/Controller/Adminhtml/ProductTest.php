@@ -49,9 +49,6 @@ class ProductTest extends \Magento\Backend\Utility\Controller
         /** @var $product \Magento\Catalog\Model\Product */
         $product = $objectManager->get('Magento\Framework\Registry')->registry('current_product');
         $this->assertEquals($associatedProductIds, $product->getAssociatedProductIds());
-
-        /** @see \Magento\Backend\Utility\Controller::assertPostConditions() */
-        $this->markTestIncomplete('Suppressing admin error messages validation until the bug MAGETWO-7044 is fixed.');
     }
 
     /**

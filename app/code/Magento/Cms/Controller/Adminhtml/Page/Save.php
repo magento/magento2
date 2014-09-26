@@ -58,11 +58,9 @@ class Save extends \Magento\Backend\App\Action
      */
     public function execute()
     {
-        // check if data sent
         $data = $this->getRequest()->getPost();
         if ($data) {
             $data = $this->dataProcessor->filter($data);
-            //init model and set data
             $model = $this->_objectManager->create('Magento\Cms\Model\Page');
 
             $id = $this->getRequest()->getParam('page_id');
@@ -77,30 +75,24 @@ class Save extends \Magento\Backend\App\Action
                 array('page' => $model, 'request' => $this->getRequest())
             );
 
-            //validating
             if (!$this->dataProcessor->validate($data)) {
                 $this->_redirect('*/*/edit', array('page_id' => $model->getId(), '_current' => true));
                 return;
             }
 
-            // try to save it
             try {
-                // save the data
                 $model->save();
-
-                // display success message
                 $this->messageManager->addSuccess(__('The page has been saved.'));
-                // clear previously saved data from session
                 $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData(false);
-                // check if 'Save and Continue'
                 if ($this->getRequest()->getParam('back')) {
                     $this->_redirect('*/*/edit', array('page_id' => $model->getId(), '_current' => true));
                     return;
                 }
-                // go to grid
                 $this->_redirect('*/*/');
                 return;
             } catch (\Magento\Framework\Model\Exception $e) {
+                $this->messageManager->addError($e->getMessage());
+            } catch (\RuntimeException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->messageManager->addException($e, __('Something went wrong while saving the page.'));

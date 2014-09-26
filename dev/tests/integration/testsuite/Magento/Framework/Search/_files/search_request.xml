@@ -34,9 +34,9 @@
                 <queryReference clause="should" ref="fulltext_search_query2" />
             </query>
 
-            <query xsi:type="matchQuery" name="fulltext_search_query" boost="5">
-                <match field="title" value="$request.title" boost="2" />
-                <match field="description" value="%request.description%" />
+            <query xsi:type="matchQuery" name="fulltext_search_query" value="default_value" boost="5">
+                <match field="title" boost="2" />
+                <match field="description" />
             </query>
 
             <query xsi:type="filteredQuery" name="fulltext_search_query2">

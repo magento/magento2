@@ -80,8 +80,18 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 // For SOAP
                 $resourcePermissionSet[] = $ref;
             }
-            $result[self::KEY_SERVICES][$serviceClass][$serviceMethod][self::KEY_ACL_RESOURCES][]
-                = $resourcePermissionSet;
+            if (!isset($result[self::KEY_SERVICES][$serviceClass][$serviceMethod][self::KEY_ACL_RESOURCES])) {
+                $result[self::KEY_SERVICES][$serviceClass][$serviceMethod][self::KEY_ACL_RESOURCES]
+                    = $resourcePermissionSet;
+            } else {
+                $result[self::KEY_SERVICES][$serviceClass][$serviceMethod][self::KEY_ACL_RESOURCES] =
+                    array_unique(
+                        array_merge(
+                            $result[self::KEY_SERVICES][$serviceClass][$serviceMethod][self::KEY_ACL_RESOURCES],
+                            $resourcePermissionSet
+                        )
+                    );
+            }
 
             $parameters = $route->getElementsByTagName('parameter');
             $data = [];

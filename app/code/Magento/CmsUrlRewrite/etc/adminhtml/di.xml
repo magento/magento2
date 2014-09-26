@@ -24,5 +24,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <preference for="Magento\CmsUrlRewrite\Service\V1\CmsPageUrlGeneratorInterface" type="Magento\CmsUrlRewrite\Service\V1\CmsPageUrlGenerator"/>
+    <type name="Magento\Cms\Model\Resource\Page">
+        <plugin name="cms_url_rewrite_plugin" type="Magento\CmsUrlRewrite\Plugin\Cms\Model\Resource\Page"/>
+    </type>
 </config>

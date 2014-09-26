@@ -22,15 +22,6 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<?php
-/* @var $this \Magento\Backend\Block\Page */
-?>
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->getLang() ?>" lang="<?php echo $this->getLang() ?>">
-<head>
-<?php echo $this->getChildHtml('head') ?>
-</head>
-<body id="html-body" class="preview-window">
 <div id="preview" class="cms-revision-preview">
     <div class="toolbar">
         <?php if (!$this->isSingleStoreMode()) :?>
@@ -77,5 +68,3 @@ jQuery("#preview_iframe").load(function() {
 
 });
 </script>
-</body>
-</html>

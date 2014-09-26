@@ -21,7 +21,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
+\Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea('adminhtml');
 /** @var $category \Magento\Catalog\Model\Category */
 $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Category');
 $category->setId(
@@ -44,7 +44,7 @@ $category->setId(
     1
 )->save();
 
-$urlKeys = array('url-key-', 'url-key-1', 'url-key-2', 'url-key-5', 'url-key-1000', 'url-key-999', 'url-key-asdf');
+$urlKeys = array('url-key', 'url-key-1', 'url-key-2', 'url-key-5', 'url-key-1000', 'url-key-999', 'url-key-asdf');
 
 foreach ($urlKeys as $i => $urlKey) {
     $id = $i + 1;
@@ -74,6 +74,6 @@ foreach ($urlKeys as $i => $urlKey) {
     )->setUrlKey(
         $urlKey
     )->setUrlPath(
-        $urlKey . '.html'
+        $urlKey //. '.html'
     )->save();
 }

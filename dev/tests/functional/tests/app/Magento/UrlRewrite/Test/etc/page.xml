@@ -24,14 +24,14 @@
  */
 -->
 <page module="Magento_UrlRewrite">
-    <urlrewriteIndex>
-        <mca>admin/urlrewrite/index</mca>
+    <urlRewriteIndex>
+        <mca>admin/url_rewrite/index</mca>
         <area>adminhtml</area>
-        <class>Magento\UrlRewrite\Test\Page\Adminhtml\UrlrewriteIndex</class>
-    </urlrewriteIndex>
-    <urlrewriteEdit>
-        <mca>admin/urlrewrite/edit</mca>
+        <class>Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteIndex</class>
+    </urlRewriteIndex>
+    <urlRewriteEdit>
+        <mca>admin/url_rewrite/edit</mca>
         <area>adminhtml</area>
-        <class>Magento\UrlRewrite\Test\Page\Adminhtml\UrlrewriteEdit</class>
-    </urlrewriteEdit>
+        <class>Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteEdit</class>
+    </urlRewriteEdit>
 </page>

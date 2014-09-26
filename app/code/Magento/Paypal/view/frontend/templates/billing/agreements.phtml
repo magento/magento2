@@ -49,7 +49,7 @@
                         <td data-th="<?php echo $this->escapeHtml(__('Updated At')); ?>" class="col updated"><?php echo $this->getItemValue($item, 'updated_at') ?></td>
                         <td data-th="<?php echo $this->escapeHtml(__('Payment Method')); ?>" class="col payment"><?php echo $this->getItemValue($item, 'payment_method_label') ?></td>
                         <td data-th="" class="col actions">
-                            <a href="<?php echo $this->getItemValue($item, 'edit_url') ?>"><?php echo __('View') ?></a>
+                            <a href="<?php echo $this->getItemValue($item, 'edit_url') ?>" class="action view"><span><?php echo __('View') ?></span></a>
                         </td>
                     </tr>
                 <?php endforeach; ?>

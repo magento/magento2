@@ -25,7 +25,6 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <remove name="footer"/>
-    <remove name="head"/>
     <remove name="left"/>
     <referenceContainer name="content">
         <block class="Magento\Cms\Block\Adminhtml\Wysiwyg\Images\Content" name="wysiwyg_images.content" template="browser/content.phtml">

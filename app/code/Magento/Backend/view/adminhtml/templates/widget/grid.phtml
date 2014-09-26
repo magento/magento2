@@ -142,11 +142,8 @@ $numColumns = sizeof($this->getColumns());
                         <?php else: ?>
                             <span class="action-next disabled"><span><?php echo __('Next page') ?></span></span>
                         <?php endif; ?>
-                        <?php if ($this->getRssLists()): ?>
-                            <?php foreach ($this->getRssLists() as $_rss): ?>
-                                <a href="<?php echo $_rss->getUrl() ?>"
-                                   class="link-feed"><?php echo $_rss->getLabel() ?></a>
-                            <?php endforeach ?>
+                        <?php if ($this->getChildBlock('grid.bottom.links')): ?>
+                            <?php echo $this->getChildHtml('grid.bottom.links') ?>
                         <?php endif; ?>
                     </div>
                 <?php endif ?>
@@ -184,7 +181,6 @@ $numColumns = sizeof($this->getColumns());
             <?php echo $this->getChildBlock('grid.massaction')->getJavaScript() ?>
             <?php endif ?>
             <?php echo $this->getAdditionalJavaScript(); ?>
-    
         });
 </script>
 <?php endif; ?>

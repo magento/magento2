@@ -50,7 +50,6 @@ class Config extends ZendConfig
             } else {
                 $this->data[$key] = $value;
             }
-
             $this->count++;
         }
     }

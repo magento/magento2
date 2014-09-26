@@ -33,26 +33,27 @@ $priceModel = $this->getPriceType('regular_price');
 
 /** @var \Magento\Catalog\Pricing\Price\FinalPrice $finalPriceModel */
 $finalPriceModel = $this->getPriceType('final_price');
+$idSuffix = $this->getIdSuffix() ? $this->getIdSuffix() : '';
 ?>
 <?php if ($this->hasSpecialPrice()): ?>
-    <p class="old-price">
+    <span class="old-price">
         <?php echo $this->renderAmount($priceModel->getAmount(), [
-            'display_label'     => __('Regular Price:'),
-            'price_id'          => $this->getPriceId('old-price-'),
+            'display_label'     => __('Regular Price'),
+            'price_id'          => $this->getPriceId('old-price-' . $idSuffix),
             'include_container' => true,
             'skip_adjustments'  => true
         ]); ?>
-    </p>
-    <p class="special-price">
+    </span>
+    <span class="special-price">
         <?php echo $this->renderAmount($finalPriceModel->getAmount(), [
-            'display_label'     => __('Special Price:'),
-            'price_id'          => $this->getPriceId('product-price-'),
-            'include_container' => false
+            'display_label'     => __('Special Price'),
+            'price_id'          => $this->getPriceId('product-price-' . $idSuffix),
+            'include_container' => true
         ]); ?>
-    </p>
+    </span>
 <?php else: ?>
     <?php echo $this->renderAmount($finalPriceModel->getAmount(), [
-        'price_id'          => $this->getPriceId('product-price-'),
+        'price_id'          => $this->getPriceId('product-price-' . $idSuffix),
         'include_container' => true
     ]); ?>
 <?php endif; ?>

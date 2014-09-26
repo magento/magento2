@@ -23,12 +23,30 @@
  */
 namespace Magento\Cms\Model;
 
+/**
+ * @magentoAppArea adminhtml
+ */
 class PageTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Cms\Model\Page
      */
     protected $model;
+
+    protected function setUp()
+    {
+        $user = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\User\Model\User'
+        )->loadByUsername(
+            \Magento\TestFramework\Bootstrap::ADMIN_NAME
+        );
+
+        /** @var $session \Magento\Backend\Model\Auth\Session */
+        $session = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Backend\Model\Auth\Session'
+        );
+        $session->setUser($user);
+    }
 
     /**
      * @magentoDbIsolation enabled
@@ -47,13 +65,13 @@ class PageTest extends \PHPUnit_Framework_TestCase
     public function generateIdentifierFromTitleDataProvider()
     {
         return array(
-            array('data' => array('title' => 'Test title'), 'expectedIdentifier' => 'test-title'),
+            array('data' => array('title' => 'Test title', 'stores' => [1]), 'expectedIdentifier' => 'test-title'),
             array(
-                'data' => array('title' => 'Кирилический заголовок'),
+                'data' => array('title' => 'Кирилический заголовок', 'stores' => [1]),
                 'expectedIdentifier' => 'kirilicheskij-zagolovok'
             ),
             array(
-                'data' => array('title' => 'Test title', 'identifier' => 'custom-identifier'),
+                'data' => array('title' => 'Test title', 'identifier' => 'custom-identifier', 'stores' => [1]),
                 'expectedIdentifier' => 'custom-identifier'
             )
         );

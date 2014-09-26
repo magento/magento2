@@ -25,7 +25,7 @@
 //
 //    List default styles reset
 //--------------------------------------
-.reset-list {
+.abstract-reset-list {
     .list-reset-styles();
     > li {
         margin: 0;
@@ -35,7 +35,7 @@
 //
 //    Link as a button
 //--------------------------------------
-.action-link-button {
+.abstract-action-link-button {
     .button();
     .link-as-button();
     border-radius: @button-border-radius;
@@ -48,7 +48,7 @@
 //
 //    Product options list
 //--------------------------------------
-.product-options-list {
+.abstract-product-options-list {
     dt:after {
         content: ': ';
     }
@@ -67,12 +67,12 @@
 //
 //    Button reset width, floats, margins
 //--------------------------------------
-.button-responsive {
+.abstract-button-responsive {
     .button-responsive();
 }
 
 .responsive(@break) when (@break = @screen-m) {
-    .button-desktop {
+    .abstract-button-desktop {
         width: auto;
     }
 }
@@ -87,7 +87,7 @@
 //    Blocks in 2 columns
 //--------------------------------------
 .responsive(@break) when (@break = @screen-m) {
-    .blocks-2columns {
+    .abstract-blocks-2columns {
         width: 48.8%;
         &:nth-child(odd) {
             float: left;
@@ -102,13 +102,47 @@
 //
 //    Title for login blocks
 //--------------------------------------
-.login-block-title {
+.abstract-login-block-title {
     strong {
         font-weight: 500;
     }
     padding-bottom: 12px;
     margin-bottom: 15px;
     border-bottom: 1px solid @color-secondary;
+}
+
+//
+//    Account blocks
+//--------------------------------------
+.abstract-account-blocks {
+    .block-title {
+        > strong {
+            .heading(h3);
+        }
+        margin-bottom: 15px;
+        > .action {
+            margin-left: 15px;
+        }
+    }
+    .box-title {
+        > span {
+            .heading(h4);
+        }
+        display: inline-block;
+        margin: 0 0 5px;
+        > .action {
+            font-weight: 400;
+            margin-left: 15px;
+        }
+    }
+    .block-content {
+        p:last-child {
+            margin-bottom: 0;
+        }
+        .box {
+            margin-bottom: @indent-base;
+        }
+    }
 }
 
 //
@@ -134,14 +168,14 @@
 //
 //    Marging for blocks & widgets
 //--------------------------------------
-.margin-for-blocks-and-widgets {
+.abstract-margin-for-blocks-and-widgets {
     margin-bottom: @indent-xl-base;
 }
 
 //
 //    Remove button for blocks
 //--------------------------------------
-.remove-button-for-blocks {
+.abstract-remove-button-for-blocks {
     .icon-font(
         @icon-remove,
         @_icon-font-size: 26px,
@@ -156,7 +190,7 @@
 //
 //    Product link
 //--------------------------------------
-.product-link {
+.abstract-product-link {
     .link(
         @_link-color: #303030,
         @_link-color-hover: #303030,
@@ -166,22 +200,14 @@
 }
 
 //
-//    Link
-//--------------------------------------
-.like-link {
-    .link();
-    cursor: pointer;
-}
-
-//
 //   Reset left margin
 //--------------------------------------
-.reset-left-margin {
+.abstract-reset-left-margin {
     margin-left: 0;
 }
 
 .responsive(@break) when (@break = @screen-m) {
-    .reset-left-margin-desktop {
+    .abstract-reset-left-margin-desktop {
         margin-left: 0;
     }
 }
@@ -189,9 +215,10 @@
 //
 //    Action with icon remove with text
 //--------------------------------------
-.action-remove {
+.abstract-action-remove {
     .button-reset();
-    &:extend(.like-link all);
+    .link();
+    cursor: pointer;
     width: auto;
     line-height: normal;
     position: absolute;
@@ -204,7 +231,7 @@
 //    Action with icon remove with text for desktop
 //--------------------------------------
 .responsive(@break) when (@break = @screen-m) {
-    .action-remove-desktop when not (@form-field-type-inline-label-width = false) and not (@form-field-type-inline-label-width = '') {
+    .abstract-action-remove-desktop when not (@form-field-type-inline-label-width = false) and not (@form-field-type-inline-label-width = '') {
         top: 6px;
         margin-left: @form-field-type-inline-label-width + 50%;
     }
@@ -213,7 +240,7 @@
 //
 //    Add Recipient
 //--------------------------------------
-.add-recipients {
+.abstract-add-recipients {
     .recipients {
         margin-bottom: 50px;
         .field {
@@ -225,7 +252,7 @@
             margin-top: 55px;
             position: relative;
             .action.remove {
-                &:extend(.action-remove all);
+                &:extend(.abstract-action-remove all);
             }
         }
         .actions-toolbar {
@@ -251,11 +278,11 @@
 //    Add Recipient for desktop
 //--------------------------------------
 .responsive(@break) when (@break = @screen-m) {
-    .add-recipients-desktop {
+    .abstract-add-recipients-desktop {
         .recipients {
             .additional {
                 .action.remove {
-                    &:extend(.action-remove-desktop all);
+                    &:extend(.abstract-action-remove-desktop all);
                 }
             }
         }
@@ -266,7 +293,7 @@
 //    Margin for forms
 //--------------------------------------
 .responsive(@break) when (@break = @screen-m) {
-    .margin-for-forms-desktop when not (@form-field-type-inline-label-width = false) and not (@form-field-type-inline-label-width = '') {
+    .abstract-margin-for-forms-desktop when not (@form-field-type-inline-label-width = false) and not (@form-field-type-inline-label-width = '') {
         margin-left: @form-field-type-inline-label-width;
     }
 }
@@ -274,18 +301,30 @@
 //
 //    Visually hidden / show visually hidden
 //--------------------------------------
-.visually-hidden {
+.abstract-visually-hidden {
     .visually-hidden();
 }
 
 .responsive-smaller(@break) when (@break = @screen-s) {
-    .visually-hidden-mobile {
+    .abstract-visually-hidden-mobile {
         .visually-hidden();
-    } 
+    }
 }
 
 .responsive-smaller(@break) when (@break = @screen-m) {
-    .visually-hidden-mobile-m {
+    .abstract-visually-hidden-mobile-m {
+        .visually-hidden();
+    }
+}
+
+.responsive(@break) when (@break = @screen-s) {
+    .abstract-visually-hidden-desktop-s {
+        .visually-hidden();
+    }
+}
+
+.responsive(@break) when (@break = @screen-m) {
+    .abstract-visually-hidden-desktop {
         .visually-hidden();
     }
 }
@@ -293,18 +332,18 @@
 //
 //    Clearfix
 //--------------------------------------
-.add-clearfix {
+.abstract-add-clearfix {
     .clearfix();
 }
 
 .responsive(@break) when (@break = @screen-m) {
-    .add-clearfix-desktop {
+    .abstract-add-clearfix-desktop {
         .clearfix();
     }
 }
 
 .responsive-smaller(@break) when (@break = @screen-s) {
-    .add-clearfix-mobile {
+    .abstract-add-clearfix-mobile {
         .clearfix();
     }
 }
@@ -312,12 +351,12 @@
 //
 //    Box-sizing
 //--------------------------------------
-.add-box-sizing {
+.abstract-add-box-sizing {
     .box-sizing();
 }
 
 .responsive(@break) when (@break = @screen-m) {
-    .add-box-sizing-desktop {
+    .abstract-add-box-sizing-desktop {
         .box-sizing();
     }
 }
@@ -326,7 +365,7 @@
 //    Revert field type
 //--------------------------------------
 .responsive(@break) when (@break = @screen-m) {
-    .revert-field-type-desktop {
+    .abstract-revert-field-type-desktop {
         .fieldset {
             > .field,
             .fields > .field {
@@ -342,7 +381,7 @@
 //
 //    Settings icons
 //--------------------------------------
-.navigation-icon {
+.abstract-navigation-icon {
     .icon-font(
         @_icon-font-content: @icon-down,
         @_icon-font-size: 34px,
@@ -360,7 +399,6 @@
 //
 //    Split button
 //--------------------------------------
-
 .abstract-split-button {
     .dropdown-split(
         @_options-selector : ~".items",
@@ -373,7 +411,7 @@
 //    Action addto
 //--------------------------------------
 .abstract-action-addto-product {
-    &:extend(.action-link-button all);
+    &:extend(.abstract-action-link-button all);
     .button-s();
 }
 
@@ -431,7 +469,7 @@
 //    Vertical Table
 //--------------------------------------
 .responsive-smaller(@break) when (@break = @screen-m) {
-    .table-vertical-mobile {
+    .abstract-table-vertical-mobile {
         .table-responsive();
         tbody > tr {
             > td {
@@ -450,26 +488,22 @@
 //
 //    Excl/Incl tax
 //--------------------------------------
-.abstract-incl-excl-tax {
-    .tax {
-        display: block;
-        .font-size(18);
-        line-height: 1;
-        .price {
-            font-weight: @font-weight-bold;
-        }
-    }
-
-    .incl.tax + .excl.tax,
+.abstract-adjustment-incl-excl-tax {
+    .price-including-tax,
+    .price-excluding-tax,
     .weee {
-        display: block;
-        .font-size(18);
+        white-space: nowrap;
+        display: inline-block;
+        .font-size(14);
+    }
+    .price-including-tax + .price-excluding-tax {
+        display: inline-block;
+        .font-size(11);
         &:before {
-            content: attr(data-th) ": ";
-            .font-size(11);
+            content: "("attr(data-label)": ";
         }
-        .price {
-            .font-size(11);
+        &:after {
+            content:")";
         }
     }
 }
@@ -490,7 +524,7 @@
     );
     &:after {
         position: absolute;
-        right: -7px;
+        right: -10px;
         top: 3px;
     }
     &-expanded {
@@ -499,6 +533,13 @@
             @_icon-font-position: after
         );
     }
+}
+
+.abstract-tax-total-expanded {
+    .icon-font-symbol(
+        @_icon-font-content: @icon-up,
+        @_icon-font-position: after
+    );
 }
 
 //
@@ -519,8 +560,9 @@
         @_icon-font-size: 10px,
         @_icon-font-line-height: 10px,
         @_icon-font-vertical-align: middle
-    ); 
+    );
 }
+
 .responsive-smaller(@break) when (@break = @screen-m) {
     .abstract-icon-add-mobile {
         .icon-font(
@@ -530,7 +572,7 @@
             @_icon-font-vertical-align: middle,
             @_icon-font-margin: 0 5px 0 0,
             @_icon-font-display: block
-        ); 
+        );
     }
 }
 
@@ -561,7 +603,7 @@
         border-bottom: @border-width-base solid @border-color-base;
         cursor: pointer;
         margin-bottom: 0;
-        padding: 10px 40px 10px 20px;
+        padding: 10px 40px 10px @layout-width-xs-indent;
         position: relative;
         .icon-font(
             @_icon-font-content: @icon-down,

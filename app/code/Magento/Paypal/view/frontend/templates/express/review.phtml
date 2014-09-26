@@ -27,29 +27,13 @@
 <hgroup class="page-title">
     <h1 class="title"><span class="base"><?php echo __('Review Order') ?></span></h1>
 </hgroup>
-<div class="paypal review view">
-    <?php if ($this->getShippingAddress()): ?>
-        <div class="block shipping information">
-            <div class="title"><strong><?php echo __('Shipping Information') ?></strong></div>
-            <div class="content">
-                <div class="box shipping address">
-                    <strong class="subtitle">
-                        <?php echo __('Shipping Address') ?>
-                        <?php if ($this->getCanEditShippingAddress()): ?>
-                            <a href="<?php echo $this->getEditUrl() ?>"
-                               class="action edit"><span><?php echo __('Edit') ?></span></a>
-                        <?php endif; ?>
-                    </strong>
-
-                    <div class="content">
-                        <address><?php echo $this->renderAddress($this->getShippingAddress()) ?></address>
-                    </div>
-                </div>
-
-                <div class="box shipping method">
-                    <strong class="subtitle"><?php echo __('Shipping Method') ?></strong>
-
-                    <div class="content">
+<div class="paypal-review view">
+    <div class="block block-order-details-view">
+        <div class="block-content">
+            <?php if ($this->getShippingAddress()): ?>
+                <div class="box box-order-shipping-method">
+                    <strong class="box-title"><span><?php echo __('Shipping Method') ?></span></strong>
+                    <div class="box-content">
                         <form method="post" id="shipping-method-form"
                               action="<?php echo $this->escapeHtml($this->getShippingMethodSubmitUrl()) ?>"
                               class="form">
@@ -76,9 +60,12 @@
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
-                                    <div class="actions">
-                                        <button id="update-shipping-method-submit" type="submit" class="action update">
-                                            <span><?php echo __('Update Shipping Method') ?></span></button>
+                                    <div class="actions-toolbar">
+                                        <div class="primary">
+                                            <button id="update-shipping-method-submit" type="submit"
+                                                    class="action update primary">
+                                                <span><?php echo __('Update Shipping Method') ?></span></button>
+                                        </div>
                                     </div>
                                 <?php else: ?>
                                     <p><?php echo __('Sorry, no quotes are available for this order at this time.') ?></p>
@@ -89,45 +76,55 @@
                         </form>
                     </div>
                 </div>
-            </div>
-        </div>
-    <?php endif; ?>
-
-    <div class="block billing information">
-        <div class="title"><strong><?php echo __('Billing Information') ?></strong></div>
-        <div class="content">
-            <div class="box billing">
-                <strong class="subtitle">
-                    <?php echo __('Payment Method') ?>
-                    <?php if ($this->getEditUrl()): ?><a href="<?php echo $this->getEditUrl() ?>" class="action edit">
-                        <span><?php echo __('Edit Payment Information') ?></span></a><?php endif ?>
-                </strong>
-
-                <div class="content">
+                <div class="box box-order-shipping-address">
+                    <strong class="box-title"><span><?php echo __('Shipping Address') ?></span></strong>
+                    <div class="box-content">
+                        <address><?php echo $this->renderAddress($this->getShippingAddress()) ?></address>
+                    </div>
+                    <?php if ($this->getCanEditShippingAddress()): ?>
+                        <div class="box-actions">
+                            <a href="<?php echo $this->getEditUrl() ?>"
+                               class="action edit"><span><?php echo __('Edit') ?></span></a>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            <?php endif; ?>
+            <div class="box box-order-billing-address">
+                <strong class="box-title"><span><?php echo __('Payment Method') ?></span></strong>
+                <div class="box-content">
                     <?php echo $this->escapeHtml($this->getPaymentMethodTitle()) ?>
                 </div>
+            <?php if ($this->getEditUrl()): ?>
+                <div class="box-actions">
+                    <a href="<?php echo $this->getEditUrl() ?>" class="action edit">
+                        <span><?php echo __('Edit Payment Information') ?></span>
+                    </a>
+                </div>
+            <?php endif ?>
             </div>
         </div>
     </div>
 
-    <div class="paypal review items">
-        <div class="paypal subtitle caption">
+    <div class="paypal-review-items">
+        <div class="paypal-review-title">
             <strong><?php echo __('Items in Your Shopping Cart') ?></strong>
             <a href="<?php echo $this->getUrl('checkout/cart') ?>"
                class="action edit"><span><?php echo __('Edit Shopping Cart') ?></span></a>
         </div>
 
-        <div id="details-reload">
+        <div id="details-reload" class="table-wrapper order-items">
             <?php echo $this->getChildHtml('details') ?>
         </div>
 
         <form method="post" id="order-review-form" action="<?php echo $this->getPlaceOrderUrl() ?>" class="form">
             <?php echo $this->getChildHtml('agreements'); ?>
-            <div class="actions" id="review-buttons-container">
-                <button type="button" id="review-button" value="<?php echo __('Place Order') ?>"
-                        class="action checkout"><span><?php echo __('Place Order') ?></span></button>
-                <button type="button" id="review-submit" value="<?php echo __('Place Order') ?>"
-                        class="action checkout"><span><?php echo __('Place Order') ?></span></button>
+            <div class="actions-toolbar" id="review-buttons-container">
+                <div class="primary">
+                    <button type="button" id="review-button" value="<?php echo __('Place Order') ?>"
+                            class="action checkout primary"><span><?php echo __('Place Order') ?></span></button>
+                    <button type="button" id="review-submit" value="<?php echo __('Place Order') ?>"
+                            class="action checkout primary"><span><?php echo __('Place Order') ?></span></button>
+                </div>
                 <span class="please-wait load indicator" id="review-please-wait" style="display: none;" data-text="<?php echo __('Submitting order information...') ?>">
                    <span><?php echo __('Submitting order information...') ?></span>
                 </span>

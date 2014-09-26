@@ -29,12 +29,6 @@
     .subtotal {
         border-top: 1px solid @color-secondary;
         padding-top: 10px;
-        .amount {
-            font-size: @font-size-xl;
-            .incl.tax {
-                display: block;
-            }
-        }
     }
     .subtitle {
         .heading(h3);
@@ -105,32 +99,13 @@
             display: inline;
         }
     }
-    .pricing.details {
-        display: table;
-        .rate,
-        .details.qty {
-            display: table-row;
-        }
-        .value,
-        .label {
-            padding-right:10px;
-            display: table-cell;
-        }
-        .label:after {
-            content: ":";
-        }
-    }
-    .action.edit {
-        .icon-font(
-            @icon-settings,
-            @_icon-font-size: 28px,
-            @_icon-font-line-height: 28px,
-            @_icon-font-text-hide: true,
-            @_icon-font-color: #303030,
-            @_icon-font-color-hover: #303030,
-            @_icon-font-color-active: #303030
-        );
-    }
+    .ui-dialog {
+         .action.close {
+             right: 0;
+             top: 46px;
+             z-index: 100;
+         }
+     }
     .action.close {
         position: absolute;
         right: 14px;
@@ -146,7 +121,7 @@
     }
     .action.showcart {
         .text {
-            &:extend(.visually-hidden all);
+            &:extend(.abstract-visually-hidden all);
         }
         .icon-font(
             @_icon-font-content: @icon-cart,
@@ -178,13 +153,6 @@
             white-space: normal;
         }
     }
-    .ui-dialog {
-        .action.close {
-            right: 0;
-            top: 46px;
-            z-index: 100;
-        }
-    }
 }
 
 .minilist {
@@ -194,25 +162,42 @@
         padding: 15px 0;
         z-index: 1;
     }
+
     .item > .product {
-        &:extend(.add-clearfix all);
+        &:extend(.abstract-add-clearfix all);
     }
+
     .product.photo {
         float: left;
     }
-    .product.details {
+
+    .product-item-details {
         padding-left: 88px;
     }
-    .action.delete {
-        .icon-font(
-            @icon-trash,
-            @_icon-font-size: 28px,
-            @_icon-font-line-height: 28px,
-            @_icon-font-text-hide: true,
-            @_icon-font-color: #303030,
-            @_icon-font-color-hover: #303030,
-            @_icon-font-color-active: #303030
-        );
+
+    .details-qty {
+        .label:after {
+            content: ":";
+        }
+    }
+    .action {
+         &.edit,
+         &.delete {
+             .icon-font(
+                 @icon-settings,
+                 @_icon-font-size: 28px,
+                 @_icon-font-line-height: 28px,
+                 @_icon-font-text-hide: true,
+                 @_icon-font-color: #303030,
+                 @_icon-font-color-hover: #303030,
+                 @_icon-font-color-active: #303030
+             );
+         }
+         &.delete {
+             .icon-font-symbol(
+                 @_icon-font-content: @icon-trash
+             );
+         }
     }
 }
 

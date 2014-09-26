@@ -26,37 +26,43 @@ namespace Magento\Test\Integrity\Xml;
 
 class SchemaTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @param $filename
-     * @dataProvider getXmlFiles
-     */
-    public function testXmlFiles($filename)
+    public function testXmlFiles()
     {
-        $dom = new \DOMDocument();
-        $xmlFile = file_get_contents($filename);
-        $dom->loadXML($xmlFile);
-        $errors = libxml_get_errors();
-        $this->assertEmpty($errors, print_r($errors, true));
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+            /**
+             * @param string $filename
+             */
+            function ($filename) {
+                $dom = new \DOMDocument();
+                $xmlFile = file_get_contents($filename);
+                $dom->loadXML($xmlFile);
+                $errors = libxml_get_errors();
+                $this->assertEmpty($errors, print_r($errors, true));
 
-        $schemaLocations = [];
-        preg_match('/xsi:noNamespaceSchemaLocation=\s*"([^"]+)"/s', $xmlFile, $schemaLocations);
-        $this->assertEquals(
-            2,
-            count($schemaLocations),
-            'The XML file at ' . $filename . ' does not have a schema properly defined.  It should
-have a xsi:noNamespaceSchemaLocation attribute defined with a relative path.  E.g.
-xsi:noNamespaceSchemaLocation="../../../lib/internal/Magento/Framework/etc/something.xsd"
-            '
+                $schemaLocations = [];
+                preg_match('/xsi:noNamespaceSchemaLocation=\s*"([^"]+)"/s', $xmlFile, $schemaLocations);
+                $this->assertEquals(
+                    2,
+                    count($schemaLocations),
+                    'The XML file at ' . $filename . ' does not have a schema properly defined.  It should '
+                    . 'have a xsi:noNamespaceSchemaLocation attribute defined with a relative path.  E.g. '
+                    . 'xsi:noNamespaceSchemaLocation="../../../lib/internal/Magento/Framework/etc/something.xsd"'
+                );
+
+                $schemaFile = dirname($filename).'/'.$schemaLocations[1];
+
+                $this->assertFileExists($schemaFile, "$filename refers to an invalid schema $schemaFile.");
+
+                $errors = \Magento\TestFramework\Utility\Validator::validateXml($dom, $schemaFile);
+                $this->assertEmpty(
+                    $errors,
+                    "Error validating $filename against $schemaFile\n" . print_r($errors, true)
+                );
+            },
+            $this->getXmlFiles()
         );
-
-        $schemaFile = dirname($filename).'/'.$schemaLocations[1];
-
-        $this->assertTrue(file_exists($schemaFile), "$filename refers to an invalid schema $schemaFile.");
-
-        $errors = \Magento\TestFramework\Utility\Validator::validateXml($dom, $schemaFile);
-        $this->assertEmpty($errors, "Error validating $filename against $schemaFile\n" . print_r($errors, true));
     }
-
 
     public function getSchemas()
     {

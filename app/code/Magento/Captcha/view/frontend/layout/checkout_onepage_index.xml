@@ -38,7 +38,6 @@
         </block>
     </referenceContainer>
     <referenceContainer name="form.billing.additional.info">
-        <referenceBlock name="head" />
         <block class="Magento\Captcha\Block\Captcha" name="captcha.guest.checkout">
             <action method="setFormId">
                 <argument name="formId" xsi:type="string">guest_checkout</argument>

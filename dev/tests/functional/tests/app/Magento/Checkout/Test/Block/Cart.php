@@ -43,7 +43,7 @@ class Cart extends Block
      *
      * @var string
      */
-    protected $cartItemByProductName = './/tr[contains(@class,"item-info") and (.//*[contains(@class,"product-item-name")]/a[.="%s"])]';
+    protected $cartItemByProductName = './/tbody[contains(@class,"cart item") and (.//*[contains(@class,"product-item-name")]/a[.="%s"])]';
     // @codingStandardsIgnoreEnd
 
     /**

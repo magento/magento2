@@ -24,13 +24,9 @@
  */
 -->
 <page layout="admin-2columns-left" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
-    <referenceBlock name="head">
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-sales-js-bootstrap-order-create-index-js">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Sales::js/bootstrap/order-create-index.js</argument>
-            </arguments>
-        </block>
-    </referenceBlock>
+    <head>
+        <link src="Magento_Sales::js/bootstrap/order-create-index.js"/>
+    </head>
     <referenceContainer name="content">
         <block class="Magento\Sales\Block\Adminhtml\Order\View" name="sales_order_edit"/>
     </referenceContainer>
@@ -68,7 +64,7 @@
                 <argument name="name" xsi:type="string">order_invoices</argument>
                 <argument name="block" xsi:type="string">sales_order_invoice.grid.container</argument>
             </action>
-        <block class = "Magento\Sales\Block\Adminhtml\Order\View\Tab\Creditmemos" name="sales_order_creditmemo.grid.container"/>
+            <block class = "Magento\Sales\Block\Adminhtml\Order\View\Tab\Creditmemos" name="sales_order_creditmemo.grid.container"/>
             <action method="addTab">
                 <argument name="name" xsi:type="string">order_creditmemos</argument>
                 <argument name="block" xsi:type="string">sales_order_creditmemo.grid.container</argument>

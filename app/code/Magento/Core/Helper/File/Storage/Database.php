@@ -255,8 +255,9 @@ class Database extends \Magento\Framework\App\Helper\AbstractHelper
                 return false;
             }
 
-            return $this->getStorageFileModel()->saveFile($file, true);
+            return $this->getStorageFileModel()->saveFile($file->getData(), true);
         }
+        return false;
     }
 
     /**

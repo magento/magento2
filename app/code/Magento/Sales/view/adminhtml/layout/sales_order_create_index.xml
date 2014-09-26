@@ -31,19 +31,13 @@
             <argument translate="true" name="id" xsi:type="string">order-header</argument>
         </action>
     </referenceBlock>
-    <referenceBlock name="head">
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-sales-js-bootstrap-order-create-index-js">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Sales::js/bootstrap/order-create-index.js</argument>
-            </arguments>
-        </block>
+    <referenceContainer name="after.body.start">
         <block class="Magento\Backend\Block\Template" name="optional_zip_countries" as="optional_zip_countries" template="Magento_Directory::js/optional_zip_countries.phtml"/>
-        <block class="Magento\Theme\Block\Html\Head\Css" name="magento-core-prototype-magento-css">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Core::prototype/magento.css</argument>
-            </arguments>
-        </block>
-    </referenceBlock>
+    </referenceContainer>
+    <head>
+        <link src="Magento_Sales::js/bootstrap/order-create-index.js"/>
+        <css src="Magento_Core::prototype/magento.css"/>
+    </head>
     <referenceContainer name="js">
         <block class="Magento\Backend\Block\Template" template="Magento_Sales::order/create/js.phtml" name="create"/>
     </referenceContainer>

@@ -26,40 +26,23 @@ return [
         'Magento\Customer\Service\V1\CustomerServiceInterface' => [
             'getCustomer' => [
                 'resources' => [
-                    0 => [
-                        'Magento_Customer::customer_self'
-                    ],
-                    1 => [
-                        'Magento_Customer::customer_self'
-                    ],
-                    2 => [
-                        'Magento_Customer::read'
-                    ],
+                    'Magento_Customer::customer_self',
+                    'Magento_Customer::read',
                 ],
                 'secure' => false,
             ],
             'updateCustomer' => [
-                'resources' => [
-                    0 => [
-                        'Magento_Customer::customer_self'
-                    ]
-                ],
+                'resources' => ['Magento_Customer::customer_self'],
                 'secure' => true,
             ],
             'createCustomer' => [
-                'resources' => [
-                    0 => [
-                        'Magento_Customer::manage'
-                    ]
-                ],
+                'resources' => ['Magento_Customer::manage'],
                 'secure' => false,
             ],
             'deleteCustomer' => [
                 'resources' => [
-                    0 => [
-                        'Magento_Customer::manage',
-                        'Magento_Customer::delete'
-                    ]
+                    'Magento_Customer::manage',
+                    'Magento_Customer::delete'
                 ],
                 'secure' => false,
             ],

@@ -206,6 +206,12 @@ class CatalogCategory extends InjectableFixture
         'group' => 'general_information',
     ];
 
+    protected $is_anchor = [
+        'attribute_code' => 'is_anchor',
+        'backend_type' => 'virtual',
+        'group' => 'general_information',
+    ];
+
     protected $url_key = [
         'attribute_code' => 'url_key',
         'backend_type' => 'virtual',
@@ -332,6 +338,11 @@ class CatalogCategory extends InjectableFixture
     public function getIsActive()
     {
         return $this->getData('is_active');
+    }
+
+    public function getIsAnchor()
+    {
+        return $this->getData('is_anchor');
     }
 
     public function getUrlKey()

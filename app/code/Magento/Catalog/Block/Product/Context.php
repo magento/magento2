@@ -84,6 +84,11 @@ class Context extends \Magento\Framework\View\Element\Template\Context
     protected $stockItemService;
 
     /**
+     * @var \Magento\Framework\View\Page\Config
+     */
+    protected $pageConfig;
+
+    /**
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
@@ -118,6 +123,7 @@ class Context extends \Magento\Framework\View\Element\Template\Context
      * @param \Magento\Catalog\Helper\Image $imageHelper
      * @param ReviewRendererInterface $reviewRenderer
      * @param \Magento\CatalogInventory\Service\V1\StockItemService $stockItemService
+     * @param \Magento\Framework\View\Page\Config $pageConfig
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -145,6 +151,7 @@ class Context extends \Magento\Framework\View\Element\Template\Context
         \Magento\Framework\View\TemplateEnginePool $enginePool,
         \Magento\Framework\App\State $appState,
         \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Framework\View\Page\Config $pageConfig,
         \Magento\Catalog\Model\Config $catalogConfig,
         \Magento\Framework\Registry $registry,
         \Magento\Tax\Helper\Data $taxHelper,
@@ -191,7 +198,8 @@ class Context extends \Magento\Framework\View\Element\Template\Context
             $viewFileSystem,
             $enginePool,
             $appState,
-            $storeManager
+            $storeManager,
+            $pageConfig
         );
     }
 

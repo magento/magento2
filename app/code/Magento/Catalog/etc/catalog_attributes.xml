@@ -26,12 +26,10 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Catalog/etc/catalog_attributes.xsd">
     <group name="catalog_category">
         <attribute name="name"/>
-        <attribute name="url_key"/>
         <attribute name="is_active"/>
     </group>
     <group name="catalog_product">
         <attribute name="name"/>
-        <attribute name="url_key"/>
         <attribute name="price"/>
         <attribute name="special_price"/>
         <attribute name="special_from_date"/>

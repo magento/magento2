@@ -40,13 +40,6 @@
             </dashboard>
         </system>
         <general>
-            <file>
-                <sitemap_generate_valid_paths>
-                    <available>
-                        <any_path>/*/sitemap.xml</any_path>
-                    </available>
-                </sitemap_generate_valid_paths>
-            </file>
             <validator_data>
                 <input_types>
                     <price>price</price>

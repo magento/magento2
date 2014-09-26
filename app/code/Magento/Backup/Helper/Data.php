@@ -46,33 +46,23 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_cacheTypeList;
 
     /**
-     * Index resource process collection factory
-     *
-     * @var \Magento\Index\Model\Resource\Process\CollectionFactory
-     */
-    protected $_processFactory;
-
-    /**
      * Construct
      *
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\App\Filesystem $filesystem
      * @param \Magento\Framework\AuthorizationInterface $authorization
      * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
-     * @param \Magento\Index\Model\Resource\Process\CollectionFactory $processFactory
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Framework\App\Filesystem $filesystem,
         \Magento\Framework\AuthorizationInterface $authorization,
-        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
-        \Magento\Index\Model\Resource\Process\CollectionFactory $processFactory
+        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
     ) {
         parent::__construct($context);
         $this->_authorization = $authorization;
         $this->_filesystem = $filesystem;
         $this->_cacheTypeList = $cacheTypeList;
-        $this->_processFactory = $processFactory;
     }
 
     /**
@@ -257,19 +247,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         if ($cacheTypes = $this->_cacheConfig->getTypes()) {
             $cacheTypesList = array_keys($cacheTypes);
             $this->_cacheTypeList->invalidate($cacheTypesList);
-        }
-        return $this;
-    }
-
-    /**
-     * Invalidate Indexer
-     *
-     * @return $this
-     */
-    public function invalidateIndexer()
-    {
-        foreach ($this->_processFactory->create() as $process) {
-            $process->changeStatus(\Magento\Index\Model\Process::STATUS_REQUIRE_REINDEX);
         }
         return $this;
     }

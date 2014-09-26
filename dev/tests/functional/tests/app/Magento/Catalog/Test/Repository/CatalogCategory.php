@@ -56,6 +56,15 @@ class CatalogCategory extends AbstractRepository
             'include_in_menu' => 'Yes',
         ];
 
+        $this->_data['default_anchor_subcategory'] = [
+            'name' => 'DefaultSubcategory%isolation%',
+            'url_key' => 'default-subcategory-%isolation%',
+            'parent_id' => ['dataSet' => 'default_category'],
+            'is_active' => 'Yes',
+            'is_anchor' => 'Yes',
+            'include_in_menu' => 'Yes',
+        ];
+
         $this->_data['root_category'] = [
             'name' => 'RootCategory%isolation%',
             'url_key' => 'root-category-%isolation%',

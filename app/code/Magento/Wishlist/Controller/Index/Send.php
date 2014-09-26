@@ -162,7 +162,7 @@ class Send extends Action\Action implements IndexInterface
             /*if share rss added rss feed to email template*/
             if ($this->getRequest()->getParam('rss_url')) {
                 $rss_url = $this->_view->getLayout()->createBlock(
-                    'Magento\Wishlist\Block\Share\Email\Rss'
+                    'Magento\Wishlist\Block\Rss\EmailLink'
                 )->setWishlistId(
                     $wishlist->getId()
                 )->toHtml();

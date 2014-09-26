@@ -25,7 +25,7 @@
 /** @var \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer $this */
 $_item = $this->getItem();
 ?>
-<span class="excl tax" data-th="<?php echo $this->escapeHtml(__('Excl. Tax')); ?>">
+<span class="price-excluding-tax" data-label="<?php echo $this->escapeHtml(__('Excl. Tax')); ?>">
     <span class="cart-price">
         <?php echo $this->getOrder()->formatPrice($this->getItem()->getPrice()) ?>
     </span>

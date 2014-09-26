@@ -34,6 +34,9 @@
             <block class="Magento\Sales\Block\Order\Info\Buttons" as="buttons" name="sales.order.info.buttons" cacheable="false"/>
         </container>
     </referenceContainer>
+    <referenceContainer name="sales.order.info.buttons">
+        <block class="Magento\Sales\Block\Order\Info\Buttons\Rss" as="buttons.rss" name="sales.order.info.buttons.rss" cacheable="false"/>
+    </referenceContainer>
     <referenceContainer name="content">
         <block class="Magento\Sales\Block\Order\View" name="order.comments" template="order/order_comments.phtml" before="sales.order.info.links" />
         <block class="Magento\Sales\Block\Order\View" name="sales.order.view" cacheable="false">

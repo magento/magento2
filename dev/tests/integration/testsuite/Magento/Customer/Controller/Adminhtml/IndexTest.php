@@ -1024,7 +1024,7 @@ class IndexTest extends \Magento\Backend\Utility\Controller
         $this->assertContains('Please correct this email address: \"*\".', $body);
         $this->assertContains('\"First Name\" is a required value.', $body);
         $this->assertContains('\"Last Name\" is a required value.', $body);
-        $this->assertContains('\"Telephone\" is a required value.', $body);
+        $this->assertContains('\"Phone Number\" is a required value.', $body);
         $this->assertContains('\"Country\" is a required value.', $body);
     }
 

@@ -29,30 +29,33 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Backend\App\AbstractAction;
 
+/**
+ * Class Authentication
+ * @package Magento\Rss\App\Action\Plugin
+ */
 class Authentication extends \Magento\Backend\App\Action\Plugin\Authentication
 {
     /**
      * @var \Magento\Framework\HTTP\Authentication
      */
-    protected $_httpAuthentication;
+    protected $httpAuthentication;
 
     /**
      * @var \Magento\Framework\Logger
      */
-    protected $_logger;
+    protected $logger;
 
     /**
      * @var \Magento\Framework\AuthorizationInterface
      */
-    protected $_authorization;
+    protected $authorization;
 
     /**
      * @var array
      */
-    protected $_aclResources = array(
+    protected $aclResources = array(
         'authenticate' => 'Magento_Rss::rss',
-        'catalog' => array('notifystock' => 'Magento_Catalog::products', 'review' => 'Magento_Review::reviews_all'),
-        'order' => 'Magento_Sales::sales_order'
+        'feed' => 'Magento_Rss::rss'
     );
 
     /**
@@ -75,9 +78,9 @@ class Authentication extends \Magento\Backend\App\Action\Plugin\Authentication
         \Magento\Framework\Logger $logger,
         \Magento\Framework\AuthorizationInterface $authorization
     ) {
-        $this->_httpAuthentication = $httpAuthentication;
-        $this->_logger = $logger;
-        $this->_authorization = $authorization;
+        $this->httpAuthentication = $httpAuthentication;
+        $this->logger = $logger;
+        $this->authorization = $authorization;
         parent::__construct($auth, $url, $response, $actionFlag, $messageManager);
     }
 
@@ -92,15 +95,12 @@ class Authentication extends \Magento\Backend\App\Action\Plugin\Authentication
      */
     public function aroundDispatch(AbstractAction $subject, \Closure $proceed, RequestInterface $request)
     {
-        $resource = isset(
-            $this->_aclResources[$request->getControllerName()]
-        ) ? isset(
-            $this->_aclResources[$request->getControllerName()][$request->getActionName()]
-        ) ? $this->_aclResources[$request
-            ->getControllerName()][$request
-            ->getActionName()] : $this
-            ->_aclResources[$request
-            ->getControllerName()] : null;
+        $resource = isset($this->aclResources[$request->getControllerName()])
+            ? isset($this->aclResources[$request->getControllerName()][$request->getActionName()])
+                ? $this->aclResources[$request->getControllerName()][$request->getActionName()]
+                : $this->aclResources[$request->getControllerName()]
+            : null;
+
         if (!$resource) {
             return parent::aroundDispatch($subject, $proceed, $request);
         }
@@ -109,17 +109,17 @@ class Authentication extends \Magento\Backend\App\Action\Plugin\Authentication
 
         // Try to login using HTTP-authentication
         if (!$session->isLoggedIn()) {
-            list($login, $password) = $this->_httpAuthentication->getCredentials();
+            list($login, $password) = $this->httpAuthentication->getCredentials();
             try {
                 $this->_auth->login($login, $password);
             } catch (\Magento\Backend\Model\Auth\Exception $e) {
-                $this->_logger->logException($e);
+                $this->logger->logException($e);
             }
         }
 
         // Verify if logged in and authorized
-        if (!$session->isLoggedIn() || !$this->_authorization->isAllowed($resource)) {
-            $this->_httpAuthentication->setAuthenticationFailed('RSS Feeds');
+        if (!$session->isLoggedIn() || !$this->authorization->isAllowed($resource)) {
+            $this->httpAuthentication->setAuthenticationFailed('RSS Feeds');
             return $this->_response;
         }
 

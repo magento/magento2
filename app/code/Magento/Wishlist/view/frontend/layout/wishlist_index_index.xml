@@ -30,6 +30,7 @@
     </referenceBlock>
     <referenceContainer name="content">
         <block class="Magento\Wishlist\Block\Customer\Wishlist" name="customer.wishlist" template="view.phtml" cacheable="false">
+            <block class="Magento\Wishlist\Block\Rss\Link" name="wishlist.rss.link" template="rss/wishlist.phtml"/>
             <block class="Magento\Wishlist\Block\Customer\Wishlist\Items" name="customer.wishlist.items" as="items" template="item/list.phtml" cacheable="false">
                 <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Image" name="customer.wishlist.item.image" template="item/column/image.phtml" cacheable="false" />
                 <block class="Magento\Wishlist\Block\Customer\Wishlist\Item\Column\Info" name="customer.wishlist.item.name" template="item/column/name.phtml" cacheable="false" />

@@ -23,41 +23,68 @@
  */
 namespace Magento\UrlRewrite\Helper;
 
+use Magento\TestFramework\Helper\ObjectManager;
+
 class UrlRewriteTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Test hasRedirectOptions
-     *
-     * @dataProvider redirectOptionsDataProvider
+     * @var \Magento\UrlRewrite\Helper\UrlRewrite
      */
-    public function testHasRedirectOptions($option, $expected)
+    protected $_helper;
+
+    protected function setUp()
     {
-        $optionsMock = $this->getMock(
-            'Magento\UrlRewrite\Model\UrlRewrite\OptionProvider',
-            array('getRedirectOptions'),
-            array(),
-            '',
-            false,
-            false
-        );
-        $optionsMock->expects($this->any())->method('getRedirectOptions')->will($this->returnValue(array('R', 'RP')));
-        $helper = new \Magento\UrlRewrite\Helper\UrlRewrite(
-            $this->getMock('Magento\Framework\App\Helper\Context', array(), array(), '', false, false),
-            $optionsMock
-        );
-        $mockObject = new \Magento\Framework\Object();
-        $mockObject->setOptions($option);
-        $this->assertEquals($expected, $helper->hasRedirectOptions($mockObject));
+        $this->_helper = (new ObjectManager($this))->getObject('Magento\UrlRewrite\Helper\UrlRewrite');
     }
 
     /**
-     * Data provider for redirect options
-     *
-     * @static
-     * @return array
+     * @dataProvider requestPathDataProvider
      */
-    public static function redirectOptionsDataProvider()
+    public function testValidateRequestPath($requestPath)
     {
-        return array(array('', false), array('R', true), array('RP', true));
+        $this->assertTrue($this->_helper->validateRequestPath($requestPath));
+    }
+
+    /**
+     * @dataProvider requestPathExceptionDataProvider
+     * @expectedException \Magento\Framework\Model\Exception
+     */
+    public function testValidateRequestPathException($requestPath)
+    {
+        $this->_helper->validateRequestPath($requestPath);
+    }
+
+    /**
+     * @dataProvider requestPathDataProvider
+     */
+    public function testValidateSuffix($suffix)
+    {
+        $this->assertTrue($this->_helper->validateSuffix($suffix));
+    }
+
+    /**
+     * @dataProvider requestPathExceptionDataProvider
+     * @expectedException \Magento\Framework\Model\Exception
+     */
+    public function testValidateSuffixException($suffix)
+    {
+        $this->_helper->validateSuffix($suffix);
+    }
+
+    public function requestPathDataProvider()
+    {
+        return array(
+            'no leading slash' => array('correct/request/path'),
+            'leading slash' => array('another/good/request/path/')
+        );
+    }
+
+    public function requestPathExceptionDataProvider()
+    {
+        return array(
+            'two slashes' => array('request/path/with/two//slashes'),
+            'three slashes' => array('request/path/with/three///slashes'),
+            'anchor' => array('request/path/with#anchor')
+        );
     }
 }

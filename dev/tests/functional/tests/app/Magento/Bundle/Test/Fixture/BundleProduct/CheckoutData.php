@@ -86,11 +86,12 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                                 'name' => '100_dollar_product'
                             ]
                         ]
-                    ]
+                    ],
+                    'qty' => 2
                 ],
                 'cartItem' => [
                     'price' => 756,
-                    'qty' => 1,
+                    'qty' => 2,
                     'subtotal' => 756
                 ]
             ],

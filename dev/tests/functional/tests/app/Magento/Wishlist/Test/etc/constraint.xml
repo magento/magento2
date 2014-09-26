@@ -27,7 +27,10 @@
     <assertWishlistShareMessage module="Magento_Wishlist">
         <severeness>low</severeness>
     </assertWishlistShareMessage>
-    <assertProductIsAbsentInWishlist module="Magento_Wishlist">
+    <assertProductsIsAbsentInWishlist module="Magento_Wishlist">
         <severeness>low</severeness>
-    </assertProductIsAbsentInWishlist>
+    </assertProductsIsAbsentInWishlist>
+    <assertWishlistIsEmpty module="Magento_Wishlist">
+        <severeness>low</severeness>
+    </assertWishlistIsEmpty>
 </constraint>

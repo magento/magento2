@@ -24,54 +24,35 @@
 
 namespace Magento\Setup\Model;
 
-use Magento\Framework\Math\Random;
-use Magento\Module\Setup\Connection\AdapterInterface;
-use Magento\Module\Setup;
+use Zend\ServiceManager\ServiceLocatorInterface;
+use Magento\Setup\Module\Setup;
 
 class AdminAccountFactory
 {
     /**
-     * @var AdapterInterface
+     * @var ServiceLocatorInterface
      */
-    protected $adapter;
+    protected $serviceLocator;
 
     /**
-     * @var array
+     * @param ServiceLocatorInterface $serviceLocator
      */
-    protected $configuration = [];
-
-    /**
-     * @var Random
-     */
-    protected $random;
-
-    /**
-     * @param Random $random
-     */
-    public function __construct(
-        Random $random
-    ) {
-        $this->random = $random;
-    }
-
-    /**
-     * @param array $config
-     */
-    public function setConfig(array $config)
+    public function __construct(ServiceLocatorInterface $serviceLocator)
     {
-        $this->configuration = $config;
+        $this->serviceLocator = $serviceLocator;
     }
 
     /**
      * @param Setup $setup
+     * @param array $data
      * @return AdminAccount
      */
-    public function create(Setup $setup)
+    public function create(Setup $setup, $data)
     {
         return new AdminAccount(
             $setup,
-            $this->random,
-            $this->configuration
+            $this->serviceLocator->get('Magento\Framework\Math\Random'),
+            $data
         );
     }
 }

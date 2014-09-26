@@ -116,7 +116,7 @@ class Timezone implements TimezoneInterface
      */
     public function getConfigTimezone()
     {
-        return $this->_scopeConfig->getValue('general/locale/timezone', $this->_scopeType);
+        return $this->_scopeConfig->getValue($this->getDefaultTimezonePath(), $this->_scopeType);
     }
 
     /**

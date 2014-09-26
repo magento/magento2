@@ -77,7 +77,11 @@ angular.module('install', ['ngStorage'])
                     $scope.nextState();
                 }
             });
-            $scope.checkProgress();
+            progress.clear(function (response) {
+                if (response.data.success) {
+                    $scope.checkProgress();
+                }
+            });
         };
     }])
     .service('progress', ['$http', function ($http) {
@@ -87,6 +91,9 @@ angular.module('install', ['ngStorage'])
             },
             post: function (data, callback) {
                 $http.post('install/start', data).success(callback);
+            },
+            clear: function (callback) {
+                $http.get('install/clear-progress').then(callback);
             }
         };
     }]);

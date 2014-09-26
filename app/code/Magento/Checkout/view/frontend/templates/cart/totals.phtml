@@ -29,14 +29,10 @@
  */
 ?>
 <div class="cart-totals">
-<?php if ($this->canApplyMsrp()): ?>
-    <div class="msrp totals"><?php echo __('You will see the order total before you submit the order.'); ?></div>
-<?php else: ?>
     <table id="shopping-cart-totals-table" class="data table totals">
         <?php echo $this->renderTotals(); ?>
         <tfoot>
             <?php echo $this->renderTotals('footer'); ?>
         </tfoot>
     </table>
-<?php endif; ?>
 </div>

@@ -27,16 +27,16 @@
 $_item = $this->getItem();
 ?>
 <?php if (($this->displayPriceInclTax() || $this->displayBothPrices()) && !$_item->getNoSubtotal()): ?>
-    <span class="incl tax" data-th="<?php echo $this->escapeHtml(__('Incl. Tax'));?>">
-        <span class="cart price">
+    <span class="price-including-tax" data-label="<?php echo $this->escapeHtml(__('Incl. Tax'));?>">
+        <span class="cart-price">
             <?php echo $this->formatPrice($_item->getRowTotalInclTax()) ?>
         </span>
     </span>
 <?php endif; ?>
 
 <?php if (($this->displayPriceExclTax() || $this->displayBothPrices()) && !$_item->getNoSubtotal()): ?>
-    <span class="excl tax" data-th="<?php echo $this->escapeHtml(__('Excl. Tax'));?>">
-        <span class="cart price">
+    <span class="price-excluding-tax" data-label="<?php echo $this->escapeHtml(__('Excl. Tax'));?>">
+        <span class="cart-price">
             <?php echo $this->formatPrice($_item->getRowTotal()) ?>
         </span>
     </span>

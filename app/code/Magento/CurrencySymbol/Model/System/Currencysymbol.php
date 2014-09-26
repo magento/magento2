@@ -22,13 +22,11 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Custom currency symbol model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- */
 namespace Magento\CurrencySymbol\Model\System;
 
+/**
+ * Custom currency symbol model
+ */
 class Currencysymbol
 {
     /**
@@ -69,7 +67,7 @@ class Currencysymbol
      */
     const XML_PATH_CUSTOM_CURRENCY_SYMBOL = 'currency/options/customsymbol';
 
-    const XML_PATH_ALLOWED_CURRENCIES = 'currency/options/allow';
+    const XML_PATH_ALLOWED_CURRENCIES = \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_ALLOW;
 
     /*
      * Separator used in config in allowed currencies list
@@ -153,34 +151,6 @@ class Currencysymbol
         $this->_systemStore = $systemStore;
         $this->_eventManager = $eventManager;
         $this->_scopeConfig = $scopeConfig;
-    }
-
-    /**
-     * Sets store Id
-     *
-     * @param  string|null $storeId
-     * @return $this
-     */
-    public function setStoreId($storeId = null)
-    {
-        $this->_storeId = $storeId;
-        $this->_symbolsData = array();
-
-        return $this;
-    }
-
-    /**
-     * Sets website Id
-     *
-     * @param string|null $websiteId
-     * @return $this
-     */
-    public function setWebsiteId($websiteId = null)
-    {
-        $this->_websiteId = $websiteId;
-        $this->_symbolsData = array();
-
-        return $this;
     }
 
     /**
@@ -307,6 +277,8 @@ class Currencysymbol
         $this->_storeManager->reinitStores();
 
         $this->clearCache();
+        //Reset symbols cache since new data is added
+        $this->_symbolsData = [];
 
         $this->_eventManager->dispatch(
             'admin_system_config_changed_section_currency',
@@ -337,7 +309,7 @@ class Currencysymbol
      *
      * @return $this
      */
-    public function clearCache()
+    protected function clearCache()
     {
         // clear cache for frontend
         foreach ($this->_cacheTypes as $cacheType) {

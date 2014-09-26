@@ -24,22 +24,25 @@
 
 namespace Magento\Setup;
 
+use Zend\Console\Adapter\AdapterInterface;
 use Zend\ModuleManager\Feature\BootstrapListenerInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
-use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
+use Zend\ModuleManager\Feature\ConsoleBannerProviderInterface;
+use Zend\ModuleManager\Feature\ConsoleUsageProviderInterface;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\MvcEvent;
 use Zend\EventManager\EventInterface;
 use Magento\Setup\Mvc\View\Http\InjectTemplateListener;
+use Magento\Setup\Controller\ConsoleController;
 
 class Module implements
     BootstrapListenerInterface,
     ConfigProviderInterface,
-    AutoloaderProviderInterface
+    ConsoleBannerProviderInterface,
+    ConsoleUsageProviderInterface
 {
     /**
-     * @param EventInterface $e
-     * @return void
+     * {@inheritdoc}
      */
     public function onBootstrap(EventInterface $e)
     {
@@ -77,7 +80,7 @@ class Module implements
     }
 
     /**
-     * @return array|mixed|\Traversable
+     * {@inheritdoc}
      */
     public function getConfig()
     {
@@ -91,16 +94,20 @@ class Module implements
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
-    public function getAutoloaderConfig()
+    public function getConsoleBanner(AdapterInterface $console)
     {
-        return array(
-            'Zend\Loader\StandardAutoloader' => array(
-                'namespaces' => array(
-                    __NAMESPACE__ => __DIR__ . '/src/',
-                ),
-            ),
-        );
+        return "==-------------------==\n"
+            . "   Magento Setup CLI   \n"
+            . "==-------------------==\n";
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getConsoleUsage(AdapterInterface $console)
+    {
+        return ConsoleController::getConsoleUsage();
     }
 }

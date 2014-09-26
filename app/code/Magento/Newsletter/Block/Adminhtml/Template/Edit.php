@@ -78,10 +78,10 @@ class Edit extends \Magento\Backend\Block\Widget
     protected function _prepareLayout()
     {
         // Load Wysiwyg on demand and Prepare layout
-        $block = $this->getLayout()->getBlock('head');
-        if ($this->_wysiwygConfig->isEnabled() && $block) {
-            $block->setCanLoadTinyMce(true);
-        }
+//        $block = $this->getLayout()->getBlock('head');
+//        if ($this->_wysiwygConfig->isEnabled() && $block) {
+//            $block->setCanLoadTinyMce(true);
+//        }
 
         $this->getToolbar()->addChild(
             'back_button',

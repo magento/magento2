@@ -40,11 +40,6 @@ class Indexer implements \Magento\Framework\AppInterface
     protected $filesystem;
 
     /**
-     * @var \Magento\Index\Model\IndexerFactory
-     */
-    protected $_indexerFactory;
-
-    /**
      * @param string $reportDir
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Indexer\Model\Processor $processor

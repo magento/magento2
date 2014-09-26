@@ -144,10 +144,6 @@ class Application
         $this->_shell->execute(
             'php -f ' . $this->_config->getApplicationBaseDir() . '/dev/shell/indexer.php -- reindexall'
         );
-        // TODO: remove once Magento\Index module is completely removed (MAGETWO-18168)
-        $this->_shell->execute(
-            'php -f ' . $this->_config->getApplicationBaseDir() . '/dev/shell/newindexer.php -- reindexall'
-        );
         return $this;
     }
 

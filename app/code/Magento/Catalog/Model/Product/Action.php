@@ -31,13 +31,6 @@ namespace Magento\Catalog\Model\Product;
 class Action extends \Magento\Framework\Model\AbstractModel
 {
     /**
-     * Index indexer
-     *
-     * @var \Magento\Index\Model\Indexer
-     */
-    protected $_indexIndexer;
-
-    /**
      * Product website factory
      *
      * @var \Magento\Catalog\Model\Product\WebsiteFactory
@@ -63,7 +56,6 @@ class Action extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Model\Product\WebsiteFactory $productWebsiteFactory
-     * @param \Magento\Index\Model\Indexer $indexIndexer
      * @param \Magento\Indexer\Model\IndexerInterface $categoryIndexer
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Model\Indexer\Product\Eav\Processor $productEavIndexerProcessor
@@ -75,7 +67,6 @@ class Action extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Catalog\Model\Product\WebsiteFactory $productWebsiteFactory,
-        \Magento\Index\Model\Indexer $indexIndexer,
         \Magento\Indexer\Model\IndexerInterface $categoryIndexer,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Catalog\Model\Indexer\Product\Eav\Processor $productEavIndexerProcessor,
@@ -84,7 +75,6 @@ class Action extends \Magento\Framework\Model\AbstractModel
         array $data = array()
     ) {
         $this->_productWebsiteFactory = $productWebsiteFactory;
-        $this->_indexIndexer = $indexIndexer;
         $this->categoryIndexer = $categoryIndexer;
         $this->_eavConfig = $eavConfig;
         $this->_productEavIndexerProcessor = $productEavIndexerProcessor;
@@ -148,12 +138,6 @@ class Action extends \Magento\Framework\Model\AbstractModel
             $this->_productEavIndexerProcessor->reindexList(array_unique($productIds));
         }
 
-        // register mass action indexer event
-        $this->_indexIndexer->processEntityAction(
-            $this,
-            \Magento\Catalog\Model\Product::ENTITY,
-            \Magento\Index\Model\Event::TYPE_MASS_ACTION
-        );
         if (!$this->getCategoryIndexer()->isScheduled()) {
             $this->getCategoryIndexer()->reindexList(array_unique($productIds));
         }
@@ -215,12 +199,6 @@ class Action extends \Magento\Framework\Model\AbstractModel
             array('product_ids' => array_unique($productIds), 'website_ids' => $websiteIds, 'action_type' => $type)
         );
 
-        // register mass action indexer event
-        $this->_indexIndexer->processEntityAction(
-            $this,
-            \Magento\Catalog\Model\Product::ENTITY,
-            \Magento\Index\Model\Event::TYPE_MASS_ACTION
-        );
         if (!$this->getCategoryIndexer()->isScheduled()) {
             $this->getCategoryIndexer()->reindexList(array_unique($productIds));
         }

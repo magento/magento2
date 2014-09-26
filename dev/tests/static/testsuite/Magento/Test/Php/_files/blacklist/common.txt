@@ -11,12 +11,14 @@ app/code/Magento/ConfigurableProduct/view
 app/code/Magento/DesignEditor/view
 app/code/Magento/Email/view
 app/code/Magento/Integration/view
+app/code/Magento/Msrp/view
 app/code/Magento/Theme/view
 app/code/Magento/User/view
 app/code/Magento/Webapi/view
 app/code/Magento/GroupedProduct/view
+app/code/Magento/Rss/view
 app/code/Magento/RecurringPayment/view
-app/code/Magento/UrlRedirect/view
+app/code/Magento/UrlRewrite/view
 dev/tests/integration/framework/Magento/TestFramework/Db/Mysql.php
 dev/tests/integration/framework/Magento/TestFramework/Db/Adapter/Mysql.php
 dev/tests/integration/framework/Magento/TestFramework/Db/ConnectionAdapter.php

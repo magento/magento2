@@ -53,8 +53,8 @@ class NameBuilderTest extends \PHPUnit_Framework_TestCase
             [['Checkout', 'Controller', 'Index'], 'Checkout\Controller\Index'],
             [['checkout', 'controller', 'index'], 'Checkout\Controller\Index'],
             [
-                ['Magento_Backend', 'Block', 'urlrewrite', 'edit', 'form'],
-                'Magento\Backend\Block\Urlrewrite\Edit\Form'
+                ['magento_backend', 'block', 'system', 'store', 'edit'],
+                'Magento\Backend\Block\System\Store\Edit'
             ],
             [['MyNamespace', 'MyModule'], 'MyNamespace\MyModule'],
             [['uc', 'words', 'test'], 'Uc\Words\Test'],

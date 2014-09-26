@@ -48,7 +48,6 @@ class EditRole extends \Magento\User\Controller\Adminhtml\User\Role
 
         $this->_addBreadcrumb($breadCrumb, $breadCrumbTitle);
 
-        $this->_view->getLayout()->getBlock('head')->setCanLoadExtJs(true);
         $this->_view->getLayout()->getBlock(
             'adminhtml.user.role.buttons'
         )->setRoleId(

@@ -26,7 +26,7 @@ namespace Magento\AdminNotification\Model\Config\Source;
 /**
  * AdminNotification update frequency source
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * @codeCoverageIgnore
  */
 class Frequency implements \Magento\Framework\Option\ArrayInterface
 {

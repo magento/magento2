@@ -78,7 +78,7 @@ class Queue extends \Magento\Framework\Model\Resource\Db\AbstractDb
             throw new \Magento\Framework\Model\Exception(__('There are no subscribers selected.'));
         }
 
-        if (!$queue->getId() && $queue->getQueueStatus() != Magento_Newsletter_Model_Queue::STATUS_NEVER) {
+        if (!$queue->getId() && $queue->getQueueStatus() != \Magento\Newsletter\Model\Queue::STATUS_NEVER) {
             throw new \Magento\Framework\Model\Exception(__('You selected an invalid queue.'));
         }
 

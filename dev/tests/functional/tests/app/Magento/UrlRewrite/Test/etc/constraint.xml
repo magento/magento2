@@ -49,13 +49,13 @@
     <assertUrlRewriteDeletedMessage module="Magento_UrlRewrite">
         <severeness>low</severeness>
         <require>
-            <index class="Magento\UrlRewrite\Test\Page\Adminhtml\UrlrewriteIndex"/>
+            <index class="Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteIndex"/>
         </require>
     </assertUrlRewriteDeletedMessage>
     <assertUrlRewriteNotInGrid module="Magento_UrlRewrite">
         <severeness>low</severeness>
         <require>
-            <urlRewriteIndex class="Magento\UrlRewrite\Test\Page\Adminhtml\UrlrewriteIndex"/>
+            <urlRewriteIndex class="Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteIndex"/>
             <productRedirect class="Magento\UrlRewrite\Test\Fixture\UrlRewrite"/>
         </require>
     </assertUrlRewriteNotInGrid>

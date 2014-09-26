@@ -36,7 +36,7 @@
     <preference for="Magento\Framework\App\Response\Http\FileFactory" type="Magento\Backend\App\Response\Http\FileFactory" />
     <preference for="Magento\Framework\App\View" type="Magento\Backend\Model\View" />
     <preference for="Magento\Framework\Model\ActionValidator\RemoveAction" type="Magento\Framework\Model\ActionValidator\RemoveAction\Allowed" />
-    <preference for="Magento\Framework\Session\Config\ConfigInterface" type="Magento\Backend\AdminConfig" />
+    <preference for="Magento\Framework\Session\Config\ConfigInterface" type="Magento\Backend\Model\Session\AdminConfig" />
     <type name="Magento\Backend\App\Action\Context">
         <arguments>
             <argument name="helper" xsi:type="object">Magento\Backend\Helper\Data</argument>
@@ -93,10 +93,10 @@
             <argument name="locale" xsi:type="object">Magento\Backend\Model\Locale\Resolver\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Backend\AdminConfig">
+    <type name="Magento\Backend\Model\Session\AdminConfig">
         <arguments>
             <argument name="lifetimePath" xsi:type="const">Magento\Backend\Model\Auth\Session::XML_PATH_SESSION_LIFETIME</argument>
-            <argument name="sessionName" xsi:type="const">Magento\Backend\AdminConfig::SESSION_NAME_ADMIN</argument>
+            <argument name="sessionName" xsi:type="const">Magento\Backend\Model\Session\AdminConfig::SESSION_NAME_ADMIN</argument>
         </arguments>
     </type>
 </config>

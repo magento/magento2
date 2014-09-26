@@ -31,7 +31,8 @@
         <label class="label"><span><?php echo $this->getLinksTitle() ?></span></label>
         <div class="control" id="downloadable-links-list"
              data-mage-init='{"downloadable":{
-                 "linkElement":"input:checkbox",
+                 "linkElement":"input:checkbox[value]",
+                 "allElements":"#links_all",
                  "config":<?php echo $this->getJsonConfig() ?>}
              }'
              data-container-for="downloadable-links">
@@ -58,6 +59,13 @@
                     </label>
                 </div>
             <?php endforeach; ?>
+            <div class="field choice downloads-all">
+                <input type="checkbox"
+                       data-notchecked="<?php echo __('Select all')?>"
+                       data-checked="<?php echo __('Unselect all')?>"
+                       id="links_all" />
+                <label class="label" for="links_all"><span><?php echo __('Select all')?></span></label>
+            </div>
         </div>
         <?php if ($_isRequired): ?>
             <span id="links-advice-container"></span>

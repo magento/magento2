@@ -3886,42 +3886,4 @@ $table = $installer->getConnection()->newTable(
 );
 $installer->getConnection()->createTable($table);
 
-/**
- * Modify core/url_rewrite table
- */
-$installer->getConnection()->addColumn(
-    $installer->getTable('core_url_rewrite'),
-    'category_id',
-    array(
-        'type' => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-        'unsigned' => true,
-        'nullable' => true,
-        'comment' => 'Category Id'
-    )
-);
-$installer->getConnection()->addColumn(
-    $installer->getTable('core_url_rewrite'),
-    'product_id',
-    array(
-        'type' => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-        'unsigned' => true,
-        'nullable' => true,
-        'comment' => 'Product Id'
-    )
-);
-$installer->getConnection()->addForeignKey(
-    $installer->getFkName('core_url_rewrite', 'category_id', 'catalog_category_entity', 'entity_id'),
-    $installer->getTable('core_url_rewrite'),
-    'category_id',
-    $installer->getTable('catalog_category_entity'),
-    'entity_id'
-);
-$installer->getConnection()->addForeignKey(
-    $installer->getFkName('core_url_rewrite', 'product_id', 'catalog_category_entity', 'entity_id'),
-    $installer->getTable('core_url_rewrite'),
-    'product_id',
-    $installer->getTable('catalog_product_entity'),
-    'entity_id'
-);
-
 $installer->endSetup();

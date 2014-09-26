@@ -1,0 +1,106 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+
+/**
+ * Template for displaying product price at product view page, gift registry and wish-list
+ *
+ * @var $this \Magento\Catalog\Pricing\Render\PriceBox
+ */
+?>
+<?php
+
+/** @var Magento\Msrp\Pricing\Price\MsrpPriceInterface $priceType */
+$priceType = $this->getPrice();
+
+/** @var $product \Magento\Catalog\Model\Product */
+$product = $this->getSaleableItem();
+$productId = $product->getId();
+$msrpPrice = $this->renderAmount(
+    $priceType->getCustomAmount($product->getMsrp() ? : $product->getTypeInstance()->getChildrenMsrp($product)),
+    [
+        'price_id' => $this->getPriceId() ? $this->getPriceId() : 'old-price-' . $productId,
+        'include_container' => false,
+        'skip_adjustments' => true
+    ]
+);
+$priceElementIdPrefix = $this->getPriceElementIdPrefix() ? $this->getPriceElementIdPrefix() : 'product-price-';
+
+$addToCartUrl = '';
+if ($product->isSaleable()) {
+    /** @var Magento\Catalog\Block\Product\AbstractProduct $addToCartUrlGenerator */
+    $addToCartUrlGenerator = $this->getLayout()->getBlockSingleton('Magento\Catalog\Block\Product\AbstractProduct');
+    $addToCartUrl = $addToCartUrlGenerator->getAddToCartUrl(
+        $product,
+        ['_query' => [
+            \Magento\Framework\App\Action\Action::PARAM_NAME_URL_ENCODED
+                => $this->helper('Magento\Core\Helper\PostData')->getEncodedUrl(
+                    $addToCartUrlGenerator->getAddToCartUrl($product)
+                )
+        ]]
+    );
+}
+?>
+<?php if ($product->getMsrp()): ?>
+    <span class="old-price"><?php echo $msrpPrice ?></span>
+<?php endif; ?>
+
+<?php if ($priceType->isShowPriceOnGesture()): ?>
+    <?php $priceElementId = $priceElementIdPrefix . $productId . $this->getIdSuffix(); ?>
+    <span id="<?php echo $this->getPriceId() ? $this->getPriceId() : $priceElementId ?>" style="display:none"></span>
+    <?php $popupId = 'msrp-popup-' . $productId . $this->getRandomString(20); ?>
+    <a href="#"
+       id="<?php echo($popupId);?>"
+       data-mage-init='{"addToCart":{
+            <?php if ($this->getRequest()->getFullActionName() === 'catalog_product_view'): ?>
+                "addToCartButton": "#product_addtocart_form [type=submit]",
+            <?php else: ?>
+                "cartForm": "#product_addtocart_form_from_popup",
+            <?php endif; ?>
+                                     "popupId": "#<?php echo $popupId; ?>",
+                                     "productName": "<?php echo $product->getName() ?>",
+                                     "realPrice": <?php echo $this->jsonEncode($this->getRealPriceHtml()) ?>,
+                                     "msrpPrice": <?php echo $this->jsonEncode($msrpPrice) ?>,
+                                     "priceElementId":"<?php echo $priceElementId ?>",
+                                     "closeButtonId": "#map-popup-close",
+                                     "popupCartButtonId": "#map-popup-button",
+                                     "addToCartUrl": "<?php echo $addToCartUrl; ?>"}}'
+    >
+        <?php echo __('Click for price'); ?>
+    </a>
+<?php else: ?>
+    <span class="msrp message">
+     <?php echo $priceType->getMsrpPriceMessage() ?>
+    </span>
+<?php endif; ?>
+
+<?php if ($this->getZone() == \Magento\Framework\Pricing\Render::ZONE_ITEM_VIEW): ?>
+    <?php $helpLinkId = 'msrp-help-' . $productId . $this->getRandomString(20); ?>
+    <a href="#"
+       id="<?php echo $helpLinkId;?>"
+       class="action show map"
+       data-mage-init='{"addToCart":{"helpLinkId": "#<?php echo $helpLinkId;?>",
+                                     "productName": "<?php echo $product->getName() ?>",
+                                     "closeButtonId": "#map-popup-close"}}'><span><?php echo __("What's this?"); ?></span>
+    </a>
+<?php endif; ?>

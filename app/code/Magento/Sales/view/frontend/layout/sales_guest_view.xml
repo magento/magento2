@@ -32,8 +32,7 @@
         </container>
     </referenceContainer>
     <referenceContainer name="content">
-        <block class="Magento\Sales\Block\Order\Info" as="info" name="sales.order.info"/>
-        <block class="Magento\Sales\Block\Order\View" name="sales.order.view" after="sales.order.info" cacheable="false">
+        <block class="Magento\Sales\Block\Order\View" name="sales.order.view" cacheable="false">
             <block class="Magento\Sales\Block\Order\Items" name="order_items" template="order/items.phtml">
                 <block class="Magento\Framework\View\Element\RendererList" name="sales.order.items.renderers" as="renderer.list" />
                 <block class="Magento\Sales\Block\Order\Totals" name="order_totals" template="order/totals.phtml">
@@ -45,6 +44,10 @@
                 </block>
             </block>
         </block>
+        <block class="Magento\Sales\Block\Order\Info" as="info" name="sales.order.info"/>
+    </referenceContainer>
+    <referenceContainer name="sales.order.info.buttons">
+        <block class="Magento\Sales\Block\Order\Info\Buttons\Rss" as="buttons.rss" name="sales.order.info.buttons.rss" cacheable="false"/>
     </referenceContainer>
     <update handle="sales_order_guest_info_links"/>
 </page>

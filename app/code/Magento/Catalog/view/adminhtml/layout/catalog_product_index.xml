@@ -44,4 +44,9 @@
     <referenceContainer name="content">
         <block class="Magento\Catalog\Block\Adminhtml\Product" name="products_list"/>
     </referenceContainer>
+    <referenceContainer name="product.grid">
+        <block class="Magento\Framework\View\Element\Text\ListText" name="grid.bottom.links">
+            <block class="Magento\Catalog\Block\Adminhtml\Rss\Grid\Link" name="grid.rss.link"/>
+        </block>
+    </referenceContainer>
 </page>

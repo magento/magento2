@@ -24,11 +24,9 @@
  */
 -->
 <page layout="2columns-left" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
-    <referenceBlock name="body.class">
-        <action method="addBodyClass">
-            <argument name="class" xsi:type="string">page-products</argument>
-        </action>
-    </referenceBlock>
+    <body>
+        <attribute name="class" value="page-products"/>
+    </body>
     <referenceContainer name="content">
         <block class="Magento\CatalogSearch\Block\Result" name="search.result" template="result.phtml" cacheable="false">
             <block class="Magento\CatalogSearch\Block\SearchResult\ListProduct" name="search_result_list" template="product/list.phtml" cacheable="false">

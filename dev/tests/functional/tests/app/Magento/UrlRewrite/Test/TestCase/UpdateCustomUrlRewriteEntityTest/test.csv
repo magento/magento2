@@ -1,3 +1,3 @@
-"initialRewrite/dataSet";"urlRewrite/data/store_id";"urlRewrite/data/request_path";"urlRewrite/data/target_path";"urlRewrite/data/options";"urlRewrite/data/description";"constraint"
+"initialRewrite/dataSet";"urlRewrite/data/store_id";"urlRewrite/data/request_path";"urlRewrite/data/target_path";"urlRewrite/data/redirect_type";"urlRewrite/data/description";"constraint"
 "default";"Main Website/Main Website Store/Default Store View";"wishlist/%isolation%";"http://www.magentocommerce.com/magento-connect/";"Permanent (301)";"test_description_relative path";"assertUrlRewriteSaveMessage, assertUrlRewriteInGrid, assertUrlRewriteSuccessOutsideRedirect"
 "custom_rewrite_wishlist";"Main Website/Main Website Store/Default Store View";"wishlist/%isolation%";"catalogsearch/result/?q=%name%";"Temporary (302)";"test_description_relative path";"assertUrlRewriteSaveMessage, assertUrlRewriteInGrid, assertUrlRewriteCustomSearchRedirect"

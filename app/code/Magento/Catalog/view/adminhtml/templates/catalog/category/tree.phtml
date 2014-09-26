@@ -44,9 +44,12 @@
         <div id="tree-div" style="width:100%; overflow:auto;"></div>
     </div>
 </div>
+<div data-id="information-dialog-tree" style="display: none;">
+    <span class="messages"><?php echo __('This operation can take much time'); ?><span>
+</div>
 <script type="text/javascript">
 var tree;
-require(["jquery", "prototype", "mage/adminhtml/form"], function(jQuery){
+require(["jquery", "jquery/ui", "prototype", "mage/adminhtml/form", "mage/translate"], function(jQuery){
 
 /**
  * Fix ext compatibility with prototype 1.6
@@ -394,6 +397,63 @@ function addNew(url, isRoot) {
     updateContent(url);
 }
 
+var mageDialog = (function($) {
+    var self = {dialogOpened: false, callback: []};
+
+    self.callback = {ok: [], cancel: []};
+    self.createDialog = function () {
+        var onEvent = function (type, dialog) {
+            self.callback[type].forEach(function(call) {
+                call();
+            });
+            $(dialog).dialog( "close" );
+        };
+        var _resetState = function() {
+            self.dialogOpened = false;
+            self.callback = {ok: [], cancel: []};
+            delete self.dialog;
+        };
+        self.dialog = $('[data-id="information-dialog-category"]').dialog({
+            autoOpen:   false,
+            modal:      true,
+            dialogClass: 'popup-window',
+            resizable: false,
+            title: $.mage.__('Warning message'),
+            buttons: [
+                {text: $.mage.__('Ok'), click: function() { onEvent('ok', this); }},
+                {text: $.mage.__('Cancel'), click: function() { onEvent('cancel', this); } }
+            ],
+            open: function () {
+                self.dialogOpened = true;
+            },
+            close: function(event, ui) {
+                $(this).dialog('destroy');
+                _resetState();
+            }
+        });
+    };
+
+    return {
+        onOk: function(call) {
+            self.callback.ok.push(call);
+            return this;
+        },
+        onCancel: function(call) {
+            self.callback.cancel.push(call);
+            return this;
+        },
+        show: function() {
+            if (self.dialog == undefined) {
+                self.createDialog();
+            }
+            if (self.dialogOpened ==  false) {
+                self.dialog.dialog('open');
+            }
+            return this;
+        }
+    };
+})(jQuery);
+
 function categoryMove(obj) {
     var data = {id:obj.dropNode.id, form_key:FORM_KEY};
 
@@ -455,17 +515,22 @@ function categoryMove(obj) {
         pd.push(encodeURIComponent(key), "=", encodeURIComponent(data[key]), "&");
     }
     pd.splice(pd.length - 1, 1);
-    new Ajax.Request(
+    mageDialog.onOk(function() {
+        new Ajax.Request(
             '<?php echo $this->getMoveUrl() ?>',
             {
                 method:'POST',
                 parameters:pd.join(""),
                 onSuccess:success,
-                onFailure:failure
+                onFailure: failure,
+                onCreate: function() { jQuery('body').loader('show'); },
+                onComplete: function() { jQuery('body').loader('hide'); }
             }
-    );
+        );
+    }).onCancel(function() {
+        reRenderTree();
+    }).show();
 }
-
     window.addNew = addNew;
 
 });

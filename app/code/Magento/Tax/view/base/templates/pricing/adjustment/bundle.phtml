@@ -27,10 +27,10 @@
 <?php if ($this->displayPriceIncludingTax()): ?>
     <?php echo $this->getDisplayAmount() ?>
 <?php elseif ($this->displayPriceExcludingTax()): ?>
-    <?php echo $this->getDisplayAmountExclTax() ?><
-<?php elseif ($this->displayBothPrices()): ?>
     <?php echo $this->getDisplayAmountExclTax() ?>
+<?php elseif ($this->displayBothPrices()): ?>
+    <?php echo $this->getDisplayAmount() ?>
     <?php if ($this->getDisplayAmountExclTax() !== $this->getDisplayAmount()): ?>
-        (+<?php echo $this->getDisplayAmount() ?> Incl. Tax)
+        (+<?php echo $this->getDisplayAmountExclTax() ?> Excl. Tax)
     <?php endif; ?>
 <?php endif; ?>

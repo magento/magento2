@@ -1042,37 +1042,39 @@
     }
 }
 
-.tax.summary-total .summary-collapse {
-    cursor: pointer;
-    display: inline-block;
-    &:before {
-        @iconsize: 16px;
-        content: "\e02d";
-        color: #816063;
-        background: #f2ebde;
+.summary-total {
+    .summary-collapse {
+        cursor: pointer;
         display: inline-block;
-        text-indent: 0;
-        font-size: @iconsize;
-        width:@iconsize;
-        height:@iconsize;
-        line-height: @iconsize;
-        overflow: hidden;
-        font-family: 'MUI-Icons';
-        border:1px solid #ada89e;
-        font-style: normal;
-        vertical-align: top;
-        margin-right:7px;
-        font-weight: normal;
-        speak: none;
-        -webkit-font-smoothing: antialiased;
-        border-radius: 2px;
+        &:before {
+            @iconsize: 16px;
+            content: "\e02d";
+            color: #816063;
+            background: #f2ebde;
+            display: inline-block;
+            text-indent: 0;
+            font-size: @iconsize;
+            width:@iconsize;
+            height:@iconsize;
+            line-height: @iconsize;
+            overflow: hidden;
+            font-family: 'MUI-Icons';
+            border:1px solid #ada89e;
+            font-style: normal;
+            vertical-align: top;
+            margin-right:7px;
+            font-weight: normal;
+            speak: none;
+            -webkit-font-smoothing: antialiased;
+            border-radius: 2px;
+        }
+        &:hover:before {
+            background: #cac3b4;
+        }
     }
-    &:hover:before {
-        background: #cac3b4;
+    &.show-details .summary-collapse:before {
+        content: "\e03a";
     }
-}
-.tax.summary-total.show-details .summary-collapse:before {
-    content: "\e03a";
 }
 
 tr.row-totals:nth-child(even) + tr.summary-details ~ tr.summary-total:not(.show-details):nth-child(even) td,
@@ -1909,7 +1911,7 @@ table.items-to-invoice tbody tr:hover td {
 /*
     URL rewrite
 -------------------------------------- */
-.adminhtml-urlrewrite-edit .field-url-rewrite-option-select .label {
+.adminhtml-urlrewrite-edit .field-entity-type-selector .label {
     width: auto;
 }
 

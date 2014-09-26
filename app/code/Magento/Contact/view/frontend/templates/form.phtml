@@ -29,7 +29,8 @@
       data-hasrequired="<?php echo __('* Required Fields') ?>"
       data-mage-init='{"validation":{}}'>
     <fieldset class="fieldset">
-        <legend class="legend"><span><?php echo __('Contact Information') ?></span></legend><br />
+        <legend class="legend"><span><?php echo __('Write Us') ?></span></legend><br />
+        <div class="field note"><?php echo __('Jot us a note and we’ll get back to you as quickly as possible.') ?></div>
         <div class="field name required">
             <label class="label" for="name"><span><?php echo __('Name') ?></span></label>
             <div class="control">
@@ -37,21 +38,21 @@
             </div>
         </div>
         <div class="field email required">
-            <label class="label" for="email"><span><?php echo __('Email') ?></span></label>
+            <label class="label" for="email"><span><?php echo __('Email Address') ?></span></label>
             <div class="control">
-                <input name="email" id="email" title="<?php echo __('Email') ?>" value="<?php echo $this->escapeHtml($this->helper('Magento\Contact\Helper\Data')->getUserEmail()) ?>" class="input-text" type="text" data-validate="{required:true, 'validate-email':true}"/>
+                <input name="email" id="email" title="<?php echo __('Email Address') ?>" value="<?php echo $this->escapeHtml($this->helper('Magento\Contact\Helper\Data')->getUserEmail()) ?>" class="input-text" type="text" data-validate="{required:true, 'validate-email':true}"/>
             </div>
         </div>
         <div class="field telephone">
-            <label class="label" for="telephone"><span><?php echo __('Telephone') ?></span></label>
+            <label class="label" for="telephone"><span><?php echo __('Phone Number') ?></span></label>
             <div class="control">
-                <input name="telephone" id="telephone" title="<?php echo __('Telephone') ?>" value="" class="input-text" type="text" />
+                <input name="telephone" id="telephone" title="<?php echo __('Phone Number') ?>" value="" class="input-text" type="text" />
             </div>
         </div>
         <div class="field comment required">
-            <label class="label" for="comment"><span><?php echo __('Comment') ?></span></label>
+            <label class="label" for="comment"><span><?php echo __('What’s on your mind?') ?></span></label>
             <div class="control">
-                <textarea name="comment" id="comment" title="<?php echo __('Comment') ?>" class="input-text" cols="5" rows="3" data-validate="{required:true}"></textarea>
+                <textarea name="comment" id="comment" title="<?php echo __('What’s on your mind?') ?>" class="input-text" cols="5" rows="3" data-validate="{required:true}"></textarea>
             </div>
         </div>
         <?php echo $this->getChildHtml('form.additional.info'); ?>

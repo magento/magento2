@@ -48,6 +48,13 @@ class Header extends Block
     protected $signOutLink = '.account-signout';
 
     /**
+     * Selector for Search Link
+     *
+     * @var string
+     */
+    protected $searchSelector = '#form-search';
+
+    /**
      * Log out Admin User
      */
     public function logOut()
@@ -67,5 +74,31 @@ class Header extends Block
     public function isLoggedIn()
     {
         return $this->_rootElement->find($this->adminAccountLink)->isVisible();
+    }
+
+    /**
+     * Search the query text
+     *
+     * @param string $query
+     * @return void
+     */
+    public function search($query)
+    {
+        /** @var \Mtf\Client\Driver\Selenium\Element\GlobalSearchElement $search */
+        $search = $this->_rootElement->find($this->searchSelector, Locator::SELECTOR_CSS, 'globalSearch');
+        $search->setValue($query);
+    }
+
+    /**
+     * Is search result is visible in suggestion dropdown
+     *
+     * @param string $query
+     * @return bool
+     */
+    public function isSearchResultVisible($query)
+    {
+        /** @var \Mtf\Client\Driver\Selenium\Element\GlobalSearchElement $search */
+        $search = $this->_rootElement->find($this->searchSelector, Locator::SELECTOR_CSS, 'globalSearch');
+        return $search->isExistValueInSearchResult($query);
     }
 }

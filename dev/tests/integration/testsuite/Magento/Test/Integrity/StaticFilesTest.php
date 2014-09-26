@@ -297,11 +297,7 @@ class StaticFilesTest extends \PHPUnit_Framework_TestCase
     private function collectFileIdsFromLayout($file)
     {
         $xml = simplexml_load_file($file);
-        // Collect "addCss" and "addJs" from theme layout
-        $elements = $xml->xpath(
-            '//block[@class="Magento\Theme\Block\Html\Head\Css" or @class="Magento\Theme\Block\Html\Head\Script"]' .
-            '/arguments/argument[@name="file"]'
-        );
+        $elements = $xml->xpath('//head/css|link|script');
         $result = array();
         if ($elements) {
             foreach ($elements as $node) {

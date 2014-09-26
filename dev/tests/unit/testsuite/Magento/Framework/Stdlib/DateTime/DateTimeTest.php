@@ -57,8 +57,19 @@ class DateTimeTest extends \PHPUnit_Framework_TestCase
 
     public function testCalculateOffset()
     {
-        $this->assertSame(-28800, $this->dateTime->calculateOffset());
-        $this->assertSame(10800, $this->dateTime->calculateOffset('Europe/Kiev'));
+        if (date('I')) {
+            $this->assertSame(-25200, $this->dateTime->calculateOffset());
+        } else {
+            $this->assertSame(-28800, $this->dateTime->calculateOffset());
+        }
+        $curZone = @date_default_timezone_get();
+        date_default_timezone_set('Europe/Kiev');
+        if (date('I')) {
+            $this->assertSame(10800, $this->dateTime->calculateOffset('Europe/Kiev'));
+        } else {
+            $this->assertSame(7200, $this->dateTime->calculateOffset('Europe/Kiev'));
+        }
+        date_default_timezone_set($curZone);
     }
 
     public function testGmtDate()
@@ -110,9 +121,16 @@ class DateTimeTest extends \PHPUnit_Framework_TestCase
 
     public function testGetGmtOffset()
     {
-        $this->assertSame(-28800, $this->dateTime->getGmtOffset('seconds'));
-        $this->assertSame(-28800, $this->dateTime->getGmtOffset('seconds11'));
-        $this->assertSame(-480, $this->dateTime->getGmtOffset('minutes'));
-        $this->assertSame(-8, $this->dateTime->getGmtOffset('hours'));
+        if (date('I')) {
+            $this->assertSame(-25200, $this->dateTime->getGmtOffset('seconds'));
+            $this->assertSame(-25200, $this->dateTime->getGmtOffset('seconds11'));
+            $this->assertSame(-420, $this->dateTime->getGmtOffset('minutes'));
+            $this->assertSame(-7, $this->dateTime->getGmtOffset('hours'));
+        } else {
+            $this->assertSame(-28800, $this->dateTime->getGmtOffset('seconds'));
+            $this->assertSame(-28800, $this->dateTime->getGmtOffset('seconds11'));
+            $this->assertSame(-480, $this->dateTime->getGmtOffset('minutes'));
+            $this->assertSame(-8, $this->dateTime->getGmtOffset('hours'));
+        }
     }
 }

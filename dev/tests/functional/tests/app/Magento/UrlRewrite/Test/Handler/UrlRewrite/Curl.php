@@ -47,10 +47,10 @@ class Curl extends AbstractCurl implements UrlRewriteInterface
             'Default Store View' => 1,
             'Main Website/Main Website Store/Default Store View' => 1,
         ],
-        'options' => [
-            'Temporary (302)' => 'R',
-            'Permanent (301)' => 'RP',
-            'No' => ''
+        'redirect_type' => [
+            'Temporary (302)' => 302,
+            'Permanent (301)' => 301,
+            'No' => 0
         ]
     ];
 
@@ -59,7 +59,7 @@ class Curl extends AbstractCurl implements UrlRewriteInterface
      *
      * @var string
      */
-    protected $url = 'admin/urlrewrite/save/';
+    protected $url = 'admin/url_rewrite/save/';
 
     /**
      * Post request for creating url rewrite

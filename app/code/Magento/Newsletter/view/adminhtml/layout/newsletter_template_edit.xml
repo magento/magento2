@@ -25,18 +25,10 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <update handle="editor"/>
-    <referenceBlock name="head">
-        <block class="Magento\Theme\Block\Html\Head\Css" name="jquery-fileuploader-css-jquery-fileupload-ui-css">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/fileUploader/css/jquery.fileupload-ui.css</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-fileuploader-bootstrap-js">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/fileUploader/bootstrap.js</argument>
-            </arguments>
-        </block>
-    </referenceBlock>
+    <head>
+        <css src="jquery/fileUploader/css/jquery.fileupload-ui.css"/>
+        <link src="jquery/fileUploader/bootstrap.js"/>
+    </head>
     <referenceContainer name="content">
         <block class="Magento\Newsletter\Block\Adminhtml\Template\Edit" name="template_edit" template="template/edit.phtml"/>
     </referenceContainer>

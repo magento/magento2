@@ -35,7 +35,6 @@ use Magento\Framework\Pricing\Render as PricingRender;
  *
  * @method string getPriceRender()
  * @method string getPriceTypeCode()
- * @method string getDisplayMsrpHelpMessage()
  */
 class Render extends Template
 {

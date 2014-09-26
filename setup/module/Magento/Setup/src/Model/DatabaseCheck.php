@@ -24,7 +24,7 @@
 
 namespace Magento\Setup\Model;
 
-use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Setup\Framework\DB\Adapter\Pdo\Mysql;
 
 class DatabaseCheck
 {

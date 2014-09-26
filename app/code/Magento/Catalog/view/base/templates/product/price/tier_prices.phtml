@@ -33,12 +33,12 @@ $msrpShowOnGesture = $this->getPriceType('msrp_price')->isShowPriceOnGesture();
 $product = $this->getSaleableItem();
 ?>
 <?php if (count($tierPrices)) : ?>
-    <ul class="<?php echo ($this->hasListClass() ? $this->getListClass() : 'prices tier items'); ?>">
+    <ul class="<?php echo ($this->hasListClass() ? $this->getListClass() : 'prices-tier items'); ?>">
     <?php foreach ($tierPrices as $index => $price) : ?>
         <li class="item">
             <?php
                 $popupId = 'msrp-popup-' . $product->getId() . $this->getRandomString(20);
-                if ($msrpShowOnGesture):
+                if ($msrpShowOnGesture && $price['price']->getValue() < $product->getMsrp()):
                     $addToCartUrl = '';
                     if ($product->isSaleable()) {
                         $addToCartUrl = $this->helper('\Magento\Checkout\Helper\Cart')
@@ -88,8 +88,7 @@ $product = $this->getSaleableItem();
                     );
                 ?><?php echo __('each') ?>
                 <?php if ($this->getShowDetailedPrice() !== false): ?>
-                    <?php echo __('and') ?>&nbsp;<strong class="benefit">
-                        <?php echo __('save')?>
+                    <?php echo __('and') ?>&nbsp;<strong class="benefit"><?php echo __('save')?>
                         <span class="percent tier-<?php echo $index ?>"><?php echo $tierPriceModel->getSavePercent($price['price']) ?></span>%
                     </strong>
                 <?php endif ?>
@@ -105,7 +104,7 @@ $product = $this->getSaleableItem();
                 inputQty: '#qty',
                 productForm: '#product_addtocart_form'
             });
-                
+
         });
 </script>
     <?php endif;?>

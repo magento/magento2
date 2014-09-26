@@ -30,14 +30,14 @@ class Data implements \Magento\Framework\Config\DataInterface
     /**
      * Configuration reader model
      *
-     * @var \Magento\Framework\Config\ReaderInterface
+     * @var ReaderInterface
      */
     protected $_reader;
 
     /**
      * Configuration cache model
      *
-     * @var \Magento\Framework\Config\CacheInterface
+     * @var CacheInterface
      */
     protected $_cache;
 
@@ -53,24 +53,51 @@ class Data implements \Magento\Framework\Config\DataInterface
      *
      * @var array
      */
-    protected $_data = array();
+    protected $_data = [];
+
+    /**
+     * @var ReaderInterface
+     */
+    private $reader;
+
+    /**
+     * @var CacheInterface
+     */
+    private $cache;
+
+    /**
+     * @var string
+     */
+    private $cacheId;
 
     /**
      * Constructor
      *
-     * @param \Magento\Framework\Config\ReaderInterface $reader
-     * @param \Magento\Framework\Config\CacheInterface $cache
+     * @param ReaderInterface $reader
+     * @param CacheInterface $cache
      * @param string $cacheId
      */
     public function __construct(
-        \Magento\Framework\Config\ReaderInterface $reader,
-        \Magento\Framework\Config\CacheInterface $cache,
+        ReaderInterface $reader,
+        CacheInterface $cache,
         $cacheId
     ) {
-        $data = $cache->load($cacheId);
+        $this->reader = $reader;
+        $this->cache = $cache;
+        $this->cacheId = $cacheId;
+        $this->initData();
+    }
+
+    /**
+     * Initialise data for configuration
+     * @return void
+     */
+    protected function initData()
+    {
+        $data = $this->cache->load($this->cacheId);
         if (false === $data) {
-            $data = $reader->read();
-            $cache->save(serialize($data), $cacheId);
+            $data = $this->reader->read();
+            $this->cache->save(serialize($data), $this->cacheId);
         } else {
             $data = unserialize($data);
         }
@@ -110,5 +137,14 @@ class Data implements \Magento\Framework\Config\DataInterface
             }
         }
         return $data;
+    }
+
+    /**
+     * Clear cache data
+     * @return void
+     */
+    public function reset()
+    {
+        $this->cache->remove($this->cacheId);
     }
 }

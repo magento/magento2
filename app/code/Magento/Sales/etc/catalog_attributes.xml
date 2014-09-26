@@ -42,8 +42,5 @@
         <attribute name="special_price"/>
         <attribute name="cost"/>
         <attribute name="gift_message_available"/>
-        <attribute name="msrp_enabled"/>
-        <attribute name="msrp"/>
-        <attribute name="msrp_display_actual_price_type"/>
     </group>
 </config>

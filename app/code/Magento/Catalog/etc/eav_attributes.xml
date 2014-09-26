@@ -29,9 +29,6 @@
             <field code="is_global" locked="true" />
             <field code="is_unique" locked="true" />
         </attribute>
-        <attribute code="url_key">
-            <field code="is_unique" locked="true" />
-        </attribute>
         <attribute code="status">
             <field code="is_filterable" locked="true" />
             <field code="is_filterable_in_search" locked="true" />

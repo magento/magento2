@@ -312,20 +312,6 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test consistency of plugin interfaces
-     */
-    public function testPluginInterfaces()
-    {
-        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
-        $invoker(
-            function ($plugin, $type) {
-                $this->validatePlugins($plugin, $type);
-            },
-            $this->pluginDataProvider()
-        );
-    }
-
-    /**
      * Validate constructor integrity
      */
     public function testConstructorIntegrity()
@@ -367,6 +353,20 @@ class CompilerTest extends \PHPUnit_Framework_TestCase
             $this->_phpClassesDataProvider()
         );
         spl_autoload_unregister(array($autoloader, 'load'));
+    }
+
+    /**
+     * Test consistency of plugin interfaces
+     */
+    public function testPluginInterfaces()
+    {
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+            function ($plugin, $type) {
+                $this->validatePlugins($plugin, $type);
+            },
+            $this->pluginDataProvider()
+        );
     }
 
     /**

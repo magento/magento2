@@ -6,10 +6,10 @@ Mode,Mode
 "Update on Save","Update on Save"
 Ready,Ready
 Processing,Processing
-"New Indexer Management","New Indexer Management"
+"Indexer Management","Indexer Management"
 "Update by Schedule","Update by Schedule"
 "Reindex required","Reindex required"
-"New Index Management","New Index Management"
+"Index Management","Index Management"
 "Please select indexers.","Please select indexers."
 "A total of %1 indexer(s) have been turned Update on Save mode on.","A total of %1 indexer(s) have been turned Update on Save mode on."
 "We couldn't change indexer(s)' mode because of an error.","We couldn't change indexer(s)' mode because of an error."

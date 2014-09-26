@@ -17,16 +17,16 @@
  * Do not edit or add to this file if you wish to upgrade Magento to newer
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
- *   
+ *
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Setup\Controller\Data;
 
+use Magento\Setup\Model\Installer;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Zend\Json\Json;
-use Magento\Setup\Model\DatabaseCheck;
 
 class DatabaseController extends AbstractActionController
 {
@@ -51,23 +51,11 @@ class DatabaseController extends AbstractActionController
     {
         $params = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
         try {
-            $db = new DatabaseCheck($this->prepareDbConfig($params));
-            return $this->jsonModel->setVariables(['success' => $db->checkConnection()]);
+            Installer::checkDatabaseConnection($params['name'], $params['host'], $params['user'], $params['password']);
+            return $this->jsonModel->setVariables(['success' => true]);
         } catch (\Exception $e) {
             return $this->jsonModel->setVariables(['success' => false]);
         }
     }
 
-    protected function prepareDbConfig(array $data = array())
-    {
-        return array(
-            'driver'         => "Pdo",
-            'dsn'            => "mysql:dbname=" . $data['name']. ";host=" .$data['host'],
-            'username'       => $data['user'],
-            'password'       => isset($data['password']) ? $data['password'] : null,
-            'driver_options' => array(
-                \PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES 'UTF8'"
-            ),
-        );
-    }
 }

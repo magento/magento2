@@ -25,7 +25,6 @@
 //
 //    Newsletter subscription
 //--------------------------------------
-
 .block.newsletter {
     margin-bottom: 40px;
     .form.subscribe {
@@ -46,7 +45,7 @@
                 @_icon-font-size: 35px,
                 @_icon-font-line-height: 33px,
                 @_icon-font-color: @form-element-input-placeholder-color
-                );
+            );
             &:before {
                 position: absolute;
             }
@@ -60,7 +59,7 @@
         display: none;
     }
     .label {
-        .visually-hidden();
+        &:extend(.abstract-visually-hidden all);
     }
     .actions {
         display: table-cell;

@@ -24,39 +24,13 @@
  */
 -->
 <page layout="admin-2columns-left" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
-    <referenceBlock name="head">
-        <action method="setCanLoadExtJs">
-            <argument name="flag" xsi:type="string">1</argument>
-        </action>
-        <action method="setCanLoadTinyMce">
-            <argument name="flag" xsi:type="string">1</argument>
-        </action>
-        <block class="Magento\Theme\Block\Html\Head\Css" name="jquery-fileuploader-css-jquery-fileupload-ui-css">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/fileUploader/css/jquery.fileupload-ui.css</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Css" name="magento-theme-css-theme-css">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Theme::css/theme.css</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Css" name="prototype-windows-themes-default-css">
-            <arguments>
-                <argument name="file" xsi:type="string">prototype/windows/themes/default.css</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Css" name="magento-core-prototype-magento-css">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Core::prototype/magento.css</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-theme-js-bootstrap-js">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Theme::js/bootstrap.js</argument>
-            </arguments>
-        </block>
-    </referenceBlock>
+    <head>
+        <css src="jquery/fileUploader/css/jquery.fileupload-ui.css"/>
+        <css src="Magento_Theme::css/theme.css"/>
+        <css src="prototype/windows/themes/default.css"/>
+        <css src="Magento_Core::prototype/magento.css"/>
+        <link src="Magento_Theme::js/bootstrap.js"/>
+    </head>
     <referenceContainer name="content">
         <block class="Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit" name="theme_edit"/>
     </referenceContainer>

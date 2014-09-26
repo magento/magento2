@@ -67,22 +67,28 @@
                     <?php echo $_address->format('html') ?>
                 </address>
             </div>
-            <div class="box method">
-                <strong class="subtitle">
+            <div class="box box-order-shipping-method">
+                <strong class="box-title">
                     <span><?php echo __('Shipping Method') ?></span>
                     <a href="<?php echo $this->getEditShippingUrl() ?>" class="action edit"><span><?php echo __('Change') ?></span></a>
                 </strong>
                 <?php if($_rate=$this->getShippingAddressRate($_address)): ?>
-                    <p>
+                    <div class="box-content">
                         <?php echo $this->escapeHtml($_rate->getCarrierTitle()) ?> (<?php echo $this->escapeHtml($_rate->getMethodTitle()) ?>)
                         <?php $_excl = $this->getShippingPriceExclTax($_address); ?>
                         <?php $_incl = $this->getShippingPriceInclTax($_address); ?>
 
-                        <?php echo $_excl; ?>
                         <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingBothPrices() && $_incl != $_excl): ?>
-                            (<?php echo __('Incl. Tax'); ?> <?php echo $_incl; ?>)
+                        <span class="price-including-tax" data-label="<?php echo __('Incl. Tax'); ?>">
                         <?php endif; ?>
-                    </p>
+                            <?php echo $_incl; ?>
+                        <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingBothPrices() && $_incl != $_excl): ?>
+                        </span>
+                        <?php endif; ?>
+                        <?php if ($this->helper('Magento\Tax\Helper\Data')->displayShippingBothPrices() && $_incl != $_excl): ?>
+                            <span class="price-excluding-tax" data-label="<?php echo __('Excl. Tax'); ?>"><?php echo $_excl; ?></span>
+                        <?php endif; ?>
+                    </div>
                 <?php endif; ?>
             </div>
             <div class="box items">
@@ -93,19 +99,11 @@
                 <table class="items data table order review" id="overview-table-<?php echo $_address->getId() ?>">
                     <thead>
                     <tr>
-                        <th rowspan="<?php echo $mergedCells; ?>" class="col item"><?php echo __('Product Name') ?></th>
-                        <th colspan="<?php echo $mergedCells; ?>" class="col price"><?php echo __('Price') ?></th>
-                        <th rowspan="<?php echo $mergedCells; ?>" class="col qty"><?php echo __('Qty') ?></th>
-                        <th colspan="<?php echo $mergedCells; ?>" class="col subtotal"><?php echo __('Subtotal') ?></th>
+                        <th class="col item"><?php echo __('Product Name') ?></th>
+                        <th class="col price"><?php echo __('Price') ?></th>
+                        <th class="col qty"><?php echo __('Qty') ?></th>
+                        <th class="col subtotal"><?php echo __('Subtotal') ?></th>
                     </tr>
-                    <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices()): ?>
-                        <tr>
-                            <th class="col price excl tax"><?php echo $this->helper('Magento\Tax\Helper\Data')->getIncExcTaxLabel(false) ?></th>
-                            <th class="col price incl tax"><?php echo $this->helper('Magento\Tax\Helper\Data')->getIncExcTaxLabel(true) ?></th>
-                            <th class="col subtotal excl tax"><?php echo $this->helper('Magento\Tax\Helper\Data')->getIncExcTaxLabel(false) ?></th>
-                            <th class="col subtotal incl tax"><?php echo $this->helper('Magento\Tax\Helper\Data')->getIncExcTaxLabel(true) ?></th>
-                        </tr>
-                    <?php endif; ?>
                     </thead>
                     <tfoot>
                         <?php echo $this->renderTotals($this->getShippingAddressTotals($_address)); ?>
@@ -135,19 +133,11 @@
             <table class="items data table order review" id="virtual-overview-table">
                 <thead>
                     <tr>
-                        <th rowspan="<?php echo $mergedCells; ?>" class="col item"><?php echo __('Product Name') ?></th>
-                        <th colspan="<?php echo $mergedCells; ?>" class="col price"><?php echo __('Price') ?></th>
-                        <th rowspan="<?php echo $mergedCells; ?>" class="col qty"><?php echo __('Qty') ?></th>
-                        <th colspan="<?php echo $mergedCells; ?>" class="col subtotal"><?php echo __('Subtotal') ?></th>
+                        <th class="col item"><?php echo __('Product Name') ?></th>
+                        <th class="col price"><?php echo __('Price') ?></th>
+                        <th class="col qty"><?php echo __('Qty') ?></th>
+                        <th class="col subtotal"><?php echo __('Subtotal') ?></th>
                     </tr>
-                    <?php if ($this->helper('Magento\Tax\Helper\Data')->displayCartBothPrices()): ?>
-                    <tr>
-                        <th class="col price excl tax"><?php echo $this->helper('Magento\Tax\Helper\Data')->getIncExcTaxLabel(false) ?></th>
-                        <th class="col price incl tax"><?php echo $this->helper('Magento\Tax\Helper\Data')->getIncExcTaxLabel(true) ?></th>
-                        <th class="col subtotal excl tax"><?php echo $this->helper('Magento\Tax\Helper\Data')->getIncExcTaxLabel(false) ?></th>
-                        <th class="col subtotal incl tax"><?php echo $this->helper('Magento\Tax\Helper\Data')->getIncExcTaxLabel(true) ?></th>
-                    </tr>
-                    <?php endif; ?>
                 </thead>
                 <tfoot>
                     <?php echo $this->renderTotals($this->getBillinAddressTotals()); ?>

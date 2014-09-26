@@ -24,24 +24,9 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
-    <referenceBlock name="head">
-        <action method="setCanLoadExtJs">
-            <argument name="flag" xsi:type="string">1</argument>
-        </action>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-backend-js-bootstrap-editor-js">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Backend::js/bootstrap/editor.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Css" name="prototype-windows-themes-default-css">
-            <arguments>
-                <argument name="file" xsi:type="string">prototype/windows/themes/default.css</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Css" name="magento-core-prototype-magento-css">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Core::prototype/magento.css</argument>
-            </arguments>
-        </block>
-    </referenceBlock>
+    <head>
+        <link src="Magento_Backend::js/bootstrap/editor.js"/>
+        <css src="prototype/windows/themes/default.css"/>
+        <css src="Magento_Core::prototype/magento.css"/>
+    </head>
 </page>

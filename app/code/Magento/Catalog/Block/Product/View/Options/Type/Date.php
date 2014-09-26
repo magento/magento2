@@ -65,17 +65,6 @@ class Date extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
     }
 
     /**
-     * @return AbstractBlock
-     */
-    protected function _prepareLayout()
-    {
-        if ($head = $this->getLayout()->getBlock('head')) {
-            $head->setCanLoadCalendarJs(true);
-        }
-        return parent::_prepareLayout();
-    }
-
-    /**
      * Use JS calendar settings
      *
      * @return boolean

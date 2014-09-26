@@ -35,4 +35,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\App\Rss\RssManagerInterface">
+        <arguments>
+            <argument name="dataProviders" xsi:type="array">
+                <item name="discounts" xsi:type="string">Magento\SalesRule\Block\Rss\Discounts</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

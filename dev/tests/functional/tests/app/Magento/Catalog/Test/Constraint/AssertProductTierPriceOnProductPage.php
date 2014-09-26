@@ -59,14 +59,14 @@ class AssertProductTierPriceOnProductPage extends AbstractConstraint implements 
     /**
      * Assertion that tier prices are displayed correctly
      *
-     * @param CatalogProductView $catalogProductView
      * @param Browser $browser
+     * @param CatalogProductView $catalogProductView
      * @param FixtureInterface $product
      * @return void
      */
     public function processAssert(
-        CatalogProductView $catalogProductView,
         Browser $browser,
+        CatalogProductView $catalogProductView,
         FixtureInterface $product
     ) {
         // TODO fix initialization url for frontend page

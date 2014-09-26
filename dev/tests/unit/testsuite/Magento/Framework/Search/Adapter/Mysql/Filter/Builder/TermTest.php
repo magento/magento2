@@ -28,22 +28,21 @@ use Magento\TestFramework\Helper\ObjectManager;
 
 class TermTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $adapter;
-    /**
-     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $resource;
+
     /**
      * @var \Magento\Framework\Search\Request\Filter\Term|\PHPUnit_Framework_MockObject_MockObject
      */
     private $requestFilter;
+
     /**
      * @var \Magento\Framework\Search\Adapter\Mysql\Filter\Builder\Term
      */
     private $filter;
+
+    /**
+     * @var \Magento\Framework\Search\Adapter\Mysql\ConditionManager|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $conditionManager;
 
     /**
      * Set up
@@ -56,23 +55,29 @@ class TermTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->adapter = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
-            ->setMethods(['quote'])
-            ->getMockForAbstractClass();
-
-        $this->resource = $this->getMockBuilder('Magento\Framework\App\Resource')
-            ->setMethods(['getConnection'])
+        $this->conditionManager = $this->getMockBuilder('\Magento\Framework\Search\Adapter\Mysql\ConditionManager')
             ->disableOriginalConstructor()
+            ->setMethods(['generateCondition'])
             ->getMock();
-        $this->resource->expects($this->once())
-            ->method('getConnection')
-            ->with(\Magento\Framework\App\Resource::DEFAULT_READ_RESOURCE)
-            ->will($this->returnValue($this->adapter));
+        $this->conditionManager->expects($this->any())
+            ->method('generateCondition')
+            ->will(
+                $this->returnCallback(
+                    function ($field, $operator, $value) {
+                        return sprintf(
+                            is_array($value) ? '%s %s (%s)' : '%s %s %s',
+                            $field,
+                            $operator,
+                            is_array($value) ? implode(', ', $value) : $value
+                        );
+                    }
+                )
+            );
 
         $this->filter = $objectManager->getObject(
             'Magento\Framework\Search\Adapter\Mysql\Filter\Builder\Term',
             [
-                'resource' => $this->resource,
+                'conditionManager' => $this->conditionManager,
             ]
         );
     }
@@ -80,42 +85,55 @@ class TermTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $field
      * @param string $value
+     * @param bool $isNegation
      * @param string $expectedResult
      * @dataProvider buildQueryDataProvider
      */
-    public function testBuildQuery($field, $value, $expectedResult)
+    public function testBuildQuery($field, $value, $isNegation, $expectedResult)
     {
         $this->requestFilter->expects($this->once())
             ->method('getField')
             ->will($this->returnValue($field));
-        $this->requestFilter->expects($this->once())
+        $this->requestFilter->expects($this->atLeastOnce())
             ->method('getValue')
             ->will($this->returnValue($value));
-        $this->adapter->expects($this->once())
-            ->method('quote')
-            ->will($this->returnArgument(0));
 
-        $actualResult = $this->filter->buildFilter($this->requestFilter);
+        $actualResult = $this->filter->buildFilter($this->requestFilter, $isNegation);
         $this->assertEquals($expectedResult, $actualResult);
     }
 
     /**
      * Data provider for BuildQuery
+     *
      * @return array
      */
     public function buildQueryDataProvider()
     {
         return [
-            [
+            'positive' => [
                 'field' => 'testField',
                 'value' => 'testValue',
+                'isNegation' => false,
                 'expectedResult' => 'testField = testValue',
             ],
-            [
+            'negative' => [
                 'field' => 'testField2',
                 'value' => 'testValue2',
-                'expectedResult' => 'testField2 = testValue2',
+                'isNegation' => true,
+                'expectedResult' => 'testField2 != testValue2',
             ],
+            'positiveIn' => [
+                'field' => 'testField2',
+                'value' => ['testValue2'],
+                'isNegation' => false,
+                'expectedResult' => 'testField2 IN (testValue2)',
+            ],
+            'negativeIn' => [
+                'field' => 'testField2',
+                'value' => ['testValue2'],
+                'isNegation' => true,
+                'expectedResult' => 'testField2 NOT IN (testValue2)',
+            ]
         ];
     }
 }

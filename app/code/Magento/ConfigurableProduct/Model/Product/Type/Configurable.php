@@ -696,6 +696,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
 
             foreach ($data as $attributeId => $attributeValue) {
                 if (isset($usedAttributes[$attributeId])) {
+                    /** @var \Magento\Catalog\Model\Resource\Eav\Attribute $attribute */
                     $attribute = $usedAttributes[$attributeId]->getProductAttribute();
                     $label = $attribute->getStoreLabel();
                     $value = $attribute;
@@ -1005,19 +1006,6 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         $options = array('super_attribute' => $superAttribute);
 
         return $options;
-    }
-
-    /**
-     * Check if Minimum Advertise Price is enabled at least in one option
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @param int $visibility
-     * @return bool|null
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    public function isMapEnabledInOptions($product, $visibility = null)
-    {
-        return null;
     }
 
     /**

@@ -91,8 +91,6 @@ class NewAction extends \Magento\Catalog\Controller\Adminhtml\Product
             $this->_setActiveMenu('Magento_Catalog::catalog_products');
         }
 
-        $this->_view->getLayout()->getBlock('head')->setCanLoadExtJs(true);
-
         $block = $this->_view->getLayout()->getBlock('catalog.wysiwyg.js');
         if ($block) {
             $block->setStoreId($product->getStoreId());

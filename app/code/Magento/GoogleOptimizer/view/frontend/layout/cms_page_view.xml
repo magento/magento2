@@ -24,7 +24,7 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
-    <referenceBlock name="head">
+    <referenceContainer name="after.body.start">
         <block class="Magento\GoogleOptimizer\Block\Code\Page" before="-" name="googleoptimizer.experiment.script"/>
-    </referenceBlock>
+    </referenceContainer>
 </page>

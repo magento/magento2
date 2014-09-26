@@ -110,9 +110,6 @@ class Handler
         }
 
         $isAllowed = false;
-        $serviceMethodInfo[SoapConfig::KEY_ACL_RESOURCES] = array_values(
-            $serviceMethodInfo[SoapConfig::KEY_ACL_RESOURCES][0]
-        );
         foreach ($serviceMethodInfo[SoapConfig::KEY_ACL_RESOURCES] as $resource) {
             if ($this->_authorization->isAllowed($resource)) {
                 $isAllowed = true;

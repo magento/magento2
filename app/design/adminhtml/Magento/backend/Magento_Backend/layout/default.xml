@@ -24,70 +24,18 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../app/code/Magento/Core/etc/page.xsd">
-    <referenceBlock name="head">
-        <block class="Magento\Theme\Block\Html\Head\Css" name="mui-reset-css">
-            <arguments>
-                <argument name="file" xsi:type="string">mui/reset.css</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Css" name="mui-base-css">
-            <arguments>
-                <argument name="file" xsi:type="string">mui/base.css</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Css" name="mui-elements-css">
-            <arguments>
-                <argument name="file" xsi:type="string">mui/elements.css</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Css" name="mui-form-css">
-            <arguments>
-                <argument name="file" xsi:type="string">mui/form.css</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Css" name="mui-components-css">
-            <arguments>
-                <argument name="file" xsi:type="string">mui/components.css</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Css" name="css-styles-admin">
-            <arguments>
-                <argument name="file" xsi:type="string">css/admin.css</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Css" name="css-styles-pages">
-            <arguments>
-                <argument name="file" xsi:type="string">css/pages.css</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Css" name="css-styles-css">
-            <arguments>
-                <argument name="file" xsi:type="string">css/styles.css</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Css" name="jquery-farbtastic-css-farbtastic-css">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/farbtastic/css/farbtastic.css</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Css" name="mui-utils-css">
-            <arguments>
-                <argument name="file" xsi:type="string">mui/utils.css</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Css" name="magento-core-prototype-magento-css">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Core::prototype/magento.css</argument>
-            </arguments>
-        </block>
-        <!-- temporary to debug -->
-        <block class="Magento\Theme\Block\Html\Head\Css" name="mui-print-css">
-            <arguments>
-                <argument name="file" xsi:type="string">mui/print.css</argument>
-                <argument name="properties" xsi:type="array">
-                    <item name="attributes" xsi:type="string">media="print"</item>
-                </argument>
-            </arguments>
-        </block>
-    </referenceBlock>
+    <head>
+        <css src="mui/reset.css"/>
+        <css src="mui/base.css"/>
+        <css src="mui/elements.css"/>
+        <css src="mui/form.css"/>
+        <css src="mui/components.css"/>
+        <css src="css/admin.css"/>
+        <css src="css/pages.css"/>
+        <css src="css/styles.css"/>
+        <css src="jquery/farbtastic/css/farbtastic.css"/>
+        <css src="mui/utils.css"/>
+        <css src="Magento_Core::prototype/magento.css"/>
+        <css src="mui/print.css" media="print"/>
+    </head>
 </page>

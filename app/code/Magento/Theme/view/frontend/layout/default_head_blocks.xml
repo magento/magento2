@@ -24,40 +24,20 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
-    <referenceBlock name="head.components">
-        <block class="Magento\Framework\View\Element\Template" name="theme_page_head_components" template="Magento_Theme::js/components.phtml"/>
-    </referenceBlock>
-    <referenceBlock name="head">
-        <block class="Magento\Theme\Block\Html\Head\Css" name="magento-calendar-css">
-            <arguments>
-                <argument name="file" xsi:type="string">mage/calendar.css</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="requirejs">
-            <arguments>
-                <argument name="file" xsi:type="string">requirejs/require.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="app-config" after="jquery">
-            <arguments>
-                <argument name="file" xsi:type="string">app-config.js</argument>
-            </arguments>
-        </block>
+    <head>
+        <meta name="x_ua_compatible" content="IE=edge,chrome=1"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+        <css src="mage/calendar.css" />
+        <script src="requirejs/require.js" />
         <!-- /**
         TODO: remove jQuery. jQuery could be loaded through RequireJS. But only in case ALL MODULES ARE AMD MODULES.
         Detail: http://requirejs.org/docs/jquery.html#noconflictmap
         */ -->
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery" after="requirejs">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/jquery.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-no-conflict" after="jquery">
-            <arguments>
-                <argument name="file" xsi:type="string">mage/jquery-no-conflict.js</argument>
-            </arguments>
-        </block>
-
-        <block class="Magento\Framework\View\Element\Js\Components" name="head.components" as="components" template="Magento_Theme::js/components.phtml"/>
-    </referenceBlock>
+        <script src="jquery/jquery.js" />
+        <script src="app-config.js" />
+        <script src="mage/jquery-no-conflict.js" />
+    </head>
+    <referenceContainer name="after.body.start">
+        <block class="Magento\Framework\View\Element\Js\Components" name="head.components" as="components" template="Magento_Theme::js/components.phtml" before="-" />
+    </referenceContainer>
 </page>

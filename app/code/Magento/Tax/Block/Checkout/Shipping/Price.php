@@ -34,7 +34,6 @@ class Price extends \Magento\Checkout\Block\Shipping\Price
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param PriceCurrencyInterface $priceCurrency
@@ -43,7 +42,6 @@ class Price extends \Magento\Checkout\Block\Shipping\Price
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $checkoutSession,
         PriceCurrencyInterface $priceCurrency,
@@ -53,7 +51,6 @@ class Price extends \Magento\Checkout\Block\Shipping\Price
         $this->taxHelper = $taxHelper;
         parent::__construct(
             $context,
-            $catalogData,
             $customerSession,
             $checkoutSession,
             $priceCurrency,
@@ -112,6 +109,16 @@ class Price extends \Magento\Checkout\Block\Shipping\Price
     public function displayShippingPriceInclTax()
     {
         return $this->taxHelper->displayShippingPriceIncludingTax();
+    }
+
+    /**
+     * Return flag whether to display shipping price excluding tax
+     *
+     * @return bool
+     */
+    public function displayShippingPriceExclTax()
+    {
+        return $this->taxHelper->displayShippingPriceExcludingTax();
     }
 
     /**

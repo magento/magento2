@@ -74,8 +74,6 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Search
 
         $this->_title->add($id ? $model->getQueryText() : __('New Search'));
 
-        $this->_view->getLayout()->getBlock('head')->setCanLoadRulesJs(true);
-
         $this->_view->getLayout()->getBlock(
             'adminhtml.catalog.search.edit'
         )->setData(

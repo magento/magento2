@@ -30,22 +30,28 @@
  */
 ?>
 <?php if(count($this->getGroups())>1): ?>
-<div class="switcher store">
-    <strong class="label"><span><?php echo __('Select Store') ?></span></strong>
-    <div class="actions dropdown options">
+<div class="switcher store switcher-store" id="switcher-store">
+    <strong class="label switcher-label"><span><?php echo __('Select Store') ?></span></strong>
+    <div class="actions dropdown options switcher-options">
         <?php foreach ($this->getGroups() as $_group): ?>
         <?php if ($_group->getId()==$this->getCurrentGroupId()): ?>
-            <div class="action toggle" data-toggle="dropdown">
+            <div class="action toggle switcher-trigger" data-toggle="dropdown" id="switcher-store-trigger">
                 <strong>
                     <span><?php echo $this->escapeHtml($_group->getName()) ?></span>
                 </strong>
             </div>
         <?php endif; ?>
         <?php endforeach; ?>
-        <ul class="dropdown">
+        <ul class="dropdown switcher-dropdown" data-mage-init='{"dropdownDialog":{
+            "appendTo":"#switcher-store > .options",
+            "triggerTarget":"#switcher-store-trigger",
+            "closeOnMouseLeave": false,
+            "triggerClass":"active",
+            "parentClass":"active",
+            "buttons":null}}'>
             <?php foreach ($this->getGroups() as $_group): ?>
             <?php if (!($_group->getId()==$this->getCurrentGroupId())): ?>
-                <li>
+                <li class="switcher-option">
                     <a href="#" data-post='<?php echo $this->getTargetStorePostData($_group->getDefaultStore()); ?>'>
                         <?php echo $this->escapeHtml($_group->getName()) ?>
                     </a>

@@ -204,19 +204,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->helper->isPriceGlobal());
     }
 
-    public function testShouldSaveUrlRewritesHistoryDefault()
-    {
-        $this->assertTrue($this->helper->shouldSaveUrlRewritesHistory());
-    }
-
-    /**
-     * @magentoConfigFixture current_store catalog/seo/save_rewrites_history 0
-     */
-    public function testShouldSaveUrlRewritesHistory()
-    {
-        $this->assertFalse($this->helper->shouldSaveUrlRewritesHistory());
-    }
-
     public function testIsUsingStaticUrlsAllowedDefault()
     {
         $this->assertFalse($this->helper->isUsingStaticUrlsAllowed());

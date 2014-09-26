@@ -72,9 +72,17 @@ class AttributeMetadataConverter
         $options = [];
         if ($attribute->usesSource()) {
             foreach ($attribute->getSource()->getAllOptions() as $option) {
-                $options[] = $this->_optionBuilder->setLabel($option['label'])
-                    ->setValue($option['value'])
-                    ->create();
+                if (!is_array($option['value'])) {
+                    $this->_optionBuilder->setValue($option['value']);
+                } else {
+                    $optionArray = [];
+                    foreach ($option['value'] as $optionArrayValues) {
+                        $optionArray[] = $this->_optionBuilder->populateWithArray($optionArrayValues)->create();
+                    }
+                    $this->_optionBuilder->setOptions($optionArray);
+                }
+                $this->_optionBuilder->setLabel($option['label']);
+                $options[] = $this->_optionBuilder->create();
             }
         }
         $validationRules = [];

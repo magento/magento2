@@ -22,9 +22,6 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-/**
- * Test for \Magento\Index\Model\Lock\Storage
- */
 namespace Magento\Sales\Block\Adminhtml\Report\Filter\Form;
 
 /**

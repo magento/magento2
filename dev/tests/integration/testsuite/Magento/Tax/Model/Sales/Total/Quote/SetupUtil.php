@@ -501,7 +501,7 @@ class SetupUtil
             ->setCode('custom_group')
             ->setTaxClassId($customerTaxClassId);
         $customerGroup = new \Magento\Customer\Service\V1\Data\CustomerGroup($customerGroupBuilder);
-        $customerGroupId = $customerGroupService->saveGroup($customerGroup);
+        $customerGroupId = $customerGroupService->createGroup($customerGroup);
         return $customerGroupId;
     }
 

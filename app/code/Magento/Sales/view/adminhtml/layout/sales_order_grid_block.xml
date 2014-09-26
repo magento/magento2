@@ -214,6 +214,9 @@
                     </arguments>
                 </block>
             </block>
+            <block class="Magento\Framework\View\Element\Text\ListText" name="grid.bottom.links">
+                <block class="Magento\Sales\Block\Adminhtml\Rss\Order\Grid\Link" name="grid.rss.link"/>
+            </block>
         </block>
     </referenceBlock>
 </page>

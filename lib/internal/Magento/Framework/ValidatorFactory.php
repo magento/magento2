@@ -28,6 +28,8 @@ namespace Magento\Framework;
  */
 class ValidatorFactory
 {
+    const DEFAULT_INSTANCE_NAME = 'Magento\Framework\Validator';
+
     /**
      * Object Manager instance
      *
@@ -50,7 +52,7 @@ class ValidatorFactory
      */
     public function __construct(
         \Magento\Framework\ObjectManager $objectManager,
-        $instanceName = 'Magento\Framework\Validator'
+        $instanceName = self::DEFAULT_INSTANCE_NAME
     ) {
         $this->_objectManager = $objectManager;
         $this->_instanceName = $instanceName;
@@ -60,10 +62,16 @@ class ValidatorFactory
      * Create class instance with specified parameters
      *
      * @param array $data
+     * @param string $instanceName
      * @return \Magento\Framework\Validator
      */
-    public function create(array $data = array())
+    public function create(array $data = [], $instanceName = null)
     {
-        return $this->_objectManager->create($this->_instanceName, $data);
+        if (null === $instanceName) {
+            return $this->_objectManager->create($this->_instanceName, $data);
+        } else {
+            return $this->_objectManager->create($instanceName, $data);
+        }
+
     }
 }

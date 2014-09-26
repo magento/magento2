@@ -37,7 +37,7 @@ angular.module('web-configuration', ['ngStorage'])
                 allowed: true
             },
             encrypt: {
-                key: '',
+                key: null,
                 type: 'magento'
             },
             advanced: {
@@ -56,6 +56,12 @@ angular.module('web-configuration', ['ngStorage'])
         $scope.updateOnExpand = function(obj) {
             obj.expanded = !obj.expanded;
         }
+
+        $scope.$watch('config.encrypt.type', function() {
+            if(angular.equals($scope.config.encrypt.type, 'magento')){
+                $scope.config.encrypt.key = null;
+            }
+        });
 
         $scope.showEncryptKey = function() {
             return angular.equals($scope.config.encrypt.type, 'user');

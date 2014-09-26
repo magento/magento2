@@ -56,7 +56,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         $customerGroupService = $this->_objectManager->create('\Magento\Customer\Service\V1\CustomerGroupService');
         $group = $builder->setId(null)->setCode(self::GROUP_CODE)->setTaxClassId($taxClassId)
             ->create();
-        $customerGroupService->saveGroup($group);
+        $customerGroupService->createGroup($group);
 
         /** @var $model \Magento\Tax\Model\TaxClass\Type\Customer */
         $model = $this->_objectManager->create('Magento\Tax\Model\TaxClass\Type\Customer');

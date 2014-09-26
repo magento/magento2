@@ -40,7 +40,6 @@
             <module name="Magento_Sales"/>
             <module name="Magento_Checkout"/>
             <module name="Magento_Wishlist"/>
-            <module name="Magento_Index"/>
             <module name="Magento_Theme"/>
             <module name="Magento_Backend"/>
             <module name="Magento_Review"/>

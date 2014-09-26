@@ -25,13 +25,13 @@
 .multicheckout {
     &.form {
         > .title {
-            &:extend(.add-clearfix all);
+            &:extend(.abstract-add-clearfix all);
             margin-bottom: 25px;
             > strong {
                 .heading(h3);
             }
             > .action {
-                &:extend(.button-responsive all);
+                &:extend(.abstract-button-responsive all);
                 margin-top: 10px;
             }
         }
@@ -66,8 +66,12 @@
         .product .item.options {
             font-size: @font-size-s;
             margin-top: 10px;
-            &:extend(.product-options-list all);
+            &:extend(.abstract-product-options-list all);
         }
+    }
+
+    .box-order-shipping-method {
+        &:extend(.abstract-adjustment-incl-excl-tax all);
     }
 
     .column.main & {
@@ -128,7 +132,7 @@
     }
 
     .checkout.review .grand.totals {
-        &:extend(.add-clearfix all);
+        &:extend(.abstract-add-clearfix all);
         margin: 0 10px 40px;
         .mark {
             float: left;
@@ -141,7 +145,7 @@
     &.block.progress {
         background: @sidebar-background;
         padding: 15px;
-        &:extend(.reset-list);
+        &:extend(.abstract-reset-list);
         .active {
             font-weight: bold;
         }
@@ -159,7 +163,7 @@
                 > .action {
                     float: right;
                     margin-left: 15px;
-                    &:extend(.button-desktop all);
+                    &:extend(.abstract-button-desktop all);
                 }
             }
             .col {
@@ -178,7 +182,7 @@
             }
             .column.main & {
                 .actions-toolbar {
-                    &:extend(.reset-left-margin-desktop all);
+                    &:extend(.abstract-reset-left-margin-desktop all);
                 }
                 .block:not(.widget):not(.widget) .content .box.items {
                     width: 100%;
@@ -188,15 +192,15 @@
 
         &.change.billing {
             .content {
-                &:extend(.add-clearfix-desktop all);
+                &:extend(.abstract-add-clearfix-desktop all);
             }
             .box {
-                &:extend(.blocks-2columns all);
+                &:extend(.abstract-blocks-2columns all);
             }
         }
 
         .checkout.review .grand.totals {
-            &:extend(.add-clearfix-desktop all);
+            &:extend(.abstract-add-clearfix-desktop all);
         }
         &.success {
             overflow: hidden;

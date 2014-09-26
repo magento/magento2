@@ -24,16 +24,14 @@
  */
 -->
 <page layout="2columns-left" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../app/code/Magento/Core/etc/page.xsd">
-    <referenceBlock name="body.class">
-        <action method="addBodyClass">
-            <argument name="class" xsi:type="string">account</argument>
-        </action>
-    </referenceBlock>
+    <body>
+        <attribute name="class" value="account"/>
+    </body>
     <referenceContainer name="sidebar.main">
         <block class="Magento\Framework\View\Element\Template" name="customer_account_navigation_block" template="Magento_Theme::html/collapsible.phtml">
             <arguments>
                 <argument name="block_title" translate="true" xsi:type="string">Account Dashboard</argument>
-                <argument name="block_css" xsi:type="string">block-account-nav</argument>
+                <argument name="block_css" xsi:type="string">block-collapsible-nav</argument>
             </arguments>
             <block class="Magento\Framework\View\Element\Html\Links" name="customer_account_navigation" before="-">
                 <arguments>

@@ -24,7 +24,12 @@
 
 namespace Magento\User\Test\Fixture;
 
+use Mtf\Fixture\FixtureFactory;
 use Mtf\Fixture\InjectableFixture;
+use Mtf\Handler\HandlerFactory;
+use Mtf\Repository\RepositoryFactory;
+use Mtf\System\Config;
+use Mtf\System\Event\EventManagerInterface;
 
 /**
  * Class User
@@ -198,6 +203,48 @@ class User extends InjectableFixture
         'group' => 'user-info'
     ];
 
+    protected $current_password = [
+        'attribute_code' => 'current_password',
+        'backend_type' => 'virtual',
+        'group' => 'user-info'
+    ];
+
+    /**
+     * Initialize dependencies.
+     *
+     * @param Config $configuration
+     * @param RepositoryFactory $repositoryFactory
+     * @param FixtureFactory $fixtureFactory
+     * @param HandlerFactory $handlerFactory
+     * @param EventManagerInterface $eventManager
+     * @param array $data
+     * @param string $dataSet
+     * @param bool $persist
+     */
+    public function __construct(
+        Config $configuration,
+        RepositoryFactory $repositoryFactory,
+        FixtureFactory $fixtureFactory,
+        HandlerFactory $handlerFactory,
+        EventManagerInterface $eventManager,
+        array $data = [],
+        $dataSet = '',
+        $persist = false
+    ) {
+        $this->defaultDataSet['current_password'] = $configuration
+            ->getConfigParam('application/backend_user_credentials/password');
+        parent::__construct(
+            $configuration,
+            $repositoryFactory,
+            $fixtureFactory,
+            $handlerFactory,
+            $eventManager,
+            $data,
+            $dataSet,
+            $persist
+        );
+    }
+
     public function getUserId()
     {
         return $this->getData('user_id');
@@ -286,5 +333,10 @@ class User extends InjectableFixture
     public function getPasswordConfirmation()
     {
         return $this->getData('password_confirmation');
+    }
+
+    public function getCurrentPassword()
+    {
+        return $this->getData('current_password');
     }
 }

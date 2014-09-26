@@ -29,7 +29,6 @@
     <type name="Magento\CatalogInventory\Model\Observer">
         <arguments>
             <argument name="resourceStock" xsi:type="object">Magento\CatalogInventory\Model\Resource\Stock\Proxy</argument>
-            <argument name="indexer" xsi:type="object">Magento\Index\Model\Indexer\Proxy</argument>
             <argument name="stock" xsi:type="object">Magento\CatalogInventory\Model\Stock\Proxy</argument>
             <argument name="stockStatus" xsi:type="object">Magento\CatalogInventory\Model\Stock\Status\Proxy</argument>
             <argument name="catalogInventoryData" xsi:type="object">Magento\CatalogInventory\Helper\Data\Proxy</argument>

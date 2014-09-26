@@ -28,7 +28,7 @@ use Magento\Backend\Test\Block\Widget\Grid as ParentGrid;
 
 /**
  * Class Grid
- * URL Redirect grid
+ * URL Rewrite grid
  */
 class Grid extends ParentGrid
 {

@@ -67,7 +67,7 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
         $this->orderConfig = $this->getMockBuilder('Magento\Sales\Model\Order\Config')
             ->setMethods(['getVisibleOnFrontStatuses'])->disableOriginalConstructor()->getMock();
 
-        $this->pageConfig = $this->getMockBuilder('Magento\Framework\View\Page\Config')
+        $this->pageConfig = $this->getMockBuilder('Magento\Framework\View\Page\Config')->setMethods(['setTitle'])
             ->disableOriginalConstructor()->getMock();
     }
 
@@ -93,6 +93,14 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
             false,
             false
         );
+        $this->pageConfig->expects($this->any())
+            ->method('setTitle')
+            ->will($this->returnSelf());
+
+        $this->context->expects($this->any())
+            ->method('getPageConfig')
+            ->will($this->returnValue($this->pageConfig));
+
         $orderCollection->expects($this->at(0))
             ->method('addFieldToSelect')
             ->with($this->equalTo('*'))
@@ -118,7 +126,6 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
             $this->orderCollectionFactory,
             $this->customerSession,
             $this->orderConfig,
-            $this->pageConfig,
             $data
         );
         $this->assertEquals($orderCollection, $this->model->getOrders());

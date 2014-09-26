@@ -47,7 +47,7 @@ class Save extends \Magento\Newsletter\Controller\Manage
                 $customerDetails = $this->_customerDetailsBuilder->setAddresses(null)
                     ->setCustomer($this->_customerBuilder->populate($customer)->setStoreId($storeId)->create())
                     ->create();
-                $this->_customerAccountService->updateCustomer($customerDetails);
+                $this->_customerAccountService->updateCustomer($customerId, $customerDetails);
 
                 if ((boolean)$this->getRequest()->getParam('is_subscribed', false)) {
                     $this->_subscriberFactory->create()->subscribeCustomerById($customerId);

@@ -24,6 +24,7 @@
 namespace Magento\Webapi\Model\Config\ClassReflector;
 
 use Zend\Code\Reflection\ClassReflection;
+use Magento\Webapi\Exception as WebapiException;
 
 /**
  * Type processor of config reader properties
@@ -444,19 +445,22 @@ class TypeProcessor
     public function processSimpleAndAnyType($value, $type)
     {
         $invalidTypeMsg = 'Invalid type for value :"%s". Expected Type: "%s".';
-        if ($this->isArrayType($type) && is_array($value)) {
+        $isArrayType = $this->isArrayType($type);
+        if ($isArrayType && is_array($value)) {
             $arrayItemType = $this->getArrayItemType($type);
             foreach (array_keys($value) as $key) {
                 if ($value !== null && !settype($value[$key], $arrayItemType)) {
-                    throw new \Magento\Webapi\Exception(sprintf($invalidTypeMsg, $value, $type));
+                    throw new WebapiException(sprintf($invalidTypeMsg, $value, $type));
                 }
             }
-        } elseif (!$this->isArrayType($type) && !is_array($value)) {
+        } elseif ($isArrayType && is_null($value)) {
+            return null;
+        } elseif (!$isArrayType && !is_array($value)) {
             if ($value !== null && $type !== self::ANY_TYPE && !settype($value, $type)) {
-                throw new \Magento\Webapi\Exception(sprintf($invalidTypeMsg, $value, $type));
+                throw new WebapiException(sprintf($invalidTypeMsg, $value, $type));
             }
         } else {
-            throw new \Magento\Webapi\Exception(sprintf($invalidTypeMsg, $value, $type));
+            throw new WebapiException(sprintf($invalidTypeMsg, $value, $type));
         }
         return $value;
     }

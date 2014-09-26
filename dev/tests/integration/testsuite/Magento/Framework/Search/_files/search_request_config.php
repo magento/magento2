@@ -48,15 +48,14 @@ return [
             "fulltext_search_query" => [
                 "name" => "fulltext_search_query",
                 "boost" => "5",
+                "value" => "default_value",
                 "match" => [
                     [
                         "field" => "title",
-                        "value" => "\$request.title",
                         "boost" => "2"
                     ],
                     [
-                        "field" => "description",
-                        "value" => "%request.description%"
+                        "field" => "description"
                     ]
                 ],
                 "type" => "matchQuery"

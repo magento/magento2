@@ -51,8 +51,6 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Set
 
         $this->_view->loadLayout();
         $this->_setActiveMenu('Magento_Catalog::catalog_attributes_sets');
-        $this->_view->getLayout()->getBlock('head')->setCanLoadExtJs(true);
-
         $this->_addBreadcrumb(__('Catalog'), __('Catalog'));
         $this->_addBreadcrumb(__('Manage Product Sets'), __('Manage Product Sets'));
 

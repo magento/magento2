@@ -31,8 +31,6 @@ use Magento\Store\Model\Store;
  */
 class Product extends \Magento\Core\Helper\Url
 {
-    const XML_PATH_PRODUCT_URL_SUFFIX = 'catalog/seo/product_url_suffix';
-
     const XML_PATH_PRODUCT_URL_USE_CATEGORY = 'catalog/seo/product_use_categories';
 
     const XML_PATH_USE_PRODUCT_CANONICAL_TAG = 'catalog/seo/product_canonical_tag';
@@ -45,13 +43,6 @@ class Product extends \Magento\Core\Helper\Url
      * @var boolean
      */
     protected $_skipSaleableCheck = false;
-
-    /**
-     * Cache for product rewrite suffix
-     *
-     * @var array
-     */
-    protected $_productUrlSuffix = array();
 
     /**
      * @var array
@@ -326,28 +317,6 @@ class Product extends \Magento\Core\Helper\Url
         }
 
         return $product->isVisibleInCatalog() && $product->isVisibleInSiteVisibility();
-    }
-
-    /**
-     * Retrieve product rewrite sufix for store
-     *
-     * @param int $storeId
-     * @return string
-     */
-    public function getProductUrlSuffix($storeId = null)
-    {
-        if (is_null($storeId)) {
-            $storeId = $this->_storeManager->getStore()->getId();
-        }
-
-        if (!isset($this->_productUrlSuffix[$storeId])) {
-            $this->_productUrlSuffix[$storeId] = $this->_scopeConfig->getValue(
-                self::XML_PATH_PRODUCT_URL_SUFFIX,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                $storeId
-            );
-        }
-        return $this->_productUrlSuffix[$storeId];
     }
 
     /**

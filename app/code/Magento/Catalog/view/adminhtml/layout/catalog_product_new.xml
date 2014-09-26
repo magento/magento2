@@ -25,28 +25,12 @@
 -->
 <page layout="admin-2columns-left" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <update handle="editor"/>
-    <referenceBlock name="head">
-        <block class="Magento\Theme\Block\Html\Head\Css" name="jquery-fileuploader-css-jquery-fileupload-ui-css">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/fileUploader/css/jquery.fileupload-ui.css</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Css" name="magento-adminhtml-catalog-category-selector-css">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Catalog::catalog/category-selector.css</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Css" name="magento-catalog-product-product-css">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Catalog::product/product.css</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-catalog-js-bootstrap-product-new-js">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Catalog::js/bootstrap/product-new.js</argument>
-            </arguments>
-        </block>
-    </referenceBlock>
+    <head>
+        <css src="jquery/fileUploader/css/jquery.fileupload-ui.css"/>
+        <css src="Magento_Catalog::catalog/category-selector.css"/>
+        <css src="Magento_Catalog::product/product.css"/>
+        <link src="Magento_Catalog::js/bootstrap/product-new.js"/>
+    </head>
     <referenceContainer name="content">
         <block class="Magento\Catalog\Block\Adminhtml\Product\Edit" name="product_edit">
             <container name="product-type-tabs" label="Tabs">

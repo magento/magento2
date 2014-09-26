@@ -95,6 +95,16 @@ class IndexTest extends \PHPUnit_Framework_TestCase
      */
     private $model;
 
+    /**
+     * @var \Magento\Framework\View\Result\Page
+     */
+    protected $resultPageMock;
+
+    /**
+     * @var \Magento\Framework\View\Page\Config
+     */
+    protected $pageConfigMock;
+
     public function setUp()
     {
         // mock objects
@@ -110,12 +120,16 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $this->requestMock = $this->basicMock('\Magento\Framework\App\RequestInterface');
         $this->responseMock = $this->basicMock('\Magento\Framework\App\ResponseInterface');
         $this->redirectMock = $this->basicMock('\Magento\Framework\App\Response\RedirectInterface');
+        $this->resultPageMock = $this->basicMock('\Magento\Framework\View\Result\Page');
+        $this->pageConfigMock = $this->basicMock('\Magento\Framework\View\Page\Config');
 
         // stubs
         $this->basicStub($this->onepageMock, 'getQuote')->willReturn($this->quoteMock);
         $this->basicStub($this->viewMock, 'getLayout')->willReturn($this->layoutMock);
+        $this->basicStub($this->viewMock, 'getPage')->willReturn($this->resultPageMock);
         $this->basicStub($this->layoutMock, 'getBlock')
             ->willReturn($this->basicMock('Magento\Theme\Block\Html\Head'));
+        $this->basicStub($this->resultPageMock, 'getConfig')->willReturn($this->pageConfigMock);
 
         // objectManagerMock
         $objectManagerReturns = [
@@ -141,7 +155,8 @@ class IndexTest extends \PHPUnit_Framework_TestCase
 
 
         // SUT
-        $this->model = $this->objectManager->getObject('\Magento\Checkout\Controller\Onepage\Index',
+        $this->model = $this->objectManager->getObject(
+            '\Magento\Checkout\Controller\Onepage\Index',
             [
                 'context' => $this->contextMock,
                 'customerSession' => $this->sessionMock,

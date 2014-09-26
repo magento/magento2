@@ -24,11 +24,9 @@
  */
 -->
 <page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
-    <referenceBlock name="head">
-        <action method="setTitle">
-            <argument translate="true" name="title" xsi:type="string">Advanced Search</argument>
-        </action>
-    </referenceBlock>
+    <head>
+        <title>Advanced Search</title>
+    </head>
     <update handle="page_calendar"/>
     <referenceContainer name="content">
         <block class="Magento\CatalogSearch\Block\Advanced\Form" name="catalogsearch_advanced_form" template="advanced/form.phtml"/>

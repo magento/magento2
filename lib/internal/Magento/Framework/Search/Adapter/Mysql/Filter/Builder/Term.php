@@ -24,36 +24,58 @@
 namespace Magento\Framework\Search\Adapter\Mysql\Filter\Builder;
 
 use Magento\Framework\App\Resource;
+use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
+use Magento\Framework\Search\Request\FilterInterface as RequestFilterInterface;
 
 class Term implements FilterInterface
 {
-    /**
-     * @var \Magento\Framework\App\Resource
-     */
-    private $resource;
+    const CONDITION_OPERATOR_EQUALS = '=';
+    const CONDITION_OPERATOR_NOT_EQUALS = '!=';
+    const CONDITION_OPERATOR_IN = 'IN';
+    const CONDITION_OPERATOR_NOT_IN = 'NOT IN';
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @var ConditionManager
      */
-    public function __construct(\Magento\Framework\App\Resource $resource)
-    {
-        $this->resource = $resource;
+    private $conditionManager;
+
+    /**
+     * @param ConditionManager $conditionManager
+     */
+    public function __construct(
+        ConditionManager $conditionManager
+    ) {
+        $this->conditionManager = $conditionManager;
     }
 
     /**
      * {@inheritdoc}
      */
     public function buildFilter(
-        \Magento\Framework\Search\Request\FilterInterface $filter
+        RequestFilterInterface $filter,
+        $isNegation
     ) {
-        $adapter = $this->resource->getConnection(Resource::DEFAULT_READ_RESOURCE);
-
         /** @var \Magento\Framework\Search\Request\Filter\Term $filter */
-        $condition = sprintf(
-            '%s = %s',
+
+        return $this->conditionManager->generateCondition(
             $filter->getField(),
-            $adapter->quote($filter->getValue())
+            $this->getConditionOperator($filter->getValue(), $isNegation),
+            $filter->getValue()
         );
-        return $condition;
+    }
+
+    /**
+     * @param string|array $value
+     * @param bool $isNegation
+     * @return string
+     */
+    private function getConditionOperator($value, $isNegation)
+    {
+        if (is_array($value)) {
+            $operator = $isNegation ? self::CONDITION_OPERATOR_NOT_IN : self::CONDITION_OPERATOR_IN;
+        } else {
+            $operator = $isNegation ? self::CONDITION_OPERATOR_NOT_EQUALS : self::CONDITION_OPERATOR_EQUALS;
+        }
+        return $operator;
     }
 }

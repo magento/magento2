@@ -36,16 +36,6 @@
                     </item>
                 </item>
             </argument>
-            <argument name="downloadable" xsi:type="array">
-                <item name="adjustments" xsi:type="array">
-                    <item name="link_price" xsi:type="array">
-                        <item name="tax" xsi:type="array">
-                            <item name="adjustment_render_class" xsi:type="string">Magento\Tax\Pricing\Render\Adjustment</item>
-                            <item name="adjustment_render_template" xsi:type="string">Magento_Tax::pricing/adjustment/downloadable.phtml</item>
-                        </item>
-                    </item>
-                </item>
-            </argument>
             <argument name="bundle" xsi:type="array">
                 <item name="adjustments" xsi:type="array">
                     <item name="bundle_option" xsi:type="array">

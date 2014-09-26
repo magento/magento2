@@ -68,10 +68,7 @@ class Invoice extends \Magento\Sales\Block\Order\Invoice\Items
      */
     protected function _prepareLayout()
     {
-        $headBlock = $this->getLayout()->getBlock('head');
-        if ($headBlock) {
-            $headBlock->setTitle(__('Order # %1', $this->getOrder()->getRealOrderId()));
-        }
+        $this->pageConfig->setTitle(__('Order # %1', $this->getOrder()->getRealOrderId()));
         $this->setChild('payment_info', $this->_paymentHelper->getInfoBlock($this->getOrder()->getPayment()));
     }
 

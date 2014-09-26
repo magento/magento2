@@ -59,6 +59,11 @@ class Context extends \Magento\Framework\View\Element\Context
     protected $_storeManager;
 
     /**
+     * @var \Magento\Framework\View\Page\Config
+     */
+    protected $pageConfig;
+
+    /**
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
@@ -82,6 +87,7 @@ class Context extends \Magento\Framework\View\Element\Context
      * @param \Magento\Framework\View\TemplateEnginePool $enginePool
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\View\Page\Config $pageConfig
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -108,7 +114,8 @@ class Context extends \Magento\Framework\View\Element\Context
         \Magento\Framework\View\FileSystem $viewFileSystem,
         \Magento\Framework\View\TemplateEnginePool $enginePool,
         \Magento\Framework\App\State $appState,
-        \Magento\Framework\StoreManagerInterface $storeManager
+        \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Framework\View\Page\Config $pageConfig
     ) {
         parent::__construct(
             $request,
@@ -137,6 +144,7 @@ class Context extends \Magento\Framework\View\Element\Context
         $this->_filesystem = $filesystem;
         $this->_viewFileSystem = $viewFileSystem;
         $this->enginePool = $enginePool;
+        $this->pageConfig = $pageConfig;
     }
 
     /**
@@ -197,5 +205,13 @@ class Context extends \Magento\Framework\View\Element\Context
     public function getStoreManager()
     {
         return $this->_storeManager;
+    }
+
+    /**
+     * @return \Magento\Framework\View\Page\Config
+     */
+    public function getPageConfig()
+    {
+        return $this->pageConfig;
     }
 }

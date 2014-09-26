@@ -43,10 +43,9 @@ class EditAddress extends \Magento\Multishipping\Controller\Checkout\Address
             )->setBackUrl(
                 $this->_url->getUrl('*/*/selectBilling')
             );
-
-            if ($headBlock = $this->_view->getLayout()->getBlock('head')) {
-                $headBlock->setTitle($addressForm->getTitle() . ' - ' . $headBlock->getDefaultTitle());
-            }
+            $this->_view->getPage()->getConfig()->setTitle(
+                $addressForm->getTitle() . ' - ' . $this->_view->getPage()->getConfig()->getDefaultTitle()
+            );
         }
         $this->_view->renderLayout();
     }

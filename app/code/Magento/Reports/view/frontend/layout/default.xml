@@ -24,10 +24,6 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
-    <referenceContainer name="sidebar.additional">
-        <block class="Magento\Reports\Block\Product\Viewed" name="reports.product.viewed" template="product_viewed.phtml"/>
-        <block class="Magento\Reports\Block\Product\Compared" name="reports.product.compared" template="product_compared.phtml"/>
-    </referenceContainer>
     <referenceBlock name="head.components">
         <block class="Magento\Framework\View\Element\Js\Components" name="reports_page_head_components" template="Magento_Reports::js/components.phtml"/>
     </referenceBlock>

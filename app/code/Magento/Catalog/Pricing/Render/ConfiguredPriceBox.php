@@ -38,7 +38,7 @@ class ConfiguredPriceBox extends FinalPriceBox
      */
     protected function _prepareLayout()
     {
-        /** @var $price \Magento\Bundle\Pricing\Price\ConfiguredPrice */
+        /** @var $price \Magento\Catalog\Pricing\Price\ConfiguredPrice */
         $price = $this->getPrice();
         /** @var $renderBlock \Magento\Catalog\Pricing\Render */
         $renderBlock = $this->getRenderBlock();

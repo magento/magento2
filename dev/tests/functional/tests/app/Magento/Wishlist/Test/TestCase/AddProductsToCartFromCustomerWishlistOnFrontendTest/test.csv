@@ -1,0 +1,4 @@
+"products";"qty";"constraint"
+"catalogProductSimple::100_dollar_product";"2";"assertProductQtyInShoppingCart, assertProductsIsAbsentInWishlist"
+"catalogProductVirtual::50_dollar_product";"1";"assertProductQtyInShoppingCart, assertProductsIsAbsentInWishlist"
+"catalogProductSimple::default,catalogProductVirtual::50_dollar_product,catalogProductSimple::default,catalogProductVirtual::50_dollar_product";"-";"assertProductQtyInShoppingCart, assertWishlistIsEmpty"

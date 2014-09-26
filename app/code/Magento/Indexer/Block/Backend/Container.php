@@ -34,7 +34,7 @@ class Container extends \Magento\Backend\Block\Widget\Grid\Container
     {
         $this->_controller = 'indexer';
         $this->_blockGroup = 'Magento_Indexer';
-        $this->_headerText = __('New Indexer Management');
+        $this->_headerText = __('Indexer Management');
         parent::_construct();
         $this->buttonList->remove('add');
     }

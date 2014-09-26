@@ -79,7 +79,7 @@
     <xs:simpleType name="methodName">
         <xs:annotation>
             <xs:documentation>
-                Method name can contain only [a-zA-Z].
+                Method name can contain only English letters.
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">

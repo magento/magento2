@@ -94,7 +94,6 @@ $attributesOrder = array(
     ),
     //Autosettings tab
     'short_description' => array($autosettingsTabName => 0, 'is_required' => 0),
-    'url_key' => array($autosettingsTabName => 10),
     'visibility' => array($autosettingsTabName => 20, 'is_required' => 0),
     'news_from_date' => array($autosettingsTabName => 30),
     'news_to_date' => array($autosettingsTabName => 40),

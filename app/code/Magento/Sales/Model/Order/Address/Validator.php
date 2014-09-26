@@ -40,7 +40,7 @@ class Validator
         'street' => 'Street',
         'city' => 'City',
         'email' => 'Email',
-        'telephone' => 'Telephone',
+        'telephone' => 'Phone Number',
         'country_id' => 'Country',
         'firstname' => 'First Name',
         'address_type' => 'Address Type'

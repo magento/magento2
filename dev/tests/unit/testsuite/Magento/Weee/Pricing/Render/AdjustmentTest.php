@@ -332,11 +332,11 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
     public function getWeeeTaxAttributesDataProvider()
     {
         return [
-            [\Magento\Weee\Model\Tax::DISPLAY_INCL, [1,2,3], []],
-            [\Magento\Weee\Model\Tax::DISPLAY_INCL_DESCR, [1,2,3], [1,2,3]],
-            [\Magento\Weee\Model\Tax::DISPLAY_EXCL_DESCR_INCL, [1,2,3], [1,2,3]],
-            [\Magento\Weee\Model\Tax::DISPLAY_EXCL, [1,2,3], []],
-            [4, [1,2,3], []],
+            [\Magento\Weee\Model\Tax::DISPLAY_INCL, [1, 2, 3], []],
+            [\Magento\Weee\Model\Tax::DISPLAY_INCL_DESCR, [1, 2, 3], [1, 2, 3]],
+            [\Magento\Weee\Model\Tax::DISPLAY_EXCL_DESCR_INCL, [1, 2, 3], [1, 2, 3]],
+            [\Magento\Weee\Model\Tax::DISPLAY_EXCL, [1, 2, 3], []],
+            [4, [1, 2, 3], []],
         ];
     }
 
@@ -345,9 +345,9 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
      *
      * @param \Magento\Framework\Object $attribute
      * @param string $expectedResult
-     * @dataProvider renderWeeeTaxAttributeDataProvider
+     * @dataProvider renderWeeeTaxAttributeAmountDataProvider
      */
-    public function testRenderWeeeTaxAttribute($attribute, $expectedResult)
+    public function testRenderWeeeTaxAttributeAmount($attribute, $expectedResult)
     {
         $this->priceCurrencyMock->expects($this->any())->method('convertAndFormat')->will($this->returnArgument(0));
 
@@ -356,17 +356,43 @@ class AdjustmentTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Data provider for testRenderWeeeTaxAttribute
+     * Data provider for testRenderWeeeTaxAttributeAmount
      *
      * @return array
      */
-    public function renderWeeeTaxAttributeDataProvider()
+    public function renderWeeeTaxAttributeAmountDataProvider()
     {
         return [
-            [new \Magento\Framework\Object(['name' => 'name1', 'amount' => 51]), 'name1: 51'],
-            [new \Magento\Framework\Object(['name' => 'name1', 'amount' => false]), 'name1: '],
-            [new \Magento\Framework\Object(['name' => false, 'amount' => 51]), ': 51'],
-            [new \Magento\Framework\Object(['name' => false, 'amount' => false]), ': '],
+            [new \Magento\Framework\Object(['amount' => 51]), 51],
+            [new \Magento\Framework\Object(['amount' => false]), false],
+        ];
+    }
+
+    /**
+     * Test for method renderWeeeTaxAttributeName
+     *
+     * @param \Magento\Framework\Object $attribute
+     * @param string $expectedResult
+     * @dataProvider renderWeeeTaxAttributeNameDataProvider
+     */
+    public function testRenderWeeeTaxAttributeName($attribute, $expectedResult)
+    {
+        $this->priceCurrencyMock->expects($this->any())->method('convertAndFormat')->will($this->returnArgument(0));
+
+        $result = $this->model->renderWeeeTaxAttributeName($attribute);
+        $this->assertEquals($expectedResult, $result);
+    }
+
+    /**
+     * Data provider for testRenderWeeeTaxAttributeName
+     *
+     * @return array
+     */
+    public function renderWeeeTaxAttributeNameDataProvider()
+    {
+        return [
+            [new \Magento\Framework\Object(['name' => 51]), 51],
+            [new \Magento\Framework\Object(['name' => false]), false],
         ];
     }
 }

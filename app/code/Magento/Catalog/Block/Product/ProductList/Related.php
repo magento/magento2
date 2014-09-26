@@ -34,13 +34,6 @@ use Magento\Framework\View\Element\AbstractBlock;
 class Related extends \Magento\Catalog\Block\Product\AbstractProduct implements \Magento\Framework\View\Block\IdentityInterface
 {
     /**
-     * Default MAP renderer type
-     *
-     * @var string
-     */
-    protected $_mapRenderer = 'msrp_noform';
-
-    /**
      * @var Collection
      */
     protected $_itemCollection;

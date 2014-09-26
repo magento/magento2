@@ -81,19 +81,6 @@ class Url extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * @param string $string
-     * @return string
-     */
-    protected function _prepareString($string)
-    {
-        $string = preg_replace('#[^0-9a-z]+#i', '-', $string);
-        $string = strtolower($string);
-        $string = trim($string, '-');
-
-        return $string;
-    }
-
-    /**
      * Add request parameter into url
      *
      * @param  string $url
@@ -119,7 +106,9 @@ class Url extends \Magento\Framework\App\Helper\AbstractHelper
                 $arrQueryParams[] = $key . '=' . $value;
             }
         }
-        $url .= $startDelimiter . implode('&', $arrQueryParams);
+        if (!empty($arrQueryParams)) {
+            $url .= $startDelimiter . implode('&', $arrQueryParams);
+        }
 
         return $url;
     }

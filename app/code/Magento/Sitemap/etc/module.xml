@@ -35,6 +35,7 @@
             <module name="Magento_Eav"/>
             <module name="Magento_Cms"/>
             <module name="Magento_Backend"/>
+            <module name="Magento_CatalogUrlRewrite"/>
         </depends>
     </module>
 </config>

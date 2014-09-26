@@ -52,17 +52,19 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
     public function testSetLayout()
     {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
         /** @var $layout \Magento\Framework\View\Layout */
-        $layout = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\View\LayoutInterface'
-        );
-        $headBlock = $layout->createBlock('Magento\Framework\View\Element\Template', 'head');
+        $layout = $objectManager->get('Magento\Framework\View\LayoutInterface');
+        /** @var $pageConfig \Magento\Framework\View\Page\Config */
+        $pageConfig = $objectManager->get('Magento\Framework\View\Page\Config');
+
         $layout->addBlock($this->_block);
 
-        $this->assertNotEmpty($headBlock->getTitle());
-        $this->assertEquals($this->_product->getMetaTitle(), $headBlock->getTitle());
-        $this->assertEquals($this->_product->getMetaKeyword(), $headBlock->getKeywords());
-        $this->assertEquals($this->_product->getMetaDescription(), $headBlock->getDescription());
+        $this->assertNotEmpty($pageConfig->getTitle());
+        $this->assertEquals($this->_product->getMetaTitle(), $pageConfig->getTitle());
+        $this->assertEquals($this->_product->getMetaKeyword(), $pageConfig->getKeywords());
+        $this->assertEquals($this->_product->getMetaDescription(), $pageConfig->getDescription());
     }
 
     public function testGetProduct()

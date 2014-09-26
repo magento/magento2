@@ -109,13 +109,6 @@ class Helper
         }
 
         /**
-         * Create Permanent Redirect for old URL key
-         */
-        if ($product->getId() && isset($productData['url_key_create_redirect'])) {
-            $product->setData('save_rewrites_history', (bool)$productData['url_key_create_redirect']);
-        }
-
-        /**
          * Check "Use Default Value" checkboxes values
          */
         $useDefaults = $this->request->getPost('use_default');

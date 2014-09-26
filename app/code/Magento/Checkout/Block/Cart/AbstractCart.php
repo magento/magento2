@@ -51,13 +51,6 @@ class AbstractCart extends \Magento\Framework\View\Element\Template
     protected $_itemRenders = array();
 
     /**
-     * Catalog data
-     *
-     * @var \Magento\Catalog\Helper\Data
-     */
-    protected $_catalogData = null;
-
-    /**
      * @var \Magento\Customer\Model\Session
      */
     protected $_customerSession;
@@ -69,21 +62,18 @@ class AbstractCart extends \Magento\Framework\View\Element\Template
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $checkoutSession,
         array $data = array()
     ) {
         $this->_customerSession = $customerSession;
         $this->_checkoutSession = $checkoutSession;
-        $this->_catalogData = $catalogData;
         parent::__construct($context, $data);
         $this->_isScopePrivate = true;
     }
@@ -175,18 +165,5 @@ class AbstractCart extends \Magento\Framework\View\Element\Template
             $this->_totals = $this->getQuote()->getTotals();
         }
         return $this->_totals;
-    }
-
-    /**
-     * Check if can apply msrp to totals
-     *
-     * @return bool
-     */
-    public function canApplyMsrp()
-    {
-        if (!$this->getQuote()->hasCanApplyMsrp() && $this->_catalogData->isMsrpEnabled()) {
-            $this->getQuote()->collectTotals();
-        }
-        return $this->getQuote()->getCanApplyMsrp();
     }
 }

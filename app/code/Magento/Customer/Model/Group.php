@@ -74,17 +74,11 @@ class Group extends \Magento\Framework\Model\AbstractModel
     protected $_storesConfig;
 
     /**
-     * @var \Magento\Index\Model\Indexer
-     */
-    protected $_indexer;
-
-    /**
      * Constructor
      *
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Store\Model\StoresConfig $storesConfig
-     * @param \Magento\Index\Model\Indexer $indexer
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
@@ -93,13 +87,11 @@ class Group extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Store\Model\StoresConfig $storesConfig,
-        \Magento\Index\Model\Indexer $indexer,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $data = array()
     ) {
         $this->_storesConfig = $storesConfig;
-        $this->_indexer = $indexer;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -162,18 +154,6 @@ class Group extends \Magento\Framework\Model\AbstractModel
             return true;
         }
         return false;
-    }
-
-    /**
-     * Run reindex process after data save
-     *
-     * @return $this
-     */
-    protected function _afterSave()
-    {
-        parent::_afterSave();
-        $this->_indexer->processEntityAction($this, self::ENTITY, \Magento\Index\Model\Event::TYPE_SAVE);
-        return $this;
     }
 
     /**

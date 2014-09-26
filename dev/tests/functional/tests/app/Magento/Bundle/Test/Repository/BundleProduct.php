@@ -57,7 +57,8 @@ class BundleProduct extends AbstractRepository
             'weight_type' => '0',
             'status' => 'Product online',
             'shipment_type' => '1',
-            'mtf_dataset_name' => 'BundleDynamic_sku_1073507449'
+            'mtf_dataset_name' => 'BundleDynamic_sku_1073507449',
+            'website_ids' => ['Main Website']
         ];
 
         $this->_data['BundleDynamic_sku_215249172'] = [
@@ -74,7 +75,8 @@ class BundleProduct extends AbstractRepository
             'weight_type' => '0',
             'price_type' => '0',
             'shipment_type' => '1',
-            'mtf_dataset_name' => 'BundleDynamic_sku_215249172'
+            'mtf_dataset_name' => 'BundleDynamic_sku_215249172',
+            'website_ids' => ['Main Website']
         ];
 
         $this->_data['bundle_dynamic_product'] = [

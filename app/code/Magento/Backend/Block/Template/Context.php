@@ -57,6 +57,11 @@ class Context extends \Magento\Framework\View\Element\Template\Context
     protected $nameBuilder;
 
     /**
+     * @var \Magento\Framework\View\Page\Config
+     */
+    protected $pageConfig;
+
+    /**
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
@@ -80,6 +85,7 @@ class Context extends \Magento\Framework\View\Element\Template\Context
      * @param \Magento\Framework\View\TemplateEnginePool $enginePool
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\View\Page\Config $pageConfig
      * @param \Magento\Framework\AuthorizationInterface $authorization
      * @param \Magento\Backend\Model\Session $backendSession
      * @param \Magento\Framework\Math\Random $mathRandom
@@ -112,6 +118,7 @@ class Context extends \Magento\Framework\View\Element\Template\Context
         \Magento\Framework\View\TemplateEnginePool $enginePool,
         \Magento\Framework\App\State $appState,
         \Magento\Framework\StoreManagerInterface $storeManager,
+        \Magento\Framework\View\Page\Config $pageConfig,
         \Magento\Framework\AuthorizationInterface $authorization,
         \Magento\Backend\Model\Session $backendSession,
         \Magento\Framework\Math\Random $mathRandom,
@@ -146,7 +153,8 @@ class Context extends \Magento\Framework\View\Element\Template\Context
             $viewFileSystem,
             $enginePool,
             $appState,
-            $storeManager
+            $storeManager,
+            $pageConfig
         );
     }
 

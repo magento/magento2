@@ -69,19 +69,22 @@ class AssertCustomVariableInPage extends AbstractConstraint
             'cmsPage',
             [
                 'dataSet' => 'default',
-                'data' => ['content' => '{{customVar code=' . $customVariable->getCode() . '}}'],
+                'data' => [
+                    'content' => [
+                        'content' => '{{customVar code=' . $customVariable->getCode() . '}}'
+                    ]
+                ],
             ]
         );
         $cmsPage->persist();
-        $url = $_ENV['app_frontend_url'] . $cmsPage->getIdentifier();
-        $browser->open($url);
+        $browser->open($_ENV['app_frontend_url'] . $cmsPage->getIdentifier());
 
         $cmsIndex->getStoreSwitcherBlock()->selectStoreView('Default Store View');
 
-        $htmlValue = ($customVariableOrigin !== null)
+        $htmlValue = $customVariableOrigin
             ? $this->getHtmlValue($customVariable, $customVariableOrigin)
             : strip_tags($customVariable->getHtmlValue());
-        $pageContent = $cmsIndex->getMainContentBlock()->getPageContent();
+        $pageContent = $cmsIndex->getCmsPageBlock()->getPageContent();
         $this->checkVariable($htmlValue, $pageContent);
 
         if ($storeOrigin !== null) {
@@ -90,7 +93,7 @@ class AssertCustomVariableInPage extends AbstractConstraint
             if ($htmlValue === '') {
                 $htmlValue = strip_tags($variable->getHtmlValue());
             }
-            $pageContent = $cmsIndex->getMainContentBlock()->getPageContent();
+            $pageContent = $cmsIndex->getCmsPageBlock()->getPageContent();
             $this->checkVariable($htmlValue, $pageContent);
         }
     }
@@ -134,7 +137,6 @@ class AssertCustomVariableInPage extends AbstractConstraint
             . "\nExpected: " . $htmlValue
             . "\nActual: " . $pageContent
         );
-
     }
 
     /**

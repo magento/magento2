@@ -44,9 +44,11 @@
             <argument name="wishlistHelper" xsi:type="object">Magento\Wishlist\Helper\Rss</argument>
         </arguments>
     </virtualType>
-    <type name="Magento\Wishlist\Block\Rss">
+    <type name="Magento\Framework\App\Rss\RssManagerInterface">
         <arguments>
-            <argument name="context" xsi:type="object">Magento\Wishlist\Block\Context</argument>
+            <argument name="dataProviders" xsi:type="array">
+                <item name="wishlist" xsi:type="string">Magento\Wishlist\Model\Rss\Wishlist</item>
+            </argument>
         </arguments>
     </type>
 </config>

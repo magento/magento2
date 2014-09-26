@@ -27,6 +27,6 @@
 $_item = $this->getItem();
 ?>
 <?php $_incl = $this->helper('Magento\Checkout\Helper\Data')->getSubtotalInclTax($_item); ?>
-<span class="cart price">
+<span class="cart-price">
     <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($_incl) ?>
 </span>

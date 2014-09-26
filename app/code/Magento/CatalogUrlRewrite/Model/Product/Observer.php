@@ -23,41 +23,33 @@
  */
 namespace Magento\CatalogUrlRewrite\Model\Product;
 
-use Magento\CatalogUrlRewrite\Helper\Data as CatalogUrlRewriteHelper;
-use Magento\CatalogUrlRewrite\Service\V1\ProductUrlGeneratorInterface;
 use Magento\Framework\Event\Observer as EventObserver;
-use Magento\UrlRedirect\Service\V1\UrlSaveInterface;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+use Magento\UrlRewrite\Model\UrlPersistInterface;
+use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 
 class Observer
 {
     /**
-     * @var ProductUrlGeneratorInterface
+     * @var ProductUrlRewriteGenerator
      */
-    protected $productUrlGenerator;
+    protected $productUrlRewriteGenerator;
 
     /**
-     * @var UrlSaveInterface
+     * @var UrlPersistInterface
      */
-    protected $urlSave;
+    protected $urlPersist;
 
     /**
-     * @var CatalogUrlRewriteHelper
-     */
-    protected $catalogUrlRewriteHelper;
-
-    /**
-     * @param ProductUrlGeneratorInterface $productUrlGenerator
-     * @param UrlSaveInterface $urlSave
-     * @param CatalogUrlRewriteHelper $catalogUrlRewriteHelper
+     * @param ProductUrlRewriteGenerator $productUrlRewriteGenerator
+     * @param UrlPersistInterface $urlPersist
      */
     public function __construct(
-        ProductUrlGeneratorInterface $productUrlGenerator,
-        UrlSaveInterface $urlSave,
-        CatalogUrlRewriteHelper $catalogUrlRewriteHelper
+        ProductUrlRewriteGenerator $productUrlRewriteGenerator,
+        UrlPersistInterface $urlPersist
     ) {
-        $this->productUrlGenerator = $productUrlGenerator;
-        $this->urlSave = $urlSave;
-        $this->catalogUrlRewriteHelper = $catalogUrlRewriteHelper;
+        $this->productUrlRewriteGenerator = $productUrlRewriteGenerator;
+        $this->urlPersist = $urlPersist;
     }
 
     /**
@@ -71,12 +63,36 @@ class Observer
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $observer->getEvent()->getProduct();
 
-        if (!$product->getUrlPath() || $product->getOrigData('url_key') != $product->getData('url_key')) {
-            $product->setUrlPath($this->catalogUrlRewriteHelper->generateProductUrlKeyPath($product));
+        $isChangedWebsites = $product->getIsChangedWebsites();
+        if ($product->dataHasChangedFor('url_key') || $product->getIsChangedCategories() || $isChangedWebsites) {
+            if ($isChangedWebsites) {
+                $this->urlPersist->deleteByData([
+                    UrlRewrite::ENTITY_ID => $product->getId(),
+                    UrlRewrite::ENTITY_TYPE => ProductUrlRewriteGenerator::ENTITY_TYPE,
+                ]);
+            }
+            $this->urlPersist->replace($this->productUrlRewriteGenerator->generate($product));
         }
+    }
 
-        if (!$product->getData('url_key') || $product->getOrigData('url_key') != $product->getData('url_key')) {
-            $this->urlSave->save($this->productUrlGenerator->generate($product));
+    /**
+     * Remove product urls from storage
+     *
+     * @param \Magento\Framework\Event\Observer $observer
+     * @return void
+     */
+    public function processUrlRewriteRemoving(EventObserver $observer)
+    {
+        /** @var \Magento\Catalog\Model\Product $product */
+        $product = $observer->getEvent()->getProduct();
+
+        if ($product->getId()) {
+            $this->urlPersist->deleteByData(
+                [
+                    UrlRewrite::ENTITY_ID => $product->getId(),
+                    UrlRewrite::ENTITY_TYPE => ProductUrlRewriteGenerator::ENTITY_TYPE,
+                ]
+            );
         }
     }
 }

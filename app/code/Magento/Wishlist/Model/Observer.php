@@ -102,7 +102,7 @@ class Observer
     public function processCartUpdateBefore($observer)
     {
         $cart = $observer->getEvent()->getCart();
-        $data = $observer->getEvent()->getInfo();
+        $data = $observer->getEvent()->getInfo()->toArray();
         $productIds = array();
 
         $wishlist = $this->_getWishlist($cart->getQuote()->getCustomerId());

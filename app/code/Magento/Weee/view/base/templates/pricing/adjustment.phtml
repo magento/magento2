@@ -30,21 +30,14 @@ $weeeSeparator = $openBrace = $closeBrace = '';
 $openBrace = '(';
 $closeBrace = ')';
 ?>
-
 <?php if ($this->showInclDescr()): // incl. + weee ?>
-    <span class="weee"><?php echo $openBrace ?>
-        <?php foreach ($this->getWeeeTaxAttributes() as $weeeTaxAttribute): ?>
-            <?php echo $weeeSeparator; ?>
-            <?php echo $this->renderWeeeTaxAttribute($weeeTaxAttribute); ?>
-            <?php $weeeSeparator = ' + '; ?>
-        <?php endforeach; ?>
-        <?php echo $closeBrace ?></span>
-<?php elseif ($this->showExclDescrIncl()): // excl. + weee + final ?>
-    <?php echo $openBrace ?>
     <?php foreach ($this->getWeeeTaxAttributes() as $weeeTaxAttribute): ?>
-        <span class="weee">
-            <?php echo $this->renderWeeeTaxAttribute($weeeTaxAttribute); ?>
-        </span>
+        <span class="weee"
+              data-label="<?php echo $this->renderWeeeTaxAttributeName($weeeTaxAttribute); ?>"><?php echo $this->renderWeeeTaxAttribute($weeeTaxAttribute); ?></span>
     <?php endforeach; ?>
-    <?php echo $closeBrace ?>
+<?php elseif ($this->showExclDescrIncl()): // excl. + weee + final ?>
+    <?php foreach ($this->getWeeeTaxAttributes() as $weeeTaxAttribute): ?>
+        <span class="weee"
+              data-label="<?php echo $this->renderWeeeTaxAttributeName($weeeTaxAttribute); ?>"><?php echo $this->renderWeeeTaxAttribute($weeeTaxAttribute); ?></span>
+    <?php endforeach; ?>
 <?php endif; ?>

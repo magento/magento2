@@ -53,7 +53,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
 
     const NOTANCHOR_CATEGORY_LAYOUT_HANDLE = 'catalog_category_view_type_default';
 
-    const SINGLE_CATEGORY_LAYOUT_HANDLE = 'catalog_category_view_{{ID}}';
+    const SINGLE_CATEGORY_LAYOUT_HANDLE = 'catalog_category_view_id_{{ID}}';
 
     /**
      * @var array

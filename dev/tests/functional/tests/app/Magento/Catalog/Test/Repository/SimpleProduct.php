@@ -187,12 +187,6 @@ class SimpleProduct extends Product
         $pricing = [
             'data' => [
                 'fields' => [
-                    'msrp_enabled' => [
-                        'value' => 'Yes',
-                        'input_value' => '1',
-                        'group' => Fixture\Product::GROUP_PRODUCT_PRICING,
-                        'input' => 'select'
-                    ],
                     'msrp_display_actual_price_type' => [
                         'value' => 'On Gesture',
                         'input_value' => '1',

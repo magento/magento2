@@ -38,7 +38,7 @@ if ($minProduct) {
             $minProduct->getPriceInfo()->getPrice('final_price')->getAmount(),
             $minProduct,
             $minProduct->getPriceInfo()->getPrice('final_price'),
-            []
+            ['include_container' => true]
         );
 }
 ?>

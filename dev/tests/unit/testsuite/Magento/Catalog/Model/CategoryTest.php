@@ -40,11 +40,29 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $filter;
 
+    /**
+     * @var \Magento\Catalog\Model\Indexer\Category\Flat\State|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $flatState;
+
     protected function setUp()
     {
         $this->filter = $this->getMock('Magento\Framework\Filter\FilterManager', ['translitUrl'], [], '', false);
+        $this->flatState = $this->getMock(
+            'Magento\Catalog\Model\Indexer\Category\Flat\State',
+            ['isAvailable'],
+            [],
+            '',
+            false
+        );
         $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $this->model = $this->objectManager->getObject('Magento\Catalog\Model\Category', ['filter' => $this->filter]);
+        $this->model = $this->objectManager->getObject(
+            'Magento\Catalog\Model\Category',
+            [
+                'filter' => $this->filter,
+                'flatState' => $this->flatState,
+            ]
+        );
     }
 
     /**
@@ -111,5 +129,27 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals($resultString, $this->model->formatUrlKey($strIn));
+    }
+
+    public function testGetUseFlatResourceFalse()
+    {
+        $this->assertEquals(false, $this->model->getUseFlatResource());
+    }
+
+    public function testGetUseFlatResourceTrue()
+    {
+        $this->flatState->expects($this->any())
+            ->method('isAvailable')
+            ->will($this->returnValue(true));
+
+        $this->model = $this->objectManager->getObject(
+            'Magento\Catalog\Model\Category',
+            [
+                'filter' => $this->filter,
+                'flatState' => $this->flatState,
+            ]
+        );
+
+        $this->assertEquals(true, $this->model->getUseFlatResource());
     }
 }

@@ -40,20 +40,25 @@ class Match implements QueryInterface
         $conditionType
     ) {
         /** @var $query \Magento\Framework\Search\Request\Query\Match */
-        foreach ($query->getMatches() as $match) {
-            $mode = Select::FULLTEXT_MODE_NATURAL;
-            if ($conditionType === Bool::QUERY_CONDITION_NOT) {
-                $match['value'] = '-' . $match['value'];
-                $mode = Select::FULLTEXT_MODE_BOOLEAN;
-            }
-
-            $scoreBuilder->addCondition(
-                $select->getMatchQuery($match['field'], $match['value'], $mode),
-                isset($match['boost']) ? $match['boost'] : 1
-            );
-
-            $select->match($match['field'], $match['value'], true, $mode);
+        $queryValue = $query->getValue();
+        if ($conditionType === Bool::QUERY_CONDITION_MUST) {
+            $queryValue = '+' . $queryValue;
+        } elseif ($conditionType === Bool::QUERY_CONDITION_NOT) {
+            $queryValue = '-' . $queryValue;
         }
+
+        $fieldList = [];
+        foreach ($query->getMatches() as $match) {
+            $fieldList[] = $match['field'];
+        }
+
+        $queryBoost = $query->getBoost();
+        $scoreBuilder->addCondition(
+            $select->getMatchQuery($fieldList, $queryValue, Select::FULLTEXT_MODE_BOOLEAN),
+            !is_null($queryBoost) ? $queryBoost : 1
+        );
+        $select->match($fieldList, $queryValue, true, Select::FULLTEXT_MODE_BOOLEAN);
+
         return $select;
     }
 }

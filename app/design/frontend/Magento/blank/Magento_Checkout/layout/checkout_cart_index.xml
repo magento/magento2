@@ -46,6 +46,6 @@
     <move element="checkout.cart.widget" destination="checkout.cart.container" after="checkout.cart.form" />
     <move element="checkout.cart.shipping" destination="cart.summary" after="checkout.cart.summary.title" />
     <move element="checkout.cart.coupon" destination="cart.summary" />
-    <move element="checkout.cart.totals" destination="cart.summary"/>
+    <move element="checkout.cart.totals.container" destination="cart.summary"/>
     <move element="checkout.cart.methods.bottom" destination="cart.summary"/>
 </page>

@@ -110,7 +110,6 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
 
         $this->_view->loadLayout();
         $this->_setActiveMenu('Magento_Catalog::catalog_categories');
-        $this->_view->getLayout()->getBlock('head')->setCanLoadExtJs(true)->setContainerCssClass('catalog-categories');
 
         $this->_addBreadcrumb(__('Manage Catalog Categories'), __('Manage Categories'));
 

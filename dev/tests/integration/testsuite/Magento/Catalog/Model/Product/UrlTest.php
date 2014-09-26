@@ -27,6 +27,7 @@ namespace Magento\Catalog\Model\Product;
  * Test class for \Magento\Catalog\Model\Product\Url.
  *
  * @magentoDataFixture Magento/Catalog/_files/url_rewrites.php
+ * @magentoAppArea frontend
  */
 class UrlTest extends \PHPUnit_Framework_TestCase
 {
@@ -35,10 +36,18 @@ class UrlTest extends \PHPUnit_Framework_TestCase
      */
     protected $_model;
 
+    /**
+     * @var \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator
+     */
+    protected $urlPathGenerator;
+
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Catalog\Model\Product\Url'
+        );
+        $this->urlPathGenerator = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator'
         );
     }
 
@@ -47,13 +56,6 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $instance = $this->_model->getUrlInstance();
         $this->assertInstanceOf('Magento\Framework\Url', $instance);
         $this->assertSame($instance, $this->_model->getUrlInstance());
-    }
-
-    public function testGetUrlRewrite()
-    {
-        $instance = $this->_model->getUrlRewrite();
-        $this->assertInstanceOf('Magento\UrlRewrite\Model\UrlRewrite', $instance);
-        $this->assertSame($instance, $this->_model->getUrlRewrite());
     }
 
     public function testGetUrlInStore()
@@ -89,11 +91,13 @@ class UrlTest extends \PHPUnit_Framework_TestCase
 
         /** @var $category \Magento\Catalog\Model\Category */
         $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Category'
+            'Magento\Catalog\Model\Category',
+            ['data' => ['url_path' => 'category', 'entity_id' => 5, 'path_ids' => [2, 3, 5]]]
         );
-        $category->setUrlPath('category.html');
-        $this->assertEquals('product.html', $this->_model->getUrlPath($product));
-        $this->assertEquals('category/product.html', $this->_model->getUrlPath($product, $category));
+        $category->setOrigData();
+
+        $this->assertEquals('product.html', $this->urlPathGenerator->getUrlPath($product));
+        $this->assertEquals('category/product.html', $this->urlPathGenerator->getUrlPath($product, $category));
     }
 
     public function testGetUrl()

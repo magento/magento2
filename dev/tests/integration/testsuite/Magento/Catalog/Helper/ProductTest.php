@@ -40,7 +40,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Catalog/_files/products.php
+     * @magentoDataFixture Magento/CatalogUrlRewrite/_files/product_simple.php
+     * @magentoAppIsolation enabled
      */
     public function testGetProductUrl()
     {
@@ -160,11 +161,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->_helper->canShow($product));
 
         $this->assertTrue($this->_helper->canShow(1));
-    }
-
-    public function testGetProductUrlSuffix()
-    {
-        $this->assertEquals('.html', $this->_helper->getProductUrlSuffix());
     }
 
     public function testCanUseCanonicalTagDefault()

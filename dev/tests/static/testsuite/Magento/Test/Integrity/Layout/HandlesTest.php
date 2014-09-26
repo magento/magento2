@@ -91,4 +91,25 @@ class HandlesTest extends \PHPUnit_Framework_TestCase
             \Magento\TestFramework\Utility\Files::init()->getLayoutFiles()
         );
     }
+
+    public function testHeadBlockUsage()
+    {
+        $invoker = new \Magento\TestFramework\Utility\AggregateInvoker($this);
+        $invoker(
+        /**
+         * Test validate that head block doesn't exist in layout
+         *
+         * @param string $layoutFile
+         */
+            function ($layoutFile) {
+                $dom = new \DOMDocument();
+                $dom->load($layoutFile);
+                $xpath = new \DOMXpath($dom);
+                if ($xpath->query("//*[@name='head']")->length) {
+                    $this->fail('Following file contains deprecated head block. File Path:' . "\n" . $layoutFile);
+                }
+            },
+            \Magento\TestFramework\Utility\Files::init()->getLayoutFiles()
+        );
+    }
 }

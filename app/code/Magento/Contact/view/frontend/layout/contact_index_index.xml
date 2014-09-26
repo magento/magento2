@@ -24,11 +24,9 @@
  */
 -->
 <page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
-    <referenceBlock name="head">
-        <action method="setTitle">
-            <argument translate="true" name="title" xsi:type="string">Contact Us</argument>
-        </action>
-    </referenceBlock>
+    <head>
+        <title>Contact Us</title>
+    </head>
     <referenceContainer name="content">
         <block class="Magento\Framework\View\Element\Template" name="contactForm" template="Magento_Contact::form.phtml">
             <container name="form.additional.info" label="Form Additional Info"/>

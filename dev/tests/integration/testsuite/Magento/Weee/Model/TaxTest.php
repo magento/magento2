@@ -93,7 +93,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             'country' => 'US',
             'value' => '12.4',
             'state' => '0',
-            'attribute_id' => '75',
+            'attribute_id' => '73',
             'entity_type_id' => '0'
         );
         $weeeTax->setData($weeeTaxData);

@@ -29,15 +29,18 @@ use Magento\Framework\Object\IdentityInterface;
 /**
  * Catalog product model
  *
- * @method \Magento\Catalog\Model\Product setHasError(bool $value)
+ * @method Product setHasError(bool $value)
  * @method null|bool getHasError()
- * @method \Magento\Catalog\Model\Product setTypeId(string $typeId)
- * @method \Magento\Catalog\Model\Product setAssociatedProductIds(array $productIds)
+ * @method Product setTypeId(string $typeId)
+ * @method Product setAssociatedProductIds(array $productIds)
  * @method array getAssociatedProductIds()
- * @method \Magento\Catalog\Model\Product setNewVariationsAttributeSetId(int $value)
+ * @method Product setNewVariationsAttributeSetId(int $value)
  * @method int getNewVariationsAttributeSetId()
  * @method int getPriceType
- * @method \Magento\Catalog\Model\Resource\Product\Collection getCollection()
+ * @method Resource\Product\Collection getCollection()
+ * @method string getUrlKey()
+ * @method Product setUrlKey(string $urlKey)
+ * @method Product setRequestPath(string $requestPath)
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  */
@@ -113,11 +116,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements IdentityIn
     protected static $_url;
 
     /**
-     * @var string
-     */
-    protected static $_urlRewrite;
-
-    /**
      * @var array
      */
     protected $_errors = array();
@@ -180,13 +178,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements IdentityIn
      * @var Product\Type
      */
     protected $_catalogProductType;
-
-    /**
-     * Index indexer
-     *
-     * @var \Magento\Index\Model\Indexer
-     */
-    protected $_indexIndexer;
 
     /**
      * Catalog product media config
@@ -282,7 +273,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements IdentityIn
      * @param Product\Visibility $catalogProductVisibility
      * @param Product\Attribute\Source\Status $catalogProductStatus
      * @param Product\Media\Config $catalogProductMediaConfig
-     * @param \Magento\Index\Model\Indexer $indexIndexer
      * @param Product\Type $catalogProductType
      * @param \Magento\Catalog\Helper\Image $catalogImage
      * @param \Magento\Catalog\Helper\Data $catalogData
@@ -312,7 +302,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements IdentityIn
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus,
         \Magento\Catalog\Model\Product\Media\Config $catalogProductMediaConfig,
-        \Magento\Index\Model\Indexer $indexIndexer,
         Product\Type $catalogProductType,
         \Magento\Catalog\Helper\Image $catalogImage,
         \Magento\Catalog\Helper\Data $catalogData,
@@ -334,7 +323,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements IdentityIn
         $this->_catalogProductVisibility = $catalogProductVisibility;
         $this->_catalogProductStatus = $catalogProductStatus;
         $this->_catalogProductMediaConfig = $catalogProductMediaConfig;
-        $this->_indexIndexer = $indexIndexer;
         $this->_catalogProductType = $catalogProductType;
         $this->_catalogImage = $catalogImage;
         $this->_catalogData = $catalogData;
@@ -755,7 +743,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements IdentityIn
 
         $result = parent::_afterSave();
 
-        $this->_indexIndexer->processEntityAction($this, self::ENTITY, \Magento\Index\Model\Event::TYPE_SAVE);
         $this->_getResource()->addCommitCallback(array($this, 'reindex'));
         $this->reloadPriceInfo();
         return $result;
@@ -830,7 +817,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements IdentityIn
     protected function _beforeDelete()
     {
         $this->cleanCache();
-        $this->_indexIndexer->logEvent($this, self::ENTITY, \Magento\Index\Model\Event::TYPE_DELETE);
         return parent::_beforeDelete();
     }
 
@@ -844,7 +830,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements IdentityIn
         $this->reindex();
         $this->_productPriceIndexerProcessor->reindexRow($this->getId());
         parent::_afterDeleteCommit();
-        $this->_indexIndexer->indexEvents(self::ENTITY, \Magento\Index\Model\Event::TYPE_DELETE);
     }
 
     /**
@@ -1515,17 +1500,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements IdentityIn
     public function formatUrlKey($str)
     {
         return $this->getUrlModel()->formatUrlKey($str);
-    }
-
-    /**
-     * Retrieve Product Url Path (include category)
-     *
-     * @param \Magento\Catalog\Model\Category $category
-     * @return string
-     */
-    public function getUrlPath($category = null)
-    {
-        return $this->getUrlModel()->getUrlPath($this, $category);
     }
 
     /**

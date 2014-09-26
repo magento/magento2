@@ -25,8 +25,6 @@
  */
 namespace Magento\Framework\App;
 
-use Magento\Framework\App\ActionInterface;
-
 class ActionFactory
 {
     /**

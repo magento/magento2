@@ -25,8 +25,8 @@
 namespace Magento\UrlRewrite\Test\TestCase;
 
 use Magento\UrlRewrite\Test\Fixture\UrlRewrite;
-use Magento\UrlRewrite\Test\Page\Adminhtml\UrlrewriteEdit;
-use Magento\UrlRewrite\Test\Page\Adminhtml\UrlrewriteIndex;
+use Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteEdit;
+use Magento\UrlRewrite\Test\Page\Adminhtml\UrlRewriteIndex;
 use Mtf\Fixture\FixtureFactory;
 use Magento\Catalog\Test\Fixture\CatalogCategory;
 use Mtf\TestCase\Injectable;
@@ -39,7 +39,7 @@ use Mtf\TestCase\Injectable;
  *
  * Test Flow:
  * 1. Login to backend as Admin
- * 2. Go to the Marketing-> SEO & Search->URL Redirects
+ * 2. Go to the Marketing-> SEO & Search->URL Rewrites
  * 3. Click "+" button
  * 4. Select "For Category" in Create URL Rewrite dropdown
  * 5. Select Category in "Category tree"
@@ -55,27 +55,27 @@ class CreateCategoryRewriteEntityTest extends Injectable
     /**
      * Page of url rewrite edit category
      *
-     * @var UrlrewriteEdit
+     * @var UrlRewriteEdit
      */
     protected $urlRewriteEdit;
 
     /**
      * Main page of url rewrite
      *
-     * @var UrlrewriteIndex
+     * @var UrlRewriteIndex
      */
     protected $urlRewriteIndex;
 
     /**
      * Inject page
      *
-     * @param UrlrewriteEdit $urlRewriteEdit
-     * @param UrlrewriteIndex $urlRewriteIndex
+     * @param UrlRewriteEdit $urlRewriteEdit
+     * @param UrlRewriteIndex $urlRewriteIndex
      * @param FixtureFactory $fixtureFactory
      * @return array
      */
     public function __inject(
-        UrlrewriteEdit $urlRewriteEdit,
+        UrlRewriteEdit $urlRewriteEdit,
         UrlRewriteIndex $urlRewriteIndex,
         FixtureFactory $fixtureFactory
     ) {

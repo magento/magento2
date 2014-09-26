@@ -29,7 +29,7 @@
             <resource id="Magento_Adminhtml::admin">
                 <resource id="Magento_Adminhtml::system">
                     <resource id="Magento_Adminhtml::tools">
-                        <resource id="Magento_Indexer::index" title="New Index Management" sortOrder="30" />
+                        <resource id="Magento_Indexer::index" title="Index Management" sortOrder="30" />
                         <resource id="Magento_Indexer::changeMode" title="Change indexer mode" sortOrder="40" />
                     </resource>
                 </resource>

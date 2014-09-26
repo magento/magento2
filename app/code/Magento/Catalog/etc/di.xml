@@ -104,9 +104,6 @@
                     <item name="special_from_date" xsi:type="string">special_from_date</item>
                     <item name="special_to_date" xsi:type="string">special_to_date</item>
                     <item name="website_ids" xsi:type="string">website_ids</item>
-                    <item name="msrp" xsi:type="string">msrp</item>
-                    <item name="msrp_enabled" xsi:type="string">msrp_enabled</item>
-                    <item name="msrp_display_actual_price_type" xsi:type="string">msrp_display_actual_price_type</item>
                     <item name="gift_wrapping_price" xsi:type="string">gift_wrapping_price</item>
                     <item name="tax_class_id" xsi:type="string">tax_class_id</item>
                 </item>
@@ -378,7 +375,6 @@
                 <item name="tier_price" xsi:type="string">Magento\Catalog\Pricing\Price\TierPrice</item>
                 <item name="group_price" xsi:type="string">Magento\Catalog\Pricing\Price\GroupPrice</item>
                 <item name="special_price" xsi:type="string">Magento\Catalog\Pricing\Price\SpecialPrice</item>
-                <item name="msrp_price" xsi:type="string">Magento\Catalog\Pricing\Price\MsrpPrice</item>
                 <item name="base_price" xsi:type="string">Magento\Catalog\Pricing\Price\BasePrice</item>
                 <item name="custom_option_price" xsi:type="string">Magento\Catalog\Pricing\Price\CustomOptionPrice</item>
                 <item name="configured_price" xsi:type="string">Magento\Catalog\Pricing\Price\ConfiguredPrice</item>
@@ -498,5 +494,16 @@
     </type>
     <type name="Magento\CatalogInventory\Model\Config\Backend\ShowOutOfStock">
         <plugin name="showOutOfStockValueChanged" type="\Magento\Catalog\Model\Plugin\ShowOutOfStockConfig"/>
+    </type>
+    <preference for="Magento\Catalog\Block\Category\Widget\Link" type="Magento\Catalog\Block\Widget\Link" />
+    <preference for="Magento\Catalog\Block\Product\Widget\Link" type="Magento\Catalog\Block\Widget\Link" />
+    <type name="Magento\Framework\App\Rss\RssManagerInterface">
+        <arguments>
+            <argument name="dataProviders" xsi:type="array">
+                <item name="new_products" xsi:type="string">Magento\Catalog\Block\Rss\Product\NewProducts</item>
+                <item name="special_products" xsi:type="string">Magento\Catalog\Block\Rss\Product\Special</item>
+                <item name="category" xsi:type="string">Magento\Catalog\Block\Rss\Category</item>
+            </argument>
+        </arguments>
     </type>
 </config>

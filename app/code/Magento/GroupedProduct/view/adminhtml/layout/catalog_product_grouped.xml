@@ -25,13 +25,9 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
     <update handle="groupedproduct_popup_grid"/>
-    <referenceBlock name="head">
-        <block class="Magento\Theme\Block\Html\Head\Css" name="magento-grouped-product-css-grouped-product-css">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_GroupedProduct::css/grouped-product.css</argument>
-            </arguments>
-        </block>
-    </referenceBlock>
+    <head>
+        <css src="Magento_GroupedProduct::css/grouped-product.css"/>
+    </head>
     <referenceBlock name="product_tabs">
         <block class="Magento\GroupedProduct\Block\Product\Grouped\AssociatedProducts" name="catalog.product.edit.grouped.container" template="product/grouped/container.phtml">
             <block class="Magento\Framework\View\Element\Template" name="catalog.product.edit.tab.super.container" template="Magento_GroupedProduct::product/grouped/grouped.phtml">

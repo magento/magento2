@@ -85,7 +85,9 @@ class CopierTest extends \PHPUnit_Framework_TestCase
                 'setId',
                 'setStoreId',
                 'getId',
-                'save'
+                'save',
+                'setUrlKey',
+                'getUrlKey',
             ),
             array(),
             '',
@@ -113,16 +115,14 @@ class CopierTest extends \PHPUnit_Framework_TestCase
             \Magento\Store\Model\Store::DEFAULT_STORE_ID
         );
         $duplicateMock->expects($this->once())->method('setData')->with('product data');
-
-
-
         $this->copyConstructorMock->expects($this->once())->method('build')->with($this->productMock, $duplicateMock);
-
+        $duplicateMock->expects($this->once())->method('getUrlKey')->willReturn('urk-key-1');
+        $duplicateMock->expects($this->once())->method('setUrlKey')->with('urk-key-2');
         $duplicateMock->expects($this->once())->method('save');
         $duplicateMock->expects($this->any())->method('getId')->will($this->returnValue(2));
-
         $optionMock->expects($this->once())->method('duplicate')->with(1, 2);
         $resourceMock->expects($this->once())->method('duplicate')->with(1, 2);
+
         $this->assertEquals($duplicateMock, $this->_model->copy($this->productMock));
     }
 }

@@ -24,12 +24,18 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Module/etc/module.xsd">
-    <module name="Magento_CatalogUrlRewrite" schema_version="1.0.0.0" active="false">
-        <depends>
+    <module name="Magento_CatalogUrlRewrite" schema_version="1.0.0.0" active="true">
+        <sequence>
             <module name="Magento_Catalog"/>
+        </sequence>
+        <depends>
+            <module name="Magento_Backend"/>
+            <module name="Magento_Catalog"/>
+            <module name="Magento_CatalogImportExport"/>
             <module name="Magento_Eav"/>
+            <module name="Magento_ImportExport"/>
             <module name="Magento_Store"/>
-            <module name="Magento_UrlRedirect"/>
+            <module name="Magento_UrlRewrite"/>
         </depends>
     </module>
 </config>

@@ -24,41 +24,48 @@
 
 namespace Magento\Framework\Search\Adapter\Mysql;
 
-
 use Magento\Framework\App\Resource\Config;
 use Magento\Framework\App\Resource;
 use Magento\TestFramework\Helper\ObjectManager;
 
 class AdapterTest extends \PHPUnit_Framework_TestCase
 {
+
     /**
      * @var ResponseFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $responseFactory;
+
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $connectionAdapter;
+
     /**
      * @var \Magento\Framework\Search\Adapter\Mysql\Mapper|\PHPUnit_Framework_MockObject_MockObject
      */
     private $mapper;
+
     /**
      * @var \Magento\Framework\Search\Adapter\Mysql\Adapter
      */
     private $adapter;
+
     /**
      * @var ObjectManager
      */
     private $objectManager;
+
     /**
      * @var \Magento\Framework\Search\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $request;
+
     /**
      * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
      */
     private $select;
+
     /**
      * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
      */

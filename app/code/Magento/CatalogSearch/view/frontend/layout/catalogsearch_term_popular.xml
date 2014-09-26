@@ -24,11 +24,9 @@
  */
 -->
 <page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
-    <referenceBlock name="head">
-        <action method="setTitle">
-            <argument translate="true" name="title" xsi:type="string">Popular Search Terms</argument>
-        </action>
-    </referenceBlock>
+    <head>
+        <title>Popular Search Terms</title>
+    </head>
     <referenceContainer name="content">
         <block class="Magento\CatalogSearch\Block\Term" name="seo.searchterm" template="term.phtml" cacheable="false"/>
     </referenceContainer>

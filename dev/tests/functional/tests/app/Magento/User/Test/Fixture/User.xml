@@ -151,6 +151,10 @@
             <attribute_code>password_confirmation</attribute_code>
             <backend_type>virtual</backend_type>
         </password_confirmation>
+        <current_password>
+            <attribute_code>current_password</attribute_code>
+            <backend_type>virtual</backend_type>
+        </current_password>
     </fields>
     <repository_class>Magento\User\Test\Repository\User</repository_class>
     <handler_interface>Magento\User\Test\Handler\User\UserInterface</handler_interface>

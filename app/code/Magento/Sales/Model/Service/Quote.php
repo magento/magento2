@@ -207,7 +207,7 @@ class Quote
                 ->setAddresses($addresses)
                 ->create();
             if ($customerData->getId()) {
-                $this->_customerAccountService->updateCustomer($customerDetails);
+                $this->_customerAccountService->updateCustomer($customerData->getId(), $customerDetails);
             } else { //for new customers
                 $customerData = $this->_customerAccountService->createCustomerWithPasswordHash(
                     $customerDetails,

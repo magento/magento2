@@ -22,20 +22,12 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->getLang() ?>" lang="<?php echo $this->getLang() ?>">
-<head>
-    <?php echo $this->getChildHtml('head') ?>
-</head>
-<body id="html-body"<?php echo $this->getBodyClass() ? ' class="' . $this->getBodyClass() . '"' : ''; ?>>
-    <?php echo $this->getChildHtml('content') ?>
-    <div id="loading-mask" style="display:none">
-        <p class="loader" id="loading_mask_loader">
-            <img src="<?php echo $this->getViewFileUrl('images/ajax-loader-tr.gif') ?>"
-                 alt="<?php echo __('Loading...') ?>"/>
-            <br/>
-            <?php echo __('Please wait...') ?>
-        </p>
-    </div>
-</body>
-</html>
+<?php echo $this->getChildHtml('content') ?>
+<div id="loading-mask" style="display:none">
+    <p class="loader" id="loading_mask_loader">
+        <img src="<?php echo $this->getViewFileUrl('images/ajax-loader-tr.gif') ?>"
+             alt="<?php echo __('Loading...') ?>"/>
+        <br/>
+        <?php echo __('Please wait...') ?>
+    </p>
+</div>

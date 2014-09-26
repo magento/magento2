@@ -24,6 +24,34 @@
  */
 -->
 <page layout="admin-1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
+    <head>
+        <title>Magento Admin</title>
+        <link src="prototype/prototype.js"/>
+        <link src="prototype/window.js"/>
+        <link src="scriptaculous/builder.js"/>
+        <link src="scriptaculous/effects.js"/>
+        <link src="lib/ccard.js"/>
+        <link src="prototype/validation.js"/>
+        <link src="varien/js.js"/>
+        <link src="mage/adminhtml/varienLoader.js"/>
+        <link src="mage/adminhtml/tools.js"/>
+        <link src="lib/ds-sleight.js" ie_condition="lt IE 7" defer="defer"/>
+        <css src="mage/calendar.css"/>
+        <link src="requirejs/require.js"/>
+        <link src="mage/requirejs/resolver.js"/>
+        <link src="jquery/jquery-1.8.2.js"/>
+        <link src="mage/jquery-no-conflict.js"/>
+        <link src="app-config.js"/>
+        <link src="extjs/ext-tree.js"/>
+        <link src="extjs/ext-tree-checkbox.js"/>
+        <css src="extjs/resources/css/ext-all.css"/>
+        <css src="extjs/resources/css/ytheme-magento.css"/>
+        <link src="Magento_Rule::rules.js"/>
+    </head>
+    <body>
+        <attribute name="id" value="html-body" />
+    </body>
+    <block name="require.js" class="Magento\Backend\Block\Page\RequireJs" template="Magento_Backend::page/js/require_js.phtml" />
     <referenceContainer name="global.notices">
         <block class="Magento\Backend\Block\Page\Notices" name="global_notices" as="global_notices" template="page/notices.phtml"/>
     </referenceContainer>
@@ -87,154 +115,11 @@
         <block class="Magento\Framework\View\Element\Template" name="page.loader" template="Magento_Backend::admin/loader.phtml" after="-"/>
     </referenceContainer>
 
-    <block class="Magento\Backend\Block\Page\Head" name="head" as="head" template="page/head.phtml">
-        <action method="setTitle">
-            <argument translate="true" name="title" xsi:type="string">Magento Admin</argument>
-        </action>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="prototype-prototype-js">
-            <arguments>
-                <argument name="file" xsi:type="string">prototype/prototype.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="prototype-window-js">
-            <arguments>
-                <argument name="file" xsi:type="string">prototype/window.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="scriptaculous-builder-js">
-            <arguments>
-                <argument name="file" xsi:type="string">scriptaculous/builder.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="scriptaculous-effects-js">
-            <arguments>
-                <argument name="file" xsi:type="string">scriptaculous/effects.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="lib-ccard-js">
-            <arguments>
-                <argument name="file" xsi:type="string">lib/ccard.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="prototype-validation-js">
-            <arguments>
-                <argument name="file" xsi:type="string">prototype/validation.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="varien-js-js">
-            <arguments>
-                <argument name="file" xsi:type="string">varien/js.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-varienloader-js">
-            <arguments>
-                <argument name="file" xsi:type="string">mage/adminhtml/varienLoader.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-tools-js">
-            <arguments>
-                <argument name="file" xsi:type="string">mage/adminhtml/tools.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="lib-ds-sleight-js">
-            <arguments>
-                <argument name="file" xsi:type="string">lib/ds-sleight.js</argument>
-                <argument name="properties" xsi:type="array">
-                    <item name="attributes" xsi:type="string">defer</item>
-                    <item name="ie_condition" xsi:type="string">lt IE 7</item>
-                </argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Css" name="magento-calendar-css">
-            <arguments>
-                <argument name="file" xsi:type="string">mage/calendar.css</argument>
-                <argument name="properties" xsi:type="array">
-                    <item name="attributes" xsi:type="string"/>
-                </argument>
-            </arguments>
-        </block>
-
-        <block class="Magento\Theme\Block\Html\Head\Script" name="requirejs">
-            <arguments>
-                <argument name="file" xsi:type="string">requirejs/require.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="mage-requirejs-resolver">
-            <arguments>
-                <argument name="file" xsi:type="string">mage/requirejs/resolver.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="app-config" after="jquery">
-            <arguments>
-                <argument name="file" xsi:type="string">app-config.js</argument>
-            </arguments>
-        </block>
-        <!-- /**
-        TODO: remove jQuery. jQuery could be loaded through RequireJS. But only in case ALL MODULES ARE AMD MODULES.
-        Detail: http://requirejs.org/docs/jquery.html#noconflictmap
-        */ -->
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery" after="requirejs">
-            <arguments>
-                <argument name="file" xsi:type="string">jquery/jquery-1.8.2.js</argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="jquery-no-conflict" after="jquery">
-            <arguments>
-                <argument name="file" xsi:type="string">mage/jquery-no-conflict.js</argument>
-            </arguments>
-        </block>
-
-        <block class="Magento\Theme\Block\Html\Head\Script" name="extjs-ext-tree-js">
-            <arguments>
-                <argument name="file" xsi:type="string">extjs/ext-tree.js</argument>
-                <argument name="properties" xsi:type="array">
-                    <item name="attributes" xsi:type="string"/>
-                    <item name="ie_condition" xsi:type="string"/>
-                    <item name="flag_name" xsi:type="string">can_load_ext_js</item>
-                </argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="extjs-ext-tree-checkbox-js">
-            <arguments>
-                <argument name="file" xsi:type="string">extjs/ext-tree-checkbox.js</argument>
-                <argument name="properties" xsi:type="array">
-                    <item name="attributes" xsi:type="string"/>
-                    <item name="ie_condition" xsi:type="string"/>
-                    <item name="flag_name" xsi:type="string">can_load_ext_js</item>
-                </argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Css" name="extjs-resources-css-ext-all-css">
-            <arguments>
-                <argument name="file" xsi:type="string">extjs/resources/css/ext-all.css</argument>
-                <argument name="properties" xsi:type="array">
-                    <item name="attributes" xsi:type="string"/>
-                    <item name="ie_condition" xsi:type="string"/>
-                    <item name="flag_name" xsi:type="string">can_load_ext_js</item>
-                </argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Css" name="extjs-resources-css-ytheme-magento-css">
-            <arguments>
-                <argument name="file" xsi:type="string">extjs/resources/css/ytheme-magento.css</argument>
-                <argument name="properties" xsi:type="array">
-                    <item name="attributes" xsi:type="string"/>
-                    <item name="ie_condition" xsi:type="string"/>
-                    <item name="flag_name" xsi:type="string">can_load_ext_js</item>
-                </argument>
-            </arguments>
-        </block>
-        <block class="Magento\Theme\Block\Html\Head\Script" name="magento-adminhtml-promo-rules-js">
-            <arguments>
-                <argument name="file" xsi:type="string">Magento_Rule::rules.js</argument>
-                <argument name="properties" xsi:type="array">
-                    <item name="attributes" xsi:type="string"/>
-                    <item name="ie_condition" xsi:type="string"/>
-                    <item name="flag_name" xsi:type="string">can_load_rules_js</item>
-                </argument>
-            </arguments>
-        </block>
+    <referenceContainer name="after.body.start">
+        <block class="Magento\RequireJs\Block\Html\Head\Config" name="requirejs-config"/>
+        <block class="Magento\Translation\Block\Js" name="translate" template="Magento_Translation::translate.phtml"/>
+        <block class="Magento\Framework\View\Element\Template" name="head.scripts" template="Magento_Backend::page/js/head_scripts.phtml"/>
         <block class="Magento\Framework\View\Element\Js\Components" name="head.components" as="components" template="Magento_Backend::page/js/components.phtml"/>
         <block class="Magento\Framework\View\Element\Html\Calendar" name="head.calendar" as="calendar" template="Magento_Backend::page/js/calendar.phtml"/>
-    </block>
+    </referenceContainer>
 </page>

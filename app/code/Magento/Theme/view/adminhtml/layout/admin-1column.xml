@@ -26,15 +26,16 @@
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/layout_single.xsd">
     <container name="root">
         <container name="backend.page">
+            <container name="after.body.start" as="after.body.start" label="Page Top" before="-"/>
             <container name="page.wrapper" as="page_wrapper" htmlTag="div" htmlClass="page-wrapper">
-                <container name="notification.window" as="notification_window"/>
-                <container name="global.notices" as="global_notices"/>
-                <container name="page.header.wrapper" as="page_header_wrapper" htmlTag="div" htmlClass="page-header-wrapper">
+                <container name="notification.window" as="notification_window" before="-"/>
+                <container name="global.notices" as="global_notices" after="notification.window"/>
+                <container name="page.header.wrapper" as="page_header_wrapper" after="global.notices" htmlTag="div" htmlClass="page-header-wrapper">
                     <container name="header" htmlTag="header" htmlClass="page-header"/>
                 </container>
-                <container name="page.menu" as="page.menu"/>
+                <container name="page.menu" as="page.menu" after="page.header.wrapper"/>
                 <container name="notifications" as="notifications" after="page.menu"/>
-                <container name="page.breadcrumbs" as="page.breadcrumbs"/>
+                <container name="page.breadcrumbs" after="notifications" as="page.breadcrumbs"/>
 
                 <container name="page.formkey" as="page.formkey"/>
                 <container name="page.js.translate" as="page.js.translate"/>
@@ -50,11 +51,11 @@
                     </container>
                 </container>
                 <container name="js" as="js" label="JavaScript"/>
-                <container name="page.footer.wrapper" as="page_footer_wrapper" htmlTag="div" htmlClass="page-footer-wrapper">
+                <container name="page.footer.wrapper" as="page_footer_wrapper" after="page.content" htmlTag="div" htmlClass="page-footer-wrapper">
                     <container name="footer" htmlTag="footer" htmlClass="page-footer"/>
                 </container>
             </container>
-            <container name="before.body.end" as="before_body_end" label="Before Body End"/>
+            <container name="before.body.end" as="before_body_end" label="Before Body End" after="-"/>
         </container>
     </container>
 </layout>

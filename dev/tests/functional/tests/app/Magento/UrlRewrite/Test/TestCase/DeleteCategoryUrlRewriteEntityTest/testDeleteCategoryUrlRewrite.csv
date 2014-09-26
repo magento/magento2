@@ -1,3 +1,3 @@
-"urlRewrite/data/id_path/entity";"urlRewrite/data/options";"urlRewrite/data/request_path";"constraint"
+"urlRewrite/data/id_path/entity";"urlRewrite/data/redirect_type";"urlRewrite/data/request_path";"constraint"
 "category/%catalogCategory::default%";"No";"-";"assertUrlRewriteDeletedMessage, assertPageByUrlRewriteIsNotFound"
 "category/%catalogCategory::default%";"No";"example%isolation%.html";"assertUrlRewriteDeletedMessage, assertPageByUrlRewriteIsNotFound"

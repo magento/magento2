@@ -25,8 +25,11 @@
 /** @var $this \Magento\Checkout\Block\Cart\Item\Renderer */
 
 $_item = $this->getItem();
-$isVisibleProduct = $_item->getProduct()->isVisibleInSiteVisibility();
-$canApplyMsrp = $this->helper('Magento\Catalog\Helper\Data')->canApplyMsrp($_item->getProduct(), \Magento\Catalog\Model\Product\Attribute\Source\Msrp\Type::TYPE_BEFORE_ORDER_CONFIRM);
+$product = $_item->getProduct();
+$isVisibleProduct = $product->isVisibleInSiteVisibility();
+/** @var \Magento\Msrp\Helper\Data $helper */
+$helper = $this->helper('Magento\Msrp\Helper\Data');
+$canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinimalPriceLessMsrp($product);
 ?>
 <tbody class="cart item">
 <tr class="item info item-info">
@@ -82,25 +85,19 @@ $canApplyMsrp = $this->helper('Magento\Catalog\Helper\Data')->canApplyMsrp($_ite
             <span class="pricing msrp">
                 <span class="msrp notice"><?php echo __('See price before order confirmation.'); ?></span>
                 <?php $helpLinkId = 'cart-msrp-help-' . $_item->getId(); ?>
-                <?php $_product = $_item->getProduct(); ?>
-                <a href="#"
-                   class="action help map"
-                   id="<?php echo($helpLinkId);?>"
-                   data-mage-init='{"addToCart":{"popupId": "#<?php echo($helpLinkId);?>",
-                                                 "productName": "<?php echo $_product->getName() ?>",
-                                                 "realPrice": "<?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($_item->getCalculationPrice()) ?>",
-                                                 "msrpPrice": "<?php echo $this->helper('Magento\Core\Helper\Data')->currency($_product->getMsrp(),true,true) ?>",
-                                                 "showAddToCart": false}}'><span><?php echo __("What's this?"); ?></span>
+                <?php $coreHelper = $this->helper('Magento\Core\Helper\Data'); ?>
+                <a href="#" class="action help map" id="<?php echo($helpLinkId); ?>" data-mage-init='{"addToCart":{"helpLinkId": "#<?php echo $helpLinkId;?>","productName": "<?php echo $product->getName(); ?>","showAddToCart": false}}'>
+                    <span><?php echo __("What's this?"); ?></span>
                 </a>
             </span>
             <?php $cols++; ?>
         </td>
     <?php else: ?>
 
-        <td class="col price" data-th="<?php echo $this->escapeHtml(__('Price')); ?>">
-            <?php echo $this->getUnitPriceHtml($_item); ?>
-            <?php $cols++; ?>
-        </td>
+    <td class="col price" data-th="<?php echo $this->escapeHtml(__('Price')); ?>">
+        <?php echo $this->getUnitPriceHtml($_item); ?>
+        <?php $cols++; ?>
+    </td>
 
     <?php endif; ?>
     <td class="col qty" data-th="<?php echo $this->escapeHtml(__('Qty')); ?>">

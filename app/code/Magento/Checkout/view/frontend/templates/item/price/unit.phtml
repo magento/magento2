@@ -26,8 +26,8 @@
 
 $_item = $this->getItem();
 ?>
-<span class="excl tax" data-th="<?php echo $this->escapeHtml(__('Excl. Tax')); ?>">
-    <span class="cart price">
+<span class="price-including-tax" data-label="<?php echo $this->escapeHtml(__('Excl. Tax')); ?>">
+    <span class="cart-price">
         <?php echo $this->helper('Magento\Checkout\Helper\Data')->formatPrice($_item->getCalculationPrice()) ?>
     </span>
 </span>

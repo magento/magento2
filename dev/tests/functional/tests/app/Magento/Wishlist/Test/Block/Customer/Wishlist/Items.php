@@ -27,6 +27,7 @@ namespace Magento\Wishlist\Test\Block\Customer\Wishlist;
 use Mtf\Block\Block;
 use Mtf\Client\Element;
 use Mtf\Client\Element\Locator;
+use Magento\Wishlist\Test\Block\Customer\Wishlist\Items\Product;
 
 /**
  * Class Items
@@ -35,22 +36,24 @@ use Mtf\Client\Element\Locator;
 class Items extends Block
 {
     /**
-     * Product name link selector
+     * Item product block
      *
      * @var string
      */
-    protected $productName = '//a[contains(@class,"product-item-link") and contains(.,"%s")]';
+    protected $itemBlock = '//li[.//a[contains(.,"%s")]]';
 
     /**
-     * Check that product present in wishlist
+     * Get item product block
      *
      * @param string $productName
-     * @return bool
+     * @return Product
      */
-    public function isProductPresent($productName)
+    public function getItemProductByName($productName)
     {
-        $productNameSelector = sprintf($this->productName, $productName);
-
-        return $this->_rootElement->find($productNameSelector, Locator::SELECTOR_XPATH)->isVisible();
+        $productBlock = sprintf($this->itemBlock, $productName);
+        return $this->blockFactory->create(
+            'Magento\Wishlist\Test\Block\Customer\Wishlist\Items\Product',
+            ['element' => $this->_rootElement->find($productBlock, Locator::SELECTOR_XPATH)]
+        );
     }
 }

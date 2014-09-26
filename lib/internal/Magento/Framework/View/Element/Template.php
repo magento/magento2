@@ -28,6 +28,7 @@ use Magento\Framework\App\Filesystem;
 /**
  * Base html block
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Template extends AbstractBlock
 {
@@ -128,6 +129,11 @@ class Template extends AbstractBlock
     protected $templateContext;
 
     /**
+     * @var \Magento\Framework\View\Page\Config
+     */
+    protected $pageConfig;
+
+    /**
      * Constructor
      *
      * @param Template\Context $context
@@ -141,6 +147,7 @@ class Template extends AbstractBlock
         $this->_storeManager = $context->getStoreManager();
         $this->_appState = $context->getAppState();
         $this->templateContext = $this;
+        $this->pageConfig = $context->getPageConfig();
         parent::__construct($context, $data);
     }
 

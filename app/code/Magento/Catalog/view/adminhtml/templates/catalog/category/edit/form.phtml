@@ -52,14 +52,92 @@
     </div>
     <div id="category_tab_content"></div>
 </form>
+<div data-id="information-dialog-category" style="display: none;">
+    <span class="information-message"><?php echo __('This operation can take much time'); ?><span>
+</div>
 <script type="text/javascript">
-require(['jquery', "mage/mage"], function($){
+require(['jquery', 'jquery/ui', "mage/mage"], function($){
+    var mageDialog = (function($) {
+        var self = {dialogOpened: false, callback: [], needShow: false};
+
+        self.callback = {ok: [], cancel: []};
+        self.createDialog = function () {
+            var onEvent = function (type, dialog) {
+                self.callback[type].forEach(function(call) {
+                    call();
+                });
+                $(dialog).dialog( "close" );
+            };
+
+            self.dialog = $('[data-id="information-dialog-category"]').dialog({
+                autoOpen:   false,
+                modal:      true,
+                dialogClass: 'popup-window',
+                resizable: false,
+                title: $.mage.__('Warning message'),
+                buttons: [
+                    {text: $.mage.__('Ok'), click: function() { onEvent('ok', this); }},
+                    {text: $.mage.__('Cancel'), click: function() { onEvent('cancel', this); } }
+                ],
+                open: function () {
+                    self.dialogOpened = true;
+                    self.callback.ok.push(function() {
+                        self.needShow = false;
+                    });
+                },
+                close: function(event, ui) {
+                    $(this).dialog('destroy');
+                    self.dialogOpened = false;
+                    self.callback = {ok: [], cancel: []};
+                    delete self.dialog;
+                }
+            });
+        };
+
+        return {
+            needToShow: function() {
+                self.needShow = true &&
+                    !!$('[data-ui-id="tabs-tab-general-information-fieldset-element-hidden-general-id"]').length;
+                return this;
+            },
+            isNeedShow: function() {
+                return self.needShow;
+            },
+            onOk: function(call) {
+                self.callback.ok.push(call);
+                return this;
+            },
+            onCancel: function(call) {
+                self.callback.cancel.push(call);
+                return this;
+            },
+            show: function() {
+                if (self.dialog == undefined) {
+                    self.createDialog();
+                }
+                if (self.dialogOpened ==  false) {
+                    self.dialog.dialog('open');
+                }
+                return this;
+            }
+        };
+    })(jQuery);
+    $(document).on('change', '[data-ui-id="urlkeyrenderer-text-general-url-key"]', function() {
+        mageDialog.needToShow();
+    });
     $.mage.extend('categoryForm', 'form', 'Magento_Catalog/catalog/category/form');
     $('#category_edit_form')
         .mage('categoryForm', {refreshUrl: '<?php echo $this->getRefreshPathUrl() ?>'})
         .mage('validation', {submitHandler: function(form){
-            form.submit();
-            displayLoadingMask();
+            if (mageDialog.isNeedShow()) {
+                mageDialog.onOk(function() {
+                    form.submit();
+                    displayLoadingMask();
+                }).show();
+            } else {
+                form.submit();
+                displayLoadingMask();
+            }
         }});
 });
 

@@ -31,13 +31,13 @@ interface QueryInterface
      * @param \Magento\Framework\Search\Adapter\Mysql\ScoreBuilder $scoreBuilder
      * @param \Magento\Framework\DB\Select $select
      * @param \Magento\Framework\Search\Request\QueryInterface $query
-     * @param bool $isNot
+     * @param string $conditionType
      * @return \Magento\Framework\DB\Select
      */
     public function build(
         ScoreBuilder $scoreBuilder,
         \Magento\Framework\DB\Select $select,
         \Magento\Framework\Search\Request\QueryInterface $query,
-        $isNot
+        $conditionType
     );
 }

@@ -53,7 +53,6 @@ class Sidebar extends AbstractCart implements IdentityInterface
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Catalog\Model\Resource\Url $catalogUrl
@@ -65,7 +64,6 @@ class Sidebar extends AbstractCart implements IdentityInterface
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Catalog\Model\Resource\Url $catalogUrl,
@@ -76,7 +74,7 @@ class Sidebar extends AbstractCart implements IdentityInterface
         $this->_checkoutHelper = $checkoutHelper;
         $this->_catalogUrl = $catalogUrl;
         $this->_checkoutCart = $checkoutCart;
-        parent::__construct($context, $catalogData, $customerSession, $checkoutSession, $data);
+        parent::__construct($context, $customerSession, $checkoutSession, $data);
         $this->_isScopePrivate = true;
     }
 

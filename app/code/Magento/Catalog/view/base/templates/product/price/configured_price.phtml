@@ -28,7 +28,7 @@
 $configuredPrice = $this->getPrice();
 $priceLabel = ($this->getPriceLabel() !== null) 
 	? $this->getPriceLabel()
-	: __('Price as configured:');
+	: __('Price as configured');
 ?>
 <p class="price-as-configured">
     <?php echo $this->renderAmount($configuredPrice->getAmount(), [

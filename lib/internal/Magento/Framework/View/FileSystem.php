@@ -118,7 +118,7 @@ class FileSystem
      *
      * @param string $fileId
      * @param array $params
-     * @return string
+     * @return string|false
      */
     public function getTemplateFileName($fileId, array $params = array())
     {

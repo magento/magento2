@@ -244,14 +244,6 @@ class TierPriceServiceTest extends \PHPUnit_Framework_TestCase
             )
         );
         $price = new \Magento\Catalog\Service\V1\Data\Product\TierPrice($priceBuilder);
-        $groupBuilder = $this->getMock(
-            '\Magento\Customer\Service\V1\Data\CustomerGroupBuilder',
-            array(),
-            array(),
-            '',
-            false
-        );
-
         $websiteMock = $this->getMockBuilder('Magento\Store\Model\Website')
             ->setMethods(['getId', '__wakeup'])
             ->disableOriginalConstructor()
@@ -260,9 +252,6 @@ class TierPriceServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->storeManagerMock->expects($this->once())->method('getWebsite')->will($this->returnValue($websiteMock));
 
-        $groupBuilder->expects($this->any())->method('getData')->will($this->returnValue(array('id' => 1)));
-        $group = new \Magento\Customer\Service\V1\Data\CustomerGroup($groupBuilder);
-        $this->groupServiceMock->expects($this->once())->method('getGroup')->will($this->returnValue($group));
         $this->productMock
             ->expects($this->once())
             ->method('getData')
@@ -367,16 +356,6 @@ class TierPriceServiceTest extends \PHPUnit_Framework_TestCase
             )
         );
         $price = new \Magento\Catalog\Service\V1\Data\Product\TierPrice($priceBuilder);
-        $groupBuilder = $this->getMock(
-            '\Magento\Customer\Service\V1\Data\CustomerGroupBuilder',
-            array(),
-            array(),
-            '',
-            false
-        );
-        $groupBuilder->expects($this->any())->method('getData')->will($this->returnValue(array('id' => 1)));
-        $group = new \Magento\Customer\Service\V1\Data\CustomerGroup($groupBuilder);
-        $this->groupServiceMock->expects($this->once())->method('getGroup')->will($this->returnValue($group));
         $this->productMock
             ->expects($this->once())
             ->method('getData')

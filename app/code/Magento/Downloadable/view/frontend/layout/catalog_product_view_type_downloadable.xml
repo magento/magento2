@@ -24,6 +24,9 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
+    <body>
+        <attribute name="class" value="page-product-downloadable"/>
+    </body>
     <referenceContainer name="product.info.type">
         <block class="Magento\Downloadable\Block\Catalog\Product\View\Type" name="product.info.downloadable" as="product_type_data" template="catalog/product/type.phtml">
             <block class="Magento\CatalogInventory\Block\Stockqty\DefaultStockqty" name="product.info.downloadable.extra" as="product_type_data_extra" template="stockqty/default.phtml"/>
@@ -36,7 +39,6 @@
                 <arguments>
                     <argument name="price_render" xsi:type="string">product.price.render.default</argument>
                     <argument name="price_type_code" xsi:type="string">link_price</argument>
-                    <argument name="display_msrp_help_message" xsi:type="string">1</argument>
                 </arguments>
             </block>
         </block>

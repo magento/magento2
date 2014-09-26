@@ -90,16 +90,24 @@ class Tax extends \Magento\Tax\Block\Sales\Order\Tax
      */
     public function getFullTaxInfo()
     {
-        /** @var $source \Magento\Sales\Model\Order */
-        $source = $this->getOrder();
-        $taxClassAmount = array();
-        if ($source instanceof \Magento\Sales\Model\Order) {
-            $taxClassAmount = $this->_taxHelper->getCalculatedTaxes($source);
-            if (empty($taxClassAmount)) {
-                $rates = $this->_taxOrderFactory->create()->getCollection()->loadByOrder($source)->toArray();
-                $taxClassAmount = $this->_taxCalculation->reproduceProcess($rates['items']);
-            }
+        $source = $this->getSource();
+        if (!$source instanceof \Magento\Sales\Model\Order\Invoice
+            && !$source instanceof \Magento\Sales\Model\Order\Creditmemo
+        ) {
+            $source = $this->getOrder();
         }
+
+        $taxClassAmount = [];
+        if (empty($source)) {
+            return $taxClassAmount;
+        }
+
+        $taxClassAmount = $this->_taxHelper->getCalculatedTaxes($source);
+        if (empty($taxClassAmount)) {
+            $rates = $this->_taxOrderFactory->create()->getCollection()->loadByOrder($source)->toArray();
+            $taxClassAmount = $this->_taxCalculation->reproduceProcess($rates['items']);
+        }
+
         return $taxClassAmount;
     }
 

@@ -59,7 +59,7 @@ class Page extends \Magento\Backend\Block\Template
     {
         parent::_construct();
 
-        $this->addBodyClass($this->_request->getFullActionName('-'));
+        $this->pageConfig->addBodyClass($this->_request->getFullActionName('-'));
     }
 
     /**
@@ -73,19 +73,6 @@ class Page extends \Magento\Backend\Block\Template
             $this->setData('lang', substr($this->_localeResolver->getLocaleCode(), 0, 2));
         }
         return $this->getData('lang');
-    }
-
-    /**
-     * Add CSS class to page body tag
-     *
-     * @param string $className
-     * @return $this
-     */
-    public function addBodyClass($className)
-    {
-        $className = preg_replace('#[^a-z0-9]+#', '-', strtolower($className));
-        $this->setBodyClass($this->getBodyClass() . ' ' . $className);
-        return $this;
     }
 
     /**

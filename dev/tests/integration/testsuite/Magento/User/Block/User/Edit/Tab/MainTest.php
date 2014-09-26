@@ -67,13 +67,18 @@ class MainTest extends \Magento\Backend\Utility\Controller
         $actualHtml = $this->_block->toHtml();
         $this->assertSelectCount(
             'input.required-entry[type="password"]',
-            0,
+            1,
             $actualHtml,
-            'All password fields have to be optional.'
+            'There should be 1 required password entry: current user password.'
         );
         $this->assertSelectCount('input.validate-admin-password[type="password"][name="password"]', 1, $actualHtml);
         $this->assertSelectCount(
             'input.validate-cpassword[type="password"][name="password_confirmation"]',
+            1,
+            $actualHtml
+        );
+        $this->assertSelectCount(
+            'input.validate-current-password[type="password"][name="' . Main::CURRENT_USER_PASSWORD_FIELD . '"]',
             1,
             $actualHtml
         );

@@ -142,6 +142,18 @@
 
     <xs:element type="containerReferenceType" name="referenceContainer"/>
 
+    <xs:element type="uiComponentType" name="ui_component">
+        <xs:annotation>
+            <xs:documentation>
+                Argument name must be unique in scope of all Blocks, Containers and other UI Components.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:key name="uiElementArgumentName">
+            <xs:selector xpath="./arguments/argument"></xs:selector>
+            <xs:field xpath="@name"></xs:field>
+        </xs:key>
+    </xs:element>
+
     <xs:element name="arguments" type="argumentsType"/>
     <xs:element name="container" type="containerType"/>
     <xs:element name="update" type="updateType"/>
@@ -151,6 +163,12 @@
     <xs:simpleType name="handlePageType">
         <xs:restriction base="xs:string">
             <xs:enumeration value="page"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="componentNameType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-zA-Z][a-zA-Z\d\-_\.]*"/>
         </xs:restriction>
     </xs:simpleType>
 
@@ -203,6 +221,7 @@
             <xs:element ref="container" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element ref="referenceBlock" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element ref="referenceContainer" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="ui_component" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute type="elementNameType" name="name"/>
         <xs:attribute type="xs:string" name="label"/>
@@ -233,11 +252,34 @@
             <xs:element ref="block" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element ref="container" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element ref="referenceBlock" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="ui_component" minOccurs="0" />
         </xs:sequence>
         <xs:attribute type="elementNameType" name="name" use="optional"/>
         <xs:attribute type="blockClassType" name="class" use="optional"/>
         <xs:attribute type="elementAliasType" name="as" use="optional"/>
         <xs:attribute type="xs:string" name="template" use="optional"/>
+        <xs:attribute type="elementPositionType" name="before" use="optional"/>
+        <xs:attribute type="elementPositionType" name="after" use="optional"/>
+        <xs:attribute type="elementOutputType" name="output" use="optional"/>
+        <xs:attribute type="xs:string" name="acl" use="optional"/>
+        <xs:attribute type="xs:string" name="ifconfig" use="optional"/>
+        <xs:attribute type="xs:string" name="group" use="optional" />
+        <xs:attribute type="xs:boolean" name="cacheable" default="true" use="optional"/>
+        <xs:attribute type="xs:int" name="ttl" use="optional"/>
+    </xs:complexType>
+
+    <xs:complexType name="uiComponentType" mixed="true">
+        <xs:annotation>
+            <xs:documentation>
+                Part of view that can generate appropriate content.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="arguments" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:attribute type="componentNameType" name="component" use="optional"/>
+        <xs:attribute type="elementNameType" name="name" use="optional"/>
+        <xs:attribute type="elementAliasType" name="as" use="optional"/>
         <xs:attribute type="elementPositionType" name="before" use="optional"/>
         <xs:attribute type="elementPositionType" name="after" use="optional"/>
         <xs:attribute type="elementOutputType" name="output" use="optional"/>
@@ -308,6 +350,7 @@
             <xs:element ref="referenceBlock" minOccurs="0" />
             <xs:element ref="referenceContainer" minOccurs="0"/>
             <xs:element ref="update" minOccurs="0" />
+            <xs:element ref="ui_component" minOccurs="0" />
         </xs:choice>
         <xs:attribute type="elementNameType" name="name" use="required"/>
     </xs:complexType>
@@ -321,6 +364,7 @@
             <xs:element ref="move" minOccurs="0" />
             <xs:element ref="referenceBlock" minOccurs="0" />
             <xs:element ref="update" minOccurs="0" />
+            <xs:element ref="ui_component" minOccurs="0" />
         </xs:choice>
         <xs:attribute type="elementNameType" name="name" use="required"/>
         <xs:attribute type="htmlTagType" name="htmlTag"/>

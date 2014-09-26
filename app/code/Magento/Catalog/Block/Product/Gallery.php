@@ -60,10 +60,7 @@ class Gallery extends \Magento\Framework\View\Element\Template
      */
     protected function _prepareLayout()
     {
-        $headBlock = $this->getLayout()->getBlock('head');
-        if ($headBlock) {
-            $headBlock->setTitle($this->getProduct()->getMetaTitle());
-        }
+        $this->pageConfig->setTitle($this->getProduct()->getMetaTitle());
         return parent::_prepareLayout();
     }
 

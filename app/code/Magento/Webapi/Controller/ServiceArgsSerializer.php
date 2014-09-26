@@ -150,6 +150,7 @@ class ServiceArgsSerializer
     protected function _createFromArray($class, $data)
     {
         $className = is_string($class) ? $class : $class->getName();
+        $data = is_array($data) ? $data : [];
         $builder = $this->_objectManager->create($className . "Builder");
         $class = new ClassReflection($className);
         foreach ($data as $propertyName => $value) {

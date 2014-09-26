@@ -24,11 +24,9 @@
  */
 -->
 <page layout="2columns-left" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd" label="Customer My Account (All Pages)" design_abstraction="custom">
-    <referenceBlock name="body.class">
-        <action method="addBodyClass">
-            <argument name="class" xsi:type="string">account</argument>
-        </action>
-    </referenceBlock>
+    <body>
+        <attribute name="class" value="account"/>
+    </body>
     <referenceContainer name="sidebar.main">
         <block class="Magento\Framework\View\Element\Html\Links" name="customer_account_navigation" before="-" template="Magento_Customer::account/navigation.phtml">
             <block class="Magento\Framework\View\Element\Html\Link\Current" name="customer-account-navigation-account-link">

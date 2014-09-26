@@ -59,7 +59,17 @@ class ActionTest extends \PHPUnit_Framework_TestCase
      */
     protected $_redirectMock;
 
-    /*
+    /**
+     * @var \Magento\Framework\App\ViewInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $viewMock;
+
+    /**
+     * @var \Magento\Framework\View\Page\Config|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $pageConfigMock;
+
+    /**
      * Full action name
      */
     const FULL_ACTION_NAME = 'module/controller/someaction';
@@ -114,6 +124,11 @@ class ActionTest extends \PHPUnit_Framework_TestCase
         );
         $this->_responseMock = $this->getMock('Magento\Framework\App\ResponseInterface', [], [], '', false);
 
+        $this->pageConfigMock = $this->getMock('Magento\Framework\View\Page\Config', ['getConfig'], [], '', false);
+        $this->viewMock = $this->getMock('Magento\Framework\App\ViewInterface');
+        $this->viewMock->expects($this->any())->method('getPage')->will($this->returnValue($this->pageConfigMock));
+        $this->pageConfigMock->expects($this->any())->method('getConfig')->will($this->returnValue(1));
+
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->action = $this->objectManagerHelper->getObject(
             'Magento\Framework\App\Action\ActionFake',
@@ -123,6 +138,7 @@ class ActionTest extends \PHPUnit_Framework_TestCase
                 'eventManager' => $this->_eventManagerMock,
                 'redirect' => $this->_redirectMock,
                 'actionFlag' => $this->_actionFlagMock,
+                'view' => $this->viewMock,
             ]
         );
         \Magento\Framework\Profiler::disable();

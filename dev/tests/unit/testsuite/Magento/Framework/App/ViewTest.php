@@ -60,6 +60,16 @@ class ViewTest extends \PHPUnit_Framework_TestCase
      */
     protected $_eventManagerMock;
 
+    /**
+     * @var \Magento\Framework\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resultPage;
+
+    /**
+     * @var \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $response;
+
     protected function setUp()
     {
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
@@ -71,13 +81,13 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->_layoutProcessor));
         $this->_actionFlagMock = $this->getMock('Magento\Framework\App\ActionFlag', array(), array(), '', false);
         $this->_eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface');
-        $resultPage = $this->getMockBuilder('Magento\Framework\View\Result\Page')
+        $this->resultPage = $this->getMockBuilder('Magento\Framework\View\Result\Page')
             ->setConstructorArgs(
                 $helper->getConstructArguments('Magento\Framework\View\Result\Page', ['request' => $this->_requestMock])
             )
-            ->setMethods(['getLayout'])
+            ->setMethods(['getLayout', 'renderResult'])
             ->getMock();
-        $resultPage->expects($this->any())
+        $this->resultPage->expects($this->any())
             ->method('getLayout')
             ->will($this->returnValue($this->_layoutMock));
         $pageFactory = $this->getMockBuilder('Magento\Framework\View\Result\PageFactory')
@@ -86,14 +96,16 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $pageFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($resultPage));
+            ->will($this->returnValue($this->resultPage));
+
+        $this->response = $this->getMock('Magento\Framework\App\Response\Http', array(), array(), '', false);
 
         $this->_view = $helper->getObject(
             'Magento\Framework\App\View',
             array(
                 'layout' => $this->_layoutMock,
                 'request' => $this->_requestMock,
-                'response' => $this->getMock('Magento\Framework\App\Response\Http', array(), array(), '', false),
+                'response' => $this->response,
                 'configScope' => $this->_configScopeMock,
                 'eventManager' => $this->_eventManagerMock,
                 'actionFlag' => $this->_actionFlagMock,
@@ -168,62 +180,29 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('expectedvalue', $this->_view->getDefaultLayoutHandle());
     }
 
-    public function testAddActionLayoutHandlesWhenPageLayoutHandlesNotExist()
-    {
-        $defaultHandles = 'full_action_name';
-        $this->_requestMock->expects(
-            $this->exactly(2)
-        )->method(
-            'getFullActionName'
-        )->will(
-            $this->returnValue('Full_Action_Name')
-        );
-        $this->_layoutProcessor->expects(
-            $this->once()
-        )->method(
-            'addPageHandles'
-        )->with(
-            array($defaultHandles)
-        )->will(
-            $this->returnValue(false)
-        );
-        $this->_layoutProcessor->expects($this->once())->method('addHandle')->with($defaultHandles);
-        $this->_view->addActionLayoutHandles();
-    }
-
     public function testAddActionLayoutHandlesWhenPageLayoutHandlesExist()
     {
-        $this->_requestMock->expects(
-            $this->once()
-        )->method(
-            'getFullActionName'
-        )->will(
-            $this->returnValue('Full_Action_Name')
-        );
-        $this->_layoutProcessor->expects(
-            $this->once()
-        )->method(
-            'addPageHandles'
-        )->with(
-            array('full_action_name')
-        )->will(
-            $this->returnValue(true)
-        );
-        $this->_layoutProcessor->expects($this->never())->method('addHandle');
+        $this->_requestMock->expects($this->once())
+            ->method('getFullActionName')
+            ->will($this->returnValue('Full_Action_Name'));
+
+        $this->_layoutProcessor->expects($this->once())
+            ->method('addHandle')
+            ->with('full_action_name');
+
         $this->_view->addActionLayoutHandles();
     }
 
     public function testAddPageLayoutHandles()
     {
         $pageHandles = array('full_action_name', 'full_action_name_key_value');
-        $this->_requestMock->expects(
-            $this->once()
-        )->method(
-            'getFullActionName'
-        )->will(
-            $this->returnValue('Full_Action_Name')
-        );
-        $this->_layoutProcessor->expects($this->once())->method('addPageHandles')->with($pageHandles);
+        $this->_requestMock->expects($this->once())
+            ->method('getFullActionName')
+            ->will($this->returnValue('Full_Action_Name'));
+
+        $this->_layoutProcessor->expects($this->once())
+            ->method('addHandle')
+            ->with($pageHandles);
         $this->_view->addPageLayoutHandles(array('key' => 'value'));
     }
 
@@ -294,35 +273,24 @@ class ViewTest extends \PHPUnit_Framework_TestCase
 
     public function testRenderLayoutWhenOutputNotEmpty()
     {
-        $this->_actionFlagMock->expects(
-            $this->once()
-        )->method(
-            'get'
-        )->with(
-            '',
-            'no-renderLayout'
-        )->will(
-            $this->returnValue(false)
-        );
+        $this->_actionFlagMock->expects($this->once())
+            ->method('get')
+            ->with('', 'no-renderLayout')
+            ->will($this->returnValue(false));
         $this->_layoutMock->expects($this->once())->method('addOutputElement')->with('output');
-        $this->_layoutMock->expects($this->once())->method('getOutput');
+        $this->resultPage->expects($this->once())->method('renderResult')->with($this->response);
         $this->_view->renderLayout('output');
     }
 
     public function testRenderLayoutWhenOutputEmpty()
     {
-        $this->_actionFlagMock->expects(
-            $this->once()
-        )->method(
-            'get'
-        )->with(
-            '',
-            'no-renderLayout'
-        )->will(
-            $this->returnValue(false)
-        );
+        $this->_actionFlagMock->expects($this->once())
+            ->method('get')
+            ->with('', 'no-renderLayout')
+            ->will($this->returnValue(false));
+
         $this->_layoutMock->expects($this->never())->method('addOutputElement');
-        $this->_layoutMock->expects($this->once())->method('getOutput');
+        $this->resultPage->expects($this->once())->method('renderResult')->with($this->response);
         $this->_view->renderLayout();
     }
 }

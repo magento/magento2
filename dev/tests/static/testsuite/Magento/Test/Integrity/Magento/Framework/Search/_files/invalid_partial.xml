@@ -29,46 +29,41 @@
         </dimensions>
         <queries>
             <query xsi:type="boolQuery" name="sugested_search_container" boost="2">
-                <queryReference clause="not" ref="fulltext_search_query" />
+                <queryReference clause="not" ref="fulltext_search_query"/>
             </query>
-
             <query xsi:type="boolQuery" name="suggested_search_container_dd" boost="2">
-                <queryReference clause="not" ref="fulltext_search_query" />
+                <queryReference clause="not" ref="fulltext_search_query"/>
             </query>
-
-            <query xsi:type="matchQuery" name="fulltext_search_query" boost="5">
-                <match field="title" value="%request.title%" boost="2" />
-                <match field="description" value="%request.description%" />
+            <query xsi:type="matchQuery" value="$fulltext_search_query$" name="fulltext_search_query" boost="5">
+                <match field="title" boost="2"/>
+                <match field="description"/>
             </query>
-
             <query xsi:type="filteredQuery" name="promoted_documents_boost">
-                <queryReference />
+                <queryReference/>
             </query>
-
             <query xsi:type="filteredQuery" name="promoted_documents_boost2">
-                <filterReference  />
+                <filterReference/>
             </query>
         </queries>
         <filters>
-            <filter xsi:type="termFilter" name="promoted_documents_boost"  />
-            <filter xsi:type="rangeFilter" field="promoted" name="price_name" from="10" to="100" />
+            <filter xsi:type="termFilter" name="promoted_documents_boost" value="$promoted_documents_boost$"/>
+            <filter xsi:type="rangeFilter" field="promoted" name="price_name" from="10" to="100"/>
             <filter xsi:type="boolFilter" name="price_name1">
-                <filterReference clause="must" ref="price_name" />
-                <filterReference />
-                <filterReference clause="must" ref="price_name" />
+                <filterReference clause="must" ref="price_name"/>
+                <filterReference clause="must" ref="price_name"/>
             </filter>
-            <filter xsi:type="termFilter" name="promoted_boost" field="promoted" value="1" />
-            <filter xsi:type="rangeFilter" field="promoted" name="price" from="10" to="100" />
+            <filter xsi:type="termFilter" name="promoted_boost" field="promoted" value="1"/>
+            <filter xsi:type="rangeFilter" field="promoted" name="price" from="10" to="100"/>
         </filters>
         <aggregation>
-             <bucket xsi:type="termBucket" name="category_bucket" field="category">
+            <bucket xsi:type="termBucket" name="category_bucket" field="category">
 
-             </bucket>
-             <bucket xsi:type="rangeBucket" name="price_bucket" field="price">
+            </bucket>
+            <bucket xsi:type="rangeBucket" name="price_bucket" field="price">
                 <metrics>
-                    <metric type="sumasdasd" />
+                    <metric type="sumasdasd"/>
                 </metrics>
-             </bucket>
+            </bucket>
         </aggregation>
     </request>
 </requests>

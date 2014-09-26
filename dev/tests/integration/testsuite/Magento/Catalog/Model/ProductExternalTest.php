@@ -253,12 +253,17 @@ class ProductExternalTest extends \PHPUnit_Framework_TestCase
         $this->_model->setUrlPath('test');
         $this->assertEquals('test', $this->_model->getUrlPath());
 
+        $urlPathGenerator = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator'
+        );
+
         /** @var $category \Magento\Catalog\Model\Category */
         $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Category'
+            'Magento\Catalog\Model\Category',
+            ['data' => ['url_path' => 'category', 'entity_id' => 5, 'path_ids' => [2, 3, 5]]]
         );
-        $category->setUrlPath('category');
-        $this->assertEquals('category/test', $this->_model->getUrlPath($category));
+        $category->setOrigData();
+        $this->assertEquals('category/test', $urlPathGenerator->getUrlPath($this->_model, $category));
     }
 
     /**

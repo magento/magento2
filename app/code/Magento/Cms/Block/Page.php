@@ -141,13 +141,9 @@ class Page extends \Magento\Framework\View\Element\AbstractBlock implements \Mag
         }
 
         $this->pageConfig->addBodyClass('cms-' . $page->getIdentifier());
-
-        $head = $this->getLayout()->getBlock('head');
-        if ($head) {
-            $head->setTitle($page->getTitle());
-            $head->setKeywords($page->getMetaKeywords());
-            $head->setDescription($page->getMetaDescription());
-        }
+        $this->pageConfig->setTitle($page->getTitle());
+        $this->pageConfig->setKeywords($page->getMetaKeywords());
+        $this->pageConfig->setDescription($page->getMetaDescription());
 
         $pageMainTitle = $this->getLayout()->getBlock('page.main.title');
         if ($pageMainTitle) {

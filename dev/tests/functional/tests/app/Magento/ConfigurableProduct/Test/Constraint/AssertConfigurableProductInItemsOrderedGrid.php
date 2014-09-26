@@ -55,7 +55,7 @@ class AssertConfigurableProductInItemsOrderedGrid extends AssertProductInItemsOr
             return 0;
         }
         $attributesData = $product->getConfigurableAttributesData()['attributes_data'];
-        foreach ($checkoutData['configurable_options'] as $option) {
+        foreach ($checkoutData['options']['configurable_options'] as $option) {
             $itemOption = $attributesData[$option['title']]['options'][$option['value']];
             $itemPrice = $itemOption['is_percent'] == 'No'
                 ? $itemOption['pricing_value']

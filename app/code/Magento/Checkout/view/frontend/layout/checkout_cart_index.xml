@@ -36,7 +36,9 @@
                 <container name="checkout.cart.widget" as="checkout_cart_widget" label="Shopping Cart Items After"/>
                 <block class="Magento\Checkout\Block\Cart\Shipping" name="checkout.cart.shipping" as="shipping" template="cart/shipping.phtml"/>
                 <block class="Magento\Checkout\Block\Cart\Coupon" name="checkout.cart.coupon" as="coupon" template="cart/coupon.phtml"/>
-                <block class="Magento\Checkout\Block\Cart\Totals" name="checkout.cart.totals" as="totals" template="cart/totals.phtml"/>
+                <container name="checkout.cart.totals.container" as="totals" label="Shopping Cart Totals">
+                    <block class="Magento\Checkout\Block\Cart\Totals" name="checkout.cart.totals" template="cart/totals.phtml"/>
+                </container>
                 <block class="Magento\Checkout\Block\Cart" name="checkout.cart.methods.bottom" template="cart/methods.phtml">
                     <container name="checkout.cart.methods" as="methods" label="Payment Methods After Checkout Button">
                         <block class="Magento\Checkout\Block\QuoteShortcutButtons" name="checkout.cart.shortcut.buttons"/>

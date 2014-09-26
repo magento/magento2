@@ -41,14 +41,14 @@ $finalPriceModel = $this->getPrice();
     <?php if ($this->showRangePrice()): ?>
         <p class="price-from">
             <?php echo $this->renderAmount($finalPriceModel->getMinimalPrice(), [
-                'display_label'     => __('From:'),
+                'display_label'     => __('From'),
                 'price_id'          => $this->getPriceId('from-'),
                 'include_container' => true
             ]); ?>
         </p>
         <p class="price-to">
             <?php echo $this->renderAmount($finalPriceModel->getMaximalPrice(), [
-                'display_label'     => __('To:'),
+                'display_label'     => __('To'),
                 'price_id'          => $this->getPriceId('to-'),
                 'include_container' => true
             ]); ?>

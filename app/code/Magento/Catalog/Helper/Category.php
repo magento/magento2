@@ -34,8 +34,6 @@ use Magento\Store\Model\Store;
  */
 class Category extends AbstractHelper
 {
-    const XML_PATH_CATEGORY_URL_SUFFIX = 'catalog/seo/category_url_suffix';
-
     const XML_PATH_USE_CATEGORY_CANONICAL_TAG = 'catalog/seo/category_canonical_tag';
 
     const XML_PATH_CATEGORY_ROOT_ID = 'catalog/category/root_id';
@@ -46,13 +44,6 @@ class Category extends AbstractHelper
      * @var array
      */
     protected $_storeCategories = array();
-
-    /**
-     * Cache for category rewrite suffix
-     *
-     * @var array
-     */
-    protected $_categoryUrlSuffix = array();
 
     /**
      * Scope config
@@ -182,53 +173,6 @@ class Category extends AbstractHelper
         }
 
         return true;
-    }
-
-    /**
-     * Retrieve category rewrite suffix for store
-     *
-     * @param int $storeId
-     * @return string
-     */
-    public function getCategoryUrlSuffix($storeId = null)
-    {
-        if (is_null($storeId)) {
-            $storeId = $this->_storeManager->getStore()->getId();
-        }
-
-        if (!isset($this->_categoryUrlSuffix[$storeId])) {
-            $this->_categoryUrlSuffix[$storeId] = $this->_scopeConfig->getValue(
-                self::XML_PATH_CATEGORY_URL_SUFFIX,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                $storeId
-            );
-        }
-        return $this->_categoryUrlSuffix[$storeId];
-    }
-
-    /**
-     * Retrieve clear url for category as parent
-     *
-     * @param string $urlPath
-     * @param bool $slash
-     * @param int $storeId
-     * @return string
-     */
-    public function getCategoryUrlPath($urlPath, $slash = false, $storeId = null)
-    {
-        if (!$this->getCategoryUrlSuffix($storeId)) {
-            return $urlPath;
-        }
-
-        if ($slash) {
-            $regexp = '#(' . preg_quote($this->getCategoryUrlSuffix($storeId), '#') . ')/$#i';
-            $replace = '/';
-        } else {
-            $regexp = '#(' . preg_quote($this->getCategoryUrlSuffix($storeId), '#') . ')$#i';
-            $replace = '';
-        }
-
-        return preg_replace($regexp, $replace, $urlPath);
     }
 
     /**

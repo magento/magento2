@@ -75,7 +75,11 @@ abstract class AbstractCurrency extends \Magento\Framework\App\Config\Value
         if ($this->getData('groups/options/fields/allow/inherit')) {
             return explode(
                 ',',
-                (string)$this->_config->getValue('currency/options/allow', $this->getScope(), $this->getScopeId())
+                (string)$this->_config->getValue(
+                    \Magento\Directory\Model\Currency::XML_PATH_CURRENCY_ALLOW,
+                    $this->getScope(),
+                    $this->getScopeId()
+                )
             );
         }
         return $this->getData('groups/options/fields/allow/value');

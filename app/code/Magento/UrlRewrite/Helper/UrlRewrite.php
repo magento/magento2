@@ -36,23 +36,6 @@ class UrlRewrite extends \Magento\Framework\App\Helper\AbstractHelper
     // Anchor is not supported in request path, e.g. 'foo#bar'
 
     /**
-     * @var \Magento\UrlRewrite\Model\UrlRewrite\OptionProvider
-     */
-    protected $_urlrewrite;
-
-    /**
-     * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\UrlRewrite\Model\UrlRewrite\OptionProvider $urlrewrite
-     */
-    public function __construct(
-        \Magento\Framework\App\Helper\Context $context,
-        \Magento\UrlRewrite\Model\UrlRewrite\OptionProvider $urlrewrite
-    ) {
-        parent::__construct($context);
-        $this->_urlrewrite = $urlrewrite;
-    }
-
-    /**
      * Core func to validate request path
      * If something is wrong with a path it throws localized error message and error code,
      * that can be checked to by wrapper func to alternate error message
@@ -114,20 +97,11 @@ class UrlRewrite extends \Magento\Framework\App\Helper\AbstractHelper
                         __('Two and more slashes together are not permitted in url rewrite suffix')
                     );
                 case self::VERR_ANCHOR:
-                    throw new \Magento\Framework\Model\Exception(__('Anchor symbol (#) is not supported in url rewrite suffix'));
+                    throw new \Magento\Framework\Model\Exception(
+                        __('Anchor symbol (#) is not supported in url rewrite suffix')
+                    );
             }
         }
         return true;
-    }
-
-    /**
-     * Has redirect options set
-     *
-     * @param \Magento\UrlRewrite\Model\UrlRewrite $urlRewrite
-     * @return bool
-     */
-    public function hasRedirectOptions($urlRewrite)
-    {
-        return in_array($urlRewrite->getOptions(), $this->_urlrewrite->getRedirectOptions());
     }
 }

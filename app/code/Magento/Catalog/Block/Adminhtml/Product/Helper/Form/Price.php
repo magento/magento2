@@ -37,7 +37,7 @@ class Price extends \Magento\Framework\Data\Form\Element\Text
     protected $_taxData;
 
     /**
-     * @var Magneto_Core_Model_StoreManager
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 

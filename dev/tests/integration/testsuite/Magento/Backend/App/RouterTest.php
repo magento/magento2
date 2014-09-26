@@ -67,7 +67,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     public function getControllerClassNameDataProvider()
     {
         return array(
-            array('Magento_Index', 'process', 'Magento\Index\Controller\Adminhtml\Process'),
+            array('Magento_Module', 'controller', 'Magento\Module\Controller\Adminhtml\Controller'),
         );
     }
 

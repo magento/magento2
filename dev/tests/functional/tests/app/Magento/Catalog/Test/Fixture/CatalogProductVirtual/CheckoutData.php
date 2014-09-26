@@ -42,6 +42,11 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
     protected function getPreset($name)
     {
         $presets = [
+            'order_default' => [
+                'options' => [
+                    'qty' => 1
+                ]
+            ],
             '50_dollar_product' => [
                 'cartItem' => [
                     'price' => 50,

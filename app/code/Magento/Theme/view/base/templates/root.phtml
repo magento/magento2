@@ -23,17 +23,12 @@
  */
 ?>
 <!doctype html>
-<html xmlns="http://www.w3.org/1999/xhtml"<?php echo $htmlAttributes ?>>
-<head>
-    <meta charset="utf-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
-    <?php echo $headContent ?>
-</head>
-<body data-container="body" data-mage-init='{"loaderAjax": {}, "loader": {}}'<?php
-    echo !empty($bodyClasses) ? ' class="' . $bodyClasses . '"' : '';
-    echo !empty($bodyAttributes) ? $bodyAttributes : '';
-?>>
-<?php echo $layoutContent ?>
-</body>
+<html xmlns="http://www.w3.org/1999/xhtml" <?php echo $htmlAttributes ?>>
+    <head <?php echo $headAttributes ?>>
+        <?php echo $requireJs ?>
+        <?php echo $headContent ?>
+    </head>
+    <body data-container="body" data-mage-init='{"loaderAjax": {}, "loader": {}}' <?php echo $bodyAttributes ?>>
+        <?php echo $layoutContent ?>
+    </body>
 </html>

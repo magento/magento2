@@ -29,7 +29,6 @@
             <item name="nominal" instance="Magento\Sales\Model\Quote\Address\Total\Nominal" sort_order="50"/>
             <item name="subtotal" instance="Magento\Sales\Model\Quote\Address\Total\Subtotal" sort_order="100"/>
             <item name="shipping" instance="Magento\Sales\Model\Quote\Address\Total\Shipping" sort_order="250"/>
-            <item name="msrp" instance="Magento\Sales\Model\Quote\Address\Total\Msrp" sort_order="600"/>
             <item name="grand_total" instance="Magento\Sales\Model\Quote\Address\Total\Grand" sort_order="550"/>
         </group>
         <group name="nominal_totals">
