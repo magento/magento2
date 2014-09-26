@@ -72,7 +72,6 @@ class Random
             fclose($fp);
         } else {
             // fallback to mt_rand() if all else fails
-            mt_srand(10000000 * (double)microtime());
             for ($i = 0, $lc = strlen($chars) - 1; $i < $length; $i++) {
                 $rand = mt_rand(0, $lc); // random integer from 0 to $lc
                 $str .= $chars[$rand]; // random character in $chars
@@ -110,7 +109,6 @@ class Random
             fclose($fp);
         } else {
             // fallback to mt_rand() if all else fails
-            mt_srand(mt_rand() + (100000000 * microtime()) % PHP_INT_MAX);
             return mt_rand($min, $max); // random integer from $min to $max
         }
 
