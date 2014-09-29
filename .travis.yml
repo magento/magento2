@@ -17,6 +17,7 @@ matrix:
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -y -qq postfix
+  - composer install
 before_script:
   # mock mail
   - sudo service postfix stop
@@ -29,15 +30,16 @@ before_script:
   - sh -c "if [ '$TEST_SUITE' = 'integration' ] || [ '$TEST_SUITE' = 'integration_integrity' ]; then mysql -e 'create database magento_integration_tests;'; mv dev/tests/integration/etc/local-mysql.travis.xml.dist dev/tests/integration/etc/local-mysql.xml; fi"
   # Install tools for static tests
   - sh -c "if [ '$TEST_SUITE' = 'static_phpcs' ] || [ '$TEST_SUITE' = 'static_annotation' ]; then pear install pear/PHP_CodeSniffer-1.5.2; fi"
+  - echo 'memory_limit = -1' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - phpenv rehash;
 script:
   # Unit tests
-  - sh -c "if [ '$TEST_SUITE' = 'unit' ]; then phpunit -c dev/tests/unit/phpunit.xml.dist; fi"
+  sh -c "if [ '$TEST_SUITE' = 'unit' ]; then ./vendor/bin/phpunit -c dev/tests/unit/phpunit.xml.dist; fi"
   # Integration tests
-  - sh -c "if [ '$TEST_SUITE' = 'integration' ]; then cd dev/tests/integration/; phpunit -c phpunit.xml.dist; fi"
+  - sh -c "if [ '$TEST_SUITE' = 'integration' ]; then cd dev/tests/integration/; ./../../../vendor/bin/phpunit -c phpunit.xml.dist; fi"
   # Integration integrity tests
-  - sh -c "if [ '$TEST_SUITE' = 'integration_integrity' ]; then cd dev/tests/integration/; phpunit -c phpunit.xml.dist testsuite/Magento/Test/Integrity; fi"
+  - sh -c "if [ '$TEST_SUITE' = 'integration_integrity' ]; then cd dev/tests/integration/; ./../../../vendor/bin/phpunit -c phpunit.xml.dist testsuite/Magento/Test/Integrity; fi"
   # Static tests [Code Style]
-  - sh -c "if [ '$TEST_SUITE' = 'static_phpcs' ]; then cd dev/tests/static; phpunit -c phpunit.xml.dist --filter 'Magento\\\\Test\\\\Php\\\\LiveCodeTest::testCodeStyle'; fi"
+  - sh -c "if [ '$TEST_SUITE' = 'static_phpcs' ]; then cd dev/tests/static; ./../../../vendor/bin/phpunit -c phpunit.xml.dist --filter 'Magento\\\\Test\\\\Php\\\\LiveCodeTest::testCodeStyle'; fi"
   # Static tests [Code Style]
-  - sh -c "if [ '$TEST_SUITE' = 'static_annotation' ]; then cd dev/tests/static; phpunit -c phpunit.xml.dist --filter 'Magento\\\\Test\\\\Php\\\\LiveCodeTest::testAnnotationStandard'; fi"
+  - sh -c "if [ '$TEST_SUITE' = 'static_annotation' ]; then cd dev/tests/static; ./../../../vendor/bin/phpunit -c phpunit.xml.dist --filter 'Magento\\\\Test\\\\Php\\\\LiveCodeTest::testAnnotationStandard'; fi"
