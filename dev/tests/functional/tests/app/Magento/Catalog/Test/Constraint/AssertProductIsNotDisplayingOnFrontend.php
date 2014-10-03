@@ -168,7 +168,7 @@ class AssertProductIsNotDisplayingOnFrontend extends AbstractConstraint
         }
 
         if ($isProductVisible) {
-            $errors[] = '- product with name "{$product->getName()}" is found in this category.';
+            $errors[] = "- product with name '{$product->getName()}' is found in this category.";
         }
 
         return $errors;

@@ -166,7 +166,7 @@ class CreateWithAttributeTest extends Functional
     protected function assertOnGrid(Product $product)
     {
         $configurableSearch = [
-            'sku' => $product->getProductSku(),
+            'sku' => $product->getSku(),
             'type' => 'Configurable Product',
         ];
         $productGridPage = Factory::getPageFactory()->getCatalogProductIndex();

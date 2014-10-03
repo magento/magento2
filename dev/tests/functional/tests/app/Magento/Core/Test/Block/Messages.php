@@ -69,11 +69,11 @@ class Messages extends Block
     protected $warningMessage = '[data-ui-id$=message-warning]';
 
     /**
-     * Check for success message
+     * Wait for success message
      *
      * @return bool
      */
-    public function assertSuccessMessage()
+    public function waitSuccessMessage()
     {
         return $this->waitForElementVisible($this->successMessage, Locator::SELECTOR_CSS);
     }

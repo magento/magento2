@@ -22,30 +22,28 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-namespace Magento\Bundle\Test\TestCase;
-
-use Magento\Wishlist\Test\TestCase\AddProductsToCartFromCustomerWishlistOnFrontendTest as AddProductsToCartFromWishlist;
+namespace Magento\Reports\Test\Block\Adminhtml\Product\Downloads;
 
 /**
- * Test Creation for Adding Bundle product from Wishlist to Cart
- *
- * Test Flow:
- *
- * Preconditions:
- * 1. Create customer and login to frontend
- * 2. Bundle product is created
- * 3. Add bundle product to customer's wishlist
- *
- * Steps:
- * 1. Navigate to My Account -> My Wishlist
- * 2. Fill qty and update wish list
- * 3. Click "Add to Cart"
- * 4. Perform asserts
- *
- * @group Wishlist_(CS)
- * @ZephyrId MAGETWO-25268
+ * Class Grid
+ * Downloads Report grid
  */
-class AddBundleProductToCartFromCustomerWishlistOnFrontendTest extends AddProductsToCartFromWishlist
+class Grid extends \Magento\Backend\Test\Block\Widget\Grid
 {
-    //
+    /**
+     * Filters array mapping
+     *
+     * @var array
+     */
+    protected $filters = [
+        'name' => [
+            'selector' => 'input[name="name"]',
+        ],
+        'link_title' => [
+            'selector' => 'input[name="link_title"]',
+        ],
+        'sku' => [
+            'selector' => 'input[name="sku"]',
+        ],
+    ];
 }

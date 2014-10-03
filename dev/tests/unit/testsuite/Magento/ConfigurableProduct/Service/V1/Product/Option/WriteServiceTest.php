@@ -62,6 +62,11 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
     protected $optionBuilder;
 
     /**
+     * @var \Magento\ConfigurableProduct\Service\V1\Data\Option\ValueBuilder
+     */
+    protected $optionValueBuilder;
+
+    /**
      * @var \Magento\ConfigurableProduct\Service\V1\Product\Option\WriteService
      */
     protected $writeService;
@@ -164,8 +169,12 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->optionBuilder = $this->objectManager
-            ->getObject('Magento\ConfigurableProduct\Service\V1\Data\OptionBuilder');
+        $this->optionBuilder = $this->objectManager->getObject(
+            'Magento\ConfigurableProduct\Service\V1\Data\OptionBuilder'
+        );
+        $this->optionValueBuilder = $this->objectManager->getObject(
+            'Magento\ConfigurableProduct\Service\V1\Data\Option\ValueBuilder'
+        );
     }
 
     /**
@@ -518,9 +527,9 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Webapi\Exception
+     * @expectedException \Magento\Framework\Exception\InputException
      */
-    public function testRemoveWebApiException()
+    public function testRemoveInputException()
     {
         $productSku = 'productSku';
 
@@ -543,19 +552,20 @@ class WriteServiceTest extends \PHPUnit_Framework_TestCase
      */
     private function getOption()
     {
+        $optionValueData = [
+            'index' => 1,
+            'price' => 12,
+            'percent' => true
+        ];
+        $optionValue = $this->optionValueBuilder->populateWithArray($optionValueData)->create();
         $data = [
             Option::ID => 1,
             Option::ATTRIBUTE_ID => 2,
             Option::LABEL => 'Test Label',
             Option::POSITION => 1,
+            Option::TYPE => 'select',
             Option::USE_DEFAULT => true,
-            Option::VALUES => [
-                [
-                    'index' => 1,
-                    'price' => 12,
-                    'percent' => true
-                ]
-            ]
+            Option::VALUES => [$optionValue]
         ];
 
         return $this->optionBuilder->populateWithArray($data)->create();

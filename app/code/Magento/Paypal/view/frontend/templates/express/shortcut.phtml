@@ -42,10 +42,6 @@ if ($this->isOrPositionBefore()) {
            alt="<?php echo __('Checkout with PayPal'); ?>"
            title="<?php echo __('Checkout with PayPal'); ?>"/>
     <?php if ($this->getConfirmationUrl() || $this->getIsInCatalogProduct()): ?>
-        <?php if ($this->getIsInCatalogProduct()): ?>
-            <input type="hidden" id="pp-checkout-url" name="return_url" value=""/>
-        <?php endif; ?>
-
         <?php
         $confirmationUrl = $this->getConfirmationUrl();
         $isInCatalogProduct = $this->getIsInCatalogProduct();
@@ -62,7 +58,7 @@ require(['jquery', 'Magento_Paypal/js/paypal-checkout'], function($){
         confirmUrl: "<?php echo !empty($confirmationUrl) ? $confirmationUrl : false ?>",
         isCatalogProduct: "<?php echo !empty($isInCatalogProduct) ? $isInCatalogProduct : false ?>",
         paypalCheckoutSelector: '#pp-checkout-url',
-        productAddToCartForm: '#product_addtocart_form'
+        shortcutContainerClass: '<?php echo "." . $shortcutHtmlId ?>'
     });
     
 });

@@ -66,7 +66,7 @@ class AssertProductReportByCustomerInGrid extends AbstractConstraint
         CatalogProductSimple $product = null,
         $gridStatus = ''
     ) {
-        $filter = $assertProductReviewInGrid->prepareFilter($product, $review, $gridStatus);
+        $filter = $assertProductReviewInGrid->prepareFilter($product, $review->getData(), $gridStatus);
 
         $customerReportReview->open();
         $customerReportReview->getGridBlock()->openReview($customer);

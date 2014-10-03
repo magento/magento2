@@ -42,8 +42,10 @@ define([
                     }
                 }
                 if (this.options.isCatalogProduct) {
-                    $(this.options.paypalCheckoutSelector).val(returnUrl);
-                    $(this.options.productAddToCartForm).submit();
+                    // find the form from which the button was clicked
+                    var form  = $(this.options.shortcutContainerClass).closest("form");
+                    $(form).find(this.options.paypalCheckoutSelector).val(returnUrl);
+                    $(form).submit();
                 } else {
                     $.mage.redirect(returnUrl);
                 }

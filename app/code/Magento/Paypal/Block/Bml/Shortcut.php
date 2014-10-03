@@ -93,6 +93,7 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
      * @param string $startAction
      * @param string $alias
      * @param string $bmlMethodCode
+     * @param string $shortcutTemplate
      * @param array $data
      */
     public function __construct
@@ -105,6 +106,7 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
         $startAction,
         $alias,
         $bmlMethodCode,
+        $shortcutTemplate,
         array $data = array()
     ) {
         $this->_paymentData = $paymentData;
@@ -114,6 +116,7 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
         $this->_paymentMethodCode = $paymentMethodCode;
         $this->_startAction = $startAction;
         $this->_alias = $alias;
+        $this->setTemplate($shortcutTemplate);
         $this->_bmlMethodCode = $bmlMethodCode;
         parent::__construct($context, $data);
     }

@@ -54,12 +54,12 @@ class CreateConfigurableTest extends Functional
         $createProductPage->getProductForm()->fill($product);
         $createProductPage->getFormPageActions()->save($product);
         //Verifying
-        $createProductPage->getMessagesBlock()->assertSuccessMessage();
+        $createProductPage->getMessagesBlock()->waitSuccessMessage();
         //Flush cache
         $cachePage = Factory::getPageFactory()->getAdminCache();
         $cachePage->open();
         $cachePage->getActionsBlock()->flushMagentoCache();
-        $cachePage->getMessagesBlock()->assertSuccessMessage();
+        $cachePage->getMessagesBlock()->waitSuccessMessage();
         //Verifying
         $this->assertOnGrid($product);
         $this->assertOnFrontend($product);
@@ -75,7 +75,7 @@ class CreateConfigurableTest extends Functional
     {
         //Search data
         $configurableSearch = [
-            'sku' => $product->getProductSku(),
+            'sku' => $product->getSku(),
             'type' => 'Configurable Product'
         ];
         $variationSkus = $product->getVariationSkus();

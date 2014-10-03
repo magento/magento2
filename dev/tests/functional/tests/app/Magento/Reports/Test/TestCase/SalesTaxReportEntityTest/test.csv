@@ -1,0 +1,4 @@
+"taxRule/dataSet";"order/dataSet";"orderStatus";"report/report_type";"report/period_type";"report/from";"report/to";"report/show_order_statuses";"report/order_statuses";"report/show_empty_rows";"invoice/do_shipment";"taxAmount";"constraint";"issue"
+"custom_rule";"default";"Pending";"Order Created Date";"Day";"m/d/Y";"m/d/Y";"Any";"-";"-";"No";"$46.20";"assertTaxReportNotInGrid";""
+"custom_rule";"default";"Processing";"Order Created Date";"Month";"m/d/Y";"m/d/Y";"Specified";"Processing";"-";"No";"$46.20";"assertTaxReportInGrid";""
+"custom_rule";"default";"Complete";"Order Updated Date";"Year";"m/d/Y";"m/d/Y";"Specified";"Complete";"Yes";"Yes";"$46.20";"assertTaxReportInGrid";"Bug: MAGETWO-28611"

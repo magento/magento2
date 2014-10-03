@@ -102,11 +102,11 @@ class WriteService implements WriteServiceInterface
             $category->save();
         } catch (\Exception $e) {
             throw new CouldNotSaveException(
-                'Could not save product "%1" with position %2 to category %3',
+                'Could not save product "%product_id" with position %position to category %category_id',
                 [
-                    $productId,
-                    $productLink->getPosition(),
-                    $categoryId,
+                    'product_id' => $productId,
+                    'position' => $productLink->getPosition(),
+                    'category_id' => $categoryId
                 ],
                 $e
             );
@@ -137,10 +137,10 @@ class WriteService implements WriteServiceInterface
             $category->save();
         } catch (\Exception $e) {
             throw new CouldNotSaveException(
-                'Could not remove product "%1" from category with ID "%2"',
+                'Could not remove product "%product_sku" from category with ID "%category_id"',
                 [
-                    $productSku,
-                    $categoryId,
+                    'product_sku' => $productSku,
+                    'category_id' => $categoryId,
                 ],
                 $e
             );

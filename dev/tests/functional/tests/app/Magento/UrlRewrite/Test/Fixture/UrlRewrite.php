@@ -51,6 +51,12 @@ class UrlRewrite extends InjectableFixture
         'backend_type' => 'virtual',
     ];
 
+    protected $id_path = [
+        'attribute_code' => 'id_path',
+        'backend_type' => 'virtual',
+        'source' => 'Magento\UrlRewrite\Test\Fixture\UrlRewrite\IdPath',
+    ];
+
     protected $store_id = [
         'attribute_code' => 'store_id',
         'backend_type' => 'varchar',
@@ -93,6 +99,11 @@ class UrlRewrite extends InjectableFixture
     public function getId()
     {
         return $this->getData('id');
+    }
+
+    public function getIdPath()
+    {
+        return $this->getData('id_path');
     }
 
     public function getStoreId()

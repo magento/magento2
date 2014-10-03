@@ -64,6 +64,15 @@
             <description />
         </fields>
     </product-details>
+    <search-engine-optimization>
+        <class>\Magento\Backend\Test\Block\Widget\Tab</class>
+        <selector>#product_info_tabs_search-engine-optimization</selector>
+        <strategy>css selector</strategy>
+        <wrapper>product</wrapper>
+        <fields>
+            <url_key/>
+        </fields>
+    </search-engine-optimization>
     <websites>
         <class>\Magento\Backend\Test\Block\Widget\Tab</class>
         <selector>#product_info_tabs_websites</selector>
@@ -137,7 +146,6 @@
             <is_returnable>
                 <input>select</input>
             </is_returnable>
-            <url_key/>
             <gift_message_available>
                 <input>select</input>
             </gift_message_available>

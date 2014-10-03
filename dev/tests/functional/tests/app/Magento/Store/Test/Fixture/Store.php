@@ -44,9 +44,10 @@ class Store extends InjectableFixture
 
     protected $defaultDataSet = [
         'group_id' => ['dataSet' => 'default'],
-        'name' => 'Custom_Store_%isolation%',
-        'code' => 'code_%isolation%',
+        'name' => 'Default Store View',
+        'code' => 'default',
         'is_active' => 'Enabled',
+        'store_id' => 1,
     ];
 
     protected $store_id = [

@@ -37,7 +37,6 @@ use Magento\Framework\StoreManagerInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Webapi\Exception;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -105,6 +104,7 @@ class WriteService implements WriteServiceInterface
      */
     public function add($productSku, Option $option)
     {
+        $this->validateNewOptionData($option);
         $product = $this->productRepository->get($productSku);
         $allowedTypes = [ProductType::TYPE_SIMPLE, ProductType::TYPE_VIRTUAL, ConfigurableType::TYPE_CODE];
         if (!in_array($product->getTypeId(), $allowedTypes)) {
@@ -139,6 +139,46 @@ class WriteService implements WriteServiceInterface
     }
 
     /**
+     * Ensure that all necessary data is available for a new option creation.
+     *
+     * @param Option $option
+     * @return void
+     * @throws InputException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    public function validateNewOptionData(Option $option)
+    {
+        $inputException = new InputException();
+        if (!$option->getAttributeId()) {
+            $inputException->addError('Option attribute ID is not specified.');
+        }
+        if (!$option->getType()) {
+            $inputException->addError('Option type is not specified.');
+        }
+        if (!$option->getLabel()) {
+            $inputException->addError('Option label is not specified.');
+        }
+        if (!$option->getValues()) {
+            $inputException->addError('Option values are not specified.');
+        } else {
+            foreach ($option->getValues() as $optionValue) {
+                if (!$optionValue->getIndex()) {
+                    $inputException->addError('Value index is not specified for an option.');
+                }
+                if (null === $optionValue->getPrice()) {
+                    $inputException->addError('Price is not specified for an option.');
+                }
+                if (null === $optionValue->isPercent()) {
+                    $inputException->addError('Percent/absolute is not specified for an option.');
+                }
+            }
+        }
+        if ($inputException->wasErrorAdded()) {
+            throw $inputException;
+        }
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function update($productSku, $optionId, Option $option)
@@ -148,13 +188,13 @@ class WriteService implements WriteServiceInterface
         $configurableAttribute = $this->configurableAttributeFactory->create();
         $configurableAttribute->load($optionId);
         if (!$configurableAttribute->getId() || $configurableAttribute->getProductId() != $product->getId()) {
-            throw new NoSuchEntityException('Option with id "%1" not found', [$optionId]);
+            throw new NoSuchEntityException('Option with id "%option_id" not found', ['option_id' => $optionId]);
         }
         $configurableAttribute = $this->optionConverter->getModelFromData($option, $configurableAttribute);
         try {
             $configurableAttribute->save();
         } catch (\Exception $e) {
-            throw new CouldNotSaveException('Could not update option with id "%1"', [$optionId]);
+            throw new CouldNotSaveException('Could not update option with id "%option_id"', ['option_id' => $optionId]);
         }
 
         return true;
@@ -180,21 +220,19 @@ class WriteService implements WriteServiceInterface
     }
 
     /**
+     * Get product by SKU.
+     *
      * @param string $productSku
      * @return \Magento\Catalog\Model\Product
-     * @throws \Magento\Webapi\Exception
+     * @throws InputException
      */
     private function getProduct($productSku)
     {
         $product = $this->productRepository->get($productSku);
         if (ConfigurableType::TYPE_CODE !== $product->getTypeId()) {
-            throw new Exception(
-                'Product with specified sku: "%1" is not a configurable product',
-                Exception::HTTP_FORBIDDEN,
-                Exception::HTTP_FORBIDDEN,
-                [
-                    $product->getSku()
-                ]
+            throw new InputException(
+                'Product with specified sku: "%sku" is not a configurable product',
+                ['sku' => $product->getSku()]
             );
         }
         return $product;

@@ -59,7 +59,7 @@ class BackendCustomerCreateTest extends Functional
         $customerPage->getPageActionsBlock()->addNew();
         $customerCreatePage->getCustomerForm()->fillCustomer($customerFixture);
         $customerCreatePage->getPageActionsBlock()->saveAndContinue();
-        $customerCreatePage->getMessagesBlock()->assertSuccessMessage();
+        $customerCreatePage->getMessagesBlock()->waitSuccessMessage();
 
         //Verifying
         $customerPage->open();

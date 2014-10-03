@@ -67,12 +67,12 @@ class LinksPurchasedSeparatelyTest extends Functional
         $productBlockForm->fill($this->product, null, $category);
         $createProductPageNew->getFormPageActions()->save();
 
-        $createProductPageNew->getMessagesBlock()->assertSuccessMessage();
+        $createProductPageNew->getMessagesBlock()->waitSuccessMessage();
 
         $cachePage = Factory::getPageFactory()->getAdminCache();
         $cachePage->open();
         $cachePage->getActionsBlock()->flushMagentoCache();
-        $cachePage->getMessagesBlock()->assertSuccessMessage();
+        $cachePage->getMessagesBlock()->waitSuccessMessage();
 
         $this->assertOnBackend();
         $this->assertOnFrontend();
@@ -88,7 +88,7 @@ class LinksPurchasedSeparatelyTest extends Functional
         $productGridPage = Factory::getPageFactory()->getCatalogProductIndex();
         $productGridPage->open();
         $gridBlock = $productGridPage->getProductGrid();
-        $this->assertTrue($gridBlock->isRowVisible(array('sku' => $this->product->getProductSku())));
+        $this->assertTrue($gridBlock->isRowVisible(['sku' => $this->product->getSku()]));
     }
 
     /**

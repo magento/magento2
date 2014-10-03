@@ -211,7 +211,8 @@ class User extends AbstractModel implements StorageInterface
                 '_roleFactory',
                 '_encryptor',
                 '_transportBuilder',
-                '_storeManager'
+                '_storeManager',
+                '_validatorBeforeSave'
             )
         );
     }

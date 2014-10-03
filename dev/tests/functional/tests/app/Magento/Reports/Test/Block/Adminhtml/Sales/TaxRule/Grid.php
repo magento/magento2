@@ -22,30 +22,13 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-namespace Magento\GroupedProduct\Test\TestCase;
-
-use Magento\Wishlist\Test\TestCase\AddProductsToCartFromCustomerWishlistOnFrontendTest as AddProductsToCartFromWishlist;
+namespace Magento\Reports\Test\Block\Adminhtml\Sales\TaxRule;
 
 /**
- * Test Creation for Adding Grouped product from Wishlist to Cart
- *
- * Test Flow:
- *
- * Preconditions:
- * 1. Create customer and login to frontend
- * 2. Grouped product is created
- * 3. Add grouped product to customer's wishlist
- *
- * Steps:
- * 1. Navigate to My Account -> My Wishlist
- * 2. Fill qty and update wish list
- * 3. Click "Add to Cart"
- * 4. Perform asserts
- *
- * @group Wishlist_(CS)
- * @ZephyrId MAGETWO-25268
+ * Class Grid
+ * Tax report grid
  */
-class AddGroupedProductToCartFromCustomerWishlistOnFrontendTest extends AddProductsToCartFromWishlist
+class Grid extends \Magento\Backend\Test\Block\Widget\Grid
 {
     //
 }

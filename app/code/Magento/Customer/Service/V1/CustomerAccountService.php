@@ -355,6 +355,7 @@ class CustomerAccountService implements CustomerAccountServiceInterface
         $this->checkPasswordStrength($newPassword);
         $customerModel->setPasswordHash($this->getPasswordHash($newPassword));
         $customerModel->save();
+        return true;
     }
 
     /**

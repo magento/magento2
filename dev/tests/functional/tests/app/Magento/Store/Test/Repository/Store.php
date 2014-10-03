@@ -43,6 +43,14 @@ class Store extends AbstractRepository
     {
         $this->_data['default'] = [
             'group_id' => ['dataSet' => 'default'],
+            'name' => 'Default Store View',
+            'code' => 'base',
+            'is_active' => 'Enabled',
+            'store_id' => 1,
+        ];
+
+        $this->_data['custom'] = [
+            'group_id' => ['dataSet' => 'default'],
             'name' => 'Custom_Store_%isolation%',
             'code' => 'code_%isolation%',
             'is_active' => 'Enabled',

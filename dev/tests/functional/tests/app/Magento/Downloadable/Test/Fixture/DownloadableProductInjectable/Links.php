@@ -128,10 +128,10 @@ class Links implements FixtureInterface
                             'number_of_downloads' => 3,
                             'sample' => [
                                 'sample_type_url' => 'Yes',
-                                'sample_url' => 'http://example3.com'
+                                'sample_url' => 'http://example.net'
                             ],
                             'file_type_url' => 'Yes',
-                            'file_link_url' => 'http://example3.com',
+                            'file_link_url' => 'http://example.net',
                             'is_shareable' => 'Yes',
                             'sort_order' => 0
                         ],
@@ -163,10 +163,10 @@ class Links implements FixtureInterface
                             'is_shareable' => 'Yes',
                             'sample' => [
                                 'sample_type_url' => 'Yes',
-                                'sample_url' => 'http://example.com/sample2'
+                                'sample_url' => 'http://example.net/sample2'
                             ],
                             'file_type_url' => 'Yes',
-                            'file_link_url' => 'http://example2.com',
+                            'file_link_url' => 'http://example.net/',
                             'sort_order' => 1
                         ],
                     ]
@@ -196,10 +196,10 @@ class Links implements FixtureInterface
                             'number_of_downloads' => 3,
                             'sample' => [
                                 'sample_type_url' => 'Yes',
-                                'sample_url' => 'http://example3.com'
+                                'sample_url' => 'http://example.net'
                             ],
                             'file_type_url' => 'Yes',
-                            'file_link_url' => 'http://example3.com',
+                            'file_link_url' => 'http://example.net',
                             'is_shareable' => 'Yes',
                             'sort_order' => 1
                         ],
@@ -209,10 +209,10 @@ class Links implements FixtureInterface
                             'number_of_downloads' => 5,
                             'sample' => [
                                 'sample_type_url' => 'Yes',
-                                'sample_url' => 'http://example3.com'
+                                'sample_url' => 'http://example.net'
                             ],
                             'file_type_url' => 'Yes',
-                            'file_link_url' => 'http://example3.com',
+                            'file_link_url' => 'http://example.net',
                             'is_shareable' => 'Yes',
                             'sort_order' => 2
                         ]

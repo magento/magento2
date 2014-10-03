@@ -43,7 +43,7 @@ class Block extends \Magento\Framework\App\Action\Action
         $blocks = json_decode($blocks);
         $handles = json_decode($handles);
 
-        $this->_view->loadLayout($handles);
+        $this->_view->loadLayout($handles, true, true, false);
         $data = array();
 
         $layout = $this->_view->getLayout();

@@ -24,14 +24,13 @@
 
 namespace Magento\Wishlist\Test\Constraint;
 
-use Mtf\Fixture\InjectableFixture;
 use Magento\Cms\Test\Page\CmsIndex;
 use Mtf\Constraint\AbstractConstraint;
 use Magento\Wishlist\Test\Page\WishlistIndex;
 
 /**
  * Class AssertWishlistIsEmpty
- * Check that there are no Products in Wishlist
+ * Assert wish list is empty on 'My Account' page
  */
 class AssertWishlistIsEmpty extends AbstractConstraint
 {
@@ -43,22 +42,19 @@ class AssertWishlistIsEmpty extends AbstractConstraint
     protected $severeness = 'low';
 
     /**
-     * Check that there are no Products in Wishlist
+     * Assert wish list is empty
      *
-     * @param InjectableFixture[] $products
      * @param CmsIndex $cmsIndex
      * @param WishlistIndex $wishlistIndex
      * @return void
      */
-    public function processAssert(array $products, CmsIndex $cmsIndex, WishlistIndex $wishlistIndex)
+    public function processAssert(CmsIndex $cmsIndex, WishlistIndex $wishlistIndex)
     {
         $cmsIndex->getLinksBlock()->openLink("My Wish List");
-        foreach ($products as $itemProduct) {
-            \PHPUnit_Framework_Assert::assertFalse(
-                $wishlistIndex->getItemsBlock()->getItemProductByName($itemProduct->getName())->isVisible(),
-                '"' . $itemProduct->getName() . '" product is present in Wishlist.'
-            );
-        }
+        \PHPUnit_Framework_Assert::assertTrue(
+            $wishlistIndex->getWishlistBlock()->isEmptyBlockVisible(),
+            'Wish list is not empty.'
+        );
     }
 
     /**
@@ -68,6 +64,6 @@ class AssertWishlistIsEmpty extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Wishlist is empty.';
+        return 'Wish list is empty.';
     }
 }

@@ -73,13 +73,13 @@ class EditBundleTest extends Functional
 
         $productGridPage->open();
         $gridBlock->searchAndOpen([
-            'sku' => $product->getProductSku(),
+            'sku' => $product->getSku(),
             'type' => 'Bundle Product'
         ]);
         $productForm->fill($editProduct);
         $editProductPage->getFormPageActions()->save();
         //Verifying
-        $editProductPage->getMessagesBlock()->assertSuccessMessage();
+        $editProductPage->getMessagesBlock()->waitSuccessMessage();
         // Flush cache
         $cachePage->open();
         $cachePage->getActionsBlock()->flushMagentoCache();
@@ -112,7 +112,7 @@ class EditBundleTest extends Functional
         $productGridPage = Factory::getPageFactory()->getCatalogProductIndex();
         $productGridPage->open();
         $gridBlock = $productGridPage->getProductGrid();
-        $this->assertTrue($gridBlock->isRowVisible(['sku' => $product->getProductSku()]));
+        $this->assertTrue($gridBlock->isRowVisible(['sku' => $product->getSku()]));
     }
 
     /**

@@ -65,12 +65,12 @@ class CreateTest extends Functional
         $productForm->fill($product);
         $createProductPage->getFormPageActions()->save();
         //Verifying
-        $createProductPage->getMessagesBlock()->assertSuccessMessage();
+        $createProductPage->getMessagesBlock()->waitSuccessMessage();
         //Flush cache
         $cachePage = Factory::getPageFactory()->getAdminCache();
         $cachePage->open();
         $cachePage->getActionsBlock()->flushMagentoCache();
-        $cachePage->getMessagesBlock()->assertSuccessMessage();
+        $cachePage->getMessagesBlock()->waitSuccessMessage();
         //Verifying
         $this->assertOnGrid($product);
         $this->assertOnCategory($product);
@@ -88,7 +88,7 @@ class CreateTest extends Functional
         $productGridPage->open();
         /** @var \Magento\Catalog\Test\Block\Adminhtml\Product\Grid $gridBlock */
         $gridBlock = $productGridPage->getProductGrid();
-        $this->assertTrue($gridBlock->isRowVisible(['sku' => $product->getProductSku()]));
+        $this->assertTrue($gridBlock->isRowVisible(['sku' => $product->getSku()]));
     }
 
     /**

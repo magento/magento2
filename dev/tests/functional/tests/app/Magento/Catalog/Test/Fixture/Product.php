@@ -245,7 +245,7 @@ class Product extends DataFixture
      *
      * @return string
      */
-    public function getProductSku()
+    public function getSku()
     {
         return $this->getData('fields/sku/value');
     }

@@ -18,34 +18,37 @@
  * versions in the future. If you wish to customize Magento for your
  * needs please refer to http://www.magentocommerce.com for more information.
  *
+ * @spi
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-namespace Magento\Downloadable\Test\TestCase;
+namespace Magento\Downloadable\Test\Block\Customer\Products;
 
-use Magento\Wishlist\Test\TestCase\AddProductsToCartFromCustomerWishlistOnFrontendTest as AddProductsToCartFromWishlist;
+use Mtf\Block\Block;
+use Mtf\Client\Element\Locator;
 
 /**
- * Test Creation for Adding Downloadable product from Wishlist to Cart
- *
- * Test Flow:
- *
- * Preconditions:
- * 1. Create customer and login to frontend
- * 2. Downloadable product is created
- * 3. Add downloadable product to customer's wishlist
- *
- * Steps:
- * 1. Navigate to My Account -> My Wishlist
- * 2. Fill qty and update wish list
- * 3. Click "Add to Cart"
- * 4. Perform asserts
- *
- * @group Wishlist_(CS)
- * @ZephyrId MAGETWO-25268
+ * Class ListProducts
+ * Downloadable Products block
  */
-class AddDownloadableProductToCartFromCustomerWishlistOnFrontendTest extends AddProductsToCartFromWishlist
+class ListProducts extends Block
 {
-    //
+    /**
+     * Link selector
+     *
+     * @var string
+     */
+    protected $link = '//a[contains(text(), "%s")]';
+
+    /**
+     * Open Link by title
+     *
+     * @param string $linkTitle
+     * @return void
+     */
+    public function openLink($linkTitle)
+    {
+        $this->_rootElement->find(sprintf($this->link, $linkTitle), Locator::SELECTOR_XPATH)->click();
+    }
 }

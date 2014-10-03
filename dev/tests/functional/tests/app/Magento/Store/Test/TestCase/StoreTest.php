@@ -54,7 +54,7 @@ class StoreTest extends Functional
         $newStorePage = Factory::getPageFactory()->getAdminSystemStoreNewStore();
         $newStorePage->getStoreForm()->fill($storeFixture);
         $newStorePage->getFormPageActions()->save();
-        $storeListPage->getMessagesBlock()->assertSuccessMessage();
+        $storeListPage->getMessagesBlock()->waitSuccessMessage();
         $this->assertContains(
             'The store view has been saved',
             $storeListPage->getMessagesBlock()->getSuccessMessages()
@@ -66,7 +66,7 @@ class StoreTest extends Functional
         $cachePage = Factory::getPageFactory()->getAdminCache();
         $cachePage->open();
         $cachePage->getActionsBlock()->flushCacheStorage();
-        $cachePage->getMessagesBlock()->assertSuccessMessage();
+        $cachePage->getMessagesBlock()->waitSuccessMessage();
 
         $configPage = Factory::getPageFactory()->getAdminSystemConfig();
         $configPage->open();
@@ -75,7 +75,7 @@ class StoreTest extends Functional
         $configGroup->open();
         $configGroup->setValue('select-groups-locale-fields-code-value', 'German (Germany)');
         $configPage->getPageActions()->save();
-        $configPage->getMessagesBlock()->assertSuccessMessage();
+        $configPage->getMessagesBlock()->waitSuccessMessage();
 
         $homePage = Factory::getPageFactory()->getCmsIndexIndex();
         $homePage->open();

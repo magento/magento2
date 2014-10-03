@@ -89,4 +89,14 @@
         <area>adminhtml</area>
         <class>Magento\Reports\Test\Page\Adminhtml\CustomerOrdersReport</class>
     </customerOrdersReport>
+    <salesTaxReport>
+        <mca>reports/report_sales/tax</mca>
+        <area>adminhtml</area>
+        <class>Magento\Reports\Test\Page\Adminhtml\SalesTaxReport</class>
+    </salesTaxReport>
+    <downloadsReport>
+        <mca>reports/report_product/downloads</mca>
+        <area>adminhtml</area>
+        <class>Magento\Reports\Test\Page\Adminhtml\DownloadsReport</class>
+    </downloadsReport>
 </page>

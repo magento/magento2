@@ -1,2 +1,0 @@
-"products";"qty";"constraint"
-"downloadableProductInjectable::with_two_separately_links";"2";"assertProductQtyInShoppingCart, assertProductsIsAbsentInWishlist"

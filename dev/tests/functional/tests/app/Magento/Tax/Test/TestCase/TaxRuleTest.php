@@ -57,7 +57,7 @@ class TaxRuleTest extends Functional
         $newTaxRulePage->getTaxRuleForm()->fill($fixture);
         $newTaxRulePage->getFormPageActions()->saveAndContinue();
         //Verifying
-        $newTaxRulePage->getMessagesBlock()->assertSuccessMessage();
+        $newTaxRulePage->getMessagesBlock()->waitSuccessMessage();
         $this->_assertOnGrid($fixture);
     }
 

@@ -58,14 +58,22 @@
             <argument name="startAction" xsi:type="string">paypal/express/start/button/1</argument>
             <argument name="checkoutType" xsi:type="string">Magento\Paypal\Model\Express\Checkout</argument>
             <argument name="alias" xsi:type="string">product.info.addtocart.paypal</argument>
+            <argument name="shortcutTemplate" xsi:type="string">express/shortcut.phtml</argument>
         </arguments>
     </type>
+    <virtualType name="Magento\Paypal\Block\Express\ShortcutContainer" type="Magento\Paypal\Block\Express\Shortcut">
+        <arguments>
+            <argument name="alias" xsi:type="string">product.info.addtocart.paypalShortcutContainer</argument>
+            <argument name="shortcutTemplate" xsi:type="string">express/shortcut/container.phtml</argument>
+        </arguments>
+    </virtualType>
     <virtualType name="Magento\Paypal\Block\PayflowExpress\Shortcut" type="Magento\Paypal\Block\Express\Shortcut">
         <arguments>
             <argument name="paymentMethodCode" xsi:type="const">Magento\Paypal\Model\Config::METHOD_WPP_PE_EXPRESS</argument>
             <argument name="startAction" xsi:type="string">paypal/payflowexpress/start/button/1</argument>
             <argument name="checkoutType" xsi:type="string">Magento\Paypal\Model\PayflowExpress\Checkout</argument>
             <argument name="alias" xsi:type="string">product.info.addtocart.payflow</argument>
+            <argument name="shortcutTemplate" xsi:type="string">express/shortcut.phtml</argument>
         </arguments>
     </virtualType>
     <type name="Magento\Paypal\Block\Bml\Shortcut">
@@ -74,6 +82,7 @@
             <argument name="startAction" xsi:type="string">paypal/bml/start/button/1</argument>
             <argument name="bmlMethodCode" xsi:type="const">Magento\Paypal\Model\Config::METHOD_WPP_BML</argument>
             <argument name="alias" xsi:type="string">product.info.addtocart.paypalbml</argument>
+            <argument name="shortcutTemplate" xsi:type="string">express/shortcut.phtml</argument>
         </arguments>
     </type>
     <type name="Magento\Payment\Model\Checks\Composite">

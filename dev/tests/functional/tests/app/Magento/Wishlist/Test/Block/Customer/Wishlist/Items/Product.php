@@ -40,6 +40,13 @@ class Product extends Form
     protected $addToCart = '.action.tocart';
 
     /**
+     * Selector for 'Remove item' button
+     *
+     * @var string
+     */
+    protected $remove = '[data-role="remove"]';
+
+    /**
      * Fill item product details
      *
      * @param array $fields
@@ -59,5 +66,15 @@ class Product extends Form
     public function clickAddToCart()
     {
         $this->_rootElement->find($this->addToCart)->click();
+    }
+
+    /**
+     * Remove product from wish list
+     *
+     * @return void
+     */
+    public function remove()
+    {
+        $this->_rootElement->find($this->remove)->click();
     }
 }

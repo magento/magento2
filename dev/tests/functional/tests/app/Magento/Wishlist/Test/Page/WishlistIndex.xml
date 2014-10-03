@@ -35,5 +35,10 @@
             <locator>#wishlist-view-form</locator>
             <strategy>css selector</strategy>
         </wishlistBlock>
+        <itemsBlock>
+            <class>Magento\Wishlist\Test\Block\Customer\Wishlist\Items</class>
+            <locator>.products-grid.wishlist</locator>
+            <strategy>css selector</strategy>
+        </itemsBlock>
     </blocks>
 </page>

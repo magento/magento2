@@ -42,7 +42,7 @@ use Mtf\TestCase\Injectable;
  * 6. Perform assertions
  *
  * @group ACL_(MX)
- * @ZephyrId MAGETWO-23413
+ * @ZephyrId MAGETWO-25699
  */
 class CreateAdminUserEntityTest extends Injectable
 {

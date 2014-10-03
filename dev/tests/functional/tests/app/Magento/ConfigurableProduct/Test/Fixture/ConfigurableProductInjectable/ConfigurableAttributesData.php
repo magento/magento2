@@ -690,6 +690,7 @@ class ConfigurableAttributesData implements FixtureInterface
             foreach ($attribute['options'] as $optionKey => $option) {
                 $compositeKey = "{$attributeKey}:{$optionKey}";
                 $optionId = $this->getAttributeOptionId($compositeKey);
+                $optionId = ($optionId !== null) ? $optionId : $rowKey . $optionKey;
 
                 $row['name'] .= '-' . $optionId;
                 $row['sku'] .= '_' . $optionId;

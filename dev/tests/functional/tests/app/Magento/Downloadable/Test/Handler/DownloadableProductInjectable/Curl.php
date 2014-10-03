@@ -26,6 +26,9 @@ namespace Magento\Downloadable\Test\Handler\DownloadableProductInjectable;
 
 use Mtf\System\Config;
 use Mtf\Fixture\FixtureInterface;
+use Mtf\Util\Protocol\CurlInterface;
+use Mtf\Util\Protocol\CurlTransport;
+use Mtf\Util\Protocol\CurlTransport\BackendDecorator;
 use Magento\Catalog\Test\Handler\CatalogProductSimple\Curl as ProductCurl;
 
 /**
@@ -103,5 +106,34 @@ class Curl extends ProductCurl implements DownloadableProductInjectableInterface
         $data = array_merge($data, $downloadableData);
 
         return $this->replaceMappingData($data);
+    }
+
+    /**
+     * Create product via curl
+     *
+     * @param array $data
+     * @param array $config
+     * @return array
+     * @throws \Exception
+     */
+    protected function createProduct(array $data, array $config)
+    {
+        $url = $this->getUrl($config);
+        $curl = new BackendDecorator(new CurlTransport(), new Config());
+        $curl->addOption(CURLOPT_HEADER, 1);
+        $curl->write(CurlInterface::POST, $url, '1.0', [], $data);
+        $response = $curl->read();
+        $curl->close();
+
+        if (!strpos($response, 'data-ui-id="messages-message-success"')) {
+            throw new \Exception("Product creation by curl handler was not successful! Response: $response");
+        }
+        preg_match("~Location: [^\s]*\/id\/(\d+)~", $response, $matches);
+        foreach ($data['downloadable']['link'] as $key => $link) {
+            preg_match('`"link_id":"(\d*?)","title":"' . $link['title'] . '"`', $response, $linkId);
+            $data['product']['checkout_data']['options']['links'][$key]['id'] = $linkId[1];
+        }
+
+        return ['id' => $matches[1], 'checkout_data' => $data['product']['checkout_data']];
     }
 }

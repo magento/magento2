@@ -93,7 +93,7 @@ class DeleteCategoryUrlRewriteEntityTest extends Injectable
         } else {
             $filter = ['id_path' => $urlRewrite->getIdPath()];
         }
-        $this->urlRewriteIndex->getUrlRewriteGrid()->searchAndOpen($filter);
+        $this->urlRewriteIndex->getUrlRedirectGrid()->searchAndOpen($filter);
         $this->urlRewriteEdit->getPageMainActions()->delete();
     }
 }

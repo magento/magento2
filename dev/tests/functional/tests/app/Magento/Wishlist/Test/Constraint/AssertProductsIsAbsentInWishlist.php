@@ -74,10 +74,9 @@ class AssertProductsIsAbsentInWishlist extends AbstractConstraint
         $itemBlock = $wishlistIndex->getWishlistBlock()->getProductItemsBlock();
 
         foreach ($products as $itemProduct) {
-            $productName = $itemProduct->getName();
             \PHPUnit_Framework_Assert::assertFalse(
-                $itemBlock->getItemProductByName($productName)->isVisible(),
-                'Product \'' . $productName . '\' is present in Wishlist on Frontend.'
+                $itemBlock->getItemProduct($itemProduct)->isVisible(),
+                'Product \'' . $itemProduct->getName() . '\' is present in Wishlist on Frontend.'
             );
         }
     }

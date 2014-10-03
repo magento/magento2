@@ -1,3 +1,24 @@
+0.1.0-alpha98
+=============
+* GitHub requests:
+   * [#678] (https://github.com/magento/magento2/issues/678) -- Fixed Travis CI builds
+* Functional tests:
+   * Create Sales Order Backend
+   * Delete Products from Wishlist
+   * Download Products Report
+   * Mass Orders Update
+   * Sales Tax Report
+* Fixed bugs:
+   * Fixed an issue where success message was not displayed after product review submit
+   * Fixed an issue where it was impossible to start checkout process using PayPal from the JavaScript pop-up window when the Display Actual Price option was set to On Gesture
+   * Fixed an issue where a fatal error was thrown after shipping method selection in PayPal Express Checkout
+   * Fixed an issue with parameters exceptions in SOAP response
+   * Fixed an issue where testGetRequestTokenOauthTimestampRefused unit test failed in certain cases
+   * Fixed an issue where TestCreateCustomer test thrown fatal error when making a SOAP request
+   * Fixed an issue with required parameters in WSDL
+   * Fixed an issue where Customer Account Service returned void response in the resetPassword method
+   * Fixed an issue where REST API failed during bundle product creation
+
 0.1.0-alpha97
 =============
  * Various improvements:

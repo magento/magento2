@@ -40,7 +40,6 @@ class AdvancedSearchTest extends Functional
      */
     public function testProductSearch()
     {
-        $this->markTestIncomplete('MAGETWO-27664');
         //Data
         $productFixture = Factory::getFixtureFactory()->getMagentoCatalogSimpleProduct();
         $productFixture->switchData('simple');

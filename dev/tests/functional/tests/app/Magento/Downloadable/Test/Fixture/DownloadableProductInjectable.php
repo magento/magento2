@@ -24,12 +24,7 @@
 
 namespace Magento\Downloadable\Test\Fixture;
 
-use Mtf\System\Config;
-use Mtf\Handler\HandlerFactory;
-use Mtf\Fixture\FixtureFactory;
 use Mtf\Fixture\InjectableFixture;
-use Mtf\Repository\RepositoryFactory;
-use Mtf\System\Event\EventManagerInterface;
 
 /**
  * Class DownloadableProductInjectable
@@ -52,44 +47,6 @@ class DownloadableProductInjectable extends InjectableFixture
     protected $handlerInterface = 'Magento\Downloadable\Test\Handler\DownloadableProductInjectable\DownloadableProductInjectableInterface';
     // @codingStandardsIgnoreEnd
 
-    /**
-     * Constructor
-     *
-     * @constructor
-     * @param Config $configuration
-     * @param RepositoryFactory $repositoryFactory
-     * @param FixtureFactory $fixtureFactory
-     * @param HandlerFactory $handlerFactory
-     * @param EventManagerInterface $eventManager
-     * @param array $data
-     * @param string $dataSet
-     * @param bool $persist
-     */
-    public function __construct(
-        Config $configuration,
-        RepositoryFactory $repositoryFactory,
-        FixtureFactory $fixtureFactory,
-        HandlerFactory $handlerFactory,
-        EventManagerInterface $eventManager,
-        array $data = [],
-        $dataSet = '',
-        $persist = false
-    ) {
-        if (!isset($data['url_key']) && isset($data['name'])) {
-            $data['url_key'] = trim(strtolower(preg_replace('#[^0-9a-z%]+#i', '-', $data['name'])), '-');
-        }
-        parent::__construct(
-            $configuration,
-            $repositoryFactory,
-            $fixtureFactory,
-            $handlerFactory,
-            $eventManager,
-            $data,
-            $dataSet,
-            $persist
-        );
-    }
-
     protected $dataConfig = [
         'type_id' => 'downloadable',
         'create_url_params' => [
@@ -102,6 +59,7 @@ class DownloadableProductInjectable extends InjectableFixture
     protected $defaultDataSet = [
         'name' => 'DownloadableProduct_%isolation%',
         'sku' => 'DownloadableProduct_%isolation%',
+        'url_key' => 'downloadableproduct_%isolation%',
         'price' => ['value' => 100.00],
         'tax_class_id' => ['dataSet' => 'Taxable Goods'],
         'description' => 'This is description for downloadable product',
@@ -585,7 +543,7 @@ class DownloadableProductInjectable extends InjectableFixture
         'is_required' => '0',
         'default_value' => '',
         'input' => 'text',
-        'group' => 'autosettings'
+        'group' => 'search-engine-optimization'
     ];
 
     protected $url_path = [

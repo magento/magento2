@@ -45,7 +45,7 @@ class EditConfigurableTest extends CreateConfigurableTest
         $configurable = Factory::getFixtureFactory()->getMagentoConfigurableProductConfigurableProduct();
         $configurable->switchData('configurable');
         $configurable->persist();
-        $productSku = $configurable->getProductSku();
+        $productSku = $configurable->getSku();
         //Preparing Data for editing product
         $editProduct = $configurable->getEditData();
 
@@ -62,7 +62,7 @@ class EditConfigurableTest extends CreateConfigurableTest
         $productForm->fill($editProduct);
         $createProductPage->getFormPageActions()->save();
         //Verifying
-        $createProductPage->getMessagesBlock()->assertSuccessMessage();
+        $createProductPage->getMessagesBlock()->waitSuccessMessage();
         //Flush cache
         $cachePage = Factory::getPageFactory()->getAdminCache();
         $cachePage->open();

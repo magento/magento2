@@ -63,12 +63,12 @@ class UnassignCategoryTest extends Functional
         $productForm->clearCategorySelect();
         $editProductPage->getFormPageActions()->save();
         //Verifying
-        $editProductPage->getMessagesBlock()->assertSuccessMessage();
+        $editProductPage->getMessagesBlock()->waitSuccessMessage();
         //Flush cache
         $cachePage = Factory::getPageFactory()->getAdminCache();
         $cachePage->open();
         $cachePage->getActionsBlock()->flushMagentoCache();
-        $cachePage->getMessagesBlock()->assertSuccessMessage();
+        $cachePage->getMessagesBlock()->waitSuccessMessage();
         //Verifying
         $this->assertAbsenceOnCategory($simple);
     }

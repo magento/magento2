@@ -62,7 +62,7 @@ class RoleId implements FixtureInterface
     {
         $this->params = $params;
         if (isset($data['dataSet']) && $data['dataSet'] !== '-') {
-                $this->role = $fixtureFactory->createByCode('adminUserRole', ['dataSet' => $data['dataSet']]);
+            $this->role = $fixtureFactory->createByCode('adminUserRole', ['dataSet' => $data['dataSet']]);
             if (!$this->role->hasData('role_id')) {
                 $this->role->persist();
             }

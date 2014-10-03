@@ -82,11 +82,6 @@ class Observer
     protected $_shortcutFactory;
 
     /**
-     * Shortcut template path
-     */
-    const SHORTCUT_TEMPLATE = 'express/shortcut.phtml';
-
-    /**
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Paypal\Helper\Hss $paypalHss
      * @param \Magento\Framework\Registry $coreRegistry
@@ -242,6 +237,7 @@ class Observer
         /** @var \Magento\Catalog\Block\ShortcutButtons $shortcutButtons */
         $shortcutButtons = $observer->getEvent()->getContainer();
         $blocks = [
+            'Magento\Paypal\Block\Express\ShortcutContainer',
             'Magento\Paypal\Block\Express\Shortcut',
             'Magento\Paypal\Block\PayflowExpress\Shortcut',
             'Magento\Paypal\Block\Bml\Shortcut',
@@ -265,8 +261,6 @@ class Observer
                 $observer->getEvent()->getIsCatalogProduct()
             )->setShowOrPosition(
                 $observer->getEvent()->getOrPosition()
-            )->setTemplate(
-                self::SHORTCUT_TEMPLATE
             );
             $shortcutButtons->addShortcut($shortcut);
         }

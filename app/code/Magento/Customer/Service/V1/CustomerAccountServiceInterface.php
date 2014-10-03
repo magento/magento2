@@ -194,7 +194,7 @@ interface CustomerAccountServiceInterface
      * @param string $customerId
      * @param string $resetToken Token sent to customer via e-mail
      * @param string $newPassword
-     * @return void
+     * @return bool true on success
      * @throws \Magento\Framework\Exception\State\InputMismatchException If token is mismatched
      * @throws \Magento\Framework\Exception\State\ExpiredException If token is expired
      * @throws \Magento\Framework\Exception\InputException If token or customer id is invalid

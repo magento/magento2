@@ -67,7 +67,7 @@ class Curl extends Conditions implements CmsPageInterface
      *
      * @var string
      */
-    protected $url = 'cms/page/save/back/edit/active_tab/content_section/';
+    protected $url = 'admin/cms_page/save/back/edit/active_tab/main_section/';
 
     /**
      * Post request for creating a cms page

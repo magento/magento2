@@ -53,7 +53,7 @@ class AssertUrlRewriteNotInGrid extends AbstractConstraint
         $urlRewriteIndex->open();
         $filter = ['request_path' => $productRedirect->getRequestPath()];
         \PHPUnit_Framework_Assert::assertFalse(
-            $urlRewriteIndex->getUrlRewriteGrid()->isRowVisible($filter),
+            $urlRewriteIndex->getUrlRedirectGrid()->isRowVisible($filter),
             'URL Rewrite with request path \'' . $productRedirect->getRequestPath() . '\' is present in grid.'
         );
     }

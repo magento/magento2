@@ -60,12 +60,12 @@ class CreateTest extends Functional
         $formBlock->fill($category);
         $actionsBlock->save();
         //Verifying
-        $messagesBlock->assertSuccessMessage();
+        $messagesBlock->waitSuccessMessage();
         //Flush cache
         $cachePage = Factory::getPageFactory()->getAdminCache();
         $cachePage->open();
         $cachePage->getActionsBlock()->flushMagentoCache();
-        $cachePage->getMessagesBlock()->assertSuccessMessage();
+        $cachePage->getMessagesBlock()->waitSuccessMessage();
         //Verifying
         $this->assertCategoryOnFrontend($category);
     }

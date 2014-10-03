@@ -299,12 +299,11 @@ class OauthTest extends \PHPUnit_Framework_TestCase
     /**
      * \Magento\Framework\Oauth\OauthInterface::ERR_TIMESTAMP_REFUSED
      *
-     * @expectedException \Magento\Framework\Oauth\OauthInputException
+     * @expectedException \Magento\Framework\Oauth\Exception
      * @dataProvider dataProviderForGetRequestTokenNonceTimestampRefusedTest
      */
     public function testGetRequestTokenOauthTimestampRefused($timestamp)
     {
-        $this->markTestIncomplete('MAGETWO-19388');
         $this->_setupConsumer();
         $this->_makeValidExpirationPeriod();
 
@@ -316,7 +315,11 @@ class OauthTest extends \PHPUnit_Framework_TestCase
 
     public function dataProviderForGetRequestTokenNonceTimestampRefusedTest()
     {
-        return array(array(0), array(time() + \Magento\Integration\Model\Oauth\Nonce\Generator::TIME_DEVIATION * 2));
+        return array(
+            array(0),
+            //Adding one day deviation
+            array(time() + \Magento\Integration\Model\Oauth\Nonce\Generator::TIME_DEVIATION + 86400)
+        );
     }
 
     protected function _setupNonce($isUsed = false, $timestamp = 0)

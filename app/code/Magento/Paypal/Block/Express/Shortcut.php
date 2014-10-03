@@ -121,6 +121,7 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
      * @param string $startAction
      * @param string $checkoutType
      * @param string $alias
+     * @param string $shortcutTemplate
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param array $data
      */
@@ -137,6 +138,7 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
         $startAction,
         $checkoutType,
         $alias,
+        $shortcutTemplate,
         \Magento\Checkout\Model\Session $checkoutSession = null,
         array $data = array()
     ) {
@@ -152,6 +154,7 @@ class Shortcut extends \Magento\Framework\View\Element\Template implements Catal
         $this->_startAction = $startAction;
         $this->_checkoutType = $checkoutType;
         $this->_alias = $alias;
+        $this->setTemplate($shortcutTemplate);
 
         parent::__construct($context, $data);
         $this->_isScopePrivate = true;
