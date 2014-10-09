@@ -180,4 +180,51 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->_model->removeAllItems();
         $this->assertEquals([], $this->_model->getItems());
     }
+
+    /**
+     * @dataProvider getArrayMockObjectOrder
+     */
+    public function testArrayIndexCollision($order)
+    {
+        $firstItemMock = $this->getMock('Magento\Framework\Object', [], [], '', false);
+        $secondItemMock = $this->getMock('Magento\Framework\Object', [], [], '', false);
+        $thirdItemMock = $this->getMock('Magento\Framework\Object', [], [], '', false);
+
+        $firstItemMock->expects($this->any())->method('getId')->will($this->returnValue(1));
+        $firstItemMock->expects($this->any())->method('getOtherId')->will($this->returnValue(1));
+
+        $secondItemMock->expects($this->any())->method('getId')->will($this->returnValue(null));
+        $secondItemMock->expects($this->any())->method('getOtherId')->will($this->returnValue(2));
+
+        $thirdItemMock->expects($this->any())->method('getId')->will($this->returnValue(null));
+        $thirdItemMock->expects($this->any())->method('getOtherId')->will($this->returnValue(3));
+
+
+        $this->assertEmpty($this->_model->getItems());
+        foreach (explode(',', $order) as $item) {
+            switch ($item) {
+                case '1':
+                    $this->_model->addItem($firstItemMock);
+                    break;
+                case '2':
+                    $this->_model->addItem($secondItemMock);
+                    break;
+                case '3':
+                    $this->_model->addItem($thirdItemMock);
+                    break;
+            }
+        }
+
+        $this->assertCount(3, $this->_model->getItems());
+        $this->_model->removeAllItems();
+        $this->assertEmpty($this->_model->getItems());
+
+    }
+
+    public function getArrayMockObjectOrder()
+    {
+        return array(
+            array('1,2,3'), array('3,2,1')
+        );
+    }
 }
