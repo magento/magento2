@@ -73,6 +73,8 @@ require([
         collapsableArea = $('> .collapse', collapsableWrapper),
         stockAvailabilityField = $('#quantity_and_stock_status'),
         qtyField = $('#qty'),
+        inventoryQty = $('#inventory_qty'),
+        inventoryAvailabilityField = $('#inventory_stock_availability'),
         currentProductTemplateControl = $('#product-template-suggest-container .action-dropdown > .action-toggle'),
         attributesInput = $("input[name='attributes[]']", variationsContainer),
         hasVariations = <?php echo ($this->getProduct()->getTypeId() == Configurable::TYPE_CODE || $this->getRequest()->has('attributes')) ? 'true' : 'false' ?>,
@@ -86,8 +88,7 @@ require([
         },
         enableElement = function (element) {
             if (!isLocked(element)) {
-            element.removeProp('disabled').trigger('change');
-
+                element.removeProp('disabled').trigger('change');
             }
         };
 
@@ -99,9 +100,11 @@ require([
 
             attributesInput.prop('disabled', false);
 
+            stockAvailabilityField.val(1);
+            inventoryQty.prop('disabled', true);
+            inventoryAvailabilityField.removeProp('disabled');
             disableElement(qtyField);
             enableElement(stockAvailabilityField);
-
             $.each($.mage.variationsAttributes($('#configurable-attributes-container')).getAttributes(), function() {
                 $('#attribute-' + this.code + '-container select').prop('disabled', true);
             })
@@ -113,7 +116,8 @@ require([
             currentProductTemplateControl
                 .removeClass('disabled')
                 .removeProp('disabled');
-
+            inventoryQty.removeProp('disabled');
+            inventoryAvailabilityField.prop('disabled', true);
             disableElement(stockAvailabilityField);
             enableElement(qtyField);
         })

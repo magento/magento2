@@ -107,8 +107,9 @@ class CreateDownloadableProductEntityTest extends Injectable
      * @param CatalogCategory $category
      * @return void
      */
-    public function testCreateDownloadableProduct(DownloadableProductInjectable $product, CatalogCategory $category)
+    public function test(DownloadableProductInjectable $product, CatalogCategory $category)
     {
+        // Steps
         $this->catalogProductIndex->open();
         $this->catalogProductIndex->getGridPageActionBlock()->addProduct('downloadable');
         $productBlockForm = $this->catalogProductNew->getProductForm();

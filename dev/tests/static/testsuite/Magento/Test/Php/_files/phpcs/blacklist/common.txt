@@ -44,3 +44,5 @@ dev/tests/integration/testsuite/Magento
 dev/tests/unit/testsuite/Magento
 # Newer version of phpcs does not complain about spacing issue.  This appears to be a bug in the phpcs version that is currently run in bamboo.
 app/code/Magento/Sales/Model/Order/Payment/Transaction.php
+vendor
+setup/vendor

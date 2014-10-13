@@ -382,7 +382,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
         $url = $this->_getUrl('wishlist/index/updateItemOptions');
         if ($itemId) {
-            $params = array('id' => $itemId, 'product' => $productId);
+            $params = array('id' => $itemId, 'product' => $productId, 'qty' => $item->getQty());
             return $this->_postDataHelper->getPostData($url, $params);
         }
 

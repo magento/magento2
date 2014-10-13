@@ -46,7 +46,7 @@ class Tax extends AbstractTotal
             $orderItemQty = $orderItem->getQtyOrdered();
 
             if (($orderItem->getTaxAmount() || $orderItem->getHiddenTaxAmount()) && $orderItemQty) {
-                if ($item->getOrderItem()->isDummy()) {
+                if ($item->getOrderItem()->isDummy() || $item->getQty() <= 0) {
                     continue;
                 }
 

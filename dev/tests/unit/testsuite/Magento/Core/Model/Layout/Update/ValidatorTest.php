@@ -42,16 +42,13 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
      */
     protected function _createValidator($layoutUpdate, $isSchemaValid = true)
     {
-        $modulesReader = $this->getMockBuilder('Magento\Framework\Module\Dir\Reader')
+        $filesystem = $this->getMockBuilder('Magento\Framework\App\Filesystem')
             ->disableOriginalConstructor()
             ->getMock();
-        $modulesReader->expects(
+        $filesystem->expects(
             $this->exactly(2)
         )->method(
-            'getModuleDir'
-        )->with(
-            'etc',
-            'Magento_Core'
+            'getPath'
         )->will(
             $this->returnValue('dummyDir')
         );
@@ -64,7 +61,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
             'xml' => '<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">' . trim(
                 $layoutUpdate
             ) . '</layout>',
-            'schemaFile' => 'dummyDir/layout_single.xsd'
+            'schemaFile' => 'dummyDir/Magento/Framework/View/Layout/etc/page_layout.xsd'
         );
 
         $exceptionMessage = 'validation exception';
@@ -82,7 +79,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
         $model = $this->_objectHelper->getObject(
             'Magento\Core\Model\Layout\Update\Validator',
-            array('modulesReader' => $modulesReader, 'domConfigFactory' => $domConfigFactory)
+            array('filesystem' => $filesystem, 'domConfigFactory' => $domConfigFactory)
         );
 
         return $model;
@@ -99,12 +96,12 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $model = $this->_createValidator($layoutUpdate, $isValid);
         $this->assertEquals(
+            $expectedResult,
             $model->isValid(
                 $layoutUpdate,
-                \Magento\Core\Model\Layout\Update\Validator::LAYOUT_SCHEMA_SINGLE_HANDLE,
+                \Magento\Core\Model\Layout\Update\Validator::LAYOUT_SCHEMA_PAGE_HANDLE,
                 false
-            ),
-            $expectedResult
+            )
         );
         $this->assertEquals($model->getMessages(), $messages);
     }
@@ -140,7 +137,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             $model->isValid(
                 $layoutUpdate,
-                \Magento\Core\Model\Layout\Update\Validator::LAYOUT_SCHEMA_SINGLE_HANDLE,
+                \Magento\Core\Model\Layout\Update\Validator::LAYOUT_SCHEMA_PAGE_HANDLE,
                 true
             ),
             $expectedResult

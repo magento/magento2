@@ -24,7 +24,7 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../app/code/Magento/Core/etc/page.xsd">
+        xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <referenceContainer name="header.container">
         <container name="header.panel.wrapper" htmlClass="panel wrapper" htmlTag="div" before="-" />
     </referenceContainer>

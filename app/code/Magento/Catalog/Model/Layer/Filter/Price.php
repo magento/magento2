@@ -76,7 +76,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
     /**
      * Catalog layer filter price algorithm
      *
-     * @var \Magento\Catalog\Model\Layer\Filter\Price\Algorithm
+     * @var \Magento\Framework\Search\Dynamic\Algorithm
      */
     protected $_priceAlgorithm;
 
@@ -101,9 +101,9 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * @param ItemFactory $filterItemFactory
      * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Layer $layer
-     * @param \Magento\Catalog\Model\Resource\Layer\Filter\PriceFactory $filterPriceFactory
+     * @param \Magento\Catalog\Model\Resource\Layer\Filter\Price $resource
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param Price\Algorithm $priceAlgorithm
+     * @param \Magento\Framework\Search\Dynamic\Algorithm $priceAlgorithm
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
@@ -113,16 +113,16 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
         \Magento\Catalog\Model\Layer\Filter\ItemFactory $filterItemFactory,
         \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Layer $layer,
-        \Magento\Catalog\Model\Resource\Layer\Filter\PriceFactory $filterPriceFactory,
+        \Magento\Catalog\Model\Resource\Layer\Filter\Price $resource,
         \Magento\Customer\Model\Session $customerSession,
-        \Magento\Catalog\Model\Layer\Filter\Price\Algorithm $priceAlgorithm,
+        \Magento\Framework\Search\Dynamic\Algorithm $priceAlgorithm,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         array $data = array()
     ) {
         $this->priceCurrency = $priceCurrency;
-        $this->_resource = $filterPriceFactory->create();
+        $this->_resource = $resource;
         $this->_customerSession = $customerSession;
         $this->_priceAlgorithm = $priceAlgorithm;
         $this->_coreRegistry = $coreRegistry;
@@ -212,7 +212,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
         $rangeKey = 'range_item_counts_' . $range;
         $items = $this->getData($rangeKey);
         if (is_null($items)) {
-            $items = $this->_getResource()->getCount($this, $range);
+            $items = $this->_getResource()->getCount($range);
             // checking max number of intervals
             $i = 0;
             $lastIndex = null;
@@ -310,9 +310,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
         if ($appliedInterval && $collection->getPricesCount() <= $this->getIntervalDivisionLimit()) {
             return array();
         }
-        $this->_priceAlgorithm->setPricesModel(
-            $this
-        )->setStatistics(
+        $this->_priceAlgorithm->setStatistics(
             $collection->getMinPrice(),
             $collection->getMaxPrice(),
             $collection->getPriceStandardDeviation(),
@@ -462,20 +460,6 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
     }
 
     /**
-     * Apply filter value to product collection based on filter range and selected value
-     *
-     * @param int $range
-     * @param int $index
-     * @return \Magento\Catalog\Model\Layer\Filter\Price
-     * @deprecated since 1.7.0.0
-     */
-    protected function _applyToCollection($range, $index)
-    {
-        $this->_getResource()->applyFilterToCollection($this, $range, $index);
-        return $this;
-    }
-
-    /**
      * Retrieve active customer group id
      *
      * @return int
@@ -588,60 +572,5 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
         }
 
         return parent::getClearLinkText();
-    }
-
-    /**
-     * Load range of product prices
-     *
-     * @param int $limit
-     * @param null|int $offset
-     * @param null|int $lowerPrice
-     * @param null|int $upperPrice
-     * @return array
-     */
-    public function loadPrices($limit, $offset = null, $lowerPrice = null, $upperPrice = null)
-    {
-        $prices = $this->_getResource()->loadPrices($this, $limit, $offset, $lowerPrice, $upperPrice);
-        if ($prices) {
-            $prices = array_map('floatval', $prices);
-        }
-
-        return $prices;
-    }
-
-    /**
-     * Load range of product prices, preceding the price
-     *
-     * @param float $price
-     * @param int $index
-     * @param null|int $lowerPrice
-     * @return array|false
-     */
-    public function loadPreviousPrices($price, $index, $lowerPrice = null)
-    {
-        $prices = $this->_getResource()->loadPreviousPrices($this, $price, $index, $lowerPrice);
-        if ($prices) {
-            $prices = array_map('floatval', $prices);
-        }
-
-        return $prices;
-    }
-
-    /**
-     * Load range of product prices, next to the price
-     *
-     * @param float $price
-     * @param int $rightIndex
-     * @param null|int $upperPrice
-     * @return array|false
-     */
-    public function loadNextPrices($price, $rightIndex, $upperPrice = null)
-    {
-        $prices = $this->_getResource()->loadNextPrices($this, $price, $rightIndex, $upperPrice);
-        if ($prices) {
-            $prices = array_map('floatval', $prices);
-        }
-
-        return $prices;
     }
 }

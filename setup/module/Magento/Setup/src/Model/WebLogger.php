@@ -65,7 +65,7 @@ class WebLogger implements LoggerInterface
      */
     private function open($mode)
     {
-        $this->resource = @fopen($this->logFile, $mode);
+        $this->resource = fopen($this->logFile, $mode);
     }
 
     /**
@@ -100,6 +100,14 @@ class WebLogger implements LoggerInterface
     public function log($message)
     {
         $this->writeToFile('<span class="text-info">' . $message . '</span>');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function logMeta($message)
+    {
+        $this->writeToFile('<span class="hidden">' . $message . '</span>');
     }
 
     /**
@@ -152,6 +160,6 @@ class WebLogger implements LoggerInterface
      */
     public function clear()
     {
-        @unlink($this->logFile);
+        unlink($this->logFile);
     }
 }

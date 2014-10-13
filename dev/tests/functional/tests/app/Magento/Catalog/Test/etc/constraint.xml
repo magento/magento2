@@ -455,4 +455,7 @@
     <assertProductNotSearchableBySku module="Magento_Catalog">
         <severeness>low</severeness>
     </assertProductNotSearchableBySku>
+    <assertCategoryRedirect module="Magento_Catalog">
+        <severeness>low</severeness>
+    </assertCategoryRedirect>
 </constraint>

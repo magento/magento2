@@ -27,9 +27,9 @@
 $_item = $this->getItem();
 ?>
 <tr>
-    <td class="col item" data-th="<?php echo $this->escapeHtml(__('Product Name'));?>"><strong class="product name"><?php echo $this->escapeHtml($this->getProductName()) ?></strong>
+    <td class="col item" data-th="<?php echo $this->escapeHtml(__('Product Name'));?>"><strong class="product name product-item-name"><?php echo $this->escapeHtml($this->getProductName()) ?></strong>
         <?php if ($_options = $this->getOptionList()):?>
-        <dl class="review-item-options">
+        <dl class="item-options">
             <?php foreach ($_options as $_option) : ?>
             <?php $_formatedOptionValue = $this->getFormatedOptionValue($_option) ?>
             <dt><?php echo $this->escapeHtml($_option['label']) ?></dt>

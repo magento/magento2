@@ -102,7 +102,7 @@ class Configure extends \Magento\Framework\View\Element\Template
     {
         // Set custom add to cart url
         $block = $this->getLayout()->getBlock('product.info');
-        if ($block) {
+        if ($block && $this->getWishlistItem()) {
             $url = $this->_wishlistData->getAddToCartUrl($this->getWishlistItem());
             $block->setCustomAddToCartUrl($url);
         }

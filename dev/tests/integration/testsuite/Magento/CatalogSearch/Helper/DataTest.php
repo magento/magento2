@@ -32,6 +32,11 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        /** @var \Magento\TestFramework\ObjectManager  $objectManager */
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var \Magento\Framework\App\Request\Http $request */
+        $request = $objectManager->get('\Magento\Framework\App\RequestInterface');
+        $request->setParam('q', 'five <words> here <being> tested');
         $this->_helper = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\CatalogSearch\Helper\Data'
         );
@@ -65,26 +70,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         /** @var \Magento\CatalogSearch\Helper\Data $catalogSearchHelper */
-        $catalogSearchHelper = $this->getMock(
-            'Magento\CatalogSearch\Helper\Data',
-            array('getQueryText'),
-            array(
-                $objectManager->get('Magento\Framework\App\Helper\Context'),
-                $objectManager->get('Magento\Framework\Stdlib\String'),
-                $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface'),
-                $objectManager->get('Magento\CatalogSearch\Model\QueryFactory'),
-                $objectManager->get('Magento\Framework\Escaper'),
-                $objectManager->get('Magento\Framework\Filter\FilterManager'),
-                $objectManager->get('Magento\Framework\StoreManagerInterface')
-            )
-        );
-        $catalogSearchHelper->expects(
-            $this->any()
-        )->method(
-            'getQueryText'
-        )->will(
-            $this->returnValue('five <words> here <being> tested')
-        );
+        $catalogSearchHelper = $objectManager->create('Magento\CatalogSearch\Helper\Data');
 
         $catalogSearchHelper->checkNotes();
 

@@ -49,7 +49,7 @@ $canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinima
                 <?php endif; ?>
             </strong>
             <?php if ($_options = $this->getOptionList()):?>
-                <dl class="cart-item-options">
+                <dl class="item-options">
                     <?php foreach ($_options as $_option) : ?>
                         <?php $_formatedOptionValue = $this->getFormatedOptionValue($_option) ?>
                         <dt><?php echo $this->escapeHtml($_option['label']) ?></dt>

@@ -24,7 +24,6 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../../app/code/Magento/Core/etc/page.xsd">
+        xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <move element="page.main.title" destination="product.info.main" before="-"/>
-    <move element="product.info.media" destination="content" before="product.info.main" />
 </page>

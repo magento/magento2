@@ -117,7 +117,8 @@ class CheckoutData implements FixtureInterface
                             'title' => 'attribute_key_1',
                             'value' => 'Content option %isolation%',
                         ]
-                    ]
+                    ],
+                    'qty' => 1
                 ],
                 'cartItem' => [
                     'price' => 340,

@@ -91,19 +91,24 @@ class Vat extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element
                     'countryElementId' => $countryElementId,
                     'groupIdHtmlId' => 'group_id',
                     'validateUrl' => $validateUrl,
-                    'vatValidMessage' => __('The VAT ID is valid. The current Customer Group will be used.'),
+                    'vatValidMessage' => __('The VAT ID is valid.'),
+                    'vatInvalidMessage' => __('The VAT ID entered (%s) is not a valid VAT ID.'),
+                    'vatValidAndGroupValidMessage' => __(
+                        'The VAT ID is valid. The current Customer Group will be used.'
+                    ),
+                    'vatValidAndGroupInvalidMessage' => __(
+                        'The VAT ID is valid but no Customer Group is assigned for it.'
+                    ),
                     'vatValidAndGroupChangeMessage' => __(
-                        'Based on the VAT ID, ' . 'the customer would belong to the Customer Group %s.'
-                    ) . "\n" . $groupMessage,
-                    'vatInvalidMessage' => __(
-                        'The VAT ID entered (%s) is not a valid VAT ID. ' .
-                        'The customer would belong to Customer Group %s.'
+                        'Based on the VAT ID, the customer would belong to the Customer Group %s.'
                     ) . "\n" . $groupMessage,
                     'vatValidationFailedMessage' => __(
-                        'There was an error validating the VAT ID. ' .
+                        'There was an error validating the VAT ID. '
+                    ),
+                    'vatCustomerGroupMessage' => __(
                         'The customer would belong to Customer Group %s.'
-                    ) . "\n" . $groupMessage,
-                    'vatErrorMessage' => __('There was an error validating the VAT ID.')
+                    ),
+                    'vatGroupErrorMessage' => __('There was an error detecting Customer Group.'),
                 )
             );
 

@@ -22,10 +22,10 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 ?>
-<div class="product details">
-    <strong class="product name"><a href="<?php echo $this->getProductUrl() ?>"><?php echo $this->escapeHtml($this->getProductName()) ?></a></strong>
+<div class="product details product-item-details">
+    <strong class="product name product-item-name"><a href="<?php echo $this->getProductUrl() ?>"><?php echo $this->escapeHtml($this->getProductName()) ?></a></strong>
     <?php if ($_options = $this->getOptionList()): ?>
-        <dl class="item options">
+        <dl class="item-options">
             <?php foreach ($_options as $_option) : ?>
                 <?php $_formatedOptionValue = $this->getFormatedOptionValue($_option) ?>
                 <dt><?php echo $this->escapeHtml($_option['label']) ?></dt>

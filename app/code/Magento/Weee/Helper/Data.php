@@ -31,6 +31,27 @@ use Magento\Store\Model\Website;
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
+    /**#@+
+     * Constants defined for keys of array, makes typos less likely
+     */
+    const KEY_WEEE_AMOUNT_INVOICED = 'weee_amount_invoiced';
+
+    const KEY_BASE_WEEE_AMOUNT_INVOICED = 'base_weee_amount_invoiced';
+
+    const KEY_WEEE_TAX_AMOUNT_INVOICED = 'weee_tax_amount_invoiced';
+
+    const KEY_BASE_WEEE_TAX_AMOUNT_INVOICED = 'base_weee_tax_amount_invoiced';
+
+    const KEY_WEEE_AMOUNT_REFUNDED = 'weee_amount_refunded';
+
+    const KEY_BASE_WEEE_AMOUNT_REFUNDED = 'base_weee_amount_refunded';
+
+    const KEY_WEEE_TAX_AMOUNT_REFUNDED = 'weee_tax_amount_refunded';
+
+    const KEY_BASE_WEEE_TAX_AMOUNT_REFUNDED = 'base_weee_tax_amount_refunded';
+
+    /**#@-*/
+
     /**
      * @var array
      */
@@ -532,6 +553,134 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             );
         }
         return $totalTaxForWeeeTax;
+    }
+
+    /**
+     * @param \Magento\Sales\Model\Order\Item $orderItem
+     * @return float
+     */
+    public function getWeeeAmountInvoiced($orderItem)
+    {
+        $weeeTaxAppliedAmounts = $this->getApplied($orderItem);
+        $totalAmountInvoiced = 0;
+        foreach ($weeeTaxAppliedAmounts as $weeeTaxAppliedAmount) {
+            if (isset($weeeTaxAppliedAmount[self::KEY_WEEE_AMOUNT_INVOICED])) {
+                $totalAmountInvoiced += $weeeTaxAppliedAmount[self::KEY_WEEE_AMOUNT_INVOICED];
+            }
+        }
+        return $totalAmountInvoiced;
+    }
+
+    /**
+     * @param \Magento\Sales\Model\Order\Item $orderItem
+     * @return float
+     */
+    public function getBaseWeeeAmountInvoiced($orderItem)
+    {
+        $weeeTaxAppliedAmounts = $this->getApplied($orderItem);
+        $baseTotalAmountInvoiced = 0;
+        foreach ($weeeTaxAppliedAmounts as $weeeTaxAppliedAmount) {
+            if (isset($weeeTaxAppliedAmount[self::KEY_BASE_WEEE_AMOUNT_INVOICED])) {
+                $baseTotalAmountInvoiced += $weeeTaxAppliedAmount[self::KEY_BASE_WEEE_AMOUNT_INVOICED];
+            }
+        }
+        return $baseTotalAmountInvoiced;
+    }
+
+    /**
+     * @param \Magento\Sales\Model\Order\Item $orderItem
+     * @return float
+     */
+    public function getWeeeTaxAmountInvoiced($orderItem)
+    {
+        $weeeTaxAppliedAmounts = $this->getApplied($orderItem);
+        $totalTaxInvoiced = 0;
+        foreach ($weeeTaxAppliedAmounts as $weeeTaxAppliedAmount) {
+            if (isset($weeeTaxAppliedAmount[self::KEY_WEEE_TAX_AMOUNT_INVOICED])) {
+                $totalTaxInvoiced += $weeeTaxAppliedAmount[self::KEY_WEEE_TAX_AMOUNT_INVOICED];
+            }
+        }
+        return $totalTaxInvoiced;
+    }
+
+    /**
+     * @param \Magento\Sales\Model\Order\Item $orderItem
+     * @return float
+     */
+    public function getBaseWeeeTaxAmountInvoiced($orderItem)
+    {
+        $weeeTaxAppliedAmounts = $this->getApplied($orderItem);
+        $baseTotalTaxInvoiced = 0;
+        foreach ($weeeTaxAppliedAmounts as $weeeTaxAppliedAmount) {
+            if (isset($weeeTaxAppliedAmount[self::KEY_BASE_WEEE_TAX_AMOUNT_INVOICED])) {
+                $baseTotalTaxInvoiced += $weeeTaxAppliedAmount[self::KEY_BASE_WEEE_TAX_AMOUNT_INVOICED];
+            }
+        }
+        return $baseTotalTaxInvoiced;
+    }
+
+    /**
+     * @param \Magento\Sales\Model\Order\Item $orderItem
+     * @return float
+     */
+    public function getWeeeAmountRefunded($orderItem)
+    {
+        $weeeTaxAppliedAmounts = $this->getApplied($orderItem);
+        $totalAmountRefunded = 0;
+        foreach ($weeeTaxAppliedAmounts as $weeeTaxAppliedAmount) {
+            if (isset($weeeTaxAppliedAmount[self::KEY_WEEE_AMOUNT_REFUNDED])) {
+                $totalAmountRefunded += $weeeTaxAppliedAmount[self::KEY_WEEE_AMOUNT_REFUNDED];
+            }
+        }
+        return $totalAmountRefunded;
+    }
+
+    /**
+     * @param \Magento\Sales\Model\Order\Item $orderItem
+     * @return float
+     */
+    public function getBaseWeeeAmountRefunded($orderItem)
+    {
+        $weeeTaxAppliedAmounts = $this->getApplied($orderItem);
+        $baseTotalAmountRefunded = 0;
+        foreach ($weeeTaxAppliedAmounts as $weeeTaxAppliedAmount) {
+            if (isset($weeeTaxAppliedAmount[self::KEY_BASE_WEEE_AMOUNT_REFUNDED])) {
+                $baseTotalAmountRefunded += $weeeTaxAppliedAmount[self::KEY_BASE_WEEE_AMOUNT_REFUNDED];
+            }
+        }
+        return $baseTotalAmountRefunded;
+    }
+
+    /**
+     * @param \Magento\Sales\Model\Order\Item $orderItem
+     * @return float
+     */
+    public function getWeeeTaxAmountRefunded($orderItem)
+    {
+        $weeeTaxAppliedAmounts = $this->getApplied($orderItem);
+        $totalTaxRefunded = 0;
+        foreach ($weeeTaxAppliedAmounts as $weeeTaxAppliedAmount) {
+            if (isset($weeeTaxAppliedAmount[self::KEY_WEEE_TAX_AMOUNT_REFUNDED])) {
+                $totalTaxRefunded += $weeeTaxAppliedAmount[self::KEY_WEEE_TAX_AMOUNT_REFUNDED];
+            }
+        }
+        return $totalTaxRefunded;
+    }
+
+    /**
+     * @param \Magento\Sales\Model\Order\Item $orderItem
+     * @return float
+     */
+    public function getBaseWeeeTaxAmountRefunded($orderItem)
+    {
+        $weeeTaxAppliedAmounts = $this->getApplied($orderItem);
+        $baseTotalTaxRefunded = 0;
+        foreach ($weeeTaxAppliedAmounts as $weeeTaxAppliedAmount) {
+            if (isset($weeeTaxAppliedAmount[self::KEY_BASE_WEEE_TAX_AMOUNT_REFUNDED])) {
+                $baseTotalTaxRefunded += $weeeTaxAppliedAmount[self::KEY_BASE_WEEE_TAX_AMOUNT_REFUNDED];
+            }
+        }
+        return $baseTotalTaxRefunded;
     }
 
     /**

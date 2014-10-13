@@ -100,6 +100,17 @@
 }
 
 //
+//    Reset image alignment in container
+//--------------------------------------
+.abstract-reset-image-wrapper {
+    height: auto;
+    padding: 0!important;
+    .product-image-photo {
+        position: static;
+    }
+}
+
+//
 //    Title for login blocks
 //--------------------------------------
 .abstract-login-block-title {
@@ -142,6 +153,15 @@
         .box {
             margin-bottom: @indent-base;
         }
+    }
+}
+
+//
+//    Account pages: order table summary
+//--------------------------------------
+.abstract-account-summary {
+    tr:first-child td {
+        border-top: @table-border-width @table-border-style @table-border-color;
     }
 }
 
@@ -492,9 +512,9 @@
     .price-including-tax,
     .price-excluding-tax,
     .weee {
-        white-space: nowrap;
         display: inline-block;
         .font-size(14);
+        white-space: nowrap;
     }
     .price-including-tax + .price-excluding-tax {
         display: inline-block;
@@ -540,6 +560,62 @@
         @_icon-font-content: @icon-up,
         @_icon-font-position: after
     );
+}
+
+//
+//    Checkout shipping methods title
+//--------------------------------------
+.abstract-methods-shipping-title {
+    .font-size(14);
+    margin: 20px 0 15px;
+    font-weight: @font-weight-bold;
+}
+
+//
+//    Checkout order review price
+//--------------------------------------
+.abstract-checkout-cart-price {
+}
+
+//
+//    Checkout order product name
+//--------------------------------------
+.abstract-checkout-product-name {
+}
+
+//
+//    Checkout order product name
+//--------------------------------------
+.abstract-product-items-summary {
+    td {
+        text-align: left;
+    }
+}
+
+//
+//    Mobile checkout order product name
+//--------------------------------------
+.responsive-smaller(@break) when (@break = @screen-m) {
+    .abstract-product-items-summary {
+        tbody {
+            .col {
+                padding: @indent-s-base 0 0;
+                &:last-child {
+                    padding-bottom: @indent-s-base
+                }
+            }
+        }
+        tfoot {
+            .mark {
+                padding-bottom: @indent-xs-base;
+                text-align: left;
+            }
+            .amount {
+                padding-top: 0;
+                text-align: left;
+            }
+        }
+    }
 }
 
 //
@@ -624,4 +700,11 @@
             );
         }
     }
+}
+
+//
+//    Abstract no display
+//--------------------------------------
+.abstract-no-display {
+    display: none;
 }

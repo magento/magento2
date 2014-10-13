@@ -112,7 +112,7 @@ class LayoutFilesTest extends \PHPUnit_Framework_TestCase
                 $typeAttr => 'object',
                 'value' => 'Magento\ConfigurableProduct\Model\Resource\Product\Collection\AssociatedProduct'
             ),
-            array($typeAttr => 'object', 'value' => 'Magento\Search\Model\Resource\Search\Grid\Collection'),
+            array($typeAttr => 'object', 'value' => 'Magento\Solr\Model\Resource\Search\Grid\Collection'),
             array($typeAttr => 'object', 'value' => 'Magento\Wishlist\Model\Resource\Item\Collection\Grid'),
             array(
                 $typeAttr => 'object',
@@ -120,7 +120,7 @@ class LayoutFilesTest extends \PHPUnit_Framework_TestCase
             ),
             array($typeAttr => 'helper', 'helper' => 'Magento\Pbridge\Helper\Data::getReviewButtonTemplate'),
             array($typeAttr => 'helper', 'helper' => 'Magento\Pbridge\Helper\Data::getContinueButtonTemplate'),
-            array($typeAttr => 'options', 'model' => 'Magento\Search\Model\Adminhtml\Search\Grid\Options'),
+            array($typeAttr => 'options', 'model' => 'Magento\Solr\Model\Adminhtml\Search\Grid\Options'),
             array($typeAttr => 'options', 'model' => 'Magento\Logging\Model\Resource\Grid\ActionsGroup'),
             array($typeAttr => 'options', 'model' => 'Magento\Logging\Model\Resource\Grid\Actions')
         );

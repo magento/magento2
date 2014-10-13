@@ -23,8 +23,8 @@
  */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-/** @var $query \Magento\CatalogSearch\Model\Query */
-$query = $objectManager->create('Magento\CatalogSearch\Model\Query');
+/** @var $query \Magento\Search\Model\Query */
+$query = $objectManager->create('Magento\Search\Model\Query');
 $query->setStoreId(1);
 $query->setQueryText(
     'query_text'

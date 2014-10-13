@@ -122,7 +122,8 @@ class DobTest extends \PHPUnit_Framework_TestCase
         $this->_block = new Dob(
             $context,
             $this->getMock('Magento\Customer\Helper\Address', array(), array(), '', false),
-            $this->_metadataService
+            $this->_metadataService,
+            $this->getMock('Magento\Framework\View\Element\Html\Date', array(), array(), '', false)
         );
     }
 

@@ -25,6 +25,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\View;
 
 use Magento\Customer\Service\V1\CustomerMetadataServiceInterface;
 use Magento\Eav\Model\AttributeDataFactory;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Order history block
@@ -124,8 +125,12 @@ class Info extends \Magento\Sales\Block\Adminhtml\Order\AbstractOrder
     {
         if ($this->getOrder()) {
             $customerGroupId = $this->getOrder()->getCustomerGroupId();
-            if (!is_null($customerGroupId)) {
-                return $this->_groupService->getGroup($customerGroupId)->getCode();
+            try {
+                if (!is_null($customerGroupId)) {
+                    return $this->_groupService->getGroup($customerGroupId)->getCode();
+                }
+            } catch (NoSuchEntityException $e) {
+                return '';
             }
         }
         return '';

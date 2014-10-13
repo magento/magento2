@@ -38,31 +38,51 @@ class AggregationFactory
     /**
      * @param \Magento\Framework\ObjectManager $objectManager
      */
-    public function __construct(
-        \Magento\Framework\ObjectManager $objectManager
-    ) {
+    public function __construct(\Magento\Framework\ObjectManager $objectManager)
+    {
         $this->objectManager = $objectManager;
     }
 
     /**
      * Create Aggregation instance
      *
-     * @param mixed $rawAggregation
-     * @return \Magento\Framework\Search\Aggregation
+     * @param array $rawAggregation
+     * @return \Magento\Framework\Search\Response\Aggregation
      */
-    public function create($rawAggregation)
+    public function create(array $rawAggregation)
     {
         $buckets = array();
-        foreach ($rawAggregation as $rawBucket) {
-            /** @var \Magento\Framework\Search\Bucket[] $buckets */
-            $buckets[] = $this->objectManager->create(
-                '\Magento\Framework\Search\Bucket',
+        foreach ($rawAggregation as $rawBucketName => $rawBucket) {
+            /** @var \Magento\Framework\Search\Response\Bucket[] $buckets */
+            $buckets[$rawBucketName] = $this->objectManager->create(
+                'Magento\Framework\Search\Response\Bucket',
                 [
-                    $rawBucket['name'],
-                    $rawBucket['value']
+                    'name' => $rawBucketName,
+                    'values' => $this->prepareValues((array)$rawBucket)
                 ]
             );
         }
-        return $this->objectManager->create('\Magento\Framework\Search\Aggregation', ['buckets' => $buckets]);
+        return $this->objectManager->create('\Magento\Framework\Search\Response\Aggregation', ['buckets' => $buckets]);
+    }
+
+    /**
+     * Prepare values list
+     *
+     * @param array $values
+     * @return \Magento\Framework\Search\Response\Aggregation\Value[]
+     */
+    private function prepareValues(array $values)
+    {
+        $valuesObjects = [];
+        foreach ($values as $name => $value) {
+            $valuesObjects[] = $this->objectManager->create(
+                'Magento\Framework\Search\Response\Aggregation\Value',
+                [
+                    'value' => $name,
+                    'metrics' => $value,
+                ]
+            );
+        }
+        return $valuesObjects;
     }
 }

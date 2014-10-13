@@ -28,7 +28,7 @@
 
     <xs:complexType name="requests">
         <xs:sequence>
-            <xs:element type="request" name="request" maxOccurs="unbounded">
+            <xs:element type="request" name="request" minOccurs="0" maxOccurs="unbounded">
                 <xs:keyref name="queryReference" refer="queryName">
                     <xs:selector xpath=".//queryReference"/>
                     <xs:field xpath="@ref"/>

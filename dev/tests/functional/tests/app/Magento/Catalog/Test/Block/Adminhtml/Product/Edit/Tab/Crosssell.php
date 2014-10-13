@@ -26,37 +26,40 @@
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab;
 
 use Mtf\Client\Element;
-use Magento\Backend\Test\Block\Widget\Tab;
-use Mtf\Factory\Factory;
+use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Crosssell\Grid as CrosssellGrid;
 
 /**
  * Class Crosssell
- * Cross-sell Tab
+ * Cross-sells Tab
  */
-class Crosssell extends Tab
+class Crosssell extends AbstractRelated
 {
-    const GROUP = 'crosssells';
+    /**
+     * Related products type
+     *
+     * @var string
+     */
+    protected $relatedType = 'cross_sell_products';
 
     /**
-     * Select cross-sells products
+     * Locator for cross sell products grid
      *
-     * @param array $products
-     * @param Element|null $context
-     * @return $this
+     * @var string
      */
-    public function fillFormTab(array $products, Element $context = null)
-    {
-        if (!isset($products['crosssell_products'])) {
-            return $this;
-        }
-        $element = $context ? : $this->_rootElement;
-        $crossSellBlock = Factory::getBlockFactory()->getMagentoCatalogAdminhtmlProductEditTabCrosssellGrid(
-            $element->find('#cross_sell_product_grid')
-        );
-        foreach ($products['crosssell_products']['value'] as $product) {
-            $crossSellBlock->searchAndSelect($product);
-        }
+    protected $crossSellGrid = '#cross_sell_product_grid';
 
-        return $this;
+    /**
+     * Return cross sell products grid
+     *
+     * @param Element|null $element [optional]
+     * @return CrosssellGrid
+     */
+    protected function getRelatedGrid(Element $element = null)
+    {
+        $element = $element ? $element : $this->_rootElement;
+        return $this->blockFactory->create(
+            '\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Crosssell\Grid',
+            ['element' => $element->find($this->crossSellGrid)]
+        );
     }
 }

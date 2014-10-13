@@ -24,19 +24,17 @@
 'use strict';
 angular.module('install', ['ngStorage'])
     .controller('installController', ['$scope', '$sce', '$timeout', '$localStorage', '$rootScope', 'progress', function ($scope, $sce, $timeout, $localStorage, $rootScope, progress) {
-        $scope.finished = false;
-        $scope.isStart = false;
-        $scope.console = false;
-        $scope.disabled = false;
+        $scope.isStarted = false;
+        $scope.isInProgress = false;
+        $scope.isConsole = false;
+        $scope.isDisabled = false;
         $scope.toggleConsole = function () {
-            $scope.console = $scope.console === false;
+            $scope.isConsole = $scope.isConsole === false;
         };
 
         $scope.checkProgress = function () {
-            $scope.isStart = true;
-            $scope.disabled = true;
+            $scope.displayProgress();
             progress.get(function (response) {
-
                 var log = '';
                 response.data.console.forEach(function (message) {
                     log = log + message + '<br>';
@@ -46,18 +44,13 @@ angular.module('install', ['ngStorage'])
                 if (response.data.success) {
                     $scope.progress = response.data.progress;
                     $scope.progressText = response.data.progress + '%';
-
-                    $timeout(function() {
-                        if (!$scope.finished) {
-                            $scope.checkProgress();
-                        }
-                    }, 1500);
                 } else {
-                    $scope.progress = 100;
-                    $scope.progressText = $scope.errorStatus;
-                    $scope.error = true;
-                    $scope.disabled = false;
-                    $rootScope.isMenuEnabled = true;
+                    $scope.displayFailure();
+                }
+                if ($scope.isInProgress) {
+                    $timeout(function() {
+                        $scope.checkProgress();
+                    }, 1500);
                 }
             });
         };
@@ -69,19 +62,30 @@ angular.module('install', ['ngStorage'])
                 'store': $localStorage.store,
                 'config': $localStorage.config
             };
-            $rootScope.isMenuEnabled = false;
+            $scope.isStarted = true;
+            $scope.isInProgress = true;
             progress.post(data, function (response) {
-                $localStorage.config.encrypt.key = response.key;
+                $scope.isInProgress = false;
                 if (response.success) {
-                    $scope.finished = true;
+                    $localStorage.config.encrypt.key = response.key;
                     $scope.nextState();
+                } else {
+                    $scope.displayFailure();
                 }
             });
-            progress.clear(function (response) {
-                if (response.data.success) {
-                    $scope.checkProgress();
-                }
+            progress.get(function () {
+                $scope.checkProgress();
             });
+        };
+        $scope.displayProgress = function() {
+            $scope.isFailed = false;
+            $scope.isDisabled = true;
+            $rootScope.isMenuEnabled = false;
+        };
+        $scope.displayFailure = function () {
+            $scope.isFailed = true;
+            $scope.isDisabled = false;
+            $rootScope.isMenuEnabled = true;
         };
     }])
     .service('progress', ['$http', function ($http) {
@@ -91,9 +95,6 @@ angular.module('install', ['ngStorage'])
             },
             post: function (data, callback) {
                 $http.post('install/start', data).success(callback);
-            },
-            clear: function (callback) {
-                $http.get('install/clear-progress').then(callback);
             }
         };
     }]);

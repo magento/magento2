@@ -30,5 +30,7 @@
         <plugin name="invalidatePriceIndexerOnImport" type="\Magento\CatalogImportExport\Model\Indexer\Product\Price\Plugin\Import" />
         <plugin name="invalidateStockIndexerOnImport" type="\Magento\CatalogImportExport\Model\Indexer\Stock\Plugin\Import" />
         <plugin name="invalidateEavIndexerOnImport" type="\Magento\CatalogImportExport\Model\Indexer\Product\Eav\Plugin\Import" />
+        <plugin name="invalidateProductCategoryIndexerOnImport" type="\Magento\CatalogImportExport\Model\Indexer\Product\Category\Plugin\Import" />
+        <plugin name="invalidateCategoryProductIndexerOnImport" type="\Magento\CatalogImportExport\Model\Indexer\Category\Product\Plugin\Import" />
     </type>
 </config>

@@ -38,6 +38,7 @@ class SchemaTest extends \PHPUnit_Framework_TestCase
                 $xmlFile = file_get_contents($filename);
                 $dom->loadXML($xmlFile);
                 $errors = libxml_get_errors();
+                libxml_clear_errors();
                 $this->assertEmpty($errors, print_r($errors, true));
 
                 $schemaLocations = [];

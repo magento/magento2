@@ -40,7 +40,6 @@ class Constant implements InterpreterInterface
         if (!isset($data['value']) || !defined($data['value'])) {
             throw new \InvalidArgumentException('Constant name is expected.');
         }
-        $constantName = $data['value'];
-        return constant($constantName);
+        return constant($data['value']);
     }
 }

@@ -24,6 +24,7 @@
 namespace Magento\Framework;
 
 use Magento\Framework\Shell\CommandRendererInterface;
+use Magento\Framework\Exception;
 
 /**
  * Shell command line wrapper encapsulates command execution and arguments escaping
@@ -66,12 +67,18 @@ class Shell implements ShellInterface
     {
         $command = $this->commandRenderer->render($command, $arguments);
         $this->log($command);
+
+        $disabled = explode(',', ini_get('disable_functions'));
+        if (in_array('exec', $disabled)) {
+            throw new Exception("exec function is disabled.");
+        }
+
         exec($command, $output, $exitCode);
         $output = implode(PHP_EOL, $output);
         $this->log($output);
         if ($exitCode) {
             $commandError = new \Exception($output, $exitCode);
-            throw new \Magento\Framework\Exception("Command `{$command}` returned non-zero exit code.", 0, $commandError);
+            throw new Exception("Command `{$command}` returned non-zero exit code.", 0, $commandError);
         }
         return $output;
     }

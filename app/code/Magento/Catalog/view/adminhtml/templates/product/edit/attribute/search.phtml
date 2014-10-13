@@ -37,7 +37,7 @@
         </div>
     </div>
 
-<script data-template-for="product-attribute-search" type="text/x-jquery-tmpl">
+<script data-template-for="product-attribute-search-<?php echo $this->getGroupId(); ?>" type="text/x-jquery-tmpl">
     <ul data-mage-init='{"menu":[]}'>
         {{if items.length}}
         {{each items}}

@@ -104,7 +104,7 @@ class Factory implements \Magento\Framework\ObjectManager\Factory
         foreach ($parameters as $parameter) {
             list($paramName, $paramType, $paramRequired, $paramDefault) = $parameter;
             $argument = null;
-            if (array_key_exists($paramName, $arguments)) {
+            if (!empty($arguments) && (isset($arguments[$paramName]) || array_key_exists($paramName, $arguments))) {
                 $argument = $arguments[$paramName];
             } else if ($paramRequired) {
                 if ($paramType) {
@@ -118,22 +118,22 @@ class Factory implements \Magento\Framework\ObjectManager\Factory
             } else {
                 $argument = $paramDefault;
             }
-            if ($paramType && !is_object($argument) && $argument !== $paramDefault) {
-                if (!is_array($argument) || !isset($argument['instance'])) {
+            if ($paramType && $argument !== $paramDefault && !is_object($argument)) {
+                if (!isset($argument['instance']) || !is_array($argument)) {
                     throw new \UnexpectedValueException(
                         'Invalid parameter configuration provided for $' . $paramName . ' argument of ' . $requestedType
                     );
                 }
                 $argumentType = $argument['instance'];
-                $isShared = (isset($argument['shared']) ? $argument['shared'] :$this->config->isShared($argumentType));
+                $isShared = (isset($argument['shared']) ? $argument['shared'] : $this->config->isShared($argumentType));
                 $argument = $isShared
                     ? $this->objectManager->get($argumentType)
                     : $this->objectManager->create($argumentType);
             } else if (is_array($argument)) {
                 if (isset($argument['argument'])) {
-                    $argKey = $argument['argument'];
-                    $argument =
-                        isset($this->globalArguments[$argKey]) ? $this->globalArguments[$argKey] : $paramDefault;
+                    $argument = isset($this->globalArguments[$argument['argument']])
+                        ? $this->globalArguments[$argument['argument']]
+                        : $paramDefault;
                 } else if (!empty($argument)) {
                     $this->parseArray($argument);
                 }

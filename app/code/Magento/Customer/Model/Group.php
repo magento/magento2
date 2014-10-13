@@ -34,11 +34,6 @@ namespace Magento\Customer\Model;
  */
 class Group extends \Magento\Framework\Model\AbstractModel
 {
-    /**
-     * Xml config path for create account default group
-     */
-    const XML_PATH_DEFAULT_ID = 'customer/create_account/default_group';
-
     const NOT_LOGGED_IN_ID = 0;
 
     const CUST_GROUP_ALL = 32000;
@@ -149,7 +144,9 @@ class Group extends \Magento\Framework\Model\AbstractModel
      */
     public function usesAsDefault()
     {
-        $data = $this->_storesConfig->getStoresConfigByPath(self::XML_PATH_DEFAULT_ID);
+        $data = $this->_storesConfig->getStoresConfigByPath(
+            \Magento\Customer\Service\V1\CustomerGroupServiceInterface::XML_PATH_DEFAULT_ID
+        );
         if (in_array($this->getId(), $data)) {
             return true;
         }

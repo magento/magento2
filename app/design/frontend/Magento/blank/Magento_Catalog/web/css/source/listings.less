@@ -226,24 +226,29 @@
     }
 }
 
-.products-list .product {
-    &-item {
-        display: table;
-        width: 100%;
+.products-list {
+    .product {
+        &-item {
+            display: table;
+            width: 100%;
 
-        &-info {
-            display: table-row;
+            &-info {
+                display: table-row;
+            }
+            &-photo {
+                width: 1%;
+                padding: 0 @indent-l-base @indent-l-base 0;
+                vertical-align: top;
+                display: table-cell;
+            }
+            &-details {
+                vertical-align: top;
+                display: table-cell;
+            }
         }
-        &-photo {
-            width: 1%;
-            padding: 0 @indent-l-base @indent-l-base 0;
-            vertical-align: top;
-            display: table-cell;
-        }
-        &-details {
-            vertical-align: top;
-            display: table-cell;
-        }
+    }
+    .product-image-wrapper {
+        &:extend(.abstract-reset-image-wrapper all);
     }
 }
 

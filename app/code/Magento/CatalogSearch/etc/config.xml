@@ -30,6 +30,7 @@
                 <search_terms>1</search_terms>
             </seo>
             <search>
+                <engine>Magento\CatalogSearch\Model\Resource\Fulltext\Engine</engine>
                 <min_query_length>1</min_query_length>
                 <max_query_length>128</max_query_length>
                 <max_query_words>10</max_query_words>

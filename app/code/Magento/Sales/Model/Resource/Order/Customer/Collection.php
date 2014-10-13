@@ -74,6 +74,13 @@ class Collection extends \Magento\Customer\Model\Resource\Customer\Collection
             'store_id=store_id',
             null,
             'left'
+        )->joinField(
+            'website_name',
+            'store_website',
+            'name',
+            'website_id=website_id',
+            null,
+            'left'
         );
         return $this;
     }

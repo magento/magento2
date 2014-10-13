@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<requests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<requests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../lib/internal/Magento/Framework/Search/etc/search_request_merged.xsd">
     <request query="suggested_search_container" index="product">
         <dimensions>
             <dimension name="scope" value="default" />
@@ -40,7 +40,7 @@
             </query>
 
             <query xsi:type="filteredQuery" name="fulltext_search_query2">
-                <filterReference ref="promoted" />
+                <filterReference clause="must" ref="promoted" />
             </query>
         </queries>
         <filters>

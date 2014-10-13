@@ -1052,6 +1052,8 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $typeValues = array();
             $typePrices = array();
             $typeTitles = array();
+            $parentCount = array();
+            $childCount = array();
 
             foreach ($bunch as $rowNumber => $rowData) {
                 if (!$this->isRowAllowedToImport($rowData, $rowNumber)) {
@@ -1076,7 +1078,9 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     $nextValueId,
                     $typeValues,
                     $typePrices,
-                    $typeTitles
+                    $typeTitles,
+                    $parentCount,
+                    $childCount
                 );
                 $this->_collectOptionTitle($rowData, $prevOptionId, $titles);
             }
@@ -1180,6 +1184,8 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param array &$typeValues
      * @param array &$typePrices
      * @param array &$typeTitles
+     * @param array &$parentCount
+     * @param array &$childCount
      * @return void
      */
     protected function _collectOptionTypeData(
@@ -1188,10 +1194,13 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         &$nextValueId,
         array &$typeValues,
         array &$typePrices,
-        array &$typeTitles
+        array &$typeTitles,
+        array &$parentCount,
+        array &$childCount
     ) {
         if ($this->_isRowHasSpecificType($this->_rowType) && $prevOptionId) {
             $specificTypeData = $this->_getSpecificTypeData($rowData, $nextValueId);
+            //For default store
             if ($specificTypeData) {
                 $typeValues[$prevOptionId][] = $specificTypeData['value'];
 
@@ -1199,7 +1208,6 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 if (!isset($typeTitles[$nextValueId][\Magento\Store\Model\Store::DEFAULT_STORE_ID])) {
                     $typeTitles[$nextValueId][\Magento\Store\Model\Store::DEFAULT_STORE_ID] = $specificTypeData['title'];
                 }
-                $typeTitles[$nextValueId][$this->_rowStoreId] = $specificTypeData['title'];
 
                 if ($specificTypeData['price']) {
                     if ($this->_isPriceGlobal) {
@@ -1214,6 +1222,22 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 }
 
                 $nextValueId++;
+                if (isset($parentCount[$prevOptionId])) {
+                    $parentCount[$prevOptionId]++;
+                } else {
+                    $parentCount[$prevOptionId] = 1;
+                }
+            }
+
+            if (!isset($childCount[$this->_rowStoreId][$prevOptionId])) {
+                $childCount[$this->_rowStoreId][$prevOptionId] = 0;
+            }
+            $parentValueId = $nextValueId - $parentCount[$prevOptionId] + $childCount[$this->_rowStoreId][$prevOptionId];
+            $specificTypeData = $this->_getSpecificTypeData($rowData, $parentValueId, false);
+            //For others stores
+            if ($specificTypeData) {
+                $typeTitles[$parentValueId][$this->_rowStoreId] = $specificTypeData['title'];
+                $childCount[$this->_rowStoreId][$prevOptionId]++;
             }
         }
     }
@@ -1430,11 +1454,12 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * @param array $rowData
      * @param int $optionTypeId
+     * @param bool $defaultStore
      * @return array|false
      */
-    protected function _getSpecificTypeData(array $rowData, $optionTypeId)
+    protected function _getSpecificTypeData(array $rowData, $optionTypeId, $defaultStore = true)
     {
-        if (!empty($rowData[self::COLUMN_ROW_TITLE]) && empty($rowData[self::COLUMN_STORE])) {
+        if (!empty($rowData[self::COLUMN_ROW_TITLE]) && $defaultStore && empty($rowData[self::COLUMN_STORE])) {
             $valueData = array(
                 'option_type_id' => $optionTypeId,
                 'sort_order' => empty($rowData[self::COLUMN_ROW_SORT]) ? 0 : abs($rowData[self::COLUMN_ROW_SORT]),
@@ -1451,10 +1476,10 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     $priceData['price_type'] = 'percent';
                 }
             }
-
             return array('value' => $valueData, 'title' => $rowData[self::COLUMN_ROW_TITLE], 'price' => $priceData);
+        } elseif (!empty($rowData[self::COLUMN_ROW_TITLE]) && !$defaultStore && !empty($rowData[self::COLUMN_STORE])) {
+            return array('title' => $rowData[self::COLUMN_ROW_TITLE]);
         }
-
         return false;
     }
 

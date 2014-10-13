@@ -770,6 +770,21 @@ class Creditmemo extends \Magento\Sales\Model\AbstractModel implements EntityInt
     }
 
     /**
+     * Checking if the creditmemo is last
+     *
+     * @return bool
+     */
+    public function isLast()
+    {
+        foreach ($this->getAllItems() as $item) {
+            if (!$item->isLast()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * Adds comment to credit memo with additional possibility to send it to customer via email
      * and show it in customer account
      *

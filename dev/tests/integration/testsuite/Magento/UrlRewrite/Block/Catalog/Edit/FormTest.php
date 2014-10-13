@@ -136,14 +136,21 @@ class FormTest extends \PHPUnit_Framework_TestCase
      *
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Core/_files/store.php
-     *
-     * @expectedException \Magento\Framework\Model\Exception
-     * @expectedExceptionMessage We can't set up a URL rewrite because the product you chose is not associated with
      */
     public function testGetEntityStoresProductStoresException()
     {
-        $args = array('product' => new \Magento\Framework\Object(array('id' => 1)));
-        $this->_getFormInstance($args);
+        $args = [
+            'product' => $this->objectManager->create(
+                'Magento\Catalog\Model\Product',
+                ['data' => ['entity_id' => 1]]
+            )
+        ];
+        $form = $this->_getFormInstance($args);
+        $this->assertEquals([], $form->getElement('store_id')->getValues());
+        $this->assertEquals(
+            'We can\'t set up a URL rewrite because the product you chose is not associated with a website.',
+            $form->getElement('store_id')->getAfterElementHtml()
+        );
     }
 
     /**
@@ -152,16 +159,25 @@ class FormTest extends \PHPUnit_Framework_TestCase
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Core/_files/store.php
      *
-     * @expectedException \Magento\Framework\Model\Exception
-     * @expectedExceptionMessage We can't set up a URL rewrite because the product you chose is not associated with
      */
     public function testGetEntityStoresProductCategoryStoresException()
     {
         $args = array(
-            'product' => new \Magento\Framework\Object(array('id' => 1, 'store_ids' => array(1))),
-            'category' => new \Magento\Framework\Object(array('id' => 1, 'store_ids' => array(3)))
+            'product' => $this->objectManager->create(
+                'Magento\Catalog\Model\Product',
+                ['data' => ['entity_id' => 1, 'store_ids' => [1]]]
+            ),
+            'category' => $this->objectManager->create(
+                'Magento\Catalog\Model\Category',
+                ['data' => ['entity_id' => 1, 'store_ids' => [3]]]
+            ),
         );
-        $this->_getFormInstance($args);
+        $form = $this->_getFormInstance($args);
+        $this->assertEquals([], $form->getElement('store_id')->getValues());
+        $this->assertEquals(
+            'We can\'t set up a URL rewrite because the product you chose is not associated with a website.',
+            $form->getElement('store_id')->getAfterElementHtml()
+        );
     }
 
     /**
@@ -169,14 +185,16 @@ class FormTest extends \PHPUnit_Framework_TestCase
      *
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Core/_files/store.php
-     *
-     * @expectedException \Magento\Framework\Model\Exception
-     * @expectedExceptionMessage We can't set up a URL rewrite because the category your chose is not associated with
      */
     public function testGetEntityStoresCategoryStoresException()
     {
         $args = array('category' => new \Magento\Framework\Object(array('id' => 1)));
-        $this->_getFormInstance($args);
+        $form = $this->_getFormInstance($args);
+        $this->assertEquals([], $form->getElement('store_id')->getValues());
+        $this->assertEquals(
+            'We can\'t set up a URL rewrite because the category you chose is not associated with a website.',
+            $form->getElement('store_id')->getAfterElementHtml()
+        );
     }
 
     /**

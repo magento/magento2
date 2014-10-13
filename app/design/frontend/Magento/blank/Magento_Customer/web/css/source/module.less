@@ -57,6 +57,9 @@
     #region_id {
         display: none;
     }
+    .actions-toolbar .action.primary {
+        &:extend(.abstract-button-l all);
+    }
 }
 
 .form-edit-account {
@@ -76,6 +79,12 @@
 
 // My account
 .account {
+    .page-title {
+        .title {
+            display: inline-block;
+            margin-top: 0;
+        }
+    }
     .messages {
         margin-bottom: @indent-base;
     }
@@ -162,6 +171,9 @@
         .page.messages {
             margin-bottom: 40px;
         }
+        .block-collapsible-nav {
+            margin-top: -21px;
+        }
         .data.table {
             &:extend(.abstract-table-vertical-mobile all);
             .col.actions {
@@ -184,6 +196,11 @@
         .captcha-img {
             display: block;
             .css(margin-bottom, @indent-s-base);
+        }
+    }
+    .customer-account-index {
+        .page-title {
+            position: relative;
         }
     }
 }
@@ -298,6 +315,13 @@
 
     .widget {
         clear: both;
+    }
+
+    //
+    //    Welcome block
+    //--------------------------------------
+    .dashboard-welcome-toggler {
+        &:extend(.abstract-visually-hidden-desktop all);
     }
 
     .control.captcha-image {

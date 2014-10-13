@@ -36,19 +36,19 @@ $finalPriceModel = $this->getPriceType('final_price');
 $idSuffix = $this->getIdSuffix() ? $this->getIdSuffix() : '';
 ?>
 <?php if ($this->hasSpecialPrice()): ?>
+    <span class="special-price">
+        <?php echo $this->renderAmount($finalPriceModel->getAmount(), [
+            'display_label'     => __('Special Price'),
+            'price_id'          => $this->getPriceId('product-price-' . $idSuffix),
+            'include_container' => true
+        ]); ?>
+    </span>
     <span class="old-price">
         <?php echo $this->renderAmount($priceModel->getAmount(), [
             'display_label'     => __('Regular Price'),
             'price_id'          => $this->getPriceId('old-price-' . $idSuffix),
             'include_container' => true,
             'skip_adjustments'  => true
-        ]); ?>
-    </span>
-    <span class="special-price">
-        <?php echo $this->renderAmount($finalPriceModel->getAmount(), [
-            'display_label'     => __('Special Price'),
-            'price_id'          => $this->getPriceId('product-price-' . $idSuffix),
-            'include_container' => true
         ]); ?>
     </span>
 <?php else: ?>

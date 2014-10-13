@@ -23,10 +23,10 @@
  */
 namespace Magento\Setup\Module;
 
-use Magento\Setup\Module\Setup\Connection\AdapterInterface;
-use Magento\Setup\Module\Setup\FileResolver as SetupFileResolver;
+use Magento\Setup\Module\Setup\ConnectionFactory;
 use Magento\Setup\Module\Updater\SetupInterface;
 use Magento\Setup\Model\LoggerInterface;
+use Magento\Setup\Module\Setup\Config;
 
 class Setup implements SetupInterface
 {
@@ -66,13 +66,6 @@ class Setup implements SetupInterface
     protected $filesystem;
 
     /**
-     * Setup File Resolver
-     *
-     * @var SetupFileResolver
-     */
-    protected $setupFileResolver;
-
-    /**
      * Logger
      *
      * @var LoggerInterface
@@ -80,29 +73,27 @@ class Setup implements SetupInterface
     protected $logger;
 
     /**
-     * Table Prefix
+     * Deployment configuration
      *
-     * @var string
+     * @var Config
      */
-    protected $tablePrefix;
+    protected $config;
 
     /**
      * Constructor
      *
-     * @param AdapterInterface $connection
-     * @param SetupFileResolver $setupFileResolver
+     * @param ConnectionFactory $connectionFactory
      * @param LoggerInterface $logger
-     * @param array $connectionConfig
+     * @param Config $config
      */
     public function __construct(
-        AdapterInterface $connection,
-        SetupFileResolver $setupFileResolver,
+        ConnectionFactory $connectionFactory,
         LoggerInterface $logger,
-        array $connectionConfig = array()
+        Config $config
     ) {
         $this->logger = $logger;
-        $this->connection = $connection->getConnection($connectionConfig);
-        $this->setupFileResolver = $setupFileResolver;
+        $this->connection = $connectionFactory->create($config->getConfigData());
+        $this->config = $config;
     }
 
     /**
@@ -136,7 +127,7 @@ class Setup implements SetupInterface
      */
     public function getTable($tableName)
     {
-        $tablePrefix = (string)$this->tablePrefix;
+        $tablePrefix = $this->config->get(Config::KEY_DB_PREFIX);
         if ($tablePrefix && strpos($tableName, $tablePrefix) !== 0) {
             $tableName = $tablePrefix . $tableName;
         }
@@ -388,16 +379,5 @@ class Setup implements SetupInterface
             ),
             true
         );
-    }
-
-    /**
-     * Set table prefix
-     *
-     * @param string $tablePrefix
-     * @return void
-     */
-    public function setTablePrefix($tablePrefix)
-    {
-        $this->tablePrefix = $tablePrefix;
     }
 }

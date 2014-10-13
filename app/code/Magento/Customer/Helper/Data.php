@@ -70,7 +70,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Config path to option that enables/disables automatic group assignment based on VAT
      */
-    const XML_PATH_CUSTOMER_VIV_GROUP_AUTO_ASSIGN = 'customer/create_account/viv_disable_auto_group_assign_default';
+    const XML_PATH_CUSTOMER_GROUP_AUTO_ASSIGN = 'customer/create_account/auto_group_assign';
 
     /**
      * Config path to support email
@@ -499,6 +499,15 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getCustomerGroupIdBasedOnVatNumber($customerCountryCode, $vatValidationResult, $store = null)
     {
         $groupId = null;
+
+        $isAutoGroupAssign = $this->_scopeConfig->isSetFlag(
+            self::XML_PATH_CUSTOMER_GROUP_AUTO_ASSIGN,
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            $store
+        );
+        if (!$isAutoGroupAssign) {
+            return $groupId;
+        }
 
         $vatClass = $this->getCustomerVatClass($customerCountryCode, $vatValidationResult, $store);
 

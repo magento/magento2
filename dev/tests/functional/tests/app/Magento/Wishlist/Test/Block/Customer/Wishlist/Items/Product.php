@@ -47,6 +47,20 @@ class Product extends Form
     protected $remove = '[data-role="remove"]';
 
     /**
+     * Selector for 'View Details' element
+     *
+     * @var string
+     */
+    protected $viewDetails = '.details.tooltip';
+
+    /**
+     * Selector for 'Options Details' tooltip
+     *
+     * @var string
+     */
+    protected $optionsDetails = '.tooltip.content .values';
+
+    /**
      * Fill item product details
      *
      * @param array $fields
@@ -76,5 +90,26 @@ class Product extends Form
     public function remove()
     {
         $this->_rootElement->find($this->remove)->click();
+    }
+
+    /**
+     * Get product options
+     *
+     * @return array|null
+     */
+    public function getOptions()
+    {
+        $viewDetails = $this->_rootElement->find($this->viewDetails);
+        if ($viewDetails->isVisible()) {
+            $viewDetails->click();
+            $values = $this->_rootElement->find($this->optionsDetails)->getElements();
+            $data = [];
+            foreach ($values as $value) {
+                $data[] = $value->getText();
+            }
+            return $data;
+        } else {
+            return null;
+        }
     }
 }

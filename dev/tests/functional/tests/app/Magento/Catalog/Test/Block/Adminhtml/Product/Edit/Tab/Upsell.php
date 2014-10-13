@@ -26,37 +26,40 @@
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab;
 
 use Mtf\Client\Element;
-use Magento\Backend\Test\Block\Widget\Tab;
-use Mtf\Factory\Factory;
+use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Upsell\Grid as UpsellGrid;
 
 /**
  * Class Upsell
- * Upsell Tab
+ * Up-sells Tab
  */
-class Upsell extends Tab
+class Upsell extends AbstractRelated
 {
-    const GROUP = 'upsells';
+    /**
+     * Related products type
+     *
+     * @var string
+     */
+    protected $relatedType = 'up_sell_products';
 
     /**
-     * Select up-sell products
+     * Locator for cross sell products grid
      *
-     * @param array $products
-     * @param Element|null $context
-     * @return $this
+     * @var string
      */
-    public function fillFormTab(array $products, Element $context = null)
-    {
-        if (!isset($products['upsell_products'])) {
-            return $this;
-        }
-        $element = $context ? : $this->_rootElement;
-        $upSellBlock = Factory::getBlockFactory()->getMagentoCatalogAdminhtmlProductEditTabUpsellGrid(
-            $element->find('#up_sell_product_grid')
-        );
-        foreach ($products['upsell_products']['value'] as $product) {
-            $upSellBlock->searchAndSelect($product);
-        }
+    protected $crossSellGrid = '#up_sell_product_grid';
 
-        return $this;
+    /**
+     * Return related products grid
+     *
+     * @param Element|null $element [optional]
+     * @return UpsellGrid
+     */
+    protected function getRelatedGrid(Element $element = null)
+    {
+        $element = $element ? $element : $this->_rootElement;
+        return $this->blockFactory->create(
+            '\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\Upsell\Grid',
+            ['element' => $element->find($this->crossSellGrid)]
+        );
     }
 }

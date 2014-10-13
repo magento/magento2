@@ -43,7 +43,7 @@ class OptionTest extends \PHPUnit_Framework_TestCase
      *
      * @var array
      */
-    protected $_testStores = array('admin' => 0);
+    protected $_testStores = array('admin' => 0, 'new_store_view' => 1);
 
     /**
      * Tables array to inject into model
@@ -80,10 +80,11 @@ class OptionTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_expectedTitles = array(
+        array('option_id' => 2, 'store_id' => 0, 'title' => 'Test Field Title'),
         array('option_id' => 3, 'store_id' => 0, 'title' => 'Test Date and Time Title'),
         array('option_id' => 4, 'store_id' => 0, 'title' => 'Test Select'),
         array('option_id' => 5, 'store_id' => 0, 'title' => 'Test Radio'),
-        array('option_id' => 1, 'store_id' => 0, 'title' => 'Test Field Title')
+        array('option_id' => 5, 'store_id' => 1, 'title' => 'Option New Store View')
     );
 
     /**
@@ -116,7 +117,9 @@ class OptionTest extends \PHPUnit_Framework_TestCase
         array('option_type_id' => 2, 'store_id' => 0, 'title' => 'Option 1'),
         array('option_type_id' => 3, 'store_id' => 0, 'title' => 'Option 2'),
         array('option_type_id' => 4, 'store_id' => 0, 'title' => 'Option 1'),
-        array('option_type_id' => 5, 'store_id' => 0, 'title' => 'Option 2')
+        array('option_type_id' => 4, 'store_id' => 1, 'title' => 'Option 1 New Store View'),
+        array('option_type_id' => 5, 'store_id' => 0, 'title' => 'Option 2'),
+        array('option_type_id' => 5, 'store_id' => 1, 'title' => 'Option 2 New Store View')
     );
 
     /**
@@ -703,6 +706,8 @@ class OptionTest extends \PHPUnit_Framework_TestCase
         $behavior = null,
         $numberOfValidations = 1
     ) {
+        $this->_testStores = array('admin' => 0);
+        $this->setUp();
         if ($behavior) {
             $this->_model->setParameters(array('behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND));
         }

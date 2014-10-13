@@ -197,17 +197,21 @@ class Builder
                 'from' => $data['from'],
                 'size' => $data['size'],
                 'query' => $mapper->getRootQuery(),
-                'dimensions' => array_map(
-                    function ($data) {
-                        return $this->objectManager->create(
-                            'Magento\Framework\Search\Request\Dimension',
-                            $data
-                        );
-                    },
-                    isset($data['dimensions']) ? $data['dimensions'] : []
-                ),
+                'dimensions' => $this->buildDimensions(isset($data['dimensions']) ? $data['dimensions'] : []),
                 'buckets' => $mapper->getBuckets()
             ]
         );
+    }
+
+    private function buildDimensions(array $dimensionsData)
+    {
+        $dimensions = [];
+        foreach ($dimensionsData as $dimensionData) {
+            $dimensions[$dimensionData['name']] = $this->objectManager->create(
+                'Magento\Framework\Search\Request\Dimension',
+                $dimensionData
+            );
+        }
+        return $dimensions;
     }
 }

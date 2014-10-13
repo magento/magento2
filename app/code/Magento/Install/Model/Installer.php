@@ -401,7 +401,7 @@ class Installer extends \Magento\Framework\Object
         }
 
         if (!empty($data['admin_no_form_key'])) {
-            $this->_installSetup->setConfigData('admin/security/use_form_key', 0);
+            $this->_installSetup->setConfigData(\Magento\Backend\Model\Url::XML_PATH_USE_SECURE_KEY, 0);
         }
 
         $unsecureBaseUrl = $this->_storeManager->getStore()->getBaseUrl('web');

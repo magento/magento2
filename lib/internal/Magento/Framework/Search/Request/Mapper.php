@@ -331,12 +331,11 @@ class Mapper
     {
         $buckets = array();
         foreach ($this->aggregations as $bucketData) {
-            $arguments =
-                [
-                    'name' => $bucketData['name'],
-                    'field' => $bucketData['field'],
-                    'metrics' => $this->mapMetrics($bucketData['metric'])
-                ];
+            $arguments = [
+                'name' => $bucketData['name'],
+                'field' => $bucketData['field'],
+                'metrics' => $this->mapMetrics($bucketData)
+            ];
             switch ($bucketData['type']) {
                 case BucketInterface::TYPE_TERM:
                     $bucket = $this->objectManager->create(
@@ -349,7 +348,16 @@ class Mapper
                         'Magento\Framework\Search\Request\Aggregation\RangeBucket',
                         array_merge(
                             $arguments,
-                            ['ranges' => $this->mapRanges($bucketData['range'])]
+                            ['ranges' => $this->mapRanges($bucketData)]
+                        )
+                    );
+                    break;
+                case BucketInterface::TYPE_DYNAMIC:
+                    $bucket = $this->objectManager->create(
+                        'Magento\Framework\Search\Request\Aggregation\DynamicBucket',
+                        array_merge(
+                            $arguments,
+                            ['method' => $bucketData['method']]
                         )
                     );
                     break;
@@ -364,19 +372,22 @@ class Mapper
     /**
      * Build Metric[] from array
      *
-     * @param array $metrics
+     * @param array $bucketData
      * @return array
      */
-    private function mapMetrics(array $metrics)
+    private function mapMetrics(array $bucketData)
     {
-        $metricObjects = array();
-        foreach ($metrics as $metric) {
-            $metricObjects[] = $this->objectManager->create(
-                'Magento\Framework\Search\Request\Aggregation\Metric',
-                [
-                    'type' => $metric['type']
-                ]
-            );
+        $metricObjects = [];
+        if (isset($bucketData['metric'])) {
+            $metrics = $bucketData['metric'];
+            foreach ($metrics as $metric) {
+                $metricObjects[] = $this->objectManager->create(
+                    'Magento\Framework\Search\Request\Aggregation\Metric',
+                    [
+                        'type' => $metric['type']
+                    ]
+                );
+            }
         }
         return $metricObjects;
     }
@@ -384,20 +395,23 @@ class Mapper
     /**
      * Build Range[] from array
      *
-     * @param array $ranges
+     * @param array $bucketData
      * @return array
      */
-    private function mapRanges(array $ranges)
+    private function mapRanges(array $bucketData)
     {
         $rangeObjects = array();
-        foreach ($ranges as $range) {
-            $rangeObjects[] = $this->objectManager->create(
-                'Magento\Framework\Search\Request\Aggregation\Range',
-                [
-                    'from' => $range['from'],
-                    'to' => $range['to']
-                ]
-            );
+        if (isset($bucketData['range'])) {
+            $ranges = $bucketData['range'];
+            foreach ($ranges as $range) {
+                $rangeObjects[] = $this->objectManager->create(
+                    'Magento\Framework\Search\Request\Aggregation\Range',
+                    [
+                        'from' => $range['from'],
+                        'to' => $range['to']
+                    ]
+                );
+            }
         }
         return $rangeObjects;
     }

@@ -24,47 +24,34 @@
  */
 namespace Magento\Customer\Controller\Account;
 
-use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session;
-use Magento\Customer\Helper\Address as CustomerHelper;
-use Magento\Framework\UrlFactory;
+use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
+use Magento\Customer\Service\V1\Data\CustomerBuilder;
 
 class Edit extends \Magento\Customer\Controller\Account
 {
-    /** @var \Magento\Customer\Service\V1\Data\CustomerBuilder */
-    protected $_customerBuilder;
+    /** @var CustomerAccountServiceInterface  */
+    protected $customerAccountService;
+
+    /** @var CustomerBuilder */
+    protected $customerBuilder;
 
     /**
      * @param Context $context
      * @param Session $customerSession
-     * @param CustomerHelper $addressHelper
-     * @param UrlFactory $urlFactory
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param CustomerAccountServiceInterface $customerAccountService
-     * @param \Magento\Customer\Service\V1\Data\CustomerBuilder $customerBuilder
+     * @param CustomerBuilder $customerBuilder
      */
     public function __construct(
         Context $context,
         Session $customerSession,
-        CustomerHelper $addressHelper,
-        UrlFactory $urlFactory,
-        \Magento\Framework\StoreManagerInterface $storeManager,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         CustomerAccountServiceInterface $customerAccountService,
-        \Magento\Customer\Service\V1\Data\CustomerBuilder $customerBuilder
+        CustomerBuilder $customerBuilder
     ) {
-        $this->_customerBuilder = $customerBuilder;
-        parent::__construct(
-            $context,
-            $customerSession,
-            $addressHelper,
-            $urlFactory,
-            $storeManager,
-            $scopeConfig,
-            $customerAccountService
-        );
+        $this->customerAccountService = $customerAccountService;
+        $this->customerBuilder = $customerBuilder;
+        parent::__construct($context, $customerSession);
     }
 
     /**
@@ -84,9 +71,9 @@ class Edit extends \Magento\Customer\Controller\Account
 
         $data = $this->_getSession()->getCustomerFormData(true);
         $customerId = $this->_getSession()->getCustomerId();
-        $customerDataObject = $this->_customerAccountService->getCustomer($customerId);
+        $customerDataObject = $this->customerAccountService->getCustomer($customerId);
         if (!empty($data)) {
-            $customerDataObject = $this->_customerBuilder->mergeDataObjectWithArray($customerDataObject, $data);
+            $customerDataObject = $this->customerBuilder->mergeDataObjectWithArray($customerDataObject, $data);
         }
         $this->_getSession()->setCustomerData($customerDataObject);
         $this->_getSession()->setChangePassword($this->getRequest()->getParam('changepass') == 1);

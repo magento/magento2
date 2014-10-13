@@ -42,6 +42,7 @@
 
 @addto-color: @text-color-muted;
 @addto-hover-color: @color-primary;
+@minicart-icons-color: #8f8f8f;
 
 body {
     .css(background-color, @page-bg-color);
@@ -60,6 +61,7 @@ body {
     &.content {
         padding-top: 10px;
         position: relative;
+        &:extend(.abstract-add-clearfix all);
     }
 }
 
@@ -126,9 +128,9 @@ body {
 @footer-bg-color: false;
 
 .page-footer {
-        margin-top: 25px;
-        .css(background-color, @footer-bg-color);
-    }
+    margin-top: 25px;
+    .css(background-color, @footer-bg-color);
+}
 
 .footer {
     &.content {
@@ -280,7 +282,7 @@ body {
 }
 
 .no-display {
-    display: none;
+    &:extend(.abstract-no-display all);
 }
 
 // Calendar

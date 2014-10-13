@@ -780,9 +780,15 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                 $itemTaxDetails = $orderTaxDetails->getItems();
                 foreach ($itemTaxDetails as $itemTaxDetail) {
                     //Aggregate taxable items associated with an item
-                    if ($itemTaxDetail->getItemId() == $orderItemId
-                        || $itemTaxDetail->getAssociatedItemId() == $orderItemId) {
+                    if ($itemTaxDetail->getItemId() == $orderItemId) {
                         $taxClassAmount = $this->_aggregateTaxes($taxClassAmount, $itemTaxDetail, $itemRatio);
+                    } elseif ($itemTaxDetail->getAssociatedItemId() == $orderItemId) {
+                        $taxableItemType = $itemTaxDetail->getType();
+                        $ratio = $itemRatio;
+                        if ($item->getTaxRatio() && isset($item->getTaxRatio()[$taxableItemType])) {
+                            $ratio = $item->getTaxRatio()[$taxableItemType];
+                        }
+                        $taxClassAmount = $this->_aggregateTaxes($taxClassAmount, $itemTaxDetail, $ratio);
                     }
                 }
             }

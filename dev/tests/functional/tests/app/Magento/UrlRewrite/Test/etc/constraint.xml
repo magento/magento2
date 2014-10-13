@@ -85,4 +85,7 @@
             <categoryView class="Magento\Catalog\Test\Page\Category\CatalogCategoryView"/>
         </require>
     </assertUrlRewriteCustomSearchRedirect>
+    <assertUrlRewriteCategoryInGrid module="Magento_UrlRewrite">
+        <severeness>low</severeness>
+    </assertUrlRewriteCategoryInGrid>
 </constraint>

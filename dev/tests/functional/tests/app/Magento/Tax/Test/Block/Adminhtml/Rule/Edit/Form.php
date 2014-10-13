@@ -87,6 +87,13 @@ class Form extends FormInterface
     protected $optionMaskElement = './/*[contains(@class, "mselect-list-item")]//label/span[text()="%s"]';
 
     /**
+     * Multi select list items
+     *
+     * @var string
+     */
+    protected $maskElement = '.mselect-list-item:first-child label';
+
+    /**
      * XPath selector for "Add New Tax Rate" button
      *
      * @var string
@@ -162,6 +169,7 @@ class Form extends FormInterface
         $taxRatesFixture = $taxRatesFixture->getFixture();
         $taxRatesData = $taxRule->getTaxRate();
 
+        $this->waitForElementVisible($this->maskElement);
         foreach ($taxRatesData as $key => $taxRate) {
             $option = $taxRateBlock->find(sprintf($this->optionMaskElement, $taxRate), Locator::SELECTOR_XPATH);
             if (!$option->isVisible()) {

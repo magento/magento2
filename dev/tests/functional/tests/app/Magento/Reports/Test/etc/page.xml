@@ -99,4 +99,9 @@
         <area>adminhtml</area>
         <class>Magento\Reports\Test\Page\Adminhtml\DownloadsReport</class>
     </downloadsReport>
+    <salesReport>
+        <mca>reports/report_sales/sales</mca>
+        <area>adminhtml</area>
+        <class>Magento\Reports\Test\Page\Adminhtml\SalesReport</class>
+    </salesReport>
 </page>

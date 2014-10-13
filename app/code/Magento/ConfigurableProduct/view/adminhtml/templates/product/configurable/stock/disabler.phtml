@@ -25,7 +25,9 @@
 <script type="text/javascript">
 require(['jquery'], function($){
     $('[data-tab-panel=product-details]').on('stockbeforedisable', function(e) {
-        if ($('[data-panel=product-variations]').is('.opened')) {
+        var variations = $('[data-panel=product-variations]');
+        if (variations.is(':visible') && variations.is('.opened')) {
+            e.stopPropagation();
             return false;
         }
     });

@@ -40,8 +40,6 @@ namespace Magento\Backend\Model\Session;
  */
 class Quote extends \Magento\Framework\Session\SessionManager
 {
-    const XML_PATH_DEFAULT_CREATEACCOUNT_GROUP = 'customer/create_account/default_group';
-
     /**
      * Quote model object
      *
@@ -152,7 +150,7 @@ class Quote extends \Magento\Framework\Session\SessionManager
                 $this->_quote->setStoreId($this->getStoreId())->load($this->getQuoteId());
             } elseif ($this->getStoreId() && $this->hasCustomerId()) {
                 $customerGroupId = $this->_scopeConfig->getValue(
-                    self::XML_PATH_DEFAULT_CREATEACCOUNT_GROUP,
+                    \Magento\Customer\Service\V1\CustomerGroupServiceInterface::XML_PATH_DEFAULT_ID,
                     \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                 );
                 $this->_quote

@@ -24,7 +24,7 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
+         xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <referenceBlock name="admin.block.customer.grid">
         <block class="Magento\Backend\Block\Widget\Grid\Export" name="admin.block.customer.grid.export" as="grid.export">
             <arguments>

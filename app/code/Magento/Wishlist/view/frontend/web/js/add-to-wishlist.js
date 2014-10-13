@@ -53,10 +53,10 @@ define([
             $(event.handleObj.selector).each(function(index, element){
                 dataToAdd[$(element).attr('name')] = $(element).val();
             });
-
+            var self = this;
             $('[data-action="add-to-wishlist"]').each(function(index, element) {
                 var params = $(element).data('post');
-                params.data = $.extend({}, params.data, dataToAdd);
+                params.data = $.extend({}, params.data, dataToAdd, {'qty': $(self.options.qtyInfo).val()});
                 $(element).data('post', params);
             });
         }

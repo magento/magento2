@@ -56,4 +56,8 @@
     <type name="Magento\Framework\App\Action\Action">
         <plugin name="catalog-app-action-dispatchController-context-plugin" type="Magento\Catalog\Model\App\Action\ContextPlugin" sortOrder="10"/>
     </type>
+    <type name="Magento\Framework\View\Layout">
+        <plugin name="catalog-session-depersonalize"
+                type="Magento\Catalog\Model\Layout\DepersonalizePlugin" sortOrder="10"/>
+    </type>
 </config>

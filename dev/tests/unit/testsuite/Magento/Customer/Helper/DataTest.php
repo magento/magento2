@@ -50,14 +50,14 @@ class DataTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Model\Metadata\Form|\PHPUnit_Framework_MockObject_MockObject */
     protected $_mockMetadataForm;
 
+    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $scopeConfigMock;
+
+    /** @var \Magento\Customer\Helper\Data */
+    protected $model;
+
     public function setUp()
     {
-        $this->_dataHelper = $this->getMockBuilder(
-            '\Magento\Customer\Helper\Data'
-        )->disableOriginalConstructor()->setMethods(
-            array('__construct')
-        )->getMock();
-
         $this->_mockRequest = $this->getMock(
             'Magento\Framework\App\RequestInterface',
             ['getPost', 'getModuleName', 'setModuleName', 'getActionName', 'setActionName', 'getParam', 'getCookie'],
@@ -69,6 +69,23 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->_mockMetadataForm = $this->getMockBuilder(
             '\Magento\Customer\Model\Metadata\Form'
         )->disableOriginalConstructor()->getMock();
+
+        $this->scopeConfigMock = $this->getMock(
+            'Magento\Framework\App\Config\ScopeConfigInterface',
+            ['getValue', 'isSetFlag'],
+            [],
+            '',
+            false
+        );
+    }
+
+    protected function prepareExtractCustomerData()
+    {
+        $this->_dataHelper = $this->getMockBuilder(
+            '\Magento\Customer\Helper\Data'
+        )->disableOriginalConstructor()->setMethods(
+            array('__construct')
+        )->getMock();
 
         $filteredData = array(
             'filter_key' => 'filter_value',
@@ -145,6 +162,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     public function testExtractCustomerData()
     {
+        $this->prepareExtractCustomerData();
         $this->assertEquals(
             $this->_expected,
             $this->_dataHelper->extractCustomerData(
@@ -160,6 +178,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     public function testExtractCustomerDataWithFactory()
     {
+        $this->prepareExtractCustomerData();
         /** @var \Magento\Customer\Model\Metadata\FormFactory|\PHPUnit_Framework_MockObject_MockObject */
         $mockFormFactory = $this->getMockBuilder(
             '\Magento\Customer\Model\Metadata\FormFactory'
@@ -195,5 +214,147 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 self::SCOPE
             )
         );
+    }
+
+    public function testGetCustomerGroupIdBasedOnVatNumberWithoutAutoAssign()
+    {
+        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $arguments = array(
+            'scopeConfig' => $this->scopeConfigMock
+        );
+        $this->model = $objectManagerHelper->getObject('Magento\Customer\Helper\Data', $arguments);
+
+        $this->scopeConfigMock->expects($this->once())
+            ->method('isSetFlag')
+            ->with(
+                \Magento\Customer\Helper\Data::XML_PATH_CUSTOMER_GROUP_AUTO_ASSIGN,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                'store'
+            )->will($this->returnValue(false));
+
+        $vatResult = $this->getMock(
+            'Magento\Framework\Object',
+            [],
+            [],
+            '',
+            false
+        );
+
+        $this->assertNull($this->model->getCustomerGroupIdBasedOnVatNumber('GB', $vatResult, 'store'));
+    }
+
+    /**
+     * @param string $countryCode
+     * @param bool $resultValid
+     * @param bool $resultSuccess
+     * @param string $merchantCountryCode
+     * @param int $vatDomestic
+     * @param int $vatIntra
+     * @param int $vatInvalid
+     * @param int $vatError
+     * @param int|null $groupId
+     * @dataProvider dataProviderGetCustomerGroupIdBasedOnVatNumber
+     */
+    public function testGetCustomerGroupIdBasedOnVatNumber(
+        $countryCode,
+        $resultValid,
+        $resultSuccess,
+        $merchantCountryCode,
+        $vatDomestic,
+        $vatIntra,
+        $vatInvalid,
+        $vatError,
+        $groupId
+    ) {
+        $objectManagerHelper = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $arguments = [
+            'scopeConfig' => $this->scopeConfigMock
+        ];
+        $this->model = $objectManagerHelper->getObject('Magento\Customer\Helper\Data', $arguments);
+
+        $this->scopeConfigMock->expects($this->once())
+            ->method('isSetFlag')
+            ->with(
+                \Magento\Customer\Helper\Data::XML_PATH_CUSTOMER_GROUP_AUTO_ASSIGN,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                'store'
+            )->will($this->returnValue(true));
+
+        $configMap = [
+            [
+                \Magento\Customer\Helper\Data::XML_PATH_CUSTOMER_VIV_DOMESTIC_GROUP,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                'store',
+                $vatDomestic
+            ],
+            [
+                \Magento\Customer\Helper\Data::XML_PATH_CUSTOMER_VIV_INTRA_UNION_GROUP,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                'store',
+                $vatIntra
+            ],
+            [
+                \Magento\Customer\Helper\Data::XML_PATH_CUSTOMER_VIV_INVALID_GROUP,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                'store',
+                $vatInvalid
+            ],
+            [
+                \Magento\Customer\Helper\Data::XML_PATH_CUSTOMER_VIV_ERROR_GROUP,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                'store',
+                $vatError
+            ],
+            [
+                \Magento\Customer\Helper\Data::XML_PATH_MERCHANT_COUNTRY_CODE,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                'store',
+                $merchantCountryCode
+            ],
+        ];
+        $this->scopeConfigMock->expects($this->any())
+            ->method('getValue')
+            ->will($this->returnValueMap($configMap));
+
+        $vatResult = $this->getMock(
+            'Magento\Framework\Object',
+            ['getIsValid', 'getRequestSuccess'],
+            [],
+            '',
+            false
+        );
+        $vatResult->expects($this->any())
+            ->method('getIsValid')
+            ->will($this->returnValue($resultValid));
+        $vatResult->expects($this->any())
+            ->method('getRequestSuccess')
+            ->will($this->returnValue($resultSuccess));
+
+        $this->assertEquals(
+            $groupId,
+            $this->model->getCustomerGroupIdBasedOnVatNumber($countryCode, $vatResult, 'store')
+        );
+    }
+
+    public function dataProviderGetCustomerGroupIdBasedOnVatNumber()
+    {
+        return [
+            ['US', false, false, 'US', null, null, null, null, 0],
+            ['US', false, false, 'GB', null, null, null, null, 0],
+            ['US', true, false, 'US', null, null, null, null, 0],
+            ['US', false, true, 'US', null, null, null, null, 0],
+            ['GB', false, false, 'GB', 3, 4, 5, 6, 6],
+            ['GB', false, false, 'DE', 3, 4, 5, 6, 6],
+            ['GB', true, true, 'GB', 3, 4, 5, 6, 3],
+            ['GB', true, true, 'DE', 3, 4, 5, 6, 4],
+            ['GB', false, true, 'DE', 3, 4, 5, 6, 5],
+            ['GB', false, true, 'GB', 3, 4, 5, 6, 5],
+            ['GB', false, false, 'GB', null, null, null, null, 0],
+            ['GB', false, false, 'DE', null, null, null, null, 0],
+            ['GB', true, true, 'GB', null, null, null, null, 0],
+            ['GB', true, true, 'DE', null, null, null, null, 0],
+            ['GB', false, true, 'DE', null, null, null, null, 0],
+            ['GB', false, true, 'GB', null, null, null, null, 0],
+        ];
     }
 }

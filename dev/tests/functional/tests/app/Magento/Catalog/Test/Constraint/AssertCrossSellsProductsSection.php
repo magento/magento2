@@ -24,15 +24,16 @@
 
 namespace Magento\Catalog\Test\Constraint;
 
+use Mtf\Client\Browser;
 use Mtf\Constraint\AbstractConstraint;
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
-use Magento\Cms\Test\Page\CmsIndex;
-use Magento\Catalog\Test\Page\Category\CatalogCategoryView;
-use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Checkout\Test\Page\CheckoutCart;
+use Magento\Catalog\Test\Page\Product\CatalogProductView;
+use Mtf\Fixture\InjectableFixture;
+use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 
 /**
  * Class AssertCrossSellsProductsSection
+ * Assert that product is displayed in cross-sell section
  */
 class AssertCrossSellsProductsSection extends AbstractConstraint
 {
@@ -46,33 +47,33 @@ class AssertCrossSellsProductsSection extends AbstractConstraint
     /**
      * Assert that product is displayed in cross-sell section
      *
-     * @param CatalogProductSimple $product1
-     * @param CatalogProductSimple $product2
-     * @param CmsIndex $cmsIndex
-     * @param CatalogCategoryView $catalogCategoryView
-     * @param CatalogProductView $catalogProductView
+     * @param Browser $browser
      * @param CheckoutCart $checkoutCart
+     * @param CatalogProductSimple $product
+     * @param CatalogProductView $catalogProductView
+     * @param InjectableFixture[] $relatedProducts
      * @return void
      */
     public function processAssert(
-        CatalogProductSimple $product1,
-        CatalogProductSimple $product2,
-        CmsIndex $cmsIndex,
-        CatalogCategoryView $catalogCategoryView,
+        Browser $browser,
+        CheckoutCart $checkoutCart,
+        CatalogProductSimple $product,
         CatalogProductView $catalogProductView,
-        CheckoutCart $checkoutCart
+        array $relatedProducts
     ) {
-        $categoryName = $product1->getCategoryIds()[0];
         $checkoutCart->open();
         $checkoutCart->getCartBlock()->clearShoppingCart();
-        $cmsIndex->getTopmenu()->selectCategoryByName($categoryName);
-        $catalogCategoryView->getListProductBlock()->openProductViewPage($product1->getName());
-        $catalogProductView->getViewBlock()->addToCart($product1);
 
-        \PHPUnit_Framework_Assert::assertTrue(
-            $checkoutCart->getCrosssellBlock()->verifyProductCrosssell($product2),
-            'Product \'' . $product2->getName() . '\' is absent in cross-sell section.'
-        );
+        $browser->open($_ENV['app_frontend_url'] . $product->getUrlKey() . '.html');
+        $catalogProductView->getViewBlock()->addToCart($product);
+        $errors = [];
+        foreach ($relatedProducts as $relatedProduct) {
+            if (!$checkoutCart->getCrosssellBlock()->verifyProductCrosssell($relatedProduct)) {
+                $errors[] = 'Product \'' . $relatedProduct->getName() . '\' is absent in cross-sell section.';
+            }
+        }
+
+        \PHPUnit_Framework_Assert::assertEmpty($errors, implode(" ", $errors));
     }
 
     /**

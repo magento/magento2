@@ -132,7 +132,7 @@ return array(
     'catalogrule/website' => 'catalogrule_website',
     'catalogsearch/fulltext' => 'catalogsearch_fulltext',
     'catalogsearch/result' => 'catalogsearch_result',
-    'catalogsearch/search_query' => 'catalogsearch_query',
+    'catalogsearch/search_query' => 'search_query',
     'checkout/agreement' => 'checkout_agreement',
     'checkout/agreement_store' => 'checkout_agreement_store',
     'chronopay/api_debug' => 'chronopay_api_debug',

@@ -1,14 +1,103 @@
+0.1.0-alpha99
+=============
+ * Released Performance Toolkit
+ * GitHub requests:
+   * [#665](https://github.com/magento/magento2/issues/665) -- Main menu event in wrong area
+   * [#666](https://github.com/magento/magento2/pull/666) -- Update di.xml
+   * [#602](https://github.com/magento/magento2/issues/602) -- Magento\Sales\Model\Order::getFullTaxInfo() incorrectly combines percentages
+   * [#673](https://github.com/magento/magento2/issues/673) -- Fixed fatal error during installation
+ * Functional tests:
+   * Updated API-functional test for Customer and Address metadata service
+   * Add cross sell
+   * Add a product to wishlist
+   * Add up sell
+   * Checkout with gift messages
+   * Create an order from a customer
+   * Create a shipment for offline payment methods
+   * Delete a product from mini shopping cart
+   * Reorder
+   * Sales order report
+   * Updating URL rewrites from a category page
+ * Layout updates:
+   * Moved layout files to the page_layout directory
+   * Moved layout validation files to framework
+ * Theme updates:
+   * Blank Theme layouts & templates were unified
+ * Search Library:
+   * Added ability to aggregate queries for MySQL adapter
+   * Implemented automatic range aggregation for MySQL adapter
+ * Search module:
+   * Introduced the Search module
+   * Moved autocomplete to the Search module
+   * Added base UI to the Search module
+ * Documentation:
+   * Added basic description of modules in the README.md files
+ * Modularity:
+   * Created API and script to get module and dependency information
+ * Framework Improvements:
+   * Decomposed heavy objects basing on profiling results
+   * Refactored the getCustomAttributesCodes method in ProductService
+   * Refactored Customer Model to use Group Model instead of Group Service
+   * Updated Travis configuration to run "composer install"
+ * Performance improvements:
+   * Removed unnecessary "save order" call during order submission step
+ * Fixed missing installation features of the new setup:
+   * Added missing installation parameters: admin_no_form_key, order_increment_prefix, cleanup_database
+   * Fixed the link to the license agreement in web installer
+   * Fixed the web installation wizard which was stuck at 96%
+ * Fixed bugs:
+   * Fixed an issue where newly created attribute was always added to the Product Details tab
+   * Fixed an issue where it was impossible to change the Stock Availability status of a product from the Advanced Inventory tab
+   * Fixed an issue where the Stock Status value changed from In Stock to Out of Stock if quantity was not specified
+   * Fixed an issue where performance toolkit failed in case of unknown argument
+   * Fixed an issue where 404 error page was displayed instead of the URL Rewrite Information page
+   * Fixed an issue where the Click for price link was not working if a product name contained quote mark
+   * Fixed an issue where the Compare products link disappeared after switching to other page
+   * Fixed an issue where the custom logo was not displayed on the category page
+   * Fixed an XSS vulnerability in category name
+   * Fixed an issue where a success save message was not displayed after saving a Search term
+   * Fixed an issue with Google Analytics where it was impossible to add the code to the pages
+   * Fixed an issue where import custom options grid was not displayed on the product creation page
+   * Fixed an issue where it was impossible to retrieve a product collection from category in the "adminhtml" area
+   * Fixed an issue where product attributes were absent on product creation form after switching to another product template
+   * Fixed an issue where the 'URL key for specified store already exists.' error message was displayed when saving a configurable product with variations which have the same name
+   * Fixed an issue where search in the Search Terms Report grid did not work
+   * Fixed an issue where the unnecessary tab "General" was displayed on the Category page in the Admin panel
+   * Fixed an issue where the Stock Status value changed from In Stock to Out of Stock if quantity was not specified for a configurable product when saving to a new template
+   * Fixed an issue where product Stock Status was always set to 'In Stock' if product quantity was specified
+   * Fixed an IE specific issue where for bundle products the Manage Stock option was reset to Yes
+   * Fixed an issue where backorder messages were not displayed
+   * Fixed an issue where the Price field was always required during Bundle product update using ProductService
+   * Fixed an issue where product name was missing in the error message
+   * Fixed an issue where configurable product did not contain a message to select options while adding product from wishlist to shopping cart
+   * Fixed an issue where the Validate VAT Number button did not work during order creation in the Admin panel
+   * Fixed an issue where Item qty in Wishlist got reset after update without changes
+   * Fixed an issue where invoice amount was incorrect when items with discount were partially invoiced
+   * Fixed product thumbnails alignment in the storefront
+   * Fixed an issue where inactive Categories were not greyed out in the tree in the Admin panel
+   * Fixed an issue where it was impossible to disable debug mode
+   * Fixed the code sample in the index.php file
+   * Removed language selector in the setup UI
+   * Fixed an issue where setup was broken if db_prefix was used
+   * Implemented usage of Symfony's PHPExecutableFinder for executing CLI tools
+   * Fixed an issue with the Import/Export functionality
+   * Fixed an issue with catalog product/category and category/product indexers invalidation after import
+   * Fixed an issue with entering invalid date in the Product Views Report
+   * Fixed an issue where it was impossible to view orders for customers from a deleted customer group
+   * Fixed an issue where a duplicate customer record was created after adding an order from the Admin panel
+   * Fixed an issue where it was impossible to log in to the Admin panel from the first attempt
+
 0.1.0-alpha98
 =============
-* GitHub requests:
+ * GitHub requests:
    * [#678] (https://github.com/magento/magento2/issues/678) -- Fixed Travis CI builds
-* Functional tests:
+ * Functional tests:
    * Create Sales Order Backend
    * Delete Products from Wishlist
    * Download Products Report
    * Mass Orders Update
    * Sales Tax Report
-* Fixed bugs:
+ * Fixed bugs:
    * Fixed an issue where success message was not displayed after product review submit
    * Fixed an issue where it was impossible to start checkout process using PayPal from the JavaScript pop-up window when the Display Actual Price option was set to On Gesture
    * Fixed an issue where a fatal error was thrown after shipping method selection in PayPal Express Checkout

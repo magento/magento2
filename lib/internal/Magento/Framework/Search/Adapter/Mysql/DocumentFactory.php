@@ -34,21 +34,22 @@ class DocumentFactory
      * @var \Magento\Framework\ObjectManager
      */
     protected $objectManager;
+
     /**
      * @var \Magento\Framework\Search\EntityMetadata
      */
-    private $entityId;
+    private $entityMetadata;
 
     /**
      * @param \Magento\Framework\ObjectManager $objectManager
-     * @param \Magento\Framework\Search\EntityMetadata $entityId
+     * @param \Magento\Framework\Search\EntityMetadata $entityMetadata
      */
     public function __construct(
         \Magento\Framework\ObjectManager $objectManager,
-        \Magento\Framework\Search\EntityMetadata $entityId
+        \Magento\Framework\Search\EntityMetadata $entityMetadata
     ) {
         $this->objectManager = $objectManager;
-        $this->entityId = $entityId;
+        $this->entityMetadata = $entityMetadata;
     }
 
     /**
@@ -62,7 +63,7 @@ class DocumentFactory
         /** @var \Magento\Framework\Search\DocumentField[] $fields */
         $fields = [];
         $documentId = null;
-        $entityId = $this->entityId->getEntityId();
+        $entityId = $this->entityMetadata->getEntityId();
         foreach ($rawDocument as $rawField) {
             if ($rawField['name'] == $entityId) {
                 $documentId = $rawField['value'];

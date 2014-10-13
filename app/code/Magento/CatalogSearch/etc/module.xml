@@ -26,11 +26,13 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Module/etc/module.xsd">
     <module name="Magento_CatalogSearch" schema_version="1.6.0.0" active="true">
         <sequence>
+            <module name="Magento_Search"/>
             <module name="Magento_Catalog"/>
         </sequence>
         <depends>
             <module name="Magento_Store"/>
             <module name="Magento_Catalog"/>
+            <module name="Magento_Search"/>
             <module name="Magento_Customer"/>
             <module name="Magento_Core"/>
             <module name="Magento_Directory"/>

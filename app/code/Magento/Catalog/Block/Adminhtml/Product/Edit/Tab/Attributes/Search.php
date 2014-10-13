@@ -89,7 +89,7 @@ class Search extends \Magento\Backend\Block\Widget
             'source' => $this->getUrl('catalog/product/suggestAttributes'),
             'minLength' => 0,
             'ajaxOptions' => array('data' => array('template_id' => $templateId)),
-            'template' => '[data-template-for="product-attribute-search"]',
+            'template' => '[data-template-for="product-attribute-search-' . $this->getGroupId() . '"]',
             'data' => $this->getSuggestedAttributes('', $templateId)
         );
     }

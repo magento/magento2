@@ -29,6 +29,7 @@ namespace Magento\Backend\Block\Widget\Grid\Column\Filter;
 
 class Store extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFilter
 {
+    const ALL_STORE_VIEWS = '0';
     /**
      * @var \Magento\Store\Model\System\Store
      */
@@ -71,9 +72,9 @@ class Store extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
         ) . '>';
         $value = $this->getColumn()->getValue();
         if ($allShow) {
-            $html .= '<option value="0"' . ($value == 0 ? ' selected="selected"' : '') . '>' . __(
-                'All Store Views'
-            ) . '</option>';
+            $html .= '<option value="' . self::ALL_STORE_VIEWS . '"'
+                 . ($value == self::ALL_STORE_VIEWS ? ' selected="selected"' : '') . '>'
+                 . __('All Store Views') . '</option>';
         } else {
             $html .= '<option value=""' . (!$value ? ' selected="selected"' : '') . '></option>';
         }
@@ -129,13 +130,14 @@ class Store extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
      */
     public function getCondition()
     {
-        if (is_null($this->getValue())) {
+        $value = $this->getValue();
+        if (is_null($value) || $value == self::ALL_STORE_VIEWS) {
             return null;
         }
-        if ($this->getValue() == '_deleted_') {
+        if ($value == '_deleted_') {
             return array('null' => true);
         } else {
-            return array('eq' => $this->getValue());
+            return array('eq' => $value);
         }
     }
 }

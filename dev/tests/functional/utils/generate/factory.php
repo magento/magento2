@@ -35,6 +35,7 @@ $path = rtrim($path, PATH_SEPARATOR);
 $path .= PATH_SEPARATOR . MTF_BP;
 $path .= PATH_SEPARATOR . MTF_BP . '/lib';
 $path .= PATH_SEPARATOR . MTF_BP . '/tests/app';
+$path .= PATH_SEPARATOR . MTF_BP . '/generated';
 $path .= PATH_SEPARATOR . MTF_BP . '/vendor/magento/mtf';
 $path .= PATH_SEPARATOR . MTF_BP . '/vendor/phpunit/phpunit';
 set_include_path($path);

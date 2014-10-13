@@ -23,38 +23,56 @@
  */
 namespace Magento\Setup\Controller\Data;
 
-use Magento\Setup\Model\Installer;
+use Magento\Setup\Model\InstallerFactory;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Stdlib\ResponseInterface as Response;
 use Zend\View\Model\JsonModel;
 use Zend\Json\Json;
+use Magento\Setup\Model\WebLogger;
 
 class DatabaseController extends AbstractActionController
 {
     /**
+     * JSON response object
+     *
      * @var JsonModel
      */
-    protected $jsonModel;
+    private $jsonResponse;
 
     /**
-     * @param JsonModel $jsonModel
+     * Installer service factory
+     *
+     * @var \Magento\Setup\Model\InstallerFactory
      */
-    public function __construct(JsonModel $jsonModel)
-    {
-        $this->jsonModel = $jsonModel;
+    private $installerFactory;
 
+    /**
+     * Constructor
+     *
+     * @param JsonModel $response
+     * @param InstallerFactory $installerFactory
+     */
+    public function __construct(JsonModel $response, InstallerFactory $installerFactory)
+    {
+        $this->jsonResponse = $response;
+        $this->installerFactory = $installerFactory;
     }
 
     /**
+     * Result of checking DB credentials
+     *
      * @return JsonModel
      */
     public function indexAction()
     {
         $params = Json::decode($this->getRequest()->getContent(), Json::TYPE_ARRAY);
         try {
-            Installer::checkDatabaseConnection($params['name'], $params['host'], $params['user'], $params['password']);
-            return $this->jsonModel->setVariables(['success' => true]);
+            $installer = $this->installerFactory->create(new WebLogger);
+            $password = isset($params['password']) ? $params['password'] : '';
+            $installer->checkDatabaseConnection($params['name'], $params['host'], $params['user'], $password);
+            return $this->jsonResponse->setVariables(['success' => true]);
         } catch (\Exception $e) {
-            return $this->jsonModel->setVariables(['success' => false]);
+            return $this->jsonResponse->setVariables(['success' => false]);
         }
     }
 

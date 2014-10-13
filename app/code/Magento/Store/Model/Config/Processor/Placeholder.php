@@ -151,8 +151,8 @@ class Placeholder
     {
         $keys = explode('/', $path);
         foreach ($keys as $key) {
-            if (is_array($data) && array_key_exists($key, $data)) {
-                $data = $data[$key];
+            if (is_array($data) && (isset($data[$key]) || array_key_exists($key, $data))) {
+                 $data = $data[$key];
             } else {
                 return null;
             }

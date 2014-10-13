@@ -184,7 +184,7 @@ class Stock extends \Magento\Framework\Data\Form\Element\Select
     {
         return "
             <script type='text/javascript'>
-                require(['jquery'], function(jQuery){
+                require(['jquery'], function(jQuery) {
                     jQuery(function($) {
                         var qty = $('#{$quantityFieldId}'),
                             productType = $('#product_type_id').val(),
@@ -192,18 +192,28 @@ class Stock extends \Magento\Framework\Data\Form\Element\Select
                             manageStockField = $('#inventory_manage_stock'),
                             useConfigManageStockField = $('#inventory_use_config_manage_stock'),
                             fieldsAssociations = {
-                                '{$quantityFieldId}' : 'inventory_qty',
-                                '{$inStockFieldId}'  : 'inventory_stock_availability'
+                                '{$quantityFieldId}': 'inventory_qty',
+                                '{$inStockFieldId}': 'inventory_stock_availability'
                             };
 
                         var disabler = function(event) {
+                            if (typeof(event) === 'undefined') {
+                                return;
+                            }
                             var stockBeforeDisable = $.Event('stockbeforedisable', {productType: productType});
                             $('[data-tab-panel=product-details]').trigger(stockBeforeDisable);
                             if (stockBeforeDisable.result !== false) {
-                                var manageStockValue = (qty.val() === '') ? 0 : 1;
+                                var manageStockValue = (qty.val() === '') ? 0 : 1,
+                                    stockAssociations = $('#' + fieldsAssociations['{$inStockFieldId}']);
                                 stockAvailabilityField.prop('disabled', !manageStockValue);
-                                $('#' + fieldsAssociations['{$inStockFieldId}']).prop('disabled', !manageStockValue);
-                                if (manageStockField.val() != manageStockValue && !(event && event.type == 'keyup')) {
+                                stockAssociations.prop('disabled', !manageStockValue);
+                                if ($(event.currentTarget).attr('id') === qty.attr('id') && event.type != 'change') {
+                                    stockAvailabilityField.val(manageStockValue);
+                                    stockAssociations.val(manageStockValue);
+                                }
+                                if (parseInt(manageStockField.val()) != manageStockValue &&
+                                    !(event && event.type == 'keyup')
+                                ) {
                                     if (useConfigManageStockField.val() == 1) {
                                         useConfigManageStockField.removeAttr('checked').val(0);
                                     }
@@ -229,7 +239,7 @@ class Stock extends \Magento\Framework\Data\Form\Element\Select
                         //Get key by value from object
                         var getKeyByValue = function(object, value) {
                             var returnVal = false;
-                            $.each(object, function(objKey, objValue){
+                            $.each(object, function(objKey, objValue) {
                                 if (value === objValue) {
                                     returnVal = objKey;
                                 }

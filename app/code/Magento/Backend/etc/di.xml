@@ -34,6 +34,7 @@
     <preference for="Magento\Backend\App\ConfigInterface" type="Magento\Backend\App\Config" />
     <preference for="Magento\Backend\Model\UrlInterface" type="Magento\Backend\Model\Url" />
     <preference for="Magento\Backend\Block\Widget\Button\ToolbarInterface" type="Magento\Backend\Block\Widget\Button\Toolbar" />
+    <preference for="Magento\Backend\Service\V1\ModuleServiceInterface" type="Magento\Backend\Service\V1\ModuleService" />
     <type name="Magento\Backend\Block\Widget\Button\ButtonList" shared="false" />
     <type name="Magento\Framework\App\AreaList">
         <arguments>
@@ -141,10 +142,6 @@
     <type name="Magento\Backend\Controller\Adminhtml\Index\GlobalSearch">
         <arguments>
             <argument name="searchModules" xsi:type="array">
-                <item name="products" xsi:type="array">
-                    <item name="class" xsi:type="string">Magento\Backend\Model\Search\Catalog</item>
-                    <item name="acl" xsi:type="string">Magento_Catalog::catalog</item>
-                </item>
                 <item name="customers" xsi:type="array">
                     <item name="class" xsi:type="string">Magento\Backend\Model\Search\Customer</item>
                     <item name="acl" xsi:type="string">Magento_Customer::customer</item>

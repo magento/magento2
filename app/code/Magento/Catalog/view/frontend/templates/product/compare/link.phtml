@@ -25,7 +25,6 @@
 ?>
 <?php
 $_helper = $this->helper('Magento\Catalog\Helper\Product\Compare');
-$_items = $_helper->getItemCount() > 0 ? $_helper->getItemCollection() : null;
 $count = $_helper->getItemCount();
 ?>
 <?php if($count > 0): ?>

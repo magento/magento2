@@ -37,6 +37,11 @@ class CrosssellProducts extends AssignProducts
     protected $assignType = 'crosssell';
 
     /**
+     * @var string
+     */
+    protected $group = 'crosssells';
+
+    /**
      * @var array
      */
     protected $_products = [];
@@ -49,8 +54,6 @@ class CrosssellProducts extends AssignProducts
         $this->_dataConfig = [
             'assignType ' => $this->assignType,
         ];
-        /** @var  $type Related|Upsell */
-        $type = 'Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Tab\\' . ucfirst(strtolower($this->assignType));
         $productsArray = [];
         foreach ($this->_products as $key => $product) {
             /** @var $product \Magento\Catalog\Test\Fixture\Product */
@@ -59,8 +62,8 @@ class CrosssellProducts extends AssignProducts
                 'name' => $product->getName()
             ];
         }
-        $this->_data['fields'][$this->assignType . '_products']['value'] = $productsArray;
-        $this->_data['fields'][$this->assignType . '_products']['group'] = $type::GROUP;
+        $this->_data['fields']['cross_sell_products']['value'] = $productsArray;
+        $this->_data['fields']['cross_sell_products']['group'] = $this->group;
 
         $this->_repository = Factory::getRepositoryFactory()
             ->getMagentoCatalogAssignProducts($this->_dataConfig, $this->_data);

@@ -43,12 +43,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Install\Block\Begin">
-        <arguments>
-            <argument name="eulaFile" xsi:type="string">LICENSE.html</argument>
-            <argument name="session" xsi:type="object">Magento\Install\Model\Session</argument>
-        </arguments>
-    </type>
     <type name="Magento\Install\Block\End">
         <arguments>
             <argument name="cryptKey" xsi:type="init_parameter">Magento\Framework\Encryption\Encryptor::PARAM_CRYPT_KEY</argument>

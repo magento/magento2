@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<requests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<requests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../../lib/internal/Magento/Framework/Search/etc/search_request.xsd">
     <request query="sugested_search_container_1" index="product_1">
         <queries>
             <query xsi:type="boolQuery" name="sugested_search_container" boost="2">
@@ -41,11 +41,11 @@
             </query>
 
             <query xsi:type="filteredQuery" name="promoted_documents_boost">
-                <queryReference ref="fulltext_search_query" />
+                <queryReference clause="must" ref="fulltext_search_query" />
             </query>
 
             <query xsi:type="filteredQuery" name="promoted_documents_boost2">
-                <filterReference ref="promoted_documents_filter" />
+                <filterReference clause="must" ref="promoted_documents_filter" />
             </query>
         </queries>
         <filters>
@@ -59,7 +59,7 @@
             <filter xsi:type="termFilter" name="promoted_boost" field="promoted" value="1" />
             <filter xsi:type="rangeFilter" field="promoted" name="price" from="10" to="100" />
         </filters>
-        <aggregation>
+        <aggregations>
             <bucket xsi:type="termBucket" name="category_bucket" field="category">
                 <metrics>
                     <metric type="sum" />
@@ -81,7 +81,8 @@
                     <range from="100" to="" />
                 </ranges>
             </bucket>
-        </aggregation>
+            <bucket xsi:type="dynamicBucket" method="dynamic1" name="dynamic_price" field="price" />
+        </aggregations>
         <from>10</from>
         <size>10</size>
     </request>

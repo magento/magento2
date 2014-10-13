@@ -56,4 +56,43 @@
         font-weight:  @font-weight-semibold;
         .font-size(14);
     }
+    .sample.link {
+        float: right;
+    }
+}
+.page-product-downloadable {
+    .product-add-form {
+        clear: both;
+        margin-bottom: @indent-m-base;
+        &:extend(.abstract-add-clearfix all);
+    }
+    .product-options-bottom {
+        .field.qty {
+            display: none!important;
+        }
+    }
+}
+
+//
+// Product view Desktop
+//--------------------------------------
+.responsive(@break) when (@break = @screen-m) {
+    .page-product-downloadable {
+        .product-add-form {
+            &:extend(.clearer all);
+        }
+        .product-options-wrapper {
+            float: left;
+            width: 55%;
+        }
+        .product-options-bottom {
+            float: right;
+            width: 40%;
+            .field.qty {
+                & + .actions {
+                    padding-top: 0;
+                }
+            }
+        }
+    }
 }

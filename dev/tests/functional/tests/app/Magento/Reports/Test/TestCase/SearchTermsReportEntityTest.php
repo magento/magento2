@@ -94,7 +94,6 @@ class SearchTermsReportEntityTest extends Injectable
      */
     public function test(CatalogProductSimple $product, $countProducts, $countSearch)
     {
-        $this->markTestIncomplete('MAGETWO-27150');
         // Preconditions
         $productName = $this->createProducts($product, $countProducts);
 

@@ -24,49 +24,35 @@
  */
 namespace Magento\Customer\Controller\Account;
 
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session;
-use Magento\Customer\Helper\Address;
-use Magento\Framework\UrlFactory;
-use Magento\Framework\StoreManagerInterface;
+use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
+use Magento\Framework\Escaper;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 class ForgotPasswordPost extends \Magento\Customer\Controller\Account
 {
-    /** @var \Magento\Framework\Escaper */
+    /** @var CustomerAccountServiceInterface  */
+    protected $customerAccountService;
+
+    /** @var Escaper */
     protected $escaper;
 
     /**
      * @param Context $context
      * @param Session $customerSession
-     * @param Address $addressHelper
-     * @param UrlFactory $urlFactory
-     * @param StoreManagerInterface $storeManager
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param CustomerAccountServiceInterface $customerAccountService
-     * @param \Magento\Framework\Escaper $escaper
+     * @param Escaper $escaper
      */
     public function __construct(
         Context $context,
         Session $customerSession,
-        Address $addressHelper,
-        UrlFactory $urlFactory,
-        StoreManagerInterface $storeManager,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         CustomerAccountServiceInterface $customerAccountService,
-        \Magento\Framework\Escaper $escaper
+        Escaper $escaper
     ) {
+        $this->customerAccountService = $customerAccountService;
         $this->escaper = $escaper;
-        parent::__construct(
-            $context,
-            $customerSession,
-            $addressHelper,
-            $urlFactory,
-            $storeManager,
-            $scopeConfig,
-            $customerAccountService
-        );
+        parent::__construct($context, $customerSession);
     }
 
     /**
@@ -86,7 +72,7 @@ class ForgotPasswordPost extends \Magento\Customer\Controller\Account
             }
 
             try {
-                $this->_customerAccountService->initiatePasswordReset(
+                $this->customerAccountService->initiatePasswordReset(
                     $email,
                     CustomerAccountServiceInterface::EMAIL_RESET
                 );

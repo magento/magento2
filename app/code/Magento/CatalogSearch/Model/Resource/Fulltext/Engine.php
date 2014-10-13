@@ -74,7 +74,7 @@ class Engine extends AbstractDb implements EngineInterface
     /**
      * Catalog search data
      *
-     * @var \Magento\CatalogSearch\Model\Resource\Helper
+     * @var \Magento\Search\Model\Resource\Helper
      */
     protected $_resourceHelper;
 
@@ -88,7 +88,7 @@ class Engine extends AbstractDb implements EngineInterface
      * @param \Magento\CatalogSearch\Model\Resource\Advanced $searchResource
      * @param \Magento\CatalogSearch\Model\Resource\Advanced\Collection $searchResourceCollection
      * @param \Magento\CatalogSearch\Helper\Data $catalogSearchData
-     * @param \Magento\CatalogSearch\Model\Resource\Helper $resourceHelper
+     * @param \Magento\Search\Model\Resource\Helper $resourceHelper
      */
     public function __construct(
         \Magento\Framework\App\Resource $resource,
@@ -98,7 +98,7 @@ class Engine extends AbstractDb implements EngineInterface
         \Magento\CatalogSearch\Model\Resource\Advanced $searchResource,
         \Magento\CatalogSearch\Model\Resource\Advanced\Collection $searchResourceCollection,
         \Magento\CatalogSearch\Helper\Data $catalogSearchData,
-        \Magento\CatalogSearch\Model\Resource\Helper $resourceHelper
+        \Magento\Search\Model\Resource\Helper $resourceHelper
     ) {
         $this->_catalogSearchAdvancedCollectionFactory = $catalogSearchAdvancedCollectionFactory;
         $this->_catalogSearchFulltextCollectionFactory = $catalogSearchFulltextCollectionFactory;

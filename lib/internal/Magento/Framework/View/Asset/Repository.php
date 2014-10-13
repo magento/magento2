@@ -70,6 +70,11 @@ class Repository
     private $fileContext;
 
     /**
+     * @var null|array
+     */
+    private $defaults = null;
+
+    /**
      * @param \Magento\Framework\UrlInterface $baseUrl
      * @param \Magento\Framework\View\DesignInterface $design
      * @param \Magento\Framework\View\Design\Theme\ListInterface $themeList
@@ -98,11 +103,9 @@ class Repository
      */
     public function updateDesignParams(array &$params)
     {
-        $defaults = $this->design->getDesignParams();
-
         // Set area
         if (empty($params['area'])) {
-            $params['area'] = $defaults['area'];
+            $params['area'] = $this->getDefaultParameter('area');
         }
 
         // Set themeModel
@@ -112,7 +115,7 @@ class Repository
             $theme = $params['themeId'];
         } elseif (isset($params['theme'])) {
             $theme = $params['theme'];
-        } elseif (empty($params['themeModel']) && $area !== $defaults['area']) {
+        } elseif (empty($params['themeModel']) && $area !== $this->getDefaultParameter('area')) {
             $theme = $this->design->getConfigurationDesignTheme($area);
         }
 
@@ -122,9 +125,8 @@ class Repository
                 throw new \UnexpectedValueException("Could not find theme '$theme' for area '$area'");
             }
         } elseif (empty($params['themeModel'])) {
-            $params['themeModel'] = $defaults['themeModel'];
+            $params['themeModel'] = $this->getDefaultParameter('themeModel');
         }
-
 
         // Set module
         if (!array_key_exists('module', $params)) {
@@ -133,9 +135,21 @@ class Repository
 
         // Set locale
         if (empty($params['locale'])) {
-            $params['locale'] = $defaults['locale'];
+            $params['locale'] = $this->getDefaultParameter('locale');
         }
         return $this;
+    }
+
+    /**
+     * Get default design parameter
+     *
+     * @param string $name
+     * @return mixed
+     */
+    private function getDefaultParameter($name)
+    {
+        $this->defaults = $this->design->getDesignParams();
+        return $this->defaults[$name];
     }
 
     /**

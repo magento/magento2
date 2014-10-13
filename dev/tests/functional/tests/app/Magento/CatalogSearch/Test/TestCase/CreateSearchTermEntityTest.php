@@ -85,7 +85,6 @@ class CreateSearchTermEntityTest extends Injectable
      */
     public function test(CatalogSearchQuery $searchTerm)
     {
-        $this->markTestIncomplete('MAGETWO-26170');
         // Steps
         $this->indexPage->open();
         $this->indexPage->getGridPageActions()->addNew();

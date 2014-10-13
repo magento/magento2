@@ -283,7 +283,8 @@ class Observer
 
         $originalQty = $product->getData('stock_data/original_inventory_qty');
         if (strlen($originalQty) > 0) {
-            $stockItemData['qty_correction'] = $stockItemData['qty'] - $originalQty;
+            $stockItemData['qty_correction'] = (isset($stockItemData['qty']) ? $stockItemData['qty'] : 0)
+                - $originalQty;
         }
 
         $stockItemDo = $this->stockItemService->getStockItem($product->getId());

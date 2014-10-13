@@ -1,9 +1,7 @@
 <?php
 /**
  * Obsolete methods
- *
  * Format: array(<method_name = ''>[, <class_scope> = ''[, <replacement>[, <is_deprecated>]]])
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -57,11 +55,17 @@ return array(
     array('_canUseCacheForInit', 'Magento\Core\Model\Config'),
     array('_canUseLocalModules'),
     array('_checkCookieStore', 'Magento\Core\Model\App'),
-    array('_checkCookieStore', 'Magento\Core\Model\Store\Storage\Db',
-        'Magento\Store\Model\StorageFactory::_checkCookieStore'),
+    array(
+        '_checkCookieStore',
+        'Magento\Core\Model\Store\Storage\Db',
+        'Magento\Store\Model\StorageFactory::_checkCookieStore'
+    ),
     array('_checkGetStore', 'Magento\Core\Model\App'),
-    array('_checkGetStore', 'Magento\Core\Model\Store\Storage\Db',
-        'Magento\Store\Model\StorageFactory::_checkRequestStore'),
+    array(
+        '_checkGetStore',
+        'Magento\Core\Model\Store\Storage\Db',
+        'Magento\Store\Model\StorageFactory::_checkRequestStore'
+    ),
     array('_checkUrlSettings', 'Magento\Backend\Controller\Adminhtml\Action'),
     array('_collectOrigData', 'Magento\Catalog\Model\Resource\AbstractResource'),
     array('_decodeFilter', 'Magento\Backend\Block\Widget\Grid'),
@@ -121,11 +125,17 @@ return array(
     array('_getSession', 'Magento\Paygate\Model\Authorizenet', 'Magento_Paygate_Model_Authorizenet::_session'),
     array('_getSHAInSet', '', 'Magento_Ogone_Model_Api::getHash'),
     array('_getStoreByGroup', 'Magento\Core\Model\App'),
-    array('_getStoreByGroup', 'Magento\Core\Model\Store\Storage\Db',
-        'Magento\Store\Model\StorageFactory::_getStoreByGroup'),
+    array(
+        '_getStoreByGroup',
+        'Magento\Core\Model\Store\Storage\Db',
+        'Magento\Store\Model\StorageFactory::_getStoreByGroup'
+    ),
     array('_getStoreByWebsite', 'Magento\Core\Model\App'),
-    array('_getStoreByWebsite', 'Magento\Core\Model\Store\Storage\Db',
-        'Magento\Store\Model\StorageFactory::_getStoreByWebsite'),
+    array(
+        '_getStoreByWebsite',
+        'Magento\Core\Model\Store\Storage\Db',
+        'Magento\Store\Model\StorageFactory::_getStoreByWebsite'
+    ),
     array('_getStoreTaxRequest', 'Magento\Tax\Model\Sales\Total\Quote\Shipping'),
     array('_getUploadMaxFilesize', 'Magento\Catalog\Model\Product\Option\Type\File'),
     array('_hookQueries', 'Magento\Core\Model\Resource\Setup'),
@@ -192,8 +202,11 @@ return array(
     array('_sendUploadResponse', 'Magento\Newsletter\Controller\Adminhtml\Subscriber'),
     array('_setAttribteValue'),
     array('_sort', 'Magento\Backend\Model\Config\Structure\Converter'),
-    array('_submitRecurringPaymentProfiles', 'Magento\Sales\Model\Service\Quote',
-        '\Magento\RecurringPayment\Model\Observer\CheckoutManagerObserver::submitRecurringPaymentProfiles'),
+    array(
+        '_submitRecurringPaymentProfiles',
+        'Magento\Sales\Model\Service\Quote',
+        '\Magento\RecurringPayment\Model\Observer\CheckoutManagerObserver::submitRecurringPaymentProfiles'
+    ),
     array(
         'submitOrder',
         'Magento\Sales\Model\Service\Quote',
@@ -481,7 +494,6 @@ return array(
     array('getItemRender', 'Magento\Checkout\Block\Cart\AbstractCart'),
     array('getItemRendererInfo', 'Magento\Checkout\Block\Cart\AbstractCart'),
     array('getKeyList', 'Magento\Framework\DB\Adapter\Pdo\Mysql'),
-    array('getLanguages', 'Magento\Install\Block\Begin'),
     array('getLanguageSelect', 'Magento\Backend\Block\Page\Footer'),
     array('getLayoutFilename', '', 'getFilename'),
     array('getLifeTime', 'Magento\Core\Model\Resource\Session'),
@@ -606,7 +618,11 @@ return array(
     array('purgeQueryParams', 'Magento\Framework\Url\QueryParamsResolver', 'Use setQueryParams([]) instead'),
     array('purgeQueryParams', 'Magento\Framework\Url\QueryParamsResolverInterface', 'Use setQueryParams([]) instead'),
     array('_getDefaultActionName', 'Magento\Framework\Url', 'Magento\Framework\UrlInterface::DEFAULT_ACTION_NAME'),
-    array('_getDefaultControllerName', 'Magento\Framework\Url', 'Magento\Framework\UrlInterface::DEFAULT_CONTROLLER_NAME'),
+    array(
+        '_getDefaultControllerName',
+        'Magento\Framework\Url',
+        'Magento\Framework\UrlInterface::DEFAULT_CONTROLLER_NAME'
+    ),
     array('_getDefaultUrlType', 'Magento\Framework\Url', 'Magento\Framework\UrlInterface::DEFAULT_URL_TYPE'),
     array('getSelectionFinalPrice', 'Magento\Bundle\Model\Product\Price'),
     array('getShipId', 'Magento\Shipping\Block\Tracking\Popup'),
@@ -630,7 +646,11 @@ return array(
     array('getTablePrefix', 'Magento\Core\Model\Config'),
     array('getTagsByType', 'Magento\Framework\App\Cache', 'Magento_Cache_Frontend_Decorator_TagScope::getTag()'),
     array('getTagsByType', 'Magento\Framework\App\Cache\Proxy', 'Magento_Cache_Frontend_Decorator_TagScope::getTag()'),
-    array('getTagsByType', 'Magento\Framework\App\CacheInterface', 'Magento_Cache_Frontend_Decorator_TagScope::getTag()'),
+    array(
+        'getTagsByType',
+        'Magento\Framework\App\CacheInterface',
+        'Magento_Cache_Frontend_Decorator_TagScope::getTag()'
+    ),
     array('getTaxAmount', 'Magento\Sales\Model\Quote\Item\AbstractItem'),
     array('getTaxRatesByProductClass', '', '_getAllRatesByProductClass'),
     array('getAllRatesByProductClass', 'Magento\Tax\Helper\Data'),
@@ -689,8 +709,11 @@ return array(
     array('init', 'Magento\Webapi\Controller\Front'),
     array('initCache'),
     array('initControllerRouters', 'Magento\Cms\Controller\Router'),
-    array('initCurrentStore', 'Magento\Store\Model\Storage\Db',
-        'Magento\Store\Model\StorageFactory::_reinitStores'),
+    array(
+        'initCurrentStore',
+        'Magento\Store\Model\Storage\Db',
+        'Magento\Store\Model\StorageFactory::_reinitStores'
+    ),
     array('_checkGetStore', 'Magento\Store\Model\Storage\Db'),
     array('_checkCookieStore', 'Magento\Store\Model\Storage\Db'),
     array('_getStoreByGroup', 'Magento\Store\Model\Storage\Db'),
@@ -737,11 +760,23 @@ return array(
     array('lockOrderInventoryData', 'Magento\CatalogInventory\Model\Observer'),
     array('logEncryptionKeySave'),
     array('logI' . 'nvitationSave'),
-    array('map', 'Magento\Framework\ObjectManager\Config\Mapper\Dom', 'Magento_ObjectManager_Config_Mapper_Dom::convert'),
+    array(
+        'map',
+        'Magento\Framework\ObjectManager\Config\Mapper\Dom',
+        'Magento_ObjectManager_Config_Mapper_Dom::convert'
+    ),
     array('mergeFiles', 'Magento\Core\Helper\Data', 'Magento\Framework\View\Asset\MergeStrategyInterface'),
     array('mergeFiles', 'Magento\Core\Model\Design\Package', 'Magento\Framework\View\Asset\MergeStrategyInterface'),
-    array('mergeFiles', 'Magento\Core\Model\Design\Package\Proxy', 'Magento\Framework\View\Asset\MergeStrategyInterface'),
-    array('mergeFiles', 'Magento\Core\Model\Design\PackageInterface', 'Magento\Framework\View\Asset\MergeStrategyInterface'),
+    array(
+        'mergeFiles',
+        'Magento\Core\Model\Design\Package\Proxy',
+        'Magento\Framework\View\Asset\MergeStrategyInterface'
+    ),
+    array(
+        'mergeFiles',
+        'Magento\Core\Model\Design\PackageInterface',
+        'Magento\Framework\View\Asset\MergeStrategyInterface'
+    ),
     array('order_success_page_view', 'Magento\GoogleAnalytics\Model\Observer'),
     array('orderedAction', 'Magento\Backend\Controller\Report\Product'),
     array('output', 'Magento\Framework\Shell'),
@@ -1098,7 +1133,11 @@ return array(
     array('mageDebugBacktrace'),
     array('mageDelTree'),
     array('mageParseCsv'),
-    array('getHttpAuthCredentials', '\Magento\Core\Helper\Http', '\Magento\Framework\HTTP\Authentication::getCredentials'),
+    array(
+        'getHttpAuthCredentials',
+        '\Magento\Core\Helper\Http',
+        '\Magento\Framework\HTTP\Authentication::getCredentials'
+    ),
     array(
         'failHttpAuthentication',
         '\Magento\Core\Helper\Http',
@@ -1111,10 +1150,26 @@ return array(
         '\Magento\CheckoutAgreements\Model\AgreementsProvider::getRequiredAgreementIds'
     ),
     array('validateIpAddr', '\Magento\Core\Helper\Http', '\Zend_Validate_Ip::isValid'),
-    array('getRemoteAddr', '\Magento\Core\Helper\Http', 'Magento\Framework\HTTP\PhpEnvironment\RemoteAddress::getRemoteAddress'),
-    array('getServerAddr', '\Magento\Core\Helper\Http', 'Magento\Framework\HTTP\PhpEnvironment\ServerAddress::getServerAddress'),
-    array('formatDate', 'Magento\Framework\Model\Resource\AbstractResource', '\Magento\Framework\Stdlib\DateTime::formatDate'),
-    array('mktime', 'Magento\Framework\Model\Resource\AbstractResource', '\Magento\Framework\Stdlib\DateTime::toTimestamp'),
+    array(
+        'getRemoteAddr',
+        '\Magento\Core\Helper\Http',
+        'Magento\Framework\HTTP\PhpEnvironment\RemoteAddress::getRemoteAddress'
+    ),
+    array(
+        'getServerAddr',
+        '\Magento\Core\Helper\Http',
+        'Magento\Framework\HTTP\PhpEnvironment\ServerAddress::getServerAddress'
+    ),
+    array(
+        'formatDate',
+        'Magento\Framework\Model\Resource\AbstractResource',
+        '\Magento\Framework\Stdlib\DateTime::formatDate'
+    ),
+    array(
+        'mktime',
+        'Magento\Framework\Model\Resource\AbstractResource',
+        '\Magento\Framework\Stdlib\DateTime::toTimestamp'
+    ),
     array('getPlainTemplateMode', '\Magento\Email\Model\Template\Filter'),
     array('getMessage', '\Magento\Core\Model\Session\Context', 'getMessageFactory'),
     array('getMessageFactory', '\Magento\Core\Model\Session\Context', 'getMessagesFactory'),
@@ -1123,7 +1178,11 @@ return array(
     array('formatTime', '\Magento\Core\Helper\Data', '\Magento\Core\Model\Locale::formatTime'),
     array('getCustomer', 'Magento\Backend\Model\Session\Quote', 'Magento\Backend\Model\Session\Quote::getCustomerId'),
     array('setCustomer', 'Magento\Backend\Model\Session\Quote', 'Magento\Backend\Model\Session\Quote::setCustomerId'),
-    array('_getConfigTimezone', '\Magento\Framework\Stdlib\DateTime\DateTime', '\Magento\Core\Model\Locale::getConfigTimezone'),
+    array(
+        '_getConfigTimezone',
+        '\Magento\Framework\Stdlib\DateTime\DateTime',
+        '\Magento\Core\Model\Locale::getConfigTimezone'
+    ),
     array('_filterPostData', '\Magento\Checkout\Controller\Onepage'),
     array('_filterPostData', '\Magento\Customer\Controller\Account'),
     array('_filterPostData', '\Magento\Customer\Controller\Adminhtml\Index'),
@@ -1131,8 +1190,16 @@ return array(
     array('noCookiesAction', '\Magento\Core\Controller\Varien\Action'),
     array('norouteAction', '\Magento\Core\Controller\Varien\Action'),
     array('getActionMethodName', '\Magento\Core\Controller\Varien\Action'),
-    array('initLayoutMessages', '\Magento\Core\Controller\Varien\Action', '\Magento\Framework\View\Layout::initMessages'),
-    array('_initLayoutMessages', '\Magento\Core\Controller\Varien\Action', '\Magento\Framework\View\Layout::initMessages'),
+    array(
+        'initLayoutMessages',
+        '\Magento\Core\Controller\Varien\Action',
+        '\Magento\Framework\View\Layout::initMessages'
+    ),
+    array(
+        '_initLayoutMessages',
+        '\Magento\Core\Controller\Varien\Action',
+        '\Magento\Framework\View\Layout::initMessages'
+    ),
     array('preDispatch', '\Magento\Core\Controller\Varien\Action'),
     array('postDispatch', '\Magento\Core\Controller\Varien\Action'),
     array('hasAction', '\Magento\Core\Controller\Varien\Action'),
@@ -1173,7 +1240,11 @@ return array(
         '\Magento\Core\Controller\Varien\Action',
         '\Magento\Framework\Stdlib\DateTime\Filter\DateTime::filter'
     ),
-    array('_filterDates', '\Magento\Core\Controller\Varien\Action', '\Magento\Framework\Stdlib\DateTime\Filter\Date::filter'),
+    array(
+        '_filterDates',
+        '\Magento\Core\Controller\Varien\Action',
+        '\Magento\Framework\Stdlib\DateTime\Filter\Date::filter'
+    ),
     array('_initDesign', '\Magento\Core\Controller\Varien\Action', '\Magento\Core\Model\DesignLoader::load'),
     array('_firePreDispatchEvents', '\Magento\Core\Controller\Varien\Action'),
     array('_prepareDownloadResponse', '\Magento\Core\Controller\Varien\Action'),
@@ -1182,7 +1253,11 @@ return array(
     array('getFlag', '\Magento\Core\Controller\Varien\Action', '\Magento\Framework\App\ActionFlag::get'),
     array('setFlag', '\Magento\Core\Controller\Varien\Action', '\Magento\Framework\App\ActionFlag::set'),
     array('loadLayout', '\Magento\Core\Controller\Varien\Action', '\Magento\Framework\App\ViewInterface::'),
-    array('addPageLayoutHandles', '\Magento\Core\Controller\Varien\Action', '\Magento\Framework\App\ViewInterface::loadLayout'),
+    array(
+        'addPageLayoutHandles',
+        '\Magento\Core\Controller\Varien\Action',
+        '\Magento\Framework\App\ViewInterface::loadLayout'
+    ),
     array(
         'getDefaultLayoutHandle',
         '\Magento\Core\Controller\Varien\Action',
@@ -1193,7 +1268,11 @@ return array(
         '\Magento\Core\Controller\Varien\Action',
         '\Magento\Framework\App\ViewInterface::generateLayoutXml'
     ),
-    array('renderLayout', '\Magento\Core\Controller\Varien\Action', '\Magento\Framework\App\ViewInterface::renderLayout'),
+    array(
+        'renderLayout',
+        '\Magento\Core\Controller\Varien\Action',
+        '\Magento\Framework\App\ViewInterface::renderLayout'
+    ),
     array('getLayout', '\Magento\Core\Controller\Varien\Action', '\Magento\Framework\App\ViewInterface::getLayout'),
     array(
         'loadLayoutUpdates',
@@ -1272,6 +1351,11 @@ return array(
     array('getCookie', 'Magento\Framework\View\Element\Js\Cookie'),
     array('setCopyright', 'Magento\Theme\Block\Html\Footer'),
     array('setLogo', 'Magento\Theme\Block\Html\Header'),
+    array('isHomePage', 'Magento\Theme\Block\Html\Header', 'Magento\Theme\Block\Html\Header\Logo::isHomePage'),
+    array('getLogoSrc', 'Magento\Theme\Block\Html\Header', 'Magento\Theme\Block\Html\Header\Logo::getLogoSrc'),
+    array('getLogoAlt', 'Magento\Theme\Block\Html\Header', 'Magento\Theme\Block\Html\Header\Logo::getLogoAlt'),
+    array('_getLogoUrl', 'Magento\Theme\Block\Html\Header', 'Magento\Theme\Block\Html\Header\Logo::_getLogoUrl'),
+    array('_isFile', 'Magento\Theme\Block\Html\Header', 'Magento\Theme\Block\Html\Header\Logo::_isFile'),
     array('_beforeCacheUrl', 'Magento\Framework\View\Element\AbstractBlock'),
     array('_afterCacheUrl', 'Magento\Framework\View\Element\AbstractBlock'),
     array('_getGroupFor', 'Magento\Framework\View\Asset\GroupedCollection', 'getGroupFor'),
@@ -1423,10 +1507,26 @@ return array(
     ),
     array('canSkipFilePublication', 'Magento\Framework\View\Publisher'),
     array('_getExtension', 'Magento\Framework\View\Publisher'),
-    array('_buildPublishedFilePath', 'Magento\Framework\View\Publisher', 'Magento\Framework\View\Publisher\FileInterface'),
-    array('_buildPublicViewRedundantFilename', 'Magento\Framework\View\Publisher', 'Magento\Framework\View\Publisher\File'),
-    array('_buildPublicViewSufficientFilename', 'Magento\Framework\View\Publisher', 'Magento\Framework\View\Publisher\File'),
-    array('_buildPublicViewFilename', 'Magento\Framework\View\Publisher', 'Magento\Framework\View\Publisher\FileInterface'),
+    array(
+        '_buildPublishedFilePath',
+        'Magento\Framework\View\Publisher',
+        'Magento\Framework\View\Publisher\FileInterface'
+    ),
+    array(
+        '_buildPublicViewRedundantFilename',
+        'Magento\Framework\View\Publisher',
+        'Magento\Framework\View\Publisher\File'
+    ),
+    array(
+        '_buildPublicViewSufficientFilename',
+        'Magento\Framework\View\Publisher',
+        'Magento\Framework\View\Publisher\File'
+    ),
+    array(
+        '_buildPublicViewFilename',
+        'Magento\Framework\View\Publisher',
+        'Magento\Framework\View\Publisher\FileInterface'
+    ),
     array('cleanAction', 'Magento\PageCache\Controller\Adminhtml\PageCache'),
     array('_isAllowed', 'Magento\PageCache\Controller\Adminhtml\PageCache'),
     array('_downloadFileAction', 'Magento\Sales\Controller\Download', '\Magento\Sales\Model\Download::downloadFile'),
@@ -1479,7 +1579,11 @@ return array(
     ),
     ['_detectMimeType', 'Magento\Framework\File\Transfer\Adapter\Http', '\Magento\Framework\File\Mime::getMimeType()'],
     ['getPublishedFilePath', 'Magento\Framework\View\Publisher'],
-    ['getPublicFilePath', 'Magento\Framework\View\PublicFilesManagerInterface', 'Magento\Framework\View\AssetInterface'],
+    [
+        'getPublicFilePath',
+        'Magento\Framework\View\PublicFilesManagerInterface',
+        'Magento\Framework\View\AssetInterface'
+    ],
     ['getPublicFilePath', 'Magento\Framework\View\Publisher', 'Magento\Framework\View\AssetInterface'],
     ['getPublicViewFile', 'Magento\Framework\View\Publisher', 'Magento\Framework\View\AssetInterface'],
     array('_getVatRequiredCustomerAddress', 'Magento\Sales\Model\Observer'),
@@ -1615,7 +1719,11 @@ return array(
     array('reindexProductPrices', '\Magento\Catalog\Model\Observer'),
     array('getCustomer', 'Magento\Checkout\Block\Onepage\AbstractOnepage'),
     ['getStoreConfig', 'Magento\Framework\View\Context', '\Magento\Framework\View\Context::getScopeConfig'],
-    ['getStoreConfig', 'Magento\Framework\View\Element\Context', '\Magento\Framework\View\Element\Context::getScopeConfig'],
+    [
+        'getStoreConfig',
+        'Magento\Framework\View\Element\Context',
+        '\Magento\Framework\View\Element\Context::getScopeConfig'
+    ],
     ['setConfig', 'Magento\Store\Model\Store'],
     ['getConfig', 'Magento\Store\Model\Store'],
     ['_compareSortOrder', 'Magento\Sales\Model\Config\Ordered'],
@@ -1797,7 +1905,11 @@ return array(
     ['prepareCatalogProductIndexSelect', 'Magento\CatalogInventory\Model\Observer'],
     ['prepareCatalogProductIndexSelect', 'Magento\CatalogInventory\Model\Resource\Stock\Status'],
     ['prepareCatalogProductIndexSelect', 'Magento\CatalogInventory\Model\Stock\Status'],
-    ['getPriceHtml', '\Magento\Catalog\Block\Product\AbstractProduct', '\Magento\Catalog\Block\Product\AbstractProduct::getProductPriceHtml'],
+    [
+        'getPriceHtml',
+        '\Magento\Catalog\Block\Product\AbstractProduct',
+        '\Magento\Catalog\Block\Product\AbstractProduct::getProductPriceHtml'
+    ],
     ['getDeleteUrl', '\Magento\Checkout\Block\Cart\Item\Renderer'],
     ['sendNewOrderEmail', 'Magento\Sales\Model\Order'],
     ['_getEmails', 'Magento\Sales\Model\Order'],
@@ -1902,6 +2014,7 @@ return array(
         'updateCategoryIndex',
         'Magento\CatalogSearch\Model\Resource\Fulltext',
     ],
+    ['_getRestrictedStoresList', 'Magento\UrlRewrite\Block\Edit\Form'],
     ['removeTag', 'Magento\UrlRewrite\Model\UrlRewrite'],
     ['addTag', 'Magento\UrlRewrite\Model\UrlRewrite'],
     ['loadByTags', 'Magento\UrlRewrite\Model\UrlRewrite'],
@@ -1913,7 +2026,30 @@ return array(
     ['formatPrice', 'Magento\Store\Model\Store', 'Magento\Framework\Pricing\PriceCurrencyInterface::format'],
     ['convertPrice', 'Magento\Store\Model\Store', 'Magento\Framework\Pricing\PriceCurrencyInterface::convert'],
     ['getPriceFilter', 'Magento\Store\Model\Store'],
+    ['setPricesModel', 'Magento\Catalog\Model\Layer\Filter\Price\Algorithm'],
+    ['loadPrices', 'Magento\Catalog\Model\Layer\Filter\Price', 'Magento\CatalogSearch\Model\Price\Interval::load'],
+    [
+        'loadPreviousPrices',
+        'Magento\Catalog\Model\Layer\Filter\Price',
+        'Magento\CatalogSearch\Model\Price\Interval::loadPrevious'
+    ],
+    [
+        'loadNextPrices',
+        'Magento\Catalog\Model\Layer\Filter\Price',
+        'Magento\CatalogSearch\Model\Price\Interval::loadNext'
+    ],
+    ['getQuery', 'Magento\CatalogSearch\Helper\Data', 'Magento\Search\Model\QueryFactory::get'],
+    ['getQueryText', 'Magento\CatalogSearch\Helper\Data', 'Magento\Search\Model\Query::getQueryText'],
     ['_addHeader', 'Magento\Rss\Model\Rss'],
     ['_addEntries', 'Magento\Rss\Model\Rss'],
     ['_addEntry', 'Magento\Rss\Model\Rss'],
+    ['_welcomeCustomer', 'Magento\Customer\Controller\Account'],
+    ['_addWelcomeMessage', 'Magento\Customer\Controller\Account'],
+    ['_isVatValidationEnabled', 'Magento\Customer\Controller\Account'],
+    ['_createUrl', 'Magento\Customer\Controller\Account'],
+    ['_extractAddress', 'Magento\Customer\Controller\Account\CreatePost', 'Magento\Customer\Controller\Account\CreatePost::extractAddress'],
+    ['_loginPostRedirect', 'Magento\Customer\Controller\Account\LoginPost', 'Magento\Customer\Controller\Account\LoginPost::loginPostRedirect'],
+    ['_getAllowedActions', 'Magento\Customer\Controller\Account', 'Magento\Customer\Controller\Account::getAllowedActions'],
+    ['isRegistrationAllowed', 'Magento\Customer\Controller\Account\CreatePost'],
+    ['isRegistrationAllowed', 'Magento\Invitation\Controller\Customer\Account\CreatePost'],
 );

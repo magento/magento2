@@ -31,7 +31,7 @@ use Magento\Framework\Data\Form\Element\Factory;
 use Magento\Framework\Data\Form\Element\Fieldset;
 
 /**
- * Abstract class for form, coumn and fieldset
+ * Abstract class for form, column and fieldset
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */

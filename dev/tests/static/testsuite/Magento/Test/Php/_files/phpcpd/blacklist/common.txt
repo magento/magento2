@@ -82,6 +82,7 @@ Magento/Sales/Model/Resource
 Magento/Sales/Model/Quote/Address/Total
 Magento/Sales/Model/Resource/Report/Order
 Magento/SalesRule/Block/Adminhtml/Promo/Quote/Edit/Tab
+Magento/Search/Block/Adminhtml/Dashboard
 Magento/Shipping/Model/Carrier
 Magento/Sitemap/Block/Adminhtml/Edit
 Magento/Sitemap/Model/
@@ -126,3 +127,5 @@ Magento/Ui
 setup
 Magento/Sales/Service/V1
 Magento/Shipping/Controller/Adminhtml/Order/Shipment
+vendor
+setup/vendor

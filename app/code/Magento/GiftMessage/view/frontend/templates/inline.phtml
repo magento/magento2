@@ -177,9 +177,8 @@ require([
             <label for="allow_gift_options_<?php echo $this->getEntity()->getId() ?>" class="label"><span><?php echo __('Add gift options') ?></span></label>
         </div>
 
-        <dl class="block items" id="allow-gift-options-container-<?php echo $this->getEntity()->getId() ?>">
-            <dt id="add-gift-options-for-order-<?php echo $this->getEntity()->getId() ?>" class="order">
-                <div class="title"><span><?php echo __('Gift Options for this address.'); ?></span></div>
+        <dl class="options-items" id="allow-gift-options-container-<?php echo $this->getEntity()->getId() ?>">
+            <dt id="add-gift-options-for-order-<?php echo $this->getEntity()->getId() ?>" class="order-title">
                 <div class="field choice">
                     <input type="checkbox" name="allow_gift_options_for_order_<?php echo $this->getEntity()->getId() ?>" id="allow_gift_options_for_order_<?php echo $this->getEntity()->getId() ?>" data-mage-init='{"giftOptions":{}}' value="1" data-selector='{"id":"#allow-gift-options-for-order-container-<?php echo $this->getEntity()->getId() ?>"}'<?php if($this->getEntityHasMessage()): ?> checked="checked"<?php endif; ?> class="checkbox" />
                     <label for="allow_gift_options_for_order_<?php echo $this->getEntity()->getId() ?>" class="label"><span><?php echo __('Add gift options for the Entire Order') ?></span></label>
@@ -191,7 +190,7 @@ require([
                 <?php if ($this->isMessagesAvailable()): ?>
                     <?php $_giftMessage = true; ?>
                     <a href="#" class="action activate message" data-mage-init='{"toggleAdvanced": {"selectorsToggleClass":"hidden", "toggleContainers":"#gift-messages-for-order-container-<?php echo $this->getEntity()->getId() ?>"}}'><?php echo __('Gift Message') ?></a>
-                    <div id="gift-messages-for-order-container-<?php echo $this->getEntity()->getId() ?>" class="block message hidden">
+                    <div id="gift-messages-for-order-container-<?php echo $this->getEntity()->getId() ?>" class="gift-messages-order hidden">
                         <fieldset class="fieldset">
                             <p><?php echo __('You can leave this box blank if you do not wish to add a gift message for this address.') ?></p>
                             <div class="field from">
@@ -218,28 +217,27 @@ require([
             </dd>
 
             <?php if ($this->isItemsAvailable()): ?>
-            <dt id="add-gift-options-for-items-<?php echo $this->getEntity()->getId() ?>" class="individual">
-                <div class="title"><span><?php echo __('Gift Options for Individual Items'); ?></span></div>
+            <dt id="add-gift-options-for-items-<?php echo $this->getEntity()->getId() ?>" class="order-title individual">
                 <div class="field choice">
                     <input type="checkbox" name="allow_gift_options_for_items_<?php echo $this->getEntity()->getId() ?>" id="allow_gift_options_for_items_<?php echo $this->getEntity()->getId() ?>" data-mage-init='{"giftOptions":{}}' value="1" data-selector='{"id":"#allow-gift-options-for-items-container-<?php echo $this->getEntity()->getId() ?>"}'<?php if($this->getItemsHasMesssages()): ?> checked="checked"<?php endif; ?> class="checkbox" />
                     <label for="allow_gift_options_for_items_<?php echo $this->getEntity()->getId() ?>" class="label"><span><?php echo __('Add gift options for Individual Items') ?></span></label>
                 </div>
             </dt>
 
-            <dd id="allow-gift-options-for-items-container-<?php echo $this->getEntity()->getId() ?>" class="options individual">
-                 <ol>
+            <dd id="allow-gift-options-for-items-container-<?php echo $this->getEntity()->getId() ?>" class="order-options individual">
+                 <ol class="items">
                  <?php foreach($this->getItems() as $_index=>$_item): ?>
                  <?php $_product=$_item->getProduct() ?>
                      <li class="item">
-                         <p class="number"><?php echo __('Item %1 of %2', $_index+1, $this->countItems()) ?></p>
                          <div class="product">
+                             <div class="number"><?php echo __('<span>Item %1</span> of %2', $_index+1, $this->countItems()) ?></div>
                              <div class="img photo container">
                                  <?php $imageBlock =  $this->getLayout()->createBlock('Magento\Catalog\Block\Product\Image'); ?>
                                  <?php echo $imageBlock->init($_product, 'gift_messages_checkout_thumbnail')->toHtml() ?>
                              </div>
-                             <strong class="product name"><?php echo $this->escapeHtml($_product->getName()) ?></strong>
+                             <strong class="product-name"><?php echo $this->escapeHtml($_product->getName()) ?></strong>
                          </div>
-                         <div class="item options">
+                         <div class="options">
                              <div class="options-items-container" id="options-items-container-<?php echo $this->getEntity()->getId() ?>-<?php echo $_item->getId() ?>"></div>
                              <input type="hidden" name="giftoptions[quote_address_item][<?php echo $_item->getId() ?>][address]" value="<?php echo $this->getEntity()->getId()?>" />
 
@@ -280,15 +278,15 @@ require([
             <dt class="extra-options-container" id="extra-options-container-<?php echo $this->getEntity()->getId() ?>"></dt>
         </dl>
     </fieldset>
-        <script type="text/javascript">
-require(['jquery', 'mage/mage'], function(jQuery){
+<script type="text/javascript">
+    require(['jquery', 'mage/mage'], function(jQuery){
 
-            jQuery('#allow_gift_options_<?php echo $this->getEntity()->getId() ?>')
-                .add('#allow_gift_options_for_order_<?php echo $this->getEntity()->getId() ?>')
-                .add('#allow_gift_options_for_items_<?php echo $this->getEntity()->getId() ?>')
-                .mage('giftOptions');
-        
-});
+    jQuery('#allow_gift_options_<?php echo $this->getEntity()->getId() ?>')
+        .add('#allow_gift_options_for_order_<?php echo $this->getEntity()->getId() ?>')
+        .add('#allow_gift_options_for_items_<?php echo $this->getEntity()->getId() ?>')
+        .mage('giftOptions');
+
+    });
 </script>
     <?php break; ?>
 <?php endswitch ?>

@@ -68,10 +68,16 @@ class Layout
         )->will(
             \PHPUnit_Framework_TestCase::returnValue($files)
         );
+        $pageLayoutFileSource = $this->_testCase->getMockForAbstractClass(
+            'Magento\Framework\View\File\CollectorInterface'
+        );
+        $pageLayoutFileSource->expects(\PHPUnit_Framework_TestCase::any())
+            ->method('getFiles')
+            ->willReturn([]);
         $cache = $this->_testCase->getMockForAbstractClass('Magento\Framework\Cache\FrontendInterface');
         return $objectManager->create(
             'Magento\Framework\View\Layout\ProcessorInterface',
-            ['fileSource' => $fileSource, 'cache' => $cache]
+            ['fileSource' => $fileSource, 'pageLayoutFileSource' => $pageLayoutFileSource, 'cache' => $cache]
         );
     }
 

@@ -170,10 +170,10 @@ class Price implements FixtureInterface
                 'price_to' => '120.00',
                 'cart_price' => '317.00'
             ],
-            'fixed-126' => [
+            'fixed-159' => [
                 'price_from' => '115.00',
                 'price_to' => '120.00',
-                'cart_price' => '126.00'
+                'cart_price' => '159.00'
             ],
             'fixed-15' => [
                 'price_from' => '15.00',

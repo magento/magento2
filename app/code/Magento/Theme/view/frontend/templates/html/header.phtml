@@ -26,21 +26,7 @@
  */
 ?>
 <?php switch($this->getShowPart()):
-    case 'logo': ?>
-        <?php $storeName = $this->getThemeName() ? $this->getThemeName() : $this->getLogoAlt();?>
-        <span data-action="toggle-nav" class="action nav-toggle"><span><?php echo __('Toggle Nav') ?></span></span>
-        <?php if ($this->isHomePage()):?>
-        <strong class="logo">
-            <img src="<?php echo $this->getLogoSrc() ?>" alt="<?php echo $this->getLogoAlt() ?>" />
-        </strong>
-        <?php else:?>
-        <a class="logo" href="<?php echo $this->getUrl(''); ?>" title="<?php echo $storeName ?>">
-            <img src="<?php echo $this->getLogoSrc() ?>" alt="<?php echo $storeName ?>" />
-        </a>
-        <?php endif?>
-    <?php break; ?>
-
-    <?php case 'welcome': ?>
+    case 'welcome': ?>
         <li class="greet welcome"><?php echo $this->getWelcome() ?></li>
     <?php break; ?>
 

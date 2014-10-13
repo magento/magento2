@@ -23,17 +23,11 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
-    <referenceContainer name="header-wrapper">
-        <block class="Magento\Framework\View\Element\Template" name="top.search" as="topSearch" template="Magento_CatalogSearch::form.mini.phtml"/>
-    </referenceContainer>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <referenceBlock name="top.search">
+        <block class="Magento\Framework\View\Element\Template" name="advanced-search-link" template="Magento_CatalogSearch::advanced/link.phtml" />
+    </referenceBlock>
     <referenceBlock name="footer_links">
-        <block class="Magento\Framework\View\Element\Html\Link\Current" ifconfig="catalog/seo/search_terms" name="catalog-search-term-popular-link">
-            <arguments>
-                <argument name="label" xsi:type="string">Search Terms</argument>
-                <argument name="path" xsi:type="string">catalogsearch/term/popular</argument>
-            </arguments>
-        </block>
         <block class="Magento\Framework\View\Element\Html\Link\Current" name="catalog-search-advanced-link">
             <arguments>
                 <argument name="label" xsi:type="string">Advanced Search</argument>

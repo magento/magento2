@@ -25,6 +25,8 @@
 namespace Magento\Setup\Model;
 
 use Zend\Console\Console;
+use Zend\Console\ColorInterface;
+
 /**
  * Console Logger
  *
@@ -49,35 +51,34 @@ class ConsoleLogger implements LoggerInterface
     }
 
     /**
-     * Logs success message
-     *
-     * @param string $message
-     * @return void
+     * {@inheritdoc}
      */
     public function logSuccess($message)
     {
-        $this->console->writeLine("[SUCCESS]" . ($message ? ": $message" : ''), 11);
+        $this->console->writeLine("[SUCCESS]" . ($message ? ": $message" : ''), ColorInterface::LIGHT_GREEN);
     }
 
     /**
-     * Logs error message
-     *
-     * @param \Exception $e
-     * @return void
+     * {@inheritdoc}
      */
     public function logError(\Exception $e)
     {
-        $this->console->writeLine("[ERROR]: " . $e, 10);
+        $this->console->writeLine("[ERROR]: " . $e, ColorInterface::LIGHT_RED);
     }
 
     /**
-     * Logs message to log writer
-     *
-     * @param string $message
-     * @return void
+     * {@inheritdoc}
      */
     public function log($message)
     {
-        $this->console->writeLine($message, 13);
+        $this->console->writeLine($message, ColorInterface::LIGHT_BLUE);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function logMeta($message)
+    {
+        $this->console->writeLine($message, ColorInterface::GRAY);
     }
 }

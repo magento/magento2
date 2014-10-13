@@ -30,7 +30,7 @@ $prefix = $this->getPrefix() ? '<span class="prefix">' . $this->getPrefix() . '<
 $suffix = $this->getSuffix() ? '<span class="suffix">' . $this->getSuffix() . '</span>' : '';
 $title = '';
 if (trim($this->getPageTitle())) {
-    $title = $prefix . '<span class="base" data-ui-id="page-title" ' .  $this->getAddBaseAttribute() . '>' . $this->getPageTitle() . '</span>' . $suffix;
+    $title = $prefix . '<span class="base" data-ui-id="page-title" ' .  $this->getAddBaseAttribute() . '>' . $this->escapeHtml($this->getPageTitle()) . '</span>' . $suffix;
 }
 ?>
 <?php if ($title): ?>

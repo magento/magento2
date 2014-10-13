@@ -54,6 +54,7 @@
             <module name="Magento_CatalogUrlRewrite"/>
             <module name="Magento_UrlRewrite"/>
             <module name="Magento_Msrp" />
+            <module name="Magento_PageCache"/>
         </depends>
     </module>
 </config>

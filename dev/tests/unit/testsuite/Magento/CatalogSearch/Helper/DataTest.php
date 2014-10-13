@@ -72,7 +72,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     {
         $this->_contextMock = $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false);
         $this->_stringMock = $this->getMock('Magento\Framework\Stdlib\String');
-        $this->_queryFactoryMock = $this->getMock('Magento\CatalogSearch\Model\QueryFactory', [], [], '', false);
+        $this->_queryFactoryMock = $this->getMock('Magento\Search\Model\QueryFactory', [], [], '', false);
         $this->_scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->_escaperMock = $this->getMock('Magento\Framework\Escaper');
         $this->_filterManagerMock = $this->getMock('Magento\Framework\Filter\FilterManager', [], [], '', false);
@@ -105,7 +105,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->_scopeConfigMock->expects($this->once())
             ->method('getValue')
             ->with(
-                \Magento\CatalogSearch\Model\Query::XML_PATH_MIN_QUERY_LENGTH,
+                \Magento\Search\Model\Query::XML_PATH_MIN_QUERY_LENGTH,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 null
             )
@@ -119,7 +119,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->_scopeConfigMock->expects($this->once())
             ->method('getValue')
             ->with(
-                \Magento\CatalogSearch\Model\Query::XML_PATH_MAX_QUERY_LENGTH,
+                \Magento\Search\Model\Query::XML_PATH_MAX_QUERY_LENGTH,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 null
             )
@@ -133,7 +133,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->_scopeConfigMock->expects($this->once())
             ->method('getValue')
             ->with(
-                \Magento\CatalogSearch\Model\Query::XML_PATH_MAX_QUERY_WORDS,
+                \Magento\Search\Model\Query::XML_PATH_MAX_QUERY_WORDS,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 null
             )

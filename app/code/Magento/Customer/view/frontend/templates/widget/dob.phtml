@@ -47,35 +47,16 @@ NOTE: Regarding styles - if we leave it this way, we'll move it to boxes.css
  * @see \Magento\Customer\Block\Widget\Dob
  */
 ?>
-<div class="field dob<?php if ($this->isRequired()) echo ' required' ?>">
-    <label class="label" for="<?php echo $this->getFieldId('month')?>"><span><?php echo __('Date of Birth') ?></span></label>
+<?php
+$fieldCssClass = 'field date field-' . $this->getHtmlId();
+$fieldCssClass .= $this->isRequired() ? ' required' : '';
+?>
+<div class="<?php echo $fieldCssClass; ?>">
+    <label class="label" for="<?php echo $this->getHtmlId()?>"><span><?php echo $this->getLabel() ?></span></label>
     <div class="control customer-dob">
-        <div class="fields group group-3">
-        <?php
-            $this->setDateInput('d',
-                '<div class="field dob-day day">
-                     <label class="label" for="' . $this->getFieldId('day') . '"><span>' . __('DD') . '</span></label>
-                     <div class="control"><input type="text" id="' . $this->getFieldId('day') . '" name="' . $this->getFieldName('day') . '" value="' . $this->getDay() . '" title="' . __('Day') . '" class="input-text validate-custom" ' . $this->getFieldParams() . '></div>
-                 </div>'
-            );
-
-            $this->setDateInput('m',
-                '<div class="field dob-month month">
-                     <label class="label" for="' . $this->getFieldId('month') . '"><span>' . __('MM')  . '</span></label>
-                     <div class="control"><input type="text" id="' . $this->getFieldId('month') . '" name="' . $this->getFieldName('month') . '" value="' . $this->getMonth()  . '" title="' . __('Month')  . '" class="input-text validate-custom" ' . $this->getFieldParams()  . '></div>
-                 </div>'
-            );
-
-            $this->setDateInput('y',
-                '<div class="field dob-year year">
-                     <label class="label" for="' . $this->getFieldId('year') . '"><span>' . __('YYYY')  . '</span></label>
-                     <div class="control"><input type="text" id="' . $this->getFieldId('year') . '" name="' . $this->getFieldName('year') . '" value="' . $this->getYear()  . '" title="' . __('Year')  . '" class="input-text validate-custom" ' . $this->getFieldParams()  . '></div>
-                 </div>'
-            );
-        ?>
-        <?php echo $this->getSortedDateInputs() ?>
-        </div>
-        <input type="hidden" id="<?php echo $this->getFieldId('full')?>" name="<?php echo $this->getFieldName('dob')?>" data-validate="{'validate-dob': ['.dob-day', '.dob-month', '.dob-year', <?php echo $this->isRequired() ? 'true' : 'false' ?>]<?php if ($this->getMinDateRange() && $this->getMaxDateRange()):?>, 'validate-date-between':['<?php echo $this->getMinDateRange()?>', '<?php echo $this->getMaxDateRange()?>']<?php endif;?>}">
-        <div class="validation-advice" id="<?php echo $this->getFieldId('date-advice')?>" style="opacity:0.999999; display:none;"></div>
+        <?php echo $this->getFieldHtml(); ?>
+        <?php if ($_message = $this->getAdditionalDescription()) : ?>
+            <div class="note"><?php echo $_message; ?></div>
+        <?php endif; ?>
     </div>
 </div>

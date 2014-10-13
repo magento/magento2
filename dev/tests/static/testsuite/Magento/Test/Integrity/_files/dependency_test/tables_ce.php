@@ -117,7 +117,7 @@ return array(
     'catalogrule_website' => 'Magento_CatalogRule',
     'catalogsearch_fulltext' => 'Magento_CatalogSearch',
     'catalogsearch_result' => 'Magento_CatalogSearch',
-    'catalogsearch_query' => 'Magento_CatalogSearch',
+    'search_query' => 'Magento_CatalogSearch',
     'checkout_agreement' => 'Magento_Checkout',
     'checkout_agreement_store' => 'Magento_Checkout',
     'cms_block' => 'Magento_Cms',

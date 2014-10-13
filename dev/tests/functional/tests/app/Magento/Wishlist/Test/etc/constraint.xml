@@ -33,4 +33,16 @@
     <assertWishlistIsEmpty module="Magento_Wishlist">
         <severeness>low</severeness>
     </assertWishlistIsEmpty>
+    <assertAddProductToWishlistSuccessMessage module="Magento_Wishlist">
+        <severeness>low</severeness>
+    </assertAddProductToWishlistSuccessMessage>
+    <assertProductIsPresentInWishlist module="Magento_Wishlist">
+        <severeness>low</severeness>
+    </assertProductIsPresentInWishlist>
+    <assertProductIsPresentInCustomerBackendWishlist module="Magento_Wishlist">
+        <severeness>low</severeness>
+    </assertProductIsPresentInCustomerBackendWishlist>
+    <assertBundleProductDetailsInWishlist module="Magento_Wishlist">
+        <severeness>low</severeness>
+    </assertBundleProductDetailsInWishlist>
 </constraint>

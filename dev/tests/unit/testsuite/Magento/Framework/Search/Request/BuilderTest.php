@@ -108,6 +108,14 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \InvalidArgumentException
+     */
+    public function testCreateInvalidArgumentExceptionNotDefined()
+    {
+        $this->requestBuilder->create();
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage Request name 'rn' doesn't exist.
      */
     public function testCreateInvalidArgumentException()

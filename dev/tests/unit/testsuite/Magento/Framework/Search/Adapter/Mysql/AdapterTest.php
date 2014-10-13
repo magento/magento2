@@ -24,8 +24,12 @@
 
 namespace Magento\Framework\Search\Adapter\Mysql;
 
-use Magento\Framework\App\Resource\Config;
 use Magento\Framework\App\Resource;
+use Magento\Framework\App\Resource\Config;
+use Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Container as AggregationContainer;
+use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderContainer;
+use Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface;
+use Magento\Framework\Search\Request\BucketInterface;
 use Magento\TestFramework\Helper\ObjectManager;
 
 class AdapterTest extends \PHPUnit_Framework_TestCase
@@ -71,12 +75,22 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
      */
     private $resource;
 
+    /**
+     * @var BucketInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $bucket;
+
+    /**
+     * @var \Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $aggregatioBuilder;
+
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
 
         $this->request = $this->getMockBuilder('Magento\Framework\Search\RequestInterface')
-            ->setMethods([])
+            ->setMethods(['getAggregation'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -92,7 +106,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['fetchAssoc'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->resource->expects($this->once())
+        $this->resource->expects($this->any())
             ->method('getConnection')
             ->with(Resource::DEFAULT_READ_RESOURCE)
             ->will($this->returnValue($this->connectionAdapter));
@@ -107,12 +121,23 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->aggregatioBuilder = $this->getMockBuilder('Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder')
+            ->setMethods(['build'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->bucket = $this->getMockBuilder('Magento\Framework\Search\Request\BucketInterface')
+            ->setMethods(['getType', 'getName'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
         $this->adapter = $this->objectManager->getObject(
             '\Magento\Framework\Search\Adapter\Mysql\Adapter',
             [
                 'mapper' => $this->mapper,
                 'responseFactory' => $this->responseFactory,
                 'resource' => $this->resource,
+                'aggregationBuilder' => $this->aggregatioBuilder
             ]
         );
     }
@@ -121,13 +146,20 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     {
         $selectResult = [
             'documents' => [
-                'id' => 1,
-                'sku' => 'Product'
+                [
+                    'product_id' => 1,
+                    'sku' => 'Product'
+                ]
             ],
-            'aggregations' => []
+            'aggregations' => [
+                'aggregation_name' => [
+                    'aggregation1' => [1, 3],
+                    'aggregation2' => [2, 4]
+                ]
+            ]
         ];
 
-        $this->connectionAdapter->expects($this->once())
+        $this->connectionAdapter->expects($this->at(0))
             ->method('fetchAssoc')
             ->will($this->returnValue($selectResult['documents']));
         $this->mapper->expects($this->once())
@@ -138,6 +170,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with($selectResult)
             ->will($this->returnArgument(0));
+        $this->aggregatioBuilder->expects($this->once())->method('build')->willReturn($selectResult['aggregations']);
         $response = $this->adapter->query($this->request);
         $this->assertEquals($selectResult, $response);
     }

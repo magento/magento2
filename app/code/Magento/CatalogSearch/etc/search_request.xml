@@ -52,10 +52,10 @@
                 <queryReference clause="should" ref="price_query" />
             </query>
             <query name="sku_query" xsi:type="filteredQuery">
-                <filterReference ref="sku_query_filter" />
+                <filterReference clause="must" ref="sku_query_filter" />
             </query>
             <query name="price_query" xsi:type="filteredQuery">
-                <filterReference ref="price_query_filter" />
+                <filterReference clause="must" ref="price_query_filter" />
             </query>
         </queries>
         <filters>

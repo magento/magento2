@@ -26,6 +26,7 @@
 require(['jquery'], function($){
     $('[data-tab-panel=product-details]').on('stockbeforedisable', function(e) {
         if (e.productType === 'bundle') {
+            e.stopPropagation();
             return false;
         }
     });

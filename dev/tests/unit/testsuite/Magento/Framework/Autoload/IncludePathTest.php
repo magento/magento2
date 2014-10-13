@@ -114,4 +114,15 @@ class IncludePathTest extends \PHPUnit_Framework_TestCase
             $this->assertFalse(class_exists($class, false));
         }
     }
+
+    public function testGetFilePath()
+    {
+        $original = '\Magento\Framework\ObjectManager\Factory\Factory';
+        $result = 'Magento/Framework/ObjectManager/Factory/Factory.php';
+        $this->assertEquals((new \Magento\Framework\Autoload\IncludePath())->getFilePath($original), $result);
+
+        $original = 'Zend_Acl_Role_Registry_Exception';
+        $result = 'Zend/Acl/Role/Registry/Exception.php';
+        $this->assertEquals((new \Magento\Framework\Autoload\IncludePath())->getFilePath($original), $result);
+    }
 }

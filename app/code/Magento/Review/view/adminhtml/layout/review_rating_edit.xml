@@ -24,4 +24,4 @@
  */
 -->
 <page layout="admin-2columns-left" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd"/>
+      xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd"/>

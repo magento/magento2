@@ -2,12 +2,13 @@
     "name": "magento/project-community-edition",
     "description": "Magento project (Community Edition)",
     "type": "project",
-    "version": "0.1.0-alpha98",
+    "version": "0.1.0-alpha99",
     "require": {
-        "php": "~5.4.11|~5.5.0"
+        "php": "~5.4.11|~5.5.0",
+        "zendframework/zend-stdlib": "2.0.3"
     },
     "require-dev": {
-        "phpunit/phpunit": "4.1.*"
+        "phpunit/phpunit": "4.1.0"
     },
     "replace": {
         "magento/module-admin-notification": "self.version",
@@ -76,6 +77,7 @@
         "magento/module-rule": "self.version",
         "magento/module-sales": "self.version",
         "magento/module-sales-rule": "self.version",
+        "magento/module-search": "self.version",
         "magento/module-sendfriend": "self.version",
         "magento/module-shipping": "self.version",
         "magento/module-sitemap": "self.version",
@@ -106,7 +108,6 @@
         "magento/framework": "self.version",
         "magento/project-setup": "0.1.0",
         "zendframework/zend-eventmanager": "2.0.3",
-        "zendframework/zend-stdlib": "2.0.3",
         "zendframework/zend-di": "2.0.3",
         "zendframework/zend-escaper": "2.0.3",
         "zendframework/zend-i18n": "2.0.3",
@@ -135,7 +136,6 @@
     "extra": {
         "component_paths": {
             "zendframework/zend-eventmanager": "lib/internal/Zend/EventManager",
-            "zendframework/zend-stdlib": "lib/internal/Zend/Stdlib",
             "zendframework/zend-di": "lib/internal/Zend/Di",
             "zendframework/zend-escaper": "lib/internal/Zend/Escaper",
             "zendframework/zend-i18n": "lib/internal/Zend/I18n",

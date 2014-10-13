@@ -116,4 +116,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\Product\Attribute\Backend\Price">
+        <plugin name="bundle" type="Magento\Bundle\Model\Plugin\PriceBackend" sortOrder="100" />
+    </type>
 </config>

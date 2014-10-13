@@ -24,33 +24,35 @@
 
 /** @var \Magento\Multishipping\Block\Checkout\Address\Select $this */
 ?>
-<div class="multicheckout block change billing">
-    <div class="content">
+<div class="multicheckout">
+    <div class="block block-billing">
     <?php foreach ($this->getAddressCollection() as $_address): ?>
-        <div class="box billing">
-            <address>
-                <?php echo $this->getAddressAsHtml($_address) ?>
-                <?php if($this->isAddressDefaultBilling($_address)): ?>
-                    <br /><strong><?php echo __('Default Billing') ?></strong>
-                <?php endif; ?>
-                <?php if($this->isAddressDefaultShipping($_address)): ?>
-                    <br /><strong><?php echo __('Default Shipping') ?></strong>
-                <?php endif; ?>
-            </address>
-            <div class="actions">
+        <div class="box box-billing-address">
+            <div class="box-content">
+                <address>
+                    <?php echo $this->getAddressAsHtml($_address) ?>
+                    <?php if($this->isAddressDefaultBilling($_address)): ?>
+                        <br /><strong><?php echo __('Default Billing') ?></strong>
+                    <?php endif; ?>
+                    <?php if($this->isAddressDefaultShipping($_address)): ?>
+                        <br /><strong><?php echo __('Default Shipping') ?></strong>
+                    <?php endif; ?>
+                </address>
+            </div>
+            <div class="box-actions">
                 <a href="<?php echo $this->getEditAddressUrl($_address) ?>" class="action edit"><span><?php echo __('Edit Address') ?></span></a>
                 <a href="<?php echo $this->getSetAddressUrl($_address) ?>" class="action select"><span><?php echo __('Select Address') ?></span></a>
             </div>
         </div>
     <?php endforeach; ?>
     </div>
-</div>
-<div class="actions-toolbar">
-    <div class="primary">
-        <button type="button" class="action add primary" role="add-address" title="<?php echo __('Add New Address') ?>"><span><?php echo __('Add New Address') ?></span></button>
-    </div>
-    <div class="secondary">
-        <a href="<?php echo $this->getBackUrl() ?>" class="action back"><span><?php echo __('Back to Billing Information') ?></span></a>
+    <div class="actions-toolbar">
+        <div class="primary">
+            <button type="button" class="action add primary" role="add-address" title="<?php echo __('Add New Address') ?>"><span><?php echo __('Add New Address') ?></span></button>
+        </div>
+        <div class="secondary">
+            <a href="<?php echo $this->getBackUrl() ?>" class="action back"><span><?php echo __('Back to Billing Information') ?></span></a>
+        </div>
     </div>
 </div>
 <script type="text/javascript">

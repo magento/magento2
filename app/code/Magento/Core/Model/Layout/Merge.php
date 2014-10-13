@@ -106,6 +106,11 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     private $_fileSource;
 
     /**
+     * @var \Magento\Framework\View\File\CollectorInterface
+     */
+    private $pageLayoutFileSource;
+
+    /**
      * @var \Magento\Core\Model\Resource\Layout\Update
      */
     private $_resource;
@@ -151,6 +156,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * @param \Magento\Framework\View\DesignInterface $design
      * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Framework\View\File\CollectorInterface $fileSource
+     * @param \Magento\Framework\View\File\CollectorInterface $pageLayoutFileSource
      * @param \Magento\Core\Model\Resource\Layout\Update $resource
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\Cache\FrontendInterface $cache
@@ -164,6 +170,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         \Magento\Framework\View\DesignInterface $design,
         \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Framework\View\File\CollectorInterface $fileSource,
+        \Magento\Framework\View\File\CollectorInterface $pageLayoutFileSource,
         \Magento\Core\Model\Resource\Layout\Update $resource,
         \Magento\Framework\App\State $appState,
         \Magento\Framework\Cache\FrontendInterface $cache,
@@ -176,6 +183,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         $this->_theme = $theme ?: $design->getDesignTheme();
         $this->_store = $storeManager->getStore();
         $this->_fileSource = $fileSource;
+        $this->pageLayoutFileSource = $pageLayoutFileSource;
         $this->_resource = $resource;
         $this->_appState = $appState;
         $this->_cache = $cache;
@@ -685,6 +693,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         $layoutStr = '';
         $theme = $this->_getPhysicalTheme($this->_theme);
         $updateFiles = $this->_fileSource->getFiles($theme, '*.xml');
+        $updateFiles = array_merge($updateFiles, $this->pageLayoutFileSource->getFiles($theme, '*.xml'));
         $dir = $this->filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::ROOT_DIR);
         $useErrors = libxml_use_internal_errors(true);
         foreach ($updateFiles as $file) {

@@ -23,123 +23,400 @@
  */
 namespace Magento\Sales\Model\Order\Invoice\Total;
 
+use \Magento\Framework\Object as MagentoObject;
+
 class TaxTest extends \PHPUnit_Framework_TestCase
 {
-    public function testCollect()
+    /**
+     * @var \Magento\Sales\Model\Order\Invoice\Total\Tax
+     */
+    protected $model;
+
+    /**
+     * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $order;
+
+    /**
+     * @var  \Magento\TestFramework\Helper\ObjectManager
+     */
+    protected $objectManager;
+
+    /**
+     * @var \Magento\Sales\Model\Order\Invoice|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $invoice;
+
+    public function setUp()
     {
-        $objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
+        $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         /** @var \Magento\Sales\Model\Order\Invoice\Total\Tax $model */
-        $model = $objectManager->getObject('Magento\Sales\Model\Order\Invoice\Total\Tax');
+        $this->model = $this->objectManager->getObject('Magento\Sales\Model\Order\Invoice\Total\Tax');
 
-        $collection = $objectManager
-            ->getCollectionMock('Magento\Sales\Model\Resource\Order\Invoice\Collection', array());
-
-        $order = $this->getMock(
+        $this->order = $this->getMock(
             '\Magento\Sales\Model\Order',
             array(
                 'getInvoiceCollection',
-                'getHiddenTaxAmount',
-                'getBaseHiddenTaxAmount',
                 '__wakeup'
             ),
             array(),
             '',
             false
         );
-        $order->expects($this->atLeastOnce())->method('getInvoiceCollection')->will($this->returnValue($collection));
-        $order->expects($this->atLeastOnce())->method('getHiddenTaxAmount')->will($this->returnValue(10));
-        $order->expects($this->atLeastOnce())->method('getBaseHiddenTaxAmount')->will($this->returnValue(10));
 
-        $invoiceItems[] = $this->getInvoiceItem(0, 10);
-
-        $invoice = $this->getMock(
+        $this->invoice = $this->getMock(
             '\Magento\Sales\Model\Order\Invoice',
             array(
                 'getAllItems',
                 'getOrder',
-                'getGrandTotal',
-                'setGrandTotal',
-                '__wakeup'
+                'roundPrice',
+                'isLast',
+                '__wakeup',
             ),
             array(),
             '',
             false
         );
-        $invoice->expects($this->atLeastOnce())->method('getAllItems')->will($this->returnValue($invoiceItems));
-        $invoice->expects($this->atLeastOnce())->method('getOrder')->will($this->returnValue($order));
-        $invoice->expects($this->atLeastOnce())->method('getGrandTotal')->will($this->returnValue(0));
-        $invoice
-            ->expects($this->atLeastOnce())
-            ->method('setGrandTotal')
-            ->with($this->equalTo(10))
-            ->will($this->returnSelf());
-
-        $model->collect($invoice);
+        $this->invoice->expects($this->atLeastOnce())->method('getOrder')->will($this->returnValue($this->order));
     }
 
     /**
-     * @param $taxAmount
-     * @param $hiddenTaxAmount
+     * @param array $orderData
+     * @param array $invoiceData
+     * @param array $expectedResults
+     * @dataProvider collectDataProvider
+     */
+    public function testCollect($orderData, $invoiceData, $expectedResults)
+    {
+        $roundingDelta = [];
+
+        //Set up order mock
+        foreach ($orderData['data_fields'] as $key => $value) {
+            $this->order->setData($key, $value);
+        }
+        /** @var \Magento\Sales\Model\Order\Invoice[] $previousInvoices */
+        $previousInvoices = [];
+        foreach ($orderData['previous_invoices'] as $previousInvoiceData) {
+            $previousInvoice = $this->getMockBuilder('\Magento\Sales\Model\Order\Invoice')
+                ->disableOriginalConstructor()
+                ->setMethods(['isCanceled', '__wakeup'])
+                ->getMock();
+            $previousInvoice->setData('shipping_amount', $previousInvoiceData['shipping_amount']);
+            $previousInvoices[] = $previousInvoice;
+        }
+
+        $this->order->expects($this->once())
+            ->method('getInvoiceCollection')
+            ->will($this->returnValue($previousInvoices));
+
+        //Set up invoice mock
+        /** @var \Magento\Sales\Model\Order\Invoice\Item[] $invoiceItems */
+        $invoiceItems = [];
+        foreach ($invoiceData['items'] as $itemKey => $invoiceItemData) {
+            $invoiceItems[$itemKey] = $this->getInvoiceItem($invoiceItemData);
+        }
+        $this->invoice->expects($this->once())
+            ->method('getAllItems')
+            ->will($this->returnValue($invoiceItems));
+        $this->invoice->expects($this->once())
+            ->method('isLast')
+            ->will($this->returnValue($invoiceData['is_last']));
+        foreach ($invoiceData['data_fields'] as $key => $value) {
+            $this->invoice->setData($key, $value);
+        }
+        $this->invoice->expects($this->any())
+            ->method('roundPrice')
+            ->will($this->returnCallback(
+                function ($price, $type, $negative) use (&$roundingDelta) {
+                    if (!isset($roundingDelta[$type])) {
+                        $roundingDelta[$type] = 0;
+                    }
+                    $roundedPrice = round($price + $roundingDelta[$type], 2);
+                    $roundingDelta[$type] = $price - $roundedPrice;
+                    return $roundedPrice;
+                }
+            ));
+
+        $this->model->collect($this->invoice);
+
+        //verify invoice data
+        foreach ($expectedResults['invoice_data'] as $key => $value) {
+            $this->assertEquals($value, $this->invoice->getData($key));
+        }
+        //verify invoice item data
+        foreach ($expectedResults['invoice_items'] as $itemKey => $itemData) {
+            $invoiceItem = $invoiceItems[$itemKey];
+            foreach ($itemData as $key => $value) {
+                $this->assertEquals($value, $invoiceItem->getData($key));
+            }
+        }
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @return array
+     */
+    public function collectDataProvider()
+    {
+        $result = [];
+        // 3 item_1, 3 item_2, $99 each, 8.19 tax rate
+        $result['partial_invoice'] = [
+            'order_data' => [
+                'previous_invoices' => [
+                ],
+                'data_fields' => [
+                    'shipping_tax_amount' => 2.45,
+                    'base_shipping_tax_amount' => 2.45,
+                    'shipping_hidden_tax_amount' => 0,
+                    'base_shipping_hidden_tax_amount' => 0,
+                    'tax_amount' => 53.56,
+                    'base_tax_amount' => 53.56,
+                ],
+            ],
+            'invoice_data' => [
+                'items' => [
+                    'item_1' =>[
+                        'order_item' => [
+                            'qty_ordered' => 3,
+                            'tax_amount' => 24.32,
+                            'tax_invoiced' => 0,
+                            'base_tax_amount' => 24.32,
+                            'base_tax_invoiced' => 0,
+                            'hidden_tax_amount' => 0,
+                            'base_hidden_tax_amount' => 0,
+                            'qty_invoiced' => 0,
+                        ],
+                        'is_last' => false,
+                        'qty' => 1,
+                    ],
+                    'item_2' => [
+                        'order_item' => [
+                            'qty_ordered' => 3,
+                            'tax_amount' => 24.33,
+                            'tax_invoiced' => 0,
+                            'base_tax_amount' => 24.33,
+                            'base_tax_invoiced' => 0,
+                            'hidden_tax_amount' => 0,
+                            'base_hidden_tax_amount' => 0,
+                            'qty_invoiced' => 0,
+                        ],
+                        'is_last' => false,
+                        'qty' => 2,
+                    ],
+                ],
+                'is_last' => false,
+                'data_fields' => [
+                    'grand_total' => 327,
+                    'base_grand_total' => 327,
+                ],
+            ],
+            'expected_results' => [
+                'invoice_items' => [
+                    'item_1' => [
+                        'tax_amount' => 8.11,
+                        'base_tax_amount' => 8.11,
+                    ],
+                    'item_2' => [
+                        'tax_amount' => 16.22,
+                        'base_tax_amount' => 16.22,
+                    ],
+                ],
+                'invoice_data' => [
+                    'grand_total' => 353.78,
+                    'base_grand_total' => 353.78,
+                    'tax_amount' => 26.78,
+                    'base_tax_amount' => 26.78,
+                ],
+            ]
+        ];
+
+        // 3 item_1, 3 item_2, $99 each, 8.19 tax rate
+        // item_1 has 1 already invoiced, item_2 has 2 already invoiced
+        $result['partial_invoice_second_invoice'] = [
+            'order_data' => [
+                'previous_invoices' => [
+                    [
+                        'shipping_amount' => 30,
+                        'is_canceled' => false,
+                    ]
+                ],
+                'data_fields' => [
+                    'shipping_tax_amount' => 2.45,
+                    'base_shipping_tax_amount' => 2.45,
+                    'shipping_hidden_tax_amount' => 0,
+                    'base_shipping_hidden_tax_amount' => 0,
+                    'tax_amount' => 53.56,
+                    'base_tax_amount' => 53.56,
+                ],
+            ],
+            'invoice_data' => [
+                'items' => [
+                    'item_1' =>[
+                        'order_item' => [
+                            'qty_ordered' => 3,
+                            'tax_amount' => 24.32,
+                            'tax_invoiced' => 8.11,
+                            'base_tax_amount' => 24.32,
+                            'base_tax_invoiced' => 8.11,
+                            'hidden_tax_amount' => 0,
+                            'base_hidden_tax_amount' => 0,
+                            'qty_invoiced' => 1,
+                        ],
+                        'is_last' => false,
+                        'qty' => 1,
+                    ],
+                    'item_2' => [
+                        'order_item' => [
+                            'qty_ordered' => 3,
+                            'tax_amount' => 24.33,
+                            'tax_invoiced' => 16.22,
+                            'base_tax_amount' => 24.33,
+                            'base_tax_invoiced' => 16.22,
+                            'hidden_tax_amount' => 0,
+                            'base_hidden_tax_amount' => 0,
+                            'qty_invoiced' => 2,
+                        ],
+                        'is_last' => false,
+                        'qty' => 0,
+                    ],
+                ],
+                'is_last' => false,
+                'data_fields' => [
+                    'grand_total' => 99,
+                    'base_grand_total' => 99,
+                ],
+            ],
+            'expected_results' => [
+                'invoice_items' => [
+                    'item_1' => [
+                        'tax_amount' => 8.11,
+                        'base_tax_amount' => 8.11,
+                    ],
+                ],
+                'invoice_data' => [
+                    'grand_total' => 107.11,
+                    'base_grand_total' => 107.11,
+                    'tax_amount' => 8.11,
+                    'base_tax_amount' => 8.11,
+                ],
+            ]
+        ];
+        // 3 item_1, 3 item_2, $99 each, 8.19 tax rate
+        // item_1 has 1 already invoiced, item_2 has 2 already invoiced
+        $result['partial_invoice_last_invoice'] = [
+            'order_data' => [
+                'previous_invoices' => [
+                    [
+                        'shipping_amount' => 30,
+                        'is_canceled' => false,
+                    ]
+                ],
+                'data_fields' => [
+                    'shipping_tax_amount' => 2.45,
+                    'base_shipping_tax_amount' => 2.45,
+                    'shipping_hidden_tax_amount' => 0,
+                    'base_shipping_hidden_tax_amount' => 0,
+                    'tax_amount' => 53.56,
+                    'base_tax_amount' => 53.56,
+                ],
+            ],
+            'invoice_data' => [
+                'items' => [
+                    'item_1' =>[
+                        'order_item' => [
+                            'qty_ordered' => 3,
+                            'tax_amount' => 24.32,
+                            'tax_invoiced' => 16.22,
+                            'base_tax_amount' => 24.32,
+                            'base_tax_invoiced' => 16.22,
+                            'hidden_tax_amount' => 0,
+                            'base_hidden_tax_amount' => 0,
+                            'qty_invoiced' => 2,
+                        ],
+                        'is_last' => true,
+                        'qty' => 1,
+                    ],
+                    'item_2' => [
+                        'order_item' => [
+                            'qty_ordered' => 3,
+                            'tax_amount' => 24.33,
+                            'tax_invoiced' => 16.22,
+                            'base_tax_amount' => 24.33,
+                            'base_tax_invoiced' => 16.22,
+                            'hidden_tax_amount' => 0,
+                            'base_hidden_tax_amount' => 0,
+                            'qty_invoiced' => 2,
+                        ],
+                        'is_last' => true,
+                        'qty' => 1,
+                    ],
+                ],
+                'is_last' => false,
+                'data_fields' => [
+                    'grand_total' => 198,
+                    'base_grand_total' => 198,
+                ],
+            ],
+            'expected_results' => [
+                'invoice_items' => [
+                    'item_1' => [
+                        'tax_amount' => 8.10,
+                        'base_tax_amount' => 8.10,
+                    ],
+                    'item_2' => [
+                        'tax_amount' => 8.11,
+                        'base_tax_amount' => 8.11,
+                    ],
+                ],
+                'invoice_data' => [
+                    'grand_total' => 214.21,
+                    'base_grand_total' => 214.21,
+                    'tax_amount' => 16.21,
+                    'base_tax_amount' => 16.21,
+                ],
+            ]
+        ];
+        return $result;
+    }
+
+    /**
+     * @param $invoiceItemData array
      * @return \Magento\Sales\Model\Order\Invoice\Item|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getInvoiceItem($taxAmount, $hiddenTaxAmount)
+    protected function getInvoiceItem($invoiceItemData)
     {
+        /** @var \Magento\Sales\Model\Order\Item|\PHPUnit_Framework_MockObject_MockObject $orderItem */
         $orderItem = $this->getMock(
             '\Magento\Sales\Model\Order\Item',
             array(
-                'getQtyOrdered',
-                'getTaxAmount',
-                'getBaseTaxAmount',
-                'getHiddenTaxAmount',
-                'getBaseHiddenTaxAmount',
+                'isDummy',
                 '__wakeup'
             ),
             array(),
             '',
             false
         );
-        $orderItem->expects($this->atLeastOnce())->method('getQtyOrdered')->will($this->returnValue(1));
-        $orderItem->expects($this->atLeastOnce())->method('getTaxAmount')->will($this->returnValue($taxAmount));
-        $orderItem->expects($this->atLeastOnce())->method('getBaseTaxAmount')->will($this->returnValue($taxAmount));
-        $orderItem
-            ->expects($this->atLeastOnce())
-            ->method('getHiddenTaxAmount')
-            ->will($this->returnValue($hiddenTaxAmount));
-        $orderItem
-            ->expects($this->atLeastOnce())
-            ->method('getBaseHiddenTaxAmount')
-            ->will($this->returnValue($hiddenTaxAmount));
+        foreach ($invoiceItemData['order_item'] as $key => $value) {
+            $orderItem->setData($key, $value);
+        }
 
+        /** @var \Magento\Sales\Model\Order\Invoice\Item|\PHPUnit_Framework_MockObject_MockObject $invoiceItem */
         $invoiceItem = $this->getMock(
             '\Magento\Sales\Model\Order\Invoice\Item',
             array(
                 'getOrderItem',
                 'isLast',
-                'setTaxAmount',
-                'setBaseTaxAmount',
-                'setHiddenTaxAmount',
-                'setBaseHiddenTaxAmount',
                 '__wakeup'
             ),
             array(),
             '',
             false
         );
-        $invoiceItem->expects($this->atLeastOnce())->method('getOrderItem')->will($this->returnValue($orderItem));
-        $invoiceItem->expects($this->atLeastOnce())->method('isLast')->will($this->returnValue(true));
-
-        $invoiceItem->expects($this->once())->method('setTaxAmount')->with($taxAmount)->will($this->returnSelf());
-        $invoiceItem->expects($this->once())->method('setBaseTaxAmount')->with($taxAmount)->will($this->returnSelf());
-        $invoiceItem
-            ->expects($this->once())
-            ->method('setHiddenTaxAmount')
-            ->with($hiddenTaxAmount)
-            ->will($this->returnSelf());
-        $invoiceItem
-            ->expects($this->once())
-            ->method('setBaseHiddenTaxAmount')
-            ->with($hiddenTaxAmount)
-            ->will($this->returnSelf());
+        $invoiceItem->expects($this->any())->method('getOrderItem')->will($this->returnValue($orderItem));
+        $invoiceItem->expects($this->any())
+            ->method('isLast')
+            ->will($this->returnValue($invoiceItemData['is_last']));
+        $invoiceItem->setData('qty', $invoiceItemData['qty']);
         return $invoiceItem;
     }
 }

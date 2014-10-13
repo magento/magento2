@@ -282,7 +282,7 @@ toggleValueElements($('inventory_use_config_qty_increments'), $('inventory_use_c
     <div class="control">
         <select id="inventory_stock_availability" name="<?php echo $this->getFieldSuffix() ?>[stock_data][is_in_stock]" <?php echo $_readonly;?>>
             <?php foreach ($this->getStockOption() as $option): ?>
-            <?php $_selected = ($option['value'] == $this->getFieldValue('is_in_stock')) ? 'selected="selected"' : '' ?>
+            <?php $_selected = ($this->getFieldValue('is_in_stock') !== null && $option['value'] == $this->getFieldValue('is_in_stock')) ? 'selected="selected"' : '' ?>
             <option value="<?php echo $option['value'] ?>" <?php echo $_selected ?>><?php echo $option['label'] ?></option>
             <?php endforeach; ?>
         </select>

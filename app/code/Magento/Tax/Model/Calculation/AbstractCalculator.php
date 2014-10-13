@@ -42,7 +42,7 @@ abstract class AbstractCalculator
 
     const KEY_APPLIED_TAX_DELTA_ROUNDING = 'applied_tax_amount';
 
-    const KEY_TAX_AFTER_DISCOUNT_DELTA_ROUNDING = 'tax_after_discount';
+    const KEY_TAX_BEFORE_DISCOUNT_DELTA_ROUNDING = 'tax_before_discount';
     /**#@-*/
 
     /**

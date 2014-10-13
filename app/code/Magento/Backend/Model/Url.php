@@ -34,6 +34,13 @@ use Magento\Backend\Model\Menu;
 class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlInterface
 {
     /**
+     * Whether to use a security key in the backend
+     *
+     * @bug Currently, this constant is slightly misleading: it says "form key", but in fact it is used by URLs, too
+     */
+    const XML_PATH_USE_SECURE_KEY = 'admin/security/use_form_key';
+
+    /**
      * Authentication session
      *
      * @var \Magento\Backend\Model\Auth\Session
@@ -268,7 +275,7 @@ class Url extends \Magento\Framework\Url implements \Magento\Backend\Model\UrlIn
      */
     public function useSecretKey()
     {
-        return $this->_scopeConfig->isSetFlag('admin/security/use_form_key') && !$this->getNoSecret();
+        return $this->_scopeConfig->isSetFlag(self::XML_PATH_USE_SECURE_KEY) && !$this->getNoSecret();
     }
 
     /**

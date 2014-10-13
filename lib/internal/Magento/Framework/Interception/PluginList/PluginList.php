@@ -245,7 +245,7 @@ class PluginList extends Scoped implements InterceptionPluginList
     public function getNext($type, $method, $code = '__self')
     {
         $this->_loadScopedData();
-        if (!array_key_exists($type, $this->_inherited)) {
+        if (!isset($this->_inherited[$type]) && !array_key_exists($type, $this->_inherited)) {
             $this->_inheritPlugins($type);
         }
         $key = $type . '_' . lcfirst($method) . '_' . $code;

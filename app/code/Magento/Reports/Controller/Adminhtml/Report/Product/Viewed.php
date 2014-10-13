@@ -45,22 +45,33 @@ class Viewed extends \Magento\Reports\Controller\Adminhtml\Report\Product
      */
     public function execute()
     {
-        $this->_title->add(__('Product Views Report'));
+        try {
+            $this->_title->add(__('Product Views Report'));
 
-        $this->_showLastExecutionTime(Flag::REPORT_PRODUCT_VIEWED_FLAG_CODE, 'viewed');
+            $this->_showLastExecutionTime(Flag::REPORT_PRODUCT_VIEWED_FLAG_CODE, 'viewed');
 
-        $this->_initAction()->_setActiveMenu(
-            'Magento_Reports::report_products_viewed'
-        )->_addBreadcrumb(
-            __('Products Most Viewed Report'),
-            __('Products Most Viewed Report')
-        );
+            $this->_initAction()->_setActiveMenu(
+                'Magento_Reports::report_products_viewed'
+            )->_addBreadcrumb(
+                __('Products Most Viewed Report'),
+                __('Products Most Viewed Report')
+            );
 
-        $gridBlock = $this->_view->getLayout()->getBlock('adminhtml_product_viewed.grid');
-        $filterFormBlock = $this->_view->getLayout()->getBlock('grid.filter.form');
+            $gridBlock = $this->_view->getLayout()->getBlock('adminhtml_product_viewed.grid');
+            $filterFormBlock = $this->_view->getLayout()->getBlock('grid.filter.form');
 
-        $this->_initReportAction(array($gridBlock, $filterFormBlock));
+            $this->_initReportAction(array($gridBlock, $filterFormBlock));
 
-        $this->_view->renderLayout();
+            $this->_view->renderLayout();
+        } catch (\Magento\Framework\Model\Exception $e) {
+            $this->messageManager->addError($e->getMessage());
+        } catch (\Exception $e) {
+            $this->messageManager->addError(
+                __('An error occurred while showing the product views report. Please review the log and try again.')
+            );
+            $this->_objectManager->get('Magento\Framework\Logger')->logException($e);
+            $this->_redirect('reports/*/viewed/');
+            return;
+        }
     }
 }

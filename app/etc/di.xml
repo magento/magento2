@@ -421,7 +421,15 @@
             <argument name="reader" xsi:type="object">Magento\Framework\Module\Declaration\Reader\Filesystem\Proxy</argument>
         </arguments>
     </type>
-
+    <type name="Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Container">
+        <arguments>
+            <argument name="buckets" xsi:type="array">
+                <item name="termBucket" xsi:type="object">Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Term</item>
+                <item name="rangeBucket" xsi:type="object">Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Range</item>
+                <item name="dynamicBucket" xsi:type="object">Magento\Framework\Search\Adapter\Mysql\Aggregation\Builder\Dynamic</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\View\Result\Page">
         <arguments>
             <argument name="template" xsi:type="string">Magento_Theme::root.phtml</argument>

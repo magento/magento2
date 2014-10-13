@@ -36,7 +36,7 @@ abstract class AbstractFactory
     protected $type = '';
 
     protected $cnt = 0;
-    
+
     protected $factoryContent = '';
 
     protected $_checkList = [];
@@ -160,11 +160,10 @@ abstract class AbstractFactory
         $items = [];
         $rewrites = [];
 
-        $fallbacks = array(
-            array(
-                'path' => 'tests/app'
-            )
-        );
+        $fallbacks = [
+            ['path' => 'tests/app'],
+            ['path' => 'generated'],
+        ];
 
         while ($fallback = array_pop($fallbacks)) {
             $path = isset($fallback['path']) ? $fallback['path'] : '';
@@ -179,7 +178,7 @@ abstract class AbstractFactory
                 if (!is_dir($filePath)) {
                     $this->_processItem($items, $rewrites, $filePath, $location, $path);
                 } else {
-                    $dirIterator =  new \RegexIterator(
+                    $dirIterator = new \RegexIterator(
                         new \RecursiveIteratorIterator(
                             new \RecursiveDirectoryIterator($filePath, \FilesystemIterator::SKIP_DOTS)
                         ),
@@ -248,7 +247,7 @@ abstract class AbstractFactory
                     $items[$original]['fallback'][$className]['class'] = $className;
                 }
 
-                $rewrites[$className] = & $items[$original]['fallback'][$className];
+                $rewrites[$className] = &$items[$original]['fallback'][$className];
 
                 if (isset($items[$className])) {
                     unset($items[$className]);
@@ -267,7 +266,7 @@ abstract class AbstractFactory
                     $rewrites[$original]['fallback'][$className]['class'] = $className;
                 }
 
-                $rewrites[$className] = & $rewrites[$original]['fallback'][$className];
+                $rewrites[$className] = &$rewrites[$original]['fallback'][$className];
 
                 if (isset($items[$className])) {
                     unset($items[$className]);
@@ -280,7 +279,7 @@ abstract class AbstractFactory
                     $items[$original]['fallback'][$className]['class'] = $className;
                 }
 
-                $rewrites[$className] = & $items[$original]['fallback'][$className];
+                $rewrites[$className] = &$items[$original]['fallback'][$className];
 
                 if (isset($items[$className])) {
                     unset($items[$className]);

@@ -56,7 +56,6 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
         $this->removeColumn('action');
         $this->removeColumn('status');
         $this->removeColumn('visibility');
-        $this->clearRss();
     }
 
     /**

@@ -26,7 +26,6 @@ namespace Magento\Catalog\Controller;
 /**
  * Test class for \Magento\Catalog\Controller\Category.
  *
- * @magentoDataFixture Magento/Catalog/_files/categories.php
  * @magentoAppArea frontend
  */
 class CategoryTest extends \Magento\TestFramework\TestCase\AbstractController
@@ -73,10 +72,10 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractController
 
     /**
      * @dataProvider getViewActionDataProvider
+     * @magentoDataFixture Magento/CatalogUrlRewrite/_files/categories_with_products.php
      */
     public function testViewAction($categoryId, array $expectedHandles, array $expectedContent)
     {
-        $this->markTestSkipped('MAGETWO-27621');
         $this->dispatch("catalog/category/view/id/{$categoryId}");
 
         /** @var $objectManager \Magento\TestFramework\ObjectManager */

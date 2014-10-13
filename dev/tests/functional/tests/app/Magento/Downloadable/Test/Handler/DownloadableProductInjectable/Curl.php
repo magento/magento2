@@ -131,7 +131,9 @@ class Curl extends ProductCurl implements DownloadableProductInjectableInterface
         preg_match("~Location: [^\s]*\/id\/(\d+)~", $response, $matches);
         foreach ($data['downloadable']['link'] as $key => $link) {
             preg_match('`"link_id":"(\d*?)","title":"' . $link['title'] . '"`', $response, $linkId);
-            $data['product']['checkout_data']['options']['links'][$key]['id'] = $linkId[1];
+            if (isset($data['product']['checkout_data']['options']['links'][$key]['label'])) {
+                $data['product']['checkout_data']['options']['links'][$key]['id'] = $linkId[1];
+            }
         }
 
         return ['id' => $matches[1], 'checkout_data' => $data['product']['checkout_data']];

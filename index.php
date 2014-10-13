@@ -4,8 +4,11 @@
  *
  * Example - run a particular store or website:
  * --------------------------------------------
- * $extra = ['MAGE_RUN_CODE' => 'website2', 'MAGE_RUN_TYPE' => 'website'];
- * $bootstrap = new \Magento\Framework\App\Bootstrap(BP, $_SERVER, $extra);
+ * $params = $_SERVER;
+ * $params[StoreManager::PARAM_RUN_CODE] = 'website2';
+ * $params[StoreManager::PARAM_RUN_TYPE] = 'website';
+ * $bootstrap = \Magento\Framework\App\Bootstrap::create(BP, $params);
+ * \/** @var \Magento\Framework\App\Http $app *\/
  * $app = $bootstrap->createApplication('Magento\Framework\App\Http');
  * $bootstrap->run($app);
  * --------------------------------------------
@@ -33,7 +36,7 @@
  */
 
 require __DIR__ . '/app/bootstrap.php';
-$bootstrap = \Magento\Framework\App\Bootstrap::create(BP, $_SERVER, null);
+$bootstrap = \Magento\Framework\App\Bootstrap::create(BP, $_SERVER);
 /** @var \Magento\Framework\App\Http $app */
 $app = $bootstrap->createApplication('Magento\Framework\App\Http');
 $bootstrap->run($app);

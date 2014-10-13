@@ -24,7 +24,7 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
+         xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <update handle="formkey"/>
     <update handle="customer_index_grid_block"/>
     <referenceContainer name="content">

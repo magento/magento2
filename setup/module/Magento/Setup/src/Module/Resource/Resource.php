@@ -43,27 +43,28 @@ class Resource implements ResourceInterface
     protected static $versions = null;
 
     /**
+     * DB adapter object
+     *
+     * @var AdapterInterface
+     */
+    private $adapter;
+
+    /**
      * Table prefix
+     *
      * @var string
      */
-    protected $tablePrefix;
+    private $tablePrefix;
 
     /**
+     * Constructor
+     *
      * @param AdapterInterface $adapter
+     * @param string $tablePrefix
      */
-    public function __construct(AdapterInterface $adapter)
+    public function __construct(AdapterInterface $adapter, $tablePrefix)
     {
         $this->adapter = $adapter;
-    }
-
-    /**
-     * Set table prefix
-     *
-     * @param string $tablePrefix
-     * @return void
-     */
-    public function setTablePrefix($tablePrefix)
-    {
         $this->tablePrefix = $tablePrefix;
     }
 

@@ -64,6 +64,7 @@ abstract class ProductTest extends \PHPUnit_Framework_TestCase
         $view->expects($this->any())->method('renderLayout')->will($this->returnSelf());
         $view->expects($this->any())->method('getLayout')->will($this->returnValue($layout));
         $view->expects($this->any())->method('loadLayout')->with(array(
+            'default',
             'popup',
             'catalog_product_new',
             'catalog_product_simple'

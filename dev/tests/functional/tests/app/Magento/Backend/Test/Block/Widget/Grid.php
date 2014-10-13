@@ -193,6 +193,20 @@ abstract class Grid extends Block
     protected $loader = '[data-role="spinner"]';
 
     /**
+     * Locator for next page action
+     *
+     * @var string
+     */
+    protected $actionNextPage = '.pager .action-next';
+
+    /**
+     * Locator for disabled next page action
+     *
+     * @var string
+     */
+    protected $actionNextPageDisabled = '.pager .action-next.disabled';
+
+    /**
      * Get backend abstract block
      *
      * @return \Magento\Backend\Test\Block\Template
@@ -394,6 +408,30 @@ abstract class Grid extends Block
     }
 
     /**
+     * Get rows data
+     *
+     * @param array $columns
+     * @return array
+     */
+    public function getRowsData(array $columns)
+    {
+        $data = [];
+        do {
+            $rows = $this->_rootElement->find($this->rowItem)->getElements();
+            foreach ($rows as $row) {
+                $rowData = [];
+                foreach ($columns as $columnName) {
+                    $rowData[$columnName] = trim($row->find('.col-' . $columnName)->getText());
+                }
+
+                $data[] = $rowData;
+            }
+        } while ($this->nextPage());
+
+        return $data;
+    }
+
+    /**
      * Check if specific row exists in grid
      *
      * @param array $filter
@@ -435,5 +473,20 @@ abstract class Grid extends Block
         if ($button->isVisible() && !$this->_rootElement->find($this->filterButton . $this->active)->isVisible()) {
             $button->click();
         }
+    }
+
+    /**
+     * Click to next page action link
+     *
+     * @return bool
+     */
+    protected function nextPage()
+    {
+        if ($this->_rootElement->find($this->actionNextPageDisabled)->isVisible()) {
+            return false;
+        }
+        $this->_rootElement->find($this->actionNextPage)->click();
+        $this->waitLoader();
+        return true;
     }
 }

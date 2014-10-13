@@ -23,6 +23,8 @@
  */
 namespace Magento\CatalogSearch\Model\Resource;
 
+use Magento\Search\Model\Resource\Helper;
+
 /**
  * CatalogSearch Fulltext Index resource model
  */
@@ -45,7 +47,7 @@ class Fulltext extends \Magento\Framework\Model\Resource\Db\AbstractDb
     /**
      * CatalogSearch resource helper
      *
-     * @var \Magento\CatalogSearch\Model\Resource\Helper
+     * @var \Magento\Search\Model\Resource\Helper
      */
     protected $_resourceHelper;
 
@@ -59,7 +61,7 @@ class Fulltext extends \Magento\Framework\Model\Resource\Db\AbstractDb
         \Magento\Framework\App\Resource $resource,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\Filter\FilterManager $filter,
-        \Magento\CatalogSearch\Model\Resource\Helper $resourceHelper
+        \Magento\Search\Model\Resource\Helper $resourceHelper
     ) {
         $this->_eventManager = $eventManager;
         $this->filter = $filter;
@@ -87,11 +89,11 @@ class Fulltext extends \Magento\Framework\Model\Resource\Db\AbstractDb
     public function resetSearchResults($storeId = null, $productIds = null)
     {
         $adapter = $this->_getWriteAdapter();
-        $adapter->update($this->getTable('catalogsearch_query'), array('is_processed' => 0));
+        $adapter->update($this->getTable('search_query'), array('is_processed' => 0));
 
         if ($storeId === null && $productIds === null) {
             // Keeping public interface
-            $adapter->update($this->getTable('catalogsearch_query'), array('is_processed' => 0));
+            $adapter->update($this->getTable('search_query'), array('is_processed' => 0));
             $adapter->delete($this->getTable('catalogsearch_result'));
             $this->_eventManager->dispatch('catalogsearch_reset_search_result');
         } else {
@@ -101,7 +103,7 @@ class Fulltext extends \Magento\Framework\Model\Resource\Db\AbstractDb
                 array('r' => $this->getTable('catalogsearch_result')),
                 null
             )->join(
-                array('q' => $this->getTable('catalogsearch_query')),
+                array('q' => $this->getTable('search_query')),
                 'q.query_id=r.query_id',
                 array()
             )->join(
@@ -121,10 +123,10 @@ class Fulltext extends \Magento\Framework\Model\Resource\Db\AbstractDb
             /** @var $select \Magento\Framework\DB\Select */
             $select = $adapter->select();
             $subSelect = $adapter->select()->from(array('res' => $this->getTable('catalogsearch_result')), null);
-            $select->exists($subSelect, 'res.query_id=' . $this->getTable('catalogsearch_query') . '.query_id', false);
+            $select->exists($subSelect, 'res.query_id=' . $this->getTable('search_query') . '.query_id', false);
 
             $adapter->update(
-                $this->getTable('catalogsearch_query'),
+                $this->getTable('search_query'),
                 array('is_processed' => 0),
                 $select->getPart(\Zend_Db_Select::WHERE)
             );
@@ -138,7 +140,7 @@ class Fulltext extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\CatalogSearch\Model\Fulltext $object
      * @param string $queryText
-     * @param \Magento\CatalogSearch\Model\Query $query
+     * @param \Magento\Search\Model\Query $query
      * @return $this
      */
     public function prepareResult($object, $queryText, $query)

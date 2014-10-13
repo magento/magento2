@@ -629,3 +629,6 @@ input.l-tcb {
 .ext-ie .x-tree {
     position:static !important;
 }
+.no-active-category a span {
+    color: #aaa !important;
+}

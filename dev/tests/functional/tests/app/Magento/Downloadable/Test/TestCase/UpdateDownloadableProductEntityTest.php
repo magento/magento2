@@ -117,8 +117,9 @@ class UpdateDownloadableProductEntityTest extends Injectable
      * @param CatalogCategory $category
      * @return void
      */
-    public function testUpdateDownloadableProduct(DownloadableProductInjectable $product, CatalogCategory $category)
+    public function test(DownloadableProductInjectable $product, CatalogCategory $category)
     {
+        // Steps
         $filter = ['sku' => $this->product->getSku()];
         $this->catalogProductIndex->open()->getProductGrid()->searchAndOpen($filter);
         $productBlockForm = $this->catalogProductEdit->getProductForm();

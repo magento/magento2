@@ -4,6 +4,4 @@
 /var
 /config/*
 !/config/*.dist
-tests/app/Magento/*/Test/Page/*/*.php
-tests/app/Magento/*/Test/Page/*.php
 phpunit.xml

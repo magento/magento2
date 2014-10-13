@@ -224,7 +224,12 @@ class CustomerGroupServiceTest extends \PHPUnit_Framework_TestCase
         $nonDefaultStoreId = $nonDefaultStore->getId();
         /** @var \Magento\Framework\App\MutableScopeConfig $scopeConfig */
         $scopeConfig = $this->_objectManager->get('Magento\Framework\App\MutableScopeConfig');
-        $scopeConfig->setValue(Group::XML_PATH_DEFAULT_ID, 2, ScopeInterface::SCOPE_STORE, 'secondstore');
+        $scopeConfig->setValue(
+            \Magento\Customer\Service\V1\CustomerGroupServiceInterface::XML_PATH_DEFAULT_ID,
+            2,
+            ScopeInterface::SCOPE_STORE,
+            'secondstore'
+        );
         $testGroup = ['id' => 2, 'code' => 'Wholesale', 'tax_class_id' => 3];
         $this->assertDefaultGroupMatches($testGroup, $nonDefaultStoreId);
     }

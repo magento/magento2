@@ -122,7 +122,7 @@ class View extends \Magento\Catalog\Test\Block\Product\View
             $downloadableOptions['downloadable_links'] = [
                 'title' => $this->getDownloadableLinksBlock()->getTitle(),
                 'downloadable' => [
-                    'link' => $this->getDownloadableLinksBlock()->getLinks()
+                    'link' => $this->getDownloadableLinksBlock()->getLinks(),
                 ]
             ];
         }

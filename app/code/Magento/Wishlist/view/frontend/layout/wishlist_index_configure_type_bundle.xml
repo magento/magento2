@@ -23,9 +23,9 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <body>
-        <attribute name="class" value="type-bundle"/>
+        <attribute name="class" value="page-product-bundle"/>
     </body>
     <referenceBlock name="product.info">
         <block class="Magento\Catalog\Block\Product\View" name="bundle.summary" as="form_top" template="Magento_Bundle::catalog/product/view/summary.phtml">
@@ -43,6 +43,9 @@
     <referenceBlock name="product.info.options.wrapper">
         <block class="Magento\Catalog\Block\Product\View" name="bundle.product.view.options.notice" template="Magento_Bundle::catalog/product/view/options/notice.phtml"/>
         <block class="Magento\Bundle\Block\Catalog\Product\View\Type\Bundle" name="product.info.bundle.options" as="type_bundle_options" template="catalog/product/view/type/bundle/options.phtml" before="-">
+            <container name="product.info.bundle.options.top" as="product_info_bundle_options_top">
+                <block class="Magento\Catalog\Block\Product\View" name="bundle.back.button" as="backButton" before="-" template="Magento_Bundle::catalog/product/view/backbutton.phtml"/>
+            </container>
             <block class="Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Select" name="product.info.bundle.options.select" as="select"/>
             <block class="Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Multi" name="product.info.bundle.options.multi" as="multi"/>
             <block class="Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Radio" name="product.info.bundle.options.radio" as="radio"/>
@@ -52,7 +55,6 @@
     <move element="product.price.tier" destination="product.info.options.wrapper.bottom" before="-" />
     <referenceBlock name="product.info.options.wrapper.bottom">
         <block class="Magento\CatalogInventory\Block\Qtyincrements" name="product.info.qtyincrements" before="-" template="qtyincrements.phtml"/>
-        <block class="Magento\Catalog\Block\Product\View" name="bundle.back.button" as="backButton" after="-" template="Magento_Bundle::catalog/product/view/backbutton.phtml"/>
         <action method="unsetChild">
             <argument name="block" xsi:type="string">product.info.addtocart</argument>
         </action>
@@ -64,12 +66,14 @@
         </action>
     </referenceBlock>
     <referenceContainer name="content">
-        <container name="bundle.options.container" label="invisible" htmlTag="div" htmlClass="bundle-options-container" after="product.info.media"/>
+        <container name="bundle.options.container" label="invisible" htmlTag="div" htmlClass="bundle-options-container" after="product.info.main"/>
         <move element="product.info" destination="bundle.options.container" before="-"/>
     </referenceContainer>
     <referenceContainer name="product.info.type">
         <block class="Magento\Bundle\Block\Catalog\Product\View\Type\Bundle" name="product.info.bundle" as="product_type_data" template="catalog/product/view/type/bundle.phtml"/>
         <container name="product.info.bundle.extra" after="product.info.bundle" as="product_type_data_extra" label="Product Extra Info"/>
-        <block class="Magento\Catalog\Block\Product\View" name="customize.button" as="customize_button" template="Magento_Bundle::catalog/product/view/customize.phtml"/>
+    </referenceContainer>
+    <referenceContainer name="product.info.main">
+        <block class="Magento\Catalog\Block\Product\View" name="customize.button" as="customize_button" template="Magento_Bundle::catalog/product/view/customize.phtml" after="product.info.price" />
     </referenceContainer>
 </page>

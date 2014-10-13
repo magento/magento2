@@ -24,6 +24,9 @@
  */
 namespace Magento\Catalog\Model\Layer\Search;
 
+use Magento\CatalogSearch\Model\Layer\Search\CollectionFilter;
+use Magento\CatalogSearch\Model\Layer\Search\StateKey;
+
 class Context extends \Magento\Catalog\Model\Layer\Context
 {
     /**
@@ -33,8 +36,8 @@ class Context extends \Magento\Catalog\Model\Layer\Context
      */
     public function __construct(
         \Magento\Catalog\Model\Layer\Search\ItemCollectionProvider $collectionProvider,
-        \Magento\Catalog\Model\Layer\Search\StateKey $stateKey,
-        \Magento\Catalog\Model\Layer\Search\CollectionFilter $collectionFilter
+        \Magento\CatalogSearch\Model\Layer\Search\StateKey $stateKey,
+        \Magento\CatalogSearch\Model\Layer\Search\CollectionFilter $collectionFilter
     ) {
         parent::__construct($collectionProvider, $stateKey, $collectionFilter);
     }

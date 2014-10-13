@@ -53,8 +53,6 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('customer/account/index');
 
         $body = $this->getResponse()->getBody();
-        $this->assertContains('<div class="block block-dashboard-welcome">', $body);
-        $this->assertContains('Hello, Firstname Lastname!', $body);
         $this->assertContains('Green str, 67', $body);
     }
 

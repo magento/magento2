@@ -84,6 +84,9 @@ class MergeTest extends \PHPUnit_Framework_TestCase
         $fileSource = $this->getMockForAbstractClass('Magento\Framework\View\File\CollectorInterface');
         $fileSource->expects($this->any())->method('getFiles')->will($this->returnValue($files));
 
+        $pageLayoutFileSource = $this->getMockForAbstractClass('Magento\Framework\View\File\CollectorInterface');
+        $pageLayoutFileSource->expects($this->any())->method('getFiles')->willReturn([]);
+
         $design = $this->getMockForAbstractClass('Magento\Framework\View\DesignInterface');
 
         $this->_store = $this->getMock('Magento\Store\Model\Store', array(), array(), '', false);
@@ -138,6 +141,7 @@ class MergeTest extends \PHPUnit_Framework_TestCase
                 'design' => $design,
                 'storeManager' => $storeManager,
                 'fileSource' => $fileSource,
+                'pageLayoutFileSource' => $pageLayoutFileSource,
                 'resource' => $this->_resource,
                 'appState' => $this->_appState,
                 'cache' => $this->_cache,

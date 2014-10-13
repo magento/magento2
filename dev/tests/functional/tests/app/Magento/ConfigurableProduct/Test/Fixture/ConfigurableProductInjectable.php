@@ -515,7 +515,7 @@ class ConfigurableProductInjectable extends InjectableFixture
         'is_required' => '0',
         'default_value' => '',
         'input' => 'text',
-        'group' => 'autosettings',
+        'group' => 'search-engine-optimization',
     ];
 
     protected $url_path = [
@@ -609,6 +609,13 @@ class ConfigurableProductInjectable extends InjectableFixture
         'backend_type' => 'virtual',
         'group' => null,
         'source' => 'Magento\ConfigurableProduct\Test\Fixture\ConfigurableProductInjectable\CheckoutData',
+    ];
+
+    protected $up_sell_products = [
+        'attribute_code' => 'up_sell_products',
+        'backend_type' => 'virtual',
+        'group' => 'upsells',
+        'source' => 'Magento\Catalog\Test\Fixture\CatalogProductSimple\UpSellProducts'
     ];
 
     public function getCategoryIds()
@@ -919,5 +926,10 @@ class ConfigurableProductInjectable extends InjectableFixture
     public function getCheckoutData()
     {
         return $this->getData('checkout_data');
+    }
+
+    public function getUpSellProducts()
+    {
+        return $this->getData('up_sell_products');
     }
 }

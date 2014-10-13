@@ -135,18 +135,11 @@ angular.module('readiness-check', [])
         };
 
         $scope.progress = function() {
-            var timeout = 0;
             angular.forEach($scope.items, function(item) {
-                timeout += 1000;
-                $timeout(function() {
-                    item.show();
-                }, timeout);
+                item.show();
             });
             angular.forEach($scope.items, function(item) {
-                timeout += 500;
-                $timeout(function() {
-                    $scope.query(item);
-                }, timeout);
+                $scope.query(item);
             });
         };
 

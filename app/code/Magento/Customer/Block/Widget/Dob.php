@@ -43,6 +43,29 @@ class Dob extends AbstractWidget
     protected $_dateInputs = array();
 
     /**
+     * @var \Magento\Framework\View\Element\Html\Date
+     */
+    protected $dateElement;
+
+    /**
+     * @param \Magento\Framework\View\Element\Template\Context $context
+     * @param \Magento\Customer\Helper\Address $addressHelper
+     * @param \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $customerMetadataService
+     * @param \Magento\Framework\View\Element\Html\Date $dateElement
+     * @param array $data
+     */
+    public function __construct(
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Magento\Customer\Helper\Address $addressHelper,
+        \Magento\Customer\Service\V1\CustomerMetadataServiceInterface $customerMetadataService,
+        \Magento\Framework\View\Element\Html\Date $dateElement,
+        array $data = array()
+    ) {
+        $this->dateElement = $dateElement;
+        parent::__construct($context, $addressHelper, $customerMetadataService, $data);
+    }
+
+    /**
      * @return void
      */
     public function _construct()
@@ -102,6 +125,44 @@ class Dob extends AbstractWidget
     public function getYear()
     {
         return $this->getTime() ? date('Y', $this->getTime()) : '';
+    }
+
+    /**
+     * Return label
+     *
+     * @return string
+     */
+    public function getLabel()
+    {
+        return __('Date of Birth');
+    }
+
+    /**
+     * Create correct date field
+     *
+     * @return string
+     */
+    public function getFieldHtml()
+    {
+        $this->dateElement->setData([
+            'name' => $this->getHtmlId(),
+            'id' => $this->getHtmlId(),
+            'class' => $this->getHtmlClass(),
+            'value' => $this->getValue(),
+            'date_format' => $this->getDateFormat(),
+            'image' => $this->getViewFileUrl('Magento_Core::calendar.gif'),
+        ]);
+        return $this->dateElement->getHtml();
+    }
+
+    /**
+     * Return id
+     *
+     * @return string
+     */
+    public function getHtmlId()
+    {
+        return 'dob';
     }
 
     /**

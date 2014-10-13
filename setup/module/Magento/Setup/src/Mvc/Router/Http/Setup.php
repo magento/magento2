@@ -93,7 +93,6 @@ class Setup extends ZendRegex
         }
 
         $chunks = explode('/', substr(ltrim($path, '/'), $pathOffset));
-        array_shift($chunks); // Extract 'lang' part
         array_pop($chunks); // Extract 'controller' part
 
         array_unshift($chunks, $this->defaults['__NAMESPACE__']);

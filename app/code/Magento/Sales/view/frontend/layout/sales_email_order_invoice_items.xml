@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd" label="Email Invoice Items List" design_abstraction="custom">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd" label="Email Invoice Items List" design_abstraction="custom">
     <update handle="sales_email_order_invoice_renderers" />
     <update handle="sales_email_item_price" />
     <block class="Magento\Sales\Block\Order\Email\Invoice\Items" name="items" template="email/invoice/items.phtml">

@@ -1,0 +1,3 @@
+"productData";"upSellProducts";"constraint"
+"catalogProductSimple::default";"catalogProductSimple::default, configurableProductInjectable::default";"assertProductSaveMessage, assertProductInGrid, assertProductForm, assertUpSellsProductsSection"
+"configurableProductInjectable::default";"catalogProductSimple::default, configurableProductInjectable::default";"assertProductSaveMessage, assertProductInGrid, assertConfigurableProductForm, assertUpSellsProductsSection"

@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <block class="Magento\Sales\Block\Adminhtml\Order\Create\Items\Grid" name="item_unit_price" template="order/create/items/price/unit.phtml"/>
     <block class="Magento\Sales\Block\Adminhtml\Order\Create\Items\Grid" name="item_row_total" template="order/create/items/price/row.phtml"/>
     <block class="Magento\Sales\Block\Adminhtml\Order\Create\Items\Grid" name="item_row_total_with_discount" template="order/create/items/price/total.phtml"/>

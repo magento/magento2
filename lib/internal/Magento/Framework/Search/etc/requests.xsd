@@ -28,19 +28,19 @@
   <xs:complexType name="request">
     <xs:sequence>
       <xs:element type="dimensions" name="dimensions" minOccurs="0" maxOccurs="1"/>
-      <xs:element type="queries" name="queries" minOccurs="1">
+      <xs:element type="queries" name="queries" minOccurs="1" maxOccurs="1">
         <xs:key name="queryName">
           <xs:selector xpath="query" />
           <xs:field xpath="@name" />
         </xs:key>
       </xs:element>
-      <xs:element type="filters" name="filters" minOccurs="0">
+      <xs:element type="filters" name="filters" minOccurs="0" maxOccurs="1">
         <xs:key name="filterName">
           <xs:selector xpath="filter" />
           <xs:field xpath="@name" />
         </xs:key>
       </xs:element>
-      <xs:element type="aggregation" name="aggregation" minOccurs="0">
+      <xs:element type="aggregations" name="aggregations" minOccurs="0" maxOccurs="1">
         <xs:key name="aggregationName">
           <xs:selector xpath="bucket" />
           <xs:field xpath="@name" />
@@ -104,9 +104,7 @@
           <xs:element name="queryReference" minOccurs="1" maxOccurs="unbounded">
             <xs:complexType>
               <xs:complexContent>
-                <xs:extension base="queryReference">
-                  <xs:attribute ref="clause" use="required" />
-                </xs:extension>
+                <xs:extension base="queryReference" />
               </xs:complexContent>
             </xs:complexType>
           </xs:element>
@@ -166,6 +164,15 @@
     </xs:complexContent>
   </xs:complexType>
 
+  <xs:complexType name="wildcardFilter">
+    <xs:complexContent>
+      <xs:extension base="filter">
+        <xs:attribute type="xs:string" name="field" use="required" />
+        <xs:attribute type="xs:string" name="value" use="required" />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
   <xs:complexType name="rangeFilter">
     <xs:complexContent>
       <xs:extension base="filter">
@@ -180,15 +187,7 @@
     <xs:complexContent>
       <xs:extension base="filter">
         <xs:sequence>
-          <xs:element name="filterReference" minOccurs="1" maxOccurs="unbounded">
-            <xs:complexType>
-              <xs:complexContent>
-                <xs:extension base="filterReference">
-                  <xs:attribute ref="clause" use="required" />
-                </xs:extension>
-              </xs:complexContent>
-            </xs:complexType>
-          </xs:element>
+          <xs:element type="filterReference" name="filterReference" minOccurs="1" maxOccurs="unbounded" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -203,7 +202,7 @@
   -->
   <xs:complexType name="bucket" abstract="true">
     <xs:sequence>
-      <xs:element type="metrics" name="metrics" />
+      <xs:element type="metrics" name="metrics" minOccurs="0" maxOccurs="unbounded" />
     </xs:sequence>
     <xs:attribute type="xs:string" name="name" use="required" />
     <xs:attribute type="xs:string" name="field" use="required" />
@@ -220,8 +219,16 @@
     <xs:complexContent>
       <xs:extension base="bucket">
         <xs:sequence>
-          <xs:element type="ranges" name="ranges" minOccurs="1" />
+          <xs:element type="ranges" name="ranges" minOccurs="1" maxOccurs="1" />
         </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="dynamicBucket">
+    <xs:complexContent>
+      <xs:extension base="bucket">
+        <xs:attribute type="xs:string" name="method" use="required" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -241,7 +248,7 @@
     </xs:simpleContent>
   </xs:complexType>
 
-  <xs:complexType name="aggregation">
+  <xs:complexType name="aggregations">
     <xs:choice maxOccurs="unbounded" minOccurs="1">
       <xs:element type="bucket" name="bucket" />
     </xs:choice>
@@ -250,6 +257,7 @@
   <xs:complexType name="queryReference">
     <xs:simpleContent>
       <xs:extension base="xs:string">
+        <xs:attribute ref="clause" use="required" />
         <xs:attribute type="xs:string" name="ref" use="required" />
       </xs:extension>
     </xs:simpleContent>
@@ -258,6 +266,7 @@
   <xs:complexType name="filterReference">
     <xs:simpleContent>
       <xs:extension base="xs:string">
+        <xs:attribute ref="clause" use="required" />
         <xs:attribute type="xs:string" name="ref" use="required" />
       </xs:extension>
     </xs:simpleContent>

@@ -86,13 +86,13 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \Magento\Framework\Search\QueryResponse
+     * @return \Magento\Framework\Search\Response\QueryResponse
      */
     private function executeQuery()
     {
         $this->reindexAll();
 
-        /** @var \Magento\Framework\Search\Request $queryRequest */
+        /** @var \Magento\Framework\Search\Response\QueryResponse $queryRequest */
         $queryRequest = $this->requestBuilder->create();
 
         $queryResponse = $this->adapter->query($queryRequest);
@@ -110,6 +110,29 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
         foreach ($indexerList as $indexer) {
             $indexer->reindexAll();
         }
+    }
+
+    /**
+     * Sample test
+     *
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @magentoConfigFixture current_store catalog/search/engine Magento\CatalogSearch\Model\Resource\Fulltext\Engine
+     * @magentoConfigFixture current_store catalog/search/search_type 2
+     * @magentoDataFixture Magento/Framework/Search/_files/products.php
+     */
+    public function testAggregationsQuery()
+    {
+        $this->requestBuilder->bind('fulltext_search_query', 'peoples');
+        $this->requestBuilder->setRequestName('one_aggregations');
+
+        $queryResponse = $this->executeQuery();
+
+        $this->assertEquals(2, $queryResponse->count());
+        $this->assertEquals(
+            ['weight_bucket', 'price_bucket', 'dynamic_price'],
+            $queryResponse->getAggregations()->getBucketNames()
+        );
     }
 
     /**

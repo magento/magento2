@@ -1172,49 +1172,84 @@ AdminOrder.prototype = {
             parameters: params,
             onSuccess: function(response) {
                 var message = '';
-                var groupChangeRequired = false;
+                var groupActionRequired = null;
                 try {
                     response = response.responseText.evalJSON();
 
-                    if (true === response.valid) {
-                        message = parameters.vatValidMessage;
-                        if (currentCustomerGroupId != response.group) {
-                            message = parameters.vatValidAndGroupChangeMessage;
-                            groupChangeRequired = true;
+                    if (null === response.group) {
+                        if (true === response.valid) {
+                            message = parameters.vatValidMessage;
+                        } else if (true === response.success) {
+                            message = parameters.vatInvalidMessage.replace(/%s/, params.vat);
+                        } else {
+                            message = parameters.vatValidationFailedMessage;
                         }
-                    } else if (response.success) {
-                        message = parameters.vatInvalidMessage.replace(/%s/, params.vat);
-                        groupChangeRequired = true;
                     } else {
-                        message = parameters.vatValidationFailedMessage;
-                        groupChangeRequired = true;
+                        if (true === response.valid) {
+                            message = parameters.vatValidAndGroupValidMessage;
+                            if (0 === response.group) {
+                                message = parameters.vatValidAndGroupInvalidMessage;
+                                groupActionRequired = 'inform';
+                            } else if (currentCustomerGroupId != response.group) {
+                                message = parameters.vatValidAndGroupChangeMessage;
+                                groupActionRequired = 'change';
+                            }
+                        } else if (response.success) {
+                            message = parameters.vatInvalidMessage.replace(/%s/, params.vat);
+                            groupActionRequired = 'inform';
+                        } else {
+                            message = parameters.vatValidationFailedMessage;
+                            groupActionRequired = 'inform';
+                        }
                     }
-
                 } catch (e) {
-                    message = parameters.vatErrorMessage;
+                    message = parameters.vatValidationFailedMessage;
                 }
-                if (!groupChangeRequired) {
+                if (null === groupActionRequired) {
                     alert(message);
                 }
                 else {
-                    this.processCustomerGroupChange(parameters.groupIdHtmlId, message, response.group);
+                    this.processCustomerGroupChange(
+                        parameters.groupIdHtmlId,
+                        message,
+                        parameters.vatCustomerGroupMessage,
+                        parameters.vatGroupErrorMessage,
+                        response.group,
+                        groupActionRequired
+                    );
                 }
             }.bind(this)
         });
     },
 
-    processCustomerGroupChange: function(groupIdHtmlId, message, groupId)
+    processCustomerGroupChange: function(groupIdHtmlId, message, customerGroupMessage, errorMessage, groupId, action)
     {
-        var currentCustomerGroupId = $(groupIdHtmlId).value;
-        var currentCustomerGroupTitle = $$('#' + groupIdHtmlId + ' > option[value=' + currentCustomerGroupId + ']')[0].text;
-        var customerGroupOption = $$('#' + groupIdHtmlId + ' > option[value=' + groupId + ']')[0];
-        var confirmText = message.replace(/%s/, customerGroupOption.text);
-        confirmText = confirmText.replace(/%s/, currentCustomerGroupTitle);
-        if (confirm(confirmText)) {
-            $$('#' + groupIdHtmlId + ' option').each(function(o) {
-                o.selected = o.readAttribute('value') == groupId;
-            });
-            this.accountGroupChange();
+        var groupMessage = '';
+        try {
+            var currentCustomerGroupId = $(groupIdHtmlId).value;
+            var currentCustomerGroupTitle =
+                $$('#' + groupIdHtmlId + ' > option[value=' + currentCustomerGroupId + ']')[0].text;
+            var customerGroupOption = $$('#' + groupIdHtmlId + ' > option[value=' + groupId + ']')[0];
+            groupMessage = customerGroupMessage.replace(/%s/, customerGroupOption.text);
+        } catch (e) {
+            groupMessage = errorMessage;
+            if (action === 'change') {
+                message = '';
+                action = 'inform';
+            }
+        }
+
+        if (action === 'change') {
+            var confirmText = message.replace(/%s/, customerGroupOption.text);
+            confirmText = confirmText.replace(/%s/, currentCustomerGroupTitle);
+            if (confirm(confirmText)) {
+                $$('#' + groupIdHtmlId + ' option').each(function (o) {
+                    o.selected = o.readAttribute('value') == groupId;
+                });
+                this.accountGroupChange();
+            }
+        } else if (action === 'inform') {
+            alert(message + '\n' + groupMessage);
         }
     }
 };

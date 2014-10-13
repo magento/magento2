@@ -463,6 +463,18 @@
             <group />
             <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\CheckoutData</source>
         </checkout_data>
+        <cross_sell_products>
+            <attribute_code>cross_sell_products</attribute_code>
+            <backend_type>virtual</backend_type>
+            <group>crosssells</group>
+            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\CrossSellProducts</source>
+        </cross_sell_products>
+        <up_sell_products>
+            <attribute_code>cross_sell_products</attribute_code>
+            <backend_type>virtual</backend_type>
+            <group>crosssells</group>
+            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\UpSellProducts</source>
+        </up_sell_products>
     </fields>
     <data_set>
         <sku></sku>

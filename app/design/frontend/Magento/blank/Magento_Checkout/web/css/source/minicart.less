@@ -26,15 +26,22 @@
 //    Minicart
 //--------------------------------------
 .block-minicart {
+    .items-total {
+        float: left;
+        margin: 0 10px;
+    }
     .subtotal {
-        border-top: 1px solid @color-secondary;
-        padding-top: 10px;
+        margin: 0 10px;
+        text-align: right;
+    }
+    .amount {
+        .price-wrapper:first-child .price {
+            font-size: @font-size-l;
+            font-weight: @font-weight-bold;
+        }
     }
     .subtitle {
-        .heading(h3);
-        display: inline-block;
-        margin-top: 0;
-        font-weight: 500;
+        display: none;
     }
     .subtitle.empty {
         display: block;
@@ -43,19 +50,25 @@
         font-size: 14px;
     }
     .empty.text {
-        margin: -10px 0 20px;
         text-align: center;
-        & + .actions {
-            margin-bottom: 10px;
-            text-align: center;
-        }
     }
     > .content > .actions {
-        margin-top: 10px;
-        > .secondary,
+        margin-top: 15px;
+        > .secondary {
+            margin: 15px 0;
+            text-align: center;
+        }
         > .primary {
-            padding-right: 20px;
-            display: inline;
+            margin: 0 10px;
+            .action.primary {
+                &:extend(.abstract-button-l all);
+                display: block;
+                width: 100%;
+            }
+        }
+        .paypal-logo {
+            margin-top: 15px;
+            text-align: center;
         }
     }
 }
@@ -71,24 +84,24 @@
         @_icon-font-position: before,
         @_icon-font-size: 35px,
         @_icon-font-line-height: 33px,
-        @_icon-font-color: @color-primary,
+        @_icon-font-color: @minicart-icons-color,
         @_icon-font-color-hover: @color-primary,
-        @_icon-font-color-active: @color-primary
+        @_icon-font-color-active: @minicart-icons-color
     );
     float: right;
     .block-minicart {
-        right: -7px;
+        padding: 25px 20px;
+        right: 0;
         width: 320px;
-        padding: 15px;
         > .title {
             display: none;
         }
-        &:before,
         &:after {
             left: auto;
             right: 25px;
         }
         &:before {
+            left: auto;
             right: 26px;
         }
     }
@@ -97,42 +110,19 @@
         > .primary,
         > .secondary {
             display: inline;
+            margin-right: @indent-s-base;
+            &:last-child {
+                margin-right: 0;
+            }
         }
     }
-    .ui-dialog {
-         .action.close {
-             right: 0;
-             top: 46px;
-             z-index: 100;
-         }
-     }
     .action.close {
-        position: absolute;
-        right: 14px;
-        top: 6px;
-        .icon-font(
-            @icon-remove,
-            @_icon-font-size: 33px,
-            @_icon-font-line-height: 33px,
-            @_icon-font-color: @text-color-muted,
-            @_icon-font-text-hide: true
-        );
-        .button-reset();
+        display: none;
     }
     .action.showcart {
         .text {
             &:extend(.abstract-visually-hidden all);
         }
-        .icon-font(
-            @_icon-font-content: @icon-cart,
-            @_icon-font-position: before,
-            @_icon-font-size: 35px,
-            @_icon-font-line-height: 33px,
-            @_icon-font-vertical-align: top,
-            @_icon-font-color: @color-primary,
-            @_icon-font-color-hover: @color-primary,
-            @_icon-font-color-active: @color-primary
-        );
         white-space: nowrap;
         .counter.qty {
             &.empty {
@@ -140,14 +130,15 @@
             }
             background: @color-active;
             border-radius: 2px;
-            color: #fff;
+            color: @page-bg-color;
             clip: none;
             display: inline-block;
-            height: 26px;
-            line-height: 26px;
-            margin: 3px 0 0 -5px;
+            height: 24px;
+            line-height: 24px;
             max-width: 2em;
-            min-width: 20px;
+            min-width: 18px;
+            margin: 3px 0 0;
+            padding: 0 3px;
             overflow: hidden;
             text-align: center;
             white-space: normal;
@@ -159,22 +150,52 @@
     .list-reset-styles(0, 0);
     .item {
         border-top: 1px solid @color-secondary;
-        padding: 15px 0;
+        padding: 20px 0;
         z-index: 1;
     }
-
     .item > .product {
         &:extend(.abstract-add-clearfix all);
     }
-
-    .product.photo {
-        float: left;
+    .product-image-wrapper {
+        &:extend(.abstract-reset-image-wrapper all);
     }
-
-    .product-item-details {
-        padding-left: 88px;
+    .product {
+        &.photo {
+            float: left;
+        }
+        &-item-name {
+            display: block;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-weight: @font-weight-base;
+            margin-top: 0;
+            a {
+                color: @link-color;
+            }
+        }
+        &.details {
+            padding-left: 88px;
+            .price {
+                font-weight: @font-weight-bold;
+            }
+        }
+        &.pricing {
+            margin-top: 3px;
+        }
+        &.options {
+            .tooltip.toggle {
+                .icon-font(
+                    @icon-down,
+                    @_icon-font-size: 28px,
+                    @_icon-font-line-height: 28px,
+                    @_icon-font-text-hide: true,
+                    @_icon-font-margin: -3px 0 0 7px,
+                    @_icon-font-position: after
+                );
+            }
+        }
     }
-
     .details-qty {
         .label:after {
             content: ":";
@@ -206,7 +227,7 @@
 //--------------------------------------
 .responsive-smaller(@break) when (@break = @screen-xs) {
     .minicart-wrapper .block-minicart {
-        width: 280px;
+        width: 289px;
     }
 }
 
@@ -215,10 +236,10 @@
 //--------------------------------------
 .responsive(@break) when (@break = @screen-m) {
     .minicart-wrapper {
-        margin-left: 10px;
+        margin-left: 13px;
         .block-minicart {
             right: -15px;
-            width: 380px;
+            width: 390px;
         }
     }
 }

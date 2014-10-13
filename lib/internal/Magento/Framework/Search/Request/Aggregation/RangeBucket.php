@@ -81,9 +81,7 @@ class RangeBucket implements BucketInterface
     }
 
     /**
-     * Get Field
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getField()
     {
@@ -91,9 +89,7 @@ class RangeBucket implements BucketInterface
     }
 
     /**
-     * Get Metrics
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getMetrics()
     {

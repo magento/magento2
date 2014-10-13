@@ -29,35 +29,27 @@
     global $taxIter; $taxIter++;
 ?>
 
-<?php if ($this->displayFullSummary()): ?>
-<?php $isTop = 1; ?>
-    <?php if ($_fullInfo) foreach ($_fullInfo as $info): ?>
-        <?php if (isset($info['hidden']) && $info['hidden']) continue; ?>
-        <?php
-            $percent    = $info['percent'];
-            $amount     = $info['amount'];
-            $rates      = $info['rates'];
-            $isFirst    = 1;
-        ?>
-        <?php foreach ($rates as $rate): ?>
-        <tr class="totals tax details details-<?php echo $taxIter; ?> <?php echo ($this->getIsPlaneMode()) ? ' plane' : '';?>">
-            <td <?php echo $this->getLabelProperties()?>>
-                <?php echo $this->escapeHtml($rate['title']); ?>
-                <?php if (!is_null($rate['percent'])): ?>
-                    (<?php echo (float)$rate['percent']; ?>%)
-                <?php endif; ?>
-                <br />
-            </td>
-            <?php if ($isFirst): ?>
-                <td <?php echo $this->getValueProperties()?> rowspan="<?php echo count($rates); ?>">
+<?php if ($_fullInfo && $this->displayFullSummary()): ?>
+        <?php foreach ($_fullInfo as $info): ?>
+            <?php
+                $percent    = $info['percent'];
+                $amount     = $info['tax_amount'];
+                $baseAmount = $info['base_tax_amount'];
+                $title      = $info['title'];
+            ?>
+            <tr class="totals tax details details-<?php echo $taxIter; ?> <?php echo ($this->getIsPlaneMode()) ? ' plane' : '';?>">
+                <td <?php echo $this->getLabelProperties()?>>
+                    <?php echo $this->escapeHtml($title); ?>
+                    <?php if (!is_null($percent)): ?>
+                        (<?php echo (float)$percent; ?>%)
+                    <?php endif; ?>
+                    <br />
+                </td>
+                <td <?php echo $this->getValueProperties()?> rowspan="1">
                     <?php echo $_order->formatPrice($amount); ?>
                 </td>
-            <?php endif; ?>
-        </tr>
-        <?php $isFirst = 0; ?>
-        <?php $isTop = 0; ?>
+            </tr>
         <?php endforeach; ?>
-    <?php endforeach; ?>
 <?php endif;?>
 
 <?php if ($this->displayFullSummary() && $_fullInfo && !$this->getIsPlaneMode()): ?>

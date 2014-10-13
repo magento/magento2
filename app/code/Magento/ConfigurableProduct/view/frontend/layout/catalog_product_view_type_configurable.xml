@@ -23,9 +23,9 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <body>
-        <attribute name="class" value="type-configurable"/>
+        <attribute name="class" value="page-product-configurable"/>
     </body>
     <referenceBlock name="head.components">
         <block class="Magento\Framework\View\Element\Js\Components" name="configurableproduct_product_view_head_components" template="Magento_ConfigurableProduct::js/components.phtml"/>

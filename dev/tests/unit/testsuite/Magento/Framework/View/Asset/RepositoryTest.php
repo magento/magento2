@@ -264,7 +264,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             'themeModel' => $defaultTheme,
             'locale' => 'locale',
         );
-        $this->design->expects($this->once())->method('getDesignParams')->will($this->returnValue($defaults));
+        $this->design->expects($this->atLeastOnce())->method('getDesignParams')->will($this->returnValue($defaults));
         $this->design->expects($this->once())
             ->method('getConfigurationDesignTheme')
             ->with('custom_area')

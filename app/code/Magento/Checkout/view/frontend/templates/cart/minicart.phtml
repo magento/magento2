@@ -21,6 +21,7 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
+
 /** @var $this \Magento\Checkout\Block\Cart\Sidebar */
 ?>
 <?php if ($this->getInList()): ?>
@@ -45,6 +46,35 @@
                 </strong>
             </div>
             <div class="content">
+                <?php if ($_cartQty || $this->getAllowCartLink()): ?>
+                    <div class="items-total">
+                        <?php echo ($_cartQty == 1) ? __('1 item ') : __('%1 items ', $_cartQty) ?>
+                    </div>
+                    <?php $isPossibleOnepageCheckout = $_cartQty && $this->isPossibleOnepageCheckout() ?>
+                    <?php if ($isPossibleOnepageCheckout): ?>
+                        <?php echo $this->getChildHtml('subtotal'); ?>
+                    <?php endif; ?>
+                    <?php echo $this->getChildHtml('minicart_info') ?>
+                    <div class="actions">
+                        <div class="primary">
+                            <?php if ($isPossibleOnepageCheckout): ?>
+                                <button
+                                    id="top-cart-btn-checkout"
+                                    type="button"
+                                    class="action checkout primary"
+                                    title="<?php echo __('Go to Checkout') ?>">
+                                    <span><?php echo __('Go to Checkout') ?></span>
+                                </button>
+                                <?php echo $this->getChildHtml('extra_actions') ?>
+                            <?php endif; ?>
+                        </div>
+                        <div class="secondary">
+                            <a class="action viewcart" href="<?php echo $this->getUrl('checkout/cart'); ?>">
+                                <span><?php echo __('Go to Shopping Cart') ?></span>
+                            </a>
+                        </div>
+                    </div>
+                <?php endif ?>
                 <?php $_items = $this->getRecentItems() ?>
                 <?php if (count($_items)): ?>
                     <strong class="subtitle"><?php echo __('Recently added item(s)') ?></strong>
@@ -63,49 +93,19 @@
                         <p class="minicart empty text"><?php echo $this->getCartEmptyMessage(); ?></p>
                     <?php endif; ?>
                 <?php endif ?>
-
-                <?php if ($_cartQty || $this->getAllowCartLink()): ?>
-                    <?php $isPossibleOnepageCheckout = $_cartQty && $this->isPossibleOnepageCheckout() ?>
-                    <?php if ($isPossibleOnepageCheckout): ?>
-                        <?php echo $this->getChildHtml('subtotal'); ?>
-                    <?php endif; ?>
-                    <?php echo $this->getChildHtml('minicart_info') ?>
-                    <div class="actions">
-                        <div class="primary">
-                            <?php if ($isPossibleOnepageCheckout): ?>
-                                <?php echo $this->getChildHtml('extra_actions') ?>
-                                <button
-                                    id="top-cart-btn-checkout"
-                                    type="button"
-                                    class="action checkout primary"
-                                    title="<?php echo __('Checkout') ?>">
-                                    <span><?php echo __('Checkout') ?></span>
-                                </button>
-                            <?php endif; ?>
-                        </div>
-                        <div class="secondary">
-                            <a class="action viewcart" href="<?php echo $this->getUrl('checkout/cart'); ?>">
-                                <span><?php echo __('View cart') ?></span>
-                            </a>
-                        </div>
-                    </div>
-                <?php endif ?>
             </div>
         </div>
     <?php endif ?>
 <?php endif; ?>
 <script type="text/javascript">
-require([
-    "jquery",
-    "mage/mage"
-], function($){
-        $('[data-block="minicart"]').mage('sidebar',{
+    (function($) {
+        $('[data-block="minicart"]').mage('sidebar', {
             checkoutUrl: '<?php echo $this->getCheckoutUrl();?>',
             checkoutButton: '#top-cart-btn-checkout',
             removeButton: '#mini-cart a.action.delete',
             confirmMessage: '<?php echo __('Are you sure you would like to remove this item from the shopping cart?') ?>'
         });
-});
+    })(jQuery);
 </script>
 <?php if ($this->getInList()): ?>
     </li>

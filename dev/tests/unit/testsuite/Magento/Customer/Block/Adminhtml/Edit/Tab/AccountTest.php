@@ -24,8 +24,11 @@
 
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab;
 
-use \Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
-use \Magento\Customer\Service\V1\CustomerAccountServiceInterface;
+use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Customer\Service\V1\CustomerAccountServiceInterface;
+use Magento\Framework\Service\Data\AbstractExtensibleObject;
+use Magento\Framework\Service\Data\AttributeValue;
+use Magento\Framework\Service\ExtensibleDataObjectConverter;
 
 class AccountTest extends \PHPUnit_Framework_TestCase
 {
@@ -186,7 +189,10 @@ class AccountTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(['Suf1', 'Suf2']));
         $this->formFactoryMock->expects($this->any())->method('create')
             ->will($this->returnValue($accountForm));
-        $this->customerFormFactoryMock->expects($this->any())->method('create')->with('customer', 'adminhtml_customer')
+        $this->customerFormFactoryMock
+            ->expects($this->any())
+            ->method('create')
+            ->with('customer', 'adminhtml_customer', ExtensibleDataObjectConverter::toFlatArray($customerObject))
             ->will($this->returnValue($customerForm));
         $this->customerAccountServiceInterfaceMock->expects($this->any())->method('canModify')->withAnyParameters()
             ->will($this->returnValue($canModifyCustomer));
@@ -228,7 +234,17 @@ class AccountTest extends \PHPUnit_Framework_TestCase
             array([], true, true),
             array(['id' => 1], true, true),
             array([], false, false),
-            array(['id' => 1], false, false),
+            array(
+                [
+                    'id' => 1,
+                    AbstractExtensibleObject::CUSTOM_ATTRIBUTES_KEY => [
+                        [AttributeValue::ATTRIBUTE_CODE => 'test_attribute1', AttributeValue::VALUE => 'test_value1'],
+                        [AttributeValue::ATTRIBUTE_CODE => 'test_attribute2', AttributeValue::VALUE => 'test_value2']
+                    ]
+                ],
+                false,
+                false
+            ),
         );
     }
 }

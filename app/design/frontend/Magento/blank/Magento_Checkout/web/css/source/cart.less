@@ -233,7 +233,7 @@
                 margin-bottom: 10px;
                 &:first-child {
                     margin-left: 0;
-                }  
+                }
             }
         }
         .action {
@@ -265,13 +265,17 @@
                 text-overflow: ellipsis;
             }
         }
+
         // Product options
-        .cart-item-options {
+        .item-options {
             font-size: @font-size-s;
             margin-top: @indent-s-base;
             margin-bottom: @indent-s-base;
             &:extend(.abstract-product-options-list all);
             &:extend(.abstract-add-clearfix all);
+        }
+        .product-image-wrapper {
+            &:extend(.abstract-reset-image-wrapper all);
         }
     }
     &-container {
@@ -320,7 +324,7 @@
             text-align: center;
             margin-top: @indent-s-base;
             .action.primary {
-                .button-l();
+                &:extend(.abstract-button-l all);
                 margin-bottom: 20px;
                 width: 100%;
             }

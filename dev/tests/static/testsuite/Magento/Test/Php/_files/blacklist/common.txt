@@ -118,3 +118,5 @@ lib/internal/Magento/Framework/Simplexml
 lib/internal/Magento/Framework/System
 lib/internal/Magento/Framework/Util.php
 lib/internal/Magento/Framework/Xml
+vendor
+setup/vendor

@@ -1,4 +1,4 @@
 "category/data/name";"category/data/is_active";"category/data/url_key";"category/data/description";"category/data/meta_title";"category/data/include_in_menu";"category/data/available_product_listing_config";"category/data/available_sort_by/sort_2";"category/data/available_sort_by/sort_1";"category/data/default_product_listing_config";"category/data/default_sort_by";"constraint"
-"Name%isolation%";"Yes";"UrlKey%isolation%";"-";"-";"Yes";"Yes";"-";"-";"No";"Name";"assertCategorySaveMessage, assertCategoryForm, assertCategoryPage "
-"Name%isolation%";"Yes";"UrlKey%isolation%";"Category Description";"Category Title";"Yes";"No";"Position";"Price";"Yes";"-";"assertCategorySaveMessage, assertCategoryForm, assertCategoryPage "
+"Name%isolation%";"Yes";"UrlKey%isolation%";"-";"-";"Yes";"Yes";"-";"-";"No";"Name";"assertCategorySaveMessage, assertCategoryForm, assertUrlRewriteCategoryInGrid, assertCategoryRedirect, assertCategoryPage"
+"Name%isolation%";"Yes";"UrlKey%isolation%";"Category Description";"Category Title";"Yes";"No";"Position";"Price";"Yes";"-";"assertCategorySaveMessage, assertCategoryForm, assertCategoryPage"
 "Name%isolation%";"No";"-";"-";"-";"-";"-";"-";"-";"-";"-";"assertCategorySaveMessage, assertCategoryForm"

@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <update handle="sales_order_item_price"/>
     <block class="Magento\Sales\Block\Adminhtml\Order\Creditmemo\Create\Items" name="order_items" template="order/creditmemo/create/items.phtml">
         <block class="Magento\Sales\Block\Adminhtml\Items\Renderer\DefaultRenderer" as="default" template="order/creditmemo/create/items/renderer/default.phtml"/>

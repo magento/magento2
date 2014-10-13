@@ -40,6 +40,10 @@ abstract class AbstractAggregateCalculator extends AbstractCalculator
         $rate = $this->calculationTool->getRate($taxRateRequest);
         $storeRate = $storeRate = $this->calculationTool->getStoreRate($taxRateRequest, $this->storeId);
 
+        $discountTaxCompensationAmount = 0;
+        $applyTaxAfterDiscount = $this->config->applyTaxAfterDiscount($this->storeId);
+        $discountAmount = $item->getDiscountAmount();
+
         // Calculate $rowTotalInclTax
         $priceInclTax = $this->calculationTool->round($item->getUnitPrice());
         $rowTotalInclTax = $priceInclTax * $quantity;
@@ -48,15 +52,16 @@ abstract class AbstractAggregateCalculator extends AbstractCalculator
             $rowTotalInclTax = $priceInclTax * $quantity;
         }
         $rowTaxExact = $this->calculationTool->calcTaxAmount($rowTotalInclTax, $rate, true, false);
-        $rowTax = $this->roundAmount($rowTaxExact, $rate, true);
+        $deltaRoundingType = self::KEY_REGULAR_DELTA_ROUNDING;
+        if ($applyTaxAfterDiscount) {
+            $deltaRoundingType = self::KEY_TAX_BEFORE_DISCOUNT_DELTA_ROUNDING;
+        }
+        $rowTax = $this->roundAmount($rowTaxExact, $rate, true, $deltaRoundingType);
         $rowTotal = $rowTotalInclTax - $rowTax;
         $price = $this->calculationTool->round($rowTotal / $quantity);
 
         //Handle discount
-        $discountTaxCompensationAmount = 0;
-        $applyTaxAfterDiscount = $this->config->applyTaxAfterDiscount($this->storeId);
-        $discountAmount = $item->getDiscountAmount();
-        if ($discountAmount && $applyTaxAfterDiscount) {
+        if ($applyTaxAfterDiscount) {
             //TODO: handle originalDiscountAmount
             $taxableAmount = max($rowTotalInclTax - $discountAmount, 0);
             $rowTaxAfterDiscount = $this->calculationTool->calcTaxAmount(
@@ -65,12 +70,7 @@ abstract class AbstractAggregateCalculator extends AbstractCalculator
                 true,
                 false
             );
-            $rowTaxAfterDiscount = $this->roundAmount(
-                $rowTaxAfterDiscount,
-                $rate,
-                true,
-                self::KEY_TAX_AFTER_DISCOUNT_DELTA_ROUNDING
-            );
+            $rowTaxAfterDiscount = $this->roundAmount($rowTaxAfterDiscount, $rate, true);
             // Set discount tax compensation
             $discountTaxCompensationAmount = $rowTax - $rowTaxAfterDiscount;
             $rowTax = $rowTaxAfterDiscount;
@@ -122,11 +122,15 @@ abstract class AbstractAggregateCalculator extends AbstractCalculator
             $taxId = $appliedRate['id'];
             $taxRate = $appliedRate['percent'];
             $rowTaxPerRate = $this->calculationTool->calcTaxAmount($rowTotal, $taxRate, false, false);
-            $rowTaxPerRate = $this->roundAmount($rowTaxPerRate, $taxRate, false);
+            $deltaRoundingType = self::KEY_REGULAR_DELTA_ROUNDING;
+            if ($applyTaxAfterDiscount) {
+                $deltaRoundingType = self::KEY_TAX_BEFORE_DISCOUNT_DELTA_ROUNDING;
+            }
+            $rowTaxPerRate = $this->roundAmount($rowTaxPerRate, $taxId, false, $deltaRoundingType);
             $rowTaxAfterDiscount = $rowTaxPerRate;
 
             //Handle discount
-            if ($discountAmount && $applyTaxAfterDiscount) {
+            if ($applyTaxAfterDiscount) {
                 //TODO: handle originalDiscountAmount
                 $taxableAmount = max($rowTotal - $discountAmount, 0);
                 $rowTaxAfterDiscount = $this->calculationTool->calcTaxAmount(
@@ -135,12 +139,7 @@ abstract class AbstractAggregateCalculator extends AbstractCalculator
                     false,
                     false
                 );
-                $rowTaxAfterDiscount = $this->roundAmount(
-                    $rowTaxAfterDiscount,
-                    $taxRate,
-                    false,
-                    self::KEY_TAX_AFTER_DISCOUNT_DELTA_ROUNDING
-                );
+                $rowTaxAfterDiscount = $this->roundAmount($rowTaxAfterDiscount, $taxId, false);
             }
             $appliedTaxes[$taxId] = $this->getAppliedTax(
                 $rowTaxAfterDiscount,

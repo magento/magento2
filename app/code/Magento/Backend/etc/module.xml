@@ -36,7 +36,6 @@
             <module name="Magento_Cron"/>
             <module name="Magento_Theme"/>
             <module name="Magento_Reports"/>
-            <module name="Magento_CatalogSearch"/>
             <module name="Magento_Sales"/>
             <module name="Magento_Catalog"/>
             <module name="Magento_User"/>

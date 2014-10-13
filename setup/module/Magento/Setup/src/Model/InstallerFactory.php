@@ -29,11 +29,15 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class InstallerFactory
 {
     /**
+     * Zend Framework's service locator
+     *
      * @var ServiceLocatorInterface
      */
     protected $serviceLocator;
 
     /**
+     * Constructor
+     *
      * @param ServiceLocatorInterface $serviceLocator
      */
     public function __construct(ServiceLocatorInterface $serviceLocator)
@@ -42,6 +46,8 @@ class InstallerFactory
     }
 
     /**
+     * Factory method for installer object
+     *
      * @param LoggerInterface $log
      * @return Installer
      */
@@ -55,7 +61,8 @@ class InstallerFactory
             $this->serviceLocator->get('Magento\Config\ConfigFactory'),
             $this->serviceLocator->get('Magento\Setup\Model\AdminAccountFactory'),
             $log,
-            $this->serviceLocator->get('Magento\Framework\Math\Random')
+            $this->serviceLocator->get('Magento\Framework\Math\Random'),
+            $this->serviceLocator->get('Magento\Setup\Module\Setup\ConnectionFactory')
         );
     }
 }

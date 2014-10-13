@@ -41,9 +41,9 @@ abstract class AbstractExtensibleObjectBuilder extends AbstractSimpleObjectBuild
     protected $metadataService;
 
     /**
-     * @var MetadataObjectInterface[]
+     * @var string[]
      */
-    protected $customAttributesMetadata;
+    protected $customAttributesCodes = null;
 
     /**
      * @param \Magento\Framework\Service\Data\ObjectFactory $objectFactory
@@ -110,16 +110,18 @@ abstract class AbstractExtensibleObjectBuilder extends AbstractSimpleObjectBuild
      */
     protected function getCustomAttributesCodes()
     {
+        if (!is_null($this->customAttributesCodes)) {
+            return $this->customAttributesCodes;
+        }
         $attributeCodes = [];
         $dataObjectClassName = $this->_getDataObjectType();
-        if (empty($this->customAttributesMetadata)) {
-            $this->customAttributesMetadata = $this->metadataService->getCustomAttributesMetadata($dataObjectClassName);
-        }
-        if (is_array($this->customAttributesMetadata)) {
-            foreach ($this->customAttributesMetadata as $attribute) {
+        $customAttributesMetadata = $this->metadataService->getCustomAttributesMetadata($dataObjectClassName);
+        if (is_array($customAttributesMetadata)) {
+            foreach ($customAttributesMetadata as $attribute) {
                 $attributeCodes[] = $attribute->getAttributeCode();
             }
         }
+        $this->customAttributesCodes = $attributeCodes;
         return $attributeCodes;
     }
 

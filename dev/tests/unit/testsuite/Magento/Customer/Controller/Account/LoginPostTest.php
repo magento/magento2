@@ -183,16 +183,16 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Customer\Controller\Account::_getAllowedActions
+     * @covers \Magento\Customer\Controller\Account::getAllowedActions
      */
     public function testGetAllowedActions()
     {
-        $this->assertAttributeEquals($this->openActions, '_openActions', $this->object);
+        $this->assertAttributeEquals($this->openActions, 'openActions', $this->object);
         /**
-         * @TODO: [TD] Protected methods must be tested via public. Eliminate _getAllowedActions method and write test
+         * @TODO: [TD] Protected methods must be tested via public. Eliminate getAllowedActions method and write test
          *   for dispatch method using this property instead.
          */
-        $method = new \ReflectionMethod('Magento\Customer\Controller\Account', '_getAllowedActions');
+        $method = new \ReflectionMethod('Magento\Customer\Controller\Account', 'getAllowedActions');
         $method->setAccessible(true);
         $this->assertEquals($this->openActions, $method->invoke($this->object));
     }

@@ -395,6 +395,7 @@
             <is_required>0</is_required>
             <default_value></default_value>
             <input>text</input>
+            <group>search-engine-optimization</group>
         </url_key>
         <url_path>
             <attribute_code>url_path</attribute_code>
@@ -466,6 +467,12 @@
             <group />
             <source>Magento\ConfigurableProduct\Test\Fixture\ConfigurableProductInjectable\CheckoutData</source>
         </checkout_data>
+        <up_sell_products>
+            <attribute_code>cross_sell_products</attribute_code>
+            <backend_type>virtual</backend_type>
+            <group>crosssells</group>
+            <source>Magento\Catalog\Test\Fixture\CatalogProductSimple\UpSellProducts</source>
+        </up_sell_products>
     </fields>
     <data_set>
         <sku></sku>

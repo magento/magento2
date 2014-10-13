@@ -76,14 +76,14 @@ class PlaceOrderStep implements TestStepInterface
      * @param AssertOrderTotalOnReviewPage $assertOrderTotalOnReviewPage
      * @param CheckoutOnepageSuccess $checkoutOnepageSuccess
      * @param string $checkoutMethod
-     * @param string $grandTotal
+     * @param string|null $grandTotal
      */
     public function __construct(
         CheckoutOnepage $checkoutOnepage,
         AssertOrderTotalOnReviewPage $assertOrderTotalOnReviewPage,
         CheckoutOnepageSuccess $checkoutOnepageSuccess,
         $checkoutMethod,
-        $grandTotal
+        $grandTotal = null
     ) {
         $this->checkoutOnepage = $checkoutOnepage;
         $this->assertOrderTotalOnReviewPage = $assertOrderTotalOnReviewPage;
@@ -99,7 +99,9 @@ class PlaceOrderStep implements TestStepInterface
      */
     public function run()
     {
-        $this->assertOrderTotalOnReviewPage->processAssert($this->checkoutOnepage, $this->grandTotal);
+        if ($this->grandTotal !== null) {
+            $this->assertOrderTotalOnReviewPage->processAssert($this->checkoutOnepage, $this->grandTotal);
+        }
         $this->checkoutOnepage->getReviewBlock()->placeOrder();
 
         return ['orderId' => $this->checkoutOnepageSuccess->getSuccessBlock()->getGuestOrderId()];

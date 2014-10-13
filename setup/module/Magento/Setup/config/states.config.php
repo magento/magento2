@@ -30,6 +30,15 @@ return [
             'views'       => ['root' => []]
         ],
         [
+            'id'          => 'root.license',
+            'url'         => 'license',
+            'templateUrl' => 'license',
+            'title'       => 'License',
+            'main'        => true,
+            'nav-bar'     => false,
+            'order'       => -1,
+        ],
+        [
             'id'          => 'root.landing',
             'url'         => 'landing',
             'templateUrl' => 'landing',

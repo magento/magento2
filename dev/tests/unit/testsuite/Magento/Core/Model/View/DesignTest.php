@@ -26,9 +26,9 @@ namespace Magento\Core\Model\View;
 class DesignTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Locale\ResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\ObjectManager|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $locale;
+    private $objectManager;
 
     /**
      * @var \Magento\Core\Model\View\Design::__construct
@@ -43,20 +43,24 @@ class DesignTest extends \PHPUnit_Framework_TestCase
         );
         $config = $this->getMockForAbstractClass('\Magento\Framework\App\Config\ScopeConfigInterface');
         $themeFactory = $this->getMock('\Magento\Core\Model\ThemeFactory');
-        $this->locale = $this->getMockForAbstractClass('\Magento\Framework\Locale\ResolverInterface');
+        $this->objectManager = $this->getMockForAbstractClass('\Magento\Framework\ObjectManager');
         $state = $this->getMock('\Magento\Framework\App\State', array(), array(), '', false);
         $themes = array();
         $this->model = new \Magento\Core\Model\View\Design(
-            $storeManager, $flyweightThemeFactory, $config, $themeFactory, $this->locale, $state, $themes
+            $storeManager, $flyweightThemeFactory, $config, $themeFactory, $this->objectManager, $state, $themes
         );
     }
 
     public function testGetLocale()
     {
         $expected = 'locale';
-        $this->locale->expects($this->once())
+        $localeMock = $this->getMockForAbstractClass('\Magento\Framework\Locale\ResolverInterface');
+        $localeMock->expects($this->once())
             ->method('getLocaleCode')
             ->will($this->returnValue($expected));
+        $this->objectManager->expects($this->once())
+            ->method('get')
+            ->will($this->returnValue($localeMock));
         $actual = $this->model->getLocale();
         $this->assertSame($expected, $actual);
     }

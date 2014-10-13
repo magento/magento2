@@ -57,6 +57,7 @@ $category->setId(4)
     ->setIsAnchor(true)
     ->setPosition(1)
     ->save();
+
 $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Category');
 $category->setId(5)
     ->setName('Category 1.1.1')

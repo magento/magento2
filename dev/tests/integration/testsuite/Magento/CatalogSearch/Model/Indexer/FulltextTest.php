@@ -49,7 +49,7 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
     protected $fulltext;
 
     /**
-     * @var \Magento\CatalogSearch\Model\QueryFactory
+     * @var \Magento\Search\Model\QueryFactory
      */
     protected $queryFactory;
 
@@ -84,7 +84,7 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->queryFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\CatalogSearch\Model\QueryFactory'
+            'Magento\Search\Model\QueryFactory'
         );
 
         $this->productFirst = $this->getProductBySku('fulltext-1');
@@ -189,10 +189,9 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
     protected function search($text)
     {
         $this->resourceFulltext->resetSearchResults();
-        $query = $this->queryFactory->create();
-        $query->setQueryText($text)->prepare();
+        $query = $this->queryFactory->get();
+        $query->unsetData()->setQueryText($text)->prepare();
         $this->resourceFulltext->prepareResult($this->fulltext, $text, $query);
-        $query->getResultCollection();
         $products = [];
         foreach ($query->getResultCollection() as $product) {
             $products[] = $product;

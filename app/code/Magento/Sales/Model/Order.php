@@ -488,9 +488,11 @@ class Order extends \Magento\Sales\Model\AbstractModel implements EntityInterfac
     protected $_productVisibility;
 
     /**
-     * @var \Magento\Tax\Model\Calculation
+     * Tax helper
+     *
+     * @var \Magento\Tax\Helper\Data
      */
-    protected $_taxCalculation;
+    protected $_taxHelper;
 
     /**
      * @var \Magento\Sales\Model\Service\OrderFactory
@@ -506,11 +508,6 @@ class Order extends \Magento\Sales\Model\AbstractModel implements EntityInterfac
      * @var \Magento\Sales\Model\Order\Status\HistoryFactory
      */
     protected $_orderHistoryFactory;
-
-    /**
-     * @var \Magento\Tax\Model\Resource\Sales\Order\Tax\CollectionFactory
-     */
-    protected $_orderTaxCollectionFactory;
 
     /**
      * @var Resource\Order\Address\CollectionFactory
@@ -562,12 +559,11 @@ class Order extends \Magento\Sales\Model\AbstractModel implements EntityInterfac
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param Resource\Order\Item\CollectionFactory $orderItemCollectionFactory
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
-     * @param \Magento\Tax\Model\Calculation $taxCalculation
+     * @param \Magento\Tax\Helper\Data $taxHelper
      * @param Service\OrderFactory $serviceOrderFactory
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param Order\Status\HistoryFactory $orderHistoryFactory
-     * @param \Magento\Tax\Model\Resource\Sales\Order\Tax\CollectionFactory $orderTaxCollectionFactory
      * @param Resource\Order\Address\CollectionFactory $addressCollectionFactory
      * @param Resource\Order\Payment\CollectionFactory $paymentCollectionFactory
      * @param Resource\Order\Status\History\CollectionFactory $historyCollectionFactory
@@ -590,12 +586,11 @@ class Order extends \Magento\Sales\Model\AbstractModel implements EntityInterfac
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Sales\Model\Resource\Order\Item\CollectionFactory $orderItemCollectionFactory,
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
-        \Magento\Tax\Model\Calculation $taxCalculation,
+        \Magento\Tax\Helper\Data $taxHelper,
         \Magento\Sales\Model\Service\OrderFactory $serviceOrderFactory,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Sales\Model\Order\Status\HistoryFactory $orderHistoryFactory,
-        \Magento\Tax\Model\Resource\Sales\Order\Tax\CollectionFactory $orderTaxCollectionFactory,
         \Magento\Sales\Model\Resource\Order\Address\CollectionFactory $addressCollectionFactory,
         \Magento\Sales\Model\Resource\Order\Payment\CollectionFactory $paymentCollectionFactory,
         \Magento\Sales\Model\Resource\Order\Status\History\CollectionFactory $historyCollectionFactory,
@@ -614,12 +609,11 @@ class Order extends \Magento\Sales\Model\AbstractModel implements EntityInterfac
 
         $this->_orderItemCollectionFactory = $orderItemCollectionFactory;
         $this->_productVisibility = $productVisibility;
-        $this->_taxCalculation = $taxCalculation;
+        $this->_taxHelper = $taxHelper;
         $this->_serviceOrderFactory = $serviceOrderFactory;
         $this->_currencyFactory = $currencyFactory;
         $this->_eavConfig = $eavConfig;
         $this->_orderHistoryFactory = $orderHistoryFactory;
-        $this->_orderTaxCollectionFactory = $orderTaxCollectionFactory;
         $this->_addressCollectionFactory = $addressCollectionFactory;
         $this->_paymentCollectionFactory = $paymentCollectionFactory;
         $this->_historyCollectionFactory = $historyCollectionFactory;
@@ -2195,8 +2189,7 @@ class Order extends \Magento\Sales\Model\AbstractModel implements EntityInterfac
      */
     public function getFullTaxInfo()
     {
-        $rates = $this->_orderTaxCollectionFactory->create()->loadByOrder($this)->toArray();
-        return $this->_taxCalculation->reproduceProcess($rates['items']);
+        return $this->_taxHelper->getCalculatedTaxes($this);
     }
 
     /**

@@ -28,6 +28,8 @@ namespace Magento\Customer\Service\V1;
  */
 interface CustomerGroupServiceInterface
 {
+    const XML_PATH_DEFAULT_ID = 'customer/create_account/default_group';
+
     const NOT_LOGGED_IN_ID = 0;
 
     const CUST_GROUP_ALL = 32000;

@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
+<page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <referenceBlock name="head.components">
         <block class="Magento\Framework\View\Element\Js\Components" name="checkout_page_head_components" template="Magento_Catalog::js/components.phtml"/>
     </referenceBlock>
@@ -43,26 +43,37 @@
     </head>
     <update handle="page_calendar"/>
     <referenceContainer name="content">
-        <container name="product.info.main" label="invisible" htmlTag="div" htmlClass="product-info-main" before="-">
-            <container name="product.info.type" label="invisible" before="-"/>
-            <block class="Magento\Catalog\Block\Product\View\Description" name="product.info.sku" template="product/view/attribute.phtml" after="product.info.type">
-                <arguments>
-                    <argument name="at_call" xsi:type="string">getSku</argument>
-                    <argument name="at_code" xsi:type="string">sku</argument>
-                    <argument name="css_class" xsi:type="string">sku</argument>
-                    <argument name="at_label" xsi:type="string">default</argument>
-                    <argument name="add_attribute" xsi:type="string">itemprop="sku"</argument>
-                </arguments>
+        <container name="product.info.media" label="invisible" htmlTag="div" htmlClass="product media" before="-">
+            <block class="Magento\Catalog\Block\Product\View\Gallery" name="product.info.media.image" template="product/view/base-image.phtml">
+                <block class="Magento\Catalog\Block\Product\Image" name="product.image.main"/>
+                <block class="Magento\Catalog\Block\Product\Image" name="product.image.thumbs"/>
             </block>
-            <block class="Magento\Catalog\Block\Product\View" name="product.info.review" template="product/view/review.phtml" after="product.info.sku"/>
-            <block class="Magento\Catalog\Pricing\Render" name="product.price.final" after="product.info.sku">
-                <arguments>
-                    <argument name="price_render" xsi:type="string">product.price.render.default</argument>
-                    <argument name="price_type_code" xsi:type="string">final_price</argument>
-                    <argument name="zone" xsi:type="string">item_view</argument>
-                </arguments>
-            </block>
-            <block class="Magento\Catalog\Pricing\Render" name="product.price.tier" after="product.price.final">
+        </container>
+
+        <container name="product.info.main" label="invisible" htmlTag="div" htmlClass="product-info-main" after="product.info.media">
+            <block class="Magento\Catalog\Block\Product\View" name="product.info.review" template="product/view/review.phtml" before="-" />
+            <container name="product.info.price" label="Product info auxiliary container" htmlTag="div" htmlClass="product-info-price" after="product.info.review">
+                <block class="Magento\Catalog\Pricing\Render" name="product.price.final" after="product.info.sku">
+                    <arguments>
+                        <argument name="price_render" xsi:type="string">product.price.render.default</argument>
+                        <argument name="price_type_code" xsi:type="string">final_price</argument>
+                        <argument name="zone" xsi:type="string">item_view</argument>
+                    </arguments>
+                </block>
+                <container name="product.info.stock.sku" label="Product auxiliary info" htmlTag="div" htmlClass="product-info-stock-sku">
+                    <container name="product.info.type" label="invisible" before="-"/>
+                    <block class="Magento\Catalog\Block\Product\View\Description" name="product.info.sku" template="product/view/attribute.phtml" after="product.info.type">
+                        <arguments>
+                            <argument name="at_call" xsi:type="string">getSku</argument>
+                            <argument name="at_code" xsi:type="string">sku</argument>
+                            <argument name="css_class" xsi:type="string">sku</argument>
+                            <argument name="at_label" xsi:type="string">default</argument>
+                            <argument name="add_attribute" xsi:type="string">itemprop="sku"</argument>
+                        </arguments>
+                    </block>
+                </container>
+            </container>
+            <block class="Magento\Catalog\Pricing\Render" name="product.price.tier" after="product.info.price">
                 <arguments>
                     <argument name="price_render" xsi:type="string">product.price.render.default</argument>
                     <argument name="price_type_code" xsi:type="string">tier_price</argument>
@@ -70,7 +81,7 @@
                 </arguments>
             </block>
             <container name="alert.urls" as="alert_urls" label="Alert Urls" after="product.price.tier"/>
-            <block class="Magento\Catalog\Block\Product\View" name="product.info" template="product/view/form.phtml">
+            <block class="Magento\Catalog\Block\Product\View" name="product.info" template="product/view/form.phtml" after="alert.urls">
                 <container name="product.info.form.content" label="invisible" as="product_info_form_content">
                     <block class="Magento\Catalog\Block\Product\View" name="product.info.addtocart" as="addtocart" template="product/view/addtocart.phtml"/>
                 </container>
@@ -90,9 +101,13 @@
                     </block>
                 </block>
             </block>
-            <container name="product.info.extrahint" as="extrahint" label="Product View Extra Hint"/>
-            <block class="Magento\Catalog\Block\Product\View" name="product.info.addto" as="addto" template="product/view/addto.phtml"/>
-            <block class="Magento\Catalog\Block\Product\View\Description" name="product.info.overview" template="product/view/attribute.phtml" group="detailed_info" after="addto">
+            <container name="product.info.extrahint" as="extrahint" label="Product View Extra Hint">
+                <container name="product.info.social" label="Product social links container" htmlTag="div" htmlClass="product-social-links" after="product.info.overview">
+                    <block class="Magento\Catalog\Block\Product\View" name="product.info.addto" as="addto" template="product/view/addto.phtml"/>
+                    <block class="Magento\Catalog\Block\Product\View" name="product.info.mailto" template="product/view/mailto.phtml"/>
+                </container>
+            </container>
+            <block class="Magento\Catalog\Block\Product\View\Description" name="product.info.overview" template="product/view/attribute.phtml" group="detailed_info" after="product.info.extrahint">
                 <arguments>
                     <argument name="at_call" xsi:type="string">getShortDescription</argument>
                     <argument name="at_code" xsi:type="string">short_description</argument>
@@ -102,17 +117,9 @@
                     <argument name="add_attribute" xsi:type="string">itemprop="description"</argument>
                 </arguments>
             </block>
-            <container name="product.info.social" label="Product social links container" htmlTag="div" htmlClass="product-social-links" after="product.info.overview">
-                <block class="Magento\Catalog\Block\Product\View" name="product.info.mailto" template="product/view/mailto.phtml"/>
-            </container>
         </container>
-        <container name="product.info.media" label="invisible" htmlTag="div" htmlClass="product media" after="product.info.main">
-            <block class="Magento\Catalog\Block\Product\View\Gallery" name="product.info.media.image" template="product/view/base-image.phtml">
-                <block class="Magento\Catalog\Block\Product\Image" name="product.image.main"/>
-                <block class="Magento\Catalog\Block\Product\Image" name="product.image.thumbs"/>
-            </block>
-        </container>
-        <block class="Magento\Catalog\Block\Product\View\Description" name="product.info.details" template="product/view/details.phtml">
+
+        <block class="Magento\Catalog\Block\Product\View\Description" name="product.info.details" template="product/view/details.phtml" after="product.info.main">
             <block class="Magento\Catalog\Block\Product\View\Description" name="product.info.description" template="product/view/attribute.phtml" group="detailed_info">
                 <arguments>
                     <argument name="at_call" xsi:type="string">getDescription</argument>

@@ -76,6 +76,7 @@ class NewAction extends \Magento\Catalog\Controller\Adminhtml\Product
 
         if ($this->getRequest()->getParam('popup')) {
             $this->_view->loadLayout(array(
+                'default',
                 'popup',
                 strtolower($this->_request->getFullActionName()),
                 'catalog_product_' . $product->getTypeId()

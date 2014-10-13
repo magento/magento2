@@ -23,6 +23,8 @@
  */
 namespace Magento\Catalog\Model\Layer\Filter\Price;
 
+use Magento\TestFramework\Helper\Bootstrap;
+
 /**
  * Test class for \Magento\Catalog\Model\Layer\Filter\Price.
  *
@@ -30,13 +32,6 @@ namespace Magento\Catalog\Model\Layer\Filter\Price;
  */
 class AlgorithmBaseTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * Algorithm model
-     *
-     * @var \Magento\Catalog\Model\Layer\Filter\Price\Algorithm
-     */
-    protected $_model;
-
     /**
      * Layer model
      *
@@ -51,39 +46,49 @@ class AlgorithmBaseTest extends \PHPUnit_Framework_TestCase
      */
     protected $_filter;
 
-    protected function setUp()
-    {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Layer\Filter\Price\Algorithm');
-        $this->_layer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Layer\Category');
-        $this->_filter = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Catalog\Model\Layer\Filter\Price', array('layer' => $this->_layer));
-        $this->_filter->setAttributeModel(new \Magento\Framework\Object(array('attribute_code' => 'price')));
-    }
+    /**
+     * @var \Magento\Catalog\Model\Resource\Layer\Filter\Price
+     */
+    protected $priceResource;
 
     /**
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @magentoConfigFixture current_store catalog/search/engine Magento\CatalogSearch\Model\Resource\Fulltext\Engine
      * @dataProvider pricesSegmentationDataProvider
      */
     public function testPricesSegmentation($categoryId, $intervalsNumber, $intervalItems)
     {
-        $this->_layer->setCurrentCategory($categoryId);
-        $collection = $this->_layer->getProductCollection();
+        $layer = Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Layer\Category');
+        $priceResource = Bootstrap::getObjectManager()
+            ->create('Magento\Catalog\Model\Resource\Layer\Filter\Price', ['layer' => $layer]);
+        $interval = Bootstrap::getObjectManager()
+            ->create('Magento\CatalogSearch\Model\Price\Interval', ['resource' => $priceResource]);
+        $objectManager = $this->getMockBuilder('Magento\Framework\ObjectManager\ObjectManager')
+                ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $objectManager->expects($this->once())->method('create')->willReturn($interval);
+        $intervalFactory = Bootstrap::getObjectManager()
+            ->create('Magento\Framework\Search\Dynamic\IntervalFactory', ['objectManager' => $objectManager]);
+        $model = Bootstrap::getObjectManager()
+            ->create('Magento\Framework\Search\Dynamic\Algorithm', ['intervalFactory' => $intervalFactory]);
+
+        $layer->setCurrentCategory($categoryId);
+        $collection = $layer->getProductCollection();
 
         $memoryUsedBefore = memory_get_usage();
-        $this->_model->setPricesModel(
-            $this->_filter
-        )->setStatistics(
+        $model->setStatistics(
             $collection->getMinPrice(),
             $collection->getMaxPrice(),
             $collection->getPriceStandardDeviation(),
             $collection->getSize()
         );
         if (!is_null($intervalsNumber)) {
-            $this->assertEquals($intervalsNumber, $this->_model->getIntervalsNumber());
+            $this->assertEquals($intervalsNumber, $model->getIntervalsNumber());
         }
 
-        $items = $this->_model->calculateSeparators();
+        $items = $model->calculateSeparators();
         $this->assertEquals(array_keys($intervalItems), array_keys($items));
 
         for ($i = 0; $i < count($intervalItems); ++$i) {

@@ -23,7 +23,7 @@
  * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Core/etc/page.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <referenceBlock name="creditmemo_items">
         <block class="Magento\Downloadable\Block\Adminhtml\Sales\Items\Column\Downloadable\Name" name="column_name_downloadable" template="sales/items/column/downloadable/creditmemo/name.phtml" group="column"/>
     </referenceBlock>

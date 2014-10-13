@@ -84,4 +84,10 @@
     <assertDownloadsReportResult module="Magento_Reports">
         <severeness>low</severeness>
     </assertDownloadsReportResult>
+    <assertSalesReportIntervalResult module="Magento_Reports">
+        <severeness>low</severeness>
+    </assertSalesReportIntervalResult>
+    <assertSalesReportTotalResult module="Magento_Reports">
+        <severeness>low</severeness>
+    </assertSalesReportTotalResult>
 </constraint>
