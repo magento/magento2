@@ -1,0 +1,4 @@
+"description";"order/dataSet";"order/data/price/preset";"refundsReport/report_type";"refundsReport/period_type";"refundsReport/from";"refundsReport/to";"refundsReport/show_order_statuses";"refundsReport/show_empty_rows";"constraint";"issue"
+"assert refunds year report";"default";"full_invoice";"Order Created Date";"Year";"m/d/Y 12:00 a-2 days";"m/d/Y 12:00 a+2 days";"Any";"Yes";"assertRefundReportIntervalResult";"MAGETWO-29383"
+"assert refunds month report";"default";"full_invoice";"Order Created Date";"Month";"m/d/Y";"m/d/Y";"Any";"No";"assertRefundReportIntervalResult";""
+"assert refund Daily report";"default";"full_invoice";"Last Credit Memo Created Date";"Day";"m/d/Y";"m/d/Y";"Specified";"No";"assertRefundReportIntervalResult";""

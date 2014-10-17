@@ -28,5 +28,8 @@
         <firstname />
         <lastname />
         <email />
+        <current_password />
+        <password />
+        <confirmation />
     </fields>
 </mapping>

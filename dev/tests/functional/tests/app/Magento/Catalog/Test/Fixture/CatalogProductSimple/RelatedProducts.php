@@ -22,15 +22,13 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-namespace Magento\Reports\Test\Block\Adminhtml\Sales\Orders\Viewed;
-
-use Magento\Reports\Test\Block\Adminhtml\AbstractFilter;
+namespace Magento\Catalog\Test\Fixture\CatalogProductSimple;
 
 /**
- * Class Filter
- * Filter for Sales Report
+ * Class RelatedProducts
+ * Create related products
  */
-class Filter extends AbstractFilter
+class RelatedProducts extends AbstractRelatedProducts
 {
     //
 }

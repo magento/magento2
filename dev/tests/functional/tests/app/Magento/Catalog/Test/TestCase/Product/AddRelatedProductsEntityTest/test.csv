@@ -1,0 +1,2 @@
+"productData";"relatedProductsData";"constraint"
+"catalogProductSimple::default";"catalogProductSimple::default, configurableProductInjectable::default";"assertProductSaveMessage, assertProductInGrid, assertProductForm, assertRelatedProductsSection"

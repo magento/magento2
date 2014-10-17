@@ -1,3 +1,15 @@
+0.1.0-alpha100
+=============
+ * Added the following functional tests:
+   * Add related products
+   * Assign custom order status
+   * Change customer password
+   * Create credit memo for offline payment methods
+   * Product type switching on creation
+   * Sales invoice report
+   * Sales refund report
+   * Update newsletter template
+
 0.1.0-alpha99
 =============
  * Released Performance Toolkit
@@ -5,7 +17,6 @@
    * [#665](https://github.com/magento/magento2/issues/665) -- Main menu event in wrong area
    * [#666](https://github.com/magento/magento2/pull/666) -- Update di.xml
    * [#602](https://github.com/magento/magento2/issues/602) -- Magento\Sales\Model\Order::getFullTaxInfo() incorrectly combines percentages
-   * [#673](https://github.com/magento/magento2/issues/673) -- Fixed fatal error during installation
  * Functional tests:
    * Updated API-functional test for Customer and Address metadata service
    * Add cross sell
@@ -46,6 +57,7 @@
    * Fixed the link to the license agreement in web installer
    * Fixed the web installation wizard which was stuck at 96%
  * Fixed bugs:
+   * Fixed fatal error during installation
    * Fixed an issue where newly created attribute was always added to the Product Details tab
    * Fixed an issue where it was impossible to change the Stock Availability status of a product from the Advanced Inventory tab
    * Fixed an issue where the Stock Status value changed from In Stock to Out of Stock if quantity was not specified

@@ -60,29 +60,29 @@ class FilterGrid extends Grid
     ];
 
     /**
-     * Get last sales from Sales Report grid
+     * Get last row data from report grid
      *
      * @return array
      */
-    public function getLastSalesResult()
+    public function getLastResult()
     {
         return $this->getResults($this->filterRows);
     }
 
     /**
-     * Get total sales from Sales Report grid
+     * Get total data from report grid
      *
      * @return array
      */
-    public function getSalesTotalResult()
+    public function getTotalResult()
     {
         return $this->getResults($this->totalRows);
     }
 
     /**
-     * Get sales data from Sales Report grid
+     * Get data from report grid
      *
-     * @param array $filterRows
+     * @param string $filterRows
      * @return array
      */
     protected function getResults($filterRows)
@@ -93,7 +93,7 @@ class FilterGrid extends Grid
             return array_fill_keys($this->rows, 0);
         }
         foreach ($this->rows as $row) {
-            $value = $this->_rootElement->find(sprintf($this->filterRows, $row), Locator::SELECTOR_XPATH)->getText();
+            $value = $this->_rootElement->find(sprintf($filterRows, $row), Locator::SELECTOR_XPATH)->getText();
             $orders[$row] = preg_replace('`[$,]`', '', $value);
         }
 

@@ -31,7 +31,7 @@
             <strategy>css selector</strategy>
         </messagesBlock>
         <filterBlock>
-            <class>Magento\Reports\Test\Block\Adminhtml\Sales\Orders\Viewed\Filter</class>
+            <class>Magento\Sales\Test\Block\Adminhtml\Report\Filter\Form</class>
             <locator>#filter_form</locator>
             <strategy>css selector</strategy>
         </filterBlock>

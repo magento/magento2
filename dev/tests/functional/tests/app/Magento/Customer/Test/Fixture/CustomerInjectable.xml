@@ -231,6 +231,10 @@
             <attribute_code>store_credit</attribute_code>
             <backend_type>virtual</backend_type>
         </store_credit>
+        <current_password>
+            <attribute_code>current_password</attribute_code>
+            <backend_type>virtual</backend_type>
+        </current_password>
     </fields>
     <handler_interface>Magento\Customer\Test\Handler\CustomerInjectable\CustomerInjectableInterface</handler_interface>
 </fixture>

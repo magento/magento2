@@ -1,2 +1,2 @@
-"product/dataSet";"product/data/cross_sell_products/presets";"constraint"
-"default";"catalogProductSimple::default, configurableProductInjectable::default";"assertProductSaveMessage, assertProductInGrid, assertProductForm, assertCrossSellsProductsSection"
+"productData";"crossSellProductsData";"constraint"
+"catalogProductSimple::default";"catalogProductSimple::default, configurableProductInjectable::default";"assertProductSaveMessage, assertProductInGrid, assertProductForm, assertCrossSellsProductsSection"

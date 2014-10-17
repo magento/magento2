@@ -1,0 +1,4 @@
+"initialCustomer/dataSet";"customer/data/current_password";"customer/data/password";"customer/data/confirmation";"constraint";"issue"
+"default";"123123q";"123123a";"123123a";"assertCustomerInfoSuccessSavedMessage, assertCustomerPasswordChanged";"Bug: MAGETWO-29412"
+"default";"123123";"123123a";"123123a";"assertChangePasswordFailMessage";""
+"default";"123123q";"123123a";"123123";"assertWrongPassConfirmationMessage";""

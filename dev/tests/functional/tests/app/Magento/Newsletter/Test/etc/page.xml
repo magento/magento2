@@ -34,6 +34,11 @@
         <area>adminhtml</area>
         <class>Magento\Newsletter\Test\Page\Adminhtml\templateNewIndex</class>
     </templateNewIndex>
+    <templateEdit>
+        <mca>newsletter/template/edit</mca>
+        <area>adminhtml</area>
+        <class>Magento\Newsletter\Test\Page\Adminhtml\TemplateEdit</class>
+    </templateEdit>
     <subscriberIndex>
         <mca>newsletter/subscriber/index</mca>
         <area>adminhtml</area>

@@ -238,5 +238,15 @@ class AddressInjectable extends AbstractRepository
             'telephone' => '444-44-444-44',
             'vat_id' => '584451913',
         ];
+
+        $this->_data['address_US_pay_pal'] = [
+            'firstname' => 'Dmytro',
+            'lastname' => 'Aponasenko',
+            'city' => 'Culver City',
+            'street' => '1 Main St',
+            'postcode' => '90230',
+            'country_id' => 'United States',
+            'region_id' => 'Culver City',
+        ];
     }
 }

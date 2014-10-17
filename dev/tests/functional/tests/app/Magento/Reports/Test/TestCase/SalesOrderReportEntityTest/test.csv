@@ -1,4 +1,4 @@
-"order/dataSet";"order/data/price/preset";"salesReport/report_type";"salesReport/report_period";"salesReport/from";"salesReport/to";"salesReport/show_order_statuses";"salesReport/order_statuses";"salesReport/show_empty_rows";"salesReport/show_actual_columns";"constraint"
-"default";"full_invoice";"Order Created Date";"Year";"m/d/Y 12:00 a-2 days";"m/d/Y 12:00 a+2 days";"Any";"-";"Yes";"Yes";"assertSalesReportIntervalResult, assertSalesReportTotalResult"
-"default";"full_invoice";"Order Created Date";"Month";"m/d/Y";"m/d/Y";"Any";"-";"No";"No";"assertSalesReportIntervalResult, assertSalesReportTotalResult"
-"default";"full_invoice";"Order Updated Date";"Day";"m/d/Y";"m/d/Y";"Specified";"Processing";"No";"No";"assertSalesReportIntervalResult, assertSalesReportTotalResult"
+"order/dataSet";"order/data/price/preset";"salesReport/report_type";"salesReport/period_type";"salesReport/from";"salesReport/to";"salesReport/show_order_statuses";"salesReport/order_statuses";"salesReport/show_empty_rows";"salesReport/show_actual_columns";"constraint";"issue"
+"default";"full_invoice";"Order Created Date";"Year";"m/d/Y 12:00 a-2 days";"m/d/Y 12:00 a+2 days";"Any";"-";"Yes";"Yes";"assertSalesReportIntervalResult, assertSalesReportTotalResult";";"Bug: MAGETWO-29383"
+"default";"full_invoice";"Order Created Date";"Month";"m/d/Y";"m/d/Y";"Any";"-";"No";"No";"assertSalesReportIntervalResult, assertSalesReportTotalResult";""
+"default";"full_invoice";"Order Updated Date";"Day";"m/d/Y";"m/d/Y";"Specified";"Processing";"No";"No";"assertSalesReportIntervalResult, assertSalesReportTotalResult";""

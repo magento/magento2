@@ -56,7 +56,7 @@ class AssertChildProductsInGrid extends AbstractConstraint
     public function processAssert(CatalogProductIndex $productGrid, ConfigurableProductInjectable $product)
     {
         $configurableAttributesData = $product->getConfigurableAttributesData();
-        $productType = $product->getIsVirtual() ? 'Virtual Product' : 'Simple Product';
+        $productType = $product->getIsVirtual() === "Yes" ? 'Virtual Product' : 'Simple Product';
         $errors = [];
 
         $productGrid->open();

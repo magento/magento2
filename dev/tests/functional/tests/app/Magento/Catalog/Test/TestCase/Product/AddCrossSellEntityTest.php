@@ -24,11 +24,6 @@
 
 namespace Magento\Catalog\Test\TestCase\Product;
 
-use Mtf\ObjectManager;
-use Mtf\TestCase\Injectable;
-use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
-use Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew;
-use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple\CrossSellProducts;
 
 /**
@@ -50,50 +45,25 @@ use Magento\Catalog\Test\Fixture\CatalogProductSimple\CrossSellProducts;
  * @group Cross-sells_(MX)
  * @ZephyrId MAGETWO-29081
  */
-class AddCrossSellEntityTest extends Injectable
+class AddCrossSellEntityTest extends AbstractAddRelatedProductsEntityTest
 {
     /**
-     * Catalog product index page on backend
+     * Run test add cross sell products entity
      *
-     * @var CatalogProductIndex
-     */
-    protected $catalogProductIndex;
-
-    /**
-     * Catalog product view page on backend
-     *
-     * @var CatalogProductNew
-     */
-    protected $catalogProductNew;
-
-    /**
-     * Inject data
-     *
-     * @param CatalogProductIndex $catalogProductIndex
-     * @param CatalogProductNew $catalogProductNew
-     * @return void
-     */
-    public function __inject(CatalogProductIndex $catalogProductIndex, CatalogProductNew $catalogProductNew)
-    {
-        $this->catalogProductIndex = $catalogProductIndex;
-        $this->catalogProductNew = $catalogProductNew;
-    }
-
-    /**
-     * Run test add cross sell entity
-     *
-     * @param CatalogProductSimple $product
+     * @param string $productData
+     * @param string $crossSellProductsData
      * @return array
      */
-    public function test(CatalogProductSimple $product)
+    public function test($productData, $crossSellProductsData)
     {
-        $this->catalogProductIndex->open();
-        $this->catalogProductIndex->getGridPageActionBlock()->addProduct('simple');
-        $this->catalogProductNew->getProductForm()->fill($product);
-        $this->catalogProductNew->getFormPageActions()->save();
+        $product = $this->getProductByData($productData, ['cross_sell_products' => $crossSellProductsData]);
+        $this->createAndSaveProduct($product);
 
-        /** @var CrossSellProducts $crossSellProducts*/
+        /** @var CrossSellProducts $crossSellProducts */
         $crossSellProducts = $product->getDataFieldConfig('cross_sell_products')['source'];
-        return ['relatedProducts' => $crossSellProducts->getProducts()];
+        return [
+            'product' => $product,
+            'relatedProducts' => $crossSellProducts->getProducts()
+        ];
     }
 }

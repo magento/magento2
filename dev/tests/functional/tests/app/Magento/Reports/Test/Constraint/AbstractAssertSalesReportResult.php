@@ -25,9 +25,9 @@
 namespace Magento\Reports\Test\Constraint;
 
 use Mtf\ObjectManager;
-use Magento\Sales\Test\Fixture\OrderInjectable;
-use Magento\Reports\Test\Page\Adminhtml\SalesReport;
+use Mtf\Page\BackendPage;
 use Mtf\Constraint\AbstractConstraint;
+use Magento\Sales\Test\Fixture\OrderInjectable;
 
 /**
  * Class AbstractAssertSalesReportResult
@@ -38,7 +38,7 @@ abstract class AbstractAssertSalesReportResult extends AbstractConstraint
     /**
      * Sales report page
      *
-     * @var SalesReport
+     * @var BackendPage
      */
     protected $salesReportPage;
 
@@ -48,17 +48,6 @@ abstract class AbstractAssertSalesReportResult extends AbstractConstraint
      * @var OrderInjectable
      */
     protected $order;
-
-    /**
-     * @constructor
-     * @param ObjectManager $objectManager
-     * @param SalesReport $salesReportPage
-     */
-    public function __construct(ObjectManager $objectManager, SalesReport $salesReportPage)
-    {
-        parent::__construct($objectManager);
-        $this->salesReportPage = $salesReportPage;
-    }
 
     /**
      * Search in sales report grid

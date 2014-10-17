@@ -144,4 +144,13 @@
         <severeness>low</severeness>
         <require />
     </assertAddressDeletedBackend>
+    <assertCustomerPasswordChanged module="Magento_Customer">
+        <severeness>low</severeness>
+    </assertCustomerPasswordChanged>
+    <assertChangePasswordFailMessage module="Magento_Customer">
+        <severeness>low</severeness>
+    </assertChangePasswordFailMessage>
+    <assertWrongPassConfirmationMessage module="Magento_Customer">
+        <severeness>low</severeness>
+    </assertWrongPassConfirmationMessage>
 </constraint>

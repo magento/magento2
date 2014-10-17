@@ -30,5 +30,10 @@
             <locator>#form-validate</locator>
             <strategy>css selector</strategy>
         </accountInfoForm>
+        <messages>
+            <class>Magento\Core\Test\Block\Messages</class>
+            <locator>.page.messages</locator>
+            <strategy>css selector</strategy>
+        </messages>
     </blocks>
 </page>

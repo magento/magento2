@@ -273,6 +273,12 @@ class CustomerInjectable extends InjectableFixture
         'group' => null,
     ];
 
+    protected $current_password = [
+        'attribute_code' => 'current_password',
+        'backend_type' => 'virtual',
+        'group' => null,
+    ];
+
     public function getId()
     {
         return $this->getData('id');
@@ -406,5 +412,10 @@ class CustomerInjectable extends InjectableFixture
     public function getPasswordConfirmation()
     {
         return $this->getData('password_confirmation');
+    }
+
+    public function getCurrentPassword()
+    {
+        return $this->getData('current_password');
     }
 }

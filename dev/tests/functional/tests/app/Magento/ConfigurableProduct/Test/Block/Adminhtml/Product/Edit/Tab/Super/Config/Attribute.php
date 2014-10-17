@@ -139,6 +139,13 @@ class Attribute extends Form
     protected $attributeLabel = '[name$="[label]"]';
 
     /**
+     * Config content selector
+     *
+     * @var string
+     */
+    protected $configContent = '#super_config-content';
+
+    /**
      * Fill attributes
      *
      * @param array $attributes
@@ -296,16 +303,15 @@ class Attribute extends Form
         $optionMapping = $this->dataMapping();
 
         $count = 1;
+        /** @var Element $attributeBlock */
         $attributeBlock = $this->_rootElement->find(sprintf($this->attributeBlock, $count), Locator::SELECTOR_XPATH);
         while ($attributeBlock->isVisible()) {
+            $this->showAttributeContent($attributeBlock);
             $attribute = [
                 'frontend_label' => $attributeBlock->find($this->attributeTitle)->getText(),
                 'label' => $attributeBlock->find($this->attributeLabel)->getValue(),
                 'options' => []
             ];
-
-            /** @var Element $attributeBlock */
-            $this->showAttributeContent($attributeBlock);
             $options = $attributeBlock->find($this->optionContainer, Locator::SELECTOR_XPATH)->getElements();
             foreach ($options as $optionKey => $option) {
                 /** @var Element $option */
@@ -335,6 +341,7 @@ class Attribute extends Form
     protected function showAttributeContent(Element $attribute)
     {
         if (!$attribute->find($this->attributeContent)->isVisible()) {
+            $this->_rootElement->find($this->configContent)->click();
             $attribute->find($this->attributeTitle)->click();
 
             $browser = $attribute;
