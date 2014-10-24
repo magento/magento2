@@ -23,6 +23,8 @@
  */
 namespace Magento\Framework\View\Asset;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 /**
  * Service model responsible for making a decision of whether to use the merged asset in place of original ones
  */
@@ -45,7 +47,7 @@ class MergeService
     /**
      * Filesystem
      *
-     * @var \Magento\Framework\App\Filesystem
+     * @var \Magento\Framework\Filesystem
      */
     protected $filesystem;
 
@@ -61,13 +63,13 @@ class MergeService
      *
      * @param \Magento\Framework\ObjectManager $objectManager
      * @param ConfigInterface $config
-     * @param \Magento\Framework\App\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\App\State $state
      */
     public function __construct(
         \Magento\Framework\ObjectManager $objectManager,
         ConfigInterface $config,
-        \Magento\Framework\App\Filesystem $filesystem,
+        \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\App\State $state
     ) {
         $this->objectManager = $objectManager;
@@ -118,7 +120,7 @@ class MergeService
      */
     public function cleanMergedJsCss()
     {
-        $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::STATIC_VIEW_DIR)
+        $this->filesystem->getDirectoryWrite(DirectoryList::STATIC_VIEW)
             ->delete(Merged::getRelativeDir());
     }
 }

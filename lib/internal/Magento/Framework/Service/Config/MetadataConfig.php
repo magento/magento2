@@ -68,15 +68,32 @@ class MetadataConfig implements MetadataServiceInterface
              * Attribute metadata builder and data object class name are expected to be configured
              * via DI using virtual types. If configuration is missing, empty array should be returned.
              */
-            $allAttributes = $this->serviceConfigReader->read();
-            if (isset($allAttributes[$dataObjectClassName])
-                && is_array($allAttributes[$dataObjectClassName])
-            ) {
-                $attributeCodes = array_keys($allAttributes[$dataObjectClassName]);
-                foreach ($attributeCodes as $attributeCode) {
-                    $this->attributeMetadataBuilder->setAttributeCode($attributeCode);
-                    $attributes[$attributeCode] = $this->attributeMetadataBuilder->create();
-                }
+            $attributes = $this->getAttributesMetadata($dataObjectClassName);
+            $implementedInterfaces = (new \ReflectionClass($dataObjectClassName))->getInterfaceNames();
+            foreach ($implementedInterfaces as $interfaceName) {
+                $attributes = array_merge($attributes, $this->getAttributesMetadata($interfaceName));
+            }
+        }
+        return $attributes;
+    }
+
+    /**
+     * Get custom attribute metadata for the given class/interface.
+     *
+     * @param string $dataObjectClassName
+     * @return \Magento\Framework\Service\Data\MetadataObjectInterface[]
+     */
+    protected function getAttributesMetadata($dataObjectClassName)
+    {
+        $attributes = [];
+        $allAttributes = $this->serviceConfigReader->read();
+        if (isset($allAttributes[$dataObjectClassName])
+            && is_array($allAttributes[$dataObjectClassName])
+        ) {
+            $attributeCodes = array_keys($allAttributes[$dataObjectClassName]);
+            foreach ($attributeCodes as $attributeCode) {
+                $this->attributeMetadataBuilder->setAttributeCode($attributeCode);
+                $attributes[$attributeCode] = $this->attributeMetadataBuilder->create();
             }
         }
         return $attributes;

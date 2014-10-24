@@ -506,4 +506,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\Layer\Search\Context">
+        <arguments>
+            <argument name="collectionProvider" xsi:type="object">Magento\Catalog\Model\Layer\Search\ItemCollectionProvider</argument>
+            <argument name="stateKey" xsi:type="object">Magento\Catalog\Model\Layer\Category\StateKey</argument>
+            <argument name="collectionFilter" xsi:type="object">Magento\Catalog\Model\Layer\Search\CollectionFilter</argument>
+        </arguments>
+    </type>
 </config>

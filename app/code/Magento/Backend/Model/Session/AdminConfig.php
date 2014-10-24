@@ -26,6 +26,7 @@
 namespace Magento\Backend\Model\Session;
 
 use Magento\Backend\App\Area\FrontNameResolver;
+use Magento\Framework\Filesystem;
 use Magento\Framework\Session\Config;
 use Magento\Framework\UrlInterface;
 
@@ -56,7 +57,7 @@ class AdminConfig extends Config
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Stdlib\String $stringHelper
      * @param \Magento\Framework\App\RequestInterface $request
-     * @param \Magento\Framework\App\Filesystem $filesystem
+     * @param Filesystem $filesystem
      * @param string $scopeType
      * @param FrontNameResolver $frontNameResolver
      * @param \Magento\Framework\StoreManagerInterface $storeManager
@@ -72,7 +73,7 @@ class AdminConfig extends Config
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Stdlib\String $stringHelper,
         \Magento\Framework\App\RequestInterface $request,
-        \Magento\Framework\App\Filesystem $filesystem,
+        Filesystem $filesystem,
         $scopeType,
         FrontNameResolver $frontNameResolver,
         \Magento\Framework\StoreManagerInterface $storeManager,

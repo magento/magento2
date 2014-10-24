@@ -53,7 +53,7 @@ class AssertAddProductToWishlistSuccessMessage extends AbstractConstraint
      * @param InjectableFixture $product
      * @return void
      */
-    public function processAssert(WishlistIndex $wishlistIndex, $product)
+    public function processAssert(WishlistIndex $wishlistIndex, InjectableFixture $product)
     {
         \PHPUnit_Framework_Assert::assertEquals(
             sprintf(self::SUCCESS_MESSAGE, $product->getName()),

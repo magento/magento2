@@ -24,7 +24,8 @@
 
 namespace Magento\Framework\App\Language;
 
-use \Magento\Framework\App\Filesystem;
+use Magento\Framework\Filesystem;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * A service for reading language package dictionaries
@@ -54,7 +55,7 @@ class Dictionary
         Filesystem $filesystem,
         ConfigFactory $configFactory
     ) {
-        $this->dir = $filesystem->getDirectoryRead(Filesystem::LOCALE_DIR);
+        $this->dir = $filesystem->getDirectoryRead(DirectoryList::LOCALE);
         $this->configFactory = $configFactory;
     }
 

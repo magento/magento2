@@ -25,6 +25,8 @@
  */
 namespace Magento\Core\Model\Asset\Plugin;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class CleanMergedJsCssTest extends \Magento\Test\BaseTestCase
 {
     /**
@@ -33,7 +35,7 @@ class CleanMergedJsCssTest extends \Magento\Test\BaseTestCase
     private $databaseMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\Filesystem
+     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Filesystem
      */
     private $filesystemMock;
 
@@ -50,7 +52,7 @@ class CleanMergedJsCssTest extends \Magento\Test\BaseTestCase
     public function setUp()
     {
         parent::setUp();
-        $this->filesystemMock = $this->basicMock('\Magento\Framework\App\Filesystem');
+        $this->filesystemMock = $this->basicMock('\Magento\Framework\Filesystem');
         $this->databaseMock = $this->basicMock('\Magento\Core\Helper\File\Storage\Database');
         $this->model = $this->objectManager->getObject('Magento\Core\Model\Asset\Plugin\CleanMergedJsCss',
             [
@@ -76,7 +78,7 @@ class CleanMergedJsCssTest extends \Magento\Test\BaseTestCase
             ->with($mergedDir);
         $this->filesystemMock->expects($this->once())
             ->method('getDirectoryRead')
-            ->with(\Magento\Framework\App\Filesystem::STATIC_VIEW_DIR)
+            ->with(DirectoryList::STATIC_VIEW)
             ->willReturn($readDirectoryMock);
 
         $this->model->aroundCleanMergedJsCss(

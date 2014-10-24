@@ -25,6 +25,7 @@ namespace Magento\Catalog\Model\Resource\Product;
 
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
+use Magento\Framework\DB\Select;
 use Magento\Store\Model\Store;
 use Magento\Customer\Service\V1\CustomerGroupServiceInterface;
 
@@ -1195,7 +1196,8 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
     {
         $select = clone $this->getSelect();
         /** @var $select \Magento\Framework\DB\Select */
-        $select->reset(\Zend_Db_Select::COLUMNS);
+        $select->reset(Select::COLUMNS);
+        $select->reset(Select::ORDER);
         $select->distinct(true);
         $select->columns('attribute_set_id');
         return $this->getConnection()->fetchCol($select);
@@ -2153,7 +2155,7 @@ class Collection extends \Magento\Catalog\Model\Resource\Collection\AbstractColl
      * @param string $dir
      * @return $this
      */
-    public function setOrder($attribute, $dir = 'desc')
+    public function setOrder($attribute, $dir = Select::SQL_DESC)
     {
         if ($attribute == 'price') {
             $this->addAttributeToSort($attribute, $dir);

@@ -340,7 +340,7 @@ class Email extends \Magento\Framework\Model\AbstractModel
             return false;
         }
 
-        $initialEnvironmentInfo = $this->_appEmulation->startEnvironmentEmulation($storeId);
+        $this->_appEmulation->startEnvironmentEmulation($storeId);
 
         if ($this->_type == 'price') {
             $this->_getPriceBlock()->setStore($store)->reset();
@@ -372,7 +372,7 @@ class Email extends \Magento\Framework\Model\AbstractModel
             \Magento\Framework\App\Area::AREA_FRONTEND,
             array($block, 'toHtml')
         );
-        $this->_appEmulation->stopEnvironmentEmulation($initialEnvironmentInfo);
+        $this->_appEmulation->stopEnvironmentEmulation();
 
         $transport = $this->_transportBuilder->setTemplateIdentifier(
             $templateId

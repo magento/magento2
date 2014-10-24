@@ -24,6 +24,7 @@
  */
 namespace Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use \Magento\Framework\App\ResponseInterface;
 
 class PreviewImage extends \Magento\Theme\Controller\Adminhtml\System\Design\Wysiwyg\Files
@@ -42,7 +43,7 @@ class PreviewImage extends \Magento\Theme\Controller\Adminhtml\System\Design\Wys
             return $this->_fileFactory->create(
                 $file,
                 array('type' => 'filename', 'value' => $helper->getThumbnailPath($file)),
-                \Magento\Framework\App\Filesystem::MEDIA_DIR
+                DirectoryList::MEDIA
             );
         } catch (\Exception $e) {
             $this->_objectManager->get('Magento\Framework\Logger')->logException($e);

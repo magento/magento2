@@ -23,7 +23,7 @@
  */
 namespace Magento\Framework\App\Config\Initial;
 
-use Magento\Framework\App\Filesystem;
+use Magento\Framework\Filesystem;
 
 class ReaderTest extends \PHPUnit_Framework_TestCase
 {

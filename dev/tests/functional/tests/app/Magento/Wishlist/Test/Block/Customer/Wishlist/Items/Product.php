@@ -54,11 +54,25 @@ class Product extends Form
     protected $viewDetails = '.details.tooltip';
 
     /**
-     * Selector for 'Options Details' tooltip
+     * Edit button css selector
      *
      * @var string
      */
-    protected $optionsDetails = '.tooltip.content .values';
+    protected $edit = '.action.edit';
+
+    /**
+     * Selector for option's label
+     *
+     * @var string
+     */
+    protected $optionLabel = '.tooltip.content .label';
+
+    /**
+     * Selector for option's value
+     *
+     * @var string
+     */
+    protected $optionValue = '.tooltip.content .values';
 
     /**
      * Fill item product details
@@ -102,14 +116,29 @@ class Product extends Form
         $viewDetails = $this->_rootElement->find($this->viewDetails);
         if ($viewDetails->isVisible()) {
             $viewDetails->click();
-            $values = $this->_rootElement->find($this->optionsDetails)->getElements();
+            $labels = $this->_rootElement->find($this->optionLabel)->getElements();
+            $values = $this->_rootElement->find($this->optionValue)->getElements();
             $data = [];
-            foreach ($values as $value) {
-                $data[] = $value->getText();
+            foreach ($labels as $key => $label) {
+                $data[] = [
+                    'title' => $label->getText(),
+                    'value' => str_replace('$', '', $values[$key]->getText())
+                ];
             }
+
             return $data;
         } else {
             return null;
         }
+    }
+
+    /**
+     * Click edit button
+     *
+     * @return void
+     */
+    public function clickEdit()
+    {
+        $this->_rootElement->find($this->edit)->click();
     }
 }

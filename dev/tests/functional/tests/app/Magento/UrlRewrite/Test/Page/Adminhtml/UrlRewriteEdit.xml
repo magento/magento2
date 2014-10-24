@@ -32,7 +32,7 @@
         </treeBlock>
         <formBlock>
             <class>Magento\UrlRewrite\Test\Block\Adminhtml\Catalog\Edit\UrlRewriteForm</class>
-            <locator>#edit_form</locator>
+            <locator>[id="page:main-container"]</locator>
             <strategy>css selector</strategy>
         </formBlock>
         <messagesBlock>

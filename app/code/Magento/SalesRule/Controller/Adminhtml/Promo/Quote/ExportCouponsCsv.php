@@ -24,6 +24,8 @@
  */
 namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class ExportCouponsCsv extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
 {
     /**
@@ -40,7 +42,7 @@ class ExportCouponsCsv extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quo
             $content = $this->_view->getLayout()->createBlock(
                 'Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Coupons\Grid'
             )->getCsvFile();
-            return $this->_fileFactory->create($fileName, $content, \Magento\Framework\App\Filesystem::VAR_DIR);
+            return $this->_fileFactory->create($fileName, $content, DirectoryList::VAR_DIR);
         } else {
             $this->_redirect('sales_rule/*/detail', array('_current' => true));
             return;

@@ -53,7 +53,7 @@ class AssertUrlRewriteCustomRedirect extends AbstractConstraint
     public function processAssert(UrlRewrite $urlRewrite, Browser $browser, CmsIndex $cmsIndex)
     {
         $browser->open($_ENV['app_frontend_url'] . $urlRewrite->getRequestPath());
-        $entity = $urlRewrite->getDataFieldConfig('id_path')['source']->getEntity();
+        $entity = $urlRewrite->getDataFieldConfig('target_path')['source']->getEntity();
         $title = $entity->hasData('name') ? $entity->getName() : $entity->getTitle();
         $pageTitle = $cmsIndex->getTitleBlock()->getTitle();
         \PHPUnit_Framework_Assert::assertEquals(

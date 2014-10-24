@@ -35,7 +35,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
     protected $_storageRoot;
 
     /**
-     * @var \Magento\Framework\App\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_filesystem;
 
@@ -66,7 +66,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_filesystem = $this->getMock('Magento\Framework\App\Filesystem', array(), array(), '', false);
+        $this->_filesystem = $this->getMock('Magento\Framework\Filesystem', array(), array(), '', false);
         $this->_helperStorage = $this->getMock('Magento\Theme\Helper\Storage', array(), array(), '', false);
         $this->_objectManager = $this->getMock('Magento\Framework\ObjectManager', array(), array(), '', false);
         $this->_imageFactory = $this->getMock('Magento\Framework\Image\AdapterFactory', array(), array(), '', false);

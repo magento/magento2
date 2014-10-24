@@ -24,6 +24,7 @@
  */
 namespace Magento\Shipping\Model\Shipping;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\RequestInterface;
 
 class LabelGenerator
@@ -49,7 +50,7 @@ class LabelGenerator
     protected $trackFactory;
 
     /**
-     * @var \Magento\Framework\App\Filesystem
+     * @var \Magento\Framework\Filesystem
      */
     protected $filesystem;
 
@@ -58,14 +59,14 @@ class LabelGenerator
      * @param LabelsFactory $labelFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Sales\Model\Order\Shipment\TrackFactory $trackFactory
-     * @param \Magento\Framework\App\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem $filesystem
      */
     public function __construct(
         \Magento\Shipping\Model\CarrierFactory $carrierFactory,
         \Magento\Shipping\Model\Shipping\LabelsFactory $labelFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Sales\Model\Order\Shipment\TrackFactory $trackFactory,
-        \Magento\Framework\App\Filesystem $filesystem
+        \Magento\Framework\Filesystem $filesystem
     ) {
         $this->_carrierFactory = $carrierFactory;
         $this->labelFactory = $labelFactory;
@@ -158,7 +159,7 @@ class LabelGenerator
     {
         /** @var \Magento\Framework\Filesystem\Directory\Write $directory */
         $directory = $this->filesystem->getDirectoryWrite(
-            \Magento\Framework\App\Filesystem::TMP_DIR
+            DirectoryList::TMP
         );
         $directory->create();
         $image = imagecreatefromstring($imageString);

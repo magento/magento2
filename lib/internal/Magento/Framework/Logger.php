@@ -23,6 +23,8 @@
  */
 namespace Magento\Framework;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 /**
  * Logger model
  */
@@ -43,15 +45,15 @@ class Logger
     protected $_loggers = array();
 
     /**
-     * @var \Magento\Framework\App\Filesystem
+     * @var \Magento\Framework\Filesystem
      */
     protected $_filesystem;
 
     /**
-     * @param \Magento\Framework\App\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem $filesystem
      * @param string $defaultFile
      */
-    public function __construct(\Magento\Framework\App\Filesystem $filesystem, $defaultFile = '')
+    public function __construct(\Magento\Framework\Filesystem $filesystem, $defaultFile = '')
     {
         $this->_filesystem = $filesystem;
         $this->addStreamLog(self::LOGGER_SYSTEM, $defaultFile)->addStreamLog(self::LOGGER_EXCEPTION, $defaultFile);
@@ -72,7 +74,7 @@ class Logger
     {
         $file = $fileOrWrapper ?: "{$loggerKey}.log";
         if (!preg_match('#^[a-z][a-z0-9+.-]*\://#i', $file)) {
-            $logDir = $this->_filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::LOG_DIR);
+            $logDir = $this->_filesystem->getDirectoryWrite(DirectoryList::LOG);
             $logDir->create();
             $file = $logDir->getAbsolutePath($file);
         }

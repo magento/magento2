@@ -24,26 +24,41 @@
 namespace Magento\GiftMessage\Service\V1\Data;
 
 /**
- * Gift Message data object
+ * Gift message data object.
  *
  * @codeCoverageIgnore
  */
-class Message extends \Magento\Framework\Service\Data\AbstractSimpleObject
+class Message extends \Magento\Framework\Service\Data\AbstractExtensibleObject
 {
+    /**
+     * Gift message ID.
+     */
     const GIFT_MESSAGE_ID = 'gift_message_id';
 
+    /**
+     * Sender name.
+     */
     const SENDER = 'sender';
 
+    /**
+     * Recipient name.
+     */
     const RECIPIENT = 'recipient';
 
+    /**
+     * Message text.
+     */
     const MESSAGE = 'message';
 
+    /**
+     * Customer ID.
+     */
     const CUSTOMER_ID = 'customer_id';
 
     /**
-     * Get gift message id
+     * Returns the gift message ID.
      *
-     * @return int|null
+     * @return int|null Gift message ID. Otherwise, null.
      */
     public function getGiftMessageId()
     {
@@ -51,9 +66,9 @@ class Message extends \Magento\Framework\Service\Data\AbstractSimpleObject
     }
 
     /**
-     * Get customer id
+     * Returns the customer ID.
      *
-     * @return int|null
+     * @return int|null Customer ID. Otherwise, null.
      */
     public function getCustomerId()
     {
@@ -61,9 +76,9 @@ class Message extends \Magento\Framework\Service\Data\AbstractSimpleObject
     }
 
     /**
-     * Sender name
+     * Returns the sender name.
      *
-     * @return string
+     * @return string Sender name.
      */
     public function getSender()
     {
@@ -71,9 +86,9 @@ class Message extends \Magento\Framework\Service\Data\AbstractSimpleObject
     }
 
     /**
-     * Recipient name
+     * Returns the recipient name.
      *
-     * @return string
+     * @return string Recipient name.
      */
     public function getRecipient()
     {
@@ -81,9 +96,9 @@ class Message extends \Magento\Framework\Service\Data\AbstractSimpleObject
     }
 
     /**
-     * Message text
+     * Returns the message text.
      *
-     * @return string
+     * @return string Message text.
      */
     public function getMessage()
     {

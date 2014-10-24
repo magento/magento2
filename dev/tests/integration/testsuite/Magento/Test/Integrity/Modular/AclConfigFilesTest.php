@@ -23,6 +23,8 @@
  */
 namespace Magento\Test\Integrity\Modular;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class AclConfigFilesTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -41,11 +43,12 @@ class AclConfigFilesTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_schemeFile = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\App\Filesystem'
-        )->getPath(
-            \Magento\Framework\App\Filesystem::LIB_INTERNAL
-        ) . '/Magento/Framework/Acl/etc/acl.xsd';
+        /** @var \Magento\Framework\Filesystem $filesystem */
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\Filesystem'
+        );
+        $this->_schemeFile = $filesystem->getDirectoryRead(DirectoryList::LIB_INTERNAL)
+            ->getAbsolutePath('Magento/Framework/Acl/etc/acl.xsd');
     }
 
     /**

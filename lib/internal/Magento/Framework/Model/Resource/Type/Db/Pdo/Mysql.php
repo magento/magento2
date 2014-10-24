@@ -28,7 +28,7 @@ class Mysql extends \Magento\Framework\Model\Resource\Type\Db implements \Magent
     /**
      * Filesystem class
      *
-     * @var \Magento\Framework\App\Filesystem
+     * @var \Magento\Framework\Filesystem
      */
     protected $_filesystem;
 
@@ -58,7 +58,7 @@ class Mysql extends \Magento\Framework\Model\Resource\Type\Db implements \Magent
     protected $_isActive;
 
     /**
-     * @param \Magento\Framework\App\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\Stdlib\String $string
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param string $host
@@ -71,7 +71,7 @@ class Mysql extends \Magento\Framework\Model\Resource\Type\Db implements \Magent
      * @param bool $active
      */
     public function __construct(
-        \Magento\Framework\App\Filesystem $filesystem,
+        \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Stdlib\String $string,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         $host,

@@ -99,7 +99,13 @@ class StandardTest extends \PHPUnit_Framework_TestCase
 
         $excludedRouters = array('admin' => 'admin router', 'vde' => 'vde router');
 
-        $routerListMock = $this->getMock('\Magento\Framework\App\Route\ConfigInterface');
+        $routerListMock = $this->getMock(
+            '\Magento\Framework\App\Route\ConfigInterface\Proxy',
+            array(),
+            array(),
+            '',
+            false
+        );
 
         $infoProcessorMock = $this->getMock('Magento\Framework\App\Request\PathInfoProcessorInterface');
         $infoProcessorMock->expects($this->any())->method('process')->will($this->returnArgument(1));

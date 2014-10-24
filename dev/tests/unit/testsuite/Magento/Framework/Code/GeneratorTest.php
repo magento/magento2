@@ -59,7 +59,7 @@ class GeneratorTest extends \PHPUnit_Framework_TestCase
     protected $ioObjectMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Filesystem
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem
      */
     protected $filesystemMock;
 

@@ -91,7 +91,6 @@ define([
                 showAjaxLoader: '_ajaxSend',
                 hideAjaxLoader: '_ajaxComplete',
                 gotoSection: function(e, section) {
-                    this._ajaxUpdateProgress(section);
                     self.element.find('.section').filter('.' + self.sectionActiveClass).children(self.contentSelector).trigger("processStop");
                     var toActivate = this.steps.index($('#' + self.options.sectionSelectorPrefix + section));
                     this._activateSection(toActivate);
@@ -103,7 +102,6 @@ define([
                 'click [data-goto-section]' : function(e) {
                     var gotoSection = $(e.target).data('goto-section');
                     self.element.find('.section').filter('.' + self.sectionActiveClass).children(self.contentSelector).trigger("processStop");
-                    this._ajaxUpdateProgress(gotoSection);
                     var toActivate = this.steps.index($('#' + self.options.sectionSelectorPrefix + gotoSection));
                     this._activateSection(toActivate);
                     return false;
@@ -225,7 +223,7 @@ define([
                 dataType: 'json',
                 beforeSend: this._ajaxSend,
                 complete: this._ajaxComplete,
-                success: function(response) {
+                success: function (response) {
                     if (successCallback) {
                         successCallback.call(this, response);
                     }
@@ -239,7 +237,7 @@ define([
                                 $(this.options.countrySelector).trigger('change');
                                 var emailAddress = {};
                                 emailAddress[this.options.billing.emailAddressName] = msg;
-                                var billingFormValidator = $( this.options.billing.form ).validate();
+                                var billingFormValidator = $(this.options.billing.form).validate();
                                 billingFormValidator.showErrors(emailAddress);
                             } else {
                                 alert($.mage.__(response.error));
@@ -261,6 +259,9 @@ define([
                             $(this.options.updateSelectorPrefix + response.update_section.name + this.options.updateSelectorSuffix)
                                 .html($(response.update_section.html)).trigger('contentUpdated');
                         }
+                        if (response.update_progress) {
+                            $(this.options.checkoutProgressContainer).html($(response.update_progress.html)).trigger('progressUpdated');
+                        }
                         if (response.duplicateBillingInfo) {
                             $(this.options.shipping.copyBillingSelector).prop('checked', true).trigger('click');
                             $(this.options.shipping.addressDropdownSelector).val($(this.options.billing.addressDropdownSelector).val()).change();
@@ -273,27 +274,6 @@ define([
                     }
                 }
             });
-        },
-
-        /**
-         * Update progress sidebar content
-         * @private
-         * @param toStep
-         */
-        _ajaxUpdateProgress: function(toStep) {
-            if (toStep) {
-                $.ajax({
-                    url: this.options.progressUrl,
-                    type: 'get',
-                    async: false,
-                    cache: false,
-                    context: this,
-                    data: toStep ? {toStep: toStep} : null,
-                    success: function(response) {
-                        $(this.options.checkoutProgressContainer).html(response);
-                    }
-                });
-            }
         }
     });
 });

@@ -151,7 +151,6 @@ class Result extends Template
         /* @var $category \Magento\Catalog\Model\Category */
         $availableOrders = $category->getAvailableSortByOptions();
         unset($availableOrders['position']);
-        $availableOrders = array_merge(array('relevance' => __('Relevance')), $availableOrders);
 
         $this->getListBlock()->setAvailableOrders(
             $availableOrders

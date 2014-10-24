@@ -25,6 +25,7 @@
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
 use Magento\Framework\App\Action\NotFoundException;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
 {
@@ -57,9 +58,9 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
             throw new NotFoundException();
         }
 
-        /** @var \Magento\Framework\App\Filesystem $filesystem */
-        $filesystem = $this->_objectManager->get('Magento\Framework\App\Filesystem');
-        $directory = $filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::MEDIA_DIR);
+        /** @var \Magento\Framework\Filesystem $filesystem */
+        $filesystem = $this->_objectManager->get('Magento\Framework\Filesystem');
+        $directory = $filesystem->getDirectoryRead(DirectoryList::MEDIA);
         $fileName = 'customer' . '/' . ltrim($file, '/');
         $path = $directory->getAbsolutePath($fileName);
         if (!$directory->isFile($fileName)
@@ -107,7 +108,7 @@ class Viewfile extends \Magento\Customer\Controller\Adminhtml\Index
             $this->_fileFactory->create(
                 $name,
                 array('type' => 'filename', 'value' => $fileName),
-                \Magento\Framework\App\Filesystem::MEDIA_DIR
+                DirectoryList::MEDIA
             )->sendResponse();
         }
 

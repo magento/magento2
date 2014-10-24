@@ -23,7 +23,7 @@
  */
 namespace Magento\Core\Model\Layout\Update;
 
-use Magento\Framework\App\Filesystem;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Validator for custom layout update
@@ -74,19 +74,19 @@ class Validator extends \Zend_Validate_Abstract
     protected $_domConfigFactory;
 
     /**
-     * @param Filesystem $filesystem
+     * @param DirectoryList $dirList
      * @param \Magento\Framework\Config\DomFactory $domConfigFactory
      */
     public function __construct(
-        Filesystem $filesystem,
+        DirectoryList $dirList,
         \Magento\Framework\Config\DomFactory $domConfigFactory
     ) {
         $this->_domConfigFactory = $domConfigFactory;
         $this->_initMessageTemplates();
         $this->_xsdSchemas = [
-            self::LAYOUT_SCHEMA_PAGE_HANDLE => $filesystem->getPath(Filesystem::LIB_INTERNAL)
+            self::LAYOUT_SCHEMA_PAGE_HANDLE => $dirList->getPath(DirectoryList::LIB_INTERNAL)
                 . '/Magento/Framework/View/Layout/etc/page_layout.xsd',
-            self::LAYOUT_SCHEMA_MERGED => $filesystem->getPath(Filesystem::LIB_INTERNAL)
+            self::LAYOUT_SCHEMA_MERGED => $dirList->getPath(DirectoryList::LIB_INTERNAL)
                 . '/Magento/Framework/View/Layout/etc/layout_merged.xsd'
         ];
     }

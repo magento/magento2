@@ -23,6 +23,8 @@
  */
 namespace Magento\Widget\Model\Widget;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 /**
  * Widget Instance Model
  *
@@ -128,7 +130,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Widget\Model\Widget $widgetModel
      * @param \Magento\Widget\Model\NamespaceResolver $namespaceResolver
      * @param \Magento\Framework\Math\Random $mathRandom
-     * @param \Magento\Framework\App\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param string[] $relatedCacheTypes
@@ -145,7 +147,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
         \Magento\Widget\Model\Widget $widgetModel,
         \Magento\Widget\Model\NamespaceResolver $namespaceResolver,
         \Magento\Framework\Math\Random $mathRandom,
-        \Magento\Framework\App\Filesystem $filesystem,
+        \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
         array $relatedCacheTypes = array(),
@@ -159,7 +161,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
         $this->_reader = $reader;
         $this->_widgetModel = $widgetModel;
         $this->mathRandom = $mathRandom;
-        $this->_directory = $filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::ROOT_DIR);
+        $this->_directory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
         $this->_namespaceResolver = $namespaceResolver;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }

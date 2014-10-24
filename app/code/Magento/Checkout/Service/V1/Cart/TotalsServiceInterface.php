@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -24,14 +23,17 @@
  */
 namespace Magento\Checkout\Service\V1\Cart;
 
+/** 
+ * Totals service interface. 
+ */
 interface TotalsServiceInterface
 {
     /**
-     * Retrieve quote totals data
+     * Returns quote totals data for a specified cart.
      *
-     * @param int $cartId
-     * @return \Magento\Checkout\Service\V1\Data\Cart\Totals
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @param int $cartId The cart ID.
+     * @return \Magento\Checkout\Service\V1\Data\Cart\Totals Quote totals data.
+     * @throws \Magento\Framework\Exception\NoSuchEntityException The specified cart does not exist.
      */
     public function getTotals($cartId);
 }

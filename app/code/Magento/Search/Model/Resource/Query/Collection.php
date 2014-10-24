@@ -164,7 +164,7 @@ class Collection extends \Magento\Framework\Model\Resource\Db\Collection\Abstrac
             true
         )->from(
             array('main_table' => $this->getTable('search_query')),
-            array('name' => $ifSynonymFor, 'num_results', 'popularity')
+            array('name' => $ifSynonymFor, 'num_results', 'popularity', 'query_id')
         );
         if ($storeIds) {
             $this->addStoreFilter($storeIds);

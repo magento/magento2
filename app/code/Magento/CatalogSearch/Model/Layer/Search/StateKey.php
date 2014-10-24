@@ -25,8 +25,9 @@
 
 namespace Magento\CatalogSearch\Model\Layer\Search;
 
+use Magento\Catalog\Model\Layer\StateKeyInterface;
 
-class StateKey extends \Magento\Catalog\Model\Layer\Category\StateKey
+class StateKey extends \Magento\Catalog\Model\Layer\Category\StateKey implements StateKeyInterface
 {
     /**
      * @var \Magento\Search\Model\QueryFactory
@@ -53,6 +54,7 @@ class StateKey extends \Magento\Catalog\Model\Layer\Category\StateKey
      */
     public function toString($category)
     {
-        return 'Q_' . $this->queryFactory->get()->getId() . '_' . \Magento\Catalog\Model\Layer\Category\StateKey::toString($category);
+        return 'Q_' . $this->queryFactory->get()->getId()
+        . '_' . \Magento\Catalog\Model\Layer\Category\StateKey::toString($category);
     }
 }

@@ -24,6 +24,7 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Creditmemo;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use \Magento\Framework\App\ResponseInterface;
 
 class ExportCsv extends \Magento\Backend\App\Action
@@ -64,6 +65,6 @@ class ExportCsv extends \Magento\Backend\App\Action
         $fileName = 'creditmemos.csv';
         $grid = $grid = $this->_view->getLayout()->getChildBlock('sales.creditmemo.grid', 'grid.export');
         $csvFile = $grid->getCsvFile();
-        return $this->_fileFactory->create($fileName, $csvFile, \Magento\Framework\App\Filesystem::VAR_DIR);
+        return $this->_fileFactory->create($fileName, $csvFile, DirectoryList::VAR_DIR);
     }
 }

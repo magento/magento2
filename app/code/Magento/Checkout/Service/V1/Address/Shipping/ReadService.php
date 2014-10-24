@@ -21,27 +21,33 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Checkout\Service\V1\Address\Shipping;
 
 use \Magento\Checkout\Service\V1\Address\Converter as AddressConverter;
 use \Magento\Framework\Exception\NoSuchEntityException;
 
+/** Quote billing address read service object. */
 class ReadService implements ReadServiceInterface
 {
     /**
+     * Quote repository.
+     *
      * @var \Magento\Sales\Model\QuoteRepository
      */
     protected $quoteRepository;
 
     /**
+     * Address converter.
+     *
      * @var AddressConverter
      */
     protected $addressConverter;
 
     /**
-     * @param \Magento\Sales\Model\QuoteRepository $quoteRepository
-     * @param AddressConverter $addressConverter
+     * Constructs a quote billing address read service object.
+     *
+     * @param \Magento\Sales\Model\QuoteRepository $quoteRepository Quote repository.
+     * @param AddressConverter $addressConverter Address converter.
      */
     public function __construct(
         \Magento\Sales\Model\QuoteRepository $quoteRepository,
@@ -52,11 +58,19 @@ class ReadService implements ReadServiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @param int $cartId The cart ID.
+     * @return \Magento\Checkout\Service\V1\Data\Cart\Address Shipping address object.
+     * @throws \Magento\Framework\Exception\NoSuchEntityException The specified cart does not exist.
      */
     public function getAddress($cartId)
     {
-        /** @var \Magento\Sales\Model\Quote $quote */
+        /**
+         * Quote.
+         *
+         * @var \Magento\Sales\Model\Quote $quote
+         */
         $quote = $this->quoteRepository->get($cartId);
         if ($quote->isVirtual()) {
             throw new NoSuchEntityException(
@@ -64,7 +78,11 @@ class ReadService implements ReadServiceInterface
             );
         }
 
-        /** @var \Magento\Sales\Model\Quote\Address $address */
+        /**
+         * Address.
+         *
+         * @var \Magento\Sales\Model\Quote\Address $address
+         */
         $address = $quote->getShippingAddress();
         return $this->addressConverter->convertModelToDataObject($address);
     }

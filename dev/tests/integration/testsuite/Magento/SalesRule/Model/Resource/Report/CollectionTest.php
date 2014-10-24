@@ -52,4 +52,64 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         }
         $this->assertEquals($expectedResult, $actualResult);
     }
+
+    /**
+     * @dataProvider periodDataProvider
+     * @magentoDataFixture Magento/SalesRule/_files/order_with_coupon.php
+     * @magentoDataFixture Magento/SalesRule/_files/report_coupons.php
+     *
+     * @param $period
+     * @param $expectedPeriod
+     * @param $dateFrom
+     * @param $dateTo
+     */
+    public function testPeriod($period, $dateFrom, $dateTo, $expectedPeriod)
+    {
+        $this->_collection->setPeriod($period);
+        $this->_collection->setDateRange($dateFrom, $dateTo);
+        $items = $this->_collection->getItems();
+        $this->assertCount(1, $items);
+        $this->assertEquals($expectedPeriod, $items[0]->getPeriod());
+    }
+
+    /**
+     * Data provider for testTableSelection
+     *
+     * @return array
+     */
+    public function periodDataProvider()
+    {
+        return array(
+            [
+                'period'    => 'year',
+                'date_from' => null,
+                'date_to'   => null,
+                'expected_period' => date('Y', time())
+            ],
+            [
+                'period'    => 'month',
+                'date_from' => null,
+                'date_to'   => null,
+                'expected_period' => date('Y-m', time())
+            ],
+            [
+                'period'    => 'day',
+                'date_from' => null,
+                'date_to'   => null,
+                'expected_period' => date('Y-m-d', time())
+            ],
+            [
+                'period'    => 'undefinedPeriod',
+                'date_from' => null,
+                'date_to'   => null,
+                'expected_period' => date('Y-m-d', time())
+            ],
+            [
+                'period'    => null,
+                'date_from' => date('Y-m-d', strtotime('-1 year', time())),
+                'date_to'   => date('Y-m-d', time()),
+                'expected_period' => date('Y-m-d', time())
+            ]
+        );
+    }
 }

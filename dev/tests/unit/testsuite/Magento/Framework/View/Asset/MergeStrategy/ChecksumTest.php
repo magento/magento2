@@ -23,6 +23,8 @@
  */
 namespace Magento\Framework\View\Asset\MergeStrategy;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class ChecksumTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -55,15 +57,15 @@ class ChecksumTest extends \PHPUnit_Framework_TestCase
         $this->mergerMock = $this->getMockForAbstractClass('\Magento\Framework\View\Asset\MergeStrategyInterface');
         $this->sourceDir = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\ReadInterface');
         $this->targetDir = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\WriteInterface');
-        $filesystem = $this->getMock('\Magento\Framework\App\Filesystem', array(), array(), '', false);
+        $filesystem = $this->getMock('\Magento\Framework\Filesystem', array(), array(), '', false);
         $filesystem->expects($this->once())
             ->method('getDirectoryRead')
-            ->with(\Magento\Framework\App\Filesystem::ROOT_DIR)
+            ->with(DirectoryList::ROOT)
             ->will($this->returnValue($this->sourceDir))
         ;
         $filesystem->expects($this->any())
             ->method('getDirectoryWrite')
-            ->with(\Magento\Framework\App\Filesystem::STATIC_VIEW_DIR)
+            ->with(DirectoryList::STATIC_VIEW)
             ->will($this->returnValue($this->targetDir))
         ;
         $this->checksum = new Checksum($this->mergerMock, $filesystem);

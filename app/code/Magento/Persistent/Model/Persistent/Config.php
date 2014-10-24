@@ -23,6 +23,8 @@
  */
 namespace Magento\Persistent\Model\Persistent;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 /**
  * Persistent Config Model
  */
@@ -84,7 +86,7 @@ class Config
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Persistent\Model\Factory $persistentFactory
-     * @param \Magento\Framework\App\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem $filesystem
      */
     public function __construct(
         \Magento\Framework\Config\DomFactory $domFactory,
@@ -92,14 +94,14 @@ class Config
         \Magento\Framework\View\LayoutInterface $layout,
         \Magento\Framework\App\State $appState,
         \Magento\Persistent\Model\Factory $persistentFactory,
-        \Magento\Framework\App\Filesystem $filesystem
+        \Magento\Framework\Filesystem $filesystem
     ) {
         $this->_domFactory = $domFactory;
         $this->_moduleReader = $moduleReader;
         $this->_layout = $layout;
         $this->_appState = $appState;
         $this->_persistentFactory = $persistentFactory;
-        $this->_modulesDirectory = $filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::MODULES_DIR);
+        $this->_modulesDirectory = $filesystem->getDirectoryRead(DirectoryList::MODULES);
     }
 
     /**

@@ -23,12 +23,15 @@
  */
 namespace Magento\CheckoutAgreements\Service\V1\Agreement;
 
+/**
+ * Checkout agreement service interface.
+ */
 interface ReadServiceInterface
 {
     /**
-     * Retrieve the list of active checkout agreements
+     * Lists active checkout agreements.
      *
-     * @return \Magento\CheckoutAgreements\Service\V1\Data\Agreement[]
+     * @return \Magento\CheckoutAgreements\Service\V1\Data\Agreement[] Array of active checkout agreements.
      */
     public function getList();
 }

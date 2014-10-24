@@ -46,6 +46,8 @@ class Onepage
     const METHOD_GUEST    = 'guest';
     const METHOD_REGISTER = 'register';
     const METHOD_CUSTOMER = 'customer';
+    const USE_FOR_SHIPPING = 1;
+    const NOT_USE_FOR_SHIPPING = 0;
 
     /**
      * @var \Magento\Customer\Model\Session
@@ -369,22 +371,15 @@ class Onepage
             array()
         );
 
-        if (!empty($customerAddressId)) {
+        if ($customerAddressId) {
             try {
                 $customerAddress = $this->_customerAddressService->getAddress($customerAddressId);
-            } catch (\Exception $e) {
-                /** Address does not exist */
-            }
-            if (isset($customerAddress)) {
                 if ($customerAddress->getCustomerId() != $this->getQuote()->getCustomerId()) {
                     return array('error' => 1, 'message' => __('The customer address is not valid.'));
                 }
-
                 $address->importCustomerAddressData($customerAddress)->setSaveInAddressBook(0);
-                $addressErrors = $addressForm->validateData($address->getData());
-                if ($addressErrors !== true) {
-                    return array('error' => 1, 'message' => $addressErrors);
-                }
+            } catch (\Exception $e) {
+                return array('error' => 1, 'message' => __('Address does not exist.'));
             }
         } else {
             // emulate request object
@@ -393,8 +388,7 @@ class Onepage
             if ($addressErrors !== true) {
                 return array('error' => 1, 'message' => array_values($addressErrors));
             }
-            $addressData = $addressForm->compactData($addressData);
-            $address->addData($addressData);
+            $address->addData($addressForm->compactData($addressData));
             //unset billing address attributes which were not shown in form
             foreach ($addressForm->getAttributes() as $attribute) {
                 if (!isset($data[$attribute->getAttributeCode()])) {
@@ -436,14 +430,15 @@ class Onepage
             /**
              * Billing address using options
              */
-            $usingCase = isset($data['use_for_shipping']) ? (int)$data['use_for_shipping'] : 0;
+            $usingCase = isset($data['use_for_shipping']) ? (int)$data['use_for_shipping'] : self::NOT_USE_FOR_SHIPPING;
 
             switch ($usingCase) {
-                case 0:
+                case self::NOT_USE_FOR_SHIPPING:
                     $shipping = $this->getQuote()->getShippingAddress();
                     $shipping->setSameAsBilling(0);
+                    $shipping->save();
                     break;
-                case 1:
+                case self::USE_FOR_SHIPPING:
                     $billing = clone $address;
                     $billing->unsAddressId()->unsAddressType();
                     $shipping = $this->getQuote()->getShippingAddress();
@@ -478,19 +473,14 @@ class Onepage
                         $shippingMethod
                     )->setCollectShippingRates(
                         true
-                    );
+                    )->collectTotals();
+                    $shipping->save();
                     $this->getCheckout()->setStepData('shipping', 'complete', true);
                     break;
             }
         }
 
-        $this->getQuote()->collectTotals();
-        $this->getQuote()->save();
-
-        if (!$this->getQuote()->isVirtual() && $this->getCheckout()->getStepData('shipping', 'complete') == true) {
-            //Recollect Shipping rates for shipping methods
-            $this->getQuote()->getShippingAddress()->setCollectShippingRates(true);
-        }
+        $address->save();
 
         $this->getCheckout()->setStepData(
             'billing',
@@ -664,7 +654,7 @@ class Onepage
             return array('error' => 1, 'message' => $validateRes);
         }
 
-        $this->getQuote()->collectTotals()->save();
+        $address->collectTotals()->save();
 
         $this->getCheckout()->setStepData('shipping', 'complete', true)->setStepData('shipping_method', 'allow', true);
 
@@ -682,11 +672,15 @@ class Onepage
         if (empty($shippingMethod)) {
             return array('error' => -1, 'message' => __('Invalid shipping method'));
         }
-        $rate = $this->getQuote()->getShippingAddress()->getShippingRateByCode($shippingMethod);
+        $shippingAddress = $this->getQuote()->getShippingAddress();
+        $rate = $shippingAddress->getShippingRateByCode($shippingMethod);
         if (!$rate) {
             return array('error' => -1, 'message' => __('Invalid shipping method'));
+        } else {
+            $shippingDescription = $rate->getCarrierTitle() . ' - ' . $rate->getMethodTitle();
+            $shippingAddress->setShippingDescription(trim($shippingDescription, ' -'));
         }
-        $this->getQuote()->getShippingAddress()->setShippingMethod($shippingMethod);
+        $shippingAddress->setShippingMethod($shippingMethod)->save();
 
         $this->getCheckout()->setStepData('shipping_method', 'complete', true)->setStepData('payment', 'allow', true);
 

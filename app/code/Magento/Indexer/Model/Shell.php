@@ -43,13 +43,13 @@ class Shell extends \Magento\Framework\App\AbstractShell
     protected $indexerFactory;
 
     /**
-     * @param \Magento\Framework\App\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem $filesystem
      * @param string $entryPoint
      * @param Indexer\CollectionFactory $indexersFactory
      * @param IndexerFactory $indexerFactory
      */
     public function __construct(
-        \Magento\Framework\App\Filesystem $filesystem,
+        \Magento\Framework\Filesystem $filesystem,
         $entryPoint,
         Indexer\CollectionFactory $indexersFactory,
         IndexerFactory $indexerFactory

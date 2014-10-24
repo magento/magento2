@@ -1,7 +1,5 @@
 <?php
 /**
- * Quote shipping address service
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -25,14 +23,15 @@
  */
 namespace Magento\Checkout\Service\V1\Address\Shipping;
 
+/** Quote billing address read service interface. */
 interface ReadServiceInterface
 {
     /**
-     * Get shipping address of the quote
+     * Returns the shipping address for a specified quote.
      *
-     * @param int $cartId
-     * @return \Magento\Checkout\Service\V1\Data\Cart\Address
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @param int $cartId The cart ID.
+     * @return \Magento\Checkout\Service\V1\Data\Cart\Address Shipping address object.
+     * @throws \Magento\Framework\Exception\NoSuchEntityException The specified cart does not exist.
      */
     public function getAddress($cartId);
 }

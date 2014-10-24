@@ -48,16 +48,6 @@ class OrderTest extends \PHPUnit_Framework_TestCase
      */
     protected $incrementId;
 
-    /**
-     * @var array
-     */
-    protected $calculatedTaxInfo = [
-        'title'           => 'My Mocked Tax Rate',
-        'percent'         => 10.0,
-        'tax_amount'      => 1.23,
-        'base_tax_amount' => 2.46,
-    ];
-
     protected function setUp()
     {
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
@@ -77,21 +67,11 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         );
         $this->incrementId = '#00000001';
 
-        // mock tax helper
-        $taxHelperMock = $this->getMockBuilder('Magento\Tax\Helper\Data')
-            ->setMethods(['getCalculatedTaxes'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $taxHelperMock->expects($this->any())
-            ->method('getCalculatedTaxes')
-            ->will($this->returnValue($this->calculatedTaxInfo));
-
         $this->order = $helper->getObject(
             'Magento\Sales\Model\Order',
             [
                 'paymentCollectionFactory' => $this->paymentCollectionFactoryMock,
                 'orderItemCollectionFactory' => $this->orderItemCollectionFactoryMock,
-                'taxHelper' => $taxHelperMock,
                 'data' => ['increment_id' => $this->incrementId]
             ]
         );
@@ -391,16 +371,5 @@ class OrderTest extends \PHPUnit_Framework_TestCase
     public function testGetEntityType()
     {
         $this->assertEquals('order', $this->order->getEntityType());
-    }
-
-
-    /**
-     * test method getFullTaxInfo()
-     */
-    public function testGetFullTaxInfo()
-    {
-        $actualResult = $this->order->getFullTaxInfo();
-        $expectedResult = $this->calculatedTaxInfo;
-        $this->assertSame($expectedResult, $actualResult);
     }
 }

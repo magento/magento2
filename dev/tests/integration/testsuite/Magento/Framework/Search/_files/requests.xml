@@ -84,7 +84,7 @@
             </query>
         </queries>
         <filters>
-            <filter xsi:type="wildcardFilter" name="wildcard_filter" value="$wildcard_filter$" field="data_index"/>
+            <filter xsi:type="wildcardFilter" name="wildcard_filter" value="$wildcard_filter$" field="name"/>
         </filters>
         <from>10</from>
         <size>10</size>
@@ -121,14 +121,14 @@
                 <filterReference clause="must" ref="term_rm"/>
                 <filterReference clause="must" ref="range_rm"/>
             </filter>
-            <filter name="range_rm" xsi:type="rangeFilter" field="product_id" from="$not_bind$" to="$not_bind$"/>
-            <filter name="term_rm" xsi:type="termFilter" field="product_id" value="$not_bind$"/>
+            <filter name="range_rm" xsi:type="rangeFilter" field="price" from="$not_bind$" to="$not_bind$"/>
+            <filter name="term_rm" xsi:type="termFilter" field="price" value="$not_bind$"/>
             <filter xsi:type="boolFilter" name="pid">
                 <filterReference clause="should" ref="pidm"/>
                 <filterReference clause="should" ref="pidsh"/>
             </filter>
-            <filter name="pidm" xsi:type="rangeFilter" field="product_id" from="$pidm_from$" to="$pidm_to$"/>
-            <filter name="pidsh" xsi:type="termFilter" field="product_id" value="$pidsh$"/>
+            <filter name="pidm" xsi:type="rangeFilter" field="price" from="$pidm_from$" to="$pidm_to$"/>
+            <filter name="pidsh" xsi:type="termFilter" field="price" value="$pidsh$"/>
         </filters>
         <from>10</from>
         <size>10</size>
@@ -145,7 +145,7 @@
         <filters>
             <filter name="range_filter"
                     xsi:type="rangeFilter"
-                    field="product_id"
+                    field="price"
                     from="$range_filter_from$"
                     to="$range_filter_to$"/>
         </filters>
@@ -164,7 +164,7 @@
         <filters>
             <filter name="range_filter_without_from_field"
                     xsi:type="rangeFilter"
-                    field="product_id"
+                    field="price"
                     to="$range_filter_to$"/>
         </filters>
         <from>10</from>
@@ -182,7 +182,7 @@
         <filters>
             <filter name="range_filter_without_to_field"
                     xsi:type="rangeFilter"
-                    field="product_id"
+                    field="price"
                     from="$range_filter_from$"/>
         </filters>
         <from>10</from>
@@ -198,7 +198,7 @@
             </query>
         </queries>
         <filters>
-            <filter name="term_filter" xsi:type="termFilter" field="product_id" value="$request.product_id$"/>
+            <filter name="term_filter" xsi:type="termFilter" field="price" value="$request.price$"/>
         </filters>
         <from>10</from>
         <size>10</size>
@@ -224,32 +224,32 @@
             </filter>
             <filter name="must_range_filter1"
                     xsi:type="rangeFilter"
-                    field="product_id"
+                    field="price"
                     from="$must_range_filter1_from$"
                     to="$must_range_filter1_to$"/>
             <filter name="should_term_filter1"
                     xsi:type="termFilter"
-                    field="product_id"
+                    field="price"
                     value="$should_term_filter1$"/>
             <filter name="should_term_filter2"
                     xsi:type="termFilter"
-                    field="product_id"
+                    field="price"
                     value="$should_term_filter2$"/>
             <filter name="should_term_filter3"
                     xsi:type="termFilter"
-                    field="product_id"
+                    field="price"
                     value="$should_term_filter3$"/>
             <filter name="should_term_filter4"
                     xsi:type="termFilter"
-                    field="product_id"
+                    field="price"
                     value="$should_term_filter4$"/>
             <filter name="not_term_filter1"
                     xsi:type="termFilter"
-                    field="product_id"
+                    field="price"
                     value="$not_term_filter1$"/>
             <filter name="not_term_filter2"
                     xsi:type="termFilter"
-                    field="product_id"
+                    field="price"
                     value="$not_term_filter2$"/>
         </filters>
         <from>10</from>
@@ -274,12 +274,12 @@
             </filter>
             <filter name="not_range_filter"
                     xsi:type="rangeFilter"
-                    field="product_id"
+                    field="price"
                     from="$not_range_filter_from$"
                     to="$not_range_filter_to$"/>
             <filter name="nested_not_term_filter"
                     xsi:type="termFilter"
-                    field="product_id"
+                    field="price"
                     value="$nested_not_term_filter$"/>
         </filters>
         <from>10</from>
@@ -303,7 +303,7 @@
             </filter>
             <filter name="nested_must_range_filter"
                     xsi:type="rangeFilter"
-                    field="product_id"
+                    field="price"
                     from="$nested_must_range_filter_from$"
                     to="$nested_must_range_filter_to$"/>
         </filters>
@@ -332,12 +332,9 @@
         </queries>
         <filters>
             <filter xsi:type="boolFilter" name="filter">
-                <filterReference clause="must" ref="store_filter"/>
-                <filterReference clause="must" ref="product_id_filter"/>
+                <filterReference clause="must" ref="price_filter"/>
             </filter>
-            <filter name="store_filter" xsi:type="termFilter" field="store_id" value="$store_filter$"/>
-            <filter name="product_id_filter" xsi:type="rangeFilter" field="product_id" from="$request.from_product_id$"
-                    to="$request.to_product_id$"/>
+            <filter name="price_filter" xsi:type="rangeFilter" field="price" from="$request.from_price$" to="$request.to_price$"/>
         </filters>
         <from>10</from>
         <size>10</size>

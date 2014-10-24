@@ -24,7 +24,7 @@
 
 namespace Magento\Catalog\Model\Layer\Search;
 
-use Magento\CatalogSearch\Model\Layer\Search\CollectionFilter;
+use Magento\TestFramework\Helper\ObjectManager;
 
 class CollectionFilterTest extends \PHPUnit_Framework_TestCase
 {
@@ -38,10 +38,6 @@ class CollectionFilterTest extends \PHPUnit_Framework_TestCase
      */
     protected $catalogConfigMock;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $queryFactoryMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -49,38 +45,38 @@ class CollectionFilterTest extends \PHPUnit_Framework_TestCase
     protected $storeManagerMock;
 
     /**
-     * @var \Magento\CatalogSearch\Model\Layer\Search\CollectionFilter
+     * @var \Magento\Catalog\Model\Layer\Search\CollectionFilter
      */
     protected $model;
 
     protected function setUp()
     {
+        $objectManager = new ObjectManager($this);
         $this->visibilityMock = $this->getMock('Magento\Catalog\Model\Product\Visibility', array(), array(), '', false);
         $this->catalogConfigMock = $this->getMock('\Magento\Catalog\Model\Config', array(), array(), '', false);
-        $this->queryFactoryMock = $this->getMock(
-            '\Magento\Search\Model\QueryFactory',
-            array(),
-            array(),
-            '',
-            false
-        );
+
         $this->storeManagerMock = $this->getMock('\Magento\Framework\StoreManagerInterface');
 
-        $this->model = new CollectionFilter(
-            $this->catalogConfigMock, $this->queryFactoryMock, $this->storeManagerMock, $this->visibilityMock
+        $this->model = $objectManager->getObject(
+            'Magento\Catalog\Model\Layer\Search\CollectionFilter',
+            [
+                'catalogConfig' => $this->catalogConfigMock,
+                'storeManager' => $this->storeManagerMock,
+                'productVisibility' => $this->visibilityMock
+            ]
         );
     }
 
     /**
-     * @covers \Magento\CatalogSearch\Model\Layer\Search\CollectionFilter::filter
-     * @covers \Magento\CatalogSearch\Model\Layer\Search\CollectionFilter::__construct
+     * @covers \Magento\Catalog\Model\Layer\Search\CollectionFilter::filter
+     * @covers \Magento\Catalog\Model\Layer\Search\CollectionFilter::__construct
      */
     public function testFilter()
     {
         $collectionMock = $this->getMock(
             '\Magento\Catalog\Model\Resource\Product\Collection',
             array(
-                'addAttributeToSelect', 'addSearchFilter', 'setStore', 'addMinimalPrice', 'addFinalPrice',
+                'addAttributeToSelect', 'setStore', 'addMinimalPrice', 'addFinalPrice',
                 'addTaxPercents', 'addStoreFilter', 'addUrlRewrite', 'setVisibility'
             ),
             array(),
@@ -88,18 +84,13 @@ class CollectionFilterTest extends \PHPUnit_Framework_TestCase
             false
         );
         $categoryMock = $this->getMock('\Magento\Catalog\Model\Category', array(), array(), '', false);
-        $queryMock = $this->getMock('Magento\CatalogSearch\Helper\Query', array('getQueryText'), array(), '', false);
-
-        $queryMock->expects($this->once())->method('getQueryText');
 
         $this->catalogConfigMock->expects($this->once())->method('getProductAttributes');
         $this->visibilityMock->expects($this->once())->method('getVisibleInSearchIds');
-        $this->queryFactoryMock->expects($this->once())->method('get')->will($this->returnValue($queryMock));
         $this->storeManagerMock->expects($this->once())->method('getStore');
 
         $collectionMock->expects($this->once())->method('addAttributeToSelect')
             ->will($this->returnValue($collectionMock));
-        $collectionMock->expects($this->once())->method('addSearchFilter')->will($this->returnValue($collectionMock));
         $collectionMock->expects($this->once())->method('setStore')->will($this->returnValue($collectionMock));
         $collectionMock->expects($this->once())->method('addMinimalPrice')->will($this->returnValue($collectionMock));
         $collectionMock->expects($this->once())->method('addFinalPrice')->will($this->returnValue($collectionMock));

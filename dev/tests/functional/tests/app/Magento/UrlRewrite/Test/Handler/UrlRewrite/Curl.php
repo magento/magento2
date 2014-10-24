@@ -70,7 +70,7 @@ class Curl extends AbstractCurl implements UrlRewriteInterface
      */
     public function persist(FixtureInterface $fixture = null)
     {
-        $url = $_ENV['app_backend_url'] . $this->url . $fixture->getIdPath();
+        $url = $_ENV['app_backend_url'] . $this->url . $fixture->getTargetPath();
         $data = $this->replaceMappingData($fixture->getData());
         $curl = new BackendDecorator(new CurlTransport(), new Config());
         $curl->write(CurlInterface::POST, $url, '1.0', [], $data);

@@ -104,6 +104,9 @@ $table = $installer->getConnection()
 )->addIndex(
     $installer->getIdxName('search_query', 'store_id'),
     'store_id'
+)->addIndex(
+    $installer->getIdxName('search_query', 'synonym_for'),
+    'synonym_for'
 )->addForeignKey(
     $installer->getFkName('search_query', 'store_id', 'store', 'store_id'),
     'store_id',

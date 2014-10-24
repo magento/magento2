@@ -22,6 +22,8 @@
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 namespace Magento\Backend\Block\Widget\Grid;
+use Magento\Framework\App\Bootstrap;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Store\Model\StoreManager;
 /**
  * @magentoDataFixture Magento/Backend/Block/_files/backend_theme.php
@@ -67,8 +69,8 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(array(
             StoreManager::PARAM_RUN_CODE => 'admin',
             StoreManager::PARAM_RUN_TYPE => 'store',
-            \Magento\Framework\App\Filesystem::PARAM_APP_DIRS => array(
-                \Magento\Framework\App\Filesystem::THEMES_DIR => array('path' => __DIR__ . '/../../_files/design')
+            Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => array(
+                DirectoryList::THEMES => array('path' => __DIR__ . '/../../_files/design')
             ),
         ));
     }

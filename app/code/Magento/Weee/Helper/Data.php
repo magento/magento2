@@ -231,7 +231,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getAmount($product, $website = null)
     {
-        if ($this->isEnabled()) {
+        /** @var \Magento\Store\Model\Store $store */
+        if ($website) {
+            $store = $this->_storeManager->getWebsite($website)->getDefaultGroup()->getDefaultStore();
+        } else {
+            $store = $product->getStore();
+        }
+
+        if ($this->isEnabled($store)) {
             return $this->_weeeTax->getWeeeAmount($product, null, null, $website, false);
         }
         return 0;
@@ -366,7 +373,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getProductWeeeAttributesForDisplay($product)
     {
-        if ($this->isEnabled()) {
+        /** @var \Magento\Store\Model\Store $store */
+        $store = $product->getStore();
+
+        if ($this->isEnabled($store)) {
             return $this->getProductWeeeAttributes($product, null, null, null, $this->typeOfDisplay(1));
         }
         return array();
@@ -389,7 +399,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $website = null,
         $calculateTaxes = false
     ) {
-        if ($this->isEnabled()) {
+        /** @var \Magento\Store\Model\Store $store */
+        if ($website) {
+            $store = $this->_storeManager->getWebsite($website)->getDefaultGroup()->getDefaultStore();
+        } else {
+            $store = $product->getStore();
+        }
+
+        if ($this->isEnabled($store)) {
             return $this->getProductWeeeAttributes(
                 $product,
                 $shipping,
@@ -409,7 +426,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getAmountForDisplay($product)
     {
-        if ($this->isEnabled()) {
+        /** @var \Magento\Store\Model\Store $store */
+        $store = $product->getStore();
+
+        if ($this->isEnabled($store)) {
             return $this->_weeeTax->getWeeeAmount($product, null, null, null, $this->typeOfDisplay(1));
         }
         return 0;
@@ -423,7 +443,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getOriginalAmount($product)
     {
-        if ($this->isEnabled()) {
+        /** @var \Magento\Store\Model\Store $store */
+        $store = $product->getStore();
+
+        if ($this->isEnabled($store)) {
             return $this->_weeeTax->getWeeeAmount($product, null, null, null, false, true);
         }
         return 0;

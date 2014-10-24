@@ -169,7 +169,7 @@ class Uploader
     /**
      * Init upload
      *
-     * @param string $fileId
+     * @param string|array $fileId
      * @throws \Exception
      */
     public function __construct($fileId)
@@ -502,7 +502,7 @@ class Uploader
     /**
      * Set upload field id
      *
-     * @param string $fileId
+     * @param string|array $fileId
      * @return void
      * @throws \Exception
      */

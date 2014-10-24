@@ -74,12 +74,36 @@ class DbTest extends \PHPUnit_Framework_TestCase
      */
     protected $_groupMock;
 
+    /**
+     * @var \Magento\Store\Model\Resource\Website\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_websiteCollectionFactoryMock;
+
+    /**
+     * @var \Magento\Store\Model\Resource\Store\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_storeCollectionFactoryMock;
+
+    /**
+     * @var \Magento\Store\Model\Resource\Group\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $_groupCollectionFactoryMock;
+
     protected function setUp()
     {
         $this->_storeFactoryMock = $this->getClassMock('Magento\Store\Model\StoreFactory', array('create'));
         $this->_websiteFactoryMock = $this->getClassMock('Magento\Store\Model\WebsiteFactory', array('create'));
         $this->_groupFactoryMock = $this->getClassMock('Magento\Store\Model\GroupFactory', array('create'));
         $this->_scopeConfig = $this->getClassMock('Magento\Framework\App\Config\ScopeConfigInterface');
+        $this->_websiteCollectionFactoryMock = $this->getClassMock(
+            'Magento\Store\Model\Resource\Website\CollectionFactory', array('create')
+        );
+        $this->_groupCollectionFactoryMock = $this->getClassMock(
+            'Magento\Store\Model\Resource\Group\CollectionFactory', array('create')
+        );
+        $this->_storeCollectionFactoryMock = $this->getClassMock(
+            'Magento\Store\Model\Resource\Store\CollectionFactory', array('create')
+        );
         $this->_appStateMock = $this->getClassMock('Magento\Framework\App\State');
         $this->_groupMock = $this->getClassMock('Magento\Store\Model\Group');
         $this->_websiteMock = $this->getClassMock('Magento\Store\Model\Website');
@@ -90,6 +114,9 @@ class DbTest extends \PHPUnit_Framework_TestCase
             $this->_websiteFactoryMock,
             $this->_groupFactoryMock,
             $this->_scopeConfig,
+            $this->_websiteCollectionFactoryMock,
+            $this->_groupCollectionFactoryMock,
+            $this->_storeCollectionFactoryMock,
             $this->_appStateMock,
             true
         );
@@ -225,6 +252,11 @@ class DbTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getIterator')
             ->will($this->returnValue(new \ArrayIterator(array($this->_storeMock))));
+        $storeCollection
+            ->expects($this->any())
+            ->method('getLastItem')
+            ->will($this->returnValue($this->_storeMock));
+
         $this->_storeFactoryMock
             ->expects($this->any())
             ->method('create')
@@ -232,6 +264,21 @@ class DbTest extends \PHPUnit_Framework_TestCase
         $this->_storeMock
             ->expects($this->any())
             ->method('getCollection')
+            ->will($this->returnValue($storeCollection));
+
+        $this->_websiteCollectionFactoryMock
+            ->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($websiteCollection));
+
+        $this->_groupCollectionFactoryMock
+            ->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($groupCollection));
+
+        $this->_storeCollectionFactoryMock
+            ->expects($this->any())
+            ->method('create')
             ->will($this->returnValue($storeCollection));
 
         $this->_storeMock->expects($this->any())->method('getWebsiteId')->will($this->returnValue($websiteId));

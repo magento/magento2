@@ -24,6 +24,7 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Sales;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use \Magento\Framework\App\ResponseInterface;
 
 class ExportShippingExcel extends \Magento\Reports\Controller\Adminhtml\Report\Sales
@@ -38,6 +39,6 @@ class ExportShippingExcel extends \Magento\Reports\Controller\Adminhtml\Report\S
         $fileName = 'shipping.xml';
         $grid = $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Sales\Shipping\Grid');
         $this->_initReportAction($grid);
-        return $this->_fileFactory->create($fileName, $grid->getExcelFile($fileName), \Magento\Framework\App\Filesystem::VAR_DIR);
+        return $this->_fileFactory->create($fileName, $grid->getExcelFile($fileName), DirectoryList::VAR_DIR);
     }
 }

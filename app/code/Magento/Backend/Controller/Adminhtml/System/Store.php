@@ -24,6 +24,8 @@
 namespace Magento\Backend\Controller\Adminhtml\System;
 
 use Magento\Backend\App\Action;
+use Magento\Framework\Filesystem;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Store controller
@@ -101,21 +103,15 @@ class Store extends Action
             return $this;
         }
         try {
+            /** @var \Magento\Backup\Model\Db $backupDb */
             $backupDb = $this->_objectManager->create('Magento\Backup\Model\Db');
-            $backup = $this->_objectManager->create(
-                'Magento\Backup\Model\Backup'
-            )->setTime(
-                time()
-            )->setType(
-                'db'
-            )->setPath(
-                $this->_objectManager->get(
-                    'Magento\Framework\App\Filesystem'
-                )->getPath(
-                    \Magento\Framework\App\Filesystem::VAR_DIR
-                ) . '/backups'
-            );
-
+            /** @var \Magento\Backup\Model\Backup $backup */
+            $backup = $this->_objectManager->create('Magento\Backup\Model\Backup');
+            /** @var Filesystem $filesystem */
+            $filesystem = $this->_objectManager->get('Magento\Framework\Filesystem');
+            $backup->setTime(time())
+                ->setType('db')
+                ->setPath($filesystem->getDirectoryRead(DirectoryList::VAR_DIR)->getAbsolutePath('backups'));
             $backupDb->createBackup($backup);
             $this->messageManager->addSuccess(__('The database was backed up.'));
         } catch (\Magento\Framework\Model\Exception $e) {

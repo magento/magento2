@@ -30,6 +30,7 @@ use Mtf\Factory\Factory;
 use Mtf\Client\Element\Locator;
 use Magento\Checkout\Test\Block\Onepage\Link;
 use Mtf\Fixture\FixtureInterface;
+use Magento\Checkout\Test\Block\Cart\CartItem;
 
 /**
  * Class Cart
@@ -68,10 +69,17 @@ class Cart extends Block
     protected $updateShoppingCart = '[name="update_cart_action"]';
 
     /**
+     * Cart empty block selector
+     *
+     * @var string
+     */
+    protected $cartEmpty = '.cart-empty';
+
+    /**
      * Get cart item block
      *
      * @param FixtureInterface $product
-     * @return \Magento\Checkout\Test\Block\Cart\CartItem
+     * @return CartItem
      */
     public function getCartItem(FixtureInterface $product)
     {
@@ -169,5 +177,15 @@ class Cart extends Block
     public function updateShoppingCart()
     {
         $this->_rootElement->find($this->updateShoppingCart, Locator::SELECTOR_CSS)->click();
+    }
+
+    /**
+     * Check that cart is empty
+     *
+     * @return bool
+     */
+    public function cartIsEmpty()
+    {
+        return $this->_rootElement->find($this->cartEmpty, Locator::SELECTOR_CSS)->isVisible();
     }
 }

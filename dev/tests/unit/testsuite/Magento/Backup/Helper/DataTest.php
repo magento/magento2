@@ -23,7 +23,8 @@
  */
 namespace Magento\Backup\Helper;
 
-use Magento\Framework\App\Filesystem;
+use Magento\Framework\Filesystem;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\MaintenanceMode;
 
 class DataTest extends \PHPUnit_Framework_TestCase
@@ -34,14 +35,27 @@ class DataTest extends \PHPUnit_Framework_TestCase
     protected $helper;
 
     /**
-     * @var \Magento\Framework\App\Filesystem | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $filesystem;
 
     public function setUp()
     {
-        $this->filesystem = $this->getMockBuilder('Magento\Framework\App\Filesystem')->disableOriginalConstructor()
+        $this->filesystem = $this->getMockBuilder('Magento\Framework\Filesystem')->disableOriginalConstructor()
             ->getMock();
+
+        $this->filesystem->expects($this->any())
+            ->method('getDirectoryRead')
+            ->will($this->returnCallback(function ($code) {
+                $dir = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\ReadInterface');
+                $dir->expects($this->any())
+                    ->method('getAbsolutePath')
+                    ->will($this->returnCallback(function ($path) use ($code) {
+                        $path = empty($path) ? $path : '/' . $path;
+                        return rtrim($code, '/') . $path;
+                    }));
+                return $dir;
+            }));
 
         $this->helper = (new \Magento\TestFramework\Helper\ObjectManager($this))
             ->getObject('Magento\Backup\Helper\Data', [
@@ -51,26 +65,17 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     public function testGetBackupIgnorePaths()
     {
-        $this->filesystem->expects($this->any())->method('getPath')
-            ->will($this->returnValueMap([
-                [MaintenanceMode::FLAG_DIR, MaintenanceMode::FLAG_DIR],
-                [Filesystem::SESSION_DIR, Filesystem::SESSION_DIR],
-                [Filesystem::CACHE_DIR, Filesystem::CACHE_DIR],
-                [Filesystem::LOG_DIR, Filesystem::LOG_DIR],
-                [Filesystem::VAR_DIR, Filesystem::VAR_DIR],
-            ]));
-
         $this->assertEquals(
             [
                 '.git',
                 '.svn',
-                'var/' . MaintenanceMode::FLAG_FILENAME,
-                Filesystem::SESSION_DIR,
-                Filesystem::CACHE_DIR,
-                Filesystem::LOG_DIR,
-                Filesystem::VAR_DIR . '/full_page_cache',
-                Filesystem::VAR_DIR . '/locks',
-                Filesystem::VAR_DIR . '/report',
+                MaintenanceMode::FLAG_DIR . '/' . MaintenanceMode::FLAG_FILENAME,
+                DirectoryList::SESSION,
+                DirectoryList::CACHE,
+                DirectoryList::LOG,
+                DirectoryList::VAR_DIR . '/full_page_cache',
+                DirectoryList::VAR_DIR . '/locks',
+                DirectoryList::VAR_DIR . '/report',
             ],
             $this->helper->getBackupIgnorePaths()
         );
@@ -78,26 +83,17 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     public function testGetRollbackIgnorePaths()
     {
-        $this->filesystem->expects($this->any())->method('getPath')
-            ->will($this->returnValueMap([
-                [MaintenanceMode::FLAG_DIR, MaintenanceMode::FLAG_DIR],
-                [Filesystem::SESSION_DIR, Filesystem::SESSION_DIR],
-                [Filesystem::ROOT_DIR, Filesystem::ROOT_DIR],
-                [Filesystem::LOG_DIR, Filesystem::LOG_DIR],
-                [Filesystem::VAR_DIR, Filesystem::VAR_DIR],
-            ]));
-
         $this->assertEquals(
             [
                 '.svn',
                 '.git',
                 'var/' . MaintenanceMode::FLAG_FILENAME,
-                Filesystem::SESSION_DIR,
-                Filesystem::LOG_DIR,
-                Filesystem::VAR_DIR . '/locks',
-                Filesystem::VAR_DIR . '/report',
-                Filesystem::ROOT_DIR . '/errors',
-                Filesystem::ROOT_DIR . '/index.php',
+                DirectoryList::SESSION,
+                DirectoryList::LOG,
+                DirectoryList::VAR_DIR . '/locks',
+                DirectoryList::VAR_DIR . '/report',
+                DirectoryList::ROOT . '/errors',
+                DirectoryList::ROOT . '/index.php',
             ],
             $this->helper->getRollbackIgnorePaths()
         );

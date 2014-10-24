@@ -68,6 +68,12 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
      */
     protected $dateTime;
 
+    /**
+     * @var \Magento\Customer\Model\Resource\Visitor|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $resource;
+
+
     public function setUp()
     {
         $this->registry = $this->getMock('Magento\Framework\Registry');
@@ -81,7 +87,7 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
         $store = $this->getMock('\Magento\Store\Model\Store', [], [], '', false, false);
         $this->storeManagerInterface->expects($this->any())->method('getStore')->will($this->returnValue($store));
 
-        $resource = $this->getMockBuilder('Magento\Customer\Model\Resource\Visitor')
+        $this->resource = $this->getMockBuilder('Magento\Customer\Model\Resource\Visitor')
             ->setMethods([
                 'beginTransaction',
                 '__sleep',
@@ -91,8 +97,8 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
                 'addCommitCallback',
                 'commit'
             ])->disableOriginalConstructor()->getMock();
-        $resource->expects($this->any())->method('getIdFieldName')->will($this->returnValue('visitor_id'));
-        $resource->expects($this->any())->method('addCommitCallback')->will($this->returnSelf());
+        $this->resource->expects($this->any())->method('getIdFieldName')->will($this->returnValue('visitor_id'));
+        $this->resource->expects($this->any())->method('addCommitCallback')->will($this->returnSelf());
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $arguments = $objectManagerHelper->getConstructArguments(
@@ -105,7 +111,7 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
                 'remoteAddress' => $this->remoteAddress,
                 'serverAddress' => $this->serverAddress,
                 'dateTime' => $this->dateTime,
-                'resource' => $resource
+                'resource' => $this->resource
             ]
         );
 
@@ -154,6 +160,10 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
         $visitor->expects($this->once())->method('setData')->will($this->returnSelf());
         $visitor->expects($this->once())->method('getData')->will($this->returnValue([]));
+
+        $this->resource->expects($this->once())->method('save')->will($this->returnSelf());
+        $this->resource->expects($this->never())->method('beginTransaction');
+
         $event = new \Magento\Framework\Object(['visitor' => $visitor]);
         $observer = new \Magento\Framework\Object(['event' => $event]);
         $this->assertSame($this->visitor, $this->visitor->logNewVisitor($observer));
@@ -165,6 +175,9 @@ class VisitorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
         $visitor->expects($this->once())->method('setData')->will($this->returnSelf());
         $visitor->expects($this->once())->method('getData')->will($this->returnValue(['visitor_id' => 1]));
+
+        $this->resource->expects($this->once())->method('save')->will($this->returnSelf());
+        $this->resource->expects($this->never())->method('beginTransaction');
 
         $event = new \Magento\Framework\Object(['visitor' => $visitor]);
         $observer = new \Magento\Framework\Object(['event' => $event]);

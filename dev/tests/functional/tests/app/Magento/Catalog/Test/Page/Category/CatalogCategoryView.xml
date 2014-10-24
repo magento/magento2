@@ -57,7 +57,7 @@
         </titleBlock>
         <viewBlock>
             <class>Magento\Catalog\Test\Block\Category\View</class>
-            <locator>.column.main</locator>
+            <locator>#maincontent</locator>
             <strategy>css selector</strategy>
         </viewBlock>
     </blocks>

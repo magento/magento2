@@ -24,15 +24,16 @@
  * @license    http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
 
-use Magento\Framework\App\Filesystem;
+use Magento\Framework\App\Bootstrap;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 require __DIR__ . '/../app/bootstrap.php';
 $params = $_SERVER;
-$params[Filesystem::PARAM_APP_DIRS] = [
-    Filesystem::PUB_DIR => ['uri' => ''],
-    Filesystem::MEDIA_DIR => ['uri' => 'media'],
-    Filesystem::STATIC_VIEW_DIR => ['uri' => 'static'],
-    Filesystem::UPLOAD_DIR => ['uri' => 'media/upload'],
+$params[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS] = [
+    DirectoryList::PUB => [DirectoryList::URL_PATH => ''],
+    DirectoryList::MEDIA => [DirectoryList::URL_PATH => 'media'],
+    DirectoryList::STATIC_VIEW => [DirectoryList::URL_PATH => 'static'],
+    DirectoryList::UPLOAD => [DirectoryList::URL_PATH => 'media/upload'],
 ];
 $bootstrap = \Magento\Framework\App\Bootstrap::create(BP, $params);
 /** @var \Magento\Framework\App\Http $app */

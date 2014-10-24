@@ -24,7 +24,9 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <preference for="Magento\Framework\Search\Adapter\Mysql\Field\ResolverInterface" type="Magento\CatalogSearch\Model\Adapter\Mysql\Field\Resolver" />
     <preference for="Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface" type="Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider"/>
+    <preference for="Magento\Framework\Search\Adapter\Mysql\Filter\PreprocessorInterface" type="Magento\CatalogSearch\Model\Adapter\Mysql\Filter\Preprocessor" />
     <type name="Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderContainer">
         <arguments>
             <argument name="dataProviders" xsi:type="array">
@@ -72,7 +74,7 @@
     <type name="Magento\Framework\Search\EntityMetadata" />
     <virtualType name="Magento\Framework\Search\ProductEntityMetadata" type="Magento\Framework\Search\EntityMetadata">
         <arguments>
-            <argument name="entityId" xsi:type="string">product_id</argument>
+            <argument name="entityId" xsi:type="string">entity_id</argument>
         </arguments>
     </virtualType>
     <type name="Magento\Framework\Search\Adapter\Mysql\DocumentFactory">
@@ -108,4 +110,13 @@
         </arguments>
     </type>
     <preference for="Magento\Search\Model\SearchCollectionInterface" type="Magento\CatalogSearch\Model\Resource\Search\Collection" />
+    <type name="Magento\Catalog\Model\Layer\Search\Context">
+        <arguments>
+            <argument name="collectionProvider" xsi:type="object">Magento\CatalogSearch\Model\Layer\Search\ItemCollectionProvider</argument>
+            <argument name="stateKey" xsi:type="object">Magento\CatalogSearch\Model\Layer\Search\StateKey</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Layer\Search\CollectionFilter">
+        <plugin name="searchQuery" type="Magento\CatalogSearch\Model\Layer\Search\Plugin\CollectionFilter" />
+    </type>
 </config>

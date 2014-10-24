@@ -21,12 +21,15 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
 namespace Magento\Framework\Service\Data;
+
+use Magento\Framework\Api\AttributeInterface;
 
 /**
  * Custom Attribute Data object
  */
-class AttributeValue extends AbstractSimpleObject
+class AttributeValue extends AbstractSimpleObject implements AttributeInterface
 {
     /**#@+
      * Constant used as key into $_data
@@ -38,7 +41,7 @@ class AttributeValue extends AbstractSimpleObject
     /**
      * Get attribute code
      *
-     * @return string the attribute code
+     * @return string
      */
     public function getAttributeCode()
     {
@@ -48,7 +51,7 @@ class AttributeValue extends AbstractSimpleObject
     /**
      * Get attribute value
      *
-     * @return mixed the attribute value
+     * @return mixed
      */
     public function getValue()
     {

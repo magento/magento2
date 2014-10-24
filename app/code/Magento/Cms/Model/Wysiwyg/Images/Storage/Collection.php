@@ -23,21 +23,23 @@
  */
 namespace Magento\Cms\Model\Wysiwyg\Images\Storage;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 /**
  * Wysiwyg Images storage collection
  */
 class Collection extends \Magento\Framework\Data\Collection\Filesystem
 {
     /**
-     * @var \Magento\Framework\App\Filesystem
+     * @var \Magento\Framework\Filesystem
      */
     protected $_filesystem;
 
     /**
      * @param \Magento\Core\Model\EntityFactory $entityFactory
-     * @param \Magento\Framework\App\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem $filesystem
      */
-    public function __construct(\Magento\Core\Model\EntityFactory $entityFactory, \Magento\Framework\App\Filesystem $filesystem)
+    public function __construct(\Magento\Core\Model\EntityFactory $entityFactory, \Magento\Framework\Filesystem $filesystem)
     {
         $this->_filesystem = $filesystem;
         parent::__construct($entityFactory);
@@ -52,7 +54,7 @@ class Collection extends \Magento\Framework\Data\Collection\Filesystem
     protected function _generateRow($filename)
     {
         $filename = preg_replace('~[/\\\]+~', '/', $filename);
-        $path = $this->_filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::MEDIA_DIR);
+        $path = $this->_filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         return array(
             'filename' => $filename,
             'basename' => basename($filename),

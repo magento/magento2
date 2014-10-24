@@ -24,6 +24,8 @@
  */
 namespace Magento\Backup\Controller\Adminhtml\Index;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class Download extends \Magento\Backup\Controller\Adminhtml\Index
 {
 
@@ -49,7 +51,7 @@ class Download extends \Magento\Backup\Controller\Adminhtml\Index
         $response = $this->_fileFactory->create(
             $fileName,
             null,
-            \Magento\Framework\App\Filesystem::VAR_DIR,
+            DirectoryList::VAR_DIR,
             'application/octet-stream',
             $backup->getSize()
         );

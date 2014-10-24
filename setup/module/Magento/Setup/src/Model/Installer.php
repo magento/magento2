@@ -146,6 +146,13 @@ class Installer
     private $progress;
 
     /**
+     * Messages
+     *
+     * @var array
+     */
+    private $messages = array();
+
+    /**
      * Constructor
      *
      * @param FilePermissions $filePermissions
@@ -191,8 +198,8 @@ class Installer
      */
     public function install($request)
     {
+        $script[] = ['File permissions check...', 'checkInstallationFilePermissions', []];
         $script[] = ['Enabling Maintenance Mode:', 'setMaintenanceMode', [1]];
-        $script[] = ['File permissions check...', 'checkFilePermissions', []];
         $script[] = ['Installing deployment configuration...', 'installDeploymentConfig', [$request]];
         if (!empty($request[self::CLEANUP_DB])) {
             $script[] = ['Cleaning up database...', 'cleanupDb', [$request]];
@@ -210,6 +217,7 @@ class Installer
         $script[] = ['Installing admin user...', 'installAdminUser', [$request]];
         $script[] = ['Enabling caches:', 'enableCaches', []];
         $script[] = ['Disabling Maintenance Mode:', 'setMaintenanceMode', [0]];
+        $script[] = ['Post installation file permissions check...', 'checkApplicationFilePermissions', []];
 
         $total = count($script) + count($this->moduleList->getModules());
         $this->progress = new Installer\Progress($total, 0);
@@ -246,20 +254,38 @@ class Installer
     }
 
     /**
-     * Check permissions of directories that are expected to be writable
+     * Check permissions of directories that are expected to be writable for installation
      *
      * @return void
      * @throws \Exception
      */
-    public function checkFilePermissions()
+    public function checkInstallationFilePermissions()
     {
-        $results = $this->filePermissions->checkPermission();
+        $results = $this->filePermissions->getMissingWritableDirectoriesForInstallation();
         if ($results) {
             $errorMsg = 'Missing writing permissions to the following directories: ';
             foreach ($results as $result) {
                 $errorMsg .= '\'' . $result . '\' ';
             }
             throw new \Exception($errorMsg);
+        }
+    }
+
+    /**
+     * Check permissions of directories that are expected to be non-writable for application
+     *
+     * @return void
+     */
+    public function checkApplicationFilePermissions()
+    {
+        $results = $this->filePermissions->getUnnecessaryWritableDirectoriesForApplication();
+        if ($results) {
+            $errorMsg = 'Unnecessary writing permissions to the following directories: ';
+            foreach ($results as $result) {
+                $errorMsg .= '\'' . $result . '\' ';
+            }
+            $this->log->log($errorMsg);
+            $this->messages[] = $errorMsg;
         }
     }
 
@@ -473,5 +499,15 @@ class Installer
         $dbName = $adapter->quoteIdentifier($config[Config::KEY_DB_NAME]);
         $adapter->query("DROP DATABASE IF EXISTS {$dbName}");
         $adapter->query("CREATE DATABASE IF NOT EXISTS {$dbName}");
+    }
+
+    /**
+     * Return messages
+     *
+     * @return array
+     */
+    public function getMessages()
+    {
+        return $this->messages;
     }
 }

@@ -104,6 +104,7 @@ class StartController extends AbstractActionController
             $config->loadFromFile();
             $this->json->setVariable('key', $config->get(Config::KEY_ENCRYPTION_KEY));
             $this->json->setVariable('success', true);
+            $this->json->setVariable('messages', $this->installer->getMessages());
         } catch(\Exception $e) {
             $this->log->logError($e);
             $this->json->setVariable('success', false);

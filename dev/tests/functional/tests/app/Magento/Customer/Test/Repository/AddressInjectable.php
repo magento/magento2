@@ -124,6 +124,37 @@ class AddressInjectable extends AbstractRepository
             'country_id' => 'United States',
             'telephone' => '555-55-555-55',
         ];
+
+        $this->_data['US_address_NY'] = [
+            'firstname' => 'John',
+            'lastname' => 'Doe',
+            'email' => 'John.Doe%isolation%@example.com',
+            'company' => 'Magento %isolation%',
+            'street' => '3222 Cliffside Drive',
+            'city' => 'Binghamton',
+            'region_id' => 'New York',
+            'postcode' => '13901',
+            'country_id' => 'United States',
+            'telephone' => '607-481-7802',
+            'default_billing' => 'Yes',
+            'default_shipping' => 'Yes'
+        ];
+
+        $this->_data['US_address_TX'] = [
+            'firstname' => 'John',
+            'lastname' => 'Doe',
+            'email' => 'John.Doe%isolation%@example.com',
+            'company' => 'Magento %isolation%',
+            'street' => '7700 W. Parmer Lane Bldg. D',
+            'city' => 'Austin',
+            'region_id' => 'Texas',
+            'postcode' => '78729 ',
+            'country_id' => 'United States',
+            'telephone' => '512-691-4400',
+            'default_billing' => 'Yes',
+            'default_shipping' => 'Yes'
+        ];
+
         $this->_data['customer_US'] = [
             'firstname' => 'John',
             'lastname' => 'Doe',

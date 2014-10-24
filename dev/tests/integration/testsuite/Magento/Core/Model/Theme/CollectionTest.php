@@ -27,6 +27,8 @@
  */
 namespace Magento\Core\Model\Theme;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -39,16 +41,16 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $directoryList = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Framework\App\Filesystem\DirectoryList',
             array(
-                'root' => \Magento\Framework\App\Filesystem::ROOT_DIR,
-                'directories' => array(
-                    \Magento\Framework\App\Filesystem::THEMES_DIR => array(
-                        'path' => dirname(__DIR__) . '/_files/design'
+                'root' => DirectoryList::ROOT,
+                'config' => array(
+                    DirectoryList::THEMES => array(
+                        DirectoryList::PATH => dirname(__DIR__) . '/_files/design'
                     )
                 )
             )
         );
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\App\Filesystem',
+            'Magento\Framework\Filesystem',
             array('directoryList' => $directoryList)
         );
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(

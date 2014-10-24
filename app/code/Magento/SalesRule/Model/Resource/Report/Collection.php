@@ -131,7 +131,7 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
      *
      * @return $this
      */
-    protected function _initSelect()
+    protected function _applyAggregatedTable()
     {
         $this->getSelect()->from($this->getResource()->getMainTable(), $this->_getSelectedColumns());
         if ($this->isSubTotals()) {
@@ -145,7 +145,7 @@ class Collection extends \Magento\Sales\Model\Resource\Report\Collection\Abstrac
             );
         }
 
-        return parent::_initSelect();
+        return parent::_applyAggregatedTable();
     }
 
     /**

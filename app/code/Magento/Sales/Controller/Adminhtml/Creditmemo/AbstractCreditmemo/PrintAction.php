@@ -24,6 +24,7 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use \Magento\Framework\App\ResponseInterface;
 
 class PrintAction extends \Magento\Backend\App\Action
@@ -72,7 +73,7 @@ class PrintAction extends \Magento\Backend\App\Action
                 return $this->_fileFactory->create(
                     'creditmemo' . $date . '.pdf',
                     $pdf->render(),
-                    \Magento\Framework\App\Filesystem::VAR_DIR,
+                    DirectoryList::VAR_DIR,
                     'application/pdf'
                 );
             }

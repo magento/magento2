@@ -110,6 +110,50 @@ class DefaultStockqtyTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($expectedQty, $this->block->getData('product_stock_qty'));
     }
 
+    public function testGetStockQtyLeft()
+    {
+        $productMinQty = 2;
+        $treshold = 2;
+        $productStockQty = 3;
+        $productId = 4;
+        $expectedQty = 1;
+
+        $product = $this->getMock('Magento\Catalog\Model\Product', ['getId', '__wakeup'], [], '', false);
+        $product->expects($this->any())->method('getId')->will($this->returnValue($productId));
+
+        $this->setDataArrayValue('threshold_qty', $treshold);
+
+        $this->registryMock->expects($this->any())
+            ->method('registry')
+            ->with('current_product')
+            ->will($this->returnValue($product));
+
+
+        $this->stockItemService->expects($this->once())
+            ->method('getStockQty')
+            ->with($this->equalTo($productId))
+            ->will($this->returnValue($productStockQty));
+
+        $stockItem = $this->getMock(
+            'Magento\CatalogInventory\Service\V1\Data\StockItem',
+            [],
+            [],
+            '',
+            false
+        );
+
+        $stockItem->expects($this->once())
+            ->method('getMinQty')
+            ->will($this->returnValue($productMinQty));
+
+        $this->stockItemService->expects($this->once())
+            ->method('getStockItem')
+            ->with($this->equalTo($productId))
+            ->will($this->returnValue($stockItem));
+
+        $this->assertSame($expectedQty, $this->block->getStockQtyLeft());
+    }
+
     /**
      * @return array
      */

@@ -23,6 +23,9 @@
  */
 namespace Magento\TestFramework;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\DriverPool;
+
 /**
  * Class ObjectManagerFactory
  *
@@ -82,24 +85,18 @@ class ObjectManagerFactory extends \Magento\Framework\App\ObjectManagerFactory
      * Restore locator instance
      *
      * @param ObjectManager $objectManager
-     * @param string $rootDir
+     * @param DirectoryList $directoryList
      * @param array $arguments
      * @return ObjectManager
      */
-    public function restore(ObjectManager $objectManager, $rootDir, array $arguments)
+    public function restore(ObjectManager $objectManager, $directoryList, array $arguments)
     {
-        $directories = isset($arguments[\Magento\Framework\App\Filesystem::PARAM_APP_DIRS])
-            ? $arguments[\Magento\Framework\App\Filesystem::PARAM_APP_DIRS]
-            : array();
-        $directoryList = new \Magento\TestFramework\App\Filesystem\DirectoryList($rootDir, $directories);
-
         \Magento\TestFramework\ObjectManager::setInstance($objectManager);
-
+        $this->directoryList = $directoryList;
         $objectManager->configure($this->_primaryConfigData);
-        $objectManager->addSharedInstance($directoryList, 'Magento\Framework\App\Filesystem\DirectoryList');
-        $objectManager->addSharedInstance($directoryList, 'Magento\Framework\Filesystem\DirectoryList');
-
-        $appArguments = parent::createAppArguments($directoryList, $arguments);
+        $objectManager->addSharedInstance($this->directoryList, 'Magento\Framework\App\Filesystem\DirectoryList');
+        $objectManager->addSharedInstance($this->directoryList, 'Magento\Framework\Filesystem\DirectoryList');
+        $appArguments = parent::createAppArguments($this->directoryList, $arguments);
         $this->appArgumentsProxy->setSubject($appArguments);
         $this->factory->setArguments($appArguments->get());
         $objectManager->addSharedInstance($appArguments, 'Magento\Framework\App\Arguments');
@@ -116,18 +113,16 @@ class ObjectManagerFactory extends \Magento\Framework\App\ObjectManagerFactory
      * Load primary config
      *
      * @param \Magento\Framework\App\Filesystem\DirectoryList $directoryList
+     * @param DriverPool $driverPool
      * @param mixed $argumentMapper
      * @param string $appMode
      * @return array
      */
-    protected function _loadPrimaryConfig(
-        \Magento\Framework\App\Filesystem\DirectoryList $directoryList,
-        $argumentMapper,
-        $appMode
-    ) {
+    protected function _loadPrimaryConfig(DirectoryList $directoryList, $driverPool, $argumentMapper, $appMode)
+    {
         if (null === $this->_primaryConfigData) {
             $this->_primaryConfigData = array_replace(
-                parent::_loadPrimaryConfig($directoryList, $argumentMapper, $appMode),
+                parent::_loadPrimaryConfig($directoryList, $driverPool, $argumentMapper, $appMode),
                 array(
                     'default_setup' => array('type' => 'Magento\TestFramework\Db\ConnectionAdapter')
                 )
@@ -151,15 +146,5 @@ class ObjectManagerFactory extends \Magento\Framework\App\ObjectManagerFactory
             );
         }
         return $this->_primaryConfigData;
-    }
-
-    /**
-     * Override method in while running integration tests to prevent getting Exception
-     *
-     * @param \Magento\Framework\ObjectManager $objectManager
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    protected function configureDirectories(\Magento\Framework\ObjectManager $objectManager)
-    {
     }
 }

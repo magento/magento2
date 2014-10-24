@@ -67,9 +67,9 @@ class ReadTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->read = new \Magento\Framework\Filesystem\Directory\Read(
-            array('path' => $this->path),
             $this->fileFactory,
-            $this->driver
+            $this->driver,
+            $this->path
         );
     }
 

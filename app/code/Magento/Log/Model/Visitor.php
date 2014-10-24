@@ -234,4 +234,33 @@ class Visitor extends \Magento\Framework\Model\AbstractModel
         }
         return $this;
     }
+
+    /**
+     * Save object data
+     *
+     * @return $this
+     * @throws \Exception
+     */
+    public function save()
+    {
+        if ($this->isDeleted()) {
+            return $this->delete();
+        }
+        if (!$this->_hasModelChanged()) {
+            return $this;
+        }
+        try {
+            $this->_validateBeforeSave();
+            $this->_beforeSave();
+            if ($this->_dataSaveAllowed) {
+                $this->_getResource()->save($this);
+                $this->_afterSave();
+            }
+            $this->_hasDataChanges = false;
+        } catch (\Exception $e) {
+            $this->_hasDataChanges = true;
+            throw $e;
+        }
+        return $this;
+    }
 }

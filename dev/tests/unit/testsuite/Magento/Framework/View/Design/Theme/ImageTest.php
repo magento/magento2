@@ -27,6 +27,8 @@
  */
 namespace Magento\Framework\View\Design\Theme;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class ImageTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -35,7 +37,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Framework\App\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_filesystemMock;
 
@@ -84,7 +86,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             array('isExist', 'copyFile', 'getRelativePath', 'delete'), array(), '', false, false
         );
         $this->_filesystemMock = $this->getMock(
-            'Magento\Framework\App\Filesystem',
+            'Magento\Framework\Filesystem',
             array('getDirectoryWrite', '__wakeup'),
             array(),
             '',
@@ -93,11 +95,11 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         );
         $this->_filesystemMock->expects($this->at(0))
             ->method('getDirectoryWrite')
-            ->with(\Magento\Framework\App\Filesystem::MEDIA_DIR)
+            ->with(DirectoryList::MEDIA)
             ->will($this->returnValue($this->_mediaDirectoryMock));
         $this->_filesystemMock->expects($this->at(1))
             ->method('getDirectoryWrite')
-            ->with(\Magento\Framework\App\Filesystem::ROOT_DIR)
+            ->with(DirectoryList::ROOT)
             ->will($this->returnValue($this->_rootDirectoryMock));
         $imageFactory = $this->getMock('Magento\Framework\Image\Factory', array(), array(), '', false, false);
         $this->_imageMock = $this->getMock('Magento\Framework\Image', array(), array(), '', false, false);

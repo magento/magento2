@@ -40,12 +40,12 @@ class File implements \Magento\Framework\App\View\Deployment\Version\StorageInte
     private $fileName;
 
     /**
-     * @param \Magento\Framework\App\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem $filesystem
      * @param string $directoryCode
      * @param string $fileName
      */
     public function __construct(
-        \Magento\Framework\App\Filesystem $filesystem,
+        \Magento\Framework\Filesystem $filesystem,
         $directoryCode,
         $fileName
     ) {

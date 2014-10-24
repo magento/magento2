@@ -29,6 +29,8 @@
  */
 namespace Magento\Install\Block;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class Download extends \Magento\Install\Block\AbstractBlock
 {
     /**
@@ -85,7 +87,7 @@ class Download extends \Magento\Install\Block\AbstractBlock
     public function hasLocalCopy()
     {
         $path = $this->_moduleReader->getModuleDir('etc', 'Magento_Adminhtml');
-        $directory = $this->_filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::MODULES_DIR);
+        $directory = $this->_filesystem->getDirectoryRead(DirectoryList::MODULES);
 
         if ($path && $directory->isDirectory($directory->getRelativePath($path))) {
             return true;

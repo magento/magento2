@@ -24,6 +24,8 @@
 
 namespace Magento\Framework\App\Language;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class DictionaryTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -44,10 +46,10 @@ class DictionaryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->dir = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\ReadInterface');
-        $filesystem = $this->getMock('\Magento\Framework\App\Filesystem', [], [], '', false);
+        $filesystem = $this->getMock('\Magento\Framework\Filesystem', [], [], '', false);
         $filesystem->expects($this->once())
             ->method('getDirectoryRead')
-            ->with(\Magento\Framework\App\Filesystem::LOCALE_DIR)
+            ->with(DirectoryList::LOCALE)
             ->will($this->returnValue($this->dir));
         $this->configFactory = $this->getMockBuilder('\Magento\Framework\App\Language\ConfigFactory')
             ->setMethods(['create'])

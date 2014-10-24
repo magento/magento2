@@ -165,7 +165,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     public function testGetAddress()
     {
         $quote = $this->getMockBuilder('Magento\Sales\Model\Quote')
-            ->setMethods(['getShippingAddress', 'getBillingAddress', '__wakeup'])
+            ->setMethods(['getShippingAddress', 'getBillingAddress', 'getStoreId', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
         $quote->expects($this->once())
@@ -174,6 +174,9 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $quote->expects($this->once())
             ->method('getBillingAddress')
             ->will($this->returnValue('billing'));
+        $quote->expects($this->any())
+            ->method('getStoreId')
+            ->will($this->returnValue(1));
 
         $this->model->setQuote($quote);
 
@@ -191,12 +194,15 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $idValue = "id_value";
 
         $quote = $this->getMockBuilder('Magento\Sales\Model\Quote')
-            ->setMethods(['getId', '__wakeup'])
+            ->setMethods(['getId', 'getStoreId', '__wakeup'])
             ->disableOriginalConstructor()
             ->getMock();
         $quote->expects($this->once())
             ->method('getId')
             ->will($this->returnValue($idValue));
+        $quote->expects($this->any())
+            ->method('getStoreId')
+            ->will($this->returnValue(1));
 
         $this->model->setQuote($quote);
 
@@ -286,13 +292,17 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
         $quoteMock = $this->getMockBuilder('Magento\Sales\Model\Quote')
             ->disableOriginalConstructor()
-            ->setMethods(['getIgnoreOldQty', '__wakeup'])
+            ->setMethods(['getIgnoreOldQty', 'getStoreId', '__wakeup'])
             ->getMock();
         $quoteMock->expects($this->once())
             ->method('getIgnoreOldQty')
             ->will($this->returnValue(true));
+        $quoteMock->expects($this->any())
+            ->method('getStoreId')
+            ->will($this->returnValue(1));
 
         $this->model->setQuote($quoteMock);
+
         $this->model->setData('qty', $existingQuantity);
 
         $this->eventDispatcher->expects($this->once())
@@ -378,7 +388,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->with('sales_quote_item_set_product', ['product' => $productMock, 'quote_item' => $this->model]);
 
         $isQtyDecimal = true;
-        $this->stockItemDoMock->expects($this->once())
+        $this->stockItemDoMock->expects($this->any())
             ->method('getStockId')
             ->will($this->returnValue(99));
         $this->stockItemDoMock->expects($this->once())
@@ -391,7 +401,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getStoreId', 'getCustomerGroupId', '__wakeup'])
             ->getMock();
-        $quoteMock->expects($this->once())
+        $quoteMock->expects($this->any())
             ->method('getStoreId')
             ->will($this->returnValue($storeId));
         $quoteMock->expects($this->once())

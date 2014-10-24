@@ -23,6 +23,8 @@
  */
 namespace Magento\Cms\Helper\Wysiwyg;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 /**
  * Wysiwyg Images Helper
  */
@@ -79,14 +81,14 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Backend\Helper\Data $backendData
      * @param \Magento\Core\Helper\Data $coreData
-     * @param \Magento\Framework\App\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Backend\Helper\Data $backendData,
         \Magento\Core\Helper\Data $coreData,
-        \Magento\Framework\App\Filesystem $filesystem,
+        \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\StoreManagerInterface $storeManager
     ) {
         parent::__construct($context);
@@ -94,7 +96,7 @@ class Images extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_coreData = $coreData;
         $this->_storeManager = $storeManager;
 
-        $this->_directory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::MEDIA_DIR);
+        $this->_directory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->_directory->create(\Magento\Cms\Model\Wysiwyg\Config::IMAGE_DIRECTORY);
     }
 

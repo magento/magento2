@@ -126,10 +126,28 @@ class Db implements \Magento\Framework\StoreManagerInterface
     protected $_scopeConfig;
 
     /**
+     * @var \Magento\Store\Model\Resource\Website\CollectionFactory
+     */
+    protected $_websiteCollectionFactory;
+
+    /**
+     * @var \Magento\Store\Model\Resource\Group\CollectionFactory
+     */
+    protected $_groupCollectionFactory;
+
+    /**
+     * @var \Magento\Store\Model\Resource\Store\CollectionFactory
+     */
+    protected $_storeCollectionFactory;
+
+    /**
      * @param StoreFactory $storeFactory
      * @param WebsiteFactory $websiteFactory
      * @param \Magento\Store\Model\GroupFactory $groupFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Store\Model\Resource\Website\CollectionFactory $websiteCollectionFactory
+     * @param \Magento\Store\Model\Resource\Group\CollectionFactory $groupCollectionFactory
+     * @param \Magento\Store\Model\Resource\Store\CollectionFactory $storeCollectionFactory
      * @param State $appState
      * @param bool $isSingleStoreAllowed
      * @param null $currentStore
@@ -139,6 +157,9 @@ class Db implements \Magento\Framework\StoreManagerInterface
         WebsiteFactory $websiteFactory,
         \Magento\Store\Model\GroupFactory $groupFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Store\Model\Resource\Website\CollectionFactory $websiteCollectionFactory,
+        \Magento\Store\Model\Resource\Group\CollectionFactory $groupCollectionFactory,
+        \Magento\Store\Model\Resource\Store\CollectionFactory $storeCollectionFactory,
         State $appState,
         $isSingleStoreAllowed,
         $currentStore = null
@@ -150,6 +171,9 @@ class Db implements \Magento\Framework\StoreManagerInterface
         $this->_isSingleStoreAllowed = $isSingleStoreAllowed;
         $this->_appState = $appState;
         $this->_currentStore = $currentStore;
+        $this->_websiteCollectionFactory = $websiteCollectionFactory;
+        $this->_groupCollectionFactory = $groupCollectionFactory;
+        $this->_storeCollectionFactory = $storeCollectionFactory;
     }
 
     /**
@@ -182,22 +206,22 @@ class Db implements \Magento\Framework\StoreManagerInterface
         $this->_websites = array();
 
         $this->_website = null;
-
         /** @var $websiteCollection \Magento\Store\Model\Resource\Website\Collection */
-        $websiteCollection = $this->_websiteFactory->create()->getCollection();
+        $websiteCollection = $this->_websiteCollectionFactory->create();
         $websiteCollection->setLoadDefault(true);
 
         /** @var $groupCollection \Magento\Store\Model\Resource\Group\Collection */
-        $groupCollection = $this->_groupFactory->create()->getCollection();
+        $groupCollection = $this->_groupCollectionFactory->create();
         $groupCollection->setLoadDefault(true);
 
         /** @var $storeCollection \Magento\Store\Model\Resource\Store\Collection */
-        $storeCollection = $this->_storeFactory->create()->getCollection();
+        $storeCollection = $this->_storeCollectionFactory->create();
         $storeCollection->setLoadDefault(true);
 
         $this->_hasSingleStore = false;
-        if ($this->_isSingleStoreAllowed) {
-            $this->_hasSingleStore = $storeCollection->count() < 3;
+        if ($this->_isSingleStoreAllowed && $storeCollection->count() < 3) {
+            $this->_hasSingleStore = true;
+            $this->_store = $storeCollection->getLastItem();
         }
 
         $websiteStores = array();
@@ -205,18 +229,10 @@ class Db implements \Magento\Framework\StoreManagerInterface
         $groupStores = array();
         foreach ($storeCollection as $store) {
             /** @var $store Store */
-            $store->setWebsite($websiteCollection->getItemById($store->getWebsiteId()));
-            $store->setGroup($groupCollection->getItemById($store->getGroupId()));
-
             $this->_stores[$store->getId()] = $store;
             $this->_stores[$store->getCode()] = $store;
-
             $websiteStores[$store->getWebsiteId()][$store->getId()] = $store;
             $groupStores[$store->getGroupId()][$store->getId()] = $store;
-
-            if ($this->_hasSingleStore) {
-                $this->_store = $store;
-            }
         }
 
         foreach ($groupCollection as $group) {
@@ -225,10 +241,7 @@ class Db implements \Magento\Framework\StoreManagerInterface
                 $groupStores[$group->getId()] = array();
             }
             $group->setStores($groupStores[$group->getId()]);
-            $group->setWebsite($websiteCollection->getItemById($group->getWebsiteId()));
-
             $websiteGroups[$group->getWebsiteId()][$group->getId()] = $group;
-
             $this->_groups[$group->getId()] = $group;
         }
 
@@ -471,7 +484,7 @@ class Db implements \Magento\Framework\StoreManagerInterface
      */
     public function getDefaultStoreView()
     {
-        foreach ($this->getWebsites() as $_website) {
+        foreach ($this->getWebsites(true) as $_website) {
             /** @var $_website Website */
             if ($_website->getIsDefault()) {
                 $_defaultStore = $this->getGroup($_website->getDefaultGroupId())->getDefaultStore();

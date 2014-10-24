@@ -43,7 +43,7 @@ class SaveShippingMethod extends \Magento\Checkout\Controller\Onepage
             if (!$result) {
                 $this->_eventManager->dispatch(
                     'checkout_controller_onepage_save_shipping_method',
-                    array('request' => $this->getRequest(), 'quote' => $this->getOnepage()->getQuote())
+                    ['request' => $this->getRequest(), 'quote' => $this->getOnepage()->getQuote()]
                 );
                 $this->getOnepage()->getQuote()->collectTotals();
                 $this->getResponse()->representJson(
@@ -51,10 +51,11 @@ class SaveShippingMethod extends \Magento\Checkout\Controller\Onepage
                 );
 
                 $result['goto_section'] = 'payment';
-                $result['update_section'] = array(
+                $result['update_section'] = [
                     'name' => 'payment-method',
                     'html' => $this->_getPaymentMethodsHtml()
-                );
+                ];
+                $result['update_progress'] = ['html' => $this->getProgressHtml($result['goto_section'])];
             }
             $this->getOnepage()->getQuote()->collectTotals()->save();
             $this->getResponse()->representJson(

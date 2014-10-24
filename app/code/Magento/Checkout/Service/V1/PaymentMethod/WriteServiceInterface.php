@@ -21,19 +21,21 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Checkout\Service\V1\PaymentMethod;
 
+/**
+ * Payment method write service interface.
+ */
 interface WriteServiceInterface
 {
     /**
-     * Add payment method to list of selected for cart
+     * Adds a specified payment method to a specified shopping cart.
      *
-     * @param \Magento\Checkout\Service\V1\Data\Cart\PaymentMethod $method
-     * @param int $cartId
-     * @return int
-     * @throws \Magento\Framework\Exception\State\InvalidTransitionException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @param \Magento\Checkout\Service\V1\Data\Cart\PaymentMethod $method The payment method.
+     * @param int $cartId The cart ID.
+     * @return int Payment method ID.
+     * @throws \Magento\Framework\Exception\State\InvalidTransitionException The billing or shipping address is not set, or the specified payment method is not available.
+     * @throws \Magento\Framework\Exception\NoSuchEntityException The specified cart does not exist.
      */
     public function set(\Magento\Checkout\Service\V1\Data\Cart\PaymentMethod $method, $cartId);
 }

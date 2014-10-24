@@ -23,6 +23,7 @@
  */
 namespace Magento\Store\Model;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Model\AbstractModel;
 
 /**
@@ -273,7 +274,7 @@ class Store extends AbstractModel implements
     /**
      * Filesystem instance
      *
-     * @var \Magento\Framework\App\Filesystem
+     * @var \Magento\Framework\Filesystem
      */
     protected $filesystem;
 
@@ -323,7 +324,7 @@ class Store extends AbstractModel implements
      * @param \Magento\Framework\UrlInterface $url
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Core\Model\Resource\Config\Data $configDataResource
-     * @param \Magento\Framework\App\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\App\Config\ReinitableConfigInterface $config
      * @param \Magento\Framework\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Session\SidResolverInterface $sidResolver
@@ -346,7 +347,7 @@ class Store extends AbstractModel implements
         \Magento\Framework\UrlInterface $url,
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Core\Model\Resource\Config\Data $configDataResource,
-        \Magento\Framework\App\Filesystem $filesystem,
+        \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\App\Config\ReinitableConfigInterface $config,
         \Magento\Framework\StoreManagerInterface $storeManager,
         \Magento\Framework\Session\SidResolverInterface $sidResolver,
@@ -578,7 +579,7 @@ class Store extends AbstractModel implements
                             \Magento\Framework\UrlInterface::URL_TYPE_WEB,
                             $secure
                         ) . $this->filesystem->getUri(
-                            \Magento\Framework\App\Filesystem::STATIC_VIEW_DIR
+                            DirectoryList::STATIC_VIEW
                         );
                     }
                     break;
@@ -593,7 +594,7 @@ class Store extends AbstractModel implements
                                 \Magento\Framework\UrlInterface::URL_TYPE_WEB,
                                 $secure
                             ) . $this->filesystem->getUri(
-                                \Magento\Framework\App\Filesystem::MEDIA_DIR
+                                DirectoryList::MEDIA
                             );
                         }
                     }
@@ -649,18 +650,18 @@ class Store extends AbstractModel implements
      * If we use Database file storage and server doesn't support rewrites (.htaccess in media folder)
      * we have to put name of fetching media script exactly into URL
      *
-     * @param \Magento\Framework\App\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem $filesystem
      * @param bool $secure
      * @return string|bool
      */
-    protected function _getMediaScriptUrl(\Magento\Framework\App\Filesystem $filesystem, $secure)
+    protected function _getMediaScriptUrl(\Magento\Framework\Filesystem $filesystem, $secure)
     {
         if (!$this->_getConfig(self::XML_PATH_USE_REWRITES) && $this->_coreFileStorageDatabase->checkDbUsage()) {
             return $this->getBaseUrl(
                 \Magento\Framework\UrlInterface::URL_TYPE_WEB,
                 $secure
             ) . $filesystem->getUri(
-                \Magento\Framework\App\Filesystem::PUB_DIR
+                DirectoryList::PUB
             ) . '/' . self::MEDIA_REWRITE_SCRIPT;
         }
         return false;

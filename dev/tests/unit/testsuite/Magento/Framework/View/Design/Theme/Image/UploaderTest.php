@@ -56,7 +56,7 @@ class UploaderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_filesystemMock = $this->getMock('Magento\Framework\App\Filesystem', array(), array(), '', false);
+        $this->_filesystemMock = $this->getMock('Magento\Framework\Filesystem', array(), array(), '', false);
         $this->_transferAdapterMock = $this->getMock('Zend_File_Transfer_Adapter_Http', array(), array(), '', false);
         $this->_fileUploader = $this->getMock('Magento\Framework\File\Uploader', array(), array(), '', false);
 

@@ -51,11 +51,18 @@
             <default_value>request_path%isolation%</default_value>
             <input>text</input>
         </request_path>
+        <entity_type>
+            <attribute_code>entity_type</attribute_code>
+            <backend_type>varchar</backend_type>
+            <is_required>0</is_required>
+            <input>text</input>
+        </entity_type>
         <target_path>
             <attribute_code>target_path</attribute_code>
             <backend_type>varchar</backend_type>
             <is_required>1</is_required>
             <default_value>target_path%isolation%</default_value>
+            <source>Magento\UrlRewrite\Test\Fixture\UrlRewrite\TargetPath</source>
             <input>text</input>
         </target_path>
         <description>

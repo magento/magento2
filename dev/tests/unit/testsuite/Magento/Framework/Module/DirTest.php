@@ -31,7 +31,7 @@ class DirTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Framework\App\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $filesystemMock;
 
@@ -47,7 +47,7 @@ class DirTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->filesystemMock = $this->getMock('Magento\Framework\App\Filesystem', array(), array(), '', false, false);
+        $this->filesystemMock = $this->getMock('Magento\Framework\Filesystem', array(), array(), '', false, false);
         $this->directoryMock = $this->getMock(
             'Magento\Framework\Filesystem\Directory\Read',
             array(),

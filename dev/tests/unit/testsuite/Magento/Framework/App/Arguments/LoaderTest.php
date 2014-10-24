@@ -40,7 +40,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     {
         $this->_dirs = $this->getMock(
             '\Magento\Framework\App\Filesystem\DirectoryList',
-            array('getDir'),
+            array('getPath'),
             array(),
             '',
             false
@@ -49,7 +49,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
 
     public function testWithOneXmlFile()
     {
-        $this->_dirs->expects($this->once())->method('getDir')->will($this->returnValue(__DIR__ . '/_files'));
+        $this->_dirs->expects($this->once())->method('getPath')->will($this->returnValue(__DIR__ . '/_files'));
         $this->_model = new Loader($this->_dirs);
         $expected = require __DIR__ . '/_files/local.php';
         $this->assertEquals($expected, $this->_model->load());
@@ -57,7 +57,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
 
     public function testWithTwoXmlFileMerging()
     {
-        $this->_dirs->expects($this->once())->method('getDir')->will($this->returnValue(__DIR__ . '/_files'));
+        $this->_dirs->expects($this->once())->method('getPath')->will($this->returnValue(__DIR__ . '/_files'));
         $this->_model = new Loader($this->_dirs, 'other/local_developer.xml');
         $expected = require __DIR__ . '/_files/other/local_developer_merged.php';
         $this->assertEquals($expected, $this->_model->load());
@@ -65,7 +65,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
 
     public function testWithoutXmlFiles()
     {
-        $this->_dirs->expects($this->once())->method('getDir')->will($this->returnValue(__DIR__ . '/notExistFolder'));
+        $this->_dirs->expects($this->once())->method('getPath')->will($this->returnValue(__DIR__ . '/notExistFolder'));
         $this->_model = new Loader($this->_dirs);
         $this->assertEquals(array(), $this->_model->load());
     }

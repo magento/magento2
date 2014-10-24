@@ -24,6 +24,7 @@
  */
 namespace Magento\TaxImportExport\Controller\Adminhtml\Rate;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use \Magento\Framework\App\ResponseInterface;
 
 class ExportCsv extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
@@ -40,7 +41,7 @@ class ExportCsv extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
         return $this->fileFactory->create(
             'rates.csv',
             $content->getCsvFile(),
-            \Magento\Framework\App\Filesystem::VAR_DIR
+            DirectoryList::VAR_DIR
         );
     }
 }

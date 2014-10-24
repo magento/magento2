@@ -39,6 +39,7 @@ class ConfigurableProductInjectable extends AbstractRepository
      * @param array $defaultData [optional]
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function __construct(array $defaultConfig = [], array $defaultData = [])
     {
@@ -130,6 +131,41 @@ class ConfigurableProductInjectable extends AbstractRepository
             'website_ids' => ['Main Website'],
             'attribute_set_id' => ['dataSet' => 'default'],
             'checkout_data' => ['preset' => 'default']
+        ];
+
+        $this->_data['with_one_option'] = [
+            'name' => 'Test configurable product %isolation%',
+            'sku' => 'sku_test_configurable_product_%isolation%',
+            'price' => ['value' => 10.00],
+            'weight' => 30.0000,
+            'status' => 'Product online',
+            'visibility' => 'Catalog, Search',
+            'tax_class_id' => ['dataSet' => 'Taxable Goods'],
+            'url_key' => 'configurable-product-%isolation%',
+            'configurable_attributes_data' => ['preset' => 'with_one_option'],
+            'quantity_and_stock_status' => [
+                'is_in_stock' => 'In Stock',
+            ],
+            'website_ids' => ['Main Website'],
+            'attribute_set_id' => ['dataSet' => 'default'],
+            'checkout_data' => ['preset' => 'with_one_option']
+        ];
+
+        $this->_data['with_out_of_stock_item'] = [
+            'name' => 'Test configurable product %isolation%',
+            'sku' => 'sku_test_configurable_product_%isolation%',
+            'price' => ['value' => 120.00],
+            'weight' => 30.0000,
+            'status' => 'Product online',
+            'visibility' => 'Catalog, Search',
+            'tax_class_id' => ['dataSet' => 'Taxable Goods'],
+            'url_key' => 'test-configurable-product-%isolation%',
+            'configurable_attributes_data' => ['preset' => 'with_out_of_stock_item'],
+            'quantity_and_stock_status' => [
+                'is_in_stock' => 'In Stock',
+            ],
+            'website_ids' => ['Main Website'],
+            'attribute_set_id' => ['dataSet' => 'default'],
         ];
     }
 }

@@ -24,6 +24,7 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Shipment;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use \Magento\Framework\App\ResponseInterface;
 
 class ExportExcel extends \Magento\Backend\App\Action
@@ -66,7 +67,7 @@ class ExportExcel extends \Magento\Backend\App\Action
         return $this->_fileFactory->create(
             $fileName,
             $grid->getExcelFile($fileName),
-            \Magento\Framework\App\Filesystem::VAR_DIR
+            DirectoryList::VAR_DIR
         );
     }
 }

@@ -46,9 +46,9 @@ class MatchTest extends \PHPUnit_Framework_TestCase
      */
     public function testBuildQuery($conditionType, $expectedSuffix)
     {
-        $expectedScoreCondition = "(MATCH (with_boost, without_boost) AGAINST ('{$expectedSuffix}someValue' " .
+        $expectedScoreCondition = "(MATCH (data_index) AGAINST ('{$expectedSuffix}someValue' " .
             "IN BOOLEAN MODE) * 3.14) AS global_score";
-        $expectedSql = "SELECT `someTable`.* FROM `someTable` WHERE (MATCH (with_boost, without_boost) " .
+        $expectedSql = "SELECT `someTable`.* FROM `someTable` WHERE (MATCH (data_index) " .
             "AGAINST ('{$expectedSuffix}someValue' IN BOOLEAN MODE))";
 
         /** @var \Magento\Framework\Search\Adapter\Mysql\ScoreBuilder $scoreBuilder */

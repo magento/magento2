@@ -25,6 +25,8 @@
  */
 namespace Magento\Install\Model;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -55,17 +57,17 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         }
         $cacheState->persist();
 
-        /** @var \Magento\Framework\App\Filesystem $filesystem */
+        /** @var \Magento\Framework\Filesystem $filesystem */
         $filesystem = $this->_objectManager->create(
-            'Magento\Framework\App\Filesystem',
+            'Magento\Framework\Filesystem',
             array(
                 'directoryList' => $this->_objectManager->create(
                     'Magento\Framework\App\Filesystem\DirectoryList',
                     array(
                         'root' => BP,
-                        'directories' => array(
-                            \Magento\Framework\App\Filesystem::MODULES_DIR => array('path' => __DIR__ . '/_files'),
-                            \Magento\Framework\App\Filesystem::CONFIG_DIR => array('path' => __DIR__ . '/_files')
+                        'config' => array(
+                            DirectoryList::MODULES => array(DirectoryList::PATH => __DIR__ . '/_files'),
+                            DirectoryList::CONFIG => array(DirectoryList::PATH => __DIR__ . '/_files')
                         )
                     )
                 )

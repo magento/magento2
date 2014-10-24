@@ -82,7 +82,7 @@ class DeleteCategoryUrlRewriteEntityTest extends Injectable
      * @param UrlRewrite $urlRewrite
      * @return void
      */
-    public function testDeleteCategoryUrlRewrite(UrlRewrite $urlRewrite)
+    public function test(UrlRewrite $urlRewrite)
     {
         //Precondition
         $urlRewrite->persist();
@@ -91,7 +91,7 @@ class DeleteCategoryUrlRewriteEntityTest extends Injectable
         if ($urlRewrite->getRequestPath()) {
             $filter = ['request_path' => $urlRewrite->getRequestPath()];
         } else {
-            $filter = ['id_path' => $urlRewrite->getIdPath()];
+            $filter = ['target_path' => $urlRewrite->getTargetPath()];
         }
         $this->urlRewriteIndex->getUrlRedirectGrid()->searchAndOpen($filter);
         $this->urlRewriteEdit->getPageMainActions()->delete();

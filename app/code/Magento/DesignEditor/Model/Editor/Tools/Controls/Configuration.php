@@ -23,6 +23,8 @@
  */
 namespace Magento\DesignEditor\Model\Editor\Tools\Controls;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 /**
  * Configuration of controls
  */
@@ -51,7 +53,7 @@ class Configuration
     protected $_design;
 
     /**
-     * @var \Magento\Framework\App\Filesystem
+     * @var \Magento\Framework\Filesystem
      */
     protected $_filesystem;
 
@@ -98,7 +100,7 @@ class Configuration
 
     /**
      * @param \Magento\Framework\View\DesignInterface $design
-     * @param \Magento\Framework\App\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\Event\ManagerInterface $eventDispatcher
      * @param \Magento\Framework\View\ConfigInterface $viewConfig
      * @param \Magento\DesignEditor\Model\Config\Control\AbstractControl $configuration
@@ -107,7 +109,7 @@ class Configuration
      */
     public function __construct(
         \Magento\Framework\View\DesignInterface $design,
-        \Magento\Framework\App\Filesystem $filesystem,
+        \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Event\ManagerInterface $eventDispatcher,
         \Magento\Framework\View\ConfigInterface $viewConfig,
         \Magento\DesignEditor\Model\Config\Control\AbstractControl $configuration = null,
@@ -300,7 +302,7 @@ class Configuration
     protected function _saveViewConfiguration(\DOMDocument $config)
     {
         $targetPath = $this->_theme->getCustomization()->getCustomViewConfigPath();
-        $directory = $this->_filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::ROOT_DIR);
+        $directory = $this->_filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $directory->writeFile($directory->getRelativePath($targetPath), $config->saveXML());
         return $this;
     }

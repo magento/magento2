@@ -57,15 +57,15 @@ class FilePermissionsController extends AbstractActionController
     public function indexAction()
     {
         $responseType = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
-        if ($this->permissions->checkPermission()) {
+        if ($this->permissions->getMissingWritableDirectoriesForInstallation()) {
             $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
         }
 
         $data = [
             'responseType' => $responseType,
             'data' => [
-                'required' => $this->permissions->getRequired(),
-                'current' => $this->permissions->getCurrent(),
+                'required' => $this->permissions->getInstallationWritableDirectories(),
+                'current' => $this->permissions->getInstallationCurrentWritableDirectories(),
             ],
         ];
 

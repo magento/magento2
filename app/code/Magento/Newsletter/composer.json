@@ -3,20 +3,20 @@
     "description": "N/A",
     "require": {
         "php": "~5.4.11|~5.5.0",
-        "magento/module-store": "0.1.0-alpha100",
-        "magento/module-core": "0.1.0-alpha100",
-        "magento/module-customer": "0.1.0-alpha100",
-        "magento/module-widget": "0.1.0-alpha100",
-        "magento/module-backend": "0.1.0-alpha100",
-        "magento/module-cms": "0.1.0-alpha100",
-        "magento/module-email": "0.1.0-alpha100",
-        "magento/module-cron": "0.1.0-alpha100",
-        "magento/module-eav": "0.1.0-alpha100",
-        "magento/framework": "0.1.0-alpha100",
+        "magento/module-store": "0.1.0-alpha101",
+        "magento/module-core": "0.1.0-alpha101",
+        "magento/module-customer": "0.1.0-alpha101",
+        "magento/module-widget": "0.1.0-alpha101",
+        "magento/module-backend": "0.1.0-alpha101",
+        "magento/module-cms": "0.1.0-alpha101",
+        "magento/module-email": "0.1.0-alpha101",
+        "magento/module-cron": "0.1.0-alpha101",
+        "magento/module-eav": "0.1.0-alpha101",
+        "magento/framework": "0.1.0-alpha101",
         "magento/magento-composer-installer": "*"
     },
     "type": "magento2-module",
-    "version": "0.1.0-alpha100",
+    "version": "0.1.0-alpha101",
     "extra": {
         "map": [
             [

@@ -179,6 +179,9 @@ class TypeProcessor
             $this->_types[$typeName]['documentation'] = $docBlock ? $this->_getDescription($docBlock) : '';
             /** @var \Zend\Code\Reflection\MethodReflection $methodReflection */
             foreach ($reflection->getMethods(\ReflectionMethod::IS_PUBLIC) as $methodReflection) {
+                if ($methodReflection->class === "Magento\Framework\Model\AbstractModel") {
+                    continue;
+                }
                 $this->_processMethod($methodReflection, $typeName);
             }
         }
@@ -294,7 +297,8 @@ class TypeProcessor
         return [
             'type' => $returnType,
             'isRequired' => $isRequired,
-            'description' => $returnAnnotation->getDescription()
+            'description' => $returnAnnotation->getDescription(),
+            'parameterCount' => $methodReflection->getNumberOfParameters()
         ];
     }
 
@@ -460,7 +464,7 @@ class TypeProcessor
                 throw new WebapiException(sprintf($invalidTypeMsg, $value, $type));
             }
         } else {
-            throw new WebapiException(sprintf($invalidTypeMsg, $value, $type));
+            throw new WebapiException(sprintf($invalidTypeMsg, (string)$value, $type));
         }
         return $value;
     }

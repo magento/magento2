@@ -93,21 +93,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $result = array();
         foreach ($this->_paymentData->getStoreMethods($store, $quote) as $method) {
-            if ($this->canManageBillingAgreements($method)) {
+            if ($method instanceof MethodInterface) {
                 $result[] = $method;
             }
         }
         return $result;
-    }
-
-    /**
-     * Check whether payment method can manage billing agreements or not
-     *
-     * @param mixed $methodInstance
-     * @return bool
-     */
-    public function canManageBillingAgreements($methodInstance)
-    {
-        return $methodInstance instanceof MethodInterface;
     }
 }

@@ -24,6 +24,7 @@
 
 namespace Magento\Framework\Less;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\View\Asset\LocalInterface;
 use Magento\Framework\View\Asset\Source;
 
@@ -55,18 +56,18 @@ class FileGenerator
     private $importProcessor;
 
     /**
-     * @param \Magento\Framework\App\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\Less\PreProcessor\Instruction\MagentoImport $magentoImportProcessor
      * @param \Magento\Framework\Less\PreProcessor\Instruction\Import $importProcessor
      */
     public function __construct(
-        \Magento\Framework\App\Filesystem $filesystem,
+        \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\Less\PreProcessor\Instruction\MagentoImport $magentoImportProcessor,
         \Magento\Framework\Less\PreProcessor\Instruction\Import $importProcessor
     ) {
-        $this->tmpDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::VAR_DIR);
+        $this->tmpDirectory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
         $this->assetRepo = $assetRepo;
         $this->magentoImportProcessor = $magentoImportProcessor;
         $this->importProcessor = $importProcessor;

@@ -23,6 +23,8 @@
  */
 namespace Magento\Core\Helper\File\Storage;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class DatabaseTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -33,7 +35,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Core\Model\File\Storage\DatabaseFactory | \PHPUnit_Framework_MockObject_MockObject  */
     protected $dbStorageFactoryMock;
 
-    /** @var \Magento\Framework\App\Filesystem | \PHPUnit_Framework_MockObject_MockObject  */
+    /** @var \Magento\Framework\Filesystem | \PHPUnit_Framework_MockObject_MockObject  */
     protected $filesystemMock;
 
     /** @var \Magento\Core\Model\File\Storage\File | \PHPUnit_Framework_MockObject_MockObject  */
@@ -52,9 +54,17 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->filesystemMock = $this->getMockBuilder('Magento\Framework\App\Filesystem')
+        $mediaDirMock = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\ReadInterface');
+        $mediaDirMock->expects($this->any())
+            ->method('getAbsolutePath')
+            ->will($this->returnValue('media-dir'));
+        $this->filesystemMock = $this->getMockBuilder('Magento\Framework\Filesystem')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->filesystemMock->expects($this->any())
+            ->method('getDirectoryRead')
+            ->with(DirectoryList::MEDIA)
+            ->will($this->returnValue($mediaDirMock));
         $this->fileStorageMock = $this->getMockBuilder('Magento\Core\Model\File\Storage\File')
             ->disableOriginalConstructor()
             ->getMock();
@@ -150,13 +160,11 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
         $this->dbStorageFactoryMock->expects($this->exactly($callNum))
             ->method('create')
             ->will($this->returnValue($dbModelMock));
-        $this->filesystemMock->expects($this->exactly($callNum))
-            ->method('getPath')
-            ->will($this->returnValue('media-dir'));
         $dbModelMock->expects($this->exactly($callNum))
-            ->method('saveFile');
+            ->method('saveFile')
+            ->with('filename');
 
-        $this->helper->saveFile('filename');
+        $this->helper->saveFile('media-dir/filename');
     }
 
     public function updateFileDataProvider()
@@ -184,13 +192,11 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
         $this->dbStorageFactoryMock->expects($this->exactly($callNum))
             ->method('create')
             ->will($this->returnValue($dbModelMock));
-        $this->filesystemMock->expects($this->exactly($callNum))
-            ->method('getPath')
-            ->will($this->returnValue('media-dir'));
         $dbModelMock->expects($this->exactly($callNum))
-            ->method('renameFile');
+            ->method('renameFile')
+            ->with('oldName', 'newName');
 
-        $this->helper->renameFile('oldName', 'newName');
+        $this->helper->renameFile('media-dir/oldName', 'media-dir/newName');
     }
 
     /**
@@ -210,13 +216,11 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
         $this->dbStorageFactoryMock->expects($this->exactly($callNum))
             ->method('create')
             ->will($this->returnValue($dbModelMock));
-        $this->filesystemMock->expects($this->exactly($callNum))
-            ->method('getPath')
-            ->will($this->returnValue('media-dir'));
         $dbModelMock->expects($this->exactly($callNum))
-            ->method('copyFile');
+            ->method('copyFile')
+            ->with('oldName', 'newName');
 
-        $this->helper->copyFile('oldName', 'newName');
+        $this->helper->copyFile('media-dir/oldName', 'media-dir/newName');
     }
 
     /**
@@ -237,14 +241,12 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
         $this->dbStorageFactoryMock->expects($this->exactly($callNum))
             ->method('create')
             ->will($this->returnValue($dbModelMock));
-        $this->filesystemMock->expects($this->exactly($callNum))
-            ->method('getPath')
-            ->will($this->returnValue('media-dir'));
         $dbModelMock->expects($this->exactly($callNum))
             ->method('fileExists')
+            ->with('file')
             ->will($this->returnValue(true));
 
-        $this->assertEquals($expected, $this->helper->fileExists('file'));
+        $this->assertEquals($expected, $this->helper->fileExists('media-dir/file'));
     }
 
     public function fileExistsDataProvider()
@@ -258,9 +260,10 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
     /**
      * @param int $storage
      * @param int $callNum
+     * @param string $expected
      * @dataProvider getUniqueFilenameDataProvider
      */
-    public function testGetUniqueFilename($storage, $callNum)
+    public function testGetUniqueFilename($storage, $callNum, $expected)
     {
         $this->configMock->expects($this->once())
             ->method('getValue')
@@ -272,9 +275,6 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
         $this->dbStorageFactoryMock->expects($this->exactly($callNum))
             ->method('create')
             ->will($this->returnValue($dbModelMock));
-        $this->filesystemMock->expects($this->exactly($callNum))
-            ->method('getPath')
-            ->will($this->returnValue('media-dir'));
         $map = [
             ['directory/filename.ext', true],
             ['directory/filename_1.ext', true],
@@ -284,7 +284,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
             ->method('fileExists')
             ->will($this->returnValueMap($map));
 
-        $this->helper->getUniqueFilename('directory/', 'filename.ext');
+        $this->assertSame($expected, $this->helper->getUniqueFilename('media-dir/directory/', 'filename.ext'));
     }
 
     public function getUniqueFilenameDataProvider()
@@ -315,11 +315,9 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
         $this->dbStorageFactoryMock->expects($this->exactly($callNum))
             ->method('create')
             ->will($this->returnValue($dbModelMock));
-        $this->filesystemMock->expects($this->exactly($callNum))
-            ->method('getPath')
-            ->will($this->returnValue('media-dir'));
         $dbModelMock->expects($this->exactly($callNum))
             ->method('loadByFilename')
+            ->with('filename')
             ->will($this->returnSelf());
         $dbModelMock->expects($this->exactly($callNum))
             ->method('getId')
@@ -330,7 +328,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
         $this->fileStorageMock->expects($this->exactly($callSaveFile))
             ->method('saveFile')
             ->will($this->returnValue(true));
-        $this->assertEquals($expected, $this->helper->saveFileToFilesystem('filename'));
+        $this->assertEquals($expected, $this->helper->saveFileToFilesystem('media-dir/filename'));
     }
 
     public function saveFileToFileSystemDataProvider()
@@ -354,11 +352,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMediaRelativePath()
     {
-        $this->filesystemMock->expects($this->once())
-            ->method('getPath')
-            ->with(\Magento\Framework\App\Filesystem::MEDIA_DIR)
-            ->will($this->returnValue('/media/dir/'));
-        $this->assertEquals('fullPath', $this->helper->getMediaRelativePath('/media/dir/fullPath'));
+        $this->assertEquals('fullPath', $this->helper->getMediaRelativePath('media-dir/fullPath'));
     }
 
     /**
@@ -385,13 +379,11 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
         $dbModelMock->expects($this->exactly($callNum))
             ->method('getResource')
             ->will($this->returnValue($resourceModelMock));
-        $this->filesystemMock->expects($this->exactly($callNum))
-            ->method('getPath')
-            ->will($this->returnValue('media-dir'));
         $resourceModelMock->expects($this->exactly($callNum))
-            ->method('deleteFolder');
+            ->method('deleteFolder')
+            ->with('folder');
 
-        $this->helper->deleteFolder('folder');
+        $this->helper->deleteFolder('media-dir/folder');
     }
 
     /**
@@ -411,13 +403,11 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
         $this->dbStorageFactoryMock->expects($this->exactly($callNum))
             ->method('create')
             ->will($this->returnValue($dbModelMock));
-        $this->filesystemMock->expects($this->exactly($callNum))
-            ->method('getPath')
-            ->will($this->returnValue('media-dir'));
         $dbModelMock->expects($this->exactly($callNum))
-            ->method('deleteFile');
+            ->method('deleteFile')
+            ->with('file');
 
-        $this->helper->deleteFile('file');
+        $this->helper->deleteFile('media-dir/file');
     }
 
     /**
@@ -428,7 +418,7 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
      * @param int $callDirWrite
      * @dataProvider saveUploadedFileDataProvider
      */
-    public function testSaveUploadedFile($result, $expected, $storage, $callNum, $callDirWrite = 0)
+    public function testSaveUploadedFile($result, $expected, $expectedFullPath, $storage, $callNum, $callDirWrite = 0)
     {
         $this->configMock->expects($this->once())
             ->method('getValue')
@@ -440,15 +430,12 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
         $this->dbStorageFactoryMock->expects($this->exactly($callNum))
             ->method('create')
             ->will($this->returnValue($dbModelMock));
-        $this->filesystemMock->expects($this->exactly($callNum))
-            ->method('getPath')
-            ->will($this->returnValue('media-dir'));
         $dirWriteMock = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\WriteInterface')
             ->disableOriginalConstructor()
             ->getMock();
         $this->filesystemMock->expects($this->exactly($callDirWrite))
             ->method('getDirectoryWrite')
-            ->with(\Magento\Framework\App\Filesystem::ROOT_DIR)
+            ->with(DirectoryList::ROOT)
             ->will($this->returnValue($dirWriteMock));
         $dirWriteMock->expects($this->exactly($callDirWrite))
             ->method('renameFile');
@@ -461,7 +448,8 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
             ->method('fileExists')
             ->will($this->returnValueMap($map));
         $dbModelMock->expects($this->exactly($callNum))
-            ->method('saveFile');
+            ->method('saveFile')
+            ->with($expectedFullPath);
         $this->assertEquals($expected, $this->helper->saveUploadedFile($result));
     }
 
@@ -469,21 +457,24 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'media database, file not unique' => [
-                ['file' => 'filename.ext', 'path' => 'directory/'],
+                ['file' => 'filename.ext', 'path' => 'media-dir/directory/'],
                 '/filename_2.ext',
+                'directory/filename_2.ext',
                 \Magento\Core\Model\File\Storage::STORAGE_MEDIA_DATABASE,
                 1,
                 1,
             ],
             'media database, file unique' => [
-                ['file' => 'file.ext', 'path' => 'directory/'],
+                ['file' => 'file.ext', 'path' => 'media-dir/directory/'],
                 '/file.ext',
+                'directory/file.ext',
                 \Magento\Core\Model\File\Storage::STORAGE_MEDIA_DATABASE,
                 1,
             ],
             'non-media database' => [
-                ['file' => 'filename.ext', 'path' => 'directory/'],
+                ['file' => 'filename.ext', 'path' => 'media-dir/directory/'],
                 'filename.ext',
+                '',
                 10,
                 0,
             ],
@@ -492,12 +483,29 @@ class DatabaseTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMediaBaseDir()
     {
-        $this->filesystemMock->expects($this->once())
-            ->method('getPath')
-            ->with(\Magento\Framework\App\Filesystem::MEDIA_DIR)
-            ->will($this->returnValue('/media/dir/'));
+        $mediaDirMock = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\ReadInterface');
+        $mediaDirMock->expects($this->any())
+            ->method('getAbsolutePath')
+            ->will($this->returnValue('media-dir'));
+        $filesystemMock = $this->getMockBuilder('Magento\Framework\Filesystem')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $filesystemMock->expects($this->once())
+            ->method('getDirectoryRead')
+            ->with(DirectoryList::MEDIA)
+            ->will($this->returnValue($mediaDirMock));
 
-        $this->assertEquals('/media/dir', $this->helper->getMediaBaseDir());
-        $this->assertEquals('/media/dir', $this->helper->getMediaBaseDir());
+        $this->helper = $this->objectManager->getObject(
+            'Magento\Core\Helper\File\Storage\Database',
+            [
+                'filesystem' => $filesystemMock,
+                'fileStorage' => $this->fileStorageMock,
+                'dbStorageFactory' => $this->dbStorageFactoryMock,
+                'config' => $this->configMock,
+            ]
+        );
+
+        $this->assertEquals('media-dir', $this->helper->getMediaBaseDir());
+        $this->assertEquals('media-dir', $this->helper->getMediaBaseDir());
     }
 }

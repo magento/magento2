@@ -35,8 +35,8 @@ class FileResolverStub implements \Magento\Framework\Config\FileResolverInterfac
         $readDirectory = $objectManager->create(
             'Magento\Framework\Filesystem\Directory\Read',
             [
-                'config' => ['path' => realpath(__DIR__ . '/../../_files/etc')],
-                'driver' => $objectManager->create('Magento\Framework\Filesystem\Driver\File')
+                'driver' => $objectManager->create('Magento\Framework\Filesystem\Driver\File'),
+                'path' => realpath(__DIR__ . '/../../_files/etc'),
             ]
         );
         $paths = ['data_object.xml'];

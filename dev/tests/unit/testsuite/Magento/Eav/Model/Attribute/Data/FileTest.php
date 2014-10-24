@@ -49,7 +49,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $this->fileValidatorMock = $this->getMock(
             '\Magento\Core\Model\File\Validator\NotProtectedExtension', ['isValid', 'getMessages'], [], '', false
         );
-        $filesystemMock = $this->getMock('\Magento\Framework\App\Filesystem', [], [], '', false);
+        $filesystemMock = $this->getMock('\Magento\Framework\Filesystem', [], [], '', false);
 
         $this->model = new File(
             $timezoneMock, $loggerMock, $localeResolverMock,

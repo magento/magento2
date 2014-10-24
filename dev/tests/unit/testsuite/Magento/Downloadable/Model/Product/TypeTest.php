@@ -41,7 +41,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $fileStorageDb = $this->getMockBuilder(
             'Magento\Core\Helper\File\Storage\Database'
         )->disableOriginalConstructor()->getMock();
-        $filesystem = $this->getMockBuilder('Magento\Framework\App\Filesystem')
+        $filesystem = $this->getMockBuilder('Magento\Framework\Filesystem')
             ->disableOriginalConstructor()
             ->getMock();
         $coreRegistry = $this->getMock('Magento\Framework\Registry', [], [], '', false);

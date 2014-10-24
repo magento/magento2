@@ -57,6 +57,7 @@ class SaveShipping extends \Magento\Checkout\Controller\Onepage
                     'name' => 'shipping-method',
                     'html' => $this->_getShippingMethodsHtml()
                 ];
+                $result['update_progress'] = ['html' => $this->getProgressHtml($result['goto_section'])];
             }
         }
         $this->getResponse()->representJson(

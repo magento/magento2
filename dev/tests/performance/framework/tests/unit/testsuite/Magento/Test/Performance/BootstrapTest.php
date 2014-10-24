@@ -35,11 +35,14 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
         $this->appBootstrap = $this->getMock('Magento\Framework\App\Bootstrap', [], [], '', false);
         $dirList = $this->getMock('Magento\Framework\App\Filesystem\DirectoryList', [], [], '', false);
         $dirList->expects($this->any())->method('getRoot')->will($this->returnValue(BP));
-        $this->appBootstrap->expects($this->any())->method('getDirList')->will($this->returnValue($dirList));
         $objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManager');
         $this->appBootstrap->expects($this->any())
             ->method('getObjectManager')
             ->will($this->returnValue($objectManager));
+        $objectManager->expects($this->any())
+            ->method('get')
+            ->with('Magento\Framework\App\Filesystem\DirectoryList')
+            ->will($this->returnValue($dirList));
     }
 
     protected function tearDown()

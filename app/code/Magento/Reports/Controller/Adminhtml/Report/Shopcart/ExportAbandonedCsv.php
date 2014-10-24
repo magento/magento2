@@ -24,6 +24,7 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Shopcart;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use \Magento\Framework\App\ResponseInterface;
 
 class ExportAbandonedCsv extends \Magento\Reports\Controller\Adminhtml\Report\Shopcart
@@ -40,6 +41,6 @@ class ExportAbandonedCsv extends \Magento\Reports\Controller\Adminhtml\Report\Sh
             'Magento\Reports\Block\Adminhtml\Shopcart\Abandoned\Grid'
         )->getCsvFile();
 
-        return $this->_fileFactory->create($fileName, $content, \Magento\Framework\App\Filesystem::VAR_DIR);
+        return $this->_fileFactory->create($fileName, $content, DirectoryList::VAR_DIR);
     }
 }

@@ -37,7 +37,7 @@ class VirtualTest extends \PHPUnit_Framework_TestCase
         $coreDataMock = $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false);
         $coreRegistryMock = $this->getMock('Magento\Framework\Registry', array(), array(), '', false);
         $fileStorageDbMock = $this->getMock('Magento\Core\Helper\File\Storage\Database', array(), array(), '', false);
-        $filesystem = $this->getMockBuilder('Magento\Framework\App\Filesystem')
+        $filesystem = $this->getMockBuilder('Magento\Framework\Filesystem')
             ->disableOriginalConstructor()
             ->getMock();
         $logger = $this->getMock('Magento\Framework\Logger', array(), array(), '', false);

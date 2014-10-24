@@ -74,7 +74,7 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
             'Magento\Widget\Model\Config\Reader'
         )->disableOriginalConstructor()->getMock();
 
-        $filesystemMock = $this->getMock('\Magento\Framework\App\Filesystem', array(), array(), '', false);
+        $filesystemMock = $this->getMock('\Magento\Framework\Filesystem', array(), array(), '', false);
         $this->_directoryMock = $this->getMock(
             '\Magento\Framework\Filesystem\Directory\Read',
             array(),

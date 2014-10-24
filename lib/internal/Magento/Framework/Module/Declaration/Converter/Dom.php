@@ -44,14 +44,15 @@ class Dom implements \Magento\Framework\Config\ConverterInterface
                 throw new \Exception('Attribute "name" is required for module node.');
             }
             $moduleData['name'] = $nameNode->nodeValue;
+            $name = $moduleData['name'];
             $versionNode = $moduleAttributes->getNamedItem('schema_version');
             if (is_null($versionNode)) {
-                throw new \Exception('Attribute "schema_version" is required for module node.');
+                throw new \Exception("Attribute 'schema_version' is missing for module '{$name}'.");
             }
             $moduleData['schema_version'] = $versionNode->nodeValue;
             $activeNode = $moduleAttributes->getNamedItem('active');
             if (is_null($activeNode)) {
-                throw new \Exception('Attribute "active" is required for module node.');
+                throw new \Exception("Attribute 'active' is missing for module '{$name}'.");
             }
             $moduleData['active'] = $activeNode->nodeValue == 'false' ? false : true;
             $moduleData['dependencies'] = array(

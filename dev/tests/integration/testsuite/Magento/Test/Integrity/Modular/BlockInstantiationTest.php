@@ -54,8 +54,11 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
                 );
                 \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea($area);
 
-                $block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create($class);
-                $this->assertNotNull($block);
+                try {
+                    \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create($class);
+                } catch (\Exception $e) {
+                    throw new \Exception("Unable to instantiate '{$class}'", 0, $e);
+                }
             },
             $this->allBlocksDataProvider()
         );

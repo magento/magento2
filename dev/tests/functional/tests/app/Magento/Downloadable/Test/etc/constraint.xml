@@ -41,4 +41,7 @@
             <product class="Mtf\Fixture\FixtureInterface" />
         </require>
     </assertDownloadableDuplicateForm>
+    <assertDownloadableProductInCustomerWishlistOnBackendGrid module="Magento_Downloadable">
+        <severeness>low</severeness>
+    </assertDownloadableProductInCustomerWishlistOnBackendGrid>
 </constraint>

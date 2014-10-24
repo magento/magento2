@@ -21,8 +21,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Framework\RequireJs;
+
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Provider of RequireJs config information
@@ -90,18 +91,18 @@ config;
     /**
      * @param \Magento\Framework\RequireJs\Config\File\Collector\Aggregated $fileSource
      * @param \Magento\Framework\View\DesignInterface $design
-     * @param \Magento\Framework\App\Filesystem $appFilesystem
+     * @param \Magento\Framework\Filesystem $appFilesystem
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      */
     public function __construct(
         \Magento\Framework\RequireJs\Config\File\Collector\Aggregated $fileSource,
         \Magento\Framework\View\DesignInterface $design,
-        \Magento\Framework\App\Filesystem $appFilesystem,
+        \Magento\Framework\Filesystem $appFilesystem,
         \Magento\Framework\View\Asset\Repository $assetRepo
     ) {
         $this->fileSource = $fileSource;
         $this->design = $design;
-        $this->baseDir = $appFilesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::ROOT_DIR);
+        $this->baseDir = $appFilesystem->getDirectoryRead(DirectoryList::ROOT);
         $this->staticContext = $assetRepo->getStaticViewFileContext();
     }
 

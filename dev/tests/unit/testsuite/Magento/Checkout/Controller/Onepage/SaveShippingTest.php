@@ -178,6 +178,9 @@ class SaveShippingTest extends \PHPUnit_Framework_TestCase
             'update_section' => [
                 'name' => 'shipping-method',
                 'html' => null
+            ],
+            'update_progress' => [
+                'html' => 'some_html'
             ]
         ];
         $this->quote->expects($this->once())
@@ -203,7 +206,7 @@ class SaveShippingTest extends \PHPUnit_Framework_TestCase
             ->with($expectedResult);
         $layout = $this->getMock(
             'Magento\Framework\View\Layout',
-            ['getUpdate', 'generateXml', 'generateElements', 'getOutput'],
+            ['getUpdate', 'generateXml', 'generateElements', 'getOutput', 'getBlock'],
             [],
             '',
             false
@@ -212,12 +215,29 @@ class SaveShippingTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($layout);
 
+        $block = $this->getMockBuilder('Magento\Framework\View\Element\AbstractBlock')
+            ->disableOriginalConstructor()
+            ->setMethods(['setAttribute', 'toHtml'])
+            ->getMockForAbstractClass();
+        $block->expects($this->any())
+            ->method('setAttribute')
+            ->willReturnSelf();
+        $block->expects($this->any())
+            ->method('toHtml')
+            ->willReturn('some_html');
+
         $update = $this->getMock('Magento\Core\Model\Layout\Merge', [], [], '', false);
         $layout->expects($this->any())
             ->method('getUpdate')
             ->willReturn($update);
         $update->expects($this->once())
             ->method('load');
+        $this->view->expects($this->any())
+            ->method('getLayout')
+            ->willReturn($layout);
+        $layout->expects($this->any())
+            ->method('getBlock')
+            ->willReturn($block);
 
         $this->controller->execute();
     }

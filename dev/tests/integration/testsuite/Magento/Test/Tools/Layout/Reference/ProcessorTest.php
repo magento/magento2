@@ -23,6 +23,8 @@
  */
 namespace Magento\Test\Tools\Layout\Reference;
 
+use Magento\Framework\Filesystem;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Tools\Layout\Formatter;
 use Magento\Tools\Layout\Reference\Processor;
 
@@ -60,9 +62,10 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
         }
         $this->_testDir = realpath(__DIR__ . '/_files') . '/';
 
+        /** @var Filesystem $filesystem */
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->get('Magento\Framework\App\Filesystem');
-        $this->_varDir = $filesystem->getPath(\Magento\Framework\App\Filesystem::VAR_DIR) . '/references/';
+            ->get('Magento\Framework\Filesystem');
+        $this->_varDir = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR)->getAbsolutePath('references/');
         mkdir($this->_varDir, 0777, true);
 
         $this->_formatter = new Formatter();

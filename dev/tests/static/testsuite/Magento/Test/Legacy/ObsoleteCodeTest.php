@@ -363,7 +363,7 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
             '|Var|Tmp|Cache|Log|Session|Upload|Export)?Dir\(/S',
             $content,
             'The class \Magento\Core\Model\Config\Options is obsolete. '
-            . 'Replacement suggestion: \Magento\Framework\App\Filesystem'
+            . 'Replacement suggestion: \Magento\Framework\Filesystem'
         );
     }
 

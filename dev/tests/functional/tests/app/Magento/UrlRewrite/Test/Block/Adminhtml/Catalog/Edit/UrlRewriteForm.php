@@ -48,16 +48,16 @@ class UrlRewriteForm extends Form
         array $replace = []
     ) {
         $data = $fixture->getData();
-        if (empty($this->getData()['target_path']) && !isset($data['target_path'])) {
-            $entity = $fixture->getDataFieldConfig('id_path')['source']->getEntity();
+        if (empty($data['entity_type']) && empty($this->getData()['target_path']) && !isset($data['target_path'])) {
+            $entity = $fixture->getDataFieldConfig('target_path')['source']->getEntity();
             $data['target_path'] = $entity->hasData('identifier')
                 ? $entity->getIdentifier()
                 : $entity->getUrlKey() . '.html';
         }
 
-        foreach ($replace as $key => $pairs) {
+        foreach ($replace as $key => $value) {
             if (isset($data[$key])) {
-                $data[$key] = str_replace(array_keys($pairs), $pairs, $data[$key]);
+                $data[$key] = preg_replace('`(\$.*?' . $value['name'] . '\$)`', $value['value'], $data[$key]);
             }
         }
 

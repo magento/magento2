@@ -23,6 +23,9 @@
  */
 namespace Magento\Core\Model\Theme;
 
+use Magento\Framework\App\Bootstrap;
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class RegistrationTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -42,8 +45,8 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
     {
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(
             array(
-                \Magento\Framework\App\Filesystem::PARAM_APP_DIRS => array(
-                    \Magento\Framework\App\Filesystem::THEMES_DIR => array(
+                Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => array(
+                    DirectoryList::THEMES => array(
                         'path' => dirname(__DIR__) . '/_files/design'
                     )
                 )

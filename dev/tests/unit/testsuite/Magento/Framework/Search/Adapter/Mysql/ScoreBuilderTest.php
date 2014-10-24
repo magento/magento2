@@ -57,11 +57,14 @@ class ScoreBuilderTest extends \PHPUnit_Framework_TestCase
         $builder->endQuery(10.3); // start two query
         $builder->endQuery(10.4); // start one query
 
+        $builder->startQuery();
+        $builder->endQuery(1);
+
         $result = $builder->build();
 
         $expected = '((someCondition1 * 1.1 + (someCondition2 * 1.2 + someCondition3 * 1.3 + ' .
             '(someCondition4 * 1.4 + someCondition5 * 1.5) * 10.1 + (someCondition6 * 1.6 + ' .
-            'someCondition7 * 1.7) * 10.2) * 10.3) * 10.4) AS global_score';
+            'someCondition7 * 1.7) * 10.2) * 10.3) * 10.4 + (0)) AS global_score';
 
         $this->assertEquals($expected, $result);
     }

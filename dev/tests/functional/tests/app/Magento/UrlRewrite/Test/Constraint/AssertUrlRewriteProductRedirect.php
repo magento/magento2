@@ -60,7 +60,7 @@ class AssertUrlRewriteProductRedirect extends AbstractConstraint
     ) {
         $browser->open($_ENV['app_frontend_url'] . $urlRewrite->getRequestPath());
         if ($product === null) {
-            $product = $urlRewrite->getDataFieldConfig('id_path')['source']->getEntity();
+            $product = $urlRewrite->getDataFieldConfig('target_path')['source']->getEntity();
         }
         \PHPUnit_Framework_Assert::assertEquals(
             $catalogProductView->getTitleBlock()->getTitle(),

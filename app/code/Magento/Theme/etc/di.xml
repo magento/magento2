@@ -65,7 +65,7 @@
     <preference for="Magento\Framework\App\View\Deployment\Version\GeneratorInterface" type="Magento\Framework\App\View\Deployment\Version\Generator\Timestamp"/>
     <type name="Magento\Framework\App\View\Deployment\Version\Storage\File">
         <arguments>
-            <argument name="directoryCode" xsi:type="const">Magento\Framework\App\Filesystem::STATIC_VIEW_DIR</argument>
+            <argument name="directoryCode" xsi:type="const">Magento\Framework\App\Filesystem\DirectoryList::STATIC_VIEW</argument>
             <argument name="fileName" xsi:type="string">deployed_version.txt</argument>
         </arguments>
     </type>

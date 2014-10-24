@@ -194,8 +194,8 @@ class Config
     /**
      * Check if fixed taxes are used in system
      *
-     * @param Store $store
-     * @return bool
+     * @param   null|string|bool|int|Store $store
+     * @return  bool
      */
     public function isEnabled($store = null)
     {

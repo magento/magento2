@@ -48,7 +48,7 @@ class FileFactoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->_fileSystemMock = $this->getMock(
-            'Magento\Framework\App\Filesystem',
+            'Magento\Framework\Filesystem',
             array('getDirectoryWrite'),
             array(),
             '',

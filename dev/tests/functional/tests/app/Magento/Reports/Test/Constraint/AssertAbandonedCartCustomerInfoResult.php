@@ -58,7 +58,7 @@ class AssertAbandonedCartCustomerInfoResult extends AbstractConstraint
         $abandonedCarts->open();
         $qty = 0;
         foreach ($products as $product) {
-            $qty += $product->getCheckoutData()['options']['qty'];
+            $qty += $product->getCheckoutData()['qty'];
         }
         $filter = [
             'customer_name' => $customer->getFirstname() . " " . $customer->getLastname(),

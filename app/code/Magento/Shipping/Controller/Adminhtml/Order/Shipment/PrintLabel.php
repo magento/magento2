@@ -24,6 +24,7 @@
  */
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use \Magento\Framework\App\ResponseInterface;
 use \Magento\Backend\App\Action;
 
@@ -106,7 +107,7 @@ class PrintLabel extends \Magento\Backend\App\Action
                 return $this->_fileFactory->create(
                     'ShippingLabel(' . $shipment->getIncrementId() . ').pdf',
                     $pdfContent,
-                    \Magento\Framework\App\Filesystem::VAR_DIR,
+                    DirectoryList::VAR_DIR,
                     'application/pdf'
                 );
             }

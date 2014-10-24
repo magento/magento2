@@ -27,7 +27,7 @@ class SnapshotTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetDbBackupFilename()
     {
-        $filesystem = $this->getMock('Magento\Framework\App\Filesystem', array(), array(), '', false);
+        $filesystem = $this->getMock('Magento\Framework\Filesystem', array(), array(), '', false);
         $backupFactory = $this->getMock('Magento\Framework\Backup\Factory', array(), array(), '', false);
         $manager = $this->getMock(
             'Magento\Framework\Backup\Snapshot',

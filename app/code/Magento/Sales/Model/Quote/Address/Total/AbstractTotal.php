@@ -62,13 +62,6 @@ abstract class AbstractTotal
     protected $_itemRowTotalKey = null;
 
     /**
-     * Static counter
-     *
-     * @var int
-     */
-    protected static $counter = 0;
-
-    /**
      * Set total code code name
      *
      * @param string $code
@@ -276,16 +269,5 @@ abstract class AbstractTotal
     public function processConfigArray($config, $store)
     {
         return $config;
-    }
-
-    /**
-     * Increment and return static counter. This function is intended to be used to generate temporary
-     * id for an item.
-     *
-     * @return int
-     */
-    protected function getNextIncrement()
-    {
-        return ++self::$counter;
     }
 }

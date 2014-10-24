@@ -52,11 +52,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Helper\Flat\AbstractFlat">
-        <arguments>
-            <argument name="isAvailable" xsi:type="boolean">false</argument>
-        </arguments>
-    </type>
     <type name="Magento\Catalog\Model\Product\CopyConstructor\Composite">
         <arguments>
             <argument name="constructors" xsi:type="array">

@@ -77,9 +77,33 @@ class TaxRate extends AbstractRepository
             'tax_region_id' => 'California',
         ];
 
+        $this->_data['us_ca_rate_8_25_no_zip'] = [
+            'code' => 'Tax Rate %isolation%',
+            'rate' => '8.25',
+            'tax_country_id' => 'United States',
+            'tax_postcode' => '*',
+            'tax_region_id' => 'California',
+        ];
+
+        $this->_data['us_ca_rate_8_375'] = [
+            'code' => 'Tax Rate %isolation%',
+            'rate' => '8.375',
+            'tax_country_id' => 'United States',
+            'tax_postcode' => '*',
+            'tax_region_id' => 'California',
+        ];
+
         $this->_data['us_ny_rate_8_375'] = [
             'code' => 'Tax Rate %isolation%',
             'rate' => '8.375',
+            'tax_country_id' => 'United States',
+            'tax_region_id' => 'New York',
+            'tax_postcode' => '*',
+        ];
+
+        $this->_data['us_ny_rate_8_25'] = [
+            'code' => 'Tax Rate %isolation%',
+            'rate' => '8.25',
             'tax_country_id' => 'United States',
             'tax_region_id' => 'New York',
             'tax_postcode' => '*',
@@ -139,6 +163,30 @@ class TaxRate extends AbstractRepository
             'tax_country_id' => 'United States',
             'tax_region_id' => 'Utah',
             'rate' => '20'
+        ];
+
+        $this->_data['tx_rate_10'] = [
+            'code' => 'TaxIdentifier%isolation%',
+            'tax_postcode' => '*',
+            'tax_country_id' => 'United States',
+            'tax_region_id' => 'Texas',
+            'rate' => '10'
+        ];
+
+        $this->_data['ny_rate_20'] = [
+            'code' => 'TaxIdentifier%isolation%',
+            'tax_postcode' => '*',
+            'tax_country_id' => 'United States',
+            'tax_region_id' => 'New York',
+            'rate' => '20'
+        ];
+
+        $this->_data['ca_rate_30'] = [
+            'code' => 'TaxIdentifier%isolation%',
+            'tax_postcode' => '*',
+            'tax_country_id' => 'United States',
+            'tax_region_id' => 'California',
+            'rate' => '30'
         ];
     }
 }

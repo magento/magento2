@@ -23,6 +23,8 @@
  */
 namespace Magento\DesignEditor\Model\Editor\Tools\Controls;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class ConfigurationTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -57,19 +59,6 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadConfigurations($type, $controlName, $controlData)
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\Framework\App\Filesystem $filesystem */
-        $relativePath = $objectManager->get(
-            'Magento\Framework\App\Filesystem'
-        )->getDirectoryRead(
-            \Magento\Framework\App\Filesystem::ROOT_DIR
-        )->getRelativePath(
-            __DIR__ . '/../../../_files/design'
-        );
-        /** @var \Magento\Framework\App\Filesystem\DirectoryList $directoryList */
-        $directoryList = $objectManager->get('Magento\Framework\App\Filesystem\DirectoryList');
-        $directoryList->addDirectory(\Magento\Framework\App\Filesystem::ROOT_DIR, array('path' => $relativePath));
-        $directoryList->addDirectory(\Magento\Framework\App\Filesystem::THEMES_DIR, array('path' => $relativePath));
         $designTheme = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             'Magento\Framework\View\DesignInterface'
         )->getDesignTheme();

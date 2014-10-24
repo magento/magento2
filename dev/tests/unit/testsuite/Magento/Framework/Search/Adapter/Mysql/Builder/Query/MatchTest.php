@@ -35,6 +35,11 @@ class MatchTest extends \PHPUnit_Framework_TestCase
     private $scoreBuilder;
 
     /**
+     * @var \Magento\Framework\Search\Adapter\Mysql\Field\ResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $resolver;
+
+    /**
      * @var \Magento\Framework\Search\Adapter\Mysql\Query\Builder\Match
      */
     private $match;
@@ -48,7 +53,15 @@ class MatchTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->match = $helper->getObject('Magento\Framework\Search\Adapter\Mysql\Query\Builder\Match');
+        $this->resolver = $this->getMockBuilder('Magento\Framework\Search\Adapter\Mysql\Field\ResolverInterface')
+            ->setMethods(['resolve'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $this->match = $helper->getObject(
+            'Magento\Framework\Search\Adapter\Mysql\Query\Builder\Match',
+            ['resolver' => $this->resolver]
+        );
     }
 
     public function testBuildQuery()
@@ -70,6 +83,8 @@ class MatchTest extends \PHPUnit_Framework_TestCase
                 $this->equalTo(true),
                 $this->equalTo(Select::FULLTEXT_MODE_BOOLEAN)
             );
+
+        $this->resolver->expects($this->once())->method('resolve')->willReturnArgument(0);
 
         /** @var \Magento\Framework\Search\Request\Query\Match|\PHPUnit_Framework_MockObject_MockObject $query */
         $query = $this->getMockBuilder('Magento\Framework\Search\Request\Query\Match')

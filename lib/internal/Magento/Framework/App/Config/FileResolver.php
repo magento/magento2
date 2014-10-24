@@ -25,6 +25,8 @@
  */
 namespace Magento\Framework\App\Config;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class FileResolver implements \Magento\Framework\Config\FileResolverInterface
 {
     /**
@@ -43,12 +45,12 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
 
     /**
      * @param \Magento\Framework\Module\Dir\Reader $moduleReader
-     * @param \Magento\Framework\App\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\Config\FileIteratorFactory $iteratorFactory
      */
     public function __construct(
         \Magento\Framework\Module\Dir\Reader $moduleReader,
-        \Magento\Framework\App\Filesystem $filesystem,
+        \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Config\FileIteratorFactory $iteratorFactory
     ) {
         $this->iteratorFactory = $iteratorFactory;
@@ -63,7 +65,7 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
     {
         switch ($scope) {
             case 'primary':
-                $directory = $this->filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::CONFIG_DIR);
+                $directory = $this->filesystem->getDirectoryRead(DirectoryList::CONFIG);
                 $iterator = $this->iteratorFactory->create(
                     $directory,
                     $directory->search('{' . $filename . ',*/' . $filename . '}')

@@ -59,7 +59,7 @@ class AssertBestsellerReportResult extends AbstractConstraint
         $productQty = [];
         foreach ($products as $key => $product) {
             /** @var CatalogProductSimple $product*/
-            $productQty[$key] = $product->getCheckoutData()['options']['qty'];
+            $productQty[$key] = $product->getCheckoutData()['qty'];
         }
         \PHPUnit_Framework_Assert::assertEquals($productQty, $totalQuantity);
     }

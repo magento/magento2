@@ -24,6 +24,7 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Shopcart;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use \Magento\Framework\App\ResponseInterface;
 
 class ExportProductCsv extends \Magento\Reports\Controller\Adminhtml\Report\Shopcart
@@ -40,6 +41,6 @@ class ExportProductCsv extends \Magento\Reports\Controller\Adminhtml\Report\Shop
             'Magento\Reports\Block\Adminhtml\Shopcart\Product\Grid'
         )->getCsvFile();
 
-        return $this->_fileFactory->create($fileName, $content, \Magento\Framework\App\Filesystem::VAR_DIR);
+        return $this->_fileFactory->create($fileName, $content, DirectoryList::VAR_DIR);
     }
 }

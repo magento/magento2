@@ -30,6 +30,8 @@
  */
 namespace Magento\CatalogImportExport\Model\Import;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 /**
  * Class ProductTest
  *
@@ -104,8 +106,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         }
 
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Framework\App\Filesystem');
-        $directory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::ROOT_DIR);
+            ->create('Magento\Framework\Filesystem');
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
 
         $source = new \Magento\ImportExport\Model\Import\Source\Csv(
             __DIR__ . '/_files/products_to_import.csv',
@@ -152,8 +154,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         }
 
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Framework\App\Filesystem');
-        $directory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::ROOT_DIR);
+            ->create('Magento\Framework\Filesystem');
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $source = new \Magento\ImportExport\Model\Import\Source\Csv(
             __DIR__ . '/_files/products_to_import.csv',
             $directory
@@ -200,8 +202,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $pathToFile = __DIR__ . '/_files/' . $importFile;
 
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Framework\App\Filesystem');
-        $directory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::ROOT_DIR);
+            ->create('Magento\Framework\Filesystem');
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
 
         $source = new \Magento\ImportExport\Model\Import\Source\Csv($pathToFile, $directory);
         $this->_model->setSource($source)->setParameters(array('behavior' => $behavior))->isDataValid();
@@ -266,8 +268,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         }
 
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Framework\App\Filesystem');
-        $directory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::ROOT_DIR);
+            ->create('Magento\Framework\Filesystem');
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
 
         $source = new \Magento\ImportExport\Model\Import\Source\Csv(
             __DIR__ . '/_files/products_to_import_with_datetime.csv',
@@ -606,9 +608,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Framework\Filesystem\Directory\Write $mediaDirectory */
         $mediaDirectory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\App\Filesystem'
+            'Magento\Framework\Filesystem'
         )->getDirectoryWrite(
-            \Magento\Framework\App\Filesystem::MEDIA_DIR
+            DirectoryList::MEDIA
         );
         $mediaDirectory->create('import');
         $dirPath = $mediaDirectory->getAbsolutePath('import');
@@ -622,9 +624,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Framework\Filesystem\Directory\Write $mediaDirectory */
         $mediaDirectory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\App\Filesystem'
+            'Magento\Framework\Filesystem'
         )->getDirectoryWrite(
-            \Magento\Framework\App\Filesystem::MEDIA_DIR
+            DirectoryList::MEDIA
         );
         $mediaDirectory->delete('import');
         $mediaDirectory->delete('catalog');
@@ -670,9 +672,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         // import data from CSV file
         $pathToFile = __DIR__ . '/_files/products_to_import_invalid_attribute_set.csv';
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\App\Filesystem'
+            'Magento\Framework\Filesystem'
         );
-        $directory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::ROOT_DIR);
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $source = new \Magento\ImportExport\Model\Import\Source\Csv($pathToFile, $directory);
         $this->_model->setSource(
             $source
@@ -710,9 +712,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         // import data from CSV file
         $pathToFile = __DIR__ . '/_files/products_with_invalid_multiselect_values.csv';
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\App\Filesystem'
+            'Magento\Framework\Filesystem'
         );
-        $directory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::ROOT_DIR);
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $source = new \Magento\ImportExport\Model\Import\Source\Csv($pathToFile, $directory);
         $validationResult = $this->_model->setSource(
             $source
@@ -743,8 +745,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $filesystem = $objectManager->create('Magento\Framework\App\Filesystem');
-        $directory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::ROOT_DIR);
+        $filesystem = $objectManager->create('Magento\Framework\Filesystem');
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
 
         $source = new \Magento\ImportExport\Model\Import\Source\Csv(
             __DIR__ . '/_files/products_multiple_stores.csv',
@@ -772,5 +774,30 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $simpleProduct->load($id);
         $this->assertEquals('Option Label', $simpleProduct->getAttributeText('attribute_with_option'));
         $this->assertEquals(array(2, 4), $simpleProduct->getAvailableInCategories());
+    }
+
+    /**
+     * @magentoDbIsolation enabled
+     */
+    public function testProductWithInvalidWeight()
+    {
+        // import data from CSV file
+        $pathToFile = __DIR__ . '/_files/product_to_import_invalid_weight.csv';
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Framework\Filesystem'
+        );
+
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = new \Magento\ImportExport\Model\Import\Source\Csv($pathToFile, $directory);
+        $validationResult = $this->_model->setSource(
+            $source
+        )->setParameters(
+                array('behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND)
+            )->isDataValid();
+
+        $expectedErrors = ["Product weight is invalid" => [2]];
+
+        $this->assertFalse($validationResult);
+        $this->assertEquals($expectedErrors, $this->_model->getErrorMessages());
     }
 }

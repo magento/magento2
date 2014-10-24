@@ -21,20 +21,26 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Checkout\Service\V1\Data\PaymentMethod;
 
 use Magento\Checkout\Service\V1\Data\PaymentMethod as QuotePaymentMethod;
 
+/**
+ * Payment method converter.
+ */
 class Converter
 {
     /**
+     * Payment method builder.
+     *
      * @var \Magento\Checkout\Service\V1\Data\Cart\PaymentMethodBuilder
      */
     protected $builder;
 
     /**
-     * @param \Magento\Checkout\Service\V1\Data\PaymentMethodBuilder $builder
+     * Constructs a payment method converter object.
+     *
+     * @param \Magento\Checkout\Service\V1\Data\PaymentMethodBuilder $builder Payment method builder.
      */
     public function __construct(\Magento\Checkout\Service\V1\Data\PaymentMethodBuilder $builder)
     {
@@ -42,10 +48,10 @@ class Converter
     }
 
     /**
-     * Convert quote payment object to payment data object
+     * Converts quote payment object to payment data object.
      *
-     * @param \Magento\Payment\Model\MethodInterface $object
-     * @return \Magento\Checkout\Service\V1\Data\Cart\PaymentMethod
+     * @param \Magento\Payment\Model\MethodInterface $object The quote payment object.
+     * @return \Magento\Checkout\Service\V1\Data\Cart\PaymentMethod Payment data object.
      */
     public function toDataObject(\Magento\Payment\Model\MethodInterface $object)
     {

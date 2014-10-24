@@ -58,7 +58,7 @@ class Builder extends EntityAbstract
     }
 
     /**
-     * Returns list of methods for class generator
+     * Return a list of methods for class generator
      *
      * @return array
      */

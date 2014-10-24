@@ -27,7 +27,6 @@ use Magento\Search\Model\Resource\Query\Collection as QueryCollection;
 use Magento\Search\Model\Resource\Query\CollectionFactory as QueryCollectionFactory;
 use Magento\Search\Model\SearchCollectionInterface as Collection;
 use Magento\Search\Model\SearchCollectionFactory as CollectionFactory;
-use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Data\Collection\Db;
 use Magento\Framework\Model\AbstractModel;
@@ -160,29 +159,6 @@ class Query extends AbstractModel implements QueryInterface
     public function getSearchCollection()
     {
         return $this->_searchCollectionFactory->create();
-    }
-
-    /**
-     * Retrieve collection of search results
-     *
-     * @deplecated
-     * @return AbstractCollection
-     */
-    public function getResultCollection()
-    {
-        $collection = $this->getData('result_collection');
-        if (is_null($collection)) {
-            $collection = $this->getSearchCollection();
-
-            $text = $this->getSynonymFor();
-            if (!$text) {
-                $text = $this->getQueryText();
-            }
-
-            $collection->addSearchFilter($text)->addStoreFilter()->addMinimalPrice()->addTaxPercents();
-            $this->setData('result_collection', $collection);
-        }
-        return $collection;
     }
 
     /**

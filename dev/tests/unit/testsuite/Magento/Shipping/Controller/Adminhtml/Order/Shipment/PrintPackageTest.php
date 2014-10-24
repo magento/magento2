@@ -23,6 +23,8 @@
  */
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 /**
  * Class PrintPackageTest
  */
@@ -211,7 +213,7 @@ class PrintPackageTest extends \PHPUnit_Framework_TestCase
             ->with(
                 'packingslip' . $date . '.pdf',
                 $content,
-                \Magento\Framework\App\Filesystem::VAR_DIR,
+                DirectoryList::VAR_DIR,
                 'application/pdf'
             )->will($this->returnValue('result-pdf-content'));
 

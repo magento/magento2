@@ -57,4 +57,7 @@
     <assertProductCustomOptionsOnBundleProductPage module="Magento_Bundle">
         <severeness>low</severeness>
     </assertProductCustomOptionsOnBundleProductPage>
+    <assertBundleProductInCustomerWishlistOnBackendGrid module="Magento_Bundle">
+        <severeness>low</severeness>
+    </assertBundleProductInCustomerWishlistOnBackendGrid>
 </constraint>

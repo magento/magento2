@@ -93,7 +93,7 @@ class UpdateCustomUrlRewriteEntityTest extends Injectable
         //Steps
         $this->urlRewriteIndex->open();
         $filter = ['request_path' => $initialRewrite->getRequestPath()];
-        $replaceData = $this->getReplaceData($initialRewrite);
+        $replaceData = $this->getReplaceData($urlRewrite);
         $this->urlRewriteIndex->getUrlRedirectGrid()->searchAndOpen($filter);
         $this->urlRewriteEdit->getFormBlock()->fill($urlRewrite, null, $replaceData);
         $this->urlRewriteEdit->getPageMainActions()->save();
@@ -108,10 +108,10 @@ class UpdateCustomUrlRewriteEntityTest extends Injectable
     protected function getReplaceData(UrlRewrite $initialRewrite)
     {
         $replaceData = [];
-        $entity = $initialRewrite->getDataFieldConfig('id_path')['source']->getEntity();
+        $entity = $initialRewrite->getDataFieldConfig('target_path')['source']->getEntity();
 
         if ($entity) {
-            $replaceData['target_path'] = ['%name%' => $entity->getName()];
+            $replaceData['target_path'] = ['name' => 'sku', 'value' => $entity->getSku()];
         }
 
         return $replaceData;

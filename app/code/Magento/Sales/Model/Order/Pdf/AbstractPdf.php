@@ -23,6 +23,8 @@
  */
 namespace Magento\Sales\Model\Order\Pdf;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 /**
  * Sales Order PDF abstract model
  */
@@ -125,7 +127,7 @@ abstract class AbstractPdf extends \Magento\Framework\Object
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\Stdlib\String $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\App\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem $filesystem
      * @param Config $pdfConfig
      * @param \Magento\Sales\Model\Order\Pdf\Total\Factory $pdfTotalFactory
      * @param \Magento\Sales\Model\Order\Pdf\ItemsFactory $pdfItemsFactory
@@ -139,7 +141,7 @@ abstract class AbstractPdf extends \Magento\Framework\Object
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\Stdlib\String $string,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\App\Filesystem $filesystem,
+        \Magento\Framework\Filesystem $filesystem,
         Config $pdfConfig,
         \Magento\Sales\Model\Order\Pdf\Total\Factory $pdfTotalFactory,
         \Magento\Sales\Model\Order\Pdf\ItemsFactory $pdfItemsFactory,
@@ -151,8 +153,8 @@ abstract class AbstractPdf extends \Magento\Framework\Object
         $this->_localeDate = $localeDate;
         $this->string = $string;
         $this->_scopeConfig = $scopeConfig;
-        $this->_mediaDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::MEDIA_DIR);
-        $this->_rootDirectory = $filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::ROOT_DIR);
+        $this->_mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $this->_rootDirectory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
         $this->_pdfConfig = $pdfConfig;
         $this->_pdfTotalFactory = $pdfTotalFactory;
         $this->_pdfItemsFactory = $pdfItemsFactory;

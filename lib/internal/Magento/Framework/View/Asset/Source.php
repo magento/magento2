@@ -24,6 +24,7 @@
 
 namespace Magento\Framework\View\Asset;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\View\Design\FileResolution\Fallback\Resolver\Simple;
 
 /**
@@ -39,7 +40,7 @@ class Source
     const TMP_MATERIALIZATION_DIR = 'view_preprocessed';
 
     /**
-     * @var \Magento\Framework\App\Filesystem
+     * @var \Magento\Framework\Filesystem
      */
     private $filesystem;
 
@@ -75,22 +76,22 @@ class Source
 
     /**
      * @param PreProcessor\Cache $cache
-     * @param \Magento\Framework\App\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem $filesystem
      * @param PreProcessor\Pool $preProcessorPool
      * @param \Magento\Framework\View\Design\FileResolution\Fallback\StaticFile $fallback
      * @param \Magento\Framework\View\Design\Theme\ListInterface $themeList
      */
     public function __construct(
         PreProcessor\Cache $cache,
-        \Magento\Framework\App\Filesystem $filesystem,
+        \Magento\Framework\Filesystem $filesystem,
         PreProcessor\Pool $preProcessorPool,
         \Magento\Framework\View\Design\FileResolution\Fallback\StaticFile $fallback,
         \Magento\Framework\View\Design\Theme\ListInterface $themeList
     ) {
         $this->cache = $cache;
         $this->filesystem = $filesystem;
-        $this->rootDir = $filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::ROOT_DIR);
-        $this->varDir = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::VAR_DIR);
+        $this->rootDir = $filesystem->getDirectoryRead(DirectoryList::ROOT);
+        $this->varDir = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
         $this->preProcessorPool = $preProcessorPool;
         $this->fallback = $fallback;
         $this->themeList = $themeList;
@@ -146,7 +147,7 @@ class Source
         if (!$sourceFile) {
             return false;
         }
-        $dirCode = \Magento\Framework\App\Filesystem::ROOT_DIR;
+        $dirCode = DirectoryList::ROOT;
         $path = $this->rootDir->getRelativePath($sourceFile);
         $cacheId = $path . ':' . $asset->getPath();
         $cached = $this->cache->load($cacheId);
@@ -165,7 +166,7 @@ class Source
         }
         $chain->assertValid();
         if ($chain->isChanged()) {
-            $dirCode = \Magento\Framework\App\Filesystem::VAR_DIR;
+            $dirCode = DirectoryList::VAR_DIR;
             $path = self::TMP_MATERIALIZATION_DIR . '/source/' . $asset->getPath();
             $this->varDir->writeFile($path, $chain->getContent());
         }

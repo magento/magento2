@@ -24,6 +24,7 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Review;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use \Magento\Framework\App\ResponseInterface;
 
 class ExportProductDetailExcel extends \Magento\Reports\Controller\Adminhtml\Report\Review
@@ -42,6 +43,6 @@ class ExportProductDetailExcel extends \Magento\Reports\Controller\Adminhtml\Rep
             $fileName
         );
 
-        return $this->_fileFactory->create($fileName, $content, \Magento\Framework\App\Filesystem::VAR_DIR);
+        return $this->_fileFactory->create($fileName, $content, DirectoryList::VAR_DIR);
     }
 }

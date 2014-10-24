@@ -1,4 +1,0 @@
-"product/dataSet";"urlRewrite/data/store_id";"urlRewrite/data/request_path";"urlRewrite/data/redirect_type";"urlRewrite/data/description";"constraint"
-"default";"Main Website/Main Website Store/Default Store View";"test_%isolation%.html";"No";"description_%isolation%";"assertUrlRewriteSaveMessage"
-"default";"Main Website/Main Website Store/Default Store View";"test_%isolation%.html";"Temporary (302)";"description_%isolation%";"assertUrlRewriteSaveMessage, assertUrlRewriteProductRedirect"
-"default";"Main Website/Main Website Store/Default Store View";"test_%isolation%.html";"Permanent (301)";"description_%isolation%";"assertUrlRewriteSaveMessage, assertUrlRewriteProductRedirect"

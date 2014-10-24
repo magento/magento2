@@ -45,7 +45,7 @@ use Magento\Customer\Test\Fixture\CustomerInjectable;
  * @group Wishlist_(CS)
  * @ZephyrId MAGETWO-28874
  */
-class DeleteProductsFromWishlistOnFrontendTest extends AbstractWishlistOnFrontend
+class DeleteProductsFromWishlistOnFrontendTest extends AbstractWishlistTest
 {
     /**
      * Delete products form default wish list

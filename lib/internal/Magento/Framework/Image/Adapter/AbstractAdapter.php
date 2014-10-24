@@ -23,6 +23,8 @@
  */
 namespace Magento\Framework\Image\Adapter;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 /**
  * @file        Abstract.php
  * @author      Magento Core Team <core@magentocommerce.com>
@@ -160,7 +162,7 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Filesystem instance
      *
-     * @var \Magento\Framework\App\Filesystem
+     * @var \Magento\Framework\Filesystem
      */
     protected $_filesystem;
 
@@ -276,13 +278,13 @@ abstract class AbstractAdapter implements AdapterInterface
     /**
      * Initialize default values
      *
-     * @param \Magento\Framework\App\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem $filesystem
      * @param array $data
      */
-    public function __construct(\Magento\Framework\App\Filesystem $filesystem, array $data = array())
+    public function __construct(\Magento\Framework\Filesystem $filesystem, array $data = array())
     {
         $this->_filesystem = $filesystem;
-        $this->directoryWrite = $this->_filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::ROOT_DIR);
+        $this->directoryWrite = $this->_filesystem->getDirectoryWrite(DirectoryList::ROOT);
     }
 
     /**

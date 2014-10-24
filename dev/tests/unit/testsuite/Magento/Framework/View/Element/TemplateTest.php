@@ -31,7 +31,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     protected $_block;
 
     /**
-     * @var \Magento\Framework\App\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_filesystem;
 
@@ -45,11 +45,35 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      */
     protected $_viewFileSystem;
 
+    /**
+     * @var \Magento\Framework\Filesystem\Directory\Read|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $rootDirMock;
+
     protected function setUp()
     {
         $this->_viewFileSystem = $this->getMock('\Magento\Framework\View\FileSystem', array(), array(), '', false);
 
-        $this->_filesystem = $this->getMock('\Magento\Framework\App\Filesystem', array(), array(), '', false);
+        $this->rootDirMock = $this->getMock('Magento\Framework\Filesystem\Directory\Read', array(), array(), '', false);
+        $this->rootDirMock->expects($this->any())
+            ->method('getRelativePath')
+            ->will($this->returnArgument(0))
+        ;
+        $appDirMock = $this->getMock('\Magento\Framework\Filesystem\Directory\Read', array(), array(), '', false);
+        $themesDirMock = $this->getMock('\Magento\Framework\Filesystem\Directory\Read', array(), array(), '', false);
+        $themesDirMock->expects($this->any())
+            ->method('getAbsolutePath')
+            ->will($this->returnValue('themedir'));
+
+        $this->_filesystem = $this->getMock('\Magento\Framework\Filesystem', array(), array(), '', false);
+        $this->_filesystem->expects($this->any())
+            ->method('getDirectoryRead')
+            ->will($this->returnValueMap([
+                [\Magento\Framework\App\Filesystem\DirectoryList::THEMES, $themesDirMock],
+                [\Magento\Framework\App\Filesystem\DirectoryList::APP, $appDirMock],
+                [\Magento\Framework\App\Filesystem\DirectoryList::ROOT, $this->rootDirMock],
+            ]))
+        ;
 
         $this->_templateEngine = $this->getMock(
             'Magento\Framework\View\TemplateEnginePool',
@@ -86,58 +110,31 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
     public function testFetchView()
     {
         $this->expectOutputString('');
-        $directoryMock = $this->getMock('\Magento\Framework\Filesystem\Directory\Read', array(), array(), '', false);
-        $directoryMock->expects($this->any())->method('getRelativePath')->will($this->returnArgument(0));
-        $this->_filesystem->expects(
-            $this->once()
-        )->method(
-            'getDirectoryRead'
-        )->will(
-            $this->returnValue($directoryMock)
-        );
-        $this->_filesystem->expects($this->any())->method('getPath')->will($this->returnValue('themedir'));
-        $directoryMock->expects(
-            $this->once()
-        )->method(
-            'isFile'
-        )->with(
-            'themedir/template.phtml'
-        )->will(
-            $this->returnValue(true)
-        );
+        $template = 'themedir/template.phtml';
+        $this->rootDirMock->expects($this->once())
+            ->method('isFile')
+            ->with($template)
+            ->will($this->returnValue(true))
+        ;
 
         $output = '<h1>Template Contents</h1>';
         $vars = array('var1' => 'value1', 'var2' => 'value2');
         $this->_templateEngine->expects($this->once())->method('render')->will($this->returnValue($output));
         $this->_block->assign($vars);
-        $this->assertEquals($output, $this->_block->fetchView('themedir/template.phtml'));
+        $this->assertEquals($output, $this->_block->fetchView($template));
     }
 
     public function testSetTemplateContext()
     {
-        $directoryMock = $this->getMock('\Magento\Framework\Filesystem\Directory\Read', array(), array(), '', false);
-        $directoryMock->expects($this->any())->method('getRelativePath')->will($this->returnArgument(0));
-        $this->_filesystem->expects(
-            $this->once()
-        )->method(
-            'getDirectoryRead'
-        )->will(
-            $this->returnValue($directoryMock)
-        );
-        $this->_filesystem->expects($this->any())->method('getPath')->will($this->returnValue('themedir'));
-        $directoryMock->expects(
-            $this->once()
-        )->method(
-            'isFile'
-        )->with(
-            'themedir/template.phtml'
-        )->will(
-            $this->returnValue(true)
-        );
-
+        $template = 'themedir/template.phtml';
+        $this->rootDirMock->expects($this->once())
+            ->method('isFile')
+            ->with($template)
+            ->will($this->returnValue(true))
+        ;
         $context = new \Magento\Framework\Object();
         $this->_templateEngine->expects($this->once())->method('render')->with($context);
         $this->_block->setTemplateContext($context);
-        $this->_block->fetchView('themedir/template.phtml');
+        $this->_block->fetchView($template);
     }
 }

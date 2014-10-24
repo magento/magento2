@@ -112,25 +112,6 @@ class Fulltext extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Prepare results for query
-     *
-     * @param Query $query
-     * @return $this
-     */
-    public function prepareResult($query = null)
-    {
-        if (!$query instanceof Query) {
-            $query = $this->queryFactory->get();
-        }
-        $queryText = $query->getQueryText();
-        if ($query->getSynonymFor()) {
-            $queryText = $query->getSynonymFor();
-        }
-        $this->getResource()->prepareResult($this, $queryText, $query);
-        return $this;
-    }
-
-    /**
      * Retrieve search type
      *
      * @param int $storeId

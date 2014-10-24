@@ -39,7 +39,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $fileValidatorMock = $this->getMock(
             '\Magento\Core\Model\File\Validator\NotProtectedExtension', [], [], '', false
         );
-        $filesystemMock = $this->getMock('\Magento\Framework\App\Filesystem', [], [], '', false);
+        $filesystemMock = $this->getMock('\Magento\Framework\Filesystem', [], [], '', false);
 
         $this->model = new Image(
             $timezoneMock, $loggerMock, $localeResolverMock, $coreDataMock, $fileValidatorMock, $filesystemMock

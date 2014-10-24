@@ -27,23 +27,29 @@ use \Magento\Checkout\Service\V1\Data\Cart\CouponBuilder as CouponBuilder;
 use \Magento\Checkout\Service\V1\Data\Cart\Coupon as Coupon;
 
 /**
- * Class ReadService
+ * Coupon read service object.
  */
 class ReadService implements ReadServiceInterface
 {
     /**
+     * Quote repository.
+     *
      * @var \Magento\Sales\Model\QuoteRepository
      */
     protected $quoteRepository;
 
     /**
+     * Coupon builder.
+     *
      * @var CouponBuilder
      */
     protected $couponBuilder;
 
     /**
-     * @param \Magento\Sales\Model\QuoteRepository $quoteRepository
-     * @param CouponBuilder $couponBuilder
+     * Constructs a coupon read service object.
+     *
+     * @param \Magento\Sales\Model\QuoteRepository $quoteRepository Quote repository.
+     * @param CouponBuilder $couponBuilder Coupon builder.
      */
     public function __construct(
         \Magento\Sales\Model\QuoteRepository $quoteRepository,
@@ -54,7 +60,11 @@ class ReadService implements ReadServiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @param int $cartId The cart ID.
+     * @return \Magento\Checkout\Service\V1\Data\Cart\Coupon Coupon object.
+     * @throws \Magento\Framework\Exception\NoSuchEntityException The specified cart does not exist.
      */
     public function get($cartId)
     {

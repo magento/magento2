@@ -456,12 +456,12 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
             $order->getState() != \Magento\Sales\Model\Order::STATE_PENDING_PAYMENT ||
             !$amountCompared
         ) {
-            throw new \Magento\Framework\Model\Exception($this->_formatStr(self::RESPONSE_ERROR_MSG, 'Order'));
+            throw new \Magento\Framework\Model\Exception(sprintf(self::RESPONSE_ERROR_MSG, 'Order'));
         }
 
         $fetchData = $this->fetchTransactionInfo($order->getPayment(), $response->getPnref());
         if (!isset($fetchData['custref']) || $fetchData['custref'] != $order->getIncrementId()) {
-            throw new \Magento\Framework\Model\Exception($this->_formatStr(self::RESPONSE_ERROR_MSG, 'Transaction'));
+            throw new \Magento\Framework\Model\Exception(sprintf(self::RESPONSE_ERROR_MSG, 'Transaction'));
         }
 
         return $order;
@@ -479,11 +479,11 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
         $request->setCreatesecuretoken(
             'Y'
         )->setSecuretokenid(
-            $this->_generateSecureTokenId()
+            $this->mathRandom->getUniqueHash()
         )->setTrxtype(
             $this->_getTrxTokenType()
         )->setAmt(
-            $this->_formatStr('%.2F', $payment->getOrder()->getBaseTotalDue())
+            sprintf('%.2F', $payment->getOrder()->getBaseTotalDue())
         )->setCurrency(
             $payment->getOrder()->getBaseCurrencyCode()
         )->setInvnum(
@@ -493,11 +493,6 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
         )->setPonum(
             $payment->getOrder()->getId()
         );
-        //This is PaPal issue with taxes and shipping
-        //->setSubtotal($this->_formatStr('%.2F', $payment->getOrder()->getBaseSubtotal()))
-        //->setTaxamt($this->_formatStr('%.2F', $payment->getOrder()->getBaseTaxAmount()))
-        //->setFreightamt($this->_formatStr('%.2F', $payment->getOrder()->getBaseShippingAmount()));
-
 
         $order = $payment->getOrder();
         if (empty($order)) {
@@ -635,28 +630,6 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
     }
 
     /**
-     * Return unique value for secure token id
-     *
-     * @return string
-     */
-    protected function _generateSecureTokenId()
-    {
-        return $this->mathRandom->getUniqueHash();
-    }
-
-    /**
-     * Format values
-     *
-     * @param mixed $format
-     * @param mixed $string
-     * @return string
-     */
-    protected function _formatStr($format, $string)
-    {
-        return sprintf($format, $string);
-    }
-
-    /**
      * If response is failed throw exception
      * Set token data in payment object
      *
@@ -708,104 +681,6 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
     }
 
     /**
-     * Add transaction with correct transaction Id
-     *
-     * @deprecated since 1.6.2.0
-     * @param \Magento\Framework\Object $payment
-     * @param string $txnId
-     * @return void
-     */
-    protected function _addTransaction($payment, $txnId)
-    {
-    }
-
-    /**
-     * Initialize request
-     *
-     * @deprecated since 1.6.2.0
-     * @param \Magento\Framework\Object $payment
-     * @param mixed $amount
-     * @return $this
-     */
-    protected function _initialize(\Magento\Framework\Object $payment, $amount)
-    {
-        return $this;
-    }
-
-    /**
-     * Check whether order review has enough data to initialize
-     *
-     * @deprecated since 1.6.2.0
-     * @param mixed|null $token
-     * @return void
-     * @throws \Magento\Framework\Model\Exception
-     */
-    public function prepareOrderReview($token = null)
-    {
-    }
-
-    /**
-     * Additional authorization logic for Account Verification
-     *
-     * @deprecated since 1.6.2.0
-     * @param \Magento\Framework\Object $payment
-     * @param mixed $amount
-     * @param \Magento\Paypal\Model\Payment\Transaction $transaction
-     * @param string $txnId
-     * @return $this
-     */
-    protected function _authorize(\Magento\Framework\Object $payment, $amount, $transaction, $txnId)
-    {
-        return $this;
-    }
-
-    /**
-     * Operate with order or quote using information from silent post
-     *
-     * @deprecated since 1.6.2.0
-     * @param \Magento\Framework\Object $document
-     * @return void
-     */
-    protected function _process(\Magento\Framework\Object $document)
-    {
-    }
-
-    /**
-     * Check Transaction
-     *
-     * @deprecated since 1.6.2.0
-     * @param \Magento\Paypal\Model\Payment\Transaction $transaction
-     * @param mixed $amount
-     * @return $this
-     */
-    protected function _checkTransaction($transaction, $amount)
-    {
-        return $this;
-    }
-
-    /**
-     * Check response from Payflow gateway.
-     *
-     * @deprecated since 1.6.2.0
-     * @return \Magento\Sales\Model\AbstractModel in case of validation passed
-     * @throws \Magento\Framework\Model\Exception In other cases
-     */
-    protected function _getDocumentFromResponse()
-    {
-        return null;
-    }
-
-    /**
-     * Get callback controller
-     *
-     * @return string
-     */
-    public function getCallbackController()
-    {
-        return $this->_callbackController;
-    }
-
-    /**
      * Get callback url
      *
      * @param string $actionName
@@ -835,6 +710,6 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
             $websiteUrl = $this->_storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_LINK, $secure);
         }
 
-        return $websiteUrl . 'paypal/' . $this->getCallbackController() . '/' . $actionName;
+        return $websiteUrl . 'paypal/' . $this->_callbackController . '/' . $actionName;
     }
 }

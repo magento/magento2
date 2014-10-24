@@ -24,8 +24,8 @@
 namespace Magento\Downloadable\Service\V1\Data;
 
 use \Magento\Core\Model\File\Uploader;
-use \Magento\Framework\Io\File;
-use \Magento\Framework\App\Filesystem;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem;
 use \Magento\Core\Model\File\Validator\NotProtectedExtension;
 use \Magento\Core\Helper\File\Storage;
 use \Magento\Core\Helper\File\Storage\Database;
@@ -85,8 +85,8 @@ class FileContentUploader extends Uploader implements FileContentUploaderInterfa
         $this->_validator = $validator;
         $this->_coreFileStorage = $coreFileStorage;
         $this->_coreFileStorageDb = $coreFileStorageDb;
-        $this->mediaDirectory = $filesystem->getDirectoryWrite(Filesystem::MEDIA_DIR);
-        $this->systemTmpDirectory = $filesystem->getDirectoryWrite(Filesystem::SYS_TMP_DIR);
+        $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $this->systemTmpDirectory = $filesystem->getDirectoryWrite(DirectoryList::SYS_TMP);
         $this->linkConfig = $linkConfig;
         $this->sampleConfig = $sampleConfig;
     }

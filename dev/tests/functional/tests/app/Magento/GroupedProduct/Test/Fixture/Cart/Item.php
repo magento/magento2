@@ -43,9 +43,9 @@ class Item extends \Magento\Catalog\Test\Fixture\Cart\Item
      */
     public function __construct(FixtureInterface $product)
     {
-        parent::__construct($product);
-
         /** @var GroupedProductInjectable $product */
+        $checkoutData = $product->getCheckoutData();
+        $this->data = isset($checkoutData['cartItem']) ? $checkoutData['cartItem'] : [];
         $associatedProducts = [];
         $cartItem = [];
 
@@ -64,10 +64,13 @@ class Item extends \Magento\Catalog\Test\Fixture\Cart\Item
 
         // Add empty "options" field
         foreach ($associatedProducts as $product) {
-            $cartItem['options'][$product->getSku()] = [];
+            $cartItem['options'][] = [
+                'title' => $product->getName(),
+                'value' => $cartItem['qty'][$product->getSku()]
+            ];
         }
 
-        $this->data = array_replace($this->data, $cartItem);
+        $this->data = $cartItem;
     }
 
     /**

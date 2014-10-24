@@ -26,7 +26,7 @@ namespace Magento\CatalogSearch\Model\Search;
 use Magento\Search\Model\QueryFactory;
 
 /**
- * Search Catalog Model
+ * Search model for backend search
  */
 class Catalog extends \Magento\Framework\Object
 {
@@ -79,17 +79,14 @@ class Catalog extends \Magento\Framework\Object
             return $this;
         }
 
-        $collection = $this->queryFactory->get()->getSearchCollection()->addAttributeToSelect(
-            'name'
-        )->addAttributeToSelect(
-            'description'
-        )->addBackendSearchFilter(
-            $this->getQuery()
-        )->setCurPage(
-            $this->getStart()
-        )->setPageSize(
-            $this->getLimit()
-        )->load();
+        $collection = $this->queryFactory->get()
+            ->getSearchCollection()
+            ->addAttributeToSelect('name')
+            ->addAttributeToSelect('description')
+            ->addBackendSearchFilter($this->getQuery())
+            ->setCurPage($this->getStart())
+            ->setPageSize($this->getLimit())
+            ->load();
 
         foreach ($collection as $product) {
             $description = strip_tags($product->getDescription());

@@ -41,9 +41,6 @@ class Grid extends ParentGrid
         'request_path' => [
             'selector' => '#urlrewriteGrid_filter_request_path'
         ],
-        'id_path' => [
-            'selector' => '#urlrewriteGrid_filter_id_path'
-        ],
         'target_path' => [
             'selector' => 'input[name="target_path"]'
         ]

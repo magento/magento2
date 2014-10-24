@@ -24,6 +24,8 @@
 
 namespace Magento\Framework\Model;
 
+use Magento\TestFramework\Helper\ObjectManager as ObjectManagerHelper;
+
 class AbstractModelTest extends \PHPUnit_Framework_TestCase
 {
     /**

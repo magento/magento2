@@ -54,7 +54,7 @@ class Links extends Block
      *
      * @var string
      */
-    protected $choiceLink = './/*[contains(@class,"choice")]';
+    protected $choiceLink = './/*[contains(@class,"choice") and @data-role="link"]';
 
     /**
      * Checkbox selector item links
@@ -137,8 +137,8 @@ class Links extends Block
 
             $linkData = [
                 'links_purchased_separately' => $choiceLink->find($this->separatelyForChoice)->isVisible()
-                        ? 'Yes'
-                        : 'No',
+                    ? 'Yes'
+                    : 'No',
                 'title' => $link->isVisible() ? $link->getText() : null,
                 'sample' => $sample->isVisible() ? $sample->getText() : null,
                 'price' => $price->isVisible() ? $this->escapePrice($price->getText()) : null,

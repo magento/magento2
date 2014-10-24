@@ -108,7 +108,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array('popup.csv', 'var myData = 5;'),
-            array('data.csv', '"field1", "field2"' . PHP_EOL . '"field3", "field4"' . PHP_EOL)
+            array('data.csv', '"field1", "field2"' . "\n" . '"field3", "field4"' . "\n")
         );
     }
 
@@ -124,7 +124,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
     {
         $file = $this->getFileInstance($path);
         foreach ($lines as $line) {
-            $this->assertEquals($line, $file->readLine($length, PHP_EOL));
+            $this->assertEquals($line, $file->readLine($length, "\n"));
         }
     }
 

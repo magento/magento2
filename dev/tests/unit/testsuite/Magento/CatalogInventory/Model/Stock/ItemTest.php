@@ -112,7 +112,10 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->scopeConfig = $this->getMock('Magento\Framework\App\Config', [], [], '', false);
+        $this->scopeConfig = $this->getMockBuilder('Magento\Framework\App\Config')
+            ->setMethods(['isSetFlag', 'getValue'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->storeManager = $this->getMock('Magento\Framework\StoreManagerInterface', [], [], '', false);
 
         $this->stockItemRegistry = $this->getMock(
@@ -707,5 +710,73 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             \Magento\CatalogInventory\Model\Stock\Status::STATUS_OUT_OF_STOCK,
             $this->item->getIsInStock()
         );
+    }
+
+    public function testAddQty()
+    {
+        $defaultQty = 5.5;
+        $qty = 3.3;
+
+        $this->setDataArrayValue('qty', $defaultQty);
+        $this->setDataArrayValue('manage_stock', true);
+
+        $this->scopeConfig->expects($this->once())
+            ->method('isSetFlag')
+            ->with(
+                $this->equalTo(Item::XML_PATH_CAN_SUBTRACT),
+                $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE)
+            )
+            ->will($this->returnValue(true));
+
+        $this->item->addQty($qty);
+        $this->assertEquals($defaultQty + $qty, $this->item->getQty());
+    }
+
+    public function testAddQtyWithManageStockFalse()
+    {
+        $qty = 1;
+        $defaultQty = 3;
+
+        $this->setDataArrayValue('qty', $defaultQty);
+        $this->setDataArrayValue('manage_stock', false);
+
+        $this->assertEquals($this->item, $this->item->addQty($qty));
+        $this->assertEquals($defaultQty, $this->item->getQty());
+    }
+
+    public function testAddQtyWithCannotSubtractConfig()
+    {
+        $qty = 1;
+        $defaultQty = 3;
+
+        $this->setDataArrayValue('qty', $defaultQty);
+        $this->setDataArrayValue('manage_stock', true);
+        $this->scopeConfig->expects($this->once())
+            ->method('isSetFlag')
+            ->with(
+                $this->equalTo(Item::XML_PATH_CAN_SUBTRACT),
+                $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE)
+            )
+            ->will($this->returnValue(false));
+
+        $this->assertEquals($this->item, $this->item->addQty($qty));
+        $this->assertEquals($defaultQty, $this->item->getQty());
+    }
+
+    public function testSubtractQty()
+    {
+        $subtractQty = 3;
+
+        $qty = 5;
+
+        $this->setDataArrayValue('qty', $qty);
+
+        $this->scopeConfig->expects($this->once())
+            ->method('isSetFlag')
+            ->with('cataloginventory/options/can_subtract', 'store')
+            ->will($this->returnValue(true));
+        $this->initManageStock(false, true);
+        $this->item->subtractQty($subtractQty);
+        $this->assertEquals($qty - $subtractQty, $this->item->getQty());
     }
 }

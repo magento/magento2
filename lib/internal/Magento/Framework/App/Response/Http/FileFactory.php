@@ -24,6 +24,8 @@
  */
 namespace Magento\Framework\App\Response\Http;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class FileFactory
 {
     /**
@@ -32,17 +34,17 @@ class FileFactory
     protected $_response;
 
     /**
-     * @var \Magento\Framework\App\Filesystem
+     * @var \Magento\Framework\Filesystem
      */
     protected $_filesystem;
 
     /**
      * @param \Magento\Framework\App\ResponseInterface $response
-     * @param \Magento\Framework\App\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem $filesystem
      */
     public function __construct(
         \Magento\Framework\App\ResponseInterface $response,
-        \Magento\Framework\App\Filesystem $filesystem
+        \Magento\Framework\Filesystem $filesystem
     ) {
         $this->_response = $response;
         $this->_filesystem = $filesystem;
@@ -68,7 +70,7 @@ class FileFactory
     public function create(
         $fileName,
         $content,
-        $baseDir = \Magento\Framework\App\Filesystem::ROOT_DIR,
+        $baseDir = DirectoryList::ROOT,
         $contentType = 'application/octet-stream',
         $contentLength = null
     ) {

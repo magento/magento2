@@ -82,7 +82,7 @@ class Indexer extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @var \Magento\Catalog\Model\Attribute\Config
      */
-    private $_attributeConfig;
+    protected $_attributeConfig;
 
     /**
      * @var array

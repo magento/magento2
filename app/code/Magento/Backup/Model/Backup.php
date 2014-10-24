@@ -23,6 +23,8 @@
  */
 namespace Magento\Backup\Model;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 /**
  * Backup file item model
  *
@@ -52,7 +54,7 @@ class Backup extends \Magento\Framework\Object implements \Magento\Framework\Bac
     protected $_stream = null;
 
     /**
-     * @var \Magento\Framework\App\Filesystem
+     * @var \Magento\Framework\Filesystem
      */
     protected $_filesystem;
 
@@ -90,7 +92,7 @@ class Backup extends \Magento\Framework\Object implements \Magento\Framework\Bac
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
-     * @param \Magento\Framework\App\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem $filesystem
      * @param array $data
      */
     public function __construct(
@@ -98,14 +100,14 @@ class Backup extends \Magento\Framework\Object implements \Magento\Framework\Bac
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Backend\Model\Auth\Session $authSession,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
-        \Magento\Framework\App\Filesystem $filesystem,
+        \Magento\Framework\Filesystem $filesystem,
         $data = array()
     ) {
         $this->_encryptor = $encryptor;
         parent::__construct($data);
 
         $this->_filesystem = $filesystem;
-        $this->varDirectory = $this->_filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::VAR_DIR);
+        $this->varDirectory = $this->_filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
         $this->_helper = $helper;
         $this->_localeResolver = $localeResolver;
         $this->_backendAuthSession = $authSession;
@@ -308,11 +310,11 @@ class Backup extends \Magento\Framework\Object implements \Magento\Framework\Bac
 
         try {
             /** @var \Magento\Framework\Filesystem\Directory\WriteInterface $varDirectory */
-            $varDirectory = $this->_filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::VAR_DIR);
+            $varDirectory = $this->_filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
             $this->_stream = $varDirectory->openFile(
                 $this->_getFilePath(),
                 $mode,
-                \Magento\Framework\App\Filesystem::WRAPPER_CONTENT_ZLIB
+                \Magento\Framework\Filesystem\DriverPool::ZLIB
             );
         } catch (\Magento\Framework\Filesystem\FilesystemException $e) {
             throw new \Magento\Framework\Backup\Exception\NotEnoughPermissions(
@@ -403,7 +405,7 @@ class Backup extends \Magento\Framework\Object implements \Magento\Framework\Bac
         }
 
         /** @var \Magento\Framework\Filesystem\Directory\ReadInterface $directory */
-        $directory = $this->_filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::VAR_DIR);
+        $directory = $this->_filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
         $directory = $directory->readFile($this->_getFilePath());
 
         echo $directory;

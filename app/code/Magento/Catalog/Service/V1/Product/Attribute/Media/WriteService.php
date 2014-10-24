@@ -27,12 +27,13 @@ namespace Magento\Catalog\Service\V1\Product\Attribute\Media;
 
 use \Magento\Catalog\Service\V1\Product\Attribute\Media\Data\GalleryEntry;
 use \Magento\Catalog\Service\V1\Product\Attribute\Media\Data\GalleryEntryContent;
-use \Magento\Framework\App\Filesystem;
+use Magento\Framework\Filesystem;
 use \Magento\Catalog\Service\V1\Product\ProductLoader;
 use \Magento\Catalog\Model\Product\Media\Config as MediaConfig;
 use \Magento\Catalog\Model\Product;
 use \Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use \Magento\Catalog\Service\V1\Product\Attribute\Media\Data\GalleryEntryContentValidator;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use \Magento\Store\Model\StoreFactory;
 use \Magento\Framework\Exception\InputException;
 use \Magento\Framework\Exception\StateException;
@@ -125,7 +126,7 @@ class WriteService implements WriteServiceInterface
 
         $fileContent = @base64_decode($entryContent->getData(), true);
         $mediaTmpPath = $this->mediaConfig->getBaseTmpMediaPath();
-        $mediaDirectory = $this->filesystem->getDirectoryWrite(Filesystem::MEDIA_DIR);
+        $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $mediaDirectory->create($mediaTmpPath);
         $fileName = $entryContent->getName() . '.' . $this->mimeTypeExtensionMap[$entryContent->getMimeType()];
         $relativeFilePath = $mediaTmpPath . DIRECTORY_SEPARATOR . $fileName;

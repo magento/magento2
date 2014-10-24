@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Checkout\Service\V1\Address\Billing;
 
 use Magento\Framework\Exception\InputException;
@@ -31,39 +30,52 @@ use \Magento\Sales\Model\Quote\AddressFactory;
 use \Magento\Checkout\Service\V1\Address\Converter;
 use \Magento\Checkout\Service\V1\Address\Validator;
 
+/** Quote billing address write service object. */
 class WriteService implements WriteServiceInterface
 {
     /**
+     * Validator.
+     *
      * @var Validator
      */
     protected $addressValidator;
 
     /**
+     * Logger.
+     *
      * @var Logger
      */
     protected $logger;
 
     /**
+     * Address factory.
+     *
      * @var AddressFactory
      */
     protected $quoteAddressFactory;
 
     /**
+     * Converter.
+     *
      * @var Converter
      */
     protected $addressConverter;
 
     /**
+     * Quote repository.
+     *
      * @var QuoteRepository
      */
     protected $quoteRepository;
 
     /**
-     * @param QuoteRepository $quoteRepository
-     * @param Converter $addressConverter
-     * @param Validator $addressValidator
-     * @param AddressFactory $quoteAddressFactory
-     * @param Logger $logger
+     * Constructs a quote billing address service object.
+     *
+     * @param QuoteRepository $quoteRepository Quote repository.
+     * @param Converter $addressConverter Address converter.
+     * @param Validator $addressValidator Address validator.
+     * @param AddressFactory $quoteAddressFactory Quote address factory.
+     * @param Logger $logger Logger.
      */
     public function __construct(
         QuoteRepository $quoteRepository,
@@ -80,13 +92,27 @@ class WriteService implements WriteServiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @param int $cartId The cart ID.
+     * @param \Magento\Checkout\Service\V1\Data\Cart\Address $addressData Billing address data.
+     * @return int Address ID.
+     * @throws \Magento\Framework\Exception\NoSuchEntityException The specified cart does not exist.
+     * @throws \Magento\Framework\Exception\InputException The specified cart ID or address data is not valid.
      */
     public function setAddress($cartId, $addressData)
     {
-        /** @var \Magento\Sales\Model\Quote $quote */
+        /**
+         * Quote.
+         *
+         * @var \Magento\Sales\Model\Quote $quote
+         */
         $quote = $this->quoteRepository->get($cartId);
-        /** @var \Magento\Sales\Model\Quote\Address $address */
+        /**
+         * Address.
+         *
+         * @var \Magento\Sales\Model\Quote\Address $address
+         */
         $address = $this->quoteAddressFactory->create();
         $this->addressValidator->validate($addressData);
         if ($addressData->getId()) {

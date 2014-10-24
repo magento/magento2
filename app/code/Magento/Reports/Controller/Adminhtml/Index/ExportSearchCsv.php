@@ -24,6 +24,7 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Index;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use \Magento\Framework\App\ResponseInterface;
 
 class ExportSearchCsv extends \Magento\Reports\Controller\Adminhtml\Index
@@ -37,6 +38,6 @@ class ExportSearchCsv extends \Magento\Reports\Controller\Adminhtml\Index
     {
         $this->_view->loadLayout(false);
         $content = $this->_view->getLayout()->getChildBlock('adminhtml.report.search.grid', 'grid.export');
-        return $this->_fileFactory->create('search.csv', $content->getCsvFile(), \Magento\Framework\App\Filesystem::VAR_DIR);
+        return $this->_fileFactory->create('search.csv', $content->getCsvFile(), DirectoryList::VAR_DIR);
     }
 }

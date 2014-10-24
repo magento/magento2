@@ -488,13 +488,6 @@ class Order extends \Magento\Sales\Model\AbstractModel implements EntityInterfac
     protected $_productVisibility;
 
     /**
-     * Tax helper
-     *
-     * @var \Magento\Tax\Helper\Data
-     */
-    protected $_taxHelper;
-
-    /**
      * @var \Magento\Sales\Model\Service\OrderFactory
      */
     protected $_serviceOrderFactory;
@@ -559,7 +552,6 @@ class Order extends \Magento\Sales\Model\AbstractModel implements EntityInterfac
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param Resource\Order\Item\CollectionFactory $orderItemCollectionFactory
      * @param \Magento\Catalog\Model\Product\Visibility $productVisibility
-     * @param \Magento\Tax\Helper\Data $taxHelper
      * @param Service\OrderFactory $serviceOrderFactory
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Eav\Model\Config $eavConfig
@@ -586,7 +578,6 @@ class Order extends \Magento\Sales\Model\AbstractModel implements EntityInterfac
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Sales\Model\Resource\Order\Item\CollectionFactory $orderItemCollectionFactory,
         \Magento\Catalog\Model\Product\Visibility $productVisibility,
-        \Magento\Tax\Helper\Data $taxHelper,
         \Magento\Sales\Model\Service\OrderFactory $serviceOrderFactory,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Eav\Model\Config $eavConfig,
@@ -609,7 +600,6 @@ class Order extends \Magento\Sales\Model\AbstractModel implements EntityInterfac
 
         $this->_orderItemCollectionFactory = $orderItemCollectionFactory;
         $this->_productVisibility = $productVisibility;
-        $this->_taxHelper = $taxHelper;
         $this->_serviceOrderFactory = $serviceOrderFactory;
         $this->_currencyFactory = $currencyFactory;
         $this->_eavConfig = $eavConfig;
@@ -2182,14 +2172,6 @@ class Order extends \Magento\Sales\Model\AbstractModel implements EntityInterfac
     public function getIsNotVirtual()
     {
         return !$this->getIsVirtual();
-    }
-
-    /**
-     * @return array
-     */
-    public function getFullTaxInfo()
-    {
-        return $this->_taxHelper->getCalculatedTaxes($this);
     }
 
     /**

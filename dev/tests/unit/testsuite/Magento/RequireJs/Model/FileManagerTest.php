@@ -24,6 +24,8 @@
 
 namespace Magento\RequireJs\Model;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class FileManagerTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -32,7 +34,7 @@ class FileManagerTest extends \PHPUnit_Framework_TestCase
     private $config;
 
     /**
-     * @var \Magento\Framework\App\FileSystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
      */
     private $fileSystem;
 
@@ -59,14 +61,14 @@ class FileManagerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->config = $this->getMock('\Magento\Framework\RequireJs\Config', array(), array(), '', false);
-        $this->fileSystem = $this->getMock('\Magento\Framework\App\FileSystem', array(), array(), '', false);
+        $this->fileSystem = $this->getMock('\Magento\Framework\Filesystem', array(), array(), '', false);
         $this->appState = $this->getMock('\Magento\Framework\App\State', array(), array(), '', false);
         $assetRepo = $this->getMock('\Magento\Framework\View\Asset\Repository', array(), array(), '', false);
         $this->object = new FileManager($this->config, $this->fileSystem, $this->appState, $assetRepo);
         $this->dir = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\WriteInterface');
         $this->fileSystem->expects($this->once())
             ->method('getDirectoryWrite')
-            ->with(\Magento\Framework\App\Filesystem::STATIC_VIEW_DIR)
+            ->with(DirectoryList::STATIC_VIEW)
             ->will($this->returnValue($this->dir))
         ;
         $this->config->expects($this->once())

@@ -123,7 +123,9 @@ class Bootstrap
             $configFile = "{$this->testsBaseDir}/config.php";
             $configFile = file_exists($configFile) ? $configFile : "{$configFile}.dist";
             $configData = require $configFile;
-            $this->config = new Config($configData, $this->testsBaseDir, $this->appBootstrap->getDirList()->getRoot());
+            /** @var \Magento\Framework\App\Filesystem\DirectoryList $dirList */
+            $dirList = $this->appBootstrap->getObjectManager()->get('Magento\Framework\App\Filesystem\DirectoryList');
+            $this->config = new Config($configData, $this->testsBaseDir, $dirList->getRoot());
         }
         return $this->config;
     }

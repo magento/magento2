@@ -23,6 +23,8 @@
  */
 namespace Magento\Framework\App\Cache\Frontend;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class FactoryTest extends \PHPUnit_Framework_TestCase
 {
     public static function setUpBeforeClass()
@@ -98,8 +100,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
     public static function idPrefixDataProvider()
     {
         return array(
-            // start of md5('CONFIG_DIR')
-            'default id prefix' => array(array('backend' => 'Zend_Cache_Backend_BlackHole'), 'a3c_'),
+            // start of md5('DIR')
+            'default id prefix' => array(array('backend' => 'Zend_Cache_Backend_BlackHole'), 'c15_'),
             'id prefix in "id_prefix" option' => array(
                 array('backend' => 'Zend_Cache_Backend_BlackHole', 'id_prefix' => 'id_prefix_value'),
                 'id_prefix_value'
@@ -157,14 +159,13 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $objectManager = $this->getMock('Magento\Framework\ObjectManager', array(), array(), '', false);
         $objectManager->expects($this->any())->method('create')->will($this->returnCallback($processFrontendFunc));
 
-        $map = array(
-            array(\Magento\Framework\App\Filesystem::CACHE_DIR, 'CACHE_DIR'),
-            array(\Magento\Framework\App\Filesystem::CONFIG_DIR, 'CONFIG_DIR')
-        );
-
-        $filesystem = $this->getMock('Magento\Framework\App\Filesystem', array('getPath'), array(), '', false);
-
-        $filesystem->expects($this->any())->method('getPath')->will($this->returnValueMap($map));
+        $dirMock = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\ReadInterface');
+        $dirMock->expects($this->any())
+            ->method('getAbsolutePath')
+            ->will($this->returnValue('DIR'));
+        $filesystem = $this->getMock('Magento\Framework\Filesystem', [], array(), '', false);
+        $filesystem->expects($this->any())->method('getDirectoryRead')->will($this->returnValue($dirMock));
+        $filesystem->expects($this->any())->method('getDirectoryWrite')->will($this->returnValue($dirMock));
 
         $resource = $this->getMock('Magento\Framework\App\Resource', array(), array(), '', false);
 

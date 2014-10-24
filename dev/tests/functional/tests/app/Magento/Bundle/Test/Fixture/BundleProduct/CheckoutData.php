@@ -68,8 +68,8 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                             ]
                         ]
                     ],
-                    'qty' => 2
                 ],
+                'qty' => 2,
                 'cartItem' => [
                     'price' => 100,
                     'qty' => 2,
@@ -87,8 +87,8 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                             ]
                         ]
                     ],
-                    'qty' => 2
                 ],
+                'qty' => 2,
                 'cartItem' => [
                     'price' => 756,
                     'qty' => 2,

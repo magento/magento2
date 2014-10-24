@@ -24,6 +24,7 @@
  */
 namespace Magento\Shipping\Controller\Adminhtml\Order\Shipment;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use \Magento\Framework\App\ResponseInterface;
 use \Magento\Backend\App\Action;
 
@@ -85,7 +86,7 @@ class PrintPackage extends \Magento\Backend\App\Action
                     'Y-m-d_H-i-s'
                 ) . '.pdf',
                 $pdf->render(),
-                \Magento\Framework\App\Filesystem::VAR_DIR,
+                DirectoryList::VAR_DIR,
                 'application/pdf'
             );
         } else {

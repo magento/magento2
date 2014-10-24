@@ -24,6 +24,8 @@
 
 namespace Magento\Framework\Less;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class FileGeneratorTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -68,10 +70,10 @@ class FileGeneratorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnCallback(function ($file) {
                 return "content of '$file'";
             }));
-        $filesystem = $this->getMock('\Magento\Framework\App\Filesystem', array(), array(), '', false);
+        $filesystem = $this->getMock('\Magento\Framework\Filesystem', array(), array(), '', false);
         $filesystem->expects($this->once())
             ->method('getDirectoryWrite')
-            ->with(\Magento\Framework\App\Filesystem::VAR_DIR)
+            ->with(DirectoryList::VAR_DIR)
             ->will($this->returnValue($this->tmpDirectory));
         $this->assetRepo = $this->getMock('\Magento\Framework\View\Asset\Repository', array(), array(), '', false);
         $this->magentoImport = $this->getMock(

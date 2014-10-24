@@ -23,6 +23,8 @@
  */
 namespace Magento\Framework\Image\Adapter;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class InterfaceTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -560,11 +562,12 @@ class InterfaceTest extends \PHPUnit_Framework_TestCase
     public function testCreatePngFromString($pixel1, $expectedColor1, $pixel2, $expectedColor2, $adapterType)
     {
         $adapter = $this->_getAdapter($adapterType);
-        $path = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\App\Filesystem'
-        )->getPath(
-            \Magento\Framework\App\Filesystem::ROOT_DIR
-        ) . '/lib/internal/LinLibertineFont/LinLibertine_Re-4.4.1.ttf';
+        /** @var \Magento\Framework\Filesystem $filesystem */
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\Filesystem'
+        );
+        $path = $filesystem->getDirectoryRead(DirectoryList::LIB_INTERNAL)
+            ->getAbsolutePath('LinLibertineFont/LinLibertine_Re-4.4.1.ttf');
         $adapter->createPngFromString('T', $path);
         $adapter->refreshImageDimensions();
 

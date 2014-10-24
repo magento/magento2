@@ -23,6 +23,8 @@
  */
 namespace Magento\Test\Integrity\Theme;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class XmlFilesTest extends \PHPUnit_Framework_TestCase
 {
     const NO_VIEW_XML_FILES_MARKER = 'no-view-xml';
@@ -38,7 +40,7 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
         }
         $this->_validateConfigFile(
             $file,
-            $this->getPath(\Magento\Framework\App\Filesystem::LIB_INTERNAL) . '/Magento/Framework/Config/etc/view.xsd'
+            $this->getPath(DirectoryList::LIB_INTERNAL) . '/Magento/Framework/Config/etc/view.xsd'
         );
     }
 
@@ -48,7 +50,7 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
     public function viewConfigFileDataProvider()
     {
         $result = [];
-        $files = glob($this->getPath(\Magento\Framework\App\Filesystem::THEMES_DIR) . '/*/*/view.xml');
+        $files = glob($this->getPath(DirectoryList::THEMES) . '/*/*/view.xml');
         foreach ($files as $file) {
             $result[substr($file, strlen(BP))] = [$file];
         }
@@ -70,7 +72,7 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
     public function themeConfigFileExistsDataProvider()
     {
         $result = [];
-        $files = glob($this->getPath(\Magento\Framework\App\Filesystem::THEMES_DIR) . '/*/*/*', GLOB_ONLYDIR);
+        $files = glob($this->getPath(DirectoryList::THEMES) . '/*/*/*', GLOB_ONLYDIR);
         foreach ($files as $themeDir) {
             $result[substr($themeDir, strlen(BP))] = [$themeDir];
         }
@@ -85,7 +87,7 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
     {
         $this->_validateConfigFile(
             $file,
-            $this->getPath(\Magento\Framework\App\Filesystem::LIB_INTERNAL) . '/Magento/Framework/Config/etc/theme.xsd'
+            $this->getPath(DirectoryList::LIB_INTERNAL) . '/Magento/Framework/Config/etc/theme.xsd'
         );
     }
 
@@ -109,7 +111,7 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
     public function themeConfigFileDataProvider()
     {
         $result = [];
-        $files = glob($this->getPath(\Magento\Framework\App\Filesystem::THEMES_DIR) . '/*/*/*/theme.xml');
+        $files = glob($this->getPath(DirectoryList::THEMES) . '/*/*/*/theme.xml');
         foreach ($files as $file) {
             $result[substr($file, strlen(BP))] = [$file];
         }
@@ -143,10 +145,10 @@ class XmlFilesTest extends \PHPUnit_Framework_TestCase
      */
     protected function getPath($code)
     {
-        return \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\App\Filesystem'
-        )->getPath(
-            $code
+        /** @var \Magento\Framework\Filesystem $filesystem */
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\Filesystem'
         );
+        return $filesystem->getDirectoryRead($code)->getAbsolutePath();
     }
 }

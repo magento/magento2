@@ -26,6 +26,7 @@ namespace Magento\UrlRewrite\Test\Block\Adminhtml\Catalog\Category;
 
 use Mtf\Block\Block;
 use Mtf\Client\Element\Locator;
+use Magento\Catalog\Test\Fixture\CatalogCategory;
 
 /**
  * Class Tree
@@ -38,17 +39,23 @@ class Tree extends Block
      *
      * @var string
      */
-    protected $skipCategoryButton = '[data-ui-id="urlrewrite-catalog-product-edit-skip-categories"]';
+    protected $skipCategoryButton = '[data-ui-id="catalog-product-edit-skip-categories"]';
 
     /**
      * Select category by its name
      *
-     * @param string $categoryName
+     * @param string|CatalogCategory $category
      * @return void
      */
-    public function selectCategory($categoryName)
+    public function selectCategory($category)
     {
-        $this->_rootElement->find("//a[contains(text(),'{$categoryName}')]", Locator::SELECTOR_XPATH)->click();
+        //TODO Remove this line after old fixture was deleted
+        $categoryName = $category instanceof CatalogCategory ? $category->getName() : $category;
+        if ($categoryName) {
+            $this->_rootElement->find("//a[contains(text(),'{$categoryName}')]", Locator::SELECTOR_XPATH)->click();
+        } else {
+            $this->skipCategorySelection();
+        }
     }
 
     /**
@@ -56,7 +63,7 @@ class Tree extends Block
      *
      * @return void
      */
-    public function skipCategorySelection()
+    protected function skipCategorySelection()
     {
         $this->_rootElement->find($this->skipCategoryButton, Locator::SELECTOR_CSS)->click();
     }

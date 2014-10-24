@@ -58,8 +58,10 @@ class Curl extends AbstractCurl implements CustomerInjectableInterface
             'United States' => 'US'
         ],
         'region_id' => [
-            'California' => 12
-        ]
+            'California' => 12,
+            'New York' => 43,
+            'Texas' => 57,
+        ],
     ];
 
     /**

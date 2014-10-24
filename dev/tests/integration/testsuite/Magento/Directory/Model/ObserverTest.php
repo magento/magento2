@@ -92,20 +92,4 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
         $rates = $currencyResource->getCurrencyRates($this->baseCurrency, explode(',', $allowedCurrencies));
         $this->assertEquals(3, count($rates));
     }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Required parameter 'area' was not passed
-     */
-    public function testScheduledUpdateCurrencyRates_invalidCurrency()
-    {
-        $allowedCurrencies = 'USD,GBP,XXX';
-        $this->configResource->saveConfig(
-            $this->allowedCurrenciesPath,
-            $allowedCurrencies,
-            ScopeInterface::SCOPE_STORE,
-            0
-        );
-        $this->observer->scheduledUpdateCurrencyRates(null);
-    }
 }

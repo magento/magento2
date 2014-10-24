@@ -286,7 +286,7 @@ class ReadTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array('popup.csv', 'var myData = 5;'),
-            array('data.csv', '"field1", "field2"' . PHP_EOL . '"field3", "field4"' . PHP_EOL)
+            array('data.csv', '"field1", "field2"' . "\n" . '"field3", "field4"' . "\n")
         );
     }
 
@@ -300,15 +300,10 @@ class ReadTest extends \PHPUnit_Framework_TestCase
     private function getDirectoryInstance($path)
     {
         $fullPath = __DIR__ . '/../_files/' . $path;
-        $config = array('path' => $fullPath);
         $objectManager = Bootstrap::getObjectManager();
+        /** @var \Magento\Framework\Filesystem\Directory\ReadFactory $directoryFactory */
         $directoryFactory = $objectManager->create('Magento\Framework\Filesystem\Directory\ReadFactory');
-        return $directoryFactory->create(
-            $config,
-            new \Magento\Framework\Filesystem\DriverFactory(
-                $objectManager->get('Magento\Framework\App\Filesystem\DirectoryList')
-            )
-        );
+        return $directoryFactory->create($fullPath);
     }
 
     /**

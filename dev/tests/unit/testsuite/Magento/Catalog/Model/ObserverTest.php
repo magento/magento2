@@ -54,7 +54,7 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     protected $_categoryFlatState;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var \Magento\Framework\StoreManagerInterface
      */
     protected $_storeManager;
 

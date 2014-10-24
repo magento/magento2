@@ -58,7 +58,7 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject */
     protected $appState;
 
-    /** @var \Magento\Framework\App\Filesystem|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject */
     protected $filesystem;
 
     /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
@@ -88,7 +88,7 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
         $this->csvParser = $this->getMock('\Magento\Framework\File\Csv', [], [], '', false);
         $this->packDictionary = $this->getMock('\Magento\Framework\App\Language\Dictionary', [], [], '', false);
         $this->directory = $this->getMock('\Magento\Framework\Filesystem\Directory\ReadInterface', [], [], '', false);
-        $filesystem = $this->getMock('\Magento\Framework\App\Filesystem', [], [], '', false);
+        $filesystem = $this->getMock('\Magento\Framework\Filesystem', [], [], '', false);
         $filesystem->expects($this->once())->method('getDirectoryRead')->will($this->returnValue($this->directory));
 
         $this->translate = new Translate(
@@ -179,7 +179,7 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
         ];
         $this->resource->expects($this->any())->method('getTranslationArray')->will($this->returnValue($dbData));
 
-        $this->cache->expects($this->exactly($forceReload ? 0 : 1))
+        $this->cache->expects($this->exactly(1))
             ->method('save');
 
         $this->translate->loadData($area, $forceReload);

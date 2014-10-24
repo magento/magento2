@@ -109,13 +109,24 @@ class RequestGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $attribute = $this->getMockBuilder('Magento\Catalog\Model\Resource\Product\Attribute')
             ->disableOriginalConstructor()
-            ->setMethods(['getAttributeCode', 'getBackendType', 'getIsVisibleInAdvancedSearch', 'getSearchWeight'])
+            ->setMethods(
+                [
+                    'getAttributeCode',
+                    'getBackendType',
+                    'getIsVisibleInAdvancedSearch',
+                    'getSearchWeight',
+                    'getFrontendInput'
+                ]
+            )
             ->getMock();
         $attribute->expects($this->any())
             ->method('getAttributeCode')
             ->willReturn($code);
         $attribute->expects($this->any())
             ->method('getBackendType')
+            ->willReturn($type);
+        $attribute->expects($this->any())
+            ->method('getFrontendInput')
             ->willReturn($type);
 
         $attribute->expects($this->any())

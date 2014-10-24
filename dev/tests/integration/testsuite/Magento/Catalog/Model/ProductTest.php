@@ -23,6 +23,8 @@
  */
 namespace Magento\Catalog\Model;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 /**
  * Tests product model:
  * - general behaviour is tested (external interaction and pricing is not tested there)
@@ -53,9 +55,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Framework\Filesystem\Directory\WriteInterface $mediaDirectory */
         $mediaDirectory = $objectManager->get(
-            'Magento\Framework\App\Filesystem'
+            'Magento\Framework\Filesystem'
         )->getDirectoryWrite(
-            \Magento\Framework\App\Filesystem::MEDIA_DIR
+            DirectoryList::MEDIA
         );
 
         if ($mediaDirectory->isExist($config->getBaseMediaPath())) {
@@ -154,9 +156,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Framework\Filesystem\Directory\WriteInterface $mediaDirectory */
         $mediaDirectory = $objectManager->get(
-            'Magento\Framework\App\Filesystem'
+            'Magento\Framework\Filesystem'
         )->getDirectoryWrite(
-            \Magento\Framework\App\Filesystem::MEDIA_DIR
+            DirectoryList::MEDIA
         );
 
         $mediaDirectory->create($config->getBaseTmpMediaPath());

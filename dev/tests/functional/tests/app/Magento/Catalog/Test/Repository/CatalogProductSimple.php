@@ -317,6 +317,18 @@ class CatalogProductSimple extends AbstractRepository
             'group_price' => ['preset' => 'default'],
         ];
 
+        $this->_data['simple_with_group_price_and_category'] = [
+            'type_id' => 'simple',
+            'attribute_set_id' => ['dataSet' => 'default'],
+            'name' => 'Simple Product %isolation%',
+            'sku' => 'sku_simple_product_%isolation%',
+            'price' => ['value' => 100, 'preset' => '-'],
+            'weight' => 1,
+            'group_price' => ['preset' => 'tax_calculation'],
+            'category_ids' => ['presets' => 'default_subcategory'],
+            'website_ids' => ['Main Website'],
+        ];
+
         $this->_data['simple_with_tier_price'] = [
             'type_id' => 'simple',
             'attribute_set_id' => ['dataSet' => 'default'],
@@ -325,6 +337,18 @@ class CatalogProductSimple extends AbstractRepository
             'price' => ['value' => 300, 'preset' => '-'],
             'weight' => 1,
             'tier_price' => ['preset' => 'default'],
+        ];
+
+        $this->_data['simple_with_tier_price_and_category'] = [
+            'type_id' => 'simple',
+            'attribute_set_id' => ['dataSet' => 'default'],
+            'name' => 'Simple Product %isolation%',
+            'sku' => 'sku_simple_product_%isolation%',
+            'price' => ['value' => 300, 'preset' => '-'],
+            'weight' => 1,
+            'tier_price' => ['preset' => 'default'],
+            'category_ids' => ['presets' => 'default_subcategory'],
+            'website_ids' => ['Main Website'],
         ];
 
         $this->_data['with_two_custom_option'] = [
@@ -364,6 +388,174 @@ class CatalogProductSimple extends AbstractRepository
             'attribute_set_id' => ['dataSet' => 'default'],
             'price' => ['value' => 100, 'preset' => '-'],
             'website_ids' => ['Main Website'],
+        ];
+
+        $this->_data['out_of_stock'] = [
+            'attribute_set_id' => ['dataSet' => 'default'],
+            'name' => 'Simple Product out of stock %isolation%',
+            'sku' => 'sku_simple_product_out_of_stock%isolation%',
+            'weight' => 1,
+            'quantity_and_stock_status' => [
+                'qty' => 25.0000,
+                'is_in_stock' => 'Out of Stock',
+            ],
+            'price' => ['value' => 560.00, 'preset' => '-'],
+            'tax_class_id' => ['dataSet' => 'Taxable Goods'],
+            'website_ids' => ['Main Website'],
+            'visibility' => 'Catalog, Search',
+            'checkout_data' => ['preset' => 'order_default'],
+        ];
+
+        $this->_data['offline'] = [
+            'attribute_set_id' => ['dataSet' => 'default'],
+            'name' => 'Simple Product offline %isolation%',
+            'sku' => 'sku_simple_product_offline_%isolation%',
+            'weight' => 1,
+            'quantity_and_stock_status' => [
+                'qty' => 25.0000,
+                'is_in_stock' => 'In Stock',
+            ],
+            'price' => ['value' => 560.00, 'preset' => '-'],
+            'tax_class_id' => ['dataSet' => 'Taxable Goods'],
+            'website_ids' => ['Main Website'],
+            'visibility' => 'Catalog, Search',
+            'checkout_data' => ['preset' => 'order_default'],
+            'status' => 'Product offline',
+        ];
+
+        $this->_data['not_visible_individually'] = [
+            'attribute_set_id' => ['dataSet' => 'default'],
+            'name' => 'Simple Product not visible %isolation%',
+            'sku' => 'sku_simple_product_not_visible_%isolation%',
+            'weight' => 1,
+            'quantity_and_stock_status' => [
+                'qty' => 25.0000,
+                'is_in_stock' => 'In Stock',
+            ],
+            'price' => ['value' => 560.00, 'preset' => '-'],
+            'tax_class_id' => ['dataSet' => 'Taxable Goods'],
+            'website_ids' => ['Main Website'],
+            'visibility' => 'Not Visible Individually',
+            'checkout_data' => ['preset' => 'order_default'],
+        ];
+
+        $this->_data['simple_with_cart_limits'] = [
+            'attribute_set_id' => ['dataSet' => 'default'],
+            'name' => 'Simple Product with cart limit %isolation%',
+            'sku' => 'sku_simple_product_with_cart_limit_%isolation%',
+            'weight' => 1,
+            'quantity_and_stock_status' => [
+                'qty' => 25.0000,
+                'is_in_stock' => 'In Stock',
+            ],
+            'price' => ['value' => 560.00, 'preset' => '-'],
+            'tax_class_id' => ['dataSet' => 'Taxable Goods'],
+            'website_ids' => ['Main Website'],
+            'visibility' => 'Catalog, Search',
+            'checkout_data' => ['preset' => 'order_default'],
+            'stock_data' => [
+                'min_sale_qty' => '2',
+                'max_sale_qty' => '5',
+            ],
+        ];
+
+        $this->_data['with_one_custom_option'] = [
+            'type_id' => 'simple',
+            'attribute_set_id' => ['dataSet' => 'default'],
+            'name' => 'Simple Product %isolation%',
+            'sku' => 'sku_simple_product_%isolation%',
+            'price' => ['value' => 300, 'preset' => '-'],
+            'weight' => 1,
+            'custom_options' => ['preset' => 'drop_down_with_one_option_percent_price'],
+            'checkout_data' => ['preset' => 'drop_down_with_one_option_percent_price'],
+            'website_ids' => ['Main Website']
+        ];
+
+        $this->_data['simple_with_qty_increments'] = [
+            'attribute_set_id' => ['dataSet' => 'default'],
+            'name' => 'Simple Product with qty increments %isolation%',
+            'sku' => 'sku_simple_product_with_qty_increments_%isolation%',
+            'weight' => 1,
+            'quantity_and_stock_status' => [
+                'qty' => 25.0000,
+                'is_in_stock' => 'In Stock',
+            ],
+            'price' => ['value' => 560.00, 'preset' => '-'],
+            'tax_class_id' => ['dataSet' => 'Taxable Goods'],
+            'website_ids' => ['Main Website'],
+            'visibility' => 'Catalog, Search',
+            'checkout_data' => ['preset' => 'order_default'],
+            'stock_data' => [
+                'enable_qty_increments' => 'Yes',
+                'qty_increments' => '2',
+            ],
+        ];
+
+        $this->_data['simple_with_tier_price_and_qty'] = [
+            'type_id' => 'simple',
+            'attribute_set_id' => ['dataSet' => 'default'],
+            'name' => 'Simple Product %isolation%',
+            'sku' => 'sku_simple_product_%isolation%',
+            'price' => ['value' => 300, 'preset' => '-'],
+            'weight' => 1,
+            'quantity_and_stock_status' => [
+                'qty' => 25.0000,
+                'is_in_stock' => 'In Stock',
+            ],
+            'tier_price' => ['preset' => 'default'],
+            'website_ids' => ['Main Website']
+        ];
+
+        $this->_data['with_recurring_payment'] = [
+            'attribute_set_id' => ['dataSet' => 'default'],
+            'name' => 'Simple Product with recurring payment %isolation%',
+            'sku' => 'sku_simple_product_with_recurring_payment_%isolation%',
+            'weight' => 1,
+            'quantity_and_stock_status' => [
+                'qty' => 25.0000,
+                'is_in_stock' => 'In Stock',
+            ],
+            'price' => ['value' => 560.00, 'preset' => '-'],
+            'tax_class_id' => ['dataSet' => 'Taxable Goods'],
+            'website_ids' => ['Main Website'],
+            'visibility' => 'Catalog, Search',
+            'checkout_data' => ['preset' => 'order_default'],
+            'is_recurring' => "Yes",
+            'recurring_payment' => [
+                'period_unit' => 'week',
+                'period_frequency' => 1
+            ]
+        ];
+
+        $this->_data['with_msrp'] = [
+            'attribute_set_id' => ['dataSet' => 'default'],
+            'name' => 'Simple Product with msrp %isolation%',
+            'sku' => 'sku_simple_product_with_msrp_%isolation%',
+            'weight' => 1,
+            'quantity_and_stock_status' => [
+                'qty' => 25.0000,
+                'is_in_stock' => 'In Stock',
+            ],
+            'price' => ['value' => 560.00, 'preset' => '-'],
+            'tax_class_id' => ['dataSet' => 'Taxable Goods'],
+            'website_ids' => ['Main Website'],
+            'visibility' => 'Catalog, Search',
+            'checkout_data' => ['preset' => 'order_default'],
+            'msrp' => 500.00,
+            'msrp_display_actual_price_type' => 'Before Order Confirmation'
+        ];
+
+        $this->_data['with_one_custom_option_and_category'] = [
+            'type_id' => 'simple',
+            'attribute_set_id' => ['dataSet' => 'default'],
+            'name' => 'Simple Product %isolation%',
+            'sku' => 'sku_simple_product_%isolation%',
+            'price' => ['value' => 300, 'preset' => '-'],
+            'weight' => 1,
+            'custom_options' => ['preset' => 'drop_down_with_one_option_percent_price'],
+            'checkout_data' => ['preset' => 'drop_down_with_one_option_percent_price'],
+            'website_ids' => ['Main Website'],
+            'category_ids' => ['presets' => 'default_subcategory'],
         ];
     }
 }

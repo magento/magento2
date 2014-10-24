@@ -24,6 +24,7 @@
 namespace Magento\Indexer\App;
 
 use Magento\Framework\App;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 class Indexer implements \Magento\Framework\AppInterface
 {
@@ -62,7 +63,7 @@ class Indexer implements \Magento\Framework\AppInterface
     public function launch()
     {
         /* Clean reports */
-        $directory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::ROOT_DIR);
+        $directory = $this->filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $path = $directory->getRelativePath($this->reportDir);
         if ($directory->isExist($path)) {
             $directory->delete($path);

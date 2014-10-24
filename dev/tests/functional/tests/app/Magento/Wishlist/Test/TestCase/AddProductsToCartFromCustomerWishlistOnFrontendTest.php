@@ -25,6 +25,7 @@
 namespace Magento\Wishlist\Test\TestCase;
 
 use Mtf\ObjectManager;
+use Mtf\Client\Browser;
 use Magento\Checkout\Test\Fixture\Cart;
 use Magento\Customer\Test\Fixture\CustomerInjectable;
 
@@ -47,19 +48,28 @@ use Magento\Customer\Test\Fixture\CustomerInjectable;
  * @group Wishlist_(CS)
  * @ZephyrId MAGETWO-25268
  */
-class AddProductsToCartFromCustomerWishlistOnFrontendTest extends AbstractWishlistOnFrontend
+class AddProductsToCartFromCustomerWishlistOnFrontendTest extends AbstractWishlistTest
 {
+    /**
+     * Browser
+     *
+     * @var Browser
+     */
+    protected $browser;
+
     /**
      * Run suggest searching result test
      *
      * @param CustomerInjectable $customer
      * @param string $products
      * @param int $qty
+     * @param Browser $browser
      * @return array
      */
-    public function test(CustomerInjectable $customer, $products, $qty)
+    public function test(CustomerInjectable $customer, $products, $qty, Browser $browser)
     {
         // Preconditions
+        $this->browser = $browser;
         $customer->persist();
         $this->loginCustomer($customer);
         $products = $this->createProducts($products);

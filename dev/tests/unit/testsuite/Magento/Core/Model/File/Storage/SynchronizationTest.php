@@ -23,6 +23,8 @@
  */
 namespace Magento\Core\Model\File\Storage;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class SynchronizationTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -75,7 +77,7 @@ class SynchronizationTest extends \PHPUnit_Framework_TestCase
         $directory->expects($this->once())->method('getRelativePath')->will($this->returnArgument(0));
         $directory->expects($this->once())->method('openFile')->with($filePath)->will($this->returnValue($file));
         $filesystem = $this->getMock(
-            'Magento\Framework\App\Filesystem',
+            'Magento\Framework\Filesystem',
             array('getDirectoryWrite'),
             array(),
             '',
@@ -86,7 +88,7 @@ class SynchronizationTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getDirectoryWrite'
         )->with(
-            \Magento\Framework\App\Filesystem::PUB_DIR
+            DirectoryList::PUB
         )->will(
             $this->returnValue($directory)
         );

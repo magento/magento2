@@ -24,7 +24,7 @@
 namespace Magento\TestFramework;
 
 use Magento\Authorization\Model\UserContextInterface;
-use Magento\Framework\App\Filesystem;
+use Magento\Framework\Filesystem;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
@@ -142,20 +142,26 @@ class Application
         $this->_installEtcDir = "{$installDir}/etc";
 
         $generationDir = "{$installDir}/generation";
+        $customDirs = array(
+            DirectoryList::CONFIG => array(DirectoryList::PATH => $this->_installEtcDir),
+            DirectoryList::VAR_DIR => array(DirectoryList::PATH => $installDir),
+            DirectoryList::MEDIA => array(DirectoryList::PATH => "{$installDir}/media"),
+            DirectoryList::STATIC_VIEW => array(DirectoryList::PATH => "{$installDir}/pub_static"),
+            DirectoryList::GENERATION => array(DirectoryList::PATH => $generationDir),
+            DirectoryList::CACHE => array(DirectoryList::PATH => $installDir . '/cache'),
+            DirectoryList::LOG => array(DirectoryList::PATH => $installDir . '/log'),
+            DirectoryList::THEMES => array(DirectoryList::PATH => BP . '/app/design'),
+            DirectoryList::SESSION => array(DirectoryList::PATH => $installDir . '/session'),
+            DirectoryList::TMP => array(DirectoryList::PATH => $installDir . '/tmp'),
+            DirectoryList::UPLOAD => array(DirectoryList::PATH => $installDir . '/upload'),
+        );
         $this->_initParams = array(
-            Filesystem::PARAM_APP_DIRS => array(
-                Filesystem::CONFIG_DIR => array('path' => $this->_installEtcDir),
-                Filesystem::VAR_DIR => array('path' => $installDir),
-                Filesystem::MEDIA_DIR => array('path' => "{$installDir}/media"),
-                Filesystem::STATIC_VIEW_DIR => array('path' => "{$installDir}/pub_static"),
-                Filesystem::GENERATION_DIR => array('path' => $generationDir),
-                Filesystem::CACHE_DIR => array('path' => $installDir . '/cache'),
-                Filesystem::LOG_DIR => array('path' => $installDir . '/log'),
-                Filesystem::THEMES_DIR => array('path' => BP . '/app/design'),
-            ),
+            \Magento\Framework\App\Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => $customDirs,
             \Magento\Framework\App\State::PARAM_MODE => $appMode
         );
-        $this->_factory = new \Magento\TestFramework\ObjectManagerFactory();
+        $dirList = new \Magento\Framework\App\Filesystem\DirectoryList(BP, $customDirs);
+        $driverPool = new \Magento\Framework\Filesystem\DriverPool;
+        $this->_factory = new \Magento\TestFramework\ObjectManagerFactory($dirList, $driverPool);
     }
 
     /**
@@ -203,27 +209,27 @@ class Application
      */
     public function initialize($overriddenParams = array())
     {
-        $overriddenParams['base_dir'] = BP;
         $overriddenParams[\Magento\Framework\App\State::PARAM_MODE] = $this->_appMode;
         $overriddenParams = $this->_customizeParams($overriddenParams);
+        $directories = isset($overriddenParams[\Magento\Framework\App\Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS])
+            ? $overriddenParams[\Magento\Framework\App\Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS]
+            : array();
+        $directoryList = new DirectoryList(BP, $directories);
 
         /** @var \Magento\TestFramework\ObjectManager $objectManager */
         $objectManager = Helper\Bootstrap::getObjectManager();
         if (!$objectManager) {
-            $objectManager = $this->_factory->create(BP, $overriddenParams);
+            $objectManager = $this->_factory->create($overriddenParams);
+            $objectManager->addSharedInstance($directoryList, 'Magento\Framework\App\Filesystem\DirectoryList');
+            $objectManager->addSharedInstance($directoryList, 'Magento\Framework\Filesystem\DirectoryList');
         } else {
-            $objectManager = $this->_factory->restore($objectManager, BP, $overriddenParams);
+            $objectManager = $this->_factory->restore($objectManager, $directoryList, $overriddenParams);
         }
 
-        $directories = isset(
-            $overriddenParams[Filesystem::PARAM_APP_DIRS]
-        ) ? $overriddenParams[Filesystem::PARAM_APP_DIRS] : array();
-        $directoryList = new \Magento\TestFramework\App\Filesystem\DirectoryList(BP, $directories);
-
-        $objectManager->addSharedInstance($directoryList, 'Magento\Framework\App\Filesystem\DirectoryList');
-        $objectManager->addSharedInstance($directoryList, 'Magento\Framework\Filesystem\DirectoryList');
-        $objectManager->removeSharedInstance('Magento\Framework\App\Filesystem');
-        $objectManager->removeSharedInstance('Magento\Framework\App\Filesystem\DirectoryList\Verification');
+        /** @var \Magento\TestFramework\App\Filesystem $filesystem */
+        $filesystem = $objectManager->get('Magento\TestFramework\App\Filesystem');
+        $objectManager->removeSharedInstance('Magento\Framework\Filesystem');
+        $objectManager->addSharedInstance($filesystem, 'Magento\Framework\Filesystem');
 
         Helper\Bootstrap::setObjectManager($objectManager);
 
@@ -255,22 +261,6 @@ class Application
             $objectManager->get('Magento\Framework\ObjectManager\DynamicConfigInterface')->getConfiguration()
         );
         \Magento\Framework\Phrase::setRenderer($objectManager->get('Magento\Framework\Phrase\RendererInterface'));
-
-        /** @var \Magento\Framework\App\Filesystem\DirectoryList\Verification $verification */
-        $verification = $objectManager->get('Magento\Framework\App\Filesystem\DirectoryList\Verification');
-        $verification->createAndVerifyDirectories();
-
-        $directoryList = $objectManager->get('Magento\Framework\App\Filesystem\DirectoryList');
-        $directoryListConfig = $objectManager->get('Magento\Framework\App\Filesystem\DirectoryList\Configuration');
-        $directoryListConfig->configure($directoryList);
-
-        $directories = isset(
-            $overriddenParams[\Magento\Framework\App\Filesystem::PARAM_APP_DIRS]
-        ) ? $overriddenParams[\Magento\Framework\App\Filesystem::PARAM_APP_DIRS] : array();
-        foreach ($directories as $code => $configOverrides) {
-            $config = array_merge($directoryList->getConfig($code), $configOverrides);
-            $directoryList->addDirectory($code, $config);
-        }
     }
 
     /**

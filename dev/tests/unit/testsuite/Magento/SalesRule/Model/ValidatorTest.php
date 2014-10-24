@@ -151,8 +151,15 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
         $itemSimple->expects($this->any())->method('getAddress')->will($this->returnValue(new \stdClass()));
 
         /** @var $quote \Magento\Sales\Model\Quote */
-        $quote = $this->getMock('Magento\Sales\Model\Quote', ['hasNominalItems', '__wakeup'], [], '', false);
+        $quote = $this->getMock(
+            'Magento\Sales\Model\Quote',
+            ['hasNominalItems', 'getStoreId', '__wakeup'],
+            [],
+            '',
+            false
+        );
         $quote->expects($this->any())->method('hasNominalItems')->will($this->returnValue(false));
+        $quote->expects($this->any())->method('getStoreId')->will($this->returnValue(1));
 
         $itemData = include $fixturePath . 'quote_item_downloadable.php';
         $itemDownloadable->addData($itemData);

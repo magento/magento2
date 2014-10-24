@@ -221,7 +221,8 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
                     'sendPasswordResetConfirmationEmail',
                     'sendPasswordResetNotificationEmail',
                     'sendPasswordReminderEmail',
-                    'delete'
+                    'delete',
+                    'validatePassword',
                 )
             )->getMock();
 
@@ -2180,5 +2181,44 @@ class CustomerAccountServiceTest extends \PHPUnit_Framework_TestCase
             ]
         );
         return $customerService;
+    }
+
+    public function testChangePasswordSendMailException()
+    {
+        $exception = new MailException(__('The mail server is down'));
+        $newPassword = 'newPassword';
+        $encryptedHash = 'password_encrypted_hash';
+
+        $this->_mockReturnValue($this->_customerModelMock, array('getId' => self::ID, 'password' => self::PASSWORD));
+
+        $this->_customerModelMock->expects($this->once())
+            ->method('validatePassword')
+            ->with(self::PASSWORD)
+            ->will($this->returnValue(true));
+        $this->_customerModelMock->expects($this->once())
+            ->method('setRpToken')
+            ->with(null)
+            ->will($this->returnSelf());
+        $this->_customerModelMock->expects($this->once())
+            ->method('setRpTokenCreatedAt')
+            ->with(null)
+            ->will($this->returnSelf());
+        $this->_encryptorMock->expects($this->once())
+            ->method('getHash')
+            ->with($newPassword, true)
+            ->will($this->returnValue($encryptedHash));
+        $this->_customerModelMock->expects($this->once())
+            ->method('setPasswordHash')
+            ->with($encryptedHash)
+            ->will($this->returnSelf());
+        $this->_customerModelMock->expects($this->once())
+            ->method('sendPasswordResetNotificationEmail')
+            ->will($this->throwException($exception));
+        $this->_loggerMock->expects($this->once())
+            ->method('logException')
+            ->with($exception);
+
+        $customerService = $this->_createService();
+        $customerService->changePassword(self::ID, self::PASSWORD, $newPassword);
     }
 }

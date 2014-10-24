@@ -23,6 +23,8 @@
  */
 namespace Magento\Sales\Model\Order\Pdf\Items;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 /**
  * Sales Order Pdf Items renderer Abstract
  */
@@ -84,7 +86,7 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Tax\Helper\Data $taxData
-     * @param \Magento\Framework\App\Filesystem $filesystem ,
+     * @param \Magento\Framework\Filesystem $filesystem ,
      * @param \Magento\Framework\Filter\FilterManager $filterManager
      * @param \Magento\Framework\Model\Resource\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
@@ -94,7 +96,7 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Tax\Helper\Data $taxData,
-        \Magento\Framework\App\Filesystem $filesystem,
+        \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Filter\FilterManager $filterManager,
         \Magento\Framework\Model\Resource\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\Db $resourceCollection = null,
@@ -102,7 +104,7 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
     ) {
         $this->filterManager = $filterManager;
         $this->_taxData = $taxData;
-        $this->_rootDirectory = $filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::ROOT_DIR);
+        $this->_rootDirectory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 

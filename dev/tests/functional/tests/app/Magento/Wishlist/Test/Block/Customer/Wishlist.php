@@ -28,7 +28,7 @@ use Mtf\Block\Block;
 
 /**
  * Class Wishlist
- * Wish list details block in "My account"
+ * Wish list details block in "My Wish List" page
  */
 class Wishlist extends Block
 {

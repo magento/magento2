@@ -181,12 +181,12 @@ class Merged implements \Iterator
     }
 
     /**
-     * Returns directory for storing merged files relative to STATIC_VIEW_DIR
+     * Returns directory for storing merged files relative to STATIC_VIEW
      *
      * @return string
      */
     public static function getRelativeDir()
     {
-        return \Magento\Framework\App\Filesystem\DirectoryList::CACHE_VIEW_REL_DIR . '/merged';
+        return Minified::CACHE_VIEW_REL . '/merged';
     }
 }

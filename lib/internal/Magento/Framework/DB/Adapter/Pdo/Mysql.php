@@ -25,7 +25,8 @@
  */
 namespace Magento\Framework\DB\Adapter\Pdo;
 
-use Magento\Framework\App\Filesystem;
+use Magento\Framework\Filesystem;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Ddl\Table;
@@ -1468,7 +1469,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     {
         $str = '## ' . date('Y-m-d H:i:s') . "\r\n" . $str;
 
-        $stream = $this->_filesystem->getDirectoryWrite(Filesystem::ROOT_DIR)->openFile($this->_debugFile, 'a');
+        $stream = $this->_filesystem->getDirectoryWrite(DirectoryList::ROOT)->openFile($this->_debugFile, 'a');
         $stream->lock();
         $stream->write($str);
         $stream->unlock();

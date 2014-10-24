@@ -93,16 +93,6 @@ class Config extends ZendConfig
     }
 
     /**
-     * Retrieve the list of Magento file permissions
-     *
-     * @return mixed
-     */
-    public function getMagentoFilePermissions()
-    {
-        return $this->magento->filesystem->permissions;
-    }
-
-    /**
      * Retrieve path to Magento config directory
      *
      * @return mixed

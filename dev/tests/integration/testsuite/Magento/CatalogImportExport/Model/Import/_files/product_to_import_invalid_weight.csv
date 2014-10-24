@@ -1,0 +1,5 @@
+sku,_store,name,price,_type,_attribute_set,weight
+simple1,,"simple 1",10,simple,Default,2
+simple2,,"simple 2",20,simple,Default,-5
+simple3,,"simple 3",30,simple,Default,0
+virtual1,,"virtual 1",5,virtual,Default,

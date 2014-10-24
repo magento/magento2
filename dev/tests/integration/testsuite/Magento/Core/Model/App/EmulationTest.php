@@ -43,12 +43,8 @@ class EmulationTest extends \PHPUnit_Framework_TestCase
         $design = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get('Magento\Framework\View\DesignInterface');
 
-        $initialEnvInfo = $this->_model->startEnvironmentEmulation(1);
-        $initialDesign = $initialEnvInfo->getInitialDesign();
-        $this->assertEquals(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE, $initialDesign['area']);
-        $this->assertEquals(\Magento\Framework\App\Area::AREA_FRONTEND, $design->getDesignTheme()->getData('area'));
-
-        $this->_model->stopEnvironmentEmulation($initialEnvInfo);
+        $this->_model->startEnvironmentEmulation(1);
+        $this->_model->stopEnvironmentEmulation();
         $this->assertEquals(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE, $design->getArea());
     }
 }

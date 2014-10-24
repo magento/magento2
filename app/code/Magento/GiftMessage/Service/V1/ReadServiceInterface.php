@@ -1,7 +1,5 @@
 <?php
 /**
- * Quote shipping method read service
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -25,23 +23,26 @@
  */
 namespace Magento\GiftMessage\Service\V1;
 
+/**
+ * Quote shipping method read service interface.
+ */
 interface ReadServiceInterface
 {
     /**
-     * Get gift message for order
+     * Returns the gift message for a specified order.
      *
-     * @param int $cartId
-     * @return \Magento\GiftMessage\Service\V1\Data\Message
+     * @param int $cartId The shopping cart ID.
+     * @return \Magento\GiftMessage\Service\V1\Data\Message Gift message.
      */
     public function get($cartId);
 
     /**
-     * Get gift message for item
+     * Returns the gift message for a specified item in a specified shopping cart.
      *
-     * @param int $cartId
-     * @param int $itemId
-     * @return \Magento\GiftMessage\Service\V1\Data\Message
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @param int $cartId The shopping cart ID.
+     * @param int $itemId The item ID.
+     * @return \Magento\GiftMessage\Service\V1\Data\Message Gift message.
+     * @throws \Magento\Framework\Exception\NoSuchEntityException The specified item does not exist in the cart.
      */
     public function getItemMessage($cartId, $itemId);
 }

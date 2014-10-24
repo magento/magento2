@@ -25,7 +25,7 @@
 namespace Magento\Framework\View\Design\FileResolution\Fallback\Resolver;
 
 use Magento\Framework\View\Design\FileResolution\Fallback;
-use Magento\Framework\App\Filesystem;
+use Magento\Framework\Filesystem;
 use Magento\Framework\View\Design\Fallback\Rule\RuleInterface;
 
 /**

@@ -23,6 +23,7 @@
  */
 namespace Magento\Webapi\Controller;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\State;
 use Magento\Framework\Exception\AbstractAggregateException;
 use Magento\Framework\Exception\AuthenticationException;
@@ -73,7 +74,7 @@ class ErrorProcessor
     /**
      * Filesystem instance
      *
-     * @var \Magento\Framework\App\Filesystem
+     * @var \Magento\Framework\Filesystem
      */
     protected $_filesystem;
 
@@ -86,19 +87,19 @@ class ErrorProcessor
      * @param \Magento\Core\Helper\Data $helper
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\Logger $logger
-     * @param \Magento\Framework\App\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem $filesystem
      */
     public function __construct(
         \Magento\Core\Helper\Data $helper,
         \Magento\Framework\App\State $appState,
         \Magento\Framework\Logger $logger,
-        \Magento\Framework\App\Filesystem $filesystem
+        \Magento\Framework\Filesystem $filesystem
     ) {
         $this->_coreHelper = $helper;
         $this->_appState = $appState;
         $this->_logger = $logger;
         $this->_filesystem = $filesystem;
-        $this->directoryWrite = $this->_filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::VAR_DIR);
+        $this->directoryWrite = $this->_filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
         $this->registerShutdownFunction();
     }
 

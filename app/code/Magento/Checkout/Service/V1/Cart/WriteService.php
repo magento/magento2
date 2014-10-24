@@ -28,45 +28,62 @@ use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\StateException;
 use Magento\Authorization\Model\UserContextInterface;
 
+/** 
+ * Cart write service object. 
+ */
 class WriteService implements WriteServiceInterface
 {
     /**
+     * Quote factory.
+     *
      * @var \Magento\Sales\Model\QuoteFactory
      */
     protected $quoteFactory;
 
     /**
+     * Quote repository.
+     *
      * @var \Magento\Sales\Model\QuoteRepository
      */
     protected $quoteRepository;
 
     /**
+     * Store manager interface.
+     *
      * @var \Magento\Framework\StoreManagerInterface
      */
     protected $storeManager;
 
     /**
+     * Customer registry.
+     *
      * @var \Magento\Customer\Model\CustomerRegistry
      */
     protected $customerRegistry;
 
     /**
+     * User context interface.
+     *
      * @var UserContextInterface
      */
     protected $userContext;
 
     /**
+     * Quote factory.
+     *
      * @var \Magento\Sales\Model\Service\QuoteFactory
      */
     protected $quoteServiceFactory;
 
     /**
-     * @param \Magento\Sales\Model\QuoteFactory $quoteFactory
-     * @param \Magento\Sales\Model\QuoteRepository $quoteRepository
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
-     * @param \Magento\Customer\Model\CustomerRegistry $customerRegistry
-     * @param UserContextInterface $userContext
-     * @param \Magento\Sales\Model\Service\QuoteFactory $quoteServiceFactory
+     * Constructs a cart write service object.
+     *
+     * @param \Magento\Sales\Model\QuoteFactory $quoteFactory Quote factory.
+     * @param \Magento\Sales\Model\QuoteRepository $quoteRepository Quote repository.
+     * @param \Magento\Framework\StoreManagerInterface $storeManager Store manager.
+     * @param \Magento\Customer\Model\CustomerRegistry $customerRegistry Customer registry.
+     * @param UserContextInterface $userContext User context.
+     * @param \Magento\Sales\Model\Service\QuoteFactory $quoteServiceFactory Quote service factory.
      */
     public function __construct(
         \Magento\Sales\Model\QuoteFactory $quoteFactory,
@@ -85,7 +102,10 @@ class WriteService implements WriteServiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @throws \Magento\Framework\Exception\CouldNotSaveException The empty cart and quote could not be created.
+     * @return int Cart ID.
      */
     public function create()
     {
@@ -102,9 +122,9 @@ class WriteService implements WriteServiceInterface
     }
 
     /**
-     * Create anonymous cart
+     * Creates an anonymous cart.
      *
-     * @return \Magento\Sales\Model\Quote
+     * @return \Magento\Sales\Model\Quote Cart object.
      */
     protected function createAnonymousCart()
     {
@@ -116,10 +136,10 @@ class WriteService implements WriteServiceInterface
     }
 
     /**
-     * Create cart for current logged in customer
+     * Creates a cart for the currently logged-in customer.
      *
-     * @return \Magento\Sales\Model\Quote
-     * @throws CouldNotSaveException
+     * @return \Magento\Sales\Model\Quote Cart object.
+     * @throws CouldNotSaveException The cart could not be created.
      */
     protected function createCustomerCart()
     {
@@ -140,7 +160,12 @@ class WriteService implements WriteServiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @param int $cartId The cart ID.
+     * @param int $customerId The customer ID.
+     * @return boolean
+     * @throws \Magento\Framework\Exception\StateException The customer cannot be assigned to the specified cart: The cart belongs to a different store or is not anonymous, or the customer already has an active cart.
      */
     public function assignCustomer($cartId, $customerId)
     {
@@ -165,7 +190,10 @@ class WriteService implements WriteServiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @param int $cartId The cart ID.
+     * @return int Order ID.
      */
     public function order($cartId)
     {

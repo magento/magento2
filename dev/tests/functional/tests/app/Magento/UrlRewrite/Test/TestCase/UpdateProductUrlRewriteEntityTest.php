@@ -88,16 +88,14 @@ class UpdateProductUrlRewriteEntityTest extends Injectable
      * @param FixtureFactory $fixtureFactory
      * @return void
      */
-    public function testUpdateProductUrlRewrite(
-        UrlRewrite $urlRewrite,
-        FixtureFactory $fixtureFactory
-    ) {
+    public function test(UrlRewrite $urlRewrite, FixtureFactory $fixtureFactory)
+    {
         /** @var UrlRewrite $productRedirect */
         $productRedirect = $fixtureFactory->createByCode(
             'urlRewrite',
             [
                 'dataSet' => 'default',
-                'data' => ['id_path' => [$urlRewrite->getIdPath()]]
+                'data' => ['target_path' => $urlRewrite->getTargetPath()]
             ]
         );
         $productRedirect->persist();

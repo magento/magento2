@@ -24,6 +24,9 @@
  */
 namespace Magento\Backup\Controller\Adminhtml\Index;
 
+use Magento\Framework\Filesystem;
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class Rollback extends \Magento\Backup\Controller\Adminhtml\Index
 {
     /**
@@ -109,11 +112,11 @@ class Rollback extends \Magento\Backup\Controller\Adminhtml\Index
 
             if ($type != \Magento\Framework\Backup\Factory::TYPE_DB) {
 
-                $backupManager->setRootDir(
-                    $this->_objectManager->get('Magento\Framework\App\Filesystem')->getPath()
-                )->addIgnorePaths(
-                    $helper->getRollbackIgnorePaths()
-                );
+                /** @var Filesystem $filesystem */
+                $filesystem = $this->_objectManager->get('Magento\Framework\Filesystem');
+                $backupManager->setRootDir($filesystem->getDirectoryRead(DirectoryList::ROOT)->getAbsolutePath())
+                    ->addIgnorePaths($helper->getRollbackIgnorePaths())
+                ;
 
                 if ($this->getRequest()->getParam('use_ftp', false)) {
                     $backupManager->setUseFtp(

@@ -71,6 +71,7 @@ class SaveBilling extends \Magento\Checkout\Controller\Onepage
 
                     $result['allow_sections'] = ['shipping'];
                     $result['duplicateBillingInfo'] = 'true';
+                    $result['update_progress'] = ['html' => $this->getProgressHtml($result['goto_section'])];
                 }
             } else {
                 $result['goto_section'] = 'shipping';

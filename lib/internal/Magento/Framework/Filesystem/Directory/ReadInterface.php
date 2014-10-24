@@ -77,10 +77,10 @@ interface ReadInterface
     /**
      * Check permissions for reading file or directory
      *
-     * @param string $path
+     * @param string $path [optional]
      * @return bool
      */
-    public function isReadable($path);
+    public function isReadable($path = null);
 
     /**
      * Check whether given path is file
@@ -93,10 +93,10 @@ interface ReadInterface
     /**
      * Check whether given path is directory
      *
-     * @param string $path
+     * @param string $path [optional]
      * @return bool
      */
-    public function isDirectory($path);
+    public function isDirectory($path = null);
 
     /**
      * Open file in read mode

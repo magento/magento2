@@ -21,23 +21,24 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Checkout\Service\V1\Data\Cart;
 
 /**
- * Coupon data for quote
+ * Coupon data for quote.
  *
  * @codeCoverageIgnore
  */
 class Coupon extends \Magento\Framework\Service\Data\AbstractExtensibleObject
 {
     /**
-     * Constants defined for keys of array
+     * Coupon code.
      */
     const COUPON_CODE = 'coupon_code';
 
     /**
-     * @return string
+     * Returns the coupon code.
+     *
+     * @return string Coupon code.
      */
     public function getCouponCode()
     {

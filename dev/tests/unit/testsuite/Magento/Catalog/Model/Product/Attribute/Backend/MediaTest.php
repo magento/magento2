@@ -88,7 +88,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
         $this->mediaDirectory = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\Write')
             ->disableOriginalConstructor()
             ->getMock();
-        $filesystem = $this->getMockBuilder('Magento\Framework\App\Filesystem')
+        $filesystem = $this->getMockBuilder('Magento\Framework\Filesystem')
             ->disableOriginalConstructor()
             ->getMock();
         $filesystem->expects($this->once())->method('getDirectoryWrite')->will(

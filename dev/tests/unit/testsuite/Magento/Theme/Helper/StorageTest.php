@@ -30,7 +30,7 @@ namespace Magento\Theme\Helper;
 class StorageTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\App\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $filesystem;
 
@@ -86,7 +86,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
         $this->customizationPath = '/' . implode('/', array('var', 'theme'));
 
         $this->request = $this->getMock('\Magento\Framework\App\Request\Http', array(), array(), '', false);
-        $this->filesystem = $this->getMock('Magento\Framework\App\Filesystem', array(), array(), '', false);
+        $this->filesystem = $this->getMock('Magento\Framework\Filesystem', array(), array(), '', false);
         $this->session = $this->getMock('Magento\Backend\Model\Session', array(), array(), '', false);
         $this->contextHelper = $this->getMock('Magento\Framework\App\Helper\Context', array(), array(), '', false);
         $this->directoryWrite = $this->getMock(

@@ -58,7 +58,7 @@ class UpdateSimpleProductEntityTest extends Injectable
      *
      * @var CatalogProductSimple
      */
-    protected $product;
+    protected $initialProduct;
 
     /**
      * Product page with a grid
@@ -103,7 +103,7 @@ class UpdateSimpleProductEntityTest extends Injectable
         CatalogCategory $category,
         FixtureFactory $fixtureFactory
     ) {
-        $this->product = $fixtureFactory->createByCode(
+        $this->initialProduct = $fixtureFactory->createByCode(
             'catalogProductSimple',
             [
                 'dataSet' => 'default',
@@ -114,7 +114,7 @@ class UpdateSimpleProductEntityTest extends Injectable
                 ]
             ]
         );
-        $this->product->persist();
+        $this->initialProduct->persist();
 
         $this->productGrid = $productGrid;
         $this->editProductPage = $editProductPage;
@@ -124,13 +124,15 @@ class UpdateSimpleProductEntityTest extends Injectable
      * Run update product simple entity test
      *
      * @param CatalogProductSimple $product
-     * @return void
+     * @return array
      */
-    public function testUpdate(CatalogProductSimple $product)
+    public function test(CatalogProductSimple $product)
     {
-        $filter = ['sku' => $this->product->getSku()];
+        $filter = ['sku' => $this->initialProduct->getSku()];
         $this->productGrid->open()->getProductGrid()->searchAndOpen($filter);
         $this->editProductPage->getProductForm()->fill($product);
         $this->editProductPage->getFormPageActions()->save();
+
+        return ['initialProduct' => $this->initialProduct];
     }
 }

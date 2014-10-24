@@ -24,8 +24,10 @@
 
 namespace Magento\Framework\App;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\DriverPool;
 use Magento\Framework\Profiler;
-use \Magento\Framework\AppInterface;
+use Magento\Framework\AppInterface;
 
 /**
  * A bootstrap of Magento application
@@ -37,14 +39,14 @@ use \Magento\Framework\AppInterface;
  */
 class Bootstrap
 {
-    /**#+
+    /**#@+
      * Possible errors that can be triggered by the bootstrap
      */
     const ERR_MAINTENANCE = 901;
     const ERR_IS_INSTALLED = 902;
-    /**#- */
+    /**#@- */
 
-    /**#+
+    /**#@+
      * Initialization parameters that allow control bootstrap behavior of asserting maintenance mode or is installed
      *
      * Possible values:
@@ -58,14 +60,24 @@ class Bootstrap
      */
     const PARAM_REQUIRE_MAINTENANCE = 'MAGE_REQUIRE_MAINTENANCE';
     const PARAM_REQUIRE_IS_INSTALLED = 'MAGE_REQUIRE_IS_INSTALLED';
-    /**#- */
+    /**#@- */
 
-    /**#+
+    /**#@+
      * Default behavior of bootstrap assertions
      */
     const DEFAULT_REQUIRE_MAINTENANCE = false;
     const DEFAULT_REQUIRE_IS_INSTALLED = true;
-    /**#- */
+    /**#@- */
+
+    /**
+     * Initialization parameter for custom directory paths
+     */
+    const INIT_PARAM_FILESYSTEM_DIR_PATHS = 'MAGE_DIRS';
+
+    /**
+     * Initialization parameter for additional filesystem drivers
+     */
+    const INIT_PARAM_FILESYSTEM_DRIVERS = 'MAGE_FILESYSTEM_DRIVERS';
 
     /**
      * The initialization parameters (normally come from the $_SERVER)
@@ -87,13 +99,6 @@ class Bootstrap
      * @var \Magento\Framework\ObjectManager
      */
     private $objectManager;
-
-    /**
-     * Directory list
-     *
-     * @var Filesystem\DirectoryList
-     */
-    private $dirList;
 
     /**
      * Configuration directory
@@ -134,9 +139,54 @@ class Bootstrap
     public static function create($rootDir, array $initParams, ObjectManagerFactory $factory = null)
     {
         if ($factory === null) {
-            $factory = new ObjectManagerFactory;
+            $factory = self::createObjectManagerFactory($rootDir, $initParams);
         }
         return new self($factory, $rootDir, $initParams);
+    }
+
+    /**
+     * Creates instance of object manager factory
+     *
+     * @param string $rootDir
+     * @param array $initParams
+     * @return ObjectManagerFactory
+     */
+    public static function createObjectManagerFactory($rootDir, array $initParams)
+    {
+        $dirList = self::createFilesystemDirectoryList($rootDir, $initParams);
+        $driverPool = self::createFilesystemDriverPool($initParams);
+        return new ObjectManagerFactory($dirList, $driverPool);
+    }
+
+    /**
+     * Creates instance of filesystem directory list
+     *
+     * @param string $rootDir
+     * @param array $initParams
+     * @return DirectoryList
+     */
+    public static function createFilesystemDirectoryList($rootDir, array $initParams)
+    {
+        $customDirs = [];
+        if (isset($initParams[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS])) {
+            $customDirs = $initParams[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS];
+        }
+        return new DirectoryList($rootDir, $customDirs);
+    }
+
+    /**
+     * Creates instance of filesystem driver pool
+     *
+     * @param array $initParams
+     * @return DriverPool
+     */
+    public static function createFilesystemDriverPool(array $initParams)
+    {
+        $extraDrivers = [];
+        if (isset($initParams[Bootstrap::INIT_PARAM_FILESYSTEM_DRIVERS])) {
+            $extraDrivers = $initParams[Bootstrap::INIT_PARAM_FILESYSTEM_DRIVERS];
+        };
+        return new DriverPool($extraDrivers);
     }
 
     /**
@@ -305,17 +355,6 @@ class Bootstrap
     }
 
     /**
-     * Gets the directory list instance
-     *
-     * @return Filesystem\DirectoryList
-     */
-    public function getDirList()
-    {
-        $this->init();
-        return $this->dirList;
-    }
-
-    /**
      * Sets a custom error handler
      *
      * @return void
@@ -334,12 +373,11 @@ class Bootstrap
     private function init()
     {
         if (!$this->objectManager) {
-            $this->objectManager = $this->factory->create($this->rootDir, $this->server);
-            $this->dirList = $this->objectManager->get('Magento\Framework\App\Filesystem\DirectoryList');
+            $this->objectManager = $this->factory->create($this->server);
             $this->maintenance = $this->objectManager->get('Magento\Framework\App\MaintenanceMode');
-            /** @var $fileSystem \Magento\Framework\App\Filesystem */
-            $fileSystem = $this->objectManager->get('Magento\Framework\App\Filesystem');
-            $this->configDir = $fileSystem->getDirectoryRead(Filesystem::CONFIG_DIR);
+            /** @var $fileSystem \Magento\Framework\Filesystem */
+            $fileSystem = $this->objectManager->get('Magento\Framework\Filesystem');
+            $this->configDir = $fileSystem->getDirectoryRead(DirectoryList::CONFIG);
         }
     }
 

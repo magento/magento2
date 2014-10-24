@@ -23,6 +23,8 @@
  */
 namespace Magento\Framework\View\Asset;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class MinifiedTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -51,7 +53,7 @@ class MinifiedTest extends \PHPUnit_Framework_TestCase
     protected $_baseUrl;
 
     /**
-     * @var \Magento\Framework\App\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_filesystem;
 
@@ -74,16 +76,16 @@ class MinifiedTest extends \PHPUnit_Framework_TestCase
             '\Magento\Framework\Filesystem\Directory\WriteInterface'
         );
         $this->_rootDir = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\ReadInterface');
-        $this->_filesystem = $this->getMock('\Magento\Framework\App\Filesystem', array(), array(), '', false);
+        $this->_filesystem = $this->getMock('\Magento\Framework\Filesystem', array(), array(), '', false);
         $this->_filesystem->expects($this->any())
             ->method('getDirectoryRead')
             ->will($this->returnValueMap([
-                [\Magento\Framework\App\Filesystem::STATIC_VIEW_DIR, $this->_staticViewDir],
-                [\Magento\Framework\App\Filesystem::ROOT_DIR, $this->_rootDir],
+                [DirectoryList::STATIC_VIEW, $this->_staticViewDir],
+                [DirectoryList::ROOT, $this->_rootDir],
             ]));
         $this->_filesystem->expects($this->any())
             ->method('getDirectoryWrite')
-            ->with(\Magento\Framework\App\Filesystem::STATIC_VIEW_DIR)
+            ->with(DirectoryList::STATIC_VIEW)
             ->will($this->returnValue($this->_staticViewDir));
         $this->_adapter = $this->getMockForAbstractClass('Magento\Framework\Code\Minifier\AdapterInterface');
         $this->_model = new Minified(

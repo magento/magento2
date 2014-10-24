@@ -25,6 +25,8 @@
  */
 namespace Magento\Widget\Model\Config;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class FileResolverTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -32,33 +34,14 @@ class FileResolverTest extends \PHPUnit_Framework_TestCase
      */
     private $_object;
 
-    /**
-     * @var \Magento\Framework\App\Filesystem\DirectoryList
-     */
-    protected $directoryList;
-
     public function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var \Magento\Framework\App\Filesystem $filesystem */
-        $filesystem = $objectManager->create(
-            'Magento\Framework\App\Filesystem',
-            array(
-                'directoryList' => $objectManager->create(
-                    'Magento\Framework\App\Filesystem\DirectoryList',
-                    array(
-                        'root' => BP,
-                        'directories' => array(
-                            \Magento\Framework\App\Filesystem::MODULES_DIR => array('path' => __DIR__ . '/_files/code'),
-                            \Magento\Framework\App\Filesystem::THEMES_DIR => array(
-                                'path' => __DIR__ . '/_files/design'
-                            ),
-                            \Magento\Framework\App\Filesystem::CONFIG_DIR => array('path' => __DIR__ . '/_files/')
-                        )
-                    )
-                )
-            )
-        );
+        /** @var \Magento\TestFramework\App\Filesystem $filesystem */
+        $filesystem = $objectManager->get('Magento\Framework\Filesystem');
+        $filesystem->overridePath(DirectoryList::MODULES, __DIR__ . '/_files/code');
+        $filesystem->overridePath(DirectoryList::THEMES, __DIR__ . '/_files/design');
+        $filesystem->overridePath(DirectoryList::CONFIG, __DIR__ . '/_files');
 
         $moduleListMock = $this->getMockBuilder(
             'Magento\Framework\Module\ModuleListInterface'
@@ -83,13 +66,6 @@ class FileResolverTest extends \PHPUnit_Framework_TestCase
             'Magento\Widget\Model\Config\FileResolver',
             array('moduleReader' => $moduleReader, 'filesystem' => $filesystem)
         );
-
-        $this->directoryList = $objectManager->get('Magento\Framework\App\Filesystem\DirectoryList');
-        $dirPath = ltrim(
-            str_replace($this->directoryList->getRoot(), '', str_replace('\\', '/', __DIR__)) . '/_files',
-            '/'
-        );
-        $this->directoryList->addDirectory(\Magento\Framework\App\Filesystem::MODULES_DIR, array('path' => $dirPath));
     }
 
     public function testGetDesign()

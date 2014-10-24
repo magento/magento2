@@ -376,12 +376,13 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         );
         $shippingAddressMock = $this->getMock(
             'Magento\Sales\Model\Quote\Address',
-            ['setSameAsBilling', '__wakeup', 'unserialize'],
+            ['setSameAsBilling', 'save', '__wakeup', 'unserialize'],
             [],
             '',
             false
         );
         $shippingAddressMock->expects($this->any())->method('setSameAsBilling')->with((int)$data['use_for_shipping']);
+        $shippingAddressMock->expects($this->once())->method('save');
         $quoteMock->expects($this->any())->method('setPasswordHash')->with($passwordHash);
         $quoteMock->expects($this->any())->method('getCheckoutMethod')->will($this->returnValue($checkoutMethod));
         $quoteMock->expects($this->any())->method('isVirtual')->will($this->returnValue($isVirtual));

@@ -114,9 +114,12 @@ class CartItem extends AbstractCartItem
     public function getOptions()
     {
         $result = [];
-        foreach ($this->config['associated_cart_items'] as $productSku => $cartItem) {
+        foreach ($this->config['associated_cart_items'] as $cartItem) {
             /** @var CheckoutCartItem $cartItem */
-            $result[$productSku] = $cartItem->getOptions();
+            $result[] = [
+                'title' => $cartItem->getProductName(),
+                'value' => $cartItem->getQty()
+            ];
         }
 
         return $result;

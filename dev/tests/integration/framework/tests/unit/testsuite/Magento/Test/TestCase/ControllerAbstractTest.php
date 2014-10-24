@@ -37,7 +37,7 @@ class ControllerAbstractTest extends \Magento\TestFramework\TestCase\AbstractCon
     {
         $this->messageManager = $this->getMock('\Magento\Framework\Message\Manager', array(), array(), '', false);
         $request = new \Magento\TestFramework\Request(
-            $this->getMock('Magento\Framework\App\Route\ConfigInterface', [], [], '', false),
+            $this->getMock('Magento\Framework\App\Route\ConfigInterface\Proxy', [], [], '', false),
             $this->getMock('Magento\Framework\App\Request\PathInfoProcessorInterface', [], [], '', false),
             $this->getMock('Magento\Framework\Stdlib\CookieManager', [], [], '', false)
         );

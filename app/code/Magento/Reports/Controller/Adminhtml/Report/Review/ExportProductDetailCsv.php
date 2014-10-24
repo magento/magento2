@@ -24,6 +24,7 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report\Review;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use \Magento\Framework\App\ResponseInterface;
 
 class ExportProductDetailCsv extends \Magento\Reports\Controller\Adminhtml\Report\Review
@@ -40,6 +41,6 @@ class ExportProductDetailCsv extends \Magento\Reports\Controller\Adminhtml\Repor
             'Magento\Reports\Block\Adminhtml\Review\Detail\Grid'
         )->getCsv();
 
-        return $this->_fileFactory->create($fileName, $content, \Magento\Framework\App\Filesystem::VAR_DIR);
+        return $this->_fileFactory->create($fileName, $content, DirectoryList::VAR_DIR);
     }
 }

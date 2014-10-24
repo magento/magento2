@@ -23,6 +23,8 @@
  */
 namespace Magento\Captcha\Model;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 /**
  * Captcha cron actions
  */
@@ -61,20 +63,20 @@ class Cron
      * @param Resource\LogFactory $resLogFactory
      * @param \Magento\Captcha\Helper\Data $helper
      * @param \Magento\Captcha\Helper\Adminhtml\Data $adminHelper
-     * @param \Magento\Framework\App\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Store\Model\StoreManager $storeManager
      */
     public function __construct(
         Resource\LogFactory $resLogFactory,
         \Magento\Captcha\Helper\Data $helper,
         \Magento\Captcha\Helper\Adminhtml\Data $adminHelper,
-        \Magento\Framework\App\Filesystem $filesystem,
+        \Magento\Framework\Filesystem $filesystem,
         \Magento\Store\Model\StoreManager $storeManager
     ) {
         $this->_resLogFactory = $resLogFactory;
         $this->_helper = $helper;
         $this->_adminHelper = $adminHelper;
-        $this->_mediaDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::MEDIA_DIR);
+        $this->_mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->_storeManager = $storeManager;
     }
 

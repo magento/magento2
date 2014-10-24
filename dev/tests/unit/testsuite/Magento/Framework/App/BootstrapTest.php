@@ -24,6 +24,8 @@
 
 namespace Magento\Framework\App;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class BootstrapTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -70,16 +72,16 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManagerFactory = $this->getMock('\Magento\Framework\App\ObjectManagerFactory', [], [], '', false);
         $this->objectManager = $this->getMockForAbstractClass('\Magento\Framework\ObjectManager');
-        $this->dirs = $this->getMock('\Magento\Framework\App\Filesystem\DirectoryList', ['getDir'], [], '', false);
+        $this->dirs = $this->getMock('\Magento\Framework\App\Filesystem\DirectoryList', ['getPath'], [], '', false);
         $this->maintenanceMode = $this->getMock('\Magento\Framework\App\MaintenanceMode', ['isOn'], [], '', false);
-        $filesystem = $this->getMock('Magento\Framework\App\Filesystem', [], [], '', false);
+        $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
 
         $this->logger = $this->getMock('Magento\Framework\Logger', [], [], '', false);
 
         $mapObjectManager = [
             ['Magento\Framework\App\Filesystem\DirectoryList', $this->dirs],
             ['Magento\Framework\App\MaintenanceMode', $this->maintenanceMode],
-            ['Magento\Framework\App\Filesystem', $filesystem],
+            ['Magento\Framework\Filesystem', $filesystem],
             ['Magento\Framework\Logger', $this->logger]
         ];
 
@@ -103,6 +105,34 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
             ['assertMaintenance', 'assertInstalled', 'getIsExpected', 'isInstalled', 'terminate'],
             [$this->objectManagerFactory, '', ['value1', 'value2']]
         );
+    }
+
+    public function testCreateObjectManagerFactory()
+    {
+        $result = Bootstrap::createObjectManagerFactory('test', []);
+        $this->assertInstanceOf('Magento\Framework\App\ObjectManagerFactory', $result);
+    }
+
+    public function testCreateFilesystemDirectoryList()
+    {
+        $result = Bootstrap::createFilesystemDirectoryList(
+            'test',
+            [Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => [DirectoryList::APP => ['path' => '/custom/path']]]
+        );
+        /** @var \Magento\Framework\App\Filesystem\DirectoryList $result */
+        $this->assertInstanceOf('Magento\Framework\App\Filesystem\DirectoryList', $result);
+        $this->assertEquals('/custom/path', $result->getPath(DirectoryList::APP));
+    }
+
+    public function testCreateFilesystemDriverPool()
+    {
+        $driverClass = get_class($this->getMockForAbstractClass('Magento\Framework\Filesystem\DriverInterface'));
+        $result = Bootstrap::createFilesystemDriverPool(
+            [Bootstrap::INIT_PARAM_FILESYSTEM_DRIVERS => ['custom' => $driverClass]]
+        );
+        /** @var \Magento\Framework\Filesystem\DriverPool $result */
+        $this->assertInstanceOf('Magento\Framework\Filesystem\DriverPool', $result);
+        $this->assertInstanceof($driverClass, $result->getDriver('custom'));
     }
 
     public function testGetParams()
@@ -134,12 +164,6 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
     {
         $bootstrap = self::createBootstrap();
         $this->assertSame($this->objectManager, $bootstrap->getObjectManager());
-    }
-
-    public function testGetDirList()
-    {
-        $bootstrap = self::createBootstrap();
-        $this->assertSame($this->dirs, $bootstrap->getDirList());
     }
 
     public function testIsDeveloperMode()

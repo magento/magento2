@@ -28,7 +28,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function testConstructor()
     {
         $helper = new \Magento\TestFramework\Helper\ObjectManager($this);
-        $filesystem = $this->getMockBuilder('\Magento\Framework\App\Filesystem')
+        $filesystem = $this->getMockBuilder('\Magento\Framework\Filesystem')
             ->disableOriginalConstructor()
             ->getMock();
         $directoryWrite = $this->getMockBuilder(

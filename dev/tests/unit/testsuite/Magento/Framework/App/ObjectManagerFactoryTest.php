@@ -62,7 +62,7 @@ class ObjectManagerFactoryTest extends \PHPUnit_Framework_TestCase
     public function testCreateObjectManagerFactoryCouldBeOverridden()
     {
         $rootPath = __DIR__ . '/_files/';
-        $factory = new ObjectManagerFactory();
-        $factory->create($rootPath, array(), false);
+        $factory = Bootstrap::createObjectManagerFactory($rootPath, []);
+        $factory->create([], false);
     }
 }

@@ -29,7 +29,7 @@
                 type="Magento\Core\Model\Layout\DepersonalizePlugin" sortOrder="1"/>
     </type>
     <type name="Magento\Framework\App\FrontController">
-        <plugin name="requestPreprocessor" type="Magento\Core\App\FrontController\Plugin\RequestPreprocessor" sortOrder="50"/>
+        <plugin name="requestPreprocessor" type="Magento\Store\App\FrontController\Plugin\RequestPreprocessor" sortOrder="50"/>
     </type>
     <type name="Magento\Framework\App\Action\Action">
         <plugin name="lastUrl" type="Magento\Core\App\Action\Plugin\LastUrl" sortOrder="70"/>

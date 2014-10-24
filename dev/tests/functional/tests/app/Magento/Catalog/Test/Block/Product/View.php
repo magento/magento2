@@ -24,11 +24,11 @@
 
 namespace Magento\Catalog\Test\Block\Product;
 
-use Mtf\Block\Block;
 use Mtf\Client\Element\Locator;
 use Mtf\Fixture\FixtureInterface;
 use Mtf\Fixture\InjectableFixture;
 use Magento\Catalog\Test\Fixture\CatalogProductSimple;
+use Magento\Catalog\Test\Block\AbstractConfigureBlock;
 
 /**
  * Class View
@@ -38,7 +38,7 @@ use Magento\Catalog\Test\Fixture\CatalogProductSimple;
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.NPathComplexity)
  */
-class View extends Block
+class View extends AbstractConfigureBlock
 {
     /**
      * XPath selector for tab
@@ -166,19 +166,6 @@ class View extends Block
     }
 
     /**
-     * This method returns the custom options block.
-     *
-     * @return \Magento\Catalog\Test\Block\Product\View\CustomOptions
-     */
-    public function getCustomOptionsBlock()
-    {
-        return $this->blockFactory->create(
-            'Magento\Catalog\Test\Block\Product\View\CustomOptions',
-            ['element' => $this->_rootElement->find($this->customOptionsSelector)]
-        );
-    }
-
-    /**
      * Add product to shopping cart
      *
      * @param FixtureInterface $product
@@ -193,8 +180,8 @@ class View extends Block
         }
 
         $this->fillOptions($product);
-        if (isset($checkoutData['options']['qty'])) {
-            $this->_rootElement->find($this->qty)->setValue($checkoutData['options']['qty']);
+        if (isset($checkoutData['qty'])) {
+            $this->setQty($checkoutData['qty']);
         }
         $this->clickAddToCart();
     }
@@ -273,6 +260,26 @@ class View extends Block
     }
 
     /**
+     * Return product price excluding tax displayed on page
+     *
+     * @return string
+     */
+    public function getProductPriceExcludingTax()
+    {
+        return $this->getPriceBlock()->getPriceExcludingTax();
+    }
+
+    /**
+     * Return product price including tax displayed on page
+     *
+     * @return string
+     */
+    public function getProductPriceIncludingTax()
+    {
+        return $this->getPriceBlock()->getPriceIncludingTax();
+    }
+
+    /**
      * Return product short description on page
      *
      * @return string|null
@@ -313,72 +320,6 @@ class View extends Block
         return $this->hasRender($typeId)
             ? $this->callRender($typeId, 'getOptions', ['product' => $product])
             : $this->getCustomOptionsBlock()->getOptions($product);
-    }
-
-    /**
-     * Fill in the option specified for the product
-     *
-     * @param FixtureInterface $product
-     * @return void
-     */
-    public function fillOptions(FixtureInterface $product)
-    {
-        $dataConfig = $product->getDataConfig();
-        $typeId = isset($dataConfig['type_id']) ? $dataConfig['type_id'] : null;
-        $checkoutData = null;
-
-        /** @var CatalogProductSimple $product */
-        if ($this->hasRender($typeId)) {
-            $this->callRender($typeId, 'fillOptions', ['product' => $product]);
-        } else {
-            $checkoutCustomOptions = [];
-
-            if ($product instanceof InjectableFixture) {
-                /** @var CatalogProductSimple $product */
-                $checkoutData = $product->getCheckoutData();
-                $checkoutCustomOptions = isset($checkoutData['options']['custom_options'])
-                    ? $checkoutData['options']['custom_options']
-                    : [];
-                $customOptions = $product->hasData('custom_options')
-                    ? $product->getDataFieldConfig('custom_options')['source']->getCustomOptions()
-                    : [];
-
-                $checkoutCustomOptions = $this->prepareCheckoutData($customOptions, $checkoutCustomOptions);
-            }
-
-            $this->getCustomOptionsBlock()->fillCustomOptions($checkoutCustomOptions);
-        }
-    }
-
-    /**
-     * Replace index fields to name fields in checkout data
-     *
-     * @param array $options
-     * @param array $checkoutData
-     * @return array
-     */
-    protected function prepareCheckoutData(array $options, array $checkoutData)
-    {
-        $result = [];
-
-        foreach ($checkoutData as $checkoutOption) {
-            $attribute = str_replace('attribute_key_', '', $checkoutOption['title']);
-            $option = str_replace('option_key_', '', $checkoutOption['value']);
-
-            if (isset($options[$attribute])) {
-                $result[] = [
-                    'type' => strtolower(preg_replace('/[^a-z]/i', '', $options[$attribute]['type'])),
-                    'title' => isset($options[$attribute]['title'])
-                            ? $options[$attribute]['title']
-                            : $attribute,
-                    'value' => isset($options[$attribute]['options'][$option]['title'])
-                            ? $options[$attribute]['options'][$option]['title']
-                            : $option
-                ];
-            }
-        }
-
-        return $result;
     }
 
     /**
@@ -447,13 +388,30 @@ class View extends Block
     }
 
     /**
+     * Add product to Wishlist
+     *
+     * @param FixtureInterface $product
+     * @return void
+     */
+    public function addToWishlist(FixtureInterface $product)
+    {
+        /** @var CatalogProductSimple $product */
+        $checkoutData = $product->getCheckoutData();
+        $this->fillOptions($product);
+        if (isset($checkoutData['qty'])) {
+            $this->setQty($checkoutData['qty']);
+        }
+        $this->clickAddToWishlist();
+    }
+
+    /**
      * Click "Add to Wishlist" button
      *
      * @return void
      */
-    public function addToWishlist()
+    public function clickAddToWishlist()
     {
-        $this->_rootElement->find($this->addToWishlist, Locator::SELECTOR_CSS)->click();
+        $this->_rootElement->find($this->addToWishlist)->click();
     }
 
     /**

@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Magento
  *
  * NOTICE OF LICENSE
@@ -25,33 +24,30 @@
 namespace Magento\Catalog\Model\Layer\Search;
 
 use Magento\Catalog\Model\Layer\ItemCollectionProviderInterface;
-use Magento\CatalogSearch\Model\Resource\Fulltext\CollectionFactory;
+use Magento\Catalog\Model\Resource\Product\CollectionFactory;
 
 class ItemCollectionProvider implements ItemCollectionProviderInterface
 {
-    /**
-     * @var \Magento\CatalogSearch\Model\Resource\Fulltext\CollectionFactory
-     */
-    protected $fulltextCollectionFactory;
 
     /**
-     * ItemCollectionProvider constructor
-     *
-     * @param CollectionFactory $fulltextCollectionFactory
+     * @var CollectionFactory
      */
-    public function __construct(CollectionFactory $fulltextCollectionFactory)
+    private $collectionFactory;
+
+    /**
+     * @param CollectionFactory $collectionFactory
+     */
+    public function __construct(CollectionFactory $collectionFactory)
     {
-        $this->fulltextCollectionFactory = $fulltextCollectionFactory;
+        $this->collectionFactory = $collectionFactory;
     }
 
     /**
-     * Retrieve item colleciton
-     *
      * @param \Magento\Catalog\Model\Category $category
      * @return \Magento\Catalog\Model\Resource\Product\Collection
      */
     public function getCollection(\Magento\Catalog\Model\Category $category)
     {
-        return $this->fulltextCollectionFactory->create();
+        return $this->collectionFactory->create();
     }
 }

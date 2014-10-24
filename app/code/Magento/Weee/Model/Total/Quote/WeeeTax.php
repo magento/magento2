@@ -39,7 +39,7 @@ class WeeeTax extends Weee
     public function collect(\Magento\Sales\Model\Quote\Address $address)
     {
         \Magento\Sales\Model\Quote\Address\Total\AbstractTotal::collect($address);
-        $this->store = $address->getQuote()->getStore();
+        $this->_store = $address->getQuote()->getStore();
         if (!$this->weeeData->isEnabled($this->_store)) {
             return $this;
         }

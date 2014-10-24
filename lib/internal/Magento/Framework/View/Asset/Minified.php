@@ -23,6 +23,8 @@
  */
 namespace Magento\Framework\View\Asset;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 /**
  * Minified page asset
  */
@@ -34,6 +36,11 @@ class Minified implements MergeableInterface
     const FILE_EXISTS = 'file_exists';
     const MTIME = 'mtime';
     /**#@-*/
+
+    /**
+     * Directory for dynamically generated public view files, relative to STATIC_VIEW
+     */
+    const CACHE_VIEW_REL = '_cache';
 
     /**
      * LocalInterface
@@ -116,7 +123,7 @@ class Minified implements MergeableInterface
      *
      * @param LocalInterface $asset
      * @param \Magento\Framework\Logger $logger
-     * @param \Magento\Framework\App\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\UrlInterface $baseUrl
      * @param \Magento\Framework\Code\Minifier\AdapterInterface $adapter
      * @param string $strategy
@@ -124,7 +131,7 @@ class Minified implements MergeableInterface
     public function __construct(
         LocalInterface $asset,
         \Magento\Framework\Logger $logger,
-        \Magento\Framework\App\Filesystem $filesystem,
+        \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\UrlInterface $baseUrl,
         \Magento\Framework\Code\Minifier\AdapterInterface $adapter,
         $strategy = self::FILE_EXISTS
@@ -132,8 +139,8 @@ class Minified implements MergeableInterface
         $this->originalAsset = $asset;
         $this->strategy = $strategy;
         $this->logger = $logger;
-        $this->rootDir = $filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::ROOT_DIR);
-        $this->staticViewDir = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::STATIC_VIEW_DIR);
+        $this->rootDir = $filesystem->getDirectoryRead(DirectoryList::ROOT);
+        $this->staticViewDir = $filesystem->getDirectoryWrite(DirectoryList::STATIC_VIEW);
         $this->baseUrl = $baseUrl;
         $this->adapter = $adapter;
     }
@@ -319,8 +326,8 @@ class Minified implements MergeableInterface
         $path = $this->originalAsset->getPath();
         $this->context = new \Magento\Framework\View\Asset\File\Context(
             $this->baseUrl->getBaseUrl(array('_type' => \Magento\Framework\UrlInterface::URL_TYPE_STATIC)),
-            \Magento\Framework\App\Filesystem::STATIC_VIEW_DIR,
-            \Magento\Framework\App\Filesystem\DirectoryList::CACHE_VIEW_REL_DIR . '/minified'
+            DirectoryList::STATIC_VIEW,
+            self::CACHE_VIEW_REL . '/minified'
         );
         $this->filePath = md5($path) . '_' . $this->composeMinifiedName(basename($path));
         $this->path = $this->context->getPath() . '/' . $this->filePath;

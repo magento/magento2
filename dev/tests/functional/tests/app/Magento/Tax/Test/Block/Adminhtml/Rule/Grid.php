@@ -71,26 +71,6 @@ class Grid extends GridInterface
     protected $firstRowSelector = '//tr[1]/td[@data-column="code"]';
 
     /**
-     * Check whether first row is visible
-     *
-     * @return bool
-     */
-    public function isFirstRowVisible()
-    {
-        return $this->_rootElement->find($this->firstRowSelector, Locator::SELECTOR_XPATH)->isVisible();
-    }
-
-    /**
-     * Open first item in grid
-     *
-     * @return void
-     */
-    public function openFirstRow()
-    {
-        $this->_rootElement->find($this->firstRowSelector, Locator::SELECTOR_XPATH)->click();
-    }
-
-    /**
      * Check if specific row exists in grid
      *
      * @param array $filter

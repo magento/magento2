@@ -54,14 +54,15 @@ class SavePayment extends \Magento\Checkout\Controller\Onepage
                 return;
             }
 
-            $data = $this->getRequest()->getPost('payment', array());
+            $data = $this->getRequest()->getPost('payment', []);
             $result = $this->getOnepage()->savePayment($data);
 
             // get section and redirect data
             $redirectUrl = $this->getOnepage()->getQuote()->getPayment()->getCheckoutRedirectUrl();
             if (empty($result['error']) && !$redirectUrl) {
                 $result['goto_section'] = 'review';
-                $result['update_section'] = array('name' => 'review', 'html' => $this->_getReviewHtml());
+                $result['update_section'] = ['name' => 'review', 'html' => $this->_getReviewHtml()];
+                $result['update_progress'] = ['html' => $this->getProgressHtml('review')];
             }
             if ($redirectUrl) {
                 $result['redirect'] = $redirectUrl;

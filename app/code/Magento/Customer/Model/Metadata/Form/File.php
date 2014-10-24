@@ -25,6 +25,9 @@
  */
 namespace Magento\Customer\Model\Metadata\Form;
 
+use Magento\Framework\File\UploaderFactory;
+use Magento\Framework\Filesystem;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Service\ArrayObjectSearch;
 
 class File extends AbstractData
@@ -49,9 +52,14 @@ class File extends AbstractData
     protected $_fileValidator;
 
     /**
-     * @var \Magento\Framework\App\Filesystem
+     * @var Filesystem
      */
     protected $_fileSystem;
+
+    /**
+     * @var UploaderFactory
+     */
+    private $uploaderFactory;
 
     /**
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
@@ -63,7 +71,8 @@ class File extends AbstractData
      * @param bool $isAjax
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\File\Validator\NotProtectedExtension $fileValidator
-     * @param \Magento\Framework\App\Filesystem $fileSystem
+     * @param Filesystem $fileSystem
+     * @param UploaderFactory $uploaderFactory
      */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
@@ -75,12 +84,14 @@ class File extends AbstractData
         $isAjax,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\File\Validator\NotProtectedExtension $fileValidator,
-        \Magento\Framework\App\Filesystem $fileSystem
+        Filesystem $fileSystem,
+        UploaderFactory $uploaderFactory
     ) {
         parent::__construct($localeDate, $logger, $attribute, $localeResolver, $value, $entityTypeCode, $isAjax);
         $this->_coreData = $coreData;
         $this->_fileValidator = $fileValidator;
         $this->_fileSystem = $fileSystem;
+        $this->uploaderFactory = $uploaderFactory;
     }
 
     /**
@@ -261,29 +272,22 @@ class File extends AbstractData
             }
         }
 
-        $path = $this->_fileSystem->getPath(\Magento\Framework\App\Filesystem::MEDIA_DIR)
-            . '/' . $this->_entityTypeCode;
-
+        $mediaDir = $this->_fileSystem->getDirectoryWrite(DirectoryList::MEDIA);
         $result = $original;
         // unlink entity file
         if ($toDelete) {
             $result = '';
-            $file = $path . $original;
-            $ioFile = new \Magento\Framework\Io\File();
-            if ($ioFile->fileExists($file)) {
-                $ioFile->rm($file);
-            }
+            $mediaDir->delete($this->_entityTypeCode . $original);
         }
 
         if (!empty($value['tmp_name'])) {
             try {
-                $uploader = new \Magento\Framework\File\Uploader($value);
+                $uploader = $this->uploaderFactory->create(['fileId' => $value]);
                 $uploader->setFilesDispersion(true);
                 $uploader->setFilenamesCaseSensitivity(false);
                 $uploader->setAllowRenameFiles(true);
-                $uploader->save($path, $value['name']);
-                $fileName = $uploader->getUploadedFileName();
-                $result = $fileName;
+                $uploader->save($mediaDir->getAbsolutePath($this->_entityTypeCode), $value['name']);
+                $result = $uploader->getUploadedFileName();
             } catch (\Exception $e) {
                 $this->_logger->logException($e);
             }

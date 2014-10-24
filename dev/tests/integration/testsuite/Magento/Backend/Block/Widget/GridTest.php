@@ -126,7 +126,7 @@ class GridTest extends \PHPUnit_Framework_TestCase
                     'Magento\Framework\View\Element\Template\Context',
                     array(
                         'filesystem' => $objectManager->create(
-                            '\Magento\Framework\App\Filesystem',
+                            '\Magento\Framework\Filesystem',
                             array('directoryList' => $directoryList)
                         )
                     )

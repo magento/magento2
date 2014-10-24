@@ -24,6 +24,8 @@
 
 namespace Magento\Framework\RequireJs;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -58,10 +60,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         );
         $this->design = $this->getMockForAbstractClass('\Magento\Framework\View\DesignInterface');
         $this->baseDir = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\ReadInterface');
-        $filesystem = $this->getMock('\Magento\Framework\App\Filesystem', array(), array(), '', false);
+        $filesystem = $this->getMock('\Magento\Framework\Filesystem', array(), array(), '', false);
         $filesystem->expects($this->once())
             ->method('getDirectoryRead')
-            ->with(\Magento\Framework\App\Filesystem::ROOT_DIR)
+            ->with(DirectoryList::ROOT)
             ->will($this->returnValue($this->baseDir));
         $repo = $this->getMock('\Magento\Framework\View\Asset\Repository', array(), array(), '', false);
         $this->context = $this->getMockForAbstractClass('\Magento\Framework\View\Asset\ContextInterface');

@@ -43,7 +43,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $string = $this->getMock('Magento\Framework\Stdlib\String', array(), array(), '', false);
         $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $translate = $this->getMock('Magento\Framework\Translate\Inline\StateInterface', array(), array(), '', false);
-        $filesystem = $this->getMock('Magento\Framework\App\Filesystem', array(), array(), '', false);
+        $filesystem = $this->getMock('Magento\Framework\Filesystem', array(), array(), '', false);
         $pdfItemsFactory = $this->getMock('Magento\Sales\Model\Order\Pdf\ItemsFactory', array(), array(), '', false);
         $localeMock = $this->getMock(
             'Magento\Framework\Stdlib\DateTime\TimezoneInterface',

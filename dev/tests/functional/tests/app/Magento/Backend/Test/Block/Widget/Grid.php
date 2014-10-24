@@ -207,6 +207,13 @@ abstract class Grid extends Block
     protected $actionNextPageDisabled = '.pager .action-next.disabled';
 
     /**
+     * First row selector
+     *
+     * @var string
+     */
+    protected $firstRowSelector = '';
+
+    /**
      * Get backend abstract block
      *
      * @return \Magento\Backend\Test\Block\Template
@@ -472,6 +479,13 @@ abstract class Grid extends Block
         $button = $this->_rootElement->find($this->filterButton);
         if ($button->isVisible() && !$this->_rootElement->find($this->filterButton . $this->active)->isVisible()) {
             $button->click();
+            $browser = $this->_rootElement;
+            $selector = $this->searchButton;
+            $browser->waitUntil(
+                function () use ($browser, $selector) {
+                    return $browser->find($selector)->isVisible() ? true : null;
+                }
+            );
         }
     }
 
@@ -488,5 +502,25 @@ abstract class Grid extends Block
         $this->_rootElement->find($this->actionNextPage)->click();
         $this->waitLoader();
         return true;
+    }
+
+    /**
+     * Check whether first row is visible
+     *
+     * @return bool
+     */
+    public function isFirstRowVisible()
+    {
+        return $this->_rootElement->find($this->firstRowSelector, Locator::SELECTOR_XPATH)->isVisible();
+    }
+
+    /**
+     * Open first item in grid
+     *
+     * @return void
+     */
+    public function openFirstRow()
+    {
+        $this->_rootElement->find($this->firstRowSelector, Locator::SELECTOR_XPATH)->click();
     }
 }

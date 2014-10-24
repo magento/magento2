@@ -13,6 +13,7 @@ dev/tests/unit/testsuite/Magento/Framework/Code/_files/app/code/Magento/SomeModu
 dev/tests/unit/testsuite/Magento/Framework/ObjectManager/Config/Reader/_files/ConfigDomMock.php
 dev/tests/unit/testsuite/Magento/Framework/ObjectManager/Code/Generator/_files/Sample.php
 dev/tests/unit/testsuite/Magento/Framework/Service/Code/Generator/_files/Sample.php
+dev/tests/unit/testsuite/Magento/Framework/Service/Code/Generator/_files/ExtensibleSample.php
 dev/tools/Magento/Tools/I18n/Zend/Exception.php
 dev/tools/Magento/Tools/I18n/Zend/Console/Getopt/Exception.php
 dev/tools/Magento/Tools/I18n/Zend/Console/Getopt.php

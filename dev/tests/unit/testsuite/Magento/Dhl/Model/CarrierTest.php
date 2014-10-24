@@ -141,7 +141,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(file_get_contents(__DIR__ . '/_files/countries.xml'))
         );
         $filesystem = $this->getMockBuilder(
-            '\Magento\Framework\App\Filesystem'
+            '\Magento\Framework\Filesystem'
         )->disableOriginalConstructor()->setMethods(
             array('getDirectoryRead')
         )->getMock();

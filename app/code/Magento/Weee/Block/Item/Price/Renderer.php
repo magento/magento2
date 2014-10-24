@@ -67,7 +67,7 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
      */
     public function displayPriceWithWeeeDetails()
     {
-        if (!$this->weeeHelper->isEnabled()) {
+        if (!$this->weeeHelper->isEnabled($this->getStoreId())) {
             return false;
         }
 
@@ -112,7 +112,7 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
     {
         $priceInclTax = $this->getItem()->getPriceInclTax();
 
-        if (!$this->weeeHelper->isEnabled()) {
+        if (!$this->weeeHelper->isEnabled($this->getStoreId())) {
             return $priceInclTax;
         }
 
@@ -133,7 +133,7 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
     {
         $basePriceInclTax = $this->getItem()->getBasePriceInclTax();
 
-        if (!$this->weeeHelper->isEnabled()) {
+        if (!$this->weeeHelper->isEnabled($this->getStoreId())) {
             return $basePriceInclTax;
         }
 
@@ -154,7 +154,7 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
     {
         $rowTotalInclTax = $this->getItem()->getRowTotalInclTax();
 
-        if (!$this->weeeHelper->isEnabled()) {
+        if (!$this->weeeHelper->isEnabled($this->getStoreId())) {
             return $rowTotalInclTax;
         }
 
@@ -175,7 +175,7 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
     {
         $baseRowTotalInclTax = $this->getItem()->getBaseRowTotalInclTax();
 
-        if (!$this->weeeHelper->isEnabled()) {
+        if (!$this->weeeHelper->isEnabled($this->getStoreId())) {
             return $baseRowTotalInclTax;
         }
 
@@ -196,7 +196,7 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
     {
         $priceExclTax = $this->getItemDisplayPriceExclTax();
 
-        if (!$this->weeeHelper->isEnabled()) {
+        if (!$this->weeeHelper->isEnabled($this->getStoreId())) {
             return $priceExclTax;
         }
 
@@ -217,7 +217,7 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
     {
         $basePriceExclTax = $this->getItem()->getBasePrice();
 
-        if (!$this->weeeHelper->isEnabled()) {
+        if (!$this->weeeHelper->isEnabled($this->getStoreId())) {
             return $basePriceExclTax;
         }
 
@@ -238,7 +238,7 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
     {
         $rowTotalExclTax = $this->getItem()->getRowTotal();
 
-        if (!$this->weeeHelper->isEnabled()) {
+        if (!$this->weeeHelper->isEnabled($this->getStoreId())) {
             return $rowTotalExclTax;
         }
 
@@ -259,7 +259,7 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
     {
         $baseRowTotalExclTax = $this->getItem()->getBaseRowTotal();
 
-        if (!$this->weeeHelper->isEnabled()) {
+        if (!$this->weeeHelper->isEnabled($this->getStoreId())) {
             return $baseRowTotalExclTax;
         }
 
@@ -279,7 +279,7 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
     {
         $priceInclTax = $this->getItem()->getPriceInclTax();
 
-        if (!$this->weeeHelper->isEnabled()) {
+        if (!$this->weeeHelper->isEnabled($this->getStoreId())) {
             return $priceInclTax;
         }
 
@@ -295,7 +295,7 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
     {
         $basePriceInclTax = $this->getItem()->getBasePriceInclTax();
 
-        if (!$this->weeeHelper->isEnabled()) {
+        if (!$this->weeeHelper->isEnabled($this->getStoreId())) {
             return $basePriceInclTax;
         }
 
@@ -311,7 +311,7 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
     {
         $rowTotalInclTax = $this->getItem()->getRowTotalInclTax();
 
-        if (!$this->weeeHelper->isEnabled()) {
+        if (!$this->weeeHelper->isEnabled($this->getStoreId())) {
             return $rowTotalInclTax;
         }
 
@@ -327,7 +327,7 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
     {
         $baseRowTotalInclTax = $this->getItem()->getBaseRowTotalInclTax();
 
-        if (!$this->weeeHelper->isEnabled()) {
+        if (!$this->weeeHelper->isEnabled($this->getStoreId())) {
             return $baseRowTotalInclTax;
         }
 
@@ -343,7 +343,7 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
     {
         $priceExclTax = $this->getItemDisplayPriceExclTax();
 
-        if (!$this->weeeHelper->isEnabled()) {
+        if (!$this->weeeHelper->isEnabled($this->getStoreId())) {
             return $priceExclTax;
         }
 
@@ -359,7 +359,7 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
     {
         $basePriceExclTax = $this->getItem()->getBasePrice();
 
-        if (!$this->weeeHelper->isEnabled()) {
+        if (!$this->weeeHelper->isEnabled($this->getStoreId())) {
             return $basePriceExclTax;
         }
 
@@ -375,7 +375,7 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
     {
         $rowTotalExclTax = $this->getItem()->getRowTotal();
 
-        if (!$this->weeeHelper->isEnabled()) {
+        if (!$this->weeeHelper->isEnabled($this->getStoreId())) {
             return $rowTotalExclTax;
         }
 
@@ -391,7 +391,7 @@ class Renderer extends \Magento\Tax\Block\Item\Price\Renderer
     {
         $baseRowTotalExclTax = $this->getItem()->getBaseRowTotal();
 
-        if (!$this->weeeHelper->isEnabled()) {
+        if (!$this->weeeHelper->isEnabled($this->getStoreId())) {
             return $baseRowTotalExclTax;
         }
 

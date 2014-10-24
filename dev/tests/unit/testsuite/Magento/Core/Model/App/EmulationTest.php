@@ -25,7 +25,7 @@
  */
 namespace Magento\Core\Model\App;
 
-class EmulationTest extends \Magento\Test\BaseTestCase
+class EmulationTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\StoreManagerInterface
@@ -68,27 +68,59 @@ class EmulationTest extends \Magento\Test\BaseTestCase
     private $viewDesignMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\Store
+     */
+    private $storeMock;
+
+    /**
+     * @var \Magento\TestFramework\Helper\ObjectManager
+     */
+    private $objectManager;
+
+    /**
+     * New store id
+     */
+    const NEW_STORE_ID = 9;
+
+    /**
      * @var \Magento\Core\Model\App\Emulation
      */
     private $model;
 
     public function setUp()
     {
-        parent::setUp();
+        $this->objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
         // Mocks
-        $this->designMock = $this->basicMock('Magento\Core\Model\Design');
-        $this->storeManagerMock = $this->basicMock('Magento\Framework\StoreManagerInterface');
-        $this->translateMock = $this->basicMock('Magento\Framework\TranslateInterface');
-        $this->scopeConfigMock = $this->basicMock('Magento\Framework\App\Config\ScopeConfigInterface');
-        $this->localeResolverMock = $this->basicMock('Magento\Framework\Locale\ResolverInterface');
-        $this->inlineConfigMock = $this->basicMock('Magento\Framework\Translate\Inline\ConfigInterface');
-        $this->inlineTranslationMock = $this->basicMock('Magento\Framework\Translate\Inline\StateInterface');
+        $this->designMock = $this->getMockBuilder('Magento\Core\Model\Design')
+            ->disableOriginalConstructor()
+            ->setMethods([])->getMock();
+        $this->storeManagerMock = $this->getMockBuilder('Magento\Framework\StoreManagerInterface')
+            ->disableOriginalConstructor()
+            ->setMethods([])->getMock();
+        $this->translateMock = $this->getMockBuilder('Magento\Framework\TranslateInterface')
+            ->disableOriginalConstructor()
+            ->setMethods([])->getMock();
+        $this->scopeConfigMock = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
+            ->disableOriginalConstructor()
+            ->setMethods([])->getMock();
+        $this->localeResolverMock = $this->getMockBuilder('Magento\Framework\Locale\ResolverInterface')
+            ->disableOriginalConstructor()
+            ->setMethods([])->getMock();
+        $this->inlineConfigMock = $this->getMockBuilder('Magento\Framework\Translate\Inline\ConfigInterface')
+            ->disableOriginalConstructor()
+            ->setMethods([])->getMock();
+        $this->inlineTranslationMock = $this->getMockBuilder('Magento\Framework\Translate\Inline\StateInterface')
+            ->disableOriginalConstructor()
+            ->setMethods([])->getMock();
         $this->viewDesignMock = $this->getMockForAbstractClass('Magento\Framework\View\DesignInterface');
+        $this->storeMock = $this->getMockBuilder('Magento\Store\Model\Store')
+            ->disableOriginalConstructor()
+            ->setMethods(['__wakeup', 'getStoreId'])
+            ->getMock();
 
         // Stubs
         $this->designMock->expects($this->any())->method('loadChange')->willReturnSelf();
         $this->designMock->expects($this->any())->method('getData')->willReturn(false);
-        $this->translateMock->expects($this->any())->method('setLocale')->willReturnSelf();
 
         // Prepare SUT
         $this->model = $this->objectManager->getObject('Magento\Core\Model\App\Emulation',
@@ -108,7 +140,6 @@ class EmulationTest extends \Magento\Test\BaseTestCase
     public function testStartDefaults()
     {
         // Test data
-        $newDesignData = ['array', 'with', 'data'];
         $inlineTranslate = false;
         $initArea = 'initial area';
         $initTheme = 'initial design theme';
@@ -116,75 +147,61 @@ class EmulationTest extends \Magento\Test\BaseTestCase
         $initLocale = 'initial locale code';
         $newInlineTranslate = false;
         $newLocale = 'new locale code';
-        $newStoreId = 9;
-        $initDesignData = ['area' => $initArea, 'theme' => $initTheme, 'store' => $initStore];
+        $newArea = \Magento\Framework\App\Area::AREA_FRONTEND;
 
         // Stubs
-
         $this->inlineTranslationMock->expects($this->any())->method('isEnabled')->willReturn($inlineTranslate);
         $this->viewDesignMock->expects($this->any())->method('getArea')->willReturn($initArea);
         $this->viewDesignMock->expects($this->any())->method('getDesignTheme')->willReturn($initTheme);
-        $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($initStore);
+        $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($this->storeMock);
+        $this->storeMock->expects($this->any())
+            ->method('getStoreId')->willReturn($initStore);
         $this->localeResolverMock->expects($this->any())->method('getLocaleCode')->willReturn($initLocale);
         $this->inlineConfigMock->expects($this->any())->method('isActive')->willReturn($newInlineTranslate);
-        $this->viewDesignMock->expects($this->any())->method('getConfigurationDesignTheme')->willReturn($newDesignData);
+        $this->viewDesignMock->expects($this->any())->method('getConfigurationDesignTheme')->willReturn($initTheme);
         $this->scopeConfigMock->expects($this->any())->method('getValue')->willReturn($newLocale);
 
         // Expectations
-        $this->inlineTranslationMock->expects($this->once())->method('suspend')->with($newInlineTranslate);
-        $this->viewDesignMock->expects($this->once())->method('setDesignTheme')->with($newDesignData);
-        $this->localeResolverMock->expects($this->once())->method('setLocaleCode')->with($newLocale);
-        $this->translateMock->expects($this->once())->method('setLocale')->with($newLocale);
-        $this->storeManagerMock->expects($this->once())->method('setCurrentStore')->with($newStoreId);
+        $this->storeMock->expects($this->any())->method('getStoreId')->willReturn($initStore);
+        $this->inlineTranslationMock->expects($this->any())->method('suspend')->with($newInlineTranslate);
+        $this->viewDesignMock->expects($this->any())->method('setDesignTheme')->with($initTheme);
+        $this->localeResolverMock->expects($this->any())->method('setLocaleCode')->with($newLocale);
+        $this->translateMock->expects($this->any())->method('setLocale')->with($newLocale);
+        $this->translateMock->expects($this->any())->method('loadData')->with($newArea);
+        $this->storeManagerMock->expects($this->any())
+            ->method('setCurrentStore')->with(self::NEW_STORE_ID);
 
         // Test
-        $initialEnvironment = $this->model->startEnvironmentEmulation($newStoreId);
-        $this->assertSame($inlineTranslate, $initialEnvironment->getInitialTranslateInline());
-        $this->assertSame($initDesignData, $initialEnvironment->getInitialDesign());
-        $this->assertSame($initLocale, $initialEnvironment->getInitialLocaleCode());
-    }
+        $this->model->startEnvironmentEmulation(self::NEW_STORE_ID, \Magento\Framework\App\Area::AREA_FRONTEND);
 
-    public function testStartWithInlineTranslation()
-    {
-        $inlineTranslation = true;
-
-        $this->inlineConfigMock->expects($this->any())->method('isActive')->willReturn($inlineTranslation);
-
-        $this->inlineTranslationMock->expects($this->once())
-            ->method('suspend')
-            ->with($inlineTranslation);
-
-        $this->model->startEnvironmentEmulation(1, null, true);
-
-    }
-
-    public function testStartAreaNotDefault()
-    {
-        $area = 'backend';
-        $newDesignData = ['array', 'with', 'data'];
-
-        $this->viewDesignMock->expects($this->any())->method('getConfiguratioNDesignTheme')->willReturn($newDesignData);
-
-        $this->viewDesignMock->expects($this->once())
-            ->method('setDesignTheme')
-            ->with($newDesignData, $area);
-
-        $this->model->startEnvironmentEmulation(1, $area);
     }
 
     public function testStop()
     {
         // Test data
-        $initialEnvInfo = $this->objectManager->getObject('\Magento\Framework\Object');
         $initArea = 'initial area';
         $initTheme = 'initial design theme';
-        $initStore = 1;
         $initLocale = 'initial locale code';
+        $initialStore = 1;
         $initTranslateInline = false;
-        $initDesignData = ['area' => $initArea, 'theme' => $initTheme, 'store' => $initStore];
-        $initialEnvInfo->setInitialTranslateInline($initTranslateInline)
-            ->setInitialDesign($initDesignData)
-            ->setInitialLocaleCode($initLocale);
+
+        $this->inlineTranslationMock->expects($this->once())
+            ->method('isEnabled')
+            ->willReturn($initTranslateInline);
+        $this->viewDesignMock->expects($this->once())
+            ->method('getArea')
+            ->willReturn($initArea);
+        $this->viewDesignMock->expects($this->once())
+            ->method('getDesignTheme')
+            ->willReturn($initTheme);
+        $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($this->storeMock);
+        $this->storeMock->expects($this->once())->method('getStoreId')->willReturn($initialStore);
+        $this->localeResolverMock->expects($this->once())
+            ->method('getLocaleCode')
+            ->willReturn($initLocale);
+
+
+        $this->model->storeCurrentEnvironmentInfo();
 
         // Expectations
         $this->inlineTranslationMock->expects($this->once())
@@ -194,16 +211,16 @@ class EmulationTest extends \Magento\Test\BaseTestCase
             ->method('setDesignTheme')
             ->with($initTheme, $initArea);
         $this->storeManagerMock->expects($this->once())
-            ->method('setCurrentStore')
-            ->with($initStore);
+            ->method('setCurrentStore')->with($initialStore);
         $this->localeResolverMock->expects($this->once())
             ->method('setLocaleCode')
             ->with($initLocale);
         $this->translateMock->expects($this->once())
             ->method('setLocale')
             ->with($initLocale);
+        $this->translateMock->expects($this->once())->method('loadData')->with($initArea);
 
         // Test
-        $this->assertSame($this->model, $this->model->stopEnvironmentEmulation($initialEnvInfo));
+        $this->model->stopEnvironmentEmulation();
     }
 } 

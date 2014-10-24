@@ -25,10 +25,8 @@ namespace Magento\Search\Model\Resource;
 
 /**
  * Search Mysql resource helper model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Helper extends \Magento\Eav\Model\Resource\Helper
+class Helper extends \Magento\Framework\DB\Helper
 {
     /**
      * @param \Magento\Framework\App\Resource $resource
@@ -37,21 +35,6 @@ class Helper extends \Magento\Eav\Model\Resource\Helper
     public function __construct(\Magento\Framework\App\Resource $resource, $modulePrefix = 'Magento_Search')
     {
         parent::__construct($resource, $modulePrefix);
-    }
-
-    /**
-     * Join information for usin full text search
-     *
-     * @param string $table
-     * @param string $alias
-     * @param \Magento\Framework\DB\Select $select
-     * @return \Zend_Db_Expr
-     */
-    public function chooseFulltext($table, $alias, $select)
-    {
-        $field = new \Zend_Db_Expr('MATCH (' . $alias . '.data_index) AGAINST (:query IN BOOLEAN MODE)');
-        $select->columns(array('relevance' => $field));
-        return $field;
     }
 
     /**

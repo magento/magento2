@@ -23,6 +23,9 @@
  */
 namespace Magento\Framework\View\Design\Fallback;
 
+use Magento\Framework\Filesystem;
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 /**
  * Factory Test
  */
@@ -40,32 +43,19 @@ class RulePoolTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $filesystemMock = $this->getMock(
-            '\Magento\Framework\App\Filesystem',
-            array('getPath', 'getDirectoryRead', '__wakeup'),
-            array(
-                'dir' => array(
-                    \Magento\Framework\App\Filesystem::THEMES_DIR => 'themes',
-                    \Magento\Framework\App\Filesystem::MODULES_DIR => 'modules',
-                    \Magento\Framework\App\Filesystem::LIB_WEB => 'lib_web',
-                )
-            ),
-            '',
-            false
-        );
-        $filesystemMock->expects(
-            $this->any()
-        )->method(
-            'getPath'
-        )->will(
-            $this->returnValueMap(
-                array(
-                    \Magento\Framework\App\Filesystem::THEMES_DIR => 'themes',
-                    \Magento\Framework\App\Filesystem::MODULES_DIR => 'modules',
-                    \Magento\Framework\App\Filesystem::LIB_WEB => 'lib_web',
-                )
-            )
-        );
+        $filesystemMock = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+        $filesystemMock->expects($this->any())
+            ->method('getDirectoryRead')
+            ->will($this->returnCallback(function ($code) {
+                $dirMock = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\ReadInterface');
+                $dirMock->expects($this->any())
+                    ->method('getAbsolutePath')
+                    ->will($this->returnCallback(function ($path) use ($code) {
+                        $path = empty($path) ? $path : '/' . $path;
+                        return rtrim($code, '/') . $path;
+                    }));
+                return $dirMock;
+            }));
 
         $this->model = new RulePool($filesystemMock);
 
@@ -209,50 +199,56 @@ class RulePoolTest extends \PHPUnit_Framework_TestCase
             'locale' => [
                 \Magento\Framework\View\Design\Fallback\RulePool::TYPE_LOCALE_FILE,
                 [],
-                ['/area/current_theme_path', '/area/parent_theme_path'],
+                [
+                    DirectoryList::THEMES . '/area/current_theme_path',
+                    DirectoryList::THEMES . '/area/parent_theme_path',
+                ],
             ],
             'file, modular' => [
                 \Magento\Framework\View\Design\Fallback\RulePool::TYPE_FILE,
                 [],
                 [
-                    '/area/current_theme_path/namespace_module',
-                    '/area/parent_theme_path/namespace_module',
-                    '/namespace/module/view/area',
-                    '/namespace/module/view/base',
+                    DirectoryList::THEMES . '/area/current_theme_path/namespace_module',
+                    DirectoryList::THEMES . '/area/parent_theme_path/namespace_module',
+                    DirectoryList::MODULES . '/namespace/module/view/area',
+                    DirectoryList::MODULES . '/namespace/module/view/base',
                 ],
             ],
             'file, non-modular' => [
                 \Magento\Framework\View\Design\Fallback\RulePool::TYPE_FILE,
                 ['namespace' => null, 'module' => null],
-                ['/area/current_theme_path', '/area/parent_theme_path',],
+                [
+                    DirectoryList::THEMES . '/area/current_theme_path',
+                    DirectoryList::THEMES . '/area/parent_theme_path',
+                ],
             ],
 
             'template, modular' => [
                 \Magento\Framework\View\Design\Fallback\RulePool::TYPE_TEMPLATE_FILE,
                 [],
                 [
-                    '/area/current_theme_path/namespace_module/templates',
-                    '/area/parent_theme_path/namespace_module/templates',
-                    '/namespace/module/view/area/templates',
-                    '/namespace/module/view/base/templates',
+                    DirectoryList::THEMES . '/area/current_theme_path/namespace_module/templates',
+                    DirectoryList::THEMES . '/area/parent_theme_path/namespace_module/templates',
+                    DirectoryList::MODULES . '/namespace/module/view/area/templates',
+                    DirectoryList::MODULES . '/namespace/module/view/base/templates',
                 ],
             ],
             'template, non-modular' => [
                 \Magento\Framework\View\Design\Fallback\RulePool::TYPE_TEMPLATE_FILE,
                 ['namespace' => null, 'module' => null],
                 [
-                    '/area/current_theme_path/templates',
-                    '/area/parent_theme_path/templates',
+                    DirectoryList::THEMES . '/area/current_theme_path/templates',
+                    DirectoryList::THEMES . '/area/parent_theme_path/templates',
                 ],
             ],
             'template, non-modular-magento-core' => [
                 \Magento\Framework\View\Design\Fallback\RulePool::TYPE_TEMPLATE_FILE,
                 ['namespace' => 'Magento', 'module' => 'Core'],
                 [
-                    '/area/current_theme_path/Magento_Core/templates',
-                    '/area/parent_theme_path/Magento_Core/templates',
-                    '/Magento/Core/view/area/templates',
-                    '/Magento/Core/view/base/templates',
+                    DirectoryList::THEMES . '/area/current_theme_path/Magento_Core/templates',
+                    DirectoryList::THEMES . '/area/parent_theme_path/Magento_Core/templates',
+                    DirectoryList::MODULES . '/Magento/Core/view/area/templates',
+                    DirectoryList::MODULES . '/Magento/Core/view/base/templates',
                 ],
             ],
 
@@ -260,44 +256,44 @@ class RulePoolTest extends \PHPUnit_Framework_TestCase
                 \Magento\Framework\View\Design\Fallback\RulePool::TYPE_STATIC_FILE,
                 [],
                 [
-                    '/area/current_theme_path/namespace_module/web/i18n/en_US',
-                    '/area/current_theme_path/namespace_module/web',
-                    '/area/parent_theme_path/namespace_module/web/i18n/en_US',
-                    '/area/parent_theme_path/namespace_module/web',
-                    '/namespace/module/view/area/web/i18n/en_US',
-                    '/namespace/module/view/base/web/i18n/en_US',
-                    '/namespace/module/view/area/web',
-                    '/namespace/module/view/base/web',
+                    DirectoryList::THEMES . '/area/current_theme_path/namespace_module/web/i18n/en_US',
+                    DirectoryList::THEMES . '/area/current_theme_path/namespace_module/web',
+                    DirectoryList::THEMES . '/area/parent_theme_path/namespace_module/web/i18n/en_US',
+                    DirectoryList::THEMES . '/area/parent_theme_path/namespace_module/web',
+                    DirectoryList::MODULES . '/namespace/module/view/area/web/i18n/en_US',
+                    DirectoryList::MODULES . '/namespace/module/view/base/web/i18n/en_US',
+                    DirectoryList::MODULES . '/namespace/module/view/area/web',
+                    DirectoryList::MODULES . '/namespace/module/view/base/web',
                 ],
             ],
             'view, modular non-localized' => [
                 \Magento\Framework\View\Design\Fallback\RulePool::TYPE_STATIC_FILE,
                 ['locale' => null],
                 [
-                    '/area/current_theme_path/namespace_module/web',
-                    '/area/parent_theme_path/namespace_module/web',
-                    '/namespace/module/view/area/web',
-                    '/namespace/module/view/base/web',
+                    DirectoryList::THEMES . '/area/current_theme_path/namespace_module/web',
+                    DirectoryList::THEMES . '/area/parent_theme_path/namespace_module/web',
+                    DirectoryList::MODULES . '/namespace/module/view/area/web',
+                    DirectoryList::MODULES . '/namespace/module/view/base/web',
                 ],
             ],
             'view, non-modular localized' => [
                 \Magento\Framework\View\Design\Fallback\RulePool::TYPE_STATIC_FILE,
                 ['module' => null, 'namespace' => null],
                 [
-                    '/area/current_theme_path/web/i18n/en_US',
-                    '/area/current_theme_path/web',
-                    '/area/parent_theme_path/web/i18n/en_US',
-                    '/area/parent_theme_path/web',
-                    '',
+                    DirectoryList::THEMES . '/area/current_theme_path/web/i18n/en_US',
+                    DirectoryList::THEMES . '/area/current_theme_path/web',
+                    DirectoryList::THEMES . '/area/parent_theme_path/web/i18n/en_US',
+                    DirectoryList::THEMES . '/area/parent_theme_path/web',
+                    DirectoryList::LIB_WEB,
                 ],
             ],
             'view, non-modular non-localized' => [
                 \Magento\Framework\View\Design\Fallback\RulePool::TYPE_STATIC_FILE,
                 ['module' => null, 'namespace' => null, 'locale' => null],
                 [
-                    '/area/current_theme_path/web',
-                    '/area/parent_theme_path/web',
-                    '',
+                    DirectoryList::THEMES . '/area/current_theme_path/web',
+                    DirectoryList::THEMES . '/area/parent_theme_path/web',
+                    DirectoryList::LIB_WEB,
                 ],
             ],
         ];

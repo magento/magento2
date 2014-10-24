@@ -23,6 +23,8 @@
  */
 namespace Magento\Framework\Backup;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 /**
  * Class to work media folder and database backups
  *
@@ -74,7 +76,7 @@ class Media extends Snapshot
     {
         $rootDir = $this->getRootDir();
         $map = array(
-            $rootDir => array('media', 'var', 'pub'),
+            $rootDir => array('var', 'pub'),
             $rootDir . '/pub' => array('media'),
             $rootDir . '/var' => array($this->getDbBackupFilename())
         );
@@ -83,7 +85,7 @@ class Media extends Snapshot
             foreach (new \DirectoryIterator($path) as $item) {
                 $filename = $item->getFilename();
                 if (!$item->isDot() && !in_array($filename, $whiteList)) {
-                    $this->addIgnorePaths($item->getPathname());
+                    $this->addIgnorePaths(str_replace('\\', '/', $item->getPathname()));
                 }
             }
         }

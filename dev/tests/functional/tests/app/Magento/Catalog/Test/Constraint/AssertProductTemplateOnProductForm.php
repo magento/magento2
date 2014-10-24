@@ -60,8 +60,7 @@ class AssertProductTemplateOnProductForm extends AbstractConstraint
      * @param CatalogProductAttribute $productAttribute
      * @return void
      */
-    public function processAssert
-    (
+    public function processAssert(
         FixtureFactory $fixtureFactory,
         CatalogProductEdit $productEdit,
         CatalogProductIndex $productGrid,
@@ -70,7 +69,6 @@ class AssertProductTemplateOnProductForm extends AbstractConstraint
         CatalogProductAttribute $productAttribute,
         CatalogAttributeSet $attributeSetOriginal = null
     ) {
-
         $productGrid->open();
         $productGrid->getGridPageActionBlock()->addProduct('simple');
         $productBlockForm = $newProductPage->getProductForm();

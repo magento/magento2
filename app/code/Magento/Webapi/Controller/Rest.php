@@ -26,9 +26,9 @@ namespace Magento\Webapi\Controller;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Exception\AuthorizationException;
-use Magento\Framework\Service\SimpleDataObjectConverter;
 use Magento\Webapi\Controller\Rest\Request as RestRequest;
 use Magento\Webapi\Controller\Rest\Response as RestResponse;
+use Magento\Webapi\Controller\Rest\Response\DataObjectConverter;
 use Magento\Webapi\Controller\Rest\Response\PartialResponseProcessor;
 use Magento\Webapi\Controller\Rest\Router;
 use Magento\Webapi\Controller\Rest\Router\Route;
@@ -96,7 +96,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     protected $userContext;
 
     /**
-     * @var SimpleDataObjectConverter $dataObjectConverter
+     * @var DataObjectConverter $dataObjectConverter
      */
     protected $dataObjectConverter;
 
@@ -115,7 +115,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
      * @param \Magento\Framework\App\AreaList $areaList
      * @param PartialResponseProcessor $partialResponseProcessor
      * @param UserContextInterface $userContext
-     * @param SimpleDataObjectConverter $dataObjectConverter
+     * @param DataObjectConverter $dataObjectConverter
      *
      * TODO: Consider removal of warning suppression
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -133,7 +133,7 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         \Magento\Framework\App\AreaList $areaList,
         PartialResponseProcessor $partialResponseProcessor,
         UserContextInterface $userContext,
-        SimpleDataObjectConverter $dataObjectConverter
+        DataObjectConverter $dataObjectConverter
     ) {
         $this->_router = $router;
         $this->_request = $request;
@@ -177,7 +177,11 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
             $service = $this->_objectManager->get($serviceClassName);
             /** @var \Magento\Framework\Service\Data\AbstractExtensibleObject $outputData */
             $outputData = call_user_func_array([$service, $serviceMethodName], $inputParams);
-            $outputData = $this->dataObjectConverter->processServiceOutput($outputData);
+            $outputData = $this->dataObjectConverter->processServiceOutput(
+                $outputData,
+                $serviceClassName,
+                $serviceMethodName
+            );
             if ($this->_request->getParam(PartialResponseProcessor::FILTER_PARAMETER) && is_array($outputData)) {
                 $outputData = $this->partialResponseProcessor->filter($outputData);
             }

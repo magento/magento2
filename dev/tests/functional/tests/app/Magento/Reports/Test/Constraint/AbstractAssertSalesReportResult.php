@@ -75,7 +75,7 @@ abstract class AbstractAssertSalesReportResult extends AbstractConstraint
         $invoice = $this->order->getPrice()[0]['grand_invoice_total'];
         $salesTotal = $this->order->getPrice()[0]['grand_order_total'];
         foreach ($this->order->getEntityId()['products'] as $product) {
-            $salesItems += $product->getCheckoutData()['options']['qty'];
+            $salesItems += $product->getCheckoutData()['qty'];
         }
         $expectedSalesData['orders'] += 1;
         $expectedSalesData['sales-items'] += $salesItems;

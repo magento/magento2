@@ -25,6 +25,8 @@
  */
 namespace Magento\Framework\App\Arguments;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class Loader
 {
     /**
@@ -69,7 +71,7 @@ class Loader
      */
     public function __construct(\Magento\Framework\App\Filesystem\DirectoryList $dirList, $customFile = null)
     {
-        $this->_dir = $dirList->getDir(\Magento\Framework\App\Filesystem::CONFIG_DIR);
+        $this->_dir = $dirList->getPath(DirectoryList::CONFIG);
         $this->_customFile = $customFile;
     }
 

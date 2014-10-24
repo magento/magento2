@@ -23,6 +23,8 @@
  */
 namespace Magento\Catalog\Helper\Product;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 /**
  * Catalog Product Custom Options helper
  *
@@ -37,12 +39,12 @@ class Options extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Framework\App\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem $filesystem
      */
-    public function __construct(\Magento\Framework\App\Helper\Context $context, \Magento\Framework\App\Filesystem $filesystem)
+    public function __construct(\Magento\Framework\App\Helper\Context $context, \Magento\Framework\Filesystem $filesystem)
     {
         parent::__construct($context);
-        $this->directory = $filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::ROOT_DIR);
+        $this->directory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
     }
 
     /**

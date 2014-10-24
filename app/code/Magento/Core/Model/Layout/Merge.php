@@ -24,6 +24,7 @@
 namespace Magento\Core\Model\Layout;
 
 use \Magento\Core\Model\Layout\Update\Validator;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Layout merge model
@@ -136,7 +137,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
     protected $_logger;
 
     /**
-     * @var \Magento\Framework\App\Filesystem
+     * @var \Magento\Framework\Filesystem
      */
     protected $filesystem;
 
@@ -162,7 +163,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
      * @param \Magento\Framework\Cache\FrontendInterface $cache
      * @param \Magento\Core\Model\Layout\Update\Validator $validator
      * @param \Magento\Framework\Logger $logger
-     * @param \Magento\Framework\App\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\View\Page\Config $pageConfig
      * @param \Magento\Framework\View\Design\ThemeInterface $theme Non-injectable theme instance
      */
@@ -176,7 +177,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         \Magento\Framework\Cache\FrontendInterface $cache,
         \Magento\Core\Model\Layout\Update\Validator $validator,
         \Magento\Framework\Logger $logger,
-        \Magento\Framework\App\Filesystem $filesystem,
+        \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\View\Page\Config $pageConfig,
         \Magento\Framework\View\Design\ThemeInterface $theme = null
     ) {
@@ -694,7 +695,7 @@ class Merge implements \Magento\Framework\View\Layout\ProcessorInterface
         $theme = $this->_getPhysicalTheme($this->_theme);
         $updateFiles = $this->_fileSource->getFiles($theme, '*.xml');
         $updateFiles = array_merge($updateFiles, $this->pageLayoutFileSource->getFiles($theme, '*.xml'));
-        $dir = $this->filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::ROOT_DIR);
+        $dir = $this->filesystem->getDirectoryRead(DirectoryList::ROOT);
         $useErrors = libxml_use_internal_errors(true);
         foreach ($updateFiles as $file) {
             $filename = $dir->getRelativePath($file->getFilename());

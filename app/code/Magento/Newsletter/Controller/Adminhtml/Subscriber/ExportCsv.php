@@ -24,6 +24,7 @@
  */
 namespace Magento\Newsletter\Controller\Adminhtml\Subscriber;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use \Magento\Framework\App\ResponseInterface;
 
 class ExportCsv extends \Magento\Newsletter\Controller\Adminhtml\Subscriber
@@ -42,7 +43,7 @@ class ExportCsv extends \Magento\Newsletter\Controller\Adminhtml\Subscriber
         return $this->_fileFactory->create(
             $fileName,
             $content->getCsvFile($fileName),
-            \Magento\Framework\App\Filesystem::VAR_DIR
+            DirectoryList::VAR_DIR
         );
     }
 }

@@ -29,23 +29,29 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\CouldNotSaveException;
 
 /**
- * Class WriteService
+ * Coupon write service object.
  */
 class WriteService implements WriteServiceInterface
 {
     /**
+     * Quote repository.
+     *
      * @var \Magento\Sales\Model\QuoteRepository
      */
     protected $quoteRepository;
 
     /**
+     * Coupon builder.
+     *
      * @var CouponBuilder
      */
     protected $couponBuilder;
 
     /**
-     * @param \Magento\Sales\Model\QuoteRepository $quoteRepository
-     * @param CouponBuilder $couponBuilder
+     * Constructs a coupon write service object.
+     *
+     * @param \Magento\Sales\Model\QuoteRepository $quoteRepository Quote repository.
+     * @param CouponBuilder $couponBuilder Coupon builder.
      */
     public function __construct(
         \Magento\Sales\Model\QuoteRepository $quoteRepository,
@@ -57,6 +63,12 @@ class WriteService implements WriteServiceInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @param int $cartId The cart ID.
+     * @param \Magento\Checkout\Service\V1\Data\Cart\Coupon $couponCodeData The coupon code data.
+     * @return bool
+     * @throws \Magento\Framework\Exception\NoSuchEntityException The specified cart does not exist.
+     * @throws \Magento\Framework\Exception\CouldNotSaveException The specified coupon could not be added.
      */
     public function set($cartId, \Magento\Checkout\Service\V1\Data\Cart\Coupon $couponCodeData)
     {
@@ -82,6 +94,11 @@ class WriteService implements WriteServiceInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @param int $cartId The cart ID.
+     * @return bool
+     * @throws \Magento\Framework\Exception\NoSuchEntityException The specified cart does not exist.
+     * @throws \Magento\Framework\Exception\CouldNotDeleteException The specified coupon could not be deleted.
      */
     public function delete($cartId)
     {

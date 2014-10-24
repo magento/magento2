@@ -24,9 +24,10 @@
 
 namespace Magento\Framework\View\Asset;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\View\Asset\File;
 use \Magento\Framework\UrlInterface;
-use \Magento\Framework\App\Filesystem;
+use Magento\Framework\Filesystem;
 
 /**
  * A repository service for view assets
@@ -218,7 +219,7 @@ class Repository
     private function getFallbackContext($urlType, $isSecure, $area, $themePath, $locale)
     {
         $secureKey = null === $isSecure ? 'null' : (int)$isSecure;
-        $baseDirType = \Magento\Framework\App\Filesystem::STATIC_VIEW_DIR;
+        $baseDirType = DirectoryList::STATIC_VIEW;
         $id = implode('|', array($baseDirType, $urlType, $secureKey, $area, $themePath, $locale));
         if (!isset($this->fallbackContext[$id])) {
             $url = $this->baseUrl->getBaseUrl(array('_type' => $urlType, '_secure' => $isSecure));
@@ -269,7 +270,7 @@ class Repository
     public function createArbitrary(
         $filePath,
         $dirPath,
-        $baseDirType = Filesystem::STATIC_VIEW_DIR,
+        $baseDirType = DirectoryList::STATIC_VIEW,
         $baseUrlType = UrlInterface::URL_TYPE_STATIC
     ) {
         $context = $this->getFileContext($baseDirType, $baseUrlType, $dirPath);

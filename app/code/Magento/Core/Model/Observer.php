@@ -23,6 +23,8 @@
  */
 namespace Magento\Core\Model;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 /**
  * Core Observer model
  *
@@ -144,7 +146,7 @@ class Observer
                     $asset = $this->_assetRepo->createArbitrary(
                         $identifier,
                         $dirPath,
-                        \Magento\Framework\App\Filesystem::MEDIA_DIR,
+                        DirectoryList::MEDIA,
                         \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
                     );
                     $this->_pageAssets->add($identifier, $asset);

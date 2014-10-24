@@ -23,6 +23,8 @@
  */
 namespace Magento\Catalog\Model;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 /**
  * Tests product model:
  * - general behaviour is tested (external interaction and pricing is not tested there)
@@ -266,9 +268,9 @@ class ProductGettersTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $mediaDirectory = $objectManager->get(
-            'Magento\Framework\App\Filesystem'
+            'Magento\Framework\Filesystem'
         )->getDirectoryWrite(
-            \Magento\Framework\App\Filesystem::MEDIA_DIR
+            DirectoryList::MEDIA
         );
         $config = $objectManager->get('Magento\Catalog\Model\Product\Media\Config');
         $mediaDirectory->delete($config->getBaseMediaPath());

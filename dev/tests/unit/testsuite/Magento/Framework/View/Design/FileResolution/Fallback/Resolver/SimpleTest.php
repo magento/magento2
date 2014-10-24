@@ -24,6 +24,8 @@
 
 namespace Magento\Framework\View\Design\FileResolution\Fallback\Resolver;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class SimpleTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -52,10 +54,10 @@ class SimpleTest extends \PHPUnit_Framework_TestCase
         $this->directory->expects($this->any())
             ->method('getRelativePath')
             ->will($this->returnArgument(0));
-        $filesystem = $this->getMock('\Magento\Framework\App\Filesystem', array(), array(), '', false);
+        $filesystem = $this->getMock('\Magento\Framework\Filesystem', array(), array(), '', false);
         $filesystem->expects($this->once())
             ->method('getDirectoryRead')
-            ->with(\Magento\Framework\App\Filesystem::ROOT_DIR)
+            ->with(DirectoryList::ROOT)
             ->will($this->returnValue($this->directory));
         $this->rule = $this->getMock(
             '\Magento\Framework\View\Design\Fallback\Rule\RuleInterface', array(), array(), '', false

@@ -85,7 +85,7 @@ class DeleteProductUrlRewriteEntityTest extends Injectable
      * @param UrlRewrite $productRedirect
      * @return void
      */
-    public function testDeleteProductUrlRewrite(UrlRewrite $productRedirect)
+    public function test(UrlRewrite $productRedirect)
     {
         // Precondition
         $productRedirect->persist();

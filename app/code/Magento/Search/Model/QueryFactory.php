@@ -85,26 +85,29 @@ class QueryFactory implements QueryFactoryInterface
     public function get()
     {
         if (!$this->query) {
-            $this->query = $this->create();
+            $maxQueryLength = $this->getMaxQueryLength();
+            $rawQueryText = $this->getRawQueryText();
+            $preparedQueryText = $this->getPreparedQueryText($rawQueryText, $maxQueryLength);
+            /** @var \Magento\Search\Model\Query $query */
+            $query = $this->create()->loadByQuery($preparedQueryText);
+            if (!$query->getId()) {
+                $query->setQueryText($preparedQueryText);
+            }
+            $query->setIsQueryTextExceeded($this->isQueryTooLong($preparedQueryText, $maxQueryLength));
+            $this->query = $query;
         }
         return $this->query;
     }
 
     /**
-     * @return Query
+     * Create new instance
+     *
+     * @param array $data
+     * @return \Magento\Search\Model\Query
      */
-    private function create()
+    public function create(array $data = [])
     {
-        $maxQueryLength = $this->getMaxQueryLength();
-        $rawQueryText = $this->getRawQueryText();
-        $preparedQueryText = $this->getPreparedQueryText($rawQueryText, $maxQueryLength);
-        /** @var \Magento\Search\Model\Query $query */
-        $query = $this->objectManager->create('\Magento\Search\Model\Query')->loadByQuery($preparedQueryText);
-        if (!$query->getId()) {
-            $query->setQueryText($preparedQueryText);
-        }
-        $query->setIsQueryTextExceeded($this->isQueryTooLong($preparedQueryText, $maxQueryLength));
-        return $query;
+        return $this->objectManager->create('Magento\Search\Model\Query', $data);
     }
 
     /**

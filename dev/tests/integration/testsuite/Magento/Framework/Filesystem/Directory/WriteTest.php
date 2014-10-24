@@ -26,6 +26,7 @@
 namespace Magento\Framework\Filesystem\Directory;
 
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Framework\Filesystem\DriverPool;
 
 /**
  * Class ReadTest
@@ -387,15 +388,10 @@ class WriteTest extends \PHPUnit_Framework_TestCase
     private function getDirectoryInstance($path, $permissions)
     {
         $fullPath = __DIR__ . '/../_files/' . $path;
-        $config = array('path' => $fullPath, 'permissions' => $permissions, 'allow_create_dirs' => true);
         $objectManager = Bootstrap::getObjectManager();
+        /** @var \Magento\Framework\Filesystem\Directory\WriteFactory $directoryFactory */
         $directoryFactory = $objectManager->create('Magento\Framework\Filesystem\Directory\WriteFactory');
-        $directory = $directoryFactory->create(
-            $config,
-            new \Magento\Framework\Filesystem\DriverFactory(
-                $objectManager->get('Magento\Framework\App\Filesystem\DirectoryList')
-            )
-        );
+        $directory = $directoryFactory->create($fullPath, DriverPool::FILE, $permissions);
         $this->testDirectories[] = $directory;
         return $directory;
     }

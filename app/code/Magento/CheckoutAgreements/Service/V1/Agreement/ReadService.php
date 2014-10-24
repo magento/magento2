@@ -32,33 +32,46 @@ use \Magento\Store\Model\ScopeInterface;
 use \Magento\CheckoutAgreements\Service\V1\Data\AgreementBuilder;
 use \Magento\CheckoutAgreements\Service\V1\Data\Agreement as AgreementDataObject;
 
+/**
+ * Checkout agreement service.
+ */
 class ReadService implements ReadServiceInterface
 {
     /**
+     * Collection factory.
+     *
      * @var AgreementCollectionFactory
      */
     private $collectionFactory;
 
     /**
+     * Agreement builder.
+     *
      * @var AgreementBuilder
      */
     private $agreementBuilder;
 
     /**
+     * Store manager.
+     *
      * @var  \Magento\Framework\StoreManagerInterface
      */
     private $storeManager;
 
     /**
+     * Scope config.
+     *
      * @var ScopeConfigInterface
      */
     private $scopeConfig;
 
     /**
-     * @param AgreementCollectionFactory $collectionFactory
-     * @param AgreementBuilder $agreementBuilder
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
-     * @param ScopeConfigInterface $scopeConfig
+     * Constructs a checkout agreement service object.
+     *
+     * @param AgreementCollectionFactory $collectionFactory Collection factory.
+     * @param AgreementBuilder $agreementBuilder Agreement builder.
+     * @param \Magento\Framework\StoreManagerInterface $storeManager Store manager.
+     * @param ScopeConfigInterface $scopeConfig Scope config.
      */
     public function __construct(
         AgreementCollectionFactory $collectionFactory,
@@ -74,6 +87,8 @@ class ReadService implements ReadServiceInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @return array|\Magento\CheckoutAgreements\Service\V1\Data\Agreement[] Array of checkout agreement service objects.
      */
     public function getList()
     {
@@ -95,10 +110,10 @@ class ReadService implements ReadServiceInterface
     }
 
     /**
-     * Create agreement data object based on given agreement model
+     * Creates an agreement data object based on a specified agreement model.
      *
-     * @param Agreement $agreement
-     * @return AgreementDataObject
+     * @param Agreement $agreement The agreement model.
+     * @return AgreementDataObject Agreement data object.
      */
     protected function createAgreementDataObject(Agreement $agreement)
     {

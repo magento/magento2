@@ -23,6 +23,7 @@
  */
 namespace Magento\Core\Model\File\Storage;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Directory\WriteInterface as DirectoryWrite;
 use Magento\Framework\Filesystem\File\Write;
 use Magento\Framework\Filesystem\FilesystemException;
@@ -52,16 +53,16 @@ class Config
 
     /**
      * @param \Magento\Core\Model\File\Storage $storage
-     * @param \Magento\Framework\App\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem $filesystem
      * @param string $cacheFile
      */
     public function __construct(
         \Magento\Core\Model\File\Storage $storage,
-        \Magento\Framework\App\Filesystem $filesystem,
+        \Magento\Framework\Filesystem $filesystem,
         $cacheFile
     ) {
         $this->config = $storage->getScriptConfig();
-        $this->pubDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::PUB_DIR);
+        $this->pubDirectory = $filesystem->getDirectoryWrite(DirectoryList::PUB);
         $this->cacheFilePath = $cacheFile;
     }
 

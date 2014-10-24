@@ -24,6 +24,8 @@
  */
 namespace Magento\ImportExport\Controller\Adminhtml\Export;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class Export extends \Magento\ImportExport\Controller\Adminhtml\Export
 {
     /**
@@ -59,7 +61,7 @@ class Export extends \Magento\ImportExport\Controller\Adminhtml\Export
                 return $this->_fileFactory->create(
                     $model->getFileName(),
                     $model->export(),
-                    \Magento\Framework\App\Filesystem::VAR_DIR,
+                    DirectoryList::VAR_DIR,
                     $model->getContentType()
                 );
             } catch (\Magento\Framework\Model\Exception $e) {

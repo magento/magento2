@@ -31,17 +31,16 @@ use Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory;
 use Magento\CatalogSearch\Model\Resource\Advanced\Collection;
 use Magento\CatalogSearch\Model\Resource\EngineInterface;
 use Magento\CatalogSearch\Model\Resource\EngineProvider;
-use Magento\Framework\Model\Exception;
-use Magento\Framework\Model\Context;
-use Magento\Framework\Registry;
-use Magento\Framework\StoreManagerInterface;
 use Magento\Directory\Model\Currency;
 use Magento\Directory\Model\CurrencyFactory;
 use Magento\Eav\Model\Entity\Attribute as EntityAttribute;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\Exception;
+use Magento\Framework\Registry;
+use Magento\Framework\StoreManagerInterface;
 
 /**
  * Catalog advanced search model
- *
  * @method \Magento\CatalogSearch\Model\Resource\Advanced getResource()
  * @method int getEntityTypeId()
  * @method \Magento\CatalogSearch\Model\Advanced setEntityTypeId(int $value)
@@ -170,6 +169,66 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Add advanced search filters to product collection
+     *
+     * @param   array $values
+     * @return  $this
+     * @throws Exception
+     */
+    public function addFilters($values)
+    {
+        $attributes = $this->getAttributes();
+        $hasConditions = false;
+        $allConditions = array();
+
+        foreach ($attributes as $attribute) {
+            /* @var $attribute Attribute */
+            if (!isset($values[$attribute->getAttributeCode()])) {
+                continue;
+            }
+            $value = $values[$attribute->getAttributeCode()];
+            $this->_addSearchCriteria($attribute, $value);
+
+            if ($attribute->getAttributeCode() == 'price') {
+                $rate = 1;
+                $store = $this->_storeManager->getStore();
+                $curency = $store->getCurrentCurrencyCode();
+                if ($curency != $store->getBaseCurrencyCode()) {
+                    $rate = $store->getBaseCurrency()->getRate($curency);
+                }
+
+                $value['from'] = isset($value['from']) ? (float)$value['from'] / $rate : '';
+                $value['to'] = isset($value['to']) ? (float)$value['to'] / $rate : '';
+            }
+            $condition = $this->_getResource()->prepareCondition(
+                $attribute,
+                $value,
+                $this->getProductCollection()
+            );
+            if ($condition === false) {
+                continue;
+            }
+
+
+            $table = $attribute->getBackend()->getTable();
+            if ($attribute->getBackendType() == 'static') {
+                $attributeId = $attribute->getAttributeCode();
+            } else {
+                $attributeId = $attribute->getId();
+            }
+            $allConditions[$table][$attributeId] = $condition;
+        }
+        if ($allConditions) {
+            $this->_registry->register('advanced_search_conditions', $allConditions);
+            $this->getProductCollection()->addFieldsToFilter($allConditions);
+        } elseif (!$hasConditions) {
+            throw new Exception(__('Please specify at least one search term.'));
+        }
+
+        return $this;
+    }
+
+    /**
      * Retrieve array of attributes used in advanced search
      *
      * @return array
@@ -195,90 +254,47 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Add advanced search filters to product collection
+     * Retrieve advanced search product collection
      *
-     * @param   array $values
-     * @return  $this
-     * @throws Exception
+     * @return Collection
      */
-    public function addFilters($values)
+    public function getProductCollection()
     {
-        $attributes = $this->getAttributes();
-        $hasConditions = false;
-        $allConditions = array();
-
-        foreach ($attributes as $attribute) {
-            /* @var $attribute Attribute */
-            if (!isset($values[$attribute->getAttributeCode()])) {
-                continue;
+        if (is_null($this->_productCollection)) {
+            $collection = $this->_engine->getAdvancedResultCollection();
+            $this->prepareProductCollection($collection);
+            if (!$collection) {
+                return $collection;
             }
-            $value = $values[$attribute->getAttributeCode()];
-
-            if ($attribute->getAttributeCode() == 'price') {
-                $value['from'] = isset($value['from']) ? trim($value['from']) : '';
-                $value['to'] = isset($value['to']) ? trim($value['to']) : '';
-                if (is_numeric($value['from']) || is_numeric($value['to'])) {
-                    if (!empty($value['currency'])) {
-                        $rate = $this->_storeManager->getStore()->getBaseCurrency()->getRate($value['currency']);
-                    } else {
-                        $rate = 1;
-                    }
-                    if ($this->_getResource()->addRatedPriceFilter(
-                        $this->getProductCollection(),
-                        $attribute,
-                        $value,
-                        $rate
-                    )
-                    ) {
-                        $hasConditions = true;
-                        $this->_addSearchCriteria($attribute, $value);
-                    }
-                }
-            } elseif ($attribute->isIndexable()) {
-                if (!is_string($value) || strlen($value) != 0) {
-                    if ($this->_getResource()->addIndexableAttributeModifiedFilter(
-                        $this->getProductCollection(),
-                        $attribute,
-                        $value
-                    )
-                    ) {
-                        $hasConditions = true;
-                        $this->_addSearchCriteria($attribute, $value);
-                    }
-                }
-            } else {
-                $condition = $this->_getResource()->prepareCondition(
-                    $attribute,
-                    $value,
-                    $this->getProductCollection()
-                );
-                if ($condition === false) {
-                    continue;
-                }
-
-                $this->_addSearchCriteria($attribute, $value);
-
-                $table = $attribute->getBackend()->getTable();
-                if ($attribute->getBackendType() == 'static') {
-                    $attributeId = $attribute->getAttributeCode();
-                } else {
-                    $attributeId = $attribute->getId();
-                }
-                $allConditions[$table][$attributeId] = $condition;
-            }
+            $this->_productCollection = $collection;
         }
-        if ($allConditions) {
-            $this->_registry->register('advanced_search_conditions', $allConditions);
-            $this->getProductCollection()->addFieldsToFilter($allConditions);
-        } elseif (!$hasConditions) {
-            throw new Exception(__('Please specify at least one search term.'));
-        }
+
+        return $this->_productCollection;
+    }
+
+    /**
+     * Prepare product collection
+     *
+     * @param Collection $collection
+     * @return $this
+     */
+    public function prepareProductCollection($collection)
+    {
+        $collection
+            ->addAttributeToSelect($this->_catalogConfig->getProductAttributes())
+            ->setStore($this->_storeManager->getStore())
+            ->addMinimalPrice()
+            ->addTaxPercents()
+            ->addStoreFilter()
+            ->setVisibility($this->_catalogProductVisibility->getVisibleInSearchIds());
 
         return $this;
     }
 
     /**
      * Add data about search criteria to object state
+     *
+     * @todo: Move this code to block
      *
      * @param   EntityAttribute $attribute
      * @param   mixed $value
@@ -354,43 +370,5 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
     public function getSearchCriterias()
     {
         return $this->_searchCriterias;
-    }
-
-    /**
-     * Retrieve advanced search product collection
-     *
-     * @return Collection
-     */
-    public function getProductCollection()
-    {
-        if (is_null($this->_productCollection)) {
-            $collection = $this->_engine->getAdvancedResultCollection();
-            $this->prepareProductCollection($collection);
-            if (!$collection) {
-                return $collection;
-            }
-            $this->_productCollection = $collection;
-        }
-
-        return $this->_productCollection;
-    }
-
-    /**
-     * Prepare product collection
-     *
-     * @param Collection $collection
-     * @return $this
-     */
-    public function prepareProductCollection($collection)
-    {
-        $collection
-            ->addAttributeToSelect($this->_catalogConfig->getProductAttributes())
-            ->setStore($this->_storeManager->getStore())
-            ->addMinimalPrice()
-            ->addTaxPercents()
-            ->addStoreFilter()
-            ->setVisibility($this->_catalogProductVisibility->getVisibleInSearchIds());
-
-        return $this;
     }
 }

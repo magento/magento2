@@ -67,5 +67,6 @@
     </div>
 </div>
 <div class="text-center">
+    <div class="bold" ng-repeat="message in messages">{{message}}</div><br/>
     <a type="button" class="btn btn-primary" href="{{config.address.web}}{{config.address.admin}}"><?php echo $this->translate('Launch Magento Admin'); ?></a>
 </div>

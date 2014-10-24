@@ -23,22 +23,39 @@
  */
 namespace Magento\Framework\Filesystem\Directory;
 
+use Magento\Framework\Filesystem\DriverPool;
+
 class WriteFactory
 {
     /**
+     * Pool of filesystem drivers
+     *
+     * @var DriverPool
+     */
+    private $driverPool;
+
+    /**
+     * Constructor
+     *
+     * @param DriverPool $driverPool
+     */
+    public function __construct(DriverPool $driverPool)
+    {
+        $this->driverPool = $driverPool;
+    }
+
+    /**
      * Create a readable directory
      *
-     * @param array $config
-     * @param \Magento\Framework\Filesystem\DriverFactory $driverFactory
+     * @param string $path
+     * @param string $protocol
+     * @param int $createPermissions
      * @return \Magento\Framework\Filesystem\Directory\Write
      */
-    public function create(array $config, \Magento\Framework\Filesystem\DriverFactory $driverFactory)
+    public function create($path, $protocol = DriverPool::FILE, $createPermissions = null)
     {
-        $protocolCode = isset($config['protocol']) ? $config['protocol'] : null;
-        $driverClass = isset($config['driver']) ? $config['driver'] : null;
-        $driver = $driverFactory->get($protocolCode, $driverClass);
-        $factory = new \Magento\Framework\Filesystem\File\WriteFactory($driverFactory);
-
-        return new \Magento\Framework\Filesystem\Directory\Write($config, $factory, $driver);
+        $driver = $this->driverPool->getDriver($protocol);
+        $factory = new \Magento\Framework\Filesystem\File\WriteFactory($this->driverPool);
+        return new Write($factory, $driver, $path, $createPermissions);
     }
 }

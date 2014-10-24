@@ -24,6 +24,8 @@
  */
 namespace Magento\ImportExport\Controller\Adminhtml\Import;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class Validate extends \Magento\ImportExport\Controller\Adminhtml\Import
 {
     /**
@@ -93,9 +95,9 @@ class Validate extends \Magento\ImportExport\Controller\Adminhtml\Import
                 $source = \Magento\ImportExport\Model\Import\Adapter::findAdapterFor(
                     $import->uploadSource(),
                     $this->_objectManager->create(
-                        'Magento\Framework\App\Filesystem'
+                        'Magento\Framework\Filesystem'
                     )->getDirectoryWrite(
-                        \Magento\Framework\App\Filesystem::ROOT_DIR
+                        DirectoryList::ROOT
                     )
                 );
                 $validationResult = $import->validateSource($source);

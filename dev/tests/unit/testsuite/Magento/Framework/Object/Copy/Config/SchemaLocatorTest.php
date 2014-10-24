@@ -24,13 +24,10 @@
 
 namespace Magento\Framework\Object\Copy\Config;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
 {
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $fileSystemMock;
 
     /**
      * @var \Magento\Framework\Object\Copy\Config\SchemaLocator
@@ -39,20 +36,26 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->fileSystemMock = $this->getMock(
-            'Magento\Framework\App\Filesystem',
+        $rootDirMock = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\ReadInterface');
+        $rootDirMock->expects($this->exactly(2))
+            ->method('getAbsolutePath')
+            ->will($this->returnCallback(function ($path) {
+                return 'schema_dir/' . $path;
+            }));
+        $fileSystemMock = $this->getMock(
+            'Magento\Framework\Filesystem',
             array(),
             array(),
             '',
             false
         );
-        $this->fileSystemMock->expects($this->any())
-            ->method('getPath')
-            ->with(\Magento\Framework\App\Filesystem::ROOT_DIR)
-            ->will($this->returnValue('schema_dir'));
+        $fileSystemMock->expects($this->once())
+            ->method('getDirectoryRead')
+            ->with(DirectoryList::ROOT)
+            ->will($this->returnValue($rootDirMock));
 
         $this->model = new \Magento\Framework\Object\Copy\Config\SchemaLocator(
-            $this->fileSystemMock,
+            $fileSystemMock,
             'schema.xsd',
             'perFileSchema.xsd'
         );

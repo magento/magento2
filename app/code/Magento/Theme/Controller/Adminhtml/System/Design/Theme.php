@@ -47,7 +47,7 @@ class Theme extends \Magento\Backend\App\Action
     protected $_assetRepo;
 
     /**
-     * @var \Magento\Framework\App\Filesystem
+     * @var \Magento\Framework\Filesystem
      */
     protected $_appFileSystem;
 
@@ -56,14 +56,14 @@ class Theme extends \Magento\Backend\App\Action
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
-     * @param \Magento\Framework\App\Filesystem $appFileSystem
+     * @param \Magento\Framework\Filesystem $appFileSystem
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
         \Magento\Framework\View\Asset\Repository $assetRepo,
-        \Magento\Framework\App\Filesystem $appFileSystem
+        \Magento\Framework\Filesystem $appFileSystem
     ) {
         $this->_coreRegistry = $coreRegistry;
         $this->_fileFactory = $fileFactory;

@@ -59,13 +59,6 @@ class Setup implements SetupInterface
     protected $setupCache = array();
 
     /**
-     * Filesystem instance
-     *
-     * @var \Magento\Filesystem\Filesystem
-     */
-    protected $filesystem;
-
-    /**
      * Logger
      *
      * @var LoggerInterface

@@ -450,8 +450,80 @@ class ConfigurableAttributesData implements FixtureInterface
                 ],
             ]
         ],
+        'with_one_option' => [
+            'attributes_data' => [
+                'attribute_key_0' => [
+                    'options' => [
+                        'option_key_0' => [
+                            'pricing_value' => 1,
+                            'include' => 'Yes',
+                            'is_percent' => 'No'
+                        ],
+                        'option_key_1' => [
+                            'pricing_value' => 2,
+                            'include' => 'Yes',
+                            'is_percent' => 'No'
+                        ],
+                        'option_key_2' => [
+                            'pricing_value' => 3,
+                            'include' => 'Yes',
+                            'is_percent' => 'No'
+                        ]
+                    ]
+                ]
+            ],
+            'products' => [],
+            'attributes' => [
+                'attribute_key_0' => 'catalogProductAttribute::attribute_type_dropdown',
+            ],
+            'matrix' => [
+                'attribute_key_0:option_key_0' => [
+                    'quantity_and_stock_status' => [
+                        'qty' => 10
+                    ],
+                    'weight' => 1
+                ],
+                'attribute_key_0:option_key_1' => [
+                    'quantity_and_stock_status' => [
+                        'qty' => 10
+                    ],
+                    'weight' => 1
+                ],
+                'attribute_key_0:option_key_2' => [
+                    'quantity_and_stock_status' => [
+                        'qty' => 10
+                    ],
+                    'weight' => 1
+                ],
+            ]
+        ],
+        'with_out_of_stock_item' => [
+            'attributes_data' => [
+                'attribute_key_0' => [
+                    'options' => [
+                        'option_key_0' => [
+                            'pricing_value' => 12.00,
+                            'include' => 'Yes',
+                            'is_percent' => 'No'
+                        ]
+                    ]
+                ]
+            ],
+            'products' => [],
+            'attributes' => [
+                'attribute_key_0' => 'catalogProductAttribute::attribute_type_dropdown_one_option'
+            ],
+            'matrix' => [
+                'attribute_key_0:option_key_0' => [
+                    'display' => 'Yes',
+                    'quantity_and_stock_status' => [
+                        'qty' => 0
+                    ],
+                    'weight' => 1
+                ]
+            ]
+        ],
     ];
-
 
     /**
      * Source constructor

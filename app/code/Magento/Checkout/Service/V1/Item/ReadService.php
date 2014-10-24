@@ -21,24 +21,32 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Checkout\Service\V1\Item;
 
+/** 
+ * Read service object. 
+ */
 class ReadService implements ReadServiceInterface
 {
     /**
+     * Quote repository.
+     *
      * @var \Magento\Sales\Model\QuoteRepository
      */
     protected $quoteRepository;
 
     /**
+     * Item mapper.
+     *
      * @var \Magento\Checkout\Service\V1\Data\Cart\ItemMapper
      */
     protected $itemMapper;
 
     /**
-     * @param \Magento\Sales\Model\QuoteRepository $quoteRepository
-     * @param \Magento\Checkout\Service\V1\Data\Cart\ItemMapper $itemMapper
+     * Constructs a read service object.
+     *
+     * @param \Magento\Sales\Model\QuoteRepository $quoteRepository Quote repository.
+     * @param \Magento\Checkout\Service\V1\Data\Cart\ItemMapper $itemMapper Item mapper.
      */
     public function __construct(
         \Magento\Sales\Model\QuoteRepository $quoteRepository,
@@ -49,7 +57,11 @@ class ReadService implements ReadServiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @param int $cartId The cart ID.
+     * @return \Magento\Checkout\Service\V1\Data\Cart\Item[] Array of items.
+     * @throws \Magento\Framework\Exception\NoSuchEntityException The specified cart does not exist.
      */
     public function getList($cartId)
     {

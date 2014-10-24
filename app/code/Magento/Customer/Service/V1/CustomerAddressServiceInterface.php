@@ -58,7 +58,7 @@ interface CustomerAddressServiceInterface
     /**
      * Retrieve address by id
      *
-     * @param string $addressId
+     * @param int $addressId
      * @return \Magento\Customer\Service\V1\Data\Address
      * @throws \Magento\Framework\Exception\NoSuchEntityException If no address can be found for the provided id.
      */

@@ -53,14 +53,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     protected $_emulatedDesignConfig = false;
 
     /**
-     * Initial environment information
-     *
-     * @var \Magento\Framework\Object|null
-     * @see self::_applyDesignConfig()
-     */
-    protected $_initialEnvironmentInfo = null;
-
-    /**
      * Package area
      *
      * @var string
@@ -127,7 +119,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
         $storeId = is_object($store) ? $store->getId() : $store;
         $area = $designConfig->getArea();
         if (!is_null($storeId)) {
-            $this->_initialEnvironmentInfo = $this->_appEmulation->startEnvironmentEmulation($storeId, $area);
+            $this->_appEmulation->startEnvironmentEmulation($storeId, $area);
         }
         return $this;
     }
@@ -139,10 +131,7 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
      */
     protected function _cancelDesignConfig()
     {
-        if (!empty($this->_initialEnvironmentInfo)) {
-            $this->_appEmulation->stopEnvironmentEmulation($this->_initialEnvironmentInfo);
-            $this->_initialEnvironmentInfo = null;
-        }
+        $this->_appEmulation->stopEnvironmentEmulation();
         return $this;
     }
 

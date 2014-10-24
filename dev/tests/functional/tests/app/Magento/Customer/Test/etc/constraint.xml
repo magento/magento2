@@ -123,26 +123,21 @@
     </assertCustomerDefaultAddresses>
     <assertCustomerMassDeleteSuccessMessage module="Magento_Customer">
         <severeness>low</severeness>
-        <require />
     </assertCustomerMassDeleteSuccessMessage>
     <assertCustomerMassDeleteNotInGrid module="Magento_Customer">
         <severeness>low</severeness>
-        <require />
     </assertCustomerMassDeleteNotInGrid>
     <assertCustomerMassDeleteInGrid module="Magento_Customer">
         <severeness>low</severeness>
-        <require />
     </assertCustomerMassDeleteInGrid>
     <assertMassActionSuccessUpdateMessage module="Magento_Customer">
         <severeness>low</severeness>
     </assertMassActionSuccessUpdateMessage>
     <assertAddressDeletedFrontend module="Magento_Customer">
         <severeness>low</severeness>
-        <require />
     </assertAddressDeletedFrontend>
     <assertAddressDeletedBackend module="Magento_Customer">
         <severeness>low</severeness>
-        <require />
     </assertAddressDeletedBackend>
     <assertCustomerPasswordChanged module="Magento_Customer">
         <severeness>low</severeness>

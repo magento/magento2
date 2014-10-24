@@ -23,6 +23,8 @@
  */
 namespace Magento\Backend\Model\Config\Backend\Admin;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 /**
  * @magentoAppArea adminhtml
  */
@@ -50,9 +52,9 @@ class RobotsTest extends \PHPUnit_Framework_TestCase
         $this->model->setPath('design/search_engine_robots/custom_instructions');
         $this->model->afterLoad();
         $this->rootDirectory = $objectManager->get(
-            'Magento\Framework\App\Filesystem'
+            'Magento\Framework\Filesystem'
         )->getDirectoryRead(
-            \Magento\Framework\App\Filesystem::ROOT_DIR
+            DirectoryList::ROOT
         );
     }
 

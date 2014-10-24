@@ -26,15 +26,22 @@
 namespace Magento\Webapi\Controller;
 
 use Magento\Framework\ObjectManager;
+use Magento\Framework\ObjectManager\Config as ObjectManagerConfig;
 use Magento\Framework\Service\Config\Reader as ServiceConfigReader;
 use Magento\Framework\Service\Data\AttributeValue;
 use Magento\Framework\Service\Data\AttributeValueBuilder;
 use Magento\Webapi\Model\Config\ClassReflector\TypeProcessor;
+use Magento\Webapi\Model\DataObjectProcessor;
 use Zend\Code\Reflection\ClassReflection;
 use Zend\Code\Reflection\MethodReflection;
 use Zend\Code\Reflection\ParameterReflection;
 use Magento\Framework\Service\SimpleDataObjectConverter;
 
+/**
+ * Deserializes arguments from API requests.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ServiceArgsSerializer
 {
     /** @var \Magento\Webapi\Model\Config\ClassReflector\TypeProcessor */
@@ -49,6 +56,9 @@ class ServiceArgsSerializer
     /** @var AttributeValueBuilder */
     protected $attributeValueBuilder;
 
+    /** @var \Magento\Framework\ObjectManager\Config */
+    protected $objectManagerConfig;
+
     /**
      * Initialize dependencies.
      *
@@ -56,17 +66,20 @@ class ServiceArgsSerializer
      * @param ObjectManager $objectManager
      * @param ServiceConfigReader $serviceConfigReader
      * @param AttributeValueBuilder $attributeValueBuilder
+     * @param ObjectManagerConfig $objectManagerConfig
      */
     public function __construct(
         TypeProcessor $typeProcessor,
         ObjectManager $objectManager,
         ServiceConfigReader $serviceConfigReader,
-        AttributeValueBuilder $attributeValueBuilder
+        AttributeValueBuilder $attributeValueBuilder,
+        ObjectManagerConfig $objectManagerConfig
     ) {
         $this->_typeProcessor = $typeProcessor;
         $this->_objectManager = $objectManager;
         $this->serviceConfigReader = $serviceConfigReader;
         $this->attributeValueBuilder = $attributeValueBuilder;
+        $this->objectManagerConfig = $objectManagerConfig;
     }
 
     /**
@@ -151,8 +164,10 @@ class ServiceArgsSerializer
     {
         $className = is_string($class) ? $class : $class->getName();
         $data = is_array($data) ? $data : [];
-        $builder = $this->_objectManager->create($className . "Builder");
         $class = new ClassReflection($className);
+
+        $builder = $this->getBuilder($className);
+
         foreach ($data as $propertyName => $value) {
             // Converts snake_case to uppercase CamelCase to help form getter/setter method names
             // This use case is for REST only. SOAP request data is already camel cased
@@ -171,6 +186,25 @@ class ServiceArgsSerializer
             }
         }
         return $builder->create();
+    }
+
+    /**
+     * Returns a builder for a given classname.
+     *
+     * @param string $className
+     * @return object a builder instance
+     */
+    protected function getBuilder($className)
+    {
+        $paramInstanceClassName = $this->objectManagerConfig->getPreference($className);
+        if (is_subclass_of($paramInstanceClassName, '\\' . DataObjectProcessor::BASE_MODEL_CLASS)) {
+            // By convention, need to lookup the concrete class preference for the data interface type and
+            // gets its builder.
+            return $this->_objectManager->create($paramInstanceClassName . "DataBuilder");
+        }
+        // By convention, for complex parameters that don't inherit from the data interface,
+        // create the name of the builder type by appending Builder to the end
+        return $this->_objectManager->create($className . "Builder");
     }
 
     /**

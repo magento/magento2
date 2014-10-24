@@ -21,12 +21,13 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /** @var \Magento\Framework\Filesystem\Directory\Write $rootDirectory */
 $rootDirectory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-    'Magento\Framework\App\Filesystem'
+    'Magento\Framework\Filesystem'
 )->getDirectoryWrite(
-    \Magento\Framework\App\Filesystem::ROOT_DIR
+    DirectoryList::ROOT
 );
 if ($rootDirectory->isExist('robots.txt')) {
     $rootDirectory->delete('robots.txt');

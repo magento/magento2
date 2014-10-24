@@ -51,4 +51,7 @@
     <assertProductAttributeIsConfigurable module="Magento_ConfigurableProduct">
         <severeness>high</severeness>
     </assertProductAttributeIsConfigurable>
+    <assertConfigurableProductInCustomerWishlistOnBackendGrid module="Magento_ConfigurableProduct">
+        <severeness>low</severeness>
+    </assertConfigurableProductInCustomerWishlistOnBackendGrid>
 </constraint>

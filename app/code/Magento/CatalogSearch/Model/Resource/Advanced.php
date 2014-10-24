@@ -102,10 +102,9 @@ class Advanced extends \Magento\Framework\Model\Resource\Db\AbstractDb
      *
      * @param \Magento\Catalog\Model\Resource\Eav\Attribute $attribute
      * @param string|array $value
-     * @param \Magento\CatalogSearch\Model\Resource\Advanced\Collection $collection
      * @return string|array
      */
-    public function prepareCondition($attribute, $value, $collection)
+    public function prepareCondition($attribute, $value)
     {
         $condition = false;
 

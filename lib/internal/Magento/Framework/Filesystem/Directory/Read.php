@@ -35,11 +35,6 @@ class Read implements ReadInterface
     protected $path;
 
     /**
-     * @var string
-     */
-    protected $scheme;
-
-    /**
      * File factory
      *
      * @var \Magento\Framework\Filesystem\File\ReadFactory
@@ -56,35 +51,30 @@ class Read implements ReadInterface
     /**
      * Constructor. Set properties.
      *
-     * @param array $config
      * @param \Magento\Framework\Filesystem\File\ReadFactory $fileFactory
      * @param \Magento\Framework\Filesystem\DriverInterface $driver
+     * @param string $path
      */
     public function __construct(
-        array $config,
         \Magento\Framework\Filesystem\File\ReadFactory $fileFactory,
-        \Magento\Framework\Filesystem\DriverInterface $driver
+        \Magento\Framework\Filesystem\DriverInterface $driver,
+        $path
     ) {
-        $this->setProperties($config);
         $this->fileFactory = $fileFactory;
         $this->driver = $driver;
+        $this->setPath($path);
     }
 
     /**
-     * Set properties from config
+     * Sets base path
      *
-     * @param array $config
+     * @param string $path
      * @return void
-     * @throws \Magento\Framework\Filesystem\FilesystemException
      */
-    protected function setProperties(array $config)
+    protected function setPath($path)
     {
-        if (!empty($config['path'])) {
-            $this->path = rtrim(str_replace('\\', '/', $config['path']), '/') . '/';
-        }
-
-        if (!empty($config['protocol'])) {
-            $this->scheme = $config['protocol'];
+        if (!empty($path)) {
+            $this->path = rtrim(str_replace('\\', '/', $path), '/') . '/';
         }
     }
 
@@ -196,11 +186,11 @@ class Read implements ReadInterface
     /**
      * Check permissions for reading file or directory
      *
-     * @param string $path
+     * @param string $path [optional]
      * @return bool
      * @throws \Magento\Framework\Filesystem\FilesystemException
      */
-    public function isReadable($path)
+    public function isReadable($path = null)
     {
         return $this->driver->isReadable($this->driver->getAbsolutePath($this->path, $path));
     }
@@ -259,10 +249,10 @@ class Read implements ReadInterface
     /**
      * Check whether given path is directory
      *
-     * @param string $path
+     * @param string $path [optional]
      * @return bool
      */
-    public function isDirectory($path)
+    public function isDirectory($path = null)
     {
         return $this->driver->isDirectory($this->driver->getAbsolutePath($this->path, $path));
     }

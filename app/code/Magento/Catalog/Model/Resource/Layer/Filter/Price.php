@@ -25,8 +25,6 @@ namespace Magento\Catalog\Model\Resource\Layer\Filter;
 
 /**
  * Catalog Layer Price Filter resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Price extends \Magento\Framework\Model\Resource\Db\AbstractDb
 {
@@ -76,18 +74,6 @@ class Price extends \Magento\Framework\Model\Resource\Db\AbstractDb
         $this->storeManager = $storeManager;
         $this->_eventManager = $eventManager;
         parent::__construct($resource);
-    }
-
-    /**
-     * Retrieve maximal price for attribute
-     *
-     * @param \Magento\Catalog\Model\Layer\Filter\Price $filter
-     * @return float
-     * @deprecated since 1.7.0.0
-     */
-    public function getMaxPrice($filter)
-    {
-        return $filter->getLayer()->getProductCollection()->getMaxPrice();
     }
 
     /**
@@ -242,28 +228,6 @@ class Price extends \Magento\Framework\Model\Resource\Db\AbstractDb
             'ROUND((' . $this->_getPriceExpression($select)
             . ') * ' . $this->layer->getProductCollection()->getCurrencyRate() . ', 2)'
         );
-    }
-
-    /**
-     * Apply attribute filter to product collection
-     *
-     * @param \Magento\Catalog\Model\Layer\Filter\Price $filter
-     * @param int $range
-     * @param int $index the range factor
-     * @return $this
-     * @deprecated since 1.7.0.0
-     */
-    public function applyFilterToCollection($filter, $range, $index)
-    {
-        $select = $filter->getLayer()->getProductCollection()->getSelect();
-        $priceExpr = $this->_getPriceExpression($select);
-        $filter->getLayer()->getProductCollection()->getSelect()->where(
-            $priceExpr . ' >= ' . $this->_getComparingValue($range * ($index - 1))
-        )->where(
-            $priceExpr . ' < ' . $this->_getComparingValue($range * $index)
-        );
-
-        return $this;
     }
 
     /**

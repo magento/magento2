@@ -180,7 +180,10 @@ class SaveBillingTest extends \PHPUnit_Framework_TestCase
                 'html' => null
             ],
             'allow_sections' => ['shipping'],
-            'duplicateBillingInfo' => 'true'
+            'duplicateBillingInfo' => 'true',
+            'update_progress' => [
+                'html' => 'some_html'
+            ]
         ];
         $this->quote->expects($this->once())
             ->method('hasItems')
@@ -202,7 +205,7 @@ class SaveBillingTest extends \PHPUnit_Framework_TestCase
 
         $layout = $this->getMock(
             'Magento\Framework\View\Layout',
-            ['getUpdate', 'generateXml', 'generateElements', 'getOutput'],
+            ['getUpdate', 'generateXml', 'generateElements', 'getOutput', 'getBlock'],
             [],
             '',
             false
@@ -210,6 +213,17 @@ class SaveBillingTest extends \PHPUnit_Framework_TestCase
         $this->layoutFactory->expects($this->once())
             ->method('create')
             ->willReturn($layout);
+
+        $block = $this->getMockBuilder('Magento\Framework\View\Element\AbstractBlock')
+            ->disableOriginalConstructor()
+            ->setMethods(['setAttribute', 'toHtml'])
+            ->getMockForAbstractClass();
+        $block->expects($this->any())
+            ->method('setAttribute')
+            ->willReturnSelf();
+        $block->expects($this->any())
+            ->method('toHtml')
+            ->willReturn('some_html');
 
         $update = $this->getMock('Magento\Core\Model\Layout\Merge', ['load'], [], '', false);
         $layout->expects($this->any())
@@ -220,6 +234,12 @@ class SaveBillingTest extends \PHPUnit_Framework_TestCase
         $this->coreHelper->expects($this->once())
             ->method('jsonEncode')
             ->with($expectedResult);
+        $this->view->expects($this->any())
+            ->method('getLayout')
+            ->willReturn($layout);
+        $layout->expects($this->any())
+            ->method('getBlock')
+            ->willReturn($block);
 
         $this->controller->execute();
     }

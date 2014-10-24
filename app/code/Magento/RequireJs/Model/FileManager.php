@@ -21,8 +21,9 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\RequireJs\Model;
+
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * A service for handling RequireJS files in the application
@@ -35,7 +36,7 @@ class FileManager
     private $config;
 
     /**
-     * @var \Magento\Framework\App\Filesystem
+     * @var \Magento\Framework\Filesystem
      */
     private $filesystem;
 
@@ -51,13 +52,13 @@ class FileManager
 
     /**
      * @param \Magento\Framework\RequireJs\Config $config
-     * @param \Magento\Framework\App\Filesystem $appFilesystem
+     * @param \Magento\Framework\Filesystem $appFilesystem
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      */
     public function __construct(
         \Magento\Framework\RequireJs\Config $config,
-        \Magento\Framework\App\Filesystem $appFilesystem,
+        \Magento\Framework\Filesystem $appFilesystem,
         \Magento\Framework\App\State $appState,
         \Magento\Framework\View\Asset\Repository $assetRepo
     ) {
@@ -89,7 +90,7 @@ class FileManager
      */
     private function ensureSourceFile($relPath)
     {
-        $dir = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::STATIC_VIEW_DIR);
+        $dir = $this->filesystem->getDirectoryWrite(DirectoryList::STATIC_VIEW);
         if ($this->appState->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER || !$dir->isExist($relPath)) {
             $dir->writeFile($relPath, $this->config->getConfig());
         }

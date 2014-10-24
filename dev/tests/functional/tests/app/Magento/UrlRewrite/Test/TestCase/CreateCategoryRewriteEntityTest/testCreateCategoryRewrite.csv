@@ -1,4 +1,0 @@
-"urlRewrite/data/store_id";"urlRewrite/data/request_path";"urlRewrite/data/redirect_type";"urlRewrite/data/description";"constraint"
-"Main Website/Main Website Store/Default Store View";"test_request%isolation%";"No";"test description";"assertUrlRewriteSaveMessage, assertUrlRewriteInGrid"
-"Main Website/Main Website Store/Default Store View";"request_path%isolation%";"Temporary (302)";"test description";"assertUrlRewriteSaveMessage, assertUrlRewriteInGrid, assertUrlRewriteCategoryRedirect"
-"Main Website/Main Website Store/Default Store View";"request_path%isolation%";"Permanent (301)";"test description";"assertUrlRewriteSaveMessage, assertUrlRewriteInGrid, assertUrlRewriteCategoryRedirect"

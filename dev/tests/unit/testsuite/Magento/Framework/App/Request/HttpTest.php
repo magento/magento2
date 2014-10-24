@@ -34,17 +34,17 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Route\ConfigInterface\Proxy | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $_routerListMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Request\PathInfoProcessorInterface | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $_infoProcessorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\CookieManager | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $_cookieManagerMock;
 
@@ -57,7 +57,13 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     {
         $this->_objectManager = new \Magento\TestFramework\Helper\ObjectManager($this);
 
-        $this->_routerListMock = $this->getMock('Magento\Framework\App\Route\ConfigInterface');
+        $this->_routerListMock = $this->getMock(
+            'Magento\Framework\App\Route\ConfigInterface\Proxy',
+            array('getRouteFrontName', 'getRouteByFrontName', '__wakeup'),
+            array(),
+            '',
+            false
+        );
         $this->_infoProcessorMock = $this->getMock('Magento\Framework\App\Request\PathInfoProcessorInterface');
         $this->_infoProcessorMock->expects($this->any())->method('process')->will($this->returnArgument(1));
         $this->_cookieManagerMock = $this->getMock('Magento\Framework\Stdlib\CookieManager');

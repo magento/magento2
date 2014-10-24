@@ -160,7 +160,7 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
         $moduleListMock = $this->getMock('Magento\Framework\Module\ModuleListInterface');
         $moduleListMock->expects($this->once())->method('getModule')->will($this->returnValue(array()));
 
-        $filesystemMock = $this->getMock('Magento\Framework\App\Filesystem', array(), array(), '', false);
+        $filesystemMock = $this->getMock('Magento\Framework\Filesystem', array(), array(), '', false);
         $modulesDirMock = $this->getMock('Magento\Framework\Filesystem\Directory\Read', array(), array(), '', false);
         $filesystemMock->expects($this->any())->method('getDirectoryRead')->will($this->returnValue($modulesDirMock));
 
@@ -252,7 +252,7 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
 
         $setupModel = new \Magento\Framework\Module\Setup\Migration(
             $this->getMock('Magento\Framework\App\Resource', array(), array(), '', false, false),
-            $this->getMock('Magento\Framework\App\Filesystem', array(), array(), '', false),
+            $this->getMock('Magento\Framework\Filesystem', array(), array(), '', false),
             $this->getMock('Magento\Core\Helper\Data', array(), array(), '', false),
             $this->getMock('Magento\Framework\Logger', array(), array(), '', false),
             $this->getMock('Magento\Framework\Event\ManagerInterface', array(), array(), '', false),
@@ -305,11 +305,11 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Filesystem
+     * @return \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filesystem
      */
     protected function _getFilesystemMock()
     {
-        $mock = $this->getMockBuilder('Magento\Framework\App\Filesystem')->disableOriginalConstructor()->getMock();
+        $mock = $this->getMockBuilder('Magento\Framework\Filesystem')->disableOriginalConstructor()->getMock();
         return $mock;
     }
 }

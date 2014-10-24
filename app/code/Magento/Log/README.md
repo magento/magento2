@@ -1,0 +1,2 @@
+The Log module is used to track online users, including both registered customers and visitors.
+Information such as customer name (if registered), session start time, time of last activity and last visited URL are recorded.

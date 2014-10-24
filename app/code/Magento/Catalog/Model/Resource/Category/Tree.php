@@ -174,7 +174,7 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
     }
 
     /**
-     * Enter description here...
+     * Add data to collection
      *
      * @param Collection $collection
      * @param boolean $sorted
@@ -209,7 +209,7 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
         $collection->addIdFilter($nodeIds);
         if ($onlyActive) {
 
-            $disabledIds = $this->_getDisabledIds($collection);
+            $disabledIds = $this->_getDisabledIds($collection, $nodeIds);
             if ($disabledIds) {
                 $collection->addFieldToFilter('entity_id', array('nin' => $disabledIds));
             }
@@ -286,19 +286,15 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
      * Return disable category ids
      *
      * @param Collection $collection
+     * @param array $allIds
      * @return array
      */
-    protected function _getDisabledIds($collection)
+    protected function _getDisabledIds($collection, $allIds)
     {
         $storeId = $this->_storeManager->getStore()->getId();
-
         $this->_inactiveItems = $this->getInactiveCategoryIds();
-
-
         $this->_inactiveItems = array_merge($this->_getInactiveItemIds($collection, $storeId), $this->_inactiveItems);
 
-
-        $allIds = $collection->getAllIds();
         $disabledIds = array();
 
         foreach ($allIds as $id) {

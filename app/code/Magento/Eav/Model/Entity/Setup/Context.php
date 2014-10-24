@@ -41,7 +41,7 @@ class Context extends \Magento\Framework\Module\Setup\Context
      * @param \Magento\Framework\Module\ResourceInterface $resourceResource
      * @param \Magento\Framework\Module\Setup\MigrationFactory $migrationFactory
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
-     * @param \Magento\Framework\App\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem $filesystem
      * @param PropertyMapperInterface $attributeMapper
      */
     public function __construct(
@@ -53,7 +53,7 @@ class Context extends \Magento\Framework\Module\Setup\Context
         \Magento\Framework\Module\ResourceInterface $resourceResource,
         \Magento\Framework\Module\Setup\MigrationFactory $migrationFactory,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
-        \Magento\Framework\App\Filesystem $filesystem,
+        \Magento\Framework\Filesystem $filesystem,
         PropertyMapperInterface $attributeMapper
     ) {
         $this->attributeMapper = $attributeMapper;

@@ -23,6 +23,8 @@
  */
 namespace Magento\Sales\Model;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class Download
 {
     /**
@@ -46,18 +48,18 @@ class Download
     protected $_fileFactory;
 
     /**
-     * @param \Magento\Framework\App\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Core\Helper\File\Storage\Database $fileStorageDatabase
      * @param \Magento\Core\Model\File\Storage\DatabaseFactory $storageDatabaseFactory
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      */
     public function __construct(
-        \Magento\Framework\App\Filesystem $filesystem,
+        \Magento\Framework\Filesystem $filesystem,
         \Magento\Core\Helper\File\Storage\Database $fileStorageDatabase,
         \Magento\Core\Model\File\Storage\DatabaseFactory $storageDatabaseFactory,
         \Magento\Framework\App\Response\Http\FileFactory $fileFactory
     ) {
-        $this->_rootDir = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::ROOT_DIR);
+        $this->_rootDir = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $this->_fileStorageDatabase = $fileStorageDatabase;
         $this->_storageDatabaseFactory = $storageDatabaseFactory;
         $this->_fileFactory = $fileFactory;
@@ -84,7 +86,7 @@ class Download
         $this->_fileFactory->create(
             $info['title'],
             array('value' => $this->_rootDir->getRelativePath($relativePath), 'type' => 'filename'),
-            \Magento\Framework\App\Filesystem::ROOT_DIR
+            DirectoryList::ROOT
         );
     }
 

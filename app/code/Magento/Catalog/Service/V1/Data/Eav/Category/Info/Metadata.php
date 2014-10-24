@@ -60,14 +60,6 @@ class Metadata extends AbstractExtensibleObject
     const ACTIVE = 'active';
 
     /**
-     * @return \Magento\Framework\Service\Data\AttributeValue[]|null
-     */
-    public function getCustomAttributes()
-    {
-        $this->_get(self::CUSTOM_ATTRIBUTES_KEY);
-    }
-
-    /**
      * @return int|null
      */
     public function getCategoryId()

@@ -26,6 +26,8 @@
  */
 namespace Magento\TestFramework\TestCase;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 abstract class AbstractConfigFiles extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -73,9 +75,10 @@ abstract class AbstractConfigFiles extends \PHPUnit_Framework_TestCase
                 )
             );
 
-            $filesystem = $this->_objectManager->get('Magento\Framework\App\Filesystem');
-            $modulesDir = $filesystem->getPath($this->getDirectoryConstant());
-            $this->_schemaFile = $modulesDir . $this->_getXsdPath();
+            /** @var \Magento\Framework\Filesystem $filesystem */
+            $filesystem = $this->_objectManager->get('Magento\Framework\Filesystem');
+            $this->_schemaFile = $filesystem->getDirectoryRead($this->getDirectoryConstant())
+                ->getAbsolutePath($this->_getXsdPath());
         }
     }
 
@@ -147,8 +150,8 @@ abstract class AbstractConfigFiles extends \PHPUnit_Framework_TestCase
     public function getXmlConfigFiles()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $directory = $objectManager->get('Magento\Framework\App\Filesystem')
-            ->getDirectoryRead(\Magento\Framework\App\Filesystem::MODULES_DIR);
+        $directory = $objectManager->get('Magento\Framework\Filesystem')
+            ->getDirectoryRead(DirectoryList::MODULES);
 
         return $objectManager->get('\Magento\Framework\Config\FileIteratorFactory')
             ->create($directory, $directory->search($this->_getConfigFilePathGlob()));
@@ -161,7 +164,7 @@ abstract class AbstractConfigFiles extends \PHPUnit_Framework_TestCase
      */
     protected function getDirectoryConstant()
     {
-        return \Magento\Framework\App\Filesystem::MODULES_DIR;
+        return DirectoryList::MODULES;
     }
 
     /**

@@ -38,9 +38,9 @@ class ProcessorFactory
      */
     public function createProcessor()
     {
-        $locatorFactory = new \Magento\Framework\App\ObjectManagerFactory();
-        $locator = $locatorFactory->create(BP, $_SERVER);
-        $response = $locator->create('\Magento\Framework\App\Response\Http');
+        $objectManagerFactory = \Magento\Framework\App\Bootstrap::createObjectManagerFactory(BP, $_SERVER);
+        $objectManager = $objectManagerFactory->create($_SERVER);
+        $response = $objectManager->create('\Magento\Framework\App\Response\Http');
         return new Processor($response);
     }
 }

@@ -24,20 +24,24 @@
 namespace Magento\Checkout\Service\V1\Data\Cart;
 
 /**
- * Quote shipping method data
+ * Quote shipping method data.
  *
  * @codeCoverageIgnore
  */
 class ShippingMethodConverter
 {
     /**
+     * Shipping method builder.
+     *
      * @var ShippingMethodBuilder
      */
     protected $builder;
 
     /**
-     * @param ShippingMethodBuilder $builder
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
+     * Constructs a shipping method builder object.
+     *
+     * @param ShippingMethodBuilder $builder Shipping method builder.
+     * @param \Magento\Framework\StoreManagerInterface $storeManager Store manager interface.
      */
     public function __construct(
         \Magento\Checkout\Service\V1\Data\Cart\ShippingMethodBuilder $builder,
@@ -48,11 +52,11 @@ class ShippingMethodConverter
     }
 
     /**
-     * Convert rate model to ShippingMethod data object
-     * @param string $quoteCurrencyCode
-     * @param \Magento\Sales\Model\Quote\Address\Rate $rateModel
+     * Converts a specified rate model to a shipping method data object.
      *
-     * @return \Magento\Checkout\Service\V1\Data\Cart\ShippingMethod
+     * @param string $quoteCurrencyCode The quote currency code.
+     * @param \Magento\Sales\Model\Quote\Address\Rate $rateModel The rate model.
+     * @return mixed Shipping method data object.
      */
     public function modelToDataObject($rateModel, $quoteCurrencyCode)
     {

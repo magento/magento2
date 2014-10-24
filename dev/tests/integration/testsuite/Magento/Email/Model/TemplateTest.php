@@ -54,7 +54,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
                 $objectManager->get('Magento\Framework\Registry'),
                 $objectManager->get('Magento\Core\Model\App\Emulation'),
                 $objectManager->get('Magento\Store\Model\StoreManager'),
-                $objectManager->create('Magento\Framework\App\Filesystem'),
+                $objectManager->create('Magento\Framework\Filesystem'),
                 $objectManager->create('Magento\Framework\View\Asset\Repository'),
                 $objectManager->create('Magento\Framework\View\FileSystem'),
                 $objectManager->create('Magento\Framework\App\Config\ScopeConfigInterface'),
@@ -150,24 +150,6 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             $theme->getId(),
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
             'fixturestore'
-        );
-    }
-
-    /**
-     * @magentoAppIsolation enabled
-     * @magentoDataFixture Magento/Core/_files/design_change.php
-     */
-    public function testGetProcessedTemplateDesignChange()
-    {
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\App\AreaList'
-        )->getArea(
-            \Magento\Framework\App\Area::AREA_FRONTEND
-        )->load();
-        $this->_model->setTemplateText('{{view url="Magento_Theme::favicon.ico"}}');
-        $this->assertStringEndsWith(
-            'static/frontend/Magento/plushe/en_US/Magento_Theme/favicon.ico',
-            $this->_model->getProcessedTemplate()
         );
     }
 

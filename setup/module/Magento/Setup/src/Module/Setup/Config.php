@@ -24,8 +24,10 @@
 
 namespace Magento\Setup\Module\Setup;
 
-use Magento\Filesystem\Directory\Write;
-use Magento\Filesystem\Filesystem;
+use Magento\Framework\Filesystem\Directory\Write;
+use Magento\Framework\Filesystem;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Setup\Model\FilesystemFactory;
 
 /**
  * Deployment configuration model
@@ -91,15 +93,15 @@ class Config
     /**
      * Default Constructor
      *
-     * @param Filesystem $filesystem
+     * @param FilesystemFactory $fileSystemFactory
      * @param string[] $data
      */
     public function __construct(
-        Filesystem $filesystem,
+        FilesystemFactory $fileSystemFactory,
         $data = []
     ) {
-        $this->filesystem = $filesystem;
-        $this->configDirectory = $filesystem->getDirectoryWrite('etc');
+        $this->filesystem = $fileSystemFactory->create();
+        $this->configDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG);
 
         if ($data) {
             $this->update($data);
@@ -169,11 +171,12 @@ class Config
         foreach ($this->data as $index => $value) {
             $contents = str_replace('{{' . $index . '}}', '<![CDATA[' . $value . ']]>', $contents);
         }
+
         if (preg_match('(\{\{.+?\}\})', $contents, $matches)) {
             throw new \Exception("Some of the keys have not been replaced in the template: {$matches[1]}");
         }
 
-        $this->configDirectory->writeFile(self::DEPLOYMENT_CONFIG_FILE, $contents, LOCK_EX);
+        $this->configDirectory->writeFile(self::DEPLOYMENT_CONFIG_FILE, $contents);
         $this->configDirectory->changePermissions(self::DEPLOYMENT_CONFIG_FILE, 0777);
     }
 

@@ -25,6 +25,10 @@
 -->
 <mapping strict="0">
     <fields>
+        <entity_type>
+            <selector>#entity-type-selector</selector>
+            <input>select</input>
+        </entity_type>
         <store_id>
             <selector>[name=store_id]</selector>
             <input>selectstore</input>

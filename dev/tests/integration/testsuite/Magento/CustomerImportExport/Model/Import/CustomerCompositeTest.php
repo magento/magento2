@@ -23,6 +23,8 @@
  */
 namespace Magento\CustomerImportExport\Model\Import;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
 {
     /**#@+
@@ -157,9 +159,9 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
             ->loadArea(\Magento\Framework\App\Area::AREA_FRONTEND);
         // set entity adapter parameters
         $this->_entityAdapter->setParameters(array('behavior' => $behavior));
-        /** @var \Magento\Framework\App\Filesystem $filesystem */
-        $filesystem = $this->_objectManager->create('Magento\Framework\App\Filesystem');
-        $rootDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::ROOT_DIR);
+        /** @var \Magento\Framework\Filesystem $filesystem */
+        $filesystem = $this->_objectManager->create('Magento\Framework\Filesystem');
+        $rootDirectory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
 
         // set fixture CSV file
         $result = $this->_entityAdapter->setSource(

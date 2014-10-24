@@ -23,6 +23,7 @@
  */
 namespace Magento\Framework\View\Asset\MergeStrategy;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\View\Asset;
 
 /**
@@ -40,7 +41,7 @@ class Direct implements \Magento\Framework\View\Asset\MergeStrategyInterface
     /**#@-*/
 
     /**
-     * @var \Magento\Framework\App\Filesystem
+     * @var \Magento\Framework\Filesystem
      */
     private $filesystem;
 
@@ -50,11 +51,11 @@ class Direct implements \Magento\Framework\View\Asset\MergeStrategyInterface
     private $cssUrlResolver;
 
     /**
-     * @param \Magento\Framework\App\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\View\Url\CssResolver $cssUrlResolver
      */
     public function __construct(
-        \Magento\Framework\App\Filesystem $filesystem,
+        \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\View\Url\CssResolver $cssUrlResolver
     ) {
         $this->filesystem = $filesystem;
@@ -67,7 +68,7 @@ class Direct implements \Magento\Framework\View\Asset\MergeStrategyInterface
     public function merge(array $assetsToMerge, Asset\LocalInterface $resultAsset)
     {
         $mergedContent = $this->composeMergedContent($assetsToMerge, $resultAsset);
-        $dir = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::STATIC_VIEW_DIR);
+        $dir = $this->filesystem->getDirectoryWrite(DirectoryList::STATIC_VIEW);
         $dir->writeFile($resultAsset->getPath(), $mergedContent);
     }
 

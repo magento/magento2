@@ -23,6 +23,9 @@
  */
 namespace Magento\Test\Integrity\Modular;
 
+use Magento\Framework\Filesystem;
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class IndexerConfigFilesTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -41,11 +44,12 @@ class IndexerConfigFilesTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->schemeFile = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\App\Filesystem'
-        )->getPath(
-            \Magento\Framework\App\Filesystem::APP_DIR
-        ) . '/code/Magento/Indexer/etc/indexer.xsd';
+        /** @var Filesystem $filesystem */
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\Filesystem'
+        );
+        $this->schemeFile = $filesystem->getDirectoryRead(DirectoryList::APP)
+            ->getAbsolutePath('code/Magento/Indexer/etc/indexer.xsd');
     }
 
     /**
@@ -69,12 +73,12 @@ class IndexerConfigFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function indexerConfigFileDataProvider()
     {
+        /** @var Filesystem $filesystem */
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Framework\Filesystem'
+        );
         $fileList = glob(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Framework\App\Filesystem'
-            )->getPath(
-                \Magento\Framework\App\Filesystem::APP_DIR
-            ) . '/*/*/*/etc/indexer.xml'
+            $filesystem->getDirectoryRead(DirectoryList::APP)->getAbsolutePath() . '/*/*/*/etc/indexer.xml'
         );
         $dataProviderResult = array();
         foreach ($fileList as $file) {

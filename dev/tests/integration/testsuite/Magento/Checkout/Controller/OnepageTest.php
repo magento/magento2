@@ -48,35 +48,10 @@ class OnepageTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('checkout/onepage/index');
         $html = $this->getResponse()->getBody();
         $this->assertContains('<li id="opc-payment"', $html);
-        $this->assertSelectCount('[id="checkout-payment-method-load"]', 1, $html);
+        $this->assertSelectEquals('[id="checkout-shipping-method-load"]', '', 1, $html);
+        $this->assertSelectEquals('[id="checkout-payment-method-load"]', '', 1, $html);
         $this->assertSelectCount('form[id="co-billing-form"][action=""]', 1, $html);
         $this->assertSelectCount('form[id="co-payment-form"] input[name="form_key"]', 1, $html);
-    }
-
-    /**
-     * Covers app/code/Magento/Checkout/Block/Onepage/Payment/Info.php
-     */
-    public function testProgressAction()
-    {
-        $steps = array(
-            'payment' => array('is_show' => true, 'complete' => true),
-            'billing' => array('is_show' => true),
-            'shipping' => array('is_show' => true),
-            'shipping_method' => array('is_show' => true)
-        );
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Checkout\Model\Session'
-        )->setSteps(
-            $steps
-        );
-
-        $this->dispatch('checkout/onepage/progress');
-        $html = $this->getResponse()->getBody();
-        $this->assertContains('Checkout', $html);
-        $methodTitle = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Checkout\Model\Session'
-        )->getQuote()->getPayment()->getMethodInstance()->getTitle();
-        $this->assertContains('<dt class="title">' . $methodTitle . '</dt>', $html);
     }
 
     public function testShippingMethodAction()

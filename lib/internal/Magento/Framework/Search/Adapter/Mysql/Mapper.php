@@ -23,7 +23,8 @@
  */
 namespace Magento\Framework\Search\Adapter\Mysql;
 
-use Magento\Framework\App\Resource\Config;
+use Magento\Framework\App\Resource;
+use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\Filter\Builder;
 use Magento\Framework\Search\Adapter\Mysql\Query\Builder\Match as MatchQueryBuilder;
@@ -39,7 +40,7 @@ use Magento\Framework\Search\RequestInterface;
 class Mapper
 {
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var Resource
      */
     private $resource;
 
@@ -69,20 +70,27 @@ class Mapper
     private $conditionManager;
 
     /**
+     * @var ScopeResolverInterface
+     */
+    private $scopeResolver;
+
+    /**
      * @param \Magento\Framework\App\Resource $resource
      * @param ScoreBuilderFactory $scoreBuilderFactory
      * @param MatchQueryBuilder $matchQueryBuilder
      * @param Builder $filterBuilder
      * @param Dimensions $dimensionsBuilder
      * @param ConditionManager $conditionManager
+     * @param ScopeResolverInterface $scopeResolver
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
+        Resource $resource,
         ScoreBuilderFactory $scoreBuilderFactory,
         MatchQueryBuilder $matchQueryBuilder,
         Builder $filterBuilder,
         Dimensions $dimensionsBuilder,
-        ConditionManager $conditionManager
+        ConditionManager $conditionManager,
+        ScopeResolverInterface $scopeResolver
     ) {
         $this->resource = $resource;
         $this->scoreBuilderFactory = $scoreBuilderFactory;
@@ -90,6 +98,7 @@ class Mapper
         $this->filterBuilder = $filterBuilder;
         $this->dimensionsBuilder = $dimensionsBuilder;
         $this->conditionManager = $conditionManager;
+        $this->scopeResolver = $scopeResolver;
     }
 
     /**
@@ -110,7 +119,7 @@ class Mapper
         );
         $select = $this->processDimensions($request, $select);
         $tableName = $this->resource->getTableName($request->getIndex());
-        $select->from($tableName)
+        $select->from($tableName, ['entity_id' =>'product_id'])
             ->columns($scoreBuilder->build())
             ->order($scoreBuilder->getScoreAlias() . ' ' . Select::SQL_DESC);
         return $select;
@@ -226,18 +235,18 @@ class Mapper
      */
     private function processFilterQuery(ScoreBuilder $scoreBuilder, FilterQuery $query, Select $select, $conditionType)
     {
+        $scoreBuilder->startQuery();
         switch ($query->getReferenceType()) {
             case FilterQuery::REFERENCE_QUERY:
-                $scoreBuilder->startQuery();
                 $select = $this->processQuery($scoreBuilder, $query->getReference(), $select, $conditionType);
                 $scoreBuilder->endQuery($query->getBoost());
                 break;
             case FilterQuery::REFERENCE_FILTER:
                 $filterCondition = $this->filterBuilder->build($query->getReference(), $conditionType);
                 $select->where($filterCondition);
-                $scoreBuilder->addCondition(1, $query->getBoost());
                 break;
         }
+        $scoreBuilder->endQuery($query->getBoost());
         return $select;
     }
 
@@ -248,7 +257,7 @@ class Mapper
      */
     private function getSelect()
     {
-        return $this->resource->getConnection(\Magento\Framework\App\Resource::DEFAULT_READ_RESOURCE)->select();
+        return $this->resource->getConnection(Resource::DEFAULT_READ_RESOURCE)->select();
     }
 
     /**
@@ -265,7 +274,7 @@ class Mapper
             $dimensions[] = $this->dimensionsBuilder->build($dimension);
         }
 
-        $query = $this->conditionManager->combineQueries($dimensions, \Zend_Db_Select::SQL_OR);
+        $query = $this->conditionManager->combineQueries($dimensions, Select::SQL_OR);
         if (!empty($query)) {
             $select->where($this->conditionManager->wrapBrackets($query));
         }

@@ -42,6 +42,20 @@ class Totals extends Block
     protected $grandTotal = '//tr[normalize-space(td)="Grand Total"]//span';
 
     /**
+     * Grand total search mask
+     *
+     * @var string
+     */
+    protected $grandTotalExclTax = '.totals.grand.excl span';
+
+    /**
+     * Grand total search mask
+     *
+     * @var string
+     */
+    protected $grandTotalInclTax = '.totals.grand.incl span';
+
+    /**
      * Subtotal search mask
      *
      * @var string
@@ -49,11 +63,25 @@ class Totals extends Block
     protected $subtotal = '//tr[normalize-space(td)="Subtotal"]//span';
 
     /**
+     * Subtotal search mask
+     *
+     * @var string
+     */
+    protected $subtotalExclTax = '.totals.sub.excl span';
+
+    /**
+     * Subtotal search mask
+     *
+     * @var string
+     */
+    protected $subtotalInclTax = '.totals.sub.incl span';
+
+    /**
      * Tax search mask
      *
      * @var string
      */
-    protected $tax = '//tr[normalize-space(td)="Tax"]//span';
+    protected $tax = '.totals-tax span';
 
     /**
      * Get shipping price selector
@@ -61,6 +89,20 @@ class Totals extends Block
      * @var string
      */
     protected $shippingPriceSelector = '.shipping.excl .price';
+
+    /**
+     * Get discount
+     *
+     * @var string
+     */
+    protected $discount = '//tr[normalize-space(td)="Discount"]//span';
+
+    /**
+     * Get shipping price including tax selector
+     *
+     * @var string
+     */
+    protected $shippingPriceInclTaxSelector = '.shipping.incl .price';
 
     /**
      * Get shipping price block selector
@@ -81,13 +123,35 @@ class Totals extends Block
     }
 
     /**
+     * Get Grand Total Text
+     *
+     * @return string
+     */
+    public function getGrandTotalIncludingTax()
+    {
+        $grandTotal = $this->_rootElement->find($this->grandTotalInclTax, Locator::SELECTOR_CSS)->getText();
+        return $this->escapeCurrency($grandTotal);
+    }
+
+    /**
+     * Get Grand Total Text
+     *
+     * @return string
+     */
+    public function getGrandTotalExcludingTax()
+    {
+        $grandTotal = $this->_rootElement->find($this->grandTotalExclTax, Locator::SELECTOR_CSS)->getText();
+        return $this->escapeCurrency($grandTotal);
+    }
+
+    /**
      * Get Tax text from Order Totals
      *
      * @return array|string
      */
     public function getTax()
     {
-        $taxPrice = $this->_rootElement->find($this->tax, Locator::SELECTOR_XPATH)->getText();
+        $taxPrice = $this->_rootElement->find($this->tax, Locator::SELECTOR_CSS)->getText();
         return $this->escapeCurrency($taxPrice);
     }
 
@@ -98,7 +162,7 @@ class Totals extends Block
      */
     public function isTaxVisible()
     {
-        return $this->_rootElement->find($this->tax, Locator::SELECTOR_XPATH)->isVisible();
+        return $this->_rootElement->find($this->tax, Locator::SELECTOR_CSS)->isVisible();
     }
 
     /**
@@ -109,6 +173,28 @@ class Totals extends Block
     public function getSubtotal()
     {
         $subTotal = $this->_rootElement->find($this->subtotal, Locator::SELECTOR_XPATH)->getText();
+        return $this->escapeCurrency($subTotal);
+    }
+
+    /**
+     * Get Subtotal text
+     *
+     * @return string
+     */
+    public function getSubtotalIncludingTax()
+    {
+        $subTotal = $this->_rootElement->find($this->subtotalInclTax, Locator::SELECTOR_CSS)->getText();
+        return $this->escapeCurrency($subTotal);
+    }
+
+    /**
+     * Get Subtotal text
+     *
+     * @return string
+     */
+    public function getSubtotalExcludingTax()
+    {
+        $subTotal = $this->_rootElement->find($this->subtotalExclTax, Locator::SELECTOR_CSS)->getText();
         return $this->escapeCurrency($subTotal);
     }
 
@@ -125,6 +211,17 @@ class Totals extends Block
     }
 
     /**
+     * Get discount
+     *
+     * @return string
+     */
+    public function getDiscount()
+    {
+        $discount = $this->_rootElement->find($this->discount, Locator::SELECTOR_XPATH)->getText();
+        return $this->escapeCurrency($discount);
+    }
+
+    /**
      * Get shipping price
      *
      * @return string
@@ -132,6 +229,18 @@ class Totals extends Block
     public function getShippingPrice()
     {
         $shippingPrice = $this->_rootElement->find($this->shippingPriceSelector, Locator::SELECTOR_CSS)->getText();
+        return $this->escapeCurrency($shippingPrice);
+    }
+
+    /**
+     * Get shipping price
+     *
+     * @return string
+     */
+    public function getShippingPriceInclTax()
+    {
+        $shippingPrice = $this->_rootElement
+            ->find($this->shippingPriceInclTaxSelector, Locator::SELECTOR_CSS)->getText();
         return $this->escapeCurrency($shippingPrice);
     }
 

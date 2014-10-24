@@ -217,15 +217,15 @@ class Observer extends \Magento\Framework\Model\AbstractModel
      */
     public function updateDiscountPercents(\Magento\Framework\Event\Observer $observer)
     {
-        if (!$this->_weeeData->isEnabled()) {
-            return $this;
-        }
-
         $productCondition = $observer->getEvent()->getProductCondition();
         if ($productCondition) {
             $eventProduct = $productCondition;
         } else {
             $eventProduct = $observer->getEvent()->getProduct();
+        }
+
+        if (!$this->_weeeData->isEnabled($eventProduct->getStore())) {
+            return $this;
         }
         $this->_weeeTax->updateProductsDiscountPercent($eventProduct);
 
@@ -240,15 +240,14 @@ class Observer extends \Magento\Framework\Model\AbstractModel
      */
     public function updateProductOptions(\Magento\Framework\Event\Observer $observer)
     {
-        if (!$this->_weeeData->isEnabled()) {
-            return $this;
-        }
-
         $response = $observer->getEvent()->getResponseObject();
         $options = $response->getAdditionalOptions();
 
         $_product = $this->_registry->registry('current_product');
         if (!$_product) {
+            return $this;
+        }
+        if (!$this->_weeeData->isEnabled($_product->getStore())) {
             return $this;
         }
 
@@ -273,10 +272,6 @@ class Observer extends \Magento\Framework\Model\AbstractModel
      */
     public function updateBundleProductOptions(\Magento\Framework\Event\Observer $observer)
     {
-        if (!$this->_weeeData->isEnabled()) {
-            return $this;
-        }
-
         $response = $observer->getEvent()->getResponseObject();
         $selection = $observer->getEvent()->getSelection();
         $options = $response->getAdditionalOptions();
@@ -285,6 +280,9 @@ class Observer extends \Magento\Framework\Model\AbstractModel
 
         $typeDynamic = \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes\Extend::DYNAMIC;
         if (!$_product || $_product->getPriceType() != $typeDynamic) {
+            return $this;
+        }
+        if (!$this->_weeeData->isEnabled($_product->getStore())) {
             return $this;
         }
 

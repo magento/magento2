@@ -61,7 +61,7 @@ class AssertUrlRewriteCustomSearchRedirect extends AbstractConstraint
             ? $urlRewrite->getRequestPath()
             : $initialRewrite->getRequestPath();
         $browser->open($_ENV['app_frontend_url'] . $urlRequestPath);
-        $entity = $initialRewrite->getDataFieldConfig('id_path')['source']->getEntity()->getName();
+        $entity = $urlRewrite->getDataFieldConfig('target_path')['source']->getEntity()->getName();
 
         \PHPUnit_Framework_Assert::assertTrue(
             $categoryView->getListProductBlock()->isProductVisible($entity),

@@ -28,7 +28,8 @@
  */
 namespace Magento\Framework\Module\Dir;
 
-use \Magento\Framework\App\Filesystem;
+use Magento\Framework\Filesystem;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use \Magento\Framework\Config\FileIteratorFactory;
 
 class ReaderTest extends \PHPUnit_Framework_TestCase
@@ -89,7 +90,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         );
         $this->_moduleListMock = $this->getMock('Magento\Framework\Module\ModuleListInterface');
         $this->_filesystemMock = $this->getMock(
-            '\Magento\Framework\App\Filesystem',
+            '\Magento\Framework\Filesystem',
             array(),
             array(),
             '',
@@ -151,7 +152,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
         $modulesDirectoryMock->expects($this->any())->method('isExist')
             ->with($configPath)
             ->will($this->returnValue(true));
-        $this->_filesystemMock->expects($this->any())->method('getDirectoryRead')->with(Filesystem::MODULES_DIR)
+        $this->_filesystemMock->expects($this->any())->method('getDirectoryRead')->with(DirectoryList::MODULES)
             ->will($this->returnValue($modulesDirectoryMock));
 
         $this->_moduleListMock->expects($this->once())->method('getModules')->will($this->returnValue($modules));

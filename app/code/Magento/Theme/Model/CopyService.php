@@ -27,6 +27,7 @@
  */
 namespace Magento\Theme\Model;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\View\Design\ThemeInterface;
 
 class CopyService
@@ -62,7 +63,7 @@ class CopyService
     protected $_customizationPath;
 
     /**
-     * @param \Magento\Framework\App\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\View\Design\Theme\FileFactory $fileFactory
      * @param \Magento\Core\Model\Layout\Link $link
      * @param \Magento\Core\Model\Layout\UpdateFactory $updateFactory
@@ -70,14 +71,14 @@ class CopyService
      * @param \Magento\Framework\View\Design\Theme\Customization\Path $customization
      */
     public function __construct(
-        \Magento\Framework\App\Filesystem $filesystem,
+        \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\View\Design\Theme\FileFactory $fileFactory,
         \Magento\Core\Model\Layout\Link $link,
         \Magento\Core\Model\Layout\UpdateFactory $updateFactory,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\View\Design\Theme\Customization\Path $customization
     ) {
-        $this->_directory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::MEDIA_DIR);
+        $this->_directory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->_fileFactory = $fileFactory;
         $this->_link = $link;
         $this->_updateFactory = $updateFactory;

@@ -25,6 +25,8 @@
  */
 namespace Magento\Framework\Session;
 
+use Magento\Framework\Filesystem;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Session\Config\ConfigInterface;
 
 /**
@@ -109,11 +111,6 @@ class Config implements ConfigInterface
     );
 
     /**
-     * @var \Magento\Framework\App\Filesystem
-     */
-    protected $_filesystem;
-
-    /**
      * @var string
      */
     protected $_scopeType;
@@ -126,7 +123,7 @@ class Config implements ConfigInterface
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Stdlib\String $stringHelper
      * @param \Magento\Framework\App\RequestInterface $request
-     * @param \Magento\Framework\App\Filesystem $filesystem
+     * @param Filesystem $filesystem
      * @param string $scopeType
      * @param string $saveMethod
      * @param null|string $savePath
@@ -138,7 +135,7 @@ class Config implements ConfigInterface
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Stdlib\String $stringHelper,
         \Magento\Framework\App\RequestInterface $request,
-        \Magento\Framework\App\Filesystem $filesystem,
+        Filesystem $filesystem,
         $scopeType,
         $saveMethod = \Magento\Framework\Session\SaveHandlerInterface::DEFAULT_HANDLER,
         $savePath = null,
@@ -149,13 +146,14 @@ class Config implements ConfigInterface
         $this->_scopeConfig = $scopeConfig;
         $this->_stringHelper = $stringHelper;
         $this->_httpRequest = $request;
-        $this->_filesystem = $filesystem;
         $this->_scopeType = $scopeType;
 
         $this->setSaveHandler($saveMethod === 'db' ? 'user' : $saveMethod);
 
         if (!$savePath) {
-            $savePath = $this->_filesystem->getPath('session');
+            $sessionDir = $filesystem->getDirectoryWrite(DirectoryList::SESSION);
+            $savePath = $sessionDir->getAbsolutePath();
+            $sessionDir->create();
         }
         $this->setSavePath($savePath);
 

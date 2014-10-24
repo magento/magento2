@@ -27,6 +27,8 @@
  */
 namespace Magento\ImportExport\Model\Import;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class EntityAbstractTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -35,8 +37,8 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
     public function testSaveValidatedBunches()
     {
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Framework\App\Filesystem');
-        $directory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::ROOT_DIR);
+            ->create('Magento\Framework\Filesystem');
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $source = new \Magento\ImportExport\Model\Import\Source\Csv(
             __DIR__ . '/Entity/_files/customers_for_validation_test.csv',
             $directory

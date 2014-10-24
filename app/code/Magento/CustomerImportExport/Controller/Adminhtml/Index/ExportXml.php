@@ -24,6 +24,8 @@
  */
 namespace Magento\CustomerImportExport\Controller\Adminhtml\Index;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 /**
  * Class Index
  */
@@ -60,6 +62,6 @@ class ExportXml extends \Magento\Backend\App\Action
         /** @var \Magento\Backend\Block\Widget\Grid\ExportInterface $exportBlock  */
         $exportBlock = $this->_view->getLayout()->getChildBlock('admin.block.customer.grid', 'grid.export');
         $content = $exportBlock->getExcelFile($fileName);
-        return $this->_fileFactory->create($fileName, $content, \Magento\Framework\App\Filesystem::VAR_DIR);
+        return $this->_fileFactory->create($fileName, $content, DirectoryList::VAR_DIR);
     }
 }

@@ -27,6 +27,8 @@
  */
 namespace Magento\Theme\Model\Wysiwyg;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class Storage
 {
     /**
@@ -84,18 +86,18 @@ class Storage
     /**
      * Initialize dependencies
      *
-     * @param \Magento\Framework\App\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Theme\Helper\Storage $helper
      * @param \Magento\Framework\ObjectManager $objectManager
      * @param \Magento\Framework\Image\AdapterFactory $imageFactory
      */
     public function __construct(
-        \Magento\Framework\App\Filesystem $filesystem,
+        \Magento\Framework\Filesystem $filesystem,
         \Magento\Theme\Helper\Storage $helper,
         \Magento\Framework\ObjectManager $objectManager,
         \Magento\Framework\Image\AdapterFactory $imageFactory
     ) {
-        $this->mediaWriteDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::MEDIA_DIR);
+        $this->mediaWriteDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->_helper = $helper;
         $this->_objectManager = $objectManager;
         $this->_imageFactory = $imageFactory;

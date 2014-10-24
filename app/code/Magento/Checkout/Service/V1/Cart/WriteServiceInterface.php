@@ -23,32 +23,33 @@
  */
 namespace Magento\Checkout\Service\V1\Cart;
 
+/** 
+ * Cart write service interface. 
+ */
 interface WriteServiceInterface
 {
     /**
-     * Create empty cart/quote for anonymous customer
+     * Enables an administrative or guest user to create an empty cart and quote for an anonymous customer.
      *
-     * Access level: admin or guest
-     *
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @return int cart id
+     * @throws \Magento\Framework\Exception\CouldNotSaveException The empty cart and quote could not be created.
+     * @return int Cart ID.
      */
     public function create();
 
     /**
-     * Assign customer to the given shopping cart
+     * Assigns a specified customer to a specified shopping cart.
      *
-     * @param int $cartId
-     * @param int $customerId
+     * @param int $cartId The cart ID.
+     * @param int $customerId The customer ID.
      * @return boolean
      */
     public function assignCustomer($cartId, $customerId);
 
     /**
-     * Place order for cart
+     * Places an order for a specified cart.
      *
-     * @param int $cartId
-     * @return int
+     * @param int $cartId The cart ID.
+     * @return int Order ID.
      */
     public function order($cartId);
 }

@@ -33,7 +33,9 @@ angular.module('install', ['ngStorage'])
         };
 
         $scope.checkProgress = function () {
-            $scope.displayProgress();
+            if ($scope.isInProgress) {
+                $scope.displayProgress();
+            }
             progress.get(function (response) {
                 var log = '';
                 response.data.console.forEach(function (message) {
@@ -68,6 +70,7 @@ angular.module('install', ['ngStorage'])
                 $scope.isInProgress = false;
                 if (response.success) {
                     $localStorage.config.encrypt.key = response.key;
+                    $localStorage.messages = response.messages;
                     $scope.nextState();
                 } else {
                     $scope.displayFailure();

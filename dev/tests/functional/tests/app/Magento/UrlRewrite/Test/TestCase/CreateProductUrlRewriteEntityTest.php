@@ -87,7 +87,7 @@ class CreateProductUrlRewriteEntityTest extends Injectable
      * @param UrlRewrite $urlRewrite
      * @return void
      */
-    public function testProductUrlRewrite(CatalogProductSimple $product, UrlRewrite $urlRewrite)
+    public function test(CatalogProductSimple $product, UrlRewrite $urlRewrite)
     {
         //Precondition
         $product->persist();
@@ -95,9 +95,9 @@ class CreateProductUrlRewriteEntityTest extends Injectable
         //Steps
         $this->urlRewriteIndex->open();
         $this->urlRewriteIndex->getPageActionsBlock()->addNew();
-        $this->urlRewriteEdit->getUrlRewriteTypeSelectorBlock()->selectType('For product');
+        $this->urlRewriteEdit->getFormBlock()->fill($urlRewrite);
         $this->urlRewriteEdit->getProductGridBlock()->searchAndOpen($filter);
-        $this->urlRewriteEdit->getTreeBlock()->skipCategorySelection();
+        $this->urlRewriteEdit->getTreeBlock()->selectCategory($product->getCategoryIds());
         $this->urlRewriteEdit->getFormBlock()->fill($urlRewrite);
         $this->urlRewriteEdit->getPageMainActions()->save();
     }

@@ -23,6 +23,7 @@
  */
 namespace Magento\CustomerImportExport\Model\Import;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\ImportExport\Model\Import;
 
 /**
@@ -77,9 +78,9 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         ];
 
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Framework\App\Filesystem');
+            ->create('Magento\Framework\Filesystem');
         $this->directoryWrite = $filesystem
-            ->getDirectoryWrite(\Magento\Framework\App\Filesystem::ROOT_DIR);
+            ->getDirectoryWrite(DirectoryList::ROOT);
     }
 
     /**

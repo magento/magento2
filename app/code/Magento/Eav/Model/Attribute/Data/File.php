@@ -23,6 +23,7 @@
  */
 namespace Magento\Eav\Model\Attribute\Data;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\RequestInterface;
 
 /**
@@ -62,7 +63,7 @@ class File extends \Magento\Eav\Model\Attribute\Data\AbstractData
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Core\Helper\Data $coreData
      * @param \Magento\Core\Model\File\Validator\NotProtectedExtension $fileValidator
-     * @param \Magento\Framework\App\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem $filesystem
      */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
@@ -70,12 +71,12 @@ class File extends \Magento\Eav\Model\Attribute\Data\AbstractData
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Core\Helper\Data $coreData,
         \Magento\Core\Model\File\Validator\NotProtectedExtension $fileValidator,
-        \Magento\Framework\App\Filesystem $filesystem
+        \Magento\Framework\Filesystem $filesystem
     ) {
         parent::__construct($localeDate, $logger, $localeResolver);
         $this->_coreData = $coreData;
         $this->_fileValidator = $fileValidator;
-        $this->_directory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::MEDIA_DIR);
+        $this->_directory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
     }
 
     /**

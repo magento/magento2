@@ -89,12 +89,11 @@ class Deployer
     /**
      * Populate all static view files for specified root path and list of languages
      *
-     * @param string $rootPath
      * @param ObjectManagerFactory $omFactory
      * @param array $locales
      * @return void
      */
-    public function deploy($rootPath, ObjectManagerFactory $omFactory, array $locales)
+    public function deploy(ObjectManagerFactory $omFactory, array $locales)
     {
         $this->omFactory = $omFactory;
         if ($this->isDryRun) {
@@ -105,7 +104,7 @@ class Deployer
         $libFiles = $this->filesUtil->getStaticLibraryFiles();
         list($areas, $appFiles) = $this->collectAppFiles($locales);
         foreach ($areas as $area => $themes) {
-            $this->emulateApplicationArea($rootPath, $area);
+            $this->emulateApplicationArea($area);
             foreach ($locales as $locale) {
                 foreach ($themes as $themePath) {
                     $this->logger->logMessage("=== {$area} -> {$themePath} -> {$locale} ===");
@@ -168,14 +167,12 @@ class Deployer
     /**
      * Emulate application area and various services that are necessary for populating files
      *
-     * @param string $rootPath
      * @param string $areaCode
      * @return void
      */
-    private function emulateApplicationArea($rootPath, $areaCode)
+    private function emulateApplicationArea($areaCode)
     {
         $objectManager = $this->omFactory->create(
-            $rootPath,
             [\Magento\Framework\App\State::PARAM_MODE => \Magento\Framework\App\State::MODE_DEFAULT]
         );
         /** @var \Magento\Framework\App\State $appState */

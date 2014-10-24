@@ -24,6 +24,8 @@
 
 namespace Mtf;
 
+use Magento\Framework\App\Bootstrap;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Stdlib\BooleanUtils;
 use Mtf\System\Config as SystemConfig;
 use Mtf\ObjectManager\Factory;
@@ -75,15 +77,15 @@ class ObjectManagerFactory
         $configuration = $systemConfig->getConfigParam();
         $diConfig->extend($configuration);
 
-        $directories = isset($arguments[\Magento\Framework\App\Filesystem::PARAM_APP_DIRS])
-            ? $arguments[\Magento\Framework\App\Filesystem::PARAM_APP_DIRS]
+        $directories = isset($arguments[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS])
+            ? $arguments[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS]
             : array();
         $directoryList = new \Magento\Framework\App\Filesystem\DirectoryList(
             realpath(MTF_BP . '../../../../'),
             $directories
         );
         (new \Magento\Framework\Autoload\IncludePath())->addIncludePath(
-            array($directoryList->getDir(\Magento\Framework\App\Filesystem::GENERATION_DIR))
+            array($directoryList->getPath(DirectoryList::GENERATION))
         );
 
         $factory = new Factory($diConfig);

@@ -23,6 +23,7 @@
  */
 namespace Magento\Test;
 
+use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\State;
 
 class ApplicationTest extends \PHPUnit_Framework_TestCase
@@ -38,16 +39,13 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $installDir = '/install/dir';
         $appMode = \Magento\Framework\App\State::MODE_DEVELOPER;
         $directoryList = new \Magento\Framework\App\Filesystem\DirectoryList(BP);
-        $filesystem = new \Magento\Framework\App\Filesystem(
+        $driverPool = new \Magento\Framework\Filesystem\DriverPool;
+        $filesystem = new \Magento\Framework\Filesystem(
             $directoryList,
-            new \Magento\Framework\Filesystem\Directory\ReadFactory(),
-            new \Magento\Framework\Filesystem\Directory\WriteFactory(),
-            new \Magento\Framework\Filesystem\File\ReadFactory(
-                new \Magento\Framework\Filesystem\DriverFactory($directoryList)
-            ),
-            new \Magento\Framework\Filesystem\File\WriteFactory(
-                new \Magento\Framework\Filesystem\DriverFactory($directoryList)
-            )
+            new \Magento\Framework\Filesystem\Directory\ReadFactory($driverPool),
+            new \Magento\Framework\Filesystem\Directory\WriteFactory($driverPool),
+            new \Magento\Framework\Filesystem\File\ReadFactory($driverPool),
+            new \Magento\Framework\Filesystem\File\WriteFactory($driverPool)
         );
 
         $object = new \Magento\TestFramework\Application(
@@ -66,7 +64,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $initParams = $object->getInitParams();
         $this->assertInternalType('array', $initParams, 'Wrong initialization parameters type');
         $this->assertArrayHasKey(
-            \Magento\Framework\App\Filesystem::PARAM_APP_DIRS,
+            Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS,
             $initParams,
             'Directories are not configured'
         );

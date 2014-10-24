@@ -23,6 +23,9 @@
  */
 namespace Magento\Store\Model;
 
+use Magento\Framework\App\Bootstrap;
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class StoreTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -61,7 +64,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             'url' => $objectManager->get('Magento\Framework\Url'),
             'request' => $objectManager->get('Magento\Framework\App\RequestInterface'),
             'configDataResource' => $objectManager->get('Magento\Core\Model\Resource\Config\Data'),
-            'filesystem' => $objectManager->get('Magento\Framework\App\Filesystem'),
+            'filesystem' => $objectManager->get('Magento\Framework\Filesystem'),
             'config' => $objectManager->get('Magento\Framework\App\Config\ReinitableConfigInterface'),
             'storeManager' => $objectManager->get('Magento\Store\Model\StoreManager'),
             'sidResolver' => $objectManager->get('Magento\Framework\Session\SidResolverInterface'),
@@ -215,8 +218,8 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     {
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(
             array(
-                \Magento\Framework\App\Filesystem::PARAM_APP_DIRS => array(
-                    \Magento\Framework\App\Filesystem::PUB_DIR => array('uri' => '')
+                Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => array(
+                    DirectoryList::PUB => array(DirectoryList::URL_PATH => '')
                 )
             )
         );

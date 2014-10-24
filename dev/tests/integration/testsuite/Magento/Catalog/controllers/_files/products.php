@@ -24,12 +24,14 @@
 
 // Copy images to tmp media path
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 $obectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var \Magento\Catalog\Model\Product\Media\Config $config */
 $config = $obectManager->get('Magento\Catalog\Model\Product\Media\Config');
 /** @var \Magento\Framework\Filesystem\Directory\WriteInterface $mediaDirectory */
-$mediaDirectory = $obectManager->get('Magento\Framework\App\Filesystem')
-    ->getDirectoryWrite(\Magento\Framework\App\Filesystem::MEDIA_DIR);
+$mediaDirectory = $obectManager->get('Magento\Framework\Filesystem')
+    ->getDirectoryWrite(DirectoryList::MEDIA);
 
 $baseTmpMediaPath = $config->getBaseTmpMediaPath();
 $mediaDirectory->create($baseTmpMediaPath);

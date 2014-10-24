@@ -41,11 +41,11 @@ use Magento\Tax\Service\V1\Data\TaxDetails;
 class Tax extends CommonTaxCollector
 {
     /**
-     * Static counter
+     * Counter
      *
      * @var int
      */
-    protected static $counter = 0;
+    protected $counter = 0;
 
     /**
      * Tax module helper

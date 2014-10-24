@@ -23,6 +23,8 @@
  */
 namespace Magento\Theme\Model;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class CopyServiceTest extends \PHPUnit_Framework_TestCase
 {
     /**#@+
@@ -166,7 +168,7 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->_filesystem =
-            $this->getMock('Magento\Framework\App\Filesystem', array('getDirectoryWrite'), array(), '', false);
+            $this->getMock('Magento\Framework\Filesystem', array('getDirectoryWrite'), array(), '', false);
         $this->_dirWriteMock = $this->getMock(
             'Magento\Framework\Filesystem\Directory\Write',
             array('isDirectory', 'search', 'copy', 'delete', 'read', 'copyFile', 'isExist'),
@@ -179,7 +181,7 @@ class CopyServiceTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getDirectoryWrite'
         )->with(
-            \Magento\Framework\App\Filesystem::MEDIA_DIR
+            DirectoryList::MEDIA
         )->will(
             $this->returnValue($this->_dirWriteMock)
         );

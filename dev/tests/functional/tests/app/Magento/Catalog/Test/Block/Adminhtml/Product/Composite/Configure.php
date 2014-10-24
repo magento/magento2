@@ -25,63 +25,72 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Composite;
 
-use Mtf\Block\Form;
 use Mtf\Client\Element\Locator;
 use Mtf\Fixture\FixtureInterface;
+use Mtf\Fixture\InjectableFixture;
+use Magento\Backend\Test\Block\Template;
+use Magento\Catalog\Test\Block\AbstractConfigureBlock;
+use Magento\Catalog\Test\Fixture\CatalogProductSimple;
 
 /**
  * Class Configure
  * Adminhtml catalog product composite configure block
- *
  */
-class Configure extends Form
+class Configure extends AbstractConfigureBlock
 {
     /**
-     * Selector for quantity field
+     * Custom options CSS selector
      *
      * @var string
      */
-    protected $qty = '[name="qty"]';
+    protected $customOptionsSelector = '#product_composite_configure_fields_options';
 
     /**
-     * Fill options for the product
+     * Selector for "Ok" button
+     *
+     * @var string
+     */
+    protected $okButton = '.ui-dialog-buttonset button:nth-of-type(2)';
+
+    /**
+     * Set quantity
+     *
+     * @param int $qty
+     * @return void
+     */
+    public function setQty($qty)
+    {
+        $this->_fill($this->dataMapping(['qty' => $qty]));
+    }
+
+    /**
+     * Fill in the option specified for the product
      *
      * @param FixtureInterface $product
      * @return void
      */
-    public function fillOptions(FixtureInterface $product)
+    public function configProduct(FixtureInterface $product)
     {
-        $productOptions = $product->getCheckoutData();
-        if (!empty($productOptions['options']['configurable_options'])) {
-            $configurableAttributesData = $product->getData('fields/configurable_attributes_data/value');
-            $checkoutData = [];
-
-            foreach ($productOptions['options']['configurable_options'] as $optionData) {
-                $titleKey = $optionData['title'];
-                $valueKey = $optionData['value'];
-
-                $checkoutData[] = [
-                    'title' => $configurableAttributesData[$titleKey]['label']['value'],
-                    'value' => $configurableAttributesData[$titleKey][$valueKey]['option_label']['value']
-                ];
-            }
-
-            foreach ($checkoutData as $option) {
-                $select = $this->_rootElement->find(
-                    '//div[@class="product-options"]//label[text()="' .
-                    $option['title'] .
-                    '"]//following-sibling::*//select',
-                    Locator::SELECTOR_XPATH,
-                    'select'
-                );
-                $select->setValue($option['value']);
-            }
+        $checkoutData = null;
+        if ($product instanceof InjectableFixture) {
+            /** @var CatalogProductSimple $product */
+            $checkoutData = $product->getCheckoutData();
         }
 
-        if (isset($productOptions['options']['qty'])) {
-            $this->_rootElement->find($this->qty)->setValue($productOptions['options']['qty']);
+        $this->fillOptions($product);
+        if (isset($checkoutData['qty'])) {
+            $this->setQty($checkoutData['qty']);
         }
+        $this->clickOk();
+    }
 
-        $this->_rootElement->find('.ui-dialog-buttonset button:nth-of-type(2)')->click();
+    /**
+     * Click "Ok" button
+     *
+     * @return void
+     */
+    public function clickOk()
+    {
+        $this->_rootElement->find($this->okButton)->click();
     }
 }

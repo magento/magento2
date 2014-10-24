@@ -23,7 +23,7 @@
  */
 namespace Magento\Setup\Framework\DB\Adapter\Pdo;
 
-use Magento\Filesystem\Filesystem;
+use Magento\Framework\Filesystem;
 use Magento\Setup\Framework\DB\Adapter\AdapterInterface;
 use Magento\Setup\Framework\DB\Ddl\Table;
 use \Magento\Framework\DB\ExpressionConverter;
@@ -39,6 +39,7 @@ use Zend\Db\Adapter\Profiler;
 use Zend\Db\ResultSet;
 use Zend\Db\Sql\Expression;
 use Zend\Db\Sql\Sql;
+use Magento\Setup\Model\FilesystemFactory;
 
 class Mysql extends Adapter implements AdapterInterface
 {
@@ -183,16 +184,18 @@ class Mysql extends Adapter implements AdapterInterface
      * @param Platform\PlatformInterface $platform
      * @param ResultSet\ResultSetInterface $queryResultPrototype
      * @param Profiler\ProfilerInterface $profiler
-     * @param Filesystem $filesystem
+     * @param FilesystemFactory $filesystemFactory
      */
     public function __construct(
         $driver,
         Platform\PlatformInterface $platform = null,
         ResultSet\ResultSetInterface $queryResultPrototype = null,
         Profiler\ProfilerInterface $profiler = null,
-        Filesystem $filesystem = null
+        FilesystemFactory $filesystemFactory = null
     ) {
-        $this->_filesystem = $filesystem;
+        if ($filesystemFactory !== null) {
+            $this->_filesystem = $filesystemFactory->create();
+        }
         parent::__construct($driver, $platform, $queryResultPrototype, $profiler);
     }
 

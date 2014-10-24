@@ -27,6 +27,9 @@
  */
 namespace Magento\Test\Helper;
 
+use Magento\Framework\App\Bootstrap;
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class BootstrapTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -50,9 +53,9 @@ class BootstrapTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     protected $_fixtureInitParams = array(
-        \Magento\Framework\App\Filesystem::PARAM_APP_DIRS => array(
-            \Magento\Framework\App\Filesystem::CONFIG_DIR => array('path' => __DIR__),
-            \Magento\Framework\App\Filesystem::VAR_DIR => array('path' => __DIR__)
+        Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => array(
+            DirectoryList::CONFIG => array('path' => __DIR__),
+            DirectoryList::VAR_DIR => array('path' => __DIR__)
         )
     );
 

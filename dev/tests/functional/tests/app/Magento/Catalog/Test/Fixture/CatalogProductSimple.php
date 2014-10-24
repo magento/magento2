@@ -624,6 +624,12 @@ class CatalogProductSimple extends InjectableFixture
         'source' => 'Magento\Catalog\Test\Fixture\CatalogProductSimple\RelatedProducts'
     ];
 
+    protected $recurring_payment = [
+        'attribute_code' => 'recurring_payment',
+        'backend_type' => 'virtual',
+        'group' => 'advanced-pricing'
+    ];
+
     public function getCategoryIds()
     {
         return $this->getData('category_ids');
@@ -937,5 +943,10 @@ class CatalogProductSimple extends InjectableFixture
     public function getRelatedProducts()
     {
         return $this->getData('related_products');
+    }
+
+    public function getRecurringPayment()
+    {
+        return $this->getData('recurring_payment');
     }
 }

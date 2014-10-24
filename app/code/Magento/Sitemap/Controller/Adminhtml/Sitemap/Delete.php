@@ -25,6 +25,7 @@
 namespace Magento\Sitemap\Controller\Adminhtml\Sitemap;
 
 use \Magento\Backend\App\Action;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 class Delete extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
 {
@@ -37,9 +38,9 @@ class Delete extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
     {
         /** @var \Magento\Framework\Filesystem\Directory\Write $directory */
         $directory = $this->_objectManager->get(
-            'Magento\Framework\App\Filesystem'
+            'Magento\Framework\Filesystem'
         )->getDirectoryWrite(
-            \Magento\Framework\App\Filesystem::ROOT_DIR
+            DirectoryList::ROOT
         );
 
         // check if we know what should be deleted

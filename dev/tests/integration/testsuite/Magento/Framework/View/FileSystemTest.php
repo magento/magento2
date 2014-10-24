@@ -23,6 +23,9 @@
  */
 namespace Magento\Framework\View;
 
+use Magento\Framework\App\Bootstrap;
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 /**
  * Tests for the view layer fallback mechanism
  * @magentoDataFixture Magento/Core/Model/_files/design/themes.php
@@ -38,8 +41,8 @@ class FileSystemTest extends \PHPUnit_Framework_TestCase
     {
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(
             array(
-                \Magento\Framework\App\Filesystem::PARAM_APP_DIRS => array(
-                    \Magento\Framework\App\Filesystem::THEMES_DIR => array(
+                Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => array(
+                    DirectoryList::THEMES => array(
                         'path' => dirname(dirname(__DIR__)) . '/Core/Model/_files/design'
                     )
                 )

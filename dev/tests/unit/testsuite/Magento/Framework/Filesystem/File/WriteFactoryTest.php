@@ -23,58 +23,63 @@
  */
 namespace Magento\Framework\Filesystem\File;
 
+use Magento\Framework\Filesystem\DriverPool;
+
 /**
  * Class WriteFactoryTest
  */
 class WriteFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Filesystem\DriverFactory | \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $driverFactory;
-
-    /**
-     * @var WriteFactory
-     */
-    protected $factory;
-
-    public function setUp()
-    {
-        $this->driverFactory = $this->getMock('Magento\Framework\Filesystem\DriverFactory', [], [], '', false);
-        $this->factory = new WriteFactory($this->driverFactory);
-    }
-
-    /**
-     * @dataProvider createProvider
      * @param string|null $protocol
+     * @param \PHPUnit_Framework_MockObject_MockObject|null $driver
+     * @dataProvider createProvider
      */
-    public function testCreate($protocol)
+    public function testCreate($protocol, $driver)
     {
-        $path = 'path';
-        $directoryDriver = $this->getMockForAbstractClass('Magento\Framework\Filesystem\DriverInterface');
-        $mode = 'a+';
-
+        $driverPool = $this->getMock('Magento\Framework\Filesystem\DriverPool', ['getDriver']);
         if ($protocol) {
-            $this->driverFactory->expects($this->once())
-                ->method('get')
-                ->with($protocol, get_class($directoryDriver))
-                ->will($this->returnValue($directoryDriver));
+            $driverMock = $this->getMockForAbstractClass('Magento\Framework\Filesystem\DriverInterface');
+            $driverMock->expects($this->any())->method('isExists')->willReturn(true);
+            $driverPool->expects($this->once())->method('getDriver')->willReturn($driverMock);
         } else {
-            $this->driverFactory->expects($this->never())
-                ->method('get');
+            $driverPool->expects($this->never())->method('getDriver');
         }
-
-        $this->assertInstanceOf(
-            'Magento\Framework\Filesystem\File\Write',
-            $this->factory->create($path, $protocol, $directoryDriver, $mode)
-        );
+        $factory = new WriteFactory($driverPool);
+        $result = $factory->create('path', $protocol, $driver);
+        $this->assertInstanceOf('Magento\Framework\Filesystem\File\Write', $result);
     }
 
+    /**
+     * @return array
+     */
     public function createProvider()
     {
+        $driver = $this->getMockForAbstractClass('Magento\Framework\Filesystem\DriverInterface');
+        $driver->expects($this->any())->method('isExists')->willReturn(true);
         return [
-            [null],
-            ['custom_protocol']
+            [null, $driver],
+            ['custom_protocol', null]
         ];
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     */
+    public function testCreateException()
+    {
+        $factory = new WriteFactory(new DriverPool);
+        $factory->create('path');
+    }
+
+    public function testCreateWithMode()
+    {
+        $driver = $this->getMockForAbstractClass('Magento\Framework\Filesystem\DriverInterface');
+        $driver->expects($this->any())->method('isExists')->willReturn(false);
+        $driverPool = $this->getMock('Magento\Framework\Filesystem\DriverPool', ['getDriver']);
+        $driverPool->expects($this->once())->method('getDriver')->with('protocol')->willReturn($driver);
+        $factory = new WriteFactory($driverPool);
+        $result = $factory->create('path', 'protocol', null, 'a+');
+        $this->assertInstanceOf('Magento\Framework\Filesystem\File\Write', $result);
     }
 }

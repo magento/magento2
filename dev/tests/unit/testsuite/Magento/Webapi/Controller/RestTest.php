@@ -98,6 +98,11 @@ class RestTest extends \PHPUnit_Framework_TestCase
      */
     protected $userContextMock;
 
+    /**
+     * @var \Magento\Webapi\Model\DataObjectProcessor|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $dataObjectProcessorMock;
+
     const SERVICE_METHOD = 'testMethod';
 
     const SERVICE_ID = 'Magento\Webapi\Controller\TestService';
@@ -125,6 +130,8 @@ class RestTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
         $this->userContextMock = $this->getMockBuilder('Magento\Authorization\Model\UserContextInterface')
             ->disableOriginalConstructor()->setMethods(['getUserId'])->getMockForAbstractClass();
+        $this->dataObjectProcessorMock = $this->getMockBuilder('Magento\Webapi\Model\DataObjectProcessor')
+            ->disableOriginalConstructor()->setMethods(['getMethodReturnType'])->getMockForAbstractClass();
     }
 
     protected function setUp()
@@ -157,6 +164,7 @@ class RestTest extends \PHPUnit_Framework_TestCase
                     'errorProcessor' => $errorProcessorMock,
                     'areaList' => $this->areaListMock,
                     'userContext' => $this->userContextMock,
+                    'dataObjectProcessor' => $this->dataObjectProcessorMock
                 ]
             );
         // Set default expectations used by all tests
@@ -167,6 +175,9 @@ class RestTest extends \PHPUnit_Framework_TestCase
         $this->_objectManagerMock->expects($this->any())->method('get')->will($this->returnValue($this->_serviceMock));
         $this->_responseMock->expects($this->any())->method('prepareResponse')->will($this->returnValue([]));
         $this->_serviceMock->expects($this->any())->method(self::SERVICE_METHOD)->will($this->returnValue(null));
+        $this->dataObjectProcessorMock->expects($this->any())->method('getMethodReturnType')
+            ->with(self::SERVICE_ID, self::SERVICE_METHOD)
+            ->will($this->returnValue('null'));
         parent::setUp();
     }
 
@@ -321,6 +332,9 @@ class RestTest extends \PHPUnit_Framework_TestCase
 
 class TestService
 {
+    /**
+     * @return null
+     */
     public function testMethod()
     {
         return null;

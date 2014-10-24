@@ -129,14 +129,14 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'fields' => array(
                     'fee_debit_or_credit' => array(
                         'label' => $this->_settlement->getFieldLabel('fee_debit_or_credit'),
-                        'value' => $model->getDebitCreditText($model->getData('fee_debit_or_credit'))
+                        'value' => $model->getDebitCreditText($model->getCastedAmount('fee_debit_or_credit'))
                     ),
                     'fee_amount' => array(
                         'label' => $this->_settlement->getFieldLabel('fee_amount'),
                         'value' => $this->_localeCurrency->getCurrency(
                             $model->getData('fee_currency')
                         )->toCurrency(
-                            $model->getData('fee_amount')
+                            $model->getCastedAmount('fee_amount')
                         )
                     )
                 ),

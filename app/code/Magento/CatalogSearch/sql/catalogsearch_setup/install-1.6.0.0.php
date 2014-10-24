@@ -28,51 +28,6 @@ $installer = $this;
 $installer->startSetup();
 
 /**
- * Create table 'catalogsearch_result'
- */
-$table = $installer->getConnection()->newTable(
-    $installer->getTable('catalogsearch_result')
-)->addColumn(
-    'query_id',
-    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-    null,
-    array('unsigned' => true, 'nullable' => false, 'primary' => true),
-    'Query ID'
-)->addColumn(
-    'product_id',
-    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
-    null,
-    array('unsigned' => true, 'nullable' => false, 'primary' => true),
-    'Product ID'
-)->addColumn(
-    'relevance',
-    \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
-    '20,4',
-    array('nullable' => false, 'default' => '0.0000'),
-    'Relevance'
-)->addForeignKey(
-    $installer->getFkName('catalogsearch_result', 'query_id', 'search_query', 'query_id'),
-    'query_id',
-    $installer->getTable('search_query'),
-    'query_id',
-    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
-    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
-)->addIndex(
-    $installer->getIdxName('catalogsearch_result', 'product_id'),
-    'product_id'
-)->addForeignKey(
-    $installer->getFkName('catalogsearch_result', 'product_id', 'catalog_product_entity', 'entity_id'),
-    'product_id',
-    $installer->getTable('catalog_product_entity'),
-    'entity_id',
-    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE,
-    \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
-)->setComment(
-    'Catalog search result table'
-);
-$installer->getConnection()->createTable($table);
-
-/**
  * Create table 'catalogsearch_fulltext'
  */
 $table = $installer->getConnection()->newTable(

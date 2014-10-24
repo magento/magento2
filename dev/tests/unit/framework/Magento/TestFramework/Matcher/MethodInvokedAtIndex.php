@@ -21,8 +21,21 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
+
 namespace Magento\TestFramework\Matcher;
 
+/**
+ * Class MethodInvokedAtIndex
+ * Matches invocations per 'method' at 'position'
+ * Example:
+ * $mock->expects(new MethodInvokedAtIndex(0))->method('getMethod')->willReturn(1);
+ * $mock->expects(new MethodInvokedAtIndex(1))->method('getMethod')->willReturn(2);
+ *
+ * $mock->getMethod(); // returns 1
+ * $mock->getMethod(); // returns 2
+ *
+ * @package Magento\TestFramework\Matcher
+ */
 class MethodInvokedAtIndex extends \PHPUnit_Framework_MockObject_Matcher_InvokedAtIndex
 {
     /**

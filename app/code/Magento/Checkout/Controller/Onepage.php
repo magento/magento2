@@ -201,6 +201,19 @@ class Onepage extends Action
     }
 
     /**
+     * Get progress html checkout step
+     *
+     * @param string $checkoutStep
+     * @return mixed
+     */
+    protected function getProgressHtml($checkoutStep = '')
+    {
+        $this->_view->loadLayout(['checkout_onepage_progress']);
+        $block = $this->_view->getLayout()->getBlock('progress')->setAttribute('next_step', $checkoutStep);
+        return $block->toHtml();
+    }
+
+    /**
      * Get one page checkout model
      *
      * @return \Magento\Checkout\Model\Type\Onepage

@@ -23,6 +23,8 @@
  */
 namespace Magento\Core\Helper\File;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 /**
  * Class Media
  */
@@ -34,7 +36,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_date;
 
     /**
-     * @var \Magento\Framework\App\Filesystem
+     * @var \Magento\Framework\Filesystem
      */
     protected $filesystem;
 
@@ -43,12 +45,12 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
-     * @param \Magento\Framework\App\Filesystem $filesystem
+     * @param \Magento\Framework\Filesystem $filesystem
      */
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
-        \Magento\Framework\App\Filesystem $filesystem
+        \Magento\Framework\Filesystem $filesystem
     ) {
         parent::__construct($context);
         $this->_date = $date;
@@ -74,7 +76,7 @@ class Media extends \Magento\Framework\App\Helper\AbstractHelper
         $path = ltrim($path, '\\/');
         $fullPath = $mediaDirectory . '/' . $path;
 
-        $dir = $this->filesystem->getDirectoryRead(\Magento\Framework\App\Filesystem::MEDIA_DIR);
+        $dir = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
         $relativePath = $dir->getRelativePath($fullPath);
         if (!$dir->isFile($relativePath)) {
             throw new \Magento\Framework\Model\Exception(__('File %1 does not exist', $fullPath));

@@ -30,37 +30,37 @@ namespace Magento\Paypal\Model\Report\Settlement;
  * @method \Magento\Paypal\Model\Resource\Report\Settlement\Row _getResource()
  * @method \Magento\Paypal\Model\Resource\Report\Settlement\Row getResource()
  * @method int getReportId()
- * @method \Magento\Paypal\Model\Report\Settlement\Row setReportId(int $value)
+ * @method Row setReportId(int $value)
  * @method string getTransactionId()
- * @method \Magento\Paypal\Model\Report\Settlement\Row setTransactionId(string $value)
+ * @method Row setTransactionId(string $value)
  * @method string getInvoiceId()
- * @method \Magento\Paypal\Model\Report\Settlement\Row setInvoiceId(string $value)
+ * @method Row setInvoiceId(string $value)
  * @method string getPaypalReferenceId()
- * @method \Magento\Paypal\Model\Report\Settlement\Row setPaypalReferenceId(string $value)
+ * @method Row setPaypalReferenceId(string $value)
  * @method string getPaypalReferenceIdType()
- * @method \Magento\Paypal\Model\Report\Settlement\Row setPaypalReferenceIdType(string $value)
+ * @method Row setPaypalReferenceIdType(string $value)
  * @method string getTransactionEventCode()
- * @method \Magento\Paypal\Model\Report\Settlement\Row setTransactionEventCode(string $value)
+ * @method Row setTransactionEventCode(string $value)
  * @method string getTransactionInitiationDate()
- * @method \Magento\Paypal\Model\Report\Settlement\Row setTransactionInitiationDate(string $value)
+ * @method Row setTransactionInitiationDate(string $value)
  * @method string getTransactionCompletionDate()
- * @method \Magento\Paypal\Model\Report\Settlement\Row setTransactionCompletionDate(string $value)
+ * @method Row setTransactionCompletionDate(string $value)
  * @method string getTransactionDebitOrCredit()
- * @method \Magento\Paypal\Model\Report\Settlement\Row setTransactionDebitOrCredit(string $value)
+ * @method Row setTransactionDebitOrCredit(string $value)
  * @method float getGrossTransactionAmount()
- * @method \Magento\Paypal\Model\Report\Settlement\Row setGrossTransactionAmount(float $value)
+ * @method Row setGrossTransactionAmount(float $value)
  * @method string getGrossTransactionCurrency()
- * @method \Magento\Paypal\Model\Report\Settlement\Row setGrossTransactionCurrency(string $value)
+ * @method Row setGrossTransactionCurrency(string $value)
  * @method string getFeeDebitOrCredit()
- * @method \Magento\Paypal\Model\Report\Settlement\Row setFeeDebitOrCredit(string $value)
+ * @method Row setFeeDebitOrCredit(string $value)
  * @method float getFeeAmount()
- * @method \Magento\Paypal\Model\Report\Settlement\Row setFeeAmount(float $value)
+ * @method Row setFeeAmount(float $value)
  * @method string getFeeCurrency()
- * @method \Magento\Paypal\Model\Report\Settlement\Row setFeeCurrency(string $value)
+ * @method Row setFeeCurrency(string $value)
  * @method string getCustomField()
- * @method \Magento\Paypal\Model\Report\Settlement\Row setCustomField(string $value)
+ * @method Row setCustomField(string $value)
  * @method string getConsumerId()
- * @method \Magento\Paypal\Model\Report\Settlement\Row setConsumerId(string $value)
+ * @method Row setConsumerId(string $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
@@ -71,14 +71,17 @@ class Row extends \Magento\Framework\Model\AbstractModel
      *
      * @var array
      */
-    protected static $_eventList = array();
+    private $eventLabelsList = array();
 
     /**
-     * Casted amount keys registry
+     * Cast amount relation
      *
      * @var array
      */
-    protected $_castedAmounts = array();
+    private $castAmountRelation = [
+        'fee_amount' => 'fee_debit_or_credit',
+        'gross_transaction_amount' => 'transaction_debit_or_credit'
+    ];
 
     /**
      * Initialize resource model
@@ -94,25 +97,19 @@ class Row extends \Magento\Framework\Model\AbstractModel
      * Return description of Reference ID Type
      * If no code specified, return full list of codes with their description
      *
-     * @param string|null $code
-     * @return string|array
+     * @param string $code
+     * @return string
      */
-    public function getReferenceType($code = null)
+    public function getReferenceType($code)
     {
         $types = array(
-            'TXN' => __('Transaction ID'),
             'ODR' => __('Order ID'),
+            'PAP' => __('Preapproved Payment ID'),
+            'TXN' => __('Transaction ID'),
             'SUB' => __('Subscription ID'),
-            'PAP' => __('Preapproved Payment ID')
         );
-        if ($code === null) {
-            asort($types);
-            return $types;
-        }
-        if (isset($types[$code])) {
-            return $types[$code];
-        }
-        return $code;
+        return !empty($types[$code]) ? $types[$code] : $code;
+
     }
 
     /**
@@ -123,55 +120,22 @@ class Row extends \Magento\Framework\Model\AbstractModel
      */
     public function getTransactionEvent($code)
     {
-        $this->_generateEventLabels();
-        if (isset(self::$_eventList[$code])) {
-            return self::$_eventList[$code];
-        }
-        return $code;
-    }
+        $events = $this->getTransactionEvents();
 
-    /**
-     * Get full list of codes with their description
-     *
-     * @return &array
-     */
-    public function &getTransactionEvents()
-    {
-        $this->_generateEventLabels();
-        return self::$_eventList;
+        return !empty($events[$code]) ? $events[$code] : $code;
     }
 
     /**
      * Return description of "Debit or Credit" value
-     * If no code specified, return full list of codes with their description
      *
-     * @param string|null $code
-     * @return string|array
+     * @param string $code
+     * @return string
      */
-    public function getDebitCreditText($code = null)
+    public function getDebitCreditText($code)
     {
         $options = array('CR' => __('Credit'), 'DR' => __('Debit'));
-        if ($code === null) {
-            return $options;
-        }
-        if (isset($options[$code])) {
-            return $options[$code];
-        }
-        return $code;
-    }
 
-    /**
-     * Invoke casting some amounts
-     *
-     * @param string $key
-     * @param string|int|null $index
-     * @return mixed
-     */
-    public function getData($key = '', $index = null)
-    {
-        $this->_castAmount('fee_amount', 'fee_debit_or_credit');
-        $this->_castAmount('gross_transaction_amount', 'transaction_debit_or_credit');
-        return parent::getData($key, $index);
+        return !empty($options[$code]) ? $options[$code] : $code;
     }
 
     /**
@@ -181,117 +145,117 @@ class Row extends \Magento\Framework\Model\AbstractModel
      * Also if the "credit" value is detected, it will be casted to negative amount
      *
      * @param string $key
-     * @param string $creditKey
-     * @return void
+     * @return float|null
      */
-    public function _castAmount($key, $creditKey)
+    public function getCastedAmount($key)
     {
-        if (isset($this->_castedAmounts[$key]) || !isset($this->_data[$key]) || !isset($this->_data[$creditKey])) {
-            return;
+        if (empty($this->castAmountRelation[$key])) {
+            return null;
         }
-        if (empty($this->_data[$key])) {
-            return;
+        if (empty($this->_data[$key]) || empty($this->_data[$this->castAmountRelation[$key]])) {
+            return null;
         }
+
         $amount = $this->_data[$key] / 100;
-        if ('CR' === $this->_data[$creditKey]) {
+        if ('CR' == $this->_data[$this->castAmountRelation[$key]]) {
             $amount = -1 * $amount;
         }
-        $this->_data[$key] = $amount;
-        $this->_castedAmounts[$key] = true;
+        return $amount;
     }
 
     /**
-     * Fill/translate and sort all event codes/labels
+     * Get full list of codes with their description
      *
-     * @return void
+     * @return array
      */
-    protected function _generateEventLabels()
+    public function getTransactionEvents()
     {
-        if (!self::$_eventList) {
-            self::$_eventList = array(
-                'T0000' => __('General: received payment of a type not belonging to the other T00xx categories'),
-                'T0001' => __('Mass Pay Payment'),
-                'T0002' => __('Subscription Payment, either payment sent or payment received'),
-                'T0003' => __('Preapproved Payment (BillUser API), either sent or received'),
-                'T0004' => __('eBay Auction Payment'),
-                'T0005' => __('Direct Payment API'),
-                'T0006' => __('Express Checkout APIs'),
-                'T0007' => __('Website Payments Standard Payment'),
-                'T0008' => __('Postage Payment to either USPS or UPS'),
-                'T0009' => __('Gift Certificate Payment: purchase of Gift Certificate'),
-                'T0010' => __('Auction Payment other than through eBay'),
-                'T0011' => __('Mobile Payment (made via a mobile phone)'),
-                'T0012' => __('Virtual Terminal Payment'),
-                'T0100' => __('General: non-payment fee of a type not belonging to the other T01xx categories'),
-                'T0101' => __('Fee: Web Site Payments Pro Account Monthly'),
-                'T0102' => __('Fee: Foreign ACH Withdrawal'),
-                'T0103' => __('Fee: WorldLink Check Withdrawal'),
-                'T0104' => __('Fee: Mass Pay Request'),
-                'T0200' => __('General Currency Conversion'),
-                'T0201' => __('User-initiated Currency Conversion'),
-                'T0202' => __('Currency Conversion required to cover negative balance'),
-                'T0300' => __('General Funding of PayPal Account '),
-                'T0301' => __('PayPal Balance Manager function of PayPal account'),
-                'T0302' => __('ACH Funding for Funds Recovery from Account Balance'),
-                'T0303' => __('EFT Funding (German banking)'),
-                'T0400' => __('General Withdrawal from PayPal Account'),
-                'T0401' => __('AutoSweep'),
-                'T0500' => __('General: Use of PayPal account for purchasing as well as receiving payments'),
-                'T0501' => __('Virtual PayPal Debit Card Transaction'),
-                'T0502' => __('PayPal Debit Card Withdrawal from ATM'),
-                'T0503' => __('Hidden Virtual PayPal Debit Card Transaction'),
-                'T0504' => __('PayPal Debit Card Cash Advance'),
-                'T0600' => __('General: Withdrawal from PayPal Account'),
-                'T0700' => __('General (Purchase with a credit card)'),
-                'T0701' => __('Negative Balance'),
-                'T0800' => __('General: bonus of a type not belonging to the other T08xx categories'),
-                'T0801' => __('Debit Card Cash Back'),
-                'T0802' => __('Merchant Referral Bonus'),
-                'T0803' => __('Balance Manager Account Bonus'),
-                'T0804' => __('PayPal Buyer Warranty Bonus'),
-                'T0805' => __('PayPal Protection Bonus'),
-                'T0806' => __('Bonus for first ACH Use'),
-                'T0900' => __('General Redemption'),
-                'T0901' => __('Gift Certificate Redemption'),
-                'T0902' => __('Points Incentive Redemption'),
-                'T0903' => __('Coupon Redemption'),
-                'T0904' => __('Reward Voucher Redemption'),
-                'T1000' => __('General. Product no longer supported'),
-                'T1100' => __('General: reversal of a type not belonging to the other T11xx categories'),
-                'T1101' => __('ACH Withdrawal'),
-                'T1102' => __('Debit Card Transaction'),
-                'T1103' => __('Reversal of Points Usage'),
-                'T1104' => __('ACH Deposit (Reversal)'),
-                'T1105' => __('Reversal of General Account Hold'),
-                'T1106' => __('Account-to-Account Payment, initiated by PayPal'),
-                'T1107' => __('Payment Refund initiated by merchant'),
-                'T1108' => __('Fee Reversal'),
-                'T1110' => __('Hold for Dispute Investigation'),
-                'T1111' => __('Reversal of hold for Dispute Investigation'),
-                'T1200' => __('General: adjustment of a type not belonging to the other T12xx categories'),
-                'T1201' => __('Chargeback'),
-                'T1202' => __('Reversal'),
-                'T1203' => __('Charge-off'),
-                'T1204' => __('Incentive'),
-                'T1205' => __('Reimbursement of Chargeback'),
-                'T1300' => __('General (Authorization)'),
-                'T1301' => __('Reauthorization'),
-                'T1302' => __('Void'),
-                'T1400' => __('General (Dividend)'),
-                'T1500' => __('General: temporary hold of a type not belonging to the other T15xx categories'),
-                'T1501' => __('Open Authorization'),
+        if (empty($this->eventLabelsList)) {
+            $this->eventLabelsList = array(
                 'T1502' => __('ACH Deposit (Hold for Dispute or Other Investigation)'),
+                'T1104' => __('ACH Deposit (Reversal)'),
+                'T0302' => __('ACH Funding for Funds Recovery from Account Balance'),
+                'T1101' => __('ACH Withdrawal'),
+                'T1106' => __('Account-to-Account Payment, initiated by PayPal'),
+                'T0010' => __('Auction Payment other than through eBay'),
+                'T0401' => __('AutoSweep'),
                 'T1503' => __('Available Balance'),
-                'T1600' => __('Funding'),
-                'T1700' => __('General: Withdrawal to Non-Bank Entity'),
-                'T1701' => __('WorldLink Withdrawal'),
+                'T0803' => __('Balance Manager Account Bonus'),
+                'T0806' => __('Bonus for first ACH Use'),
                 'T1800' => __('Buyer Credit Payment'),
-                'T1900' => __('General Adjustment without businessrelated event'),
+                'T1203' => __('Charge-off'),
+                'T1201' => __('Chargeback'),
+                'T0903' => __('Coupon Redemption'),
+                'T0202' => __('Currency Conversion required to cover negative balance'),
+                'T0801' => __('Debit Card Cash Back'),
+                'T1102' => __('Debit Card Transaction'),
+                'T0005' => __('Direct Payment API'),
+                'T0303' => __('EFT Funding (German banking)'),
+                'T0006' => __('Express Checkout APIs'),
+                'T1108' => __('Fee Reversal'),
+                'T0102' => __('Fee: Foreign ACH Withdrawal'),
+                'T0104' => __('Fee: Mass Pay Request'),
+                'T0101' => __('Fee: Web Site Payments Pro Account Monthly'),
+                'T0103' => __('Fee: WorldLink Check Withdrawal'),
+                'T1600' => __('Funding'),
+                'T1300' => __('General (Authorization)'),
+                'T1400' => __('General (Dividend)'),
                 'T2000' => __('General (Funds Transfer from PayPal Account to Another)'),
+                'T0700' => __('General (Purchase with a credit card)'),
+                'T1900' => __('General Adjustment without businessrelated event'),
+                'T0200' => __('General Currency Conversion'),
+                'T0300' => __('General Funding of PayPal Account '),
+                'T0900' => __('General Redemption'),
+                'T0400' => __('General Withdrawal from PayPal Account'),
+                'T1000' => __('General. Product no longer supported'),
+                'T0500' => __('General: Use of PayPal account for purchasing as well as receiving payments'),
+                'T0600' => __('General: Withdrawal from PayPal Account'),
+                'T1700' => __('General: Withdrawal to Non-Bank Entity'),
+                'T1200' => __('General: adjustment of a type not belonging to the other T12xx categories'),
+                'T0800' => __('General: bonus of a type not belonging to the other T08xx categories'),
+                'T9900' => __('General: event not yet categorized'),
+                'T0100' => __('General: non-payment fee of a type not belonging to the other T01xx categories'),
+                'T0000' => __('General: received payment of a type not belonging to the other T00xx categories'),
+                'T1100' => __('General: reversal of a type not belonging to the other T11xx categories'),
+                'T1500' => __('General: temporary hold of a type not belonging to the other T15xx categories'),
+                'T0009' => __('Gift Certificate Payment: purchase of Gift Certificate'),
+                'T0901' => __('Gift Certificate Redemption'),
+                'T0503' => __('Hidden Virtual PayPal Debit Card Transaction'),
+                'T1110' => __('Hold for Dispute Investigation'),
+                'T1204' => __('Incentive'),
+                'T0001' => __('Mass Pay Payment'),
+                'T0802' => __('Merchant Referral Bonus'),
+                'T0011' => __('Mobile Payment (made via a mobile phone)'),
+                'T0701' => __('Negative Balance'),
+                'T1501' => __('Open Authorization'),
+                'T0301' => __('PayPal Balance Manager function of PayPal account'),
+                'T0804' => __('PayPal Buyer Warranty Bonus'),
+                'T0504' => __('PayPal Debit Card Cash Advance'),
+                'T0502' => __('PayPal Debit Card Withdrawal from ATM'),
+                'T0805' => __('PayPal Protection Bonus'),
+                'T1107' => __('Payment Refund initiated by merchant'),
+                'T0902' => __('Points Incentive Redemption'),
+                'T0008' => __('Postage Payment to either USPS or UPS'),
+                'T0003' => __('Preapproved Payment (BillUser API, either sent or received'),
+                'T1301' => __('Reauthorization'),
+                'T1205' => __('Reimbursement of Chargeback'),
+                'T1202' => __('Reversal'),
+                'T1105' => __('Reversal of General Account Hold'),
+                'T1103' => __('Reversal of Points Usage'),
+                'T1111' => __('Reversal of hold for Dispute Investigation'),
+                'T0904' => __('Reward Voucher Redemption'),
                 'T2001' => __('Settlement Consolidation'),
-                'T9900' => __('General: event not yet categorized')
+                'T0002' => __('Subscription Payment, either payment sent or payment received'),
+                'T0201' => __('User-initiated Currency Conversion'),
+                'T0501' => __('Virtual PayPal Debit Card Transaction'),
+                'T0012' => __('Virtual Terminal Payment'),
+                'T1302' => __('Void'),
+                'T0007' => __('Website Payments Standard Payment'),
+                'T1701' => __('WorldLink Withdrawal'),
+                'T0004' => __('eBay Auction Payment')
             );
-            asort(self::$_eventList);
         }
+
+        return $this->eventLabelsList;
     }
 }

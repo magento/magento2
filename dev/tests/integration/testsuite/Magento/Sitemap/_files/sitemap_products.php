@@ -23,17 +23,20 @@
  */
 
 // Copy images to tmp media path
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var \Magento\Catalog\Model\Product\Media\Config $config */
 $config = $objectManager->get('Magento\Catalog\Model\Product\Media\Config');
 
+/** @var \Magento\Framework\Filesystem $filesystem */
+$filesystem = $objectManager->get('Magento\Framework\Filesystem');
 /** @var \Magento\Framework\Filesystem\Directory\WriteInterface $mediaDirectory */
-$filesystem = $objectManager->get('Magento\Framework\App\Filesystem');
-$mediaPath = $filesystem->getPath(\Magento\Framework\App\Filesystem::MEDIA_DIR);
-$mediaDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::MEDIA_DIR);
-
+$mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+$mediaPath = $mediaDirectory->getAbsolutePath();
 $baseTmpMediaPath = $config->getBaseTmpMediaPath();
 $mediaDirectory->create($baseTmpMediaPath);
+
 copy(__DIR__ . '/magento_image_sitemap.png', $mediaPath . '/' . $baseTmpMediaPath . '/magento_image_sitemap.png');
 copy(__DIR__ . '/second_image.png', $mediaPath . '/' . $baseTmpMediaPath . '/second_image.png');
 

@@ -237,22 +237,6 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
     }
 
     /**
-     * Prepare text of item label
-     *
-     * @param      int $range
-     * @param      float $value
-     * @return     string
-     * @deprecated since 1.7.0.0
-     */
-    protected function _renderItemLabel($range, $value)
-    {
-        $fromPrice = $this->priceCurrency->format(($value - 1) * $range);
-        $toPrice = $this->priceCurrency->format($value * $range);
-
-        return __('%1 - %2', $fromPrice, $toPrice);
-    }
-
-    /**
      * Prepare text of range label
      *
      * @param float|string $fromPrice

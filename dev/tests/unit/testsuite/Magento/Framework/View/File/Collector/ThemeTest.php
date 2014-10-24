@@ -31,7 +31,7 @@ use Magento\Framework\View\File\Factory;
 class ThemeTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\App\Filesystem|PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem|PHPUnit_Framework_MockObject_MockObject
      */
     protected $filesystemMock;
 
@@ -52,7 +52,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
 
     public function setup()
     {
-        $this->filesystemMock = $this->getMockBuilder('Magento\Framework\App\Filesystem')
+        $this->filesystemMock = $this->getMockBuilder('Magento\Framework\Filesystem')
             ->disableOriginalConstructor()->getMock();
 
         $this->themesDirectoryMock = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\ReadInterface')

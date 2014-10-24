@@ -24,20 +24,25 @@
 namespace Magento\Framework\Filesystem\File;
 
 use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Filesystem\DriverPool;
 
 class ReadFactory
 {
     /**
-     * @var \Magento\Framework\Filesystem\DriverFactory
+     * Pool of filesystem drivers
+     *
+     * @var DriverPool
      */
-    protected $driverFactory;
+    private $driverPool;
 
     /**
-     * @param \Magento\Framework\Filesystem\DriverFactory $driverFactory
+     * Constructor
+     *
+     * @param DriverPool $driverPool
      */
-    public function __construct(\Magento\Framework\Filesystem\DriverFactory $driverFactory)
+    public function __construct(DriverPool $driverPool)
     {
-        $this->driverFactory = $driverFactory;
+        $this->driverPool = $driverPool;
     }
 
     /**
@@ -47,11 +52,15 @@ class ReadFactory
      * @param string|null $protocol [optional]
      * @param DriverInterface $driver [optional]
      * @return \Magento\Framework\Filesystem\File\ReadInterface
+     * @throws \InvalidArgumentException
      */
     public function create($path, $protocol = null, DriverInterface $driver = null)
     {
-        $driverClassName = is_null($driver) ? null : get_class($driver);
-        $driver = $protocol ? $this->driverFactory->get($protocol, $driverClassName) : $driver;
-        return new \Magento\Framework\Filesystem\File\Read($path, $driver);
+        if ($protocol) {
+            $driver = $this->driverPool->getDriver($protocol);
+        } elseif (!$driver) {
+            throw new \InvalidArgumentException('Either driver or protocol must be specified.');
+        }
+        return new Read($path, $driver);
     }
 }

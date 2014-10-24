@@ -24,6 +24,7 @@
  */
 namespace Magento\TaxImportExport\Controller\Adminhtml\Rate;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use \Magento\Framework\App\ResponseInterface;
 
 class ExportPost extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
@@ -100,6 +101,6 @@ class ExportPost extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
             $content .= $rate->toString($template) . "\n";
         }
         $this->_view->loadLayout();
-        return $this->fileFactory->create('tax_rates.csv', $content, \Magento\Framework\App\Filesystem::VAR_DIR);
+        return $this->fileFactory->create('tax_rates.csv', $content, DirectoryList::VAR_DIR);
     }
 }

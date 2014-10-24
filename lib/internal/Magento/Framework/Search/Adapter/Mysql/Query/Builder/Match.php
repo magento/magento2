@@ -24,12 +24,26 @@
 namespace Magento\Framework\Search\Adapter\Mysql\Query\Builder;
 
 use Magento\Framework\DB\Select;
+use Magento\Framework\Search\Adapter\Mysql\Field\ResolverInterface;
 use Magento\Framework\Search\Adapter\Mysql\ScoreBuilder;
 use Magento\Framework\Search\Request\Query\Bool;
 use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
 
 class Match implements QueryInterface
 {
+    /**
+     * @var ResolverInterface
+     */
+    private $resolver;
+
+    /**
+     * @param ResolverInterface $resolver
+     */
+    public function __construct(ResolverInterface $resolver)
+    {
+        $this->resolver = $resolver;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -46,18 +60,19 @@ class Match implements QueryInterface
         } elseif ($conditionType === Bool::QUERY_CONDITION_NOT) {
             $queryValue = '-' . $queryValue;
         }
-
+        
         $fieldList = [];
         foreach ($query->getMatches() as $match) {
             $fieldList[] = $match['field'];
         }
+        $resolvedFieldList = $this->resolver->resolve($fieldList);
 
         $queryBoost = $query->getBoost();
         $scoreBuilder->addCondition(
-            $select->getMatchQuery($fieldList, $queryValue, Select::FULLTEXT_MODE_BOOLEAN),
+            $select->getMatchQuery($resolvedFieldList, $queryValue, Select::FULLTEXT_MODE_BOOLEAN),
             !is_null($queryBoost) ? $queryBoost : 1
         );
-        $select->match($fieldList, $queryValue, true, Select::FULLTEXT_MODE_BOOLEAN);
+        $select->match($resolvedFieldList, $queryValue, true, Select::FULLTEXT_MODE_BOOLEAN);
 
         return $select;
     }

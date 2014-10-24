@@ -26,22 +26,51 @@ namespace Magento\CheckoutAgreements\Service\V1\Data;
 use \Magento\Framework\Service\Data\AbstractExtensibleObject;
 
 /**
+ * Checkout agreement data object.
+ *
  * @codeCoverageIgnore
  */
 class Agreement extends AbstractExtensibleObject
 {
+    /**
+     * Agreement ID.
+     */
     const ID = 'id';
+
+    /**
+     * Agreement name.
+     */
     const NAME = 'name';
+
+    /**
+     * Agreement content.
+     */
     const CONTENT = 'content';
+
+    /**
+     * Agreement content height. Optional CSS property.
+     */
     const CONTENT_HEIGHT = 'content_height';
+
+    /**
+     * Agreement checkbox text. Caption of UI component.
+     */
     const CHECKBOX_TEXT = 'checkbox_text';
+
+    /**
+     * Agreement status.
+     */
     const ACTIVE = 'active';
+
+    /**
+     * Agreement content type. True is HTML. False is plain text.
+     */
     const HTML = 'html';
 
     /**
-     * Retrieve agreement ID
+     * Returns the agreement ID.
      *
-     * @return int
+     * @return int Agreement ID.
      */
     public function getId()
     {
@@ -49,9 +78,9 @@ class Agreement extends AbstractExtensibleObject
     }
 
     /**
-     * Retrieve agreement name
+     * Returns the agreement name.
      *
-     * @return string
+     * @return string Agreement name.
      */
     public function getName()
     {
@@ -59,9 +88,9 @@ class Agreement extends AbstractExtensibleObject
     }
 
     /**
-     * Retrieve agreement content
+     * Returns the agreement content.
      *
-     * @return string
+     * @return string Agreement content.
      */
     public function getContent()
     {
@@ -69,9 +98,9 @@ class Agreement extends AbstractExtensibleObject
     }
 
     /**
-     * Retrieve agreement content height (optional CSS property)
+     * Returns the agreement content height, which is an optional CSS property.
      *
-     * @return string|null
+     * @return string|null Agreement content height. Otherwise, null.
      */
     public function getContentHeight()
     {
@@ -79,9 +108,9 @@ class Agreement extends AbstractExtensibleObject
     }
 
     /**
-     * Retrieve agreement checkbox text
+     * Returns the agreement checkbox text.
      *
-     * @return string
+     * @return string Agreement checkbox text.
      */
     public function getCheckboxText()
     {
@@ -89,9 +118,9 @@ class Agreement extends AbstractExtensibleObject
     }
 
     /**
-     * Retrieve agreement status
+     * Returns the agreement status.
      *
-     * @return bool
+     * @return bool Agreement status.
      */
     public function isActive()
     {
@@ -99,9 +128,10 @@ class Agreement extends AbstractExtensibleObject
     }
 
     /**
-     * Retrieve agreement content type
+     * Returns the agreement content type.
      *
-     * @return bool
+     * @return bool * true - HTML.
+     * * false - plain text.
      */
     public function isHtml()
     {

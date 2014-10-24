@@ -45,5 +45,10 @@
             <locator>[id="page:main-container"]</locator>
             <strategy>css selector</strategy>
         </customerForm>
+        <configureProductBlock>
+            <class>Magento\Catalog\Test\Block\Adminhtml\Product\Composite\Configure</class>
+            <locator>//*[@role="dialog" and ./*[@id="product_composite_configure"] and contains(@style,"display: block")]</locator>
+            <strategy>xpath</strategy>
+        </configureProductBlock>
     </blocks>
 </page>

@@ -23,6 +23,8 @@
  */
 namespace Magento\Core\Helper\File;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class MediaTest extends \PHPUnit_Framework_TestCase
 {
     const UPDATE_TIME = 'update_time';
@@ -44,12 +46,12 @@ class MediaTest extends \PHPUnit_Framework_TestCase
         $this->dirMock = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\ReadInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $filesystemMock = $this->getMockBuilder('Magento\Framework\App\Filesystem')
+        $filesystemMock = $this->getMockBuilder('Magento\Framework\Filesystem')
             ->disableOriginalConstructor()
             ->getMock();
         $filesystemMock->expects($this->any())
             ->method('getDirectoryRead')
-            ->with(\Magento\Framework\App\Filesystem::MEDIA_DIR)
+            ->with(DirectoryList::MEDIA)
             ->will($this->returnValue($this->dirMock));
         $dateMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\DateTime')
             ->disableOriginalConstructor()

@@ -51,11 +51,11 @@ class Weee extends AbstractTotal
     protected $_store;
 
     /**
-     * Static counter
+     * Counter
      *
      * @var int
      */
-    protected static $counter = 0;
+    protected $counter = 0;
 
     /**
      * Array to keep track of weee taxable item code to quote item
@@ -170,7 +170,15 @@ class Weee extends AbstractTotal
         $associatedTaxables = $item->getAssociatedTaxables();
         if (!$associatedTaxables) {
             $associatedTaxables = [];
+        } else {
+            // remove existing weee associated taxables
+            foreach ($associatedTaxables as $iTaxable => $taxable) {
+                if ($taxable[CommonTaxCollector::KEY_ASSOCIATED_TAXABLE_TYPE] == self::ITEM_TYPE) {
+                    unset($associatedTaxables[$iTaxable]);
+                }
+            }
         }
+
         foreach ($attributes as $key => $attribute) {
             $title          = $attribute->getName();
 
@@ -206,9 +214,10 @@ class Weee extends AbstractTotal
             );
 
             if ($this->weeeData->isTaxable($this->_store)) {
-                $itemTaxCalculationId = $item->getTaxCalculationItemId();
+
                 $weeeItemCode = self::ITEM_CODE_WEEE_PREFIX . $this->getNextIncrement();
                 $weeeItemCode .= '-' . $title;
+
                 $associatedTaxables[] = [
                     CommonTaxCollector::KEY_ASSOCIATED_TAXABLE_TYPE => self::ITEM_TYPE,
                     CommonTaxCollector::KEY_ASSOCIATED_TAXABLE_CODE => $weeeItemCode,
@@ -272,14 +281,14 @@ class Weee extends AbstractTotal
     }
 
     /**
-     * Increment and return static counter. This function is intended to be used to generate temporary
+     * Increment and return counter. This function is intended to be used to generate temporary
      * id for an item.
      *
      * @return int
      */
     protected function getNextIncrement()
     {
-        return ++self::$counter;
+        return ++$this->counter;
     }
 
     /**

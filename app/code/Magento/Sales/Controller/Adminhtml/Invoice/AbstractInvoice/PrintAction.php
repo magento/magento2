@@ -24,6 +24,7 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use \Magento\Framework\App\ResponseInterface;
 
 abstract class PrintAction extends \Magento\Backend\App\Action
@@ -67,7 +68,7 @@ abstract class PrintAction extends \Magento\Backend\App\Action
                 return $this->_fileFactory->create(
                     'invoice' . $date . '.pdf',
                     $pdf->render(),
-                    \Magento\Framework\App\Filesystem::VAR_DIR,
+                    DirectoryList::VAR_DIR,
                     'application/pdf'
                 );
             }

@@ -42,10 +42,10 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
      */
     protected function _createValidator($layoutUpdate, $isSchemaValid = true)
     {
-        $filesystem = $this->getMockBuilder('Magento\Framework\App\Filesystem')
+        $dirList = $this->getMockBuilder('Magento\Framework\App\Filesystem\DirectoryList')
             ->disableOriginalConstructor()
             ->getMock();
-        $filesystem->expects(
+        $dirList->expects(
             $this->exactly(2)
         )->method(
             'getPath'
@@ -79,7 +79,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
         $model = $this->_objectHelper->getObject(
             'Magento\Core\Model\Layout\Update\Validator',
-            array('filesystem' => $filesystem, 'domConfigFactory' => $domConfigFactory)
+            array('dirList' => $dirList, 'domConfigFactory' => $domConfigFactory)
         );
 
         return $model;

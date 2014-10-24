@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\GiftMessage\Service\V1;
 
 use Magento\Framework\Exception\CouldNotSaveException;
@@ -29,39 +28,54 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * Gift message write service data object.
+ */
 class WriteService implements WriteServiceInterface
 {
     /**
+     * Quote repository.
+     *
      * @var \Magento\Sales\Model\QuoteRepository
      */
     protected $quoteRepository;
 
     /**
+     * Store manager interface.
+     *
      * @var \Magento\Framework\StoreManagerInterface
      */
     protected $storeManager;
 
     /**
+     * Gift message manager.
+     *
      * @var \Magento\GiftMessage\Model\GiftMessageManager
      */
     protected $giftMessageManager;
 
     /**
+     * Message helper.
+     *
      * @var \Magento\GiftMessage\Helper\Message
      */
     protected $helper;
 
     /**
+     * Product loader.
+     *
      * @var \Magento\Catalog\Service\V1\Product\ProductLoader
      */
     protected $productLoader;
 
     /**
-     * @param \Magento\Sales\Model\QuoteRepository $quoteRepository
-     * @param \Magento\Framework\StoreManagerInterface $storeManager
-     * @param \Magento\GiftMessage\Model\GiftMessageManager $giftMessageManager
-     * @param \Magento\GiftMessage\Helper\Message $helper
-     * @param \Magento\Catalog\Service\V1\Product\ProductLoader $productLoader
+     * Constructs a gift message write service data object.
+     *
+     * @param \Magento\Sales\Model\QuoteRepository $quoteRepository Quote repository.
+     * @param \Magento\Framework\StoreManagerInterface $storeManager Store manager.
+     * @param \Magento\GiftMessage\Model\GiftMessageManager $giftMessageManager Gift message manager.
+     * @param \Magento\GiftMessage\Helper\Message $helper Message helper.
+     * @param \Magento\Catalog\Service\V1\Product\ProductLoader $productLoader Product loader.
      */
     public function __construct(
         \Magento\Sales\Model\QuoteRepository $quoteRepository,
@@ -78,11 +92,22 @@ class WriteService implements WriteServiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @param int $cartId The shopping cart ID.
+     * @param Data\Message $giftMessage The gift message.
+     * @return bool
+     * @throws \Magento\Framework\Exception\InputException You cannot add gift messages to empty carts.
+     * @throws \Magento\Framework\Exception\State\InvalidTransitionException You cannot add gift messages to virtual
+     * products.
      */
     public function setForQuote($cartId, \Magento\GiftMessage\Service\V1\Data\Message $giftMessage)
     {
-        /** @var \Magento\Sales\Model\Quote $quote */
+        /**
+         * Quote.
+         *
+         * @var \Magento\Sales\Model\Quote $quote
+         */
         $quote = $this->quoteRepository->get($cartId);
 
         if (0 == $quote->getItemsCount()) {
@@ -98,7 +123,15 @@ class WriteService implements WriteServiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @param int $cartId The shopping cart ID.
+     * @param Data\Message $giftMessage The gift message.
+     * @param int $itemId The item ID.
+     * @return bool
+     * @throws \Magento\Framework\Exception\State\InvalidTransitionException You cannot add gift messages to
+     * virtual products.
+     * @throws \Magento\Framework\Exception\NoSuchEntityException The specified item does not exist in the cart.
      */
     public function setForItem($cartId, \Magento\GiftMessage\Service\V1\Data\Message $giftMessage, $itemId)
     {
@@ -118,15 +151,15 @@ class WriteService implements WriteServiceInterface
     }
 
     /**
-     * Set gift message to item or quote
+     * Sets the gift message to item or quote.
      *
-     * @param \Magento\Sales\Model\Quote $quote
-     * @param string $type
-     * @param \Magento\GiftMessage\Service\V1\Data\Message $giftMessage
-     * @param null|int $entityId
+     * @param \Magento\Sales\Model\Quote $quote The quote.
+     * @param string $type The type.
+     * @param \Magento\GiftMessage\Service\V1\Data\Message $giftMessage The gift message.
+     * @param null|int $entityId The entity ID.
      * @return void
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @throws \Magento\Framework\Exception\State\InvalidTransitionException
+     * @throws \Magento\Framework\Exception\CouldNotSaveException The specified gift message is not available.
+     * @throws \Magento\Framework\Exception\State\InvalidTransitionException The billing or shipping address is not set.
      */
     protected function setMessage(\Magento\Sales\Model\Quote $quote, $type, $giftMessage, $entityId = null)
     {

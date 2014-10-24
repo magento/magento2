@@ -23,6 +23,8 @@
  */
 namespace Magento\Backend\Block\Widget\Grid;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Backend\Block\Widget\Grid\ExportInterface
 {
     /**
@@ -190,7 +192,7 @@ class Extended extends \Magento\Backend\Block\Widget\Grid implements \Magento\Ba
         parent::_construct();
         $this->_emptyText = __('We couldn\'t find any records.');
 
-        $this->_directory = $this->_filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem::VAR_DIR);
+        $this->_directory = $this->_filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
     }
 
     /**

@@ -42,15 +42,6 @@ class InvoiceSenderTest extends \PHPUnit_Framework_TestCase
         );
         $invoice->setOrder($order);
 
-        $payment = $order->getPayment();
-        $paymentInfoBlock = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Payment\Helper\Data'
-        )->getInfoBlock(
-            $payment
-        );
-        $paymentInfoBlock->setArea('invalid-area');
-        $payment->setBlockMock($paymentInfoBlock);
-
         /** @var InvoiceSender $invoiceSender */
         $invoiceSender = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create('Magento\Sales\Model\Order\Email\Sender\InvoiceSender');
@@ -61,6 +52,5 @@ class InvoiceSenderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($result);
         $this->assertNotEmpty($invoice->getEmailSent());
-        $this->assertEquals('frontend', $paymentInfoBlock->getArea());
     }
 }

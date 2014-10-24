@@ -3,16 +3,16 @@
     "description": "N/A",
     "require": {
         "php": "~5.4.11|~5.5.0",
-        "magento/module-authorization": "0.1.0-alpha100",
-        "magento/module-backend": "0.1.0-alpha100",
-        "magento/module-core": "0.1.0-alpha100",
-        "magento/module-integration": "0.1.0-alpha100",
-        "magento/module-theme": "0.1.0-alpha100",
-        "magento/framework": "0.1.0-alpha100",
+        "magento/module-authorization": "0.1.0-alpha101",
+        "magento/module-backend": "0.1.0-alpha101",
+        "magento/module-core": "0.1.0-alpha101",
+        "magento/module-integration": "0.1.0-alpha101",
+        "magento/module-theme": "0.1.0-alpha101",
+        "magento/framework": "0.1.0-alpha101",
         "magento/magento-composer-installer": "*"
     },
     "type": "magento2-module",
-    "version": "0.1.0-alpha100",
+    "version": "0.1.0-alpha101",
     "extra": {
         "map": [
             [

@@ -64,7 +64,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetConnectionInMemoryCaching()
     {
-        $filesystem = $this->getMock('Magento\Framework\App\Filesystem', array(), array(), '', false);
+        $filesystem = $this->getMock('Magento\Framework\Filesystem', array(), array(), '', false);
         $string = $this->getMock('Magento\Framework\Stdlib\String', array(), array(), '', false);
         $dateTime = $this->getMock('Magento\Framework\Stdlib\DateTime', null, array(), '', true);
         $connection = new \Magento\Framework\DB\Adapter\Pdo\Mysql(

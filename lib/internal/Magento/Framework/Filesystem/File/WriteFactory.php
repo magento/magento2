@@ -24,20 +24,25 @@
 namespace Magento\Framework\Filesystem\File;
 
 use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Filesystem\DriverPool;
 
 class WriteFactory
 {
     /**
-     * @var \Magento\Framework\Filesystem\DriverFactory
+     * Pool of filesystem drivers
+     *
+     * @var DriverPool
      */
-    protected $driverFactory;
+    private $driverPool;
 
     /**
-     * @param \Magento\Framework\Filesystem\DriverFactory $driverFactory
+     * Constructor
+     *
+     * @param DriverPool $driverPool
      */
-    public function __construct(\Magento\Framework\Filesystem\DriverFactory $driverFactory)
+    public function __construct(DriverPool $driverPool)
     {
-        $this->driverFactory = $driverFactory;
+        $this->driverPool = $driverPool;
     }
 
     /**
@@ -48,10 +53,15 @@ class WriteFactory
      * @param DriverInterface $driver [optional]
      * @param string $mode [optional]
      * @return Write
+     * @throws \InvalidArgumentException
      */
     public function create($path, $protocol = null, DriverInterface $driver = null, $mode = 'r')
     {
-        $driver = $protocol ? $this->driverFactory->get($protocol, get_class($driver)) : $driver;
-        return new \Magento\Framework\Filesystem\File\Write($path, $driver, $mode);
+        if ($protocol) {
+            $driver = $this->driverPool->getDriver($protocol);
+        } elseif (!$driver) {
+            throw new \InvalidArgumentException('Either driver or protocol must be specified.');
+        }
+        return new Write($path, $driver, $mode);
     }
 }

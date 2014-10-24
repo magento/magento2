@@ -29,6 +29,9 @@
  */
 namespace Magento\Framework\Backup;
 
+use Magento\Framework\Filesystem as AppFilesystem;
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class Snapshot extends Filesystem
 {
     /**
@@ -41,7 +44,7 @@ class Snapshot extends Filesystem
     /**
      * Filesystem facade
      *
-     * @var \Magento\Framework\App\Filesystem
+     * @var AppFilesystem
      */
     protected $_filesystem;
 
@@ -51,10 +54,10 @@ class Snapshot extends Filesystem
     protected $_backupFactory;
 
     /**
-     * @param \Magento\Framework\App\Filesystem $filesystem
+     * @param AppFilesystem $filesystem
      * @param Factory $backupFactory
      */
-    public function __construct(\Magento\Framework\App\Filesystem $filesystem, Factory $backupFactory)
+    public function __construct(AppFilesystem $filesystem, Factory $backupFactory)
     {
         $this->_filesystem = $filesystem;
         $this->_backupFactory = $backupFactory;
@@ -127,17 +130,12 @@ class Snapshot extends Filesystem
      */
     protected function _createDbBackupInstance()
     {
-        return $this->_backupFactory->create(
-            Factory::TYPE_DB
-        )->setBackupExtension(
-            'gz'
-        )->setTime(
-            $this->getTime()
-        )->setBackupsDir(
-            $this->_filesystem->getPath(\Magento\Framework\App\Filesystem::VAR_DIR)
-        )->setResourceModel(
-            $this->getResourceModel()
-        );
+        return $this->_backupFactory->create(Factory::TYPE_DB)
+            ->setBackupExtension('gz')
+            ->setTime($this->getTime())
+            ->setBackupsDir($this->_filesystem->getDirectoryWrite(DirectoryList::VAR_DIR)->getAbsolutePath())
+            ->setResourceModel($this->getResourceModel())
+        ;
     }
 
     /**

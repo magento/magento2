@@ -21,7 +21,6 @@
  * @copyright   Copyright (c) 2014 X.commerce, Inc. (http://www.magentocommerce.com)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  */
-
 namespace Magento\Checkout\Service\V1\PaymentMethod;
 
 use \Magento\Sales\Model\QuoteRepository;
@@ -30,33 +29,46 @@ use Magento\Checkout\Service\V1\Data\Cart\PaymentMethod\Converter as QuoteMethod
 use Magento\Checkout\Service\V1\Data\PaymentMethod\Converter as PaymentMethodConverter;
 use \Magento\Payment\Model\MethodList;
 
+/**
+ * Payment method read service object.
+ */
 class ReadService implements ReadServiceInterface
 {
     /**
+     * Quote repository.
+     *
      * @var QuoteRepository
      */
     protected $quoteRepository;
 
     /**
+     * Quote method converter.
+     *
      * @var QuoteMethodConverter
      */
     protected $quoteMethodConverter;
 
     /**
+     * Payment method converter.
+     *
      * @var PaymentMethodConverter
      */
     protected $paymentMethodConverter;
 
     /**
+     * Method list.
+     *
      * @var MethodList
      */
     protected $methodList;
 
     /**
-     * @param QuoteRepository $quoteRepository
-     * @param QuoteMethodConverter $quoteMethodConverter
-     * @param PaymentMethodConverter $paymentMethodConverter
-     * @param MethodList $methodList
+     * Constructs a payment method read service object.
+     *
+     * @param QuoteRepository $quoteRepository Quote repository.
+     * @param QuoteMethodConverter $quoteMethodConverter Quote method converter.
+     * @param PaymentMethodConverter $paymentMethodConverter Payment method converter.
+     * @param MethodList $methodList Method list.
      */
     public function __construct(
         QuoteRepository $quoteRepository,
@@ -71,7 +83,11 @@ class ReadService implements ReadServiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @param int $cartId The cart ID.
+     * @return \Magento\Checkout\Service\V1\Data\Cart\PaymentMethod  Payment method object.
+     * @throws \Magento\Framework\Exception\NoSuchEntityException The specified cart does not exist.
      */
     public function getPayment($cartId)
     {
@@ -85,7 +101,11 @@ class ReadService implements ReadServiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @param int $cartId The cart ID.
+     * @return \Magento\Checkout\Service\V1\Data\PaymentMethod[] Array of payment methods.
+     * @throws \Magento\Framework\Exception\NoSuchEntityException The specified cart does not exist.
      */
     public function getList($cartId)
     {

@@ -1,6 +1,8 @@
 <?php
 namespace Magento\Cms\Model\Wysiwyg\Images;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 /**
  * Magento
  *
@@ -111,7 +113,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->_filesystemMock = $this->getMock('Magento\Framework\App\Filesystem', array(), array(), '', false);
+        $this->_filesystemMock = $this->getMock('Magento\Framework\Filesystem', array(), array(), '', false);
         $this->_driverMock = $this->getMockForAbstractClass(
             'Magento\Framework\Filesystem\DriverInterface',
             array(),
@@ -139,7 +141,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->_filesystemMock = $this->getMock(
-            'Magento\Framework\App\Filesystem',
+            'Magento\Framework\Filesystem',
             array('getDirectoryWrite'),
             array(),
             '',
@@ -150,7 +152,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getDirectoryWrite'
         )->with(
-            \Magento\Framework\App\Filesystem::MEDIA_DIR
+            DirectoryList::MEDIA
         )->will(
             $this->returnValue($this->_directoryMock)
         );

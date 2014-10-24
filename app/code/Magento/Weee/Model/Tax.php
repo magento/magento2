@@ -194,18 +194,19 @@ class Tax extends \Magento\Framework\Model\AbstractModel
      */
     public function getWeeeAttributeCodes($forceEnabled = false)
     {
-        return $this->getWeeeTaxAttributeCodes($forceEnabled);
+        return $this->getWeeeTaxAttributeCodes(null, $forceEnabled);
     }
 
     /**
      * Retrieve Wee tax attribute codes
      *
-     * @param bool $forceEnabled
+     * @param  null|string|bool|int|Store $store
+     * @param  bool $forceEnabled
      * @return array
      */
-    public function getWeeeTaxAttributeCodes($forceEnabled = false)
+    public function getWeeeTaxAttributeCodes($store = null, $forceEnabled = false)
     {
-        if (!$forceEnabled && !$this->weeeConfig->isEnabled()) {
+        if (!$forceEnabled && !$this->weeeConfig->isEnabled($store)) {
             return array();
         }
 
@@ -233,14 +234,15 @@ class Tax extends \Magento\Framework\Model\AbstractModel
         $ignoreDiscount = false
     ) {
         $result = array();
-        $allWeee = $this->getWeeeTaxAttributeCodes();
-        if (!$allWeee) {
-            return $result;
-        }
 
         $websiteId = $this->_storeManager->getWebsite($website)->getId();
         /** @var \Magento\Store\Model\Store $store */
         $store = $this->_storeManager->getWebsite($website)->getDefaultGroup()->getDefaultStore();
+
+        $allWeee = $this->getWeeeTaxAttributeCodes($store);
+        if (!$allWeee) {
+            return $result;
+        }
 
         /** @var \Magento\Tax\Model\Calculation $calculator */
         $calculator = $this->_calculationFactory->create();

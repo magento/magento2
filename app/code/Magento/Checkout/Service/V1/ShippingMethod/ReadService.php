@@ -31,27 +31,38 @@ use \Magento\Checkout\Service\V1\Data\Cart\ShippingMethodBuilder;
 use \Magento\Framework\Exception\StateException;
 use \Magento\Framework\Exception\InputException;
 
+/**
+ * Shipping method read service.
+ */
 class ReadService implements ReadServiceInterface
 {
     /**
+     * Quote repository.
+     *
      * @var QuoteRepository
      */
     protected $quoteRepository;
 
     /**
+     * Shipping method builder.
+     *
      * @var \Magento\Checkout\Service\V1\Data\Cart\ShippingMethodBuilder
      */
     protected $methodBuilder;
 
     /**
+     * Shipping method converter.
+     *
      * @var ShippingMethodConverter
      */
     protected $converter;
 
     /**
-     * @param QuoteRepository $quoteRepository
-     * @param ShippingMethodConverter $converter
-     * @param \Magento\Checkout\Service\V1\Data\Cart\ShippingMethodBuilder $methodBuilder
+     * Constructs a shipping method read service object.
+     *
+     * @param QuoteRepository $quoteRepository Quote repository.
+     * @param ShippingMethodConverter $converter Shipping method converter.
+     * @param \Magento\Checkout\Service\V1\Data\Cart\ShippingMethodBuilder $methodBuilder Shipping method builder.
      */
     public function __construct(
         QuoteRepository $quoteRepository,
@@ -64,7 +75,12 @@ class ReadService implements ReadServiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @param int $cartId The shopping cart ID.
+     * @return \Magento\Checkout\Service\V1\Data\Cart\ShippingMethod Shipping method.
+     * @throws \Magento\Framework\Exception\NoSuchEntityException The specified shopping cart does not exist.
+     * @throws \Magento\Framework\Exception\StateException The shipping address is not set.
      */
     public function getMethod($cartId)
     {
@@ -99,10 +115,12 @@ class ReadService implements ReadServiceInterface
     }
 
     /**
-     * @param string $delimiter
-     * @param string $line
-     * @return array
-     * @throws \Magento\Framework\Exception\InputException
+     * Divides names at specified delimiter character on a specified line.
+     *
+     * @param string $delimiter The delimiter character.
+     * @param string $line The line.
+     * @return array Array of names.
+     * @throws \Magento\Framework\Exception\InputException The specified line does not contain the specified delimiter character.
      */
     protected function divideNames($delimiter, $line)
     {
@@ -113,7 +131,12 @@ class ReadService implements ReadServiceInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
+     *
+     * @param int $cartId The shopping cart ID.
+     * @return \Magento\Checkout\Service\V1\Data\Cart\ShippingMethod[] An array of shipping methods.
+     * @throws \Magento\Framework\Exception\NoSuchEntityException The specified quote does not exist.
+     * @throws \Magento\Framework\Exception\StateException The shipping address is not set.
      */
     public function getList($cartId)
     {

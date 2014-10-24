@@ -3,7 +3,7 @@
 "catalogProductVirtual::50_dollar_product";"1";"assertProductQtyInShoppingCart, assertProductsIsAbsentInWishlist"
 "catalogProductSimple::default,catalogProductVirtual::50_dollar_product,catalogProductSimple::default,catalogProductVirtual::50_dollar_product";"-";"assertProductQtyInShoppingCart, assertWishlistIsEmpty"
 "groupedProductInjectable::three_simple_products";"-";"assertProductQtyInShoppingCart, assertProductsIsAbsentInWishlist"
-"downloadableProductInjectable::with_two_separately_links";"2";"assertProductQtyInShoppingCart, assertProductsIsAbsentInWishlist"
+"downloadableProductInjectable::with_two_separately_links";"-";"assertProductQtyInShoppingCart, assertProductsIsAbsentInWishlist"
 "configurableProductInjectable::default";"3";"assertProductQtyInShoppingCart, assertProductsIsAbsentInWishlist"
 "bundleProduct::bundle_dynamic_product";"2";"assertProductQtyInShoppingCart, assertProductsIsAbsentInWishlist"
 "bundleProduct::bundle_fixed_product";"2";"assertProductQtyInShoppingCart, assertProductsIsAbsentInWishlist"

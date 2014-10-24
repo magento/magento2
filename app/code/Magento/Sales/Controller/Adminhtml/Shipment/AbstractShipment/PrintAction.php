@@ -24,6 +24,7 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Shipment\AbstractShipment;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use \Magento\Framework\App\ResponseInterface;
 
 abstract class PrintAction extends \Magento\Backend\App\Action
@@ -71,7 +72,7 @@ abstract class PrintAction extends \Magento\Backend\App\Action
                 return $this->_fileFactory->create(
                     'packingslip' . $date . '.pdf',
                     $pdf->render(),
-                    \Magento\Framework\App\Filesystem::VAR_DIR,
+                    DirectoryList::VAR_DIR,
                     'application/pdf'
                 );
             }

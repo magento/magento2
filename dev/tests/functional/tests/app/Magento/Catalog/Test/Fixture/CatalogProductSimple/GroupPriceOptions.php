@@ -112,6 +112,13 @@ class GroupPriceOptions implements FixtureInterface
                     'price' => 20,
                     'website' => 'All Websites [USD]',
                     'customer_group' => 'NOT LOGGED IN'
+                ],
+            ],
+            'tax_calculation' => [
+                [
+                    'price' => 90.99,
+                    'website' => 'All Websites [USD]',
+                    'customer_group' => 'General'
                 ]
             ],
         ];

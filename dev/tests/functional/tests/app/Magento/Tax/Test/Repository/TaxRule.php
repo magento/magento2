@@ -36,6 +36,7 @@ class TaxRule extends AbstractRepository
      * @param array $defaultData
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function __construct(array $defaultConfig = [], array $defaultData = [])
     {
@@ -129,6 +130,55 @@ class TaxRule extends AbstractRepository
             ],
             'priority' => '1',
             'position' => '1',
+        ];
+
+        $this->_data['customer_equals_store_rate'] = [
+            'code' => 'TaxIdentifier%isolation%',
+            'tax_rate' => [
+                'dataSet' => [
+                    0 => 'us_ca_rate_8_25_no_zip',
+                    1 => 'us_ny_rate_8_25',
+                ]
+            ],
+            'priority' => '0',
+            'position' => '0',
+        ];
+
+        $this->_data['customer_less_store_rate'] = [
+            'code' => 'TaxIdentifier%isolation%',
+            'tax_rate' => [
+                'dataSet' => [
+                    0 => 'us_ca_rate_8_375',
+                    1 => 'us_ny_rate_8_25',
+                ]
+            ],
+            'priority' => '0',
+            'position' => '0',
+        ];
+
+        $this->_data['customer_greater_store_rate'] = [
+            'code' => 'TaxIdentifier%isolation%',
+            'tax_rate' => [
+                'dataSet' => [
+                    0 => 'us_ca_rate_8_25_no_zip',
+                    1 => 'us_ny_rate_8_375',
+                ]
+            ],
+            'priority' => '0',
+            'position' => '0',
+        ];
+
+        $this->_data['cross_border_tax_rule'] = [
+            'code' => 'TaxIdentifier%isolation%',
+            'tax_rate' => [
+                'dataSet' => [
+                    0 => 'tx_rate_10',
+                    1 => 'ny_rate_20',
+                    2 => 'ca_rate_30',
+                ]
+            ],
+            'priority' => '0',
+            'position' => '0',
         ];
     }
 }

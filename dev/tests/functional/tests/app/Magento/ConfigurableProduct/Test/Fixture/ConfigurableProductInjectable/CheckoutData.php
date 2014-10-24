@@ -54,8 +54,8 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                             'value' => 'option_key_1',
                         ]
                     ],
-                    'qty' => 3
                 ],
+                'qty' => 3,
                 'cartItem' => [
                     'price' => 172,
                     'qty' => 3,
@@ -113,6 +113,17 @@ class CheckoutData extends \Magento\Catalog\Test\Fixture\CatalogProductSimple\Ch
                 'cartItem' => [
                     'price' => 101,
                 ]
+            ],
+            'with_one_option' => [
+                'options' => [
+                    'configurable_options' => [
+                        [
+                            'title' => 'attribute_key_0',
+                            'value' => 'option_key_0',
+                        ],
+                    ],
+                ],
+                'qty' => 1,
             ],
         ];
         return isset($presets[$name]) ? $presets[$name] : null;

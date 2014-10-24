@@ -23,7 +23,8 @@
  */
 namespace Magento\Core\Model\Theme;
 
-use Magento\Framework\App\Filesystem;
+use Magento\Framework\Filesystem;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Model\Exception;
 use Magento\Framework\View\Design\ThemeInterface;
 
@@ -83,7 +84,7 @@ class Registration
     ) {
         $this->_collectionFactory = $collectionFactory;
         $this->_themeCollection = $filesystemCollection;
-        $this->directoryRead = $filesystem->getDirectoryRead(Filesystem::MEDIA_DIR);
+        $this->directoryRead = $filesystem->getDirectoryRead(DirectoryList::MEDIA);
     }
 
     /**

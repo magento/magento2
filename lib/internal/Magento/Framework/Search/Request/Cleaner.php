@@ -140,9 +140,12 @@ class Cleaner
                 $keys = ['from', 'to'];
                 foreach ($keys as $key) {
                     if (isset($filter[$key]) && preg_match('/\$(.+)\$/si', $filter[$key], $matches)) {
-                        unset($this->requestData['filters'][$filterName]);
-                        break;
+                        unset($this->requestData['filters'][$filterName][$key]);
                     }
+                }
+                $filterKeys = array_keys($this->requestData['filters'][$filterName]);
+                if (count(array_diff($keys, $filterKeys)) == count($keys)) {
+                    unset($this->requestData['filters'][$filterName]);
                 }
                 break;
             case FilterInterface::TYPE_BOOL:

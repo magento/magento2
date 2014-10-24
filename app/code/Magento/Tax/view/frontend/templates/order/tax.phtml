@@ -25,7 +25,7 @@
 <?php
     $_order  = $this->getOrder();
     $_source = $this->getSource();
-    $_fullInfo = $_order->getFullTaxInfo();
+    $_fullInfo = $this->helper('Magento\Tax\Helper\Data')->getCalculatedTaxes($_source);
     global $taxIter; $taxIter++;
 ?>
 

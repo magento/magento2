@@ -73,16 +73,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider canManageBillingAgreementsDataProvider
-     * @param $expectedResult
-     * @param $methodInstance
-     */
-    public function testCanManageBillingAgreements($expectedResult, $methodInstance)
-    {
-        $this->assertEquals($expectedResult, $this->_helper->canManageBillingAgreements($methodInstance));
-    }
-
-    /**
      * @return array
      */
     public function getBillingAgreementMethodsDataProvider()
@@ -100,16 +90,5 @@ class DataTest extends \PHPUnit_Framework_TestCase
             array('1', $quoteMock, array($methodInterfaceMock), array($methodInterfaceMock)),
             array('1', $quoteMock, array(new \StdClass()), array())
         );
-    }
-
-    /**
-     * @return array
-     */
-    public function canManageBillingAgreementsDataProvider()
-    {
-        $methodInterfaceMock = $this->getMockBuilder(
-            'Magento\Paypal\Model\Billing\Agreement\MethodInterface'
-        )->getMock();
-        return array(array(true, $methodInterfaceMock), array(false, new \StdClass()));
     }
 }

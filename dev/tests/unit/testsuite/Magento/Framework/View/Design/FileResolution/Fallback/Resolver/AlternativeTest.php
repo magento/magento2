@@ -24,6 +24,8 @@
 
 namespace Magento\Framework\View\Design\FileResolution\Fallback\Resolver;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 class AlternativeTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -47,10 +49,10 @@ class AlternativeTest extends \PHPUnit_Framework_TestCase
         $this->directory->expects($this->any())
             ->method('getRelativePath')
             ->will($this->returnArgument(0));
-        $filesystem = $this->getMock('\Magento\Framework\App\Filesystem', array(), array(), '', false);
+        $filesystem = $this->getMock('\Magento\Framework\Filesystem', array(), array(), '', false);
         $filesystem->expects($this->once())
             ->method('getDirectoryRead')
-            ->with(\Magento\Framework\App\Filesystem::ROOT_DIR)
+            ->with(DirectoryList::ROOT)
             ->will($this->returnValue($this->directory));
         $this->rule = $this->getMock(
             '\Magento\Framework\View\Design\Fallback\Rule\RuleInterface', array(), array(), '', false
@@ -79,7 +81,7 @@ class AlternativeTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('\InvalidArgumentException', "\$alternativeExtensions must be an array with format:"
             . " array('ext1' => array('ext1', 'ext2'), 'ext3' => array(...)]");
 
-        $filesystem = $this->getMock('Magento\Framework\App\Filesystem', array(), array(), '', false);
+        $filesystem = $this->getMock('Magento\Framework\Filesystem', array(), array(), '', false);
         $rulePool = $this->getMock('Magento\Framework\View\Design\Fallback\RulePool', array(), array(), '', false);
         $cache = $this->getMockForAbstractClass(
             'Magento\Framework\View\Design\FileResolution\Fallback\CacheDataInterface'

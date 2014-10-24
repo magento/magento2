@@ -90,7 +90,6 @@ class CreateCustomUrlRewriteEntityTest extends Injectable
     {
         $this->urlRewriteIndex->open();
         $this->urlRewriteIndex->getPageActionsBlock()->addNew();
-        $this->urlRewriteEdit->getUrlRewriteTypeSelectorBlock()->selectType('Custom');
         $this->urlRewriteEdit->getFormBlock()->fill($urlRewrite);
         $this->urlRewriteEdit->getPageMainActions()->save();
     }

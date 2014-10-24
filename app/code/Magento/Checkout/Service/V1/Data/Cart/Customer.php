@@ -24,14 +24,20 @@
 namespace Magento\Checkout\Service\V1\Data\Cart;
 
 /**
- * Customer data for quote
+ * Customer data for quote.
  *
  * @codeCoverageIgnore
  */
 class Customer extends \Magento\Framework\Service\Data\AbstractExtensibleObject
 {
+    /**
+     * Customer ID.
+     */
     const ID = 'id';
 
+    /**
+     * Customer tax class ID.
+     */
     const TAX_CLASS_ID = 'tax_class_id';
 
     const GROUP_ID = 'group_id';
